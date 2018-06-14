@@ -35,6 +35,14 @@ export const menuData = [
         name: '商品列表',
         path: 'good-list',
       },
+      {
+        name: '商品分类',
+        path: 'good-type',
+      },
+      {
+        name: '商品属性',
+        path: 'good-attr',
+      },
     ],
   },
   {

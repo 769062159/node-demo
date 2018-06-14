@@ -1,5 +1,5 @@
 import { routerRedux } from 'dva/router';
-import { fakeAccountLogin } from '../services/api';
+import { fakeAccountLogin, fakeAccountLogout } from '../services/api';
 import { setToken, setTokenExpired } from '../utils/authority';
 import { reloadAuthorized } from '../utils/Authorized';
 
@@ -27,14 +27,19 @@ export default {
         yield put(routerRedux.push('/'));
       }
     },
-    *logout(_, { put, select }) {
+    *logout(_, { call, put, select }) {
       try {
-        // get location pathname
-        const urlParams = new URL(window.location.href);
-        const pathname = yield select(state => state.routing.location.pathname);
-        // add the parameters in the url
-        urlParams.searchParams.set('redirect', pathname);
-        window.history.replaceState(null, 'login', urlParams.href);
+        const response = yield call(fakeAccountLogout, 'out');
+        console.log(response);
+        if (response.code === 200) {
+          localStorage.setItem('token', '');
+          // get location pathname
+          const urlParams = new URL(window.location.href);
+          const pathname = yield select(state => state.routing.location.pathname);
+          // add the parameters in the url
+          urlParams.searchParams.set('redirect', pathname);
+          window.history.replaceState(null, 'login', urlParams.href);
+        }
       } finally {
         yield put({
           type: 'changeLoginStatus',

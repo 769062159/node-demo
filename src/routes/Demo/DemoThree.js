@@ -113,8 +113,8 @@ export default class Group extends Component {
       const { depRole } = this.state;
       if (depRole.length !== 2) {
         message.error('请选择部门角色');
-      }
-      if (!err) {
+      } else if (!err) {
+        // if (!err) {
         const data = {
           ...values,
           group_id: depRole[0],
@@ -128,6 +128,7 @@ export default class Group extends Component {
           this.handleCancel();
           this.updataData();
         });
+        // }
       }
     });
   };

@@ -133,6 +133,12 @@ export const getRouterConfig = app => {
     '/good/good-list': {
       component: dynamicWrapper(app, ['goods'], () => import('../routes/Goods/GoodsList')),
     },
+    '/good/good-type': {
+      component: dynamicWrapper(app, ['goods'], () => import('../routes/Goods/GoodsType')),
+    },
+    '/good/good-attr': {
+      component: dynamicWrapper(app, ['goods'], () => import('../routes/Goods/GoodsAttr')),
+    },
     // 用户相关信息
     '/demo/group': {
       component: dynamicWrapper(app, ['user'], () => import('../routes/Demo/Group')),

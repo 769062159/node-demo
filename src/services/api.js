@@ -100,7 +100,7 @@ export async function deleteMenu(params) {
 }
 // 角色列表
 export async function getRoleList(params) {
-  return request('/admin/user/rolelist', {
+  return request('/admin/gr/role/list', {
     method: 'POST',
     body: params,
   });
@@ -121,7 +121,7 @@ export async function getRoleMenu(params) {
 }
 // 部门列表
 export async function getGroupList(params) {
-  return request('/admin/user/grouplist', {
+  return request('/admin/gr/group/list', {
     method: 'POST',
     body: params,
   });

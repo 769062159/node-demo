@@ -1,10 +1,21 @@
-import { getAllGoods, getRoleMenu, setRoleMenu, deleteMenu } from '../services/api';
+import {
+  getAllGoods,
+  editGoodType,
+  getAllType,
+  addGoodType,
+  delGoodType,
+  getAttrList,
+  addGoodAttr,
+  editGoodAttr,
+} from '../services/goods';
 
 export default {
   namespace: 'goods',
 
   state: {
     goodsList: {},
+    goodType: [],
+    goodAttr: [],
   },
 
   effects: {
@@ -15,28 +26,59 @@ export default {
         payload: response.data,
       });
     },
-    *fetchRoleMenu({ payload }, { call, put }) {
-      const response = yield call(getRoleMenu, payload);
+    *editGoodType({ payload }, { call, put }) {
+      yield call(editGoodType, payload);
+      const response = yield call(getAllType, payload);
       yield put({
-        type: 'RoleMenu',
+        type: 'fetchType',
         payload: response.data,
       });
     },
-    *setRoleMenu({ payload }, { call }) {
-      yield call(setRoleMenu, payload);
-      // const responses = yield call(getRoleMenu, payload);
-      // yield put({
-      //   type: 'RoleMenu',
-      //   payload: responses.data,
-      // });
+    *getAllType({ payload }, { call, put }) {
+      const response = yield call(getAllType, payload);
+      yield put({
+        type: 'fetchType',
+        payload: response.data,
+      });
     },
-    *delMenu({ payload }, { call }) {
-      yield call(deleteMenu, payload);
-      // const responses = yield call(getRoleMenu, payload);
-      // yield put({
-      //   type: 'RoleMenu',
-      //   payload: responses.data,
-      // });
+    *addGoodType({ payload }, { call, put }) {
+      yield call(addGoodType, payload);
+      const response = yield call(getAllType, payload);
+      yield put({
+        type: 'fetchType',
+        payload: response.data,
+      });
+    },
+    *delGoodType({ payload }, { call, put }) {
+      yield call(delGoodType, payload);
+      const response = yield call(getAllType, payload);
+      yield put({
+        type: 'fetchType',
+        payload: response.data,
+      });
+    },
+    *getAllAttr({ payload }, { call, put }) {
+      const response = yield call(getAttrList, payload);
+      yield put({
+        type: 'fetchAttr',
+        payload: response.data,
+      });
+    },
+    *addGoodAttr({ payload }, { call, put }) {
+      yield call(addGoodAttr, payload);
+      const response = yield call(getAttrList, payload);
+      yield put({
+        type: 'fetchAttr',
+        payload: response.data,
+      });
+    },
+    *editGoodAttr({ payload }, { call, put }) {
+      yield call(editGoodAttr, payload);
+      const response = yield call(getAttrList, payload);
+      yield put({
+        type: 'fetchAttr',
+        payload: response.data,
+      });
     },
   },
 
@@ -48,11 +90,18 @@ export default {
         goodsList: payload,
       };
     },
-    RoleMenu(state, { payload }) {
+    fetchType(state, { payload }) {
       // state.menuList = payload;
       return {
         ...state,
-        RoleMenu: payload,
+        goodType: payload,
+      };
+    },
+    fetchAttr(state, { payload }) {
+      // state.menuList = payload;
+      return {
+        ...state,
+        goodAttr: payload,
       };
     },
   },
