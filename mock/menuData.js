@@ -1,4 +1,42 @@
 export const menuData = [
+  /**
+   * @description 动态menu以及伪动态router
+   * 		使用identity来控制权限，如果为common就是公用权限，不写则是没有权限=>403页面
+   * */
+  {
+    name: '用户',
+    icon: 'smile',
+    path: 'demo',
+    children: [
+      {
+        name: '部门角色',
+        path: 'group',
+      },
+      {
+        name: '菜单新增',
+        path: 'demo-two',
+      },
+      {
+        name: '用户列表',
+        path: 'demo-three',
+      },
+      {
+        name: '菜单列表',
+        path: 'menu-list',
+      },
+    ],
+  },
+  {
+    name: '商品',
+    icon: 'smile',
+    path: 'good',
+    children: [
+      {
+        name: '商品列表',
+        path: 'good-list',
+      },
+    ],
+  },
   {
     name: 'dashboard',
     icon: 'dashboard',
@@ -15,8 +53,8 @@ export const menuData = [
       {
         name: '工作台',
         path: 'workplace',
-//         hideInBreadcrumb: true,
-//         hideInMenu: true,
+        //         hideInBreadcrumb: true,
+        //         hideInMenu: true,
       },
     ],
   },
@@ -35,7 +73,7 @@ export const menuData = [
       },
       {
         name: '高级表单',
-//      authority: 'admin',
+        //      authority: 'admin',
         path: 'advanced-form',
       },
     ],
@@ -89,7 +127,7 @@ export const menuData = [
       {
         name: '高级详情页',
         path: 'advanced',
-//      authority: 'user',
+        //      authority: 'user',
       },
     ],
   },
@@ -132,38 +170,11 @@ export const menuData = [
       },
     ],
   },
-  /**
-   * @description 动态menu以及伪动态router
-   * 		使用identity来控制权限，如果为common就是公用权限，不写则是没有权限=>403页面
-   * */
-  {
-    name: 'demo',
-    icon: 'smile',
-    path: 'demo',
-    identity: 'demo',
-    children: [
-      {
-        name: 'demo-one',
-        path: 'demo-one',
-        identity: 'demo.one',
-      },
-      {
-        name: 'demo-two',
-        path: 'demo-two',
-        identity: 'demo.two',
-      },
-      {
-        name: 'demo-two',
-        path: 'demo-three',
-        identity:'demo.three',
-      },
-    ],
-  },
   {
     name: '账户',
     icon: 'user',
     path: 'user',
-//  authority: 'guest',
+    //  authority: 'guest',
     children: [
       {
         name: '登录',

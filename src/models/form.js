@@ -1,6 +1,6 @@
 import { routerRedux } from 'dva/router';
 import { message } from 'antd';
-import { fakeSubmitForm } from '../services/api';
+import { fakeSubmitForm, addMenu } from '../services/api';
 
 export default {
   namespace: 'form',
@@ -17,6 +17,10 @@ export default {
   effects: {
     *submitRegularForm({ payload }, { call }) {
       yield call(fakeSubmitForm, payload);
+      message.success('提交成功');
+    },
+    *submitAddMenuForm({ payload }, { call }) {
+      yield call(addMenu, payload);
       message.success('提交成功');
     },
     *submitStepForm({ payload }, { call, put }) {

@@ -18,8 +18,12 @@ export default {
         payload: response,
       });
       // Login successfully
-      if (response.status === 'ok') {
-        reloadAuthorized();
+      if (response.code === 200) {
+        // console.log(response);
+        const failTime = response.data.expired_time * 1000;
+        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('failTime', failTime);
+        // reloadAuthorized();
         yield put(routerRedux.push('/'));
       }
     },
@@ -48,7 +52,7 @@ export default {
   reducers: {
     changeLoginStatus(state, { payload }) {
       if (payload.data) {
-        setToken(payload.data);
+        setToken(payload.data.token);
       } else {
         setTokenExpired();
       }

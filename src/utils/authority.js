@@ -1,15 +1,22 @@
 // use localStorage to store the authority info, which might be sent from server in actual project.
 import store from '../index';
 
+export function setAuthority(authority) {
+  return localStorage.setItem('antd-pro-authority', authority);
+}
 /**
  * 获取token
  */
 export function getAuthority() {
   const token = getToken();
   // 判断token是否过期
-  if (!token) { return null; }
+  if (!token) {
+    return null;
+  }
   const nowTime = new Date() - 0;
-  if (token.expireIn > nowTime) { return token.token; }
+  if (token.expireIn > nowTime) {
+    return token.token;
+  }
   return null;
 }
 
@@ -19,7 +26,9 @@ export function setToken(token) {
 
 export function getToken() {
   const tokenStr = localStorage.getItem('security.token');
-  if (!tokenStr) { return null; }
+  if (!tokenStr) {
+    return null;
+  }
 
   const token = JSON.parse(tokenStr);
   return token;
@@ -35,10 +44,14 @@ export function setTokenExpired() {
  */
 export function hasPermission(authorityIdentity) {
   // 通用页面直接允许通过
-  if (authorityIdentity === 'common') { return true; }
+  if (authorityIdentity === 'common') {
+    return true;
+  }
 
-  let token = getAuthority();
-  if (!authorityIdentity || !token) { return false; }
+  const token = getAuthority();
+  if (!authorityIdentity || !token) {
+    return false;
+  }
 
   const rootIdentity = 'root';
   // 已登录且是首页
@@ -46,10 +59,12 @@ export function hasPermission(authorityIdentity) {
     return true;
   }
 
-  if (!store) { return false; }
+  if (!store) {
+    return false;
+  }
 
   // 从redux中获取菜单
-  var menus = store.getState().global.menus;
+  const { menus } = store.getState().global;
   if (!menus || menus.length <= 0) {
     return false;
   }
@@ -57,14 +72,20 @@ export function hasPermission(authorityIdentity) {
 }
 
 function checkAuth(identity, menus) {
-  if (!menus || menus.length <= 0) { return false; }
+  if (!menus || menus.length <= 0) {
+    return false;
+  }
   let result = false;
   for (let i = 0; i < menus.length; i++) {
-    let menu = menus[i];
-    if (identity === menu.identity) { return true; }
+    const menu = menus[i];
+    if (identity === menu.identity) {
+      return true;
+    }
     if (menu.children && menu.children.length) {
       result = checkAuth(identity, menu.children);
-      if (result) { return true; }
+      if (result) {
+        return true;
+      }
     }
   }
 

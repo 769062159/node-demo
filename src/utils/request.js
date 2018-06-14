@@ -8,10 +8,11 @@ const codeMessage = {
   201: '新建或修改数据成功。',
   202: '一个请求已经进入后台排队（异步任务）。',
   204: '删除数据成功。',
-  400: '发出的请求有错误，服务器没有进行新建或修改数据的操作。',
-  401: '用户没有权限（令牌、用户名、密码错误）。',
+  400: '账户未登陆或者登陆过期。',
+  401: '登陆过期',
   403: '用户得到授权，但是访问是被禁止的。',
-  404: '发出的请求针对的是不存在的记录，服务器没有进行操作。',
+  404: '发出的请求针对的是不存在的记录。',
+  405: '获取登陆信息失败，请重新登陆',
   406: '请求的格式不可得。',
   410: '请求的资源被永久删除，且不会再得到的。',
   422: '当创建一个对象时，发生一个验证错误。',
@@ -34,6 +35,8 @@ function checkStatus(response) {
   error.response = response;
   throw error;
 }
+const apiurl = "http://hlsj.test.seastart.cn";
+// const apiurl = "";
 
 /**
  * Requests a URL, returning a promise.
@@ -42,30 +45,72 @@ function checkStatus(response) {
  * @param  {object} [options] The options we want to pass to "fetch"
  * @return {object}           An object containing either "data" or "err"
  */
-export default function request(url, options) {
-  const defaultOptions = {
-    credentials: 'include',
-  };
-  const newOptions = { ...defaultOptions, ...options };
+export default async function request(url, options) {
+  const newUrl = apiurl + url;
+  const failTime = localStorage.getItem('failTime');
+  let token = localStorage.getItem('token');
+  // console.log(token);
+  // console.log(failTime);
+  if (url !== '/admin/login' && failTime < new Date().getTime()) {
+    let nowToken = await fetch(`${apiurl}/admin/updatetoken`,{
+      method: 'post',
+      headers: {
+        mode: "no-cors",
+        Accept: 'application/json',
+        'Content-Type': 'application/json; charset=utf-8',
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    nowToken = nowToken.json();
+    await nowToken.then(res => {
+      if (res.code === 200) {
+        const {token: nowTokens} = res.data;
+        token = nowTokens;
+        localStorage.setItem('token',token);
+        localStorage.setItem('failTime',res.data.expired_time * 1000);
+      } else if (res.code === 400 || res.code === 404 || res.code === 405) {
+        localStorage.setItem('token', '');
+        const { dispatch } = store;
+        dispatch(routerRedux.push('/user/login'));
+      }
+    });
+  }
+
+
+  // const defaultOptions = {
+  //   credentials: 'include',
+  // };
+  const newOptions = {...options };
+  newOptions.headers = {
+    Accept: 'application/json',
+    mode: "no-cors",
+    // 'Authorization': '',
+    // 'JOKE': 'seastartmall!',
+    // 'Device': 'xcx',
+    // 'AppID': 'wxbfd3fb865c4ae400',
+    // 'content-type': 'application/x-www-form-urlencoded',
+  }
   if (newOptions.method === 'POST' || newOptions.method === 'PUT') {
     if (!(newOptions.body instanceof FormData)) {
       newOptions.headers = {
+        mode: "no-cors",
         Accept: 'application/json',
         'Content-Type': 'application/json; charset=utf-8',
-        ...newOptions.headers,
+        Authorization: `Bearer ${token}`,
+        // ...newOptions.headers,
       };
       newOptions.body = JSON.stringify(newOptions.body);
     } else {
       // newOptions.body is FormData
       newOptions.headers = {
+        mode: "no-cors",
         Accept: 'application/json',
-        'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${token}`,
         ...newOptions.headers,
       };
     }
   }
-
-  return fetch(url, newOptions)
+  return fetch(newUrl, newOptions)
     .then(checkStatus)
     .then(response => {
       if (newOptions.method === 'DELETE' || response.status === 204) {
@@ -74,12 +119,16 @@ export default function request(url, options) {
       return response.json();
     })
     .catch(e => {
-      const { dispatch } = store;
       const status = e.name;
+      const { dispatch } = store;
       if (status === 401) {
         dispatch({
           type: 'login/logout',
         });
+        return;
+      }
+      if (status === 405) {
+        dispatch(routerRedux.push('/user/login'));
         return;
       }
       if (status === 403) {

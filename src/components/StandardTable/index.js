@@ -36,6 +36,7 @@ class StandardTable extends PureComponent {
   }
 
   handleRowSelectChange = (selectedRowKeys, selectedRows) => {
+    console.log(22);
     let needTotalList = [...this.state.needTotalList];
     needTotalList = needTotalList.map(item => {
       return {
@@ -63,11 +64,12 @@ class StandardTable extends PureComponent {
 
   render() {
     const { selectedRowKeys, needTotalList } = this.state;
-    const { data: { list, pagination }, loading, columns, rowKey } = this.props;
+    const { data: { list, pagination }, loading, columns, rowKey, scroll } = this.props;
 
     const paginationProps = {
-      showSizeChanger: true,
-      showQuickJumper: true,
+      // 页数的跳转和页数的输入
+      // showSizeChanger: true,
+      // showQuickJumper: true,
       ...pagination,
     };
 
@@ -106,6 +108,7 @@ class StandardTable extends PureComponent {
         <Table
           loading={loading}
           rowKey={rowKey || 'key'}
+          scroll={scroll}
           rowSelection={rowSelection}
           dataSource={list}
           columns={columns}

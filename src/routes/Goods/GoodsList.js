@@ -1,0 +1,435 @@
+import React, { PureComponent, Fragment } from 'react';
+import { connect } from 'dva';
+import moment from 'moment';
+import {
+  Row,
+  Col,
+  Card,
+  Form,
+  Input,
+  Select,
+  Icon,
+  Button,
+  Dropdown,
+  Menu,
+  InputNumber,
+  DatePicker,
+  Badge,
+  Divider,
+} from 'antd';
+import StandardTable from 'components/StandardTable';
+import PageHeaderLayout from '../../layouts/PageHeaderLayout';
+
+import styles from './TableList.less';
+
+const FormItem = Form.Item;
+const { Option } = Select;
+const getValue = obj =>
+  Object.keys(obj)
+    .map(key => obj[key])
+    .join(',');
+// const statusMap = ['default', 'processing', 'success', 'error'];
+const statusMap = ['processing', 'processing', 'error'];
+const goodsStatus = ['上架', '未上架', '下架'];
+const goodsTypeStatus = ['普通商品', '一元购', '秒杀', '众筹'];
+const payType = ['拍下减库存', '付款减库存'];
+const isTrue = ['是', '否'];
+
+@connect(({ goods, loading }) => ({
+  goods,
+  loading: loading.models.rule,
+}))
+@Form.create()
+export default class TableList extends PureComponent {
+  state = {
+    expandForm: false,
+    selectedRows: [],
+    formValues: {},
+  };
+
+  componentDidMount() {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'goods/fetchGoods',
+    });
+  }
+
+  handleStandardTableChange = (pagination, filtersArg, sorter) => {
+    const { dispatch } = this.props;
+    const { formValues } = this.state;
+
+    const filters = Object.keys(filtersArg).reduce((obj, key) => {
+      const newObj = { ...obj };
+      newObj[key] = getValue(filtersArg[key]);
+      return newObj;
+    }, {});
+
+    const params = {
+      currentPage: pagination.current,
+      pageSize: pagination.pageSize,
+      ...formValues,
+      ...filters,
+    };
+    if (sorter.field) {
+      params.sorter = `${sorter.field}_${sorter.order}`;
+    }
+    console.log(99);
+    console.log(params);
+    dispatch({
+      type: 'goods/fetchGoods',
+      payload: params,
+    });
+  };
+
+  handleFormReset = () => {
+    const { form, dispatch } = this.props;
+    form.resetFields();
+    this.setState({
+      formValues: {},
+    });
+    console.log(999);
+    dispatch({
+      type: 'goods/fetchGoods',
+      payload: {},
+    });
+  };
+
+  toggleForm = () => {
+    this.setState({
+      expandForm: !this.state.expandForm,
+    });
+  };
+
+  handleMenuClick = e => {
+    const { dispatch } = this.props;
+    const { selectedRows } = this.state;
+
+    if (!selectedRows) return;
+
+    switch (e.key) {
+      case 'remove':
+        dispatch({
+          type: 'rule/remove',
+          payload: {
+            no: selectedRows.map(row => row.no).join(','),
+          },
+          callback: () => {
+            this.setState({
+              selectedRows: [],
+            });
+          },
+        });
+        break;
+      default:
+        break;
+    }
+  };
+
+  handleSelectRows = rows => {
+    this.setState({
+      selectedRows: rows,
+    });
+  };
+
+  handleSearch = e => {
+    e.preventDefault();
+
+    const { dispatch, form } = this.props;
+
+    form.validateFields((err, fieldsValue) => {
+      if (err) return;
+
+      const values = {
+        ...fieldsValue,
+        updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
+      };
+
+      this.setState({
+        formValues: values,
+      });
+      console.log(9999);
+      dispatch({
+        type: 'goods/fetchGoods',
+        payload: values,
+      });
+    });
+  };
+
+  // 删除商品
+  deleteGoods = id => {
+    event.preventDefault();
+    console.log(id);
+  };
+  renderSimpleForm() {
+    const { getFieldDecorator } = this.props.form;
+    return (
+      <Form onSubmit={this.handleSearch} layout="inline">
+        <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+          <Col md={8} sm={24}>
+            <FormItem label="规则编号">
+              {getFieldDecorator('no')(<Input placeholder="请输入" />)}
+            </FormItem>
+          </Col>
+          <Col md={8} sm={24}>
+            <FormItem label="使用状态">
+              {getFieldDecorator('goods_status')(
+                <Select placeholder="请选择" style={{ width: '100%' }}>
+                  <Option value="0">关闭</Option>
+                  <Option value="1">运行中</Option>
+                </Select>
+              )}
+            </FormItem>
+          </Col>
+          <Col md={8} sm={24}>
+            <span className={styles.submitButtons}>
+              <Button type="primary" htmlType="submit">
+                查询
+              </Button>
+              <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>
+                重置
+              </Button>
+              <a style={{ marginLeft: 8 }} onClick={this.toggleForm}>
+                展开 <Icon type="down" />
+              </a>
+            </span>
+          </Col>
+        </Row>
+      </Form>
+    );
+  }
+
+  renderAdvancedForm() {
+    const { getFieldDecorator } = this.props.form;
+    return (
+      <Form onSubmit={this.handleSearch} layout="inline">
+        <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+          <Col md={8} sm={24}>
+            <FormItem label="规则编号">
+              {getFieldDecorator('no')(<Input placeholder="请输入" />)}
+            </FormItem>
+          </Col>
+          <Col md={8} sm={24}>
+            <FormItem label="使用状态">
+              {getFieldDecorator('status')(
+                <Select placeholder="请选择" style={{ width: '100%' }}>
+                  <Option value="0">关闭</Option>
+                  <Option value="1">运行中</Option>
+                </Select>
+              )}
+            </FormItem>
+          </Col>
+          <Col md={8} sm={24}>
+            <FormItem label="调用次数">
+              {getFieldDecorator('number')(<InputNumber style={{ width: '100%' }} />)}
+            </FormItem>
+          </Col>
+        </Row>
+        <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+          <Col md={8} sm={24}>
+            <FormItem label="更新日期">
+              {getFieldDecorator('date')(
+                <DatePicker style={{ width: '100%' }} placeholder="请输入更新日期" />
+              )}
+            </FormItem>
+          </Col>
+          <Col md={8} sm={24}>
+            <FormItem label="使用状态">
+              {getFieldDecorator('status3')(
+                <Select placeholder="请选择" style={{ width: '100%' }}>
+                  <Option value="0">关闭</Option>
+                  <Option value="1">运行中</Option>
+                </Select>
+              )}
+            </FormItem>
+          </Col>
+          <Col md={8} sm={24}>
+            <FormItem label="使用状态">
+              {getFieldDecorator('status4')(
+                <Select placeholder="请选择" style={{ width: '100%' }}>
+                  <Option value="0">关闭</Option>
+                  <Option value="1">运行中</Option>
+                </Select>
+              )}
+            </FormItem>
+          </Col>
+        </Row>
+        <div style={{ overflow: 'hidden' }}>
+          <span style={{ float: 'right', marginBottom: 24 }}>
+            <Button type="primary" htmlType="submit">
+              查询
+            </Button>
+            <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>
+              重置
+            </Button>
+            <a style={{ marginLeft: 8 }} onClick={this.toggleForm}>
+              收起 <Icon type="up" />
+            </a>
+          </span>
+        </div>
+      </Form>
+    );
+  }
+
+  renderForm() {
+    return this.state.expandForm ? this.renderAdvancedForm() : this.renderSimpleForm();
+  }
+
+  render() {
+    console.log(this.props);
+    const { goods: { goodsList: datas }, loading } = this.props;
+    const data = {
+      list: datas.list,
+      pagination: {
+        current: 1,
+        pageSize: datas.page,
+        total: datas.total,
+      },
+    };
+    const { selectedRows } = this.state;
+
+    const columns = [
+      {
+        title: '商品名',
+        dataIndex: 'goods_name',
+        key: 'goods_name',
+      },
+      {
+        title: '商品品牌',
+        dataIndex: 'brand_name',
+        key: 'brand_name',
+      },
+      // {
+      //   title: '服务调用次数',
+      //   dataIndex: 'callNo',
+      //   sorter: true,
+      //   align: 'right',
+      //   render: val => `${val} 万`,
+      //   // mark to display a total number
+      //   needTotal: true,
+      // },
+      {
+        title: '状态',
+        dataIndex: 'goods_status',
+        key: 'goods_status',
+        filters: [
+          {
+            text: goodsStatus[0],
+            value: 0,
+          },
+          {
+            text: goodsStatus[1],
+            value: 1,
+          },
+          {
+            text: goodsStatus[2],
+            value: 2,
+          },
+          {
+            text: goodsStatus[3],
+            value: 3,
+          },
+        ],
+        onFilter: (value, record) => record.goods_status.toString() === value,
+        render(val) {
+          return <Badge status={statusMap[val]} text={goodsStatus[val]} />;
+        },
+      },
+      {
+        title: '商品类别',
+        dataIndex: 'goods_type',
+        render: val => <span>{goodsTypeStatus[val]}</span>,
+      },
+      {
+        title: '商品上架时间',
+        dataIndex: 'goods_shelves_time',
+        sorter: true,
+        render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
+      },
+      {
+        title: '创建时间',
+        dataIndex: 'create_time',
+        sorter: true,
+        render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
+      },
+      {
+        title: '库存',
+        dataIndex: 'goods_total_store_nums',
+        key: 'goods_total_store_nums',
+      },
+      {
+        title: '付款方式',
+        dataIndex: 'shop_goods_reduced_inventory',
+        render: val => <span>{payType[val]}</span>,
+      },
+      {
+        title: '包邮',
+        dataIndex: 'goods_free_shipping',
+        render: val => <span>{isTrue[val]}</span>,
+      },
+      {
+        title: '显示',
+        dataIndex: 'goods_is_show',
+        render: val => <span>{isTrue[val]}</span>,
+      },
+      {
+        title: '快递费',
+        dataIndex: 'shop_shipping_exp',
+        key: 'shop_shipping_exp',
+      },
+      {
+        title: '操作',
+        fixed: 'right',
+        width: 150,
+        render: record => (
+          <Fragment>
+            <a href="">配置</a>
+            <Divider type="vertical" />
+            <a onClick={this.deleteGoods.bind(this, record.goods_id)}>删除</a>
+          </Fragment>
+        ),
+      },
+    ];
+
+    const menu = (
+      <Menu onClick={this.handleMenuClick} selectedKeys={[]}>
+        <Menu.Item key="remove">删除</Menu.Item>
+        <Menu.Item key="approval">批量审批</Menu.Item>
+      </Menu>
+    );
+
+    return (
+      <PageHeaderLayout title="查询表格">
+        <Card bordered={false}>
+          <div className={styles.tableList}>
+            <div className={styles.tableListForm}>{this.renderForm()}</div>
+            <div className={styles.tableListOperator}>
+              <Button icon="plus" type="primary">
+                新建
+              </Button>
+              {selectedRows.length > 0 && (
+                <span>
+                  <Button>批量操作</Button>
+                  <Dropdown overlay={menu}>
+                    <Button>
+                      更多操作 <Icon type="down" />
+                    </Button>
+                  </Dropdown>
+                </span>
+              )}
+            </div>
+            <StandardTable
+              rowKey={record => record.goods_id}
+              scroll={{ x: 1500 }}
+              selectedRows={selectedRows}
+              loading={loading}
+              data={data}
+              columns={columns}
+              onSelectRow={this.handleSelectRows}
+              onChange={this.handleStandardTableChange}
+            />
+          </div>
+        </Card>
+      </PageHeaderLayout>
+    );
+  }
+}

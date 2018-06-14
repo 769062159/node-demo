@@ -16,7 +16,7 @@ import Authorized from '../utils/Authorized';
 import logo from '../assets/logo.svg';
 
 import AppMenu from '../components/utils/AppMenu';
-import { hasPermission } from '../utils/authority';
+// import { hasPermission } from '../utils/authority';
 
 const { Content } = Layout;
 const { AuthorizedRoute } = Authorized;
@@ -25,14 +25,14 @@ const { AuthorizedRoute } = Authorized;
  * 根据菜单取得重定向地址.
  */
 const redirectData = [];
-const getRedirect = (item) => {
+const getRedirect = item => {
   if (item && item.children) {
     if (item.children[0] && item.children[0].path) {
       redirectData.push({
         from: `/${item.path}`,
         to: `/${item.children[0].path}`,
       });
-      item.children.forEach((children) => {
+      item.children.forEach(children => {
         getRedirect(children);
       });
     }
@@ -61,7 +61,7 @@ const query = {
 };
 
 let isMobile;
-enquireScreen((b) => {
+enquireScreen(b => {
   isMobile = b;
 });
 
@@ -69,7 +69,7 @@ class BasicLayout extends React.PureComponent {
   static childContextTypes = {
     location: PropTypes.object,
     breadcrumbNameMap: PropTypes.object,
-  }
+  };
   state = {
     isMobile,
   };
@@ -81,7 +81,7 @@ class BasicLayout extends React.PureComponent {
     };
   }
   componentDidMount() {
-    enquireScreen((mobile) => {
+    enquireScreen(mobile => {
       this.setState({
         isMobile: mobile,
       });
@@ -113,20 +113,20 @@ class BasicLayout extends React.PureComponent {
       return '/dashboard/analysis';
     }
     return redirect;
-  }
-  handleMenuCollapse = (collapsed) => {
+  };
+  handleMenuCollapse = collapsed => {
     this.props.dispatch({
       type: 'global/changeLayoutCollapsed',
       payload: collapsed,
     });
-  }
-  handleNoticeClear = (type) => {
+  };
+  handleNoticeClear = type => {
     message.success(`清空了${type}`);
     this.props.dispatch({
       type: 'global/clearNotices',
       payload: type,
     });
-  }
+  };
   handleMenuClick = ({ key }) => {
     if (key === 'triggerError') {
       this.props.dispatch(routerRedux.push('/exception/trigger'));
@@ -137,17 +137,24 @@ class BasicLayout extends React.PureComponent {
         type: 'login/logout',
       });
     }
-  }
-  handleNoticeVisibleChange = (visible) => {
+  };
+  handleNoticeVisibleChange = visible => {
     if (visible) {
       this.props.dispatch({
         type: 'global/fetchNotices',
       });
     }
-  }
+  };
   render() {
     const {
-      currentUser, collapsed, fetchingNotices, notices, routerData, match, location, menus,
+      currentUser,
+      collapsed,
+      fetchingNotices,
+      notices,
+      routerData,
+      match,
+      location,
+      menus,
     } = this.props;
     const bashRedirect = this.getBashRedirect();
     const layout = (
@@ -179,49 +186,43 @@ class BasicLayout extends React.PureComponent {
           />
           <Content style={{ margin: '24px 24px 0', height: '100%' }}>
             <Switch>
-              {
-                redirectData.map(item =>
-                  <Redirect key={item.from} exact from={item.from} to={item.to} />
-                )
-              }
-              {
-                getRoutes(match.path, routerData).map(item =>
-                  (
-                    <AuthorizedRoute
-                      key={item.key}
-                      path={item.path}
-                      component={item.component}
-                      exact={item.exact}
-                      authority={() => hasPermission(item.identity)}
-                      redirectPath="/exception/403"
-                    />
-                  )
-                )
-              }
+              {redirectData.map(item => (
+                <Redirect key={item.from} exact from={item.from} to={item.to} />
+              ))}
+              {getRoutes(match.path, routerData).map(item => (
+                <AuthorizedRoute
+                  key={item.key}
+                  path={item.path}
+                  component={item.component}
+                  exact={item.exact}
+                  // authority={() => hasPermission(item.identity)}
+                  redirectPath="/exception/403"
+                />
+              ))}
               <Redirect exact from="/" to={bashRedirect} />
               <Route render={NotFound} />
             </Switch>
           </Content>
           <GlobalFooter
-            links={[{
-              key: 'Pro 首页',
-              title: 'Pro 首页',
-              href: 'http://pro.ant.design',
-              blankTarget: true,
-            }, {
-              key: 'github',
-              title: <Icon type="github" />,
-              href: 'https://github.com/ant-design/ant-design-pro',
-              blankTarget: true,
-            }, {
-              key: 'Ant Design',
-              title: 'Ant Design',
-              href: 'http://ant.design',
-              blankTarget: true,
-            }]}
+            // links={[{
+            //   key: 'Pro 首页',
+            //   title: 'Pro 首页',
+            //   href: 'http://pro.ant.design',
+            //   blankTarget: true,
+            // }, {
+            //   key: 'github',
+            //   title: <Icon type="github" />,
+            //   href: 'https://github.com/ant-design/ant-design-pro',
+            //   blankTarget: true,
+            // }, {
+            //   key: 'Ant Design',
+            //   title: 'Ant Design',
+            //   href: 'http://ant.design',
+            //   blankTarget: true,
+            // }]}
             copyright={
               <div>
-                Copyright <Icon type="copyright" /> 2018 蚂蚁金服体验技术部出品
+                Copyright <Icon type="copyright" /> 2018 风远科技
               </div>
             }
           />

@@ -4,6 +4,12 @@ export async function query() {
   return request('/api/users');
 }
 
+// export async function queryCurrent() {
+//   return request('/api/currentUser');
+// }
+
 export async function queryCurrent() {
-  return request('/api/currentUser');
+  return request('/admin/myinfo', {
+    method: 'POST',
+  });
 }

@@ -6,7 +6,7 @@ import dynamic from 'dva/dynamic';
 import { getRouterConfig } from './common/router';
 import Authorized from './utils/Authorized';
 import styles from './index.less';
-import { hasPermission } from './utils/authority';
+// import { hasPermission } from './utils/authority';
 
 const { ConnectedRouter } = routerRedux;
 const { AuthorizedRoute } = Authorized;
@@ -26,7 +26,7 @@ function RouterConfig({ history, app }) {
           <AuthorizedRoute
             path="/"
             render={props => <BasicLayout {...props} />}
-            authority={() => hasPermission('root')}
+            // authority={() => hasPermission('root')}
             redirectPath="/user/login"
           />
         </Switch>
