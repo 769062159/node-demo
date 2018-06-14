@@ -15,9 +15,11 @@ export default {
   state: {
     list: [],
     UserList: [],
+    UserListPage: {},
     RoleList: [],
     currentUser: {},
     GroupList: [],
+    GroupRoleList: [], // 联表用
   },
 
   effects: {
@@ -30,32 +32,27 @@ export default {
     },
     *fetchGroup({ payload }, { call, put }) {
       const response = yield call(getGroupList, payload);
-      // const GroupList = { GroupList :response.data};
-      // console.log(GroupList);
       yield put({
         type: 'getGroup',
+        payload: response.data,
+      });
+    },
+    *getJoinGroup({ payload }, { call, put }) {
+      const response = yield call(getGroupList, payload);
+      yield put({
+        type: 'joinGroup',
         payload: response.data,
       });
     },
     *delDep({ payload }, { call }) {
       // 删除部门或者角色
       yield call(delDep, payload);
-      // yield put({
-      //   type: 'delDep',
-      //   payload: response.data,
-      // });
     },
     *addDep({ payload }, { call }) {
       // 删除部门或者角色
       yield call(addDep, payload);
-      // console.log(response.data);
-      // yield put({
-      //   type: 'addDep',
-      //   payload: response.data,
-      // });
     },
     *addUser({ payload }, { call }) {
-      // 删除部门或者角色
       yield call(addUser, payload);
       // console.log(response.data);
       // yield put({
@@ -64,9 +61,10 @@ export default {
       // });
     },
     *delUser({ payload }, { call, put }) {
-      const response = yield call(deleteUser, payload);
+      yield call(deleteUser, payload);
+      const response = yield call(getUserList, payload);
       yield put({
-        type: 'deleteUser',
+        type: 'getUserList',
         payload: response.data,
       });
     },
@@ -79,10 +77,17 @@ export default {
     },
     *fetchRole({ payload }, { call, put }) {
       const response = yield call(getRoleList, payload);
-      // const GroupList = { GroupList :response.data};
       yield put({
         type: 'getRole',
         payload: response.data,
+      });
+    },
+    *getJoinRole({ payload }, { call, put }) {
+      const response = yield call(getRoleList, payload);
+      yield put({
+        type: 'getRoleJoin',
+        payload: response.data,
+        param: payload.parent_id[0],
       });
     },
     *fetchCurrent(_, { call, put }) {
@@ -96,9 +101,14 @@ export default {
 
   reducers: {
     getUserList(state, { payload }) {
+      const { list, page, total } = payload;
       return {
         ...state,
-        UserList: payload,
+        UserList: list,
+        UserListPage: {
+          pageSize: page,
+          total,
+        },
       };
     },
     getGroup(state, { payload }) {
@@ -107,10 +117,28 @@ export default {
         GroupList: payload,
       };
     },
+    joinGroup(state, { payload }) {
+      const { list } = payload;
+      return {
+        ...state,
+        GroupRoleList: list,
+      };
+    },
     getRole(state, { payload }) {
       return {
         ...state,
         RoleList: payload,
+      };
+    },
+    getRoleJoin(state, { payload, param }) {
+      state.GroupRoleList = state.GroupRoleList.map(res => {
+        if (res.id === param) {
+          res.children = payload.list;
+        }
+        return res;
+      });
+      return {
+        ...state,
       };
     },
     save(state, action) {

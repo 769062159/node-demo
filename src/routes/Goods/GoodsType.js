@@ -180,7 +180,7 @@ export default class TableList extends PureComponent {
         dispatch({
           type: 'goods/delGoodType',
           payload: {
-            id,
+            class_id: id,
           },
         });
         // that.setState({

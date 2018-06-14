@@ -19,7 +19,7 @@ export async function editGoodType(params) {
 
 // 所有商品分类
 export async function getAllType(params) {
-  return request('/goods/class/lists', {
+  return request('/admin/goods/class/lists', {
     method: 'POST',
     body: params,
   });
@@ -27,7 +27,7 @@ export async function getAllType(params) {
 
 // 创建商品分类
 export async function addGoodType(params) {
-  return request('/goods/class/create', {
+  return request('/admin/goods/class/create', {
     method: 'POST',
     body: params,
   });
@@ -35,7 +35,7 @@ export async function addGoodType(params) {
 
 // 分类删除
 export async function delGoodType(params) {
-  return request('/admin/shop-goods-class/delete', {
+  return request('/admin/goods/class/delete', {
     method: 'POST',
     body: params,
   });

@@ -11,7 +11,7 @@ const { confirm } = Modal;
 @connect(({ user, loading }) => ({
   user,
   submitting: loading.effects['user/addDep'],
-  loading: loading.effects['user/fetchUser'],
+  loading: loading.models.user,
 }))
 @Form.create()
 export default class Group extends Component {
@@ -19,7 +19,6 @@ export default class Group extends Component {
     super(props);
     this.state = {
       addUserVisible: false,
-      dep: {},
       pagination: 1,
       depRole: [],
     };
@@ -30,9 +29,9 @@ export default class Group extends Component {
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
-      type: 'user/fetchGroup',
+      type: 'user/getJoinGroup',
     });
-    this.updataData();
+    // this.updataData();
   }
 
   // componentWillReceiveProps() {
@@ -40,7 +39,6 @@ export default class Group extends Component {
   // }
   // 更改部门
   onDepChange = (value, selectedOptions) => {
-    console.log(value, selectedOptions);
     this.state.depRole = value;
     if (value.length > 1) {
       return false;
@@ -53,33 +51,20 @@ export default class Group extends Component {
       targetOption.loading = false;
       const { dispatch } = this.props;
       dispatch({
-        type: 'user/fetchRole',
+        type: 'user/getJoinRole',
         payload: {
           status: 0,
           parent_id: value,
         },
-      }).then(() => {
-        this.update();
-        const { dep } = this.state;
-        dep.GroupList.list.forEach(element => {
-          if (element.id == value) {
-            element.children = dep.RoleList.list;
-          }
-        });
       });
-      //   console.log(targetOption);
-      //   this.state.dep.GroupList.list[value] = targetOption;
-      //   this.setState({
-      //     user: [...this.state.user],
-      //   });
     }, 1000);
   };
   // 更新
-  update = () => {
-    this.setState((prevState, props) => ({
-      dep: props.user,
-    }));
-  };
+  // update = () => {
+  //   this.setState((prevState, props) => ({
+  //     dep: props.user,
+  //   }));
+  // };
   // 刷新本页
   updataData = () => {
     const { pagination } = this.state;
@@ -90,8 +75,6 @@ export default class Group extends Component {
         status: 0,
         page: pagination,
       },
-    }).then(() => {
-      this.update();
     });
   };
   // 新增modal显示
@@ -114,7 +97,6 @@ export default class Group extends Component {
       if (depRole.length !== 2) {
         message.error('请选择部门角色');
       } else if (!err) {
-        // if (!err) {
         const data = {
           ...values,
           group_id: depRole[0],
@@ -175,8 +157,9 @@ export default class Group extends Component {
     );
   };
   render() {
-    const { addUserVisible, dep } = this.state;
-    const { loading, submitting } = this.props;
+    const { addUserVisible } = this.state;
+    const { loading, submitting, user: { UserList, UserListPage, GroupRoleList } } = this.props;
+    console.log(GroupRoleList);
     const { getFieldDecorator } = this.props.form;
     const progressColumns = [
       {
@@ -214,17 +197,6 @@ export default class Group extends Component {
         },
       },
     ];
-    let pagination = {};
-    let UserList = {};
-    let GroupList = [];
-    if (Object.keys(dep).length) {
-      UserList = dep.UserList;
-      pagination = {
-        pageSize: UserList.page,
-        total: UserList.total,
-      };
-      GroupList = dep.GroupList.list;
-    }
     return (
       <PageHeaderLayout title="用户列表">
         <Card bordered={false}>
@@ -233,11 +205,11 @@ export default class Group extends Component {
           </Button>
           <Table
             onChange={this.handleTableChange}
-            dataSource={UserList.list}
+            dataSource={UserList}
             rowKey={record => record.id}
             loading={loading}
             columns={progressColumns}
-            pagination={pagination}
+            pagination={UserListPage}
           />
           <Modal
             title="Title"
@@ -279,7 +251,7 @@ export default class Group extends Component {
               <div>部门角色</div>
               <Cascader
                 filedNames={{ label: 'name', value: 'id' }}
-                options={GroupList}
+                options={GroupRoleList}
                 onChange={this.onDepChange}
                 changeOnSelect
               />
