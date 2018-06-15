@@ -58,11 +58,14 @@ export default {
       });
     },
     *getAllAttr({ payload }, { call, put }) {
-      const response = yield call(getAttrList, payload);
-      yield put({
-        type: 'fetchAttr',
-        payload: response.data,
-      });
+      const response = yield call(getAttrList, payload) || {};
+      console.log(response);
+      if (response) {
+        yield put({
+          type: 'fetchAttr',
+          payload: response.data,
+        });
+      }
     },
     *addGoodAttr({ payload }, { call, put }) {
       yield call(addGoodAttr, payload);

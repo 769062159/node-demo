@@ -324,10 +324,6 @@ export default class TableList extends PureComponent {
             text: goodsStatus[2],
             value: 2,
           },
-          {
-            text: goodsStatus[3],
-            value: 3,
-          },
         ],
         onFilter: (value, record) => record.goods_status.toString() === value,
         render(val) {

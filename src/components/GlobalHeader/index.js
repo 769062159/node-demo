@@ -159,20 +159,24 @@ export default class GlobalHeader extends PureComponent {
           ) : (
             <Spin size="small" style={{ marginLeft: 8 }} />
           )} */}
-          {currentUser.nick_name ? (
-            <Dropdown overlay={menu}>
-              <span className={`${styles.action} ${styles.account}`}>
-                <Avatar
-                  size="small"
-                  className={styles.avatar}
-                  src={
-                    currentUser.avatar ||
-                    'https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png'
-                  }
-                />
-                <span className={styles.name}>{currentUser.name}</span>
-              </span>
-            </Dropdown>
+          {currentUser ? (
+            currentUser.nick_name ? (
+              <Dropdown overlay={menu}>
+                <span className={`${styles.action} ${styles.account}`}>
+                  <Avatar
+                    size="small"
+                    className={styles.avatar}
+                    src={
+                      currentUser.avatar ||
+                      'https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png'
+                    }
+                  />
+                  <span className={styles.name}>{currentUser.name}</span>
+                </span>
+              </Dropdown>
+            ) : (
+              <Spin size="small" style={{ marginLeft: 8 }} />
+            )
           ) : (
             <Spin size="small" style={{ marginLeft: 8 }} />
           )}
