@@ -11,7 +11,7 @@ export async function getAllGoods(params) {
 
 // 商品分类修改
 export async function editGoodType(params) {
-  return request('/shop-goods-class/updatet', {
+  return request('/admin/goods/class/update', {
     method: 'POST',
     body: params,
   });

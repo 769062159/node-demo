@@ -47,6 +47,7 @@ const isTrue = ['是', '否'];
 export default class TableList extends PureComponent {
   state = {
     expandForm: false,
+    dataIndex: {},
     addUserVisible: false,
     // selectedRows: [],
     formValues: {},
@@ -56,8 +57,8 @@ export default class TableList extends PureComponent {
     header: {
       Authorization: `Bearer ${localStorage.getItem('token')}`,
     },
+    selectOption: 0,
   };
-
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
@@ -192,26 +193,33 @@ export default class TableList extends PureComponent {
       },
     });
   };
+  // 修改信息
+  editGoods = (id, e) => {
+    e.preventDefault();
+    this.setState({
+      dataIndex: id,
+    });
+    this.showModal();
+  };
   // 新增modal显示
   showModal = () => {
     this.setState({
       addUserVisible: true,
     });
+    this.renderForm();
   };
   // 新增取消
   handAddleCancel = () => {
     this.setState({
       addUserVisible: false,
+      dataIndex: {},
+      fileList: [],
     });
   };
-  // 新增提交
-  handleSubmit = e => {
+  // 新增修改提交
+  handleSubmit = (type, e) => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
-      // const { depRole } = this.state;
-      // if (depRole.length !== 2) {
-      //   message.error('请选择部门角色');
-      // }
       if (!err) {
         const data = {
           ...values,
@@ -223,28 +231,48 @@ export default class TableList extends PureComponent {
             message.error('二级分类请上传图片');
             return false;
           }
+        } else {
+          data.parent_id = 0;
         }
         const { dispatch } = this.props;
-        dispatch({
-          type: 'goods/addGoodType',
-          payload: data,
-        });
-        message.success('添加成功');
+        const { dataIndex } = this.state;
+        console.log(type);
+        if (type) {
+          data.class_id = dataIndex.class_id;
+          dispatch({
+            type: 'goods/editGoodType',
+            payload: data,
+          });
+          message.success('修改成功');
+        } else {
+          dispatch({
+            type: 'goods/addGoodType',
+            payload: data,
+          });
+          message.success('添加成功');
+        }
         this.handAddleCancel();
       }
     });
   };
   // 选择option
-  selectOption = () => {
-    console.log(1);
+  selectOption = value => {
+    console.log(value);
+    this.setState({
+      selectOption: value,
+    });
   };
   // 上传图片
   handleCancel = () => this.setState({ previewVisible: false });
+  removeImg = () => {
+    const { dataIndex } = this.state;
+    dataIndex.class_img_url = '';
+    this.setState({ dataIndex });
+  };
 
   handlePreview = file => {
-    console.log(file);
     this.setState({
-      previewImage: file.data || file.thumbUrl,
+      previewImage: file.url || file.thumbUrl,
       previewVisible: true,
     });
   };
@@ -252,7 +280,6 @@ export default class TableList extends PureComponent {
   handleChange = ({ fileList }) => {
     // const { response } = fileList;
     fileList = fileList.map(item => {
-      console.log(item);
       if (item.status === 'done') {
         const img = {};
         img.status = 'done';
@@ -264,7 +291,6 @@ export default class TableList extends PureComponent {
       }
       return item;
     });
-    console.log(fileList);
     this.setState({ fileList });
   };
   normFile = e => {
@@ -274,10 +300,9 @@ export default class TableList extends PureComponent {
     }
     return e && e.fileList;
   };
-
-  render() {
+  renderAdvancedForm() {
     const { goods: { goodType: datas }, loading } = this.props;
-    const { getFieldDecorator } = this.props.form;
+    const { header, fileList, previewImage, previewVisible, selectOption } = this.state;
     // 上传icon
     const uploadButton = (
       <div>
@@ -285,8 +310,17 @@ export default class TableList extends PureComponent {
         <div className="ant-upload-text">Upload</div>
       </div>
     );
-    const { addUserVisible, header, fileList, previewVisible, previewImage } = this.state;
+    // 上传图片参数
+    const payload = {
+      type: 2,
+    };
+    const { getFieldDecorator } = this.props.form;
     const selectItem = [];
+    selectItem.push(
+      <Option key={9999} value={0}>
+        顶级分类
+      </Option>
+    );
     datas.forEach(res => {
       selectItem.push(
         <Option key={res.class_id} value={res.class_id}>
@@ -294,6 +328,164 @@ export default class TableList extends PureComponent {
         </Option>
       );
     });
+    // 上传图片dom
+    const uploadItem = (
+      <div className="clearfix">
+        <Upload
+          action="http://hlsj.test.seastart.cn/admin/img/upload"
+          headers={header}
+          listType="picture-card"
+          fileList={fileList}
+          onPreview={this.handlePreview}
+          onChange={this.handleChange}
+          data={payload}
+        >
+          {fileList.length >= 1 ? null : uploadButton}
+        </Upload>
+        <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
+          <img alt="example" style={{ width: '100%' }} src={previewImage} />
+        </Modal>
+      </div>
+    );
+    return (
+      <Form onSubmit={this.handleSubmit.bind(this, 0)} hideRequiredMark style={{ marginTop: 8 }}>
+        <FormItem label="分类名称">
+          {getFieldDecorator('name', {
+            rules: [
+              {
+                required: true,
+                message: '请输入分类名称',
+              },
+            ],
+          })(<Input placeholder="给分类起个名字" />)}
+        </FormItem>
+        <FormItem label="上级分类">
+          {getFieldDecorator('parent_id', {})(
+            <Select style={{ width: 120 }} onChange={this.selectOption}>
+              {selectItem}
+            </Select>
+          )}
+        </FormItem>
+        {selectOption ? uploadItem : null}
+        <FormItem tyle={{ marginTop: 32 }}>
+          <Button type="primary" htmlType="submit" loading={loading}>
+            提交
+          </Button>
+        </FormItem>
+      </Form>
+    );
+  }
+  renderSimpleForm() {
+    const { goods: { goodType: datas }, loading } = this.props;
+    const { header, dataIndex, fileList, previewVisible, selectOption } = this.state;
+    let { previewImage } = this.state;
+    const className = dataIndex.class_name;
+    const classParentId = dataIndex.class_parent_id || 0;
+    if (dataIndex.class_img_url) {
+      const img = {
+        uid: -1,
+        status: 'done',
+      };
+      img.name = `${dataIndex.class_name}.png`;
+      img.url = dataIndex.class_img_url;
+      previewImage = img.url;
+      fileList[0] = img;
+    }
+    // 上传icon
+    const uploadButton = (
+      <div>
+        <Icon type="plus" />
+        <div className="ant-upload-text">Upload</div>
+      </div>
+    );
+    // 上传图片参数
+    const payload = {
+      type: 2,
+    };
+    const { getFieldDecorator } = this.props.form;
+    const selectItem = [];
+    if (dataIndex.class_level === 1) {
+      selectItem.push(
+        <Option key={999} value={0}>
+          顶级分类
+        </Option>
+      );
+    } else {
+      datas.forEach(res => {
+        selectItem.push(
+          <Option key={res.class_id} value={res.class_id}>
+            {res.class_name}
+          </Option>
+        );
+      });
+    }
+    // 上传图片dom
+    const uploadItem = (
+      <div className="clearfix">
+        <Upload
+          action="http://hlsj.test.seastart.cn/admin/img/upload"
+          headers={header}
+          listType="picture-card"
+          fileList={fileList}
+          onPreview={this.handlePreview}
+          onChange={this.handleChange}
+          data={payload}
+          onRemove={this.removeImg}
+        >
+          {fileList.length >= 1 ? null : uploadButton}
+        </Upload>
+        <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
+          <img alt="example" style={{ width: '100%' }} src={previewImage} />
+        </Modal>
+      </div>
+    );
+    return (
+      <Form onSubmit={this.handleSubmit.bind(this, 1)} hideRequiredMark style={{ marginTop: 8 }}>
+        <FormItem label="分类名称">
+          {getFieldDecorator('name', {
+            initialValue: className,
+            rules: [
+              {
+                required: true,
+                message: '请输入分类名称',
+              },
+            ],
+          })(<Input placeholder="给分类起个名字" />)}
+        </FormItem>
+        <FormItem label="上级分类">
+          {getFieldDecorator('parent_id', {
+            initialValue: classParentId,
+            rules: [
+              {
+                required: true,
+                message: '请输入分类名称',
+              },
+            ],
+          })(
+            <Select style={{ width: 120 }} onChange={this.selectOption}>
+              {selectItem}
+            </Select>
+          )}
+        </FormItem>
+        {selectOption ? uploadItem : null}
+        <FormItem tyle={{ marginTop: 32 }}>
+          <Button type="primary" htmlType="submit" loading={loading}>
+            修改
+          </Button>
+        </FormItem>
+      </Form>
+    );
+  }
+  // 渲染修改还是新增
+  renderForm() {
+    const { dataIndex } = this.state;
+    const length = Object.keys(dataIndex).length;
+    return length ? this.renderSimpleForm() : this.renderAdvancedForm();
+  }
+  render() {
+    const { goods: { goodType: datas }, loading } = this.props;
+    // const { getFieldDecorator } = this.props.form;
+    const { addUserVisible } = this.state;
     const progressColumns = [
       {
         title: '分类名',
@@ -314,9 +506,9 @@ export default class TableList extends PureComponent {
         title: '操作',
         fixed: 'right',
         width: 150,
-        render: record => (
+        render: (text, record) => (
           <Fragment>
-            <a href="">配置</a>
+            <a onClick={this.editGoods.bind(this, record)}>修改</a>
             <Divider type="vertical" />
             <a onClick={this.deleteGoods.bind(this, record.class_id)}>删除</a>
           </Fragment>
@@ -324,17 +516,6 @@ export default class TableList extends PureComponent {
       },
     ];
 
-    // const menu = (
-    //   <Menu onClick={this.handleMenuClick} selectedKeys={[]}>
-    //     <Menu.Item key="remove">删除</Menu.Item>
-    //     <Menu.Item key="approval">批量审批</Menu.Item>
-    //   </Menu>
-    // );
-    // 上传图片参数
-    const payload = {
-      type: 2,
-    };
-    console.log(fileList);
     return (
       <PageHeaderLayout title="商品分类">
         <Card bordered={false}>
@@ -381,71 +562,7 @@ export default class TableList extends PureComponent {
           onCancel={this.handAddleCancel.bind(this)}
           footer=""
         >
-          <Form onSubmit={this.handleSubmit} hideRequiredMark style={{ marginTop: 8 }}>
-            <FormItem label="分类名称">
-              {getFieldDecorator('name', {
-                rules: [
-                  {
-                    required: true,
-                    message: '请输入分类名称',
-                  },
-                ],
-              })(<Input placeholder="给分类起个名字" />)}
-            </FormItem>
-            <FormItem label="上级分类">
-              {getFieldDecorator('parent_id', {})(
-                <Select style={{ width: 120 }} onChange={this.selectOption}>
-                  {selectItem}
-                </Select>
-              )}
-            </FormItem>
-            {/* <FormItem
-              // {...formItemLayout}
-              label="上传图片"
-              // extra=""
-            >
-              {getFieldDecorator('upload', {
-                valuePropName: 'fileList',
-                getValueFromEvent: this.normFile,
-              })(
-                <Upload
-                  name="logo"
-                  data={payload}
-                  action="http://hlsj.test.seastart.cn/admin/img/upload"
-                  // fileList={fileList}
-                  // onPreview={this.handlePreview}
-                  // onChange={this.handleChange}
-                  headers={header}
-                  listType="picture"
-                >
-                  <Button>
-                    <Icon type="upload" /> Click to upload
-                  </Button>
-                </Upload>
-              )}
-            </FormItem> */}
-            <div className="clearfix">
-              <Upload
-                action="http://hlsj.test.seastart.cn/admin/img/upload"
-                headers={header}
-                listType="picture-card"
-                fileList={fileList}
-                onPreview={this.handlePreview}
-                onChange={this.handleChange}
-                data={payload}
-              >
-                {fileList.length >= 1 ? null : uploadButton}
-              </Upload>
-              <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
-                <img alt="example" style={{ width: '100%' }} src={previewImage} />
-              </Modal>
-            </div>
-            <FormItem tyle={{ marginTop: 32 }}>
-              <Button type="primary" htmlType="submit" loading={loading}>
-                提交
-              </Button>
-            </FormItem>
-          </Form>
+          {this.renderForm()}
         </Modal>
       </PageHeaderLayout>
     );

@@ -91,6 +91,12 @@ export default {
       };
     },
     fetchType(state, { payload }) {
+      payload = payload.map(res => {
+        if (res.has_category.length) {
+          res.children = res.has_category;
+        }
+        return res;
+      });
       // state.menuList = payload;
       return {
         ...state,
