@@ -31,12 +31,8 @@ export default class Group extends Component {
     dispatch({
       type: 'user/getJoinGroup',
     });
-    // this.updataData();
+    this.updataData();
   }
-
-  // componentWillReceiveProps() {
-  //   console.log(1);
-  // }
   // 更改部门
   onDepChange = (value, selectedOptions) => {
     this.state.depRole = value;

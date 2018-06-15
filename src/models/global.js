@@ -13,7 +13,8 @@ export default {
   },
 
   effects: {
-  	*fetchMenus({ payload }, { call, put, select }) { // 增加
+    *fetchMenus(_, { call, put, select }) {
+      // 增加
       const menus = yield call(getAuthMenus);
       const routerConfig = yield select(state => state.global.routerConfig);
       const routerData = yield call(getRouterData, routerConfig, menus);
@@ -26,7 +27,7 @@ export default {
         type: 'saveRouterData',
         payload: routerData,
       });
-   },
+    },
     *fetchNotices(_, { call, put }) {
       const data = yield call(queryNotices);
       yield put({
@@ -87,7 +88,7 @@ export default {
         ...state,
         routerData: payload,
       };
-    }
+    },
   },
 
   subscriptions: {

@@ -31,13 +31,13 @@ export default {
       //   payload: responses.data,
       // });
     },
-    *delMenu({ payload }, { call }) {
+    *delMenu({ payload }, { call, put }) {
       yield call(deleteMenu, payload);
-      // const responses = yield call(getRoleMenu, payload);
-      // yield put({
-      //   type: 'RoleMenu',
-      //   payload: responses.data,
-      // });
+      const response = yield call(getAllMenu);
+      yield put({
+        type: 'show',
+        payload: response,
+      });
     },
   },
 

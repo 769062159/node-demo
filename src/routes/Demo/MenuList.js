@@ -25,11 +25,11 @@ export default class Group extends Component {
     this.updataData();
   }
   // 更新
-  update = () => {
-    this.setState((prevState, props) => ({
-      menuList: props.menu.data,
-    }));
-  };
+  // update = () => {
+  //   this.setState((prevState, props) => ({
+  //     menuList: props.menu.data,
+  //   }));
+  // };
   // 刷新本页
   updataData = () => {
     const { pagination } = this.state;
@@ -40,8 +40,6 @@ export default class Group extends Component {
         status: 0,
         page: pagination,
       },
-    }).then(() => {
-      this.update();
     });
   };
 
@@ -73,14 +71,9 @@ export default class Group extends Component {
   };
   // 换页
   handleTableChange = pagination => {
-    this.setState(
-      {
-        pagination: pagination.current,
-      },
-      () => {
-        this.updataData();
-      }
-    );
+    this.setState({
+      pagination: pagination.current,
+    });
   };
   // 跳到角色
   goPath = () => {
@@ -89,9 +82,10 @@ export default class Group extends Component {
     dispatch(routerRedux.push(url));
   };
   render() {
-    const { menuList } = this.state;
-    console.log(this.props);
-    const { loading } = this.props;
+    // const { menuList } = this.state;
+    // console.log(this.props);
+    // const { menu: { data: menuList } } =
+    const { loading, menu: { data: menuList } } = this.props;
     const progressColumns = [
       {
         title: '',

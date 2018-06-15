@@ -187,16 +187,16 @@ export async function getAuthMenus() {
 }
 // 我的菜单列表
 // export async function getAuthMenus() {
-// 	return request('/admin/menu/list', { method: 'POST'}).then(function(datas) {
-//     let menu = datas.data;
+// 	return request('/admin/menu/list', { method: 'POST'}).then((datas) => {
+//     const menu = datas.data;
 //     menu.forEach(element => {
 //       element.name = element.menu_name;
 //       element.children.forEach(res => {
 //         res.name = res.menu_name;
 //       });
 //     });
-// 		return new Promise(function (resolve) {
-// 			resolve(menuConfig.getMenuData(menu));
+// 		return new Promise( (resolve) => {
+// 			resolve(menu);
 // 		});
 // 	});
 // }
