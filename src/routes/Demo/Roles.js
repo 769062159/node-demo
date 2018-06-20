@@ -273,7 +273,7 @@ export default class Role extends Component {
     return (
       <PageHeaderLayout title="角色列表">
         <Card>
-          <Button type="primary" onClick={this.showModal.bind(this)}>
+          <Button type="primary" onClick={this.showModal.bind(this)} style={{ marginBottom: 24 }}>
             新增角色
           </Button>
           <Table

@@ -3,6 +3,7 @@ import { connect } from 'dva';
 import { routerRedux } from 'dva/router';
 import { Table, Button, Modal, Card } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
+// import './style.less';
 
 const ButtonGroup = Button.Group;
 const { confirm } = Modal;
@@ -120,7 +121,7 @@ export default class Group extends Component {
     return (
       <PageHeaderLayout title="菜单列表">
         <Card bordered={false}>
-          <Button type="primary" onClick={this.goPath}>
+          <Button type="primary" onClick={this.goPath} style={{ marginBottom: 24 }}>
             新增菜单
           </Button>
           <Table

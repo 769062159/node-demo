@@ -171,7 +171,7 @@ export default class GlobalHeader extends PureComponent {
                       'https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png'
                     }
                   />
-                  <span className={styles.name}>{currentUser.name}</span>
+                  <span className={styles.name}>{currentUser.nick_name}</span>
                 </span>
               </Dropdown>
             ) : (

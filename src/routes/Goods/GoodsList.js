@@ -12,7 +12,7 @@ import {
   Button,
   Dropdown,
   Menu,
-  InputNumber,
+  // InputNumber,
   DatePicker,
   Badge,
   Divider,
@@ -23,6 +23,7 @@ import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './TableList.less';
 
 const FormItem = Form.Item;
+const InputGroup = Input.Group;
 const { Option } = Select;
 const getValue = obj =>
   Object.keys(obj)
@@ -45,6 +46,8 @@ export default class TableList extends PureComponent {
     expandForm: false,
     selectedRows: [],
     formValues: {},
+    minPrice: '',
+    maxPrice: '',
   };
 
   componentDidMount() {
@@ -53,6 +56,17 @@ export default class TableList extends PureComponent {
       type: 'goods/fetchGoods',
     });
   }
+
+  // 设置最小值
+  setMin = e => {
+    const { value } = e.target;
+    this.setState({ minPrice: value });
+  };
+  // 设置最大值
+  setMax = e => {
+    const { value } = e.target;
+    this.setState({ maxPrice: value });
+  };
 
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
     const { dispatch } = this.props;
@@ -86,6 +100,8 @@ export default class TableList extends PureComponent {
     form.resetFields();
     this.setState({
       formValues: {},
+      minPrice: '',
+      maxPrice: '',
     });
     console.log(999);
     dispatch({
@@ -148,6 +164,13 @@ export default class TableList extends PureComponent {
         formValues: values,
       });
       console.log(9999);
+      const { minPrice, maxPrice } = this.state;
+      console.log(minPrice);
+      console.log(maxPrice);
+      if (minPrice && maxPrice) {
+        values.sell_goods_price_start = minPrice;
+        values.sell_goods_price_end = maxPrice;
+      }
       dispatch({
         type: 'goods/fetchGoods',
         payload: values,
@@ -160,22 +183,24 @@ export default class TableList extends PureComponent {
     event.preventDefault();
     console.log(id);
   };
+
   renderSimpleForm() {
     const { getFieldDecorator } = this.props.form;
     return (
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
-            <FormItem label="规则编号">
-              {getFieldDecorator('no')(<Input placeholder="请输入" />)}
+            <FormItem label="商品名称">
+              {getFieldDecorator('goods_name')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
             <FormItem label="使用状态">
               {getFieldDecorator('goods_status')(
                 <Select placeholder="请选择" style={{ width: '100%' }}>
-                  <Option value="0">关闭</Option>
-                  <Option value="1">运行中</Option>
+                  <Option value="0">上架中</Option>
+                  <Option value="1">未上架</Option>
+                  <Option value="2">下架</Option>
                 </Select>
               )}
             </FormItem>
@@ -204,32 +229,64 @@ export default class TableList extends PureComponent {
       <Form onSubmit={this.handleSearch} layout="inline">
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
-            <FormItem label="规则编号">
-              {getFieldDecorator('no')(<Input placeholder="请输入" />)}
+            <FormItem label="商品名称">
+              {getFieldDecorator('goods_name')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
             <FormItem label="使用状态">
-              {getFieldDecorator('status')(
+              {getFieldDecorator('goods_status')(
                 <Select placeholder="请选择" style={{ width: '100%' }}>
-                  <Option value="0">关闭</Option>
-                  <Option value="1">运行中</Option>
+                  <Option value="0">上架中</Option>
+                  <Option value="1">未上架</Option>
+                  <Option value="2">下架</Option>
                 </Select>
               )}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
-            <FormItem label="调用次数">
-              {getFieldDecorator('number')(<InputNumber style={{ width: '100%' }} />)}
+            <FormItem label="创建日期">
+              {getFieldDecorator('create_start')(
+                <DatePicker
+                  style={{ width: '100%' }}
+                  format="YYYY-MM-DD HH:mm:ss"
+                  showTime
+                  placeholder="请输入创建日期"
+                />
+              )}
             </FormItem>
           </Col>
         </Row>
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
-            <FormItem label="更新日期">
-              {getFieldDecorator('date')(
-                <DatePicker style={{ width: '100%' }} placeholder="请输入更新日期" />
-              )}
+            <FormItem label="调用次数">
+              <InputGroup compact>
+                <Input
+                  key={1}
+                  value={this.state.minPrice}
+                  style={{ width: 70, textAlign: 'center' }}
+                  onChange={this.setMin}
+                  placeholder="Min"
+                />
+                <Input
+                  key={2}
+                  style={{
+                    width: 30,
+                    borderLeft: 0,
+                    pointerEvents: 'none',
+                    backgroundColor: '#fff',
+                  }}
+                  placeholder="~"
+                  disabled
+                />
+                <Input
+                  key={3}
+                  value={this.state.maxPrice}
+                  style={{ width: 70, textAlign: 'center', borderLeft: 0 }}
+                  onChange={this.setMax}
+                  placeholder="Max"
+                />
+              </InputGroup>
             </FormItem>
           </Col>
           <Col md={8} sm={24}>

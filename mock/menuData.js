@@ -6,7 +6,7 @@ export const menuData = [
   {
     name: '用户',
     icon: 'smile',
-    path: 'demo',
+    path: 'users',
     children: [
       {
         name: '部门角色',
@@ -14,11 +14,11 @@ export const menuData = [
       },
       {
         name: '菜单新增',
-        path: 'demo-two',
+        path: 'menu-add',
       },
       {
         name: '用户列表',
-        path: 'demo-three',
+        path: 'user-list',
       },
       {
         name: '菜单列表',

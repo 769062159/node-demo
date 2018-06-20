@@ -140,19 +140,19 @@ export const getRouterConfig = app => {
       component: dynamicWrapper(app, ['goods'], () => import('../routes/Goods/GoodsAttr')),
     },
     // 用户相关信息
-    '/demo/group': {
+    '/users/group': {
       component: dynamicWrapper(app, ['user'], () => import('../routes/Demo/Group')),
     },
-    '/demo/role/:id': {
+    '/users/role/:id': {
       component: dynamicWrapper(app, ['user', 'menu'], () => import('../routes/Demo/Roles')),
     },
-    '/demo/demo-two': {
+    '/users/menu-add': {
       component: dynamicWrapper(app, ['menu'], () => import('../routes/Demo/DemoTwo')),
     },
-    '/demo/demo-three': {
+    '/users/user-list': {
       component: dynamicWrapper(app, [], () => import('../routes/Demo/DemoThree')),
     },
-    '/demo/menu-list': {
+    '/users/menu-list': {
       component: dynamicWrapper(app, ['menu'], () => import('../routes/Demo/MenuList')),
     },
     '/user': {

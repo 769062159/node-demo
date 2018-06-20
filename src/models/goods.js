@@ -16,6 +16,7 @@ export default {
     goodsList: {},
     goodType: [],
     goodAttr: [],
+    goodsAttrPage: {},
   },
 
   effects: {
@@ -59,7 +60,6 @@ export default {
     },
     *getAllAttr({ payload }, { call, put }) {
       const response = yield call(getAttrList, payload) || {};
-      console.log(response);
       if (response) {
         yield put({
           type: 'fetchAttr',
@@ -108,9 +108,14 @@ export default {
     },
     fetchAttr(state, { payload }) {
       // state.menuList = payload;
+      const { list, total, page } = payload;
       return {
         ...state,
-        goodAttr: payload,
+        goodAttr: list,
+        goodsAttrPage: {
+          pageSize: page,
+          total,
+        },
       };
     },
   },

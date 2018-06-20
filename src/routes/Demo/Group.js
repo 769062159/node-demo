@@ -86,7 +86,7 @@ export default class Group extends Component {
   goPath = index => {
     const { dispatch } = this.props;
     const { id } = this.props.user.GroupList.list[index];
-    const url = `/demo/role/${id}`;
+    const url = `/users/role/${id}`;
     dispatch(routerRedux.push(url));
   };
 
@@ -165,7 +165,7 @@ export default class Group extends Component {
     return (
       <PageHeaderLayout title="部门列表">
         <Card bordered={false}>
-          <Button type="primary" onClick={this.showModal.bind(this)}>
+          <Button type="primary" onClick={this.showModal.bind(this)} style={{ marginBottom: 24 }}>
             新增部门
           </Button>
           <Table

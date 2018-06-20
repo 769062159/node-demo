@@ -51,7 +51,7 @@ export async function addGoodAttr(params) {
 
 // 属性列表
 export async function getAttrList(params) {
-  return request('/goods/attr/lists', {
+  return request('/admin/goods/attr/lists', {
     method: 'POST',
     body: params,
   });

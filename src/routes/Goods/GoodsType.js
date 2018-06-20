@@ -37,7 +37,6 @@ const getValue = obj =>
 // const goodsStatus = ['上架', '未上架', '下架'];
 // const goodsTypeStatus = ['普通商品', '一元购', '秒杀', '众筹'];
 // const payType = ['拍下减库存', '付款减库存'];
-const isTrue = ['是', '否'];
 
 @connect(({ goods, loading }) => ({
   goods,
@@ -377,7 +376,7 @@ export default class TableList extends PureComponent {
   }
   renderSimpleForm() {
     const { goods: { goodType: datas }, loading } = this.props;
-    const { header, dataIndex, fileList, previewVisible, selectOption } = this.state;
+    const { header, dataIndex, fileList, previewVisible } = this.state;
     let { previewImage } = this.state;
     const className = dataIndex.class_name;
     const classParentId = dataIndex.class_parent_id || 0;
@@ -467,7 +466,7 @@ export default class TableList extends PureComponent {
             </Select>
           )}
         </FormItem>
-        {selectOption ? uploadItem : null}
+        {dataIndex.class_level !== 1 ? uploadItem : null}
         <FormItem tyle={{ marginTop: 32 }}>
           <Button type="primary" htmlType="submit" loading={loading}>
             修改
@@ -499,13 +498,13 @@ export default class TableList extends PureComponent {
       },
       {
         title: '显示',
-        dataIndex: 'is_show',
-        render: val => <span>{isTrue[val]}</span>,
+        dataIndex: 'class_img_url',
+        render: val => (val ? <img src={val} alt="图片" /> : null),
       },
       {
         title: '操作',
-        fixed: 'right',
-        width: 150,
+        // fixed: 'right',
+        // width: 150,
         render: (text, record) => (
           <Fragment>
             <a onClick={this.editGoods.bind(this, record)}>修改</a>
@@ -537,7 +536,7 @@ export default class TableList extends PureComponent {
               )} */}
             </div>
             <Table
-              onChange={this.handleTableChange}
+              // onChange={this.handleTableChange}
               dataSource={datas}
               rowKey={record => record.class_id}
               loading={loading}

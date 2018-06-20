@@ -12,7 +12,6 @@ const getValue = obj =>
   Object.keys(obj)
     .map(key => obj[key])
     .join(',');
-const isTrue = ['是', '否'];
 // 动态加减
 let uuid = 0;
 @connect(({ goods, loading }) => ({
@@ -24,17 +23,19 @@ export default class TableList extends PureComponent {
   state = {
     expandForm: false,
     addUserVisible: false,
+    sonAttrVisible: false,
+    sonAttrName: '',
     // selectedRows: [],
     formValues: {},
-    previewVisible: false,
-    previewImage: '',
-    fileList: [],
   };
 
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
       type: 'goods/getAllAttr',
+      payload: {
+        status: 0,
+      },
     });
   }
 
@@ -110,11 +111,21 @@ export default class TableList extends PureComponent {
       },
     });
   };
+  // 子修改modal显示取消
+  handSonModal = (name, e) => {
+    e.preventDefault();
+    const { sonAttrVisible } = this.state;
+    this.setState({
+      sonAttrVisible: !sonAttrVisible,
+      sonAttrName: name,
+    });
+  };
   // 新增modal显示
   showModal = () => {
     this.setState({
       addUserVisible: true,
     });
+    this.renderForm();
   };
   // 新增取消
   handAddleCancel = () => {
@@ -168,8 +179,7 @@ export default class TableList extends PureComponent {
   };
 
   render() {
-    console.log(this.state);
-    const { goods: { goodType: datas }, loading } = this.props;
+    const { goods: { goodAttr: datas, goodsAttrPage }, loading } = this.props;
     // 上传icon
     // const uploadButton = (
     //   <div>
@@ -177,31 +187,28 @@ export default class TableList extends PureComponent {
     //     <div className="ant-upload-text">Upload</div>
     //   </div>
     // );
-    const { addUserVisible } = this.state;
+    const { addUserVisible, sonAttrVisible, sonAttrName } = this.state;
     const { getFieldDecorator, getFieldValue } = this.props.form;
 
     const progressColumns = [
       {
-        title: '分类名',
-        dataIndex: 'class_name',
-        key: 'class_name',
+        title: '属性名',
+        dataIndex: 'name',
+        key: 'name',
       },
       {
         title: '创建时间',
         dataIndex: 'create_time',
       },
       {
-        title: '显示',
-        dataIndex: 'is_show',
-        render: val => <span>{isTrue[val]}</span>,
+        title: '更新时间',
+        dataIndex: 'update_time',
       },
       {
         title: '操作',
-        fixed: 'right',
-        width: 150,
         render: record => (
           <Fragment>
-            <a href="">配置</a>
+            <a href="">修改</a>
             <Divider type="vertical" />
             <a onClick={this.deleteGoods.bind(this, record.class_id)}>删除</a>
           </Fragment>
@@ -223,6 +230,32 @@ export default class TableList extends PureComponent {
         xs: { span: 24, offset: 0 },
         sm: { span: 20, offset: 4 },
       },
+    };
+    // 子table
+    const expandedRowRender = data => {
+      const columnss = [
+        { title: '属性值', dataIndex: 'value', key: 'value' },
+        { title: '创建时间', dataIndex: 'create_time', key: 'create_time' },
+        { title: '更新时间', dataIndex: 'update_time', key: 'update_time' },
+        {
+          title: '操作',
+          render: record => (
+            <Fragment>
+              <a onClick={this.handSonModal.bind(this, record.value)}>修改</a>
+              <Divider type="vertical" />
+              <a href="">删除</a>
+            </Fragment>
+          ),
+        },
+      ];
+      return (
+        <Table
+          columns={columnss}
+          dataSource={data}
+          pagination={false}
+          rowKey={record => record.id + record.value}
+        />
+      );
     };
     getFieldDecorator('keys', { initialValue: [] });
     const keys = getFieldValue('keys');
@@ -266,12 +299,14 @@ export default class TableList extends PureComponent {
               </Button>
             </div>
             <Table
-              onChange={this.handleTableChange}
+              className="components-table-demo-nested"
+              // onChange={this.handleTableChange}
+              expandedRowRender={record => expandedRowRender(record.has_many_attr)}
               dataSource={datas}
-              rowKey={record => record.class_id}
+              rowKey={record => record.id + record.create_time}
               loading={loading}
               columns={progressColumns}
-              pagination={false}
+              pagination={goodsAttrPage}
             />
           </div>
         </Card>
@@ -304,6 +339,14 @@ export default class TableList extends PureComponent {
               </Button>
             </FormItem>
           </Form>
+        </Modal>
+        <Modal
+          title="Title"
+          visible={sonAttrVisible}
+          onCancel={this.handSonModal.bind(this, '')}
+          footer=""
+        >
+          <Input placeholder="给属性起个名字" defaultValue={sonAttrName} />
         </Modal>
       </PageHeaderLayout>
     );
