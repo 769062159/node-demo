@@ -41,9 +41,9 @@ export async function delGoodType(params) {
   });
 }
 
-// 属性增加
+// 属性增加 修改 删除  后台合并了
 export async function addGoodAttr(params) {
-  return request('/goods/attr/create', {
+  return request('/admin/goods/attr/create', {
     method: 'POST',
     body: params,
   });
@@ -60,6 +60,14 @@ export async function getAttrList(params) {
 // 属性修改
 export async function editGoodAttr(params) {
   return request('/goods/attr/update', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+// 初始化商品数据
+export async function initGoodAttr(params) {
+  return request('/admin/goods/init', {
     method: 'POST',
     body: params,
   });

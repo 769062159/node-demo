@@ -48,17 +48,17 @@ export const getRouterConfig = app => {
     },
     '/form/step-form/info': {
       identity: 'common',
-      name: '分步表单（填写转账信息）',
+      // name: '分步表单（填写转账信息）',
       component: dynamicWrapper(app, ['form'], () => import('../routes/Forms/StepForm/Step1')),
     },
     '/form/step-form/confirm': {
       identity: 'common',
-      name: '分步表单（确认转账信息）',
+      // name: '分步表单（确认转账信息）',
       component: dynamicWrapper(app, ['form'], () => import('../routes/Forms/StepForm/Step2')),
     },
     '/form/step-form/result': {
       identity: 'common',
-      name: '分步表单（完成）',
+      // name: '分步表单（完成）',
       component: dynamicWrapper(app, ['form'], () => import('../routes/Forms/StepForm/Step3')),
     },
     '/form/advanced-form': {
@@ -138,6 +138,25 @@ export const getRouterConfig = app => {
     },
     '/good/good-attr': {
       component: dynamicWrapper(app, ['goods'], () => import('../routes/Goods/GoodsAttr')),
+    },
+    '/good/step-form': {
+      identity: 'common',
+      component: dynamicWrapper(app, ['form'], () => import('../routes/Goods/StepForm')),
+    },
+    '/good/step-form/info': {
+      identity: 'common',
+      // name: '分步表单（填写转账信息）',
+      component: dynamicWrapper(app, ['goods'], () => import('../routes/Goods/StepForm/Step1')),
+    },
+    '/good/step-form/confirm/:type': {
+      identity: 'common',
+      // name: '分步表单（确认转账信息）',
+      component: dynamicWrapper(app, ['goods'], () => import('../routes/Goods/StepForm/Step2')),
+    },
+    '/good/step-form/result': {
+      identity: 'common',
+      // name: '分步表单（完成）',
+      component: dynamicWrapper(app, ['goods'], () => import('../routes/Goods/StepForm/Step3')),
     },
     // 用户相关信息
     '/users/group': {

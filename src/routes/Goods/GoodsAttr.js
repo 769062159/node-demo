@@ -1,13 +1,25 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
-import { Table, Modal, Card, Form, Input, Icon, Button, Divider } from 'antd';
+import {
+  Table,
+  Modal,
+  Card,
+  Form,
+  Input,
+  Icon,
+  Button,
+  Divider,
+  Select,
+  InputNumber,
+  message,
+} from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
 import styles from './TableList.less';
 
 const FormItem = Form.Item;
 const { confirm } = Modal;
-// const { Option } = Select;
+const { Option } = Select;
 const getValue = obj =>
   Object.keys(obj)
     .map(key => obj[key])
@@ -23,8 +35,8 @@ export default class TableList extends PureComponent {
   state = {
     expandForm: false,
     addUserVisible: false,
-    sonAttrVisible: false,
-    sonAttrName: '',
+    editData: {},
+    isFromEdit: false, // 从修改打开modal
     // selectedRows: [],
     formValues: {},
   };
@@ -33,9 +45,10 @@ export default class TableList extends PureComponent {
     const { dispatch } = this.props;
     dispatch({
       type: 'goods/getAllAttr',
-      payload: {
-        status: 0,
-      },
+      payload: {},
+    });
+    dispatch({
+      type: 'goods/getAllType',
     });
   }
 
@@ -58,8 +71,6 @@ export default class TableList extends PureComponent {
     if (sorter.field) {
       params.sorter = `${sorter.field}_${sorter.order}`;
     }
-    console.log(99);
-    console.log(params);
     dispatch({
       type: 'goods/getAllAttr',
       payload: params,
@@ -72,7 +83,6 @@ export default class TableList extends PureComponent {
     this.setState({
       formValues: {},
     });
-    console.log(999);
     dispatch({
       type: 'goods/getAllAttr',
       payload: {},
@@ -84,10 +94,26 @@ export default class TableList extends PureComponent {
       expandForm: !this.state.expandForm,
     });
   };
-
-  // 删除商品
-  deleteGoods = id => {
+  // 修改商品
+  editGoods = data => {
+    if (data.status) {
+      message.error('该属性不能修改');
+      return;
+    }
     event.preventDefault();
+    this.setState({
+      addUserVisible: true,
+      isFromEdit: true,
+      editData: data,
+    });
+  };
+  // 删除商品
+  deleteGoods = data => {
+    event.preventDefault();
+    if (data.status) {
+      message.error('该属性不能删除');
+      return;
+    }
     const that = this;
     confirm({
       content: '你确定删除这个吗？',
@@ -97,9 +123,10 @@ export default class TableList extends PureComponent {
       onOk() {
         const { dispatch } = that.props;
         dispatch({
-          type: 'goods/delGoodType',
+          type: 'goods/addGoodAttr',
           payload: {
-            id,
+            ...data,
+            status: 1,
           },
         });
         // that.setState({
@@ -111,41 +138,65 @@ export default class TableList extends PureComponent {
       },
     });
   };
-  // 子修改modal显示取消
-  handSonModal = (name, e) => {
-    e.preventDefault();
-    const { sonAttrVisible } = this.state;
-    this.setState({
-      sonAttrVisible: !sonAttrVisible,
-      sonAttrName: name,
-    });
-  };
   // 新增modal显示
   showModal = () => {
     this.setState({
       addUserVisible: true,
     });
-    this.renderForm();
   };
   // 新增取消
   handAddleCancel = () => {
     this.setState({
       addUserVisible: false,
+      isFromEdit: false,
+      editData: {},
     });
   };
-  // 新增提交
+  // 新增提交&&修改
   handleSubmit = e => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
-      console.log(values);
+      const attrData = [];
       if (!err) {
-        // const { dispatch } = this.props;
-        // dispatch({
-        //   type: 'goods/addGoodType',
-        //   payload: values,
-        // });
-        // message.success('添加成功');
-        // this.handAddleCancel();
+        const { dispatch } = this.props;
+        const { isFromEdit, editData } = this.state;
+        values.attr = attrData;
+        values.status = 0;
+        if (isFromEdit) {
+          values.id = editData.id;
+          const sonAttr = editData.has_many_attr.filter(res => {
+            return res.status === 0;
+          });
+          const length = sonAttr.length - 1;
+          values.values.forEach((res, index) => {
+            if (index > length) {
+              attrData.push({
+                value: res,
+                status: 0,
+                id: 0,
+              });
+            } else {
+              attrData.push({
+                value: res,
+                status: 0,
+                id: sonAttr[index].id,
+              });
+            }
+          });
+        } else {
+          values.values.forEach(res => {
+            attrData.push({
+              value: res,
+              status: 0,
+            });
+          });
+        }
+        dispatch({
+          type: 'goods/addGoodAttr',
+          payload: values,
+        });
+        message.success(`${isFromEdit ? '修改成功' : '添加成功'}`);
+        this.handAddleCancel();
       }
     });
   };
@@ -179,7 +230,16 @@ export default class TableList extends PureComponent {
   };
 
   render() {
-    const { goods: { goodAttr: datas, goodsAttrPage }, loading } = this.props;
+    const { goods: { goodAttr: datas, goodsAttrPage, goodType }, loading } = this.props;
+    // 选择上级分类
+    const selectItem = [];
+    goodType.forEach(res => {
+      selectItem.push(
+        <Option key={res.class_id} value={res.class_id}>
+          {res.class_name}
+        </Option>
+      );
+    });
     // 上传icon
     // const uploadButton = (
     //   <div>
@@ -187,7 +247,7 @@ export default class TableList extends PureComponent {
     //     <div className="ant-upload-text">Upload</div>
     //   </div>
     // );
-    const { addUserVisible, sonAttrVisible, sonAttrName } = this.state;
+    const { addUserVisible, isFromEdit, editData } = this.state;
     const { getFieldDecorator, getFieldValue } = this.props.form;
 
     const progressColumns = [
@@ -195,6 +255,9 @@ export default class TableList extends PureComponent {
         title: '属性名',
         dataIndex: 'name',
         key: 'name',
+        render(text, record) {
+          return record.status ? <span>{text}</span> : <a>{text}</a>;
+        },
       },
       {
         title: '创建时间',
@@ -208,9 +271,9 @@ export default class TableList extends PureComponent {
         title: '操作',
         render: record => (
           <Fragment>
-            <a href="">修改</a>
+            <a onClick={this.editGoods.bind(this, record)}>修改</a>
             <Divider type="vertical" />
-            <a onClick={this.deleteGoods.bind(this, record.class_id)}>删除</a>
+            <a onClick={this.deleteGoods.bind(this, record)}>删除</a>
           </Fragment>
         ),
       },
@@ -233,31 +296,33 @@ export default class TableList extends PureComponent {
     };
     // 子table
     const expandedRowRender = data => {
-      const columnss = [
-        { title: '属性值', dataIndex: 'value', key: 'value' },
-        { title: '创建时间', dataIndex: 'create_time', key: 'create_time' },
-        { title: '更新时间', dataIndex: 'update_time', key: 'update_time' },
-        {
-          title: '操作',
-          render: record => (
-            <Fragment>
-              <a onClick={this.handSonModal.bind(this, record.value)}>修改</a>
-              <Divider type="vertical" />
-              <a href="">删除</a>
-            </Fragment>
-          ),
-        },
-      ];
-      return (
-        <Table
-          columns={columnss}
-          dataSource={data}
-          pagination={false}
-          rowKey={record => record.id + record.value}
-        />
-      );
+      const item = [];
+      data.forEach(res => {
+        item.push(
+          res.status ? (
+            <span style={{ marginRight: 20 }} key={res.id}>
+              {res.value}
+            </span>
+          ) : (
+            <span style={{ marginRight: 20, color: 'blue' }} key={res.id}>
+              {res.value}
+            </span>
+          )
+        );
+      });
+      return <p>{item}</p>;
     };
-    getFieldDecorator('keys', { initialValue: [] });
+    const initValue = [];
+    if (isFromEdit) {
+      const sonAttr = editData.has_many_attr.filter(res => {
+        return res.status === 0;
+      });
+      sonAttr.forEach(res => {
+        initValue.push(res.value);
+      });
+    }
+
+    getFieldDecorator('keys', { initialValue: initValue });
     const keys = getFieldValue('keys');
     const formItems = keys.map((k, index) => {
       return (
@@ -267,8 +332,9 @@ export default class TableList extends PureComponent {
           required={false}
           key={k}
         >
-          {getFieldDecorator(`values[${k}]`, {
+          {getFieldDecorator(`values[${index}]`, {
             validateTrigger: ['onChange', 'onBlur'],
+            initialValue: `${initValue[index] || ''}`,
             rules: [
               {
                 required: true,
@@ -288,7 +354,17 @@ export default class TableList extends PureComponent {
         </FormItem>
       );
     });
+    // console.log(formItems);
+    // console.log(editData.has_many_attr);
 
+    // 修改的属性名
+    // const attrName =  isFromEdit ? editData.name : '';
+    // // 修改的属性排序
+    // const attrSort =  isFromEdit ? editData.sort : '';
+    // // // 修改的属性父id
+    // const attrId =  isFromEdit ? editData.goods_class_id : '';
+    // console.log(attrName);
+    // console.log(this.props.form);
     return (
       <PageHeaderLayout title="商品属性">
         <Card bordered={false}>
@@ -302,6 +378,7 @@ export default class TableList extends PureComponent {
               className="components-table-demo-nested"
               // onChange={this.handleTableChange}
               expandedRowRender={record => expandedRowRender(record.has_many_attr)}
+              // expandedRowRender={record => <p style={{ margin: 0 }}>{record.description}</p>}
               dataSource={datas}
               rowKey={record => record.id + record.create_time}
               loading={loading}
@@ -314,11 +391,27 @@ export default class TableList extends PureComponent {
           title="Title"
           visible={addUserVisible}
           onCancel={this.handAddleCancel.bind(this)}
+          destroyOnClose="true"
           footer=""
         >
           <Form onSubmit={this.handleSubmit} hideRequiredMark style={{ marginTop: 8 }}>
-            <FormItem label="属性名称">
+            <FormItem label="分类" {...formItemLayout}>
+              {getFieldDecorator('goods_class_id', {
+                initialValue: editData.goods_class_id,
+              })(
+                <Select style={{ width: 200 }} onChange={this.selectOption}>
+                  {selectItem}
+                </Select>
+              )}
+            </FormItem>
+            <FormItem label="排序" {...formItemLayout}>
+              {getFieldDecorator('sort', {
+                initialValue: editData.sort,
+              })(<InputNumber />)}
+            </FormItem>
+            <FormItem label="属性名称" {...formItemLayout}>
               {getFieldDecorator('name', {
+                initialValue: editData.name,
                 rules: [
                   {
                     required: true,
@@ -335,18 +428,10 @@ export default class TableList extends PureComponent {
             </FormItem>
             <FormItem tyle={{ marginTop: 32 }}>
               <Button type="primary" htmlType="submit" loading={loading}>
-                提交
+                {isFromEdit ? '修改' : '提交'}
               </Button>
             </FormItem>
           </Form>
-        </Modal>
-        <Modal
-          title="Title"
-          visible={sonAttrVisible}
-          onCancel={this.handSonModal.bind(this, '')}
-          footer=""
-        >
-          <Input placeholder="给属性起个名字" defaultValue={sonAttrName} />
         </Modal>
       </PageHeaderLayout>
     );

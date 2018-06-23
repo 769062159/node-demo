@@ -12,9 +12,16 @@ export default {
       receiverName: 'Alex',
       amount: '500',
     },
+    editor: '',
   },
 
   effects: {
+    *addEditor({ payload }, { put }) {
+      yield put({
+        type: 'addEditors',
+        payload,
+      });
+    },
     *submitRegularForm({ payload }, { call }) {
       yield call(fakeSubmitForm, payload);
       message.success('提交成功');
@@ -38,6 +45,13 @@ export default {
   },
 
   reducers: {
+    addEditors(state, { payload }) {
+      console.log(payload);
+      return {
+        ...state,
+        editor: payload,
+      };
+    },
     saveStepFormData(state, { payload }) {
       return {
         ...state,

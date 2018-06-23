@@ -259,7 +259,7 @@ export default class TableList extends PureComponent {
         </Row>
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
-            <FormItem label="调用次数">
+            <FormItem label="价格区间">
               <InputGroup compact>
                 <Input
                   key={1}
@@ -332,7 +332,7 @@ export default class TableList extends PureComponent {
   }
 
   render() {
-    console.log(this.props);
+    // console.log(this.props);
     const { goods: { goodsList: datas }, loading } = this.props;
     const data = {
       list: datas.list,

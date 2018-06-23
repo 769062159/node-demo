@@ -43,6 +43,10 @@ export const menuData = [
         name: '商品属性',
         path: 'good-attr',
       },
+      {
+        name: '商品添加',
+        path: 'step-form',
+      },
     ],
   },
   {

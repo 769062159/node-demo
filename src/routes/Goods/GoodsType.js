@@ -331,7 +331,7 @@ export default class TableList extends PureComponent {
     const uploadItem = (
       <div className="clearfix">
         <Upload
-          action="http://hlsj.test.seastart.cn/admin/img/upload"
+          action="http://hlsj.test.seastart.cn/admin/upload"
           headers={header}
           listType="picture-card"
           fileList={fileList}
@@ -422,7 +422,7 @@ export default class TableList extends PureComponent {
     const uploadItem = (
       <div className="clearfix">
         <Upload
-          action="http://hlsj.test.seastart.cn/admin/img/upload"
+          action="http://hlsj.test.seastart.cn/admin/upload"
           headers={header}
           listType="picture-card"
           fileList={fileList}

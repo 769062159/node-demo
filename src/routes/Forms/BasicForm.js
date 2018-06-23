@@ -12,6 +12,7 @@ import {
   Icon,
   Tooltip,
 } from 'antd';
+import ReactEditor from 'components/ReactEditor';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './style.less';
 
@@ -37,7 +38,7 @@ export default class BasicForms extends PureComponent {
     });
   };
   render() {
-    const { submitting } = this.props;
+    const { submitting, dispatch } = this.props;
     const { getFieldDecorator, getFieldValue } = this.props.form;
 
     const formItemLayout = {
@@ -65,6 +66,7 @@ export default class BasicForms extends PureComponent {
         content="表单页用于向用户收集或验证信息，基础表单常见于数据项较少的表单场景。"
       >
         <Card bordered={false}>
+          <ReactEditor dispatch={dispatch} />
           <Form onSubmit={this.handleSubmit} hideRequiredMark style={{ marginTop: 8 }}>
             <FormItem {...formItemLayout} label="标题">
               {getFieldDecorator('title', {
