@@ -84,6 +84,7 @@ export default async function request(url, options) {
   newOptions.headers = {
     Accept: 'application/json',
     mode: "no-cors",
+    Authorization: `Bearer ${token}`,
     // 'Authorization': '',
     // 'JOKE': 'seastartmall!',
     // 'Device': 'xcx',
@@ -96,8 +97,8 @@ export default async function request(url, options) {
         mode: "no-cors",
         Accept: 'application/json',
         'Content-Type': 'application/json; charset=utf-8',
-        Authorization: `Bearer ${token}`,
-        // ...newOptions.headers,
+        // Authorization: `Bearer ${token}`,
+        ...newOptions.headers,
       };
       newOptions.body = JSON.stringify(newOptions.body);
     } else {
@@ -105,7 +106,7 @@ export default async function request(url, options) {
       newOptions.headers = {
         mode: "no-cors",
         Accept: 'application/json',
-        Authorization: `Bearer ${token}`,
+        // Authorization: `Bearer ${token}`,
         ...newOptions.headers,
       };
     }

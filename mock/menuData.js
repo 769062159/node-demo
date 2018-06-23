@@ -50,6 +50,17 @@ export const menuData = [
     ],
   },
   {
+    name: '首页',
+    icon: 'smile',
+    path: 'index',
+    children: [
+      {
+        name: '广告',
+        path: 'ads',
+      },
+    ],
+  },
+  {
     name: 'dashboard',
     icon: 'dashboard',
     path: 'dashboard',
