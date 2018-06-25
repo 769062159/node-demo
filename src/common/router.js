@@ -133,6 +133,10 @@ export const getRouterConfig = app => {
     '/index/ads': {
       component: dynamicWrapper(app, ['indexs'], () => import('../routes/index/ads')),
     },
+    // 直播
+    '/live/list': {
+      component: dynamicWrapper(app, ['live'], () => import('../routes/live/list')),
+    },
     // 商品
     '/good/good-list': {
       component: dynamicWrapper(app, ['goods'], () => import('../routes/Goods/GoodsList')),
@@ -142,6 +146,9 @@ export const getRouterConfig = app => {
     },
     '/good/good-attr': {
       component: dynamicWrapper(app, ['goods'], () => import('../routes/Goods/GoodsAttr')),
+    },
+    '/good/good-brand': {
+      component: dynamicWrapper(app, ['goods'], () => import('../routes/Goods/GoodBrand')),
     },
     '/good/step-form': {
       identity: 'common',

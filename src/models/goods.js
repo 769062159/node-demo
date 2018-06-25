@@ -8,38 +8,77 @@ import {
   addGoodAttr,
   editGoodAttr,
   initGoodAttr,
+  getBrand,
+  addBrand,
+  deleteBrand,
+  updateBrand,
 } from '../services/goods';
+import { uploadImg } from '../services/api';
 
-// 将数据组合成列表，利用递归的特性
-const toGet = (arr, obj, currentIndex, attrArr, map) => {
-  const maxLength = attrArr.length;
-  if (currentIndex >= maxLength) {
-    return;
+const arrayCombination = (dyadicArray, type) => {
+  if (dyadicArray.length > 1) {
+    const _dyadicArray = [];
+    dyadicArray.forEach(item => {
+      _dyadicArray.push(item);
+    });
+    const arr1 = _dyadicArray.shift();
+    const arr2 = _dyadicArray.shift();
+    const tempArr = [];
+    arr1.forEach(item => {
+      arr2.forEach(_item => {
+        if (type) {
+          tempArr.push(`${item}|${_item}`);
+        } else {
+          tempArr.push(`${item}${_item}`);
+        }
+      });
+    });
+    _dyadicArray.unshift(tempArr);
+    return arrayCombination(_dyadicArray, type);
+  } else {
+    return dyadicArray[0];
   }
-  // const AttrArrMap = new Map();
-  // attrArr.forEach(res => {
-  //   for (const [key, value] of res.AttrArrMap) {
-  //     AttrArrMap.set(key, value);
-  //   }
-  // })
-  attrArr[currentIndex].checkArr.forEach(item => {
-    // 在组合到最后一个之前，不停的往模板对象上添加属性
-    // obj[attrArr[currentIndex].name] = item;
-    obj[attrArr[currentIndex].id] = item;
-    const key = attrArr[currentIndex].name + item;
-    const value = attrArr[currentIndex].AttrArrMap.get(key);
-    map.set(attrArr[currentIndex].id, value);
-    if (currentIndex === maxLength - 1) {
-      // 组合到最后一个后，创建一个新的对象，然后放置入列表中
-      const result = Object.assign({}, obj);
-      result.price = '0';
-      result.count = '1';
-      result.AttrArrMap = map;
-      arr.push(result);
-    } else {
-      toGet(arr, obj, currentIndex + 1, attrArr, map);
+};
+// 将数据组合成列表，利用递归的特性
+const toGet = (arr, attrArr, AttrArrMap) => {
+  const dyadicArray = [];
+  const dyadicArrayId = [];
+  attrArr.forEach(res => {
+    if (res.checked && res.checkArr.length) {
+      dyadicArray.push(res.checkArr);
+      const arr = new Map();
+      res.has_many_attr.forEach(ele => {
+        arr.set(ele.value, ele.id);
+      });
+      const arrs = [];
+      res.checkArr.forEach(ele => {
+        arrs.push(arr.get(ele));
+      });
+      dyadicArrayId.push(arrs);
     }
   });
+  if (!dyadicArray.length) {
+    return arr;
+  }
+  const arrTableId = arrayCombination(dyadicArrayId, 1);
+  const arrTable = arrayCombination(dyadicArray);
+  arrTable.forEach((res, index) => {
+    const arrId = arrTableId[index].toString().split('|');
+    const param = [];
+    arrId.forEach(ele => {
+      param.push(AttrArrMap.get(Number(ele)));
+    });
+    arr.push({
+      sku_goods_name: res,
+      goods_sku_attr: param,
+      price: 0,
+      store_nums: 0,
+      goods_sku_sn: '',
+      img: '',
+      fileList: [],
+    });
+  });
+  return arr;
 };
 
 export default {
@@ -53,10 +92,56 @@ export default {
     initGoodsAttr: [], // 初始化的商品分类数组
     typeName: '', // 选中的商品分类
     attrTable: [], // 属性table
-    tableHeader: {}, // table头部
+    AttrArrMap: new Map(), // 用来对比的map
+    // tableHeader: {}, // table头部
+    brandList: [], // 品牌列表
+    brandListPage: {}, // 品牌页脚
   },
 
   effects: {
+    *fetchBrand({ payload }, { call, put }) {
+      const response = yield call(getBrand, { page: payload.pagination });
+      if (response.code === 200) {
+        yield put({
+          type: 'getBrands',
+          payload: response.data,
+        });
+      }
+    },
+    *addBrand({ payload }, { call, put }) {
+      yield call(addBrand, payload);
+      const response = yield call(getBrand, { page: payload.pagination });
+      if (response.code === 200) {
+        yield put({
+          type: 'getBrands',
+          payload: response.data,
+        });
+      }
+    },
+    *editBrand({ payload }, { call, put }) {
+      yield call(updateBrand, payload);
+      const response = yield call(getBrand, { page: payload.pagination });
+      if (response.code === 200) {
+        yield put({
+          type: 'getBrands',
+          payload: response.data,
+        });
+      }
+    },
+    *deleteBrand({ payload }, { call, put }) {
+      yield call(deleteBrand, payload);
+      const response = yield call(getBrand, { page: payload.pagination });
+      if (response.code === 200) {
+        yield put({
+          type: 'getBrands',
+          payload: response.data,
+        });
+      }
+    },
+    *uploadImg({ payload }, { call }) {
+      const response = yield call(uploadImg, payload);
+      console.log(response);
+    },
     *clearAttrTabe(_, { put }) {
       yield put({
         type: 'clearAttrTabes',
@@ -78,23 +163,21 @@ export default {
             break;
           }
         }
-        const tableHeader = {};
+        const AttrArrMap = new Map();
         selectType[0].ha_many_attr_class.forEach(ele => {
-          tableHeader[ele.id] = ele.name;
           const AttrArr = [];
-          const AttrArrMap = new Map();
           ele.has_many_attr.forEach(res => {
             if (res.status === 0) {
               AttrArr.push(res.value);
-              AttrArrMap.set(ele.name + res.value, {
+              AttrArrMap.set(res.id, {
                 attr_class_id: res.attr_class_id,
                 attr_id: res.id,
                 attr_class_name: ele.name,
+                attr_name: res.value,
               });
             }
           });
           ele.AttrArr = AttrArr;
-          ele.AttrArrMap = AttrArrMap;
           ele.checked = false;
           ele.checkArr = [];
         });
@@ -103,7 +186,7 @@ export default {
           payload: {
             typeName,
             initGoodsAttr: selectType[0].ha_many_attr_class,
-            tableHeader,
+            AttrArrMap,
           },
         });
       }
@@ -198,6 +281,16 @@ export default {
   },
 
   reducers: {
+    getBrands(state, { payload }) {
+      return {
+        ...state,
+        brandList: payload.list,
+        brandListPage: {
+          pageSize: payload.page,
+          total: payload.total,
+        },
+      };
+    },
     clearAttrTabes(state) {
       const arr = [];
       return {
@@ -226,13 +319,13 @@ export default {
       };
     },
     checkedLists(state, { payload }) {
-      const { initGoodsAttr } = state;
+      const { initGoodsAttr, AttrArrMap } = state;
       const arr = [];
       initGoodsAttr[payload.index].checkArr = payload.checkedList;
       const attrData = initGoodsAttr.filter(res => {
         return res.checked;
       });
-      toGet(arr, {}, 0, attrData, new Map());
+      toGet(arr, attrData, AttrArrMap);
       return {
         ...state,
         initGoodsAttr,
@@ -240,11 +333,17 @@ export default {
       };
     },
     checkeds(state, { payload }) {
-      const { initGoodsAttr } = state;
+      const { initGoodsAttr, AttrArrMap } = state;
+      const arr = [];
       initGoodsAttr[payload.index].checked = !initGoodsAttr[payload.index].checked;
+      const attrData = initGoodsAttr.filter(res => {
+        return res.checked;
+      });
+      toGet(arr, attrData, AttrArrMap);
       return {
         ...state,
         initGoodsAttr,
+        attrTable: arr,
       };
     },
     init(state, { payload }) {

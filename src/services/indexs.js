@@ -1,9 +1,10 @@
 import request from '../utils/request';
 
 // 所有广告
-export async function getAds() {
+export async function getAds(params) {
   return request('/admin/ads/list', {
-    method: 'get',
+    method: 'POST',
+    body: params,
   });
 }
 

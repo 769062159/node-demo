@@ -1,19 +1,7 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
 import moment from 'moment';
-import {
-  Table,
-  message,
-  Upload,
-  Modal,
-  Card,
-  Form,
-  Input,
-  Icon,
-  Button,
-  Divider,
-  InputNumber,
-} from 'antd';
+import { Table, message, Upload, Modal, Card, Form, Input, Icon, Button, Divider } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
 import styles from './TableList.less';
@@ -30,20 +18,19 @@ const { confirm } = Modal;
 // const goodsTypeStatus = ['普通商品', '一元购', '秒杀', '众筹'];
 // const payType = ['拍下减库存', '付款减库存'];
 
-@connect(({ indexs, loading }) => ({
-  indexs,
-  loading: loading.models.indexs,
+@connect(({ live, loading }) => ({
+  live,
+  loading: loading.models.live,
 }))
 @Form.create()
 export default class TableList extends PureComponent {
   state = {
+    pagination: 1,
     expandForm: false,
     editData: {},
     addUserVisible: false,
-    // formValues: {},
     previewVisible: false,
     previewImage: '',
-    pagination: 1, // 页脚
     fileList: [],
     header: {
       Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -53,7 +40,7 @@ export default class TableList extends PureComponent {
     const { dispatch } = this.props;
     const { pagination } = this.state;
     dispatch({
-      type: 'indexs/fetchAds',
+      type: 'live/fetchLive',
       payload: {
         pagination,
       },
@@ -119,7 +106,7 @@ export default class TableList extends PureComponent {
         const { dispatch } = that.props;
         const { pagination } = that.state;
         dispatch({
-          type: 'indexs/deleteAds',
+          type: 'live/deleteLive',
           payload: {
             ad_id: id,
             pagination,
@@ -160,9 +147,9 @@ export default class TableList extends PureComponent {
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         if (this.state.fileList.length) {
-          values.pic = this.state.fileList[0].url;
+          values.cover = this.state.fileList[0].url;
         } else {
-          message.error('请上传广告图片');
+          message.error('请上传直播封面');
           return false;
         }
         const { dispatch } = this.props;
@@ -171,13 +158,13 @@ export default class TableList extends PureComponent {
         if (Object.keys(editData).length) {
           values.ad_id = editData.id;
           dispatch({
-            type: 'indexs/editAds',
+            type: 'live/editLive',
             payload: values,
           });
           message.success('修改成功');
         } else {
           dispatch({
-            type: 'indexs/addAds',
+            type: 'live/addLive',
             payload: values,
           });
           message.success('添加成功');
@@ -190,7 +177,7 @@ export default class TableList extends PureComponent {
   handleCancel = () => this.setState({ previewVisible: false });
   removeImg = () => {
     const { editData } = this.state;
-    editData.pic = '';
+    editData.cover = '';
     this.setState({ editData });
   };
   // 放大图片
@@ -198,6 +185,20 @@ export default class TableList extends PureComponent {
     this.setState({
       previewImage: file.url || file.thumbUrl,
       previewVisible: true,
+    });
+  };
+  // 换页
+  handleTableChange = pagination => {
+    const { current } = pagination;
+    this.setState({
+      pagination: current,
+    });
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'live/fetchLive',
+      payload: {
+        pagination: current,
+      },
     });
   };
 
@@ -216,20 +217,6 @@ export default class TableList extends PureComponent {
       return item;
     });
     this.setState({ fileList });
-  };
-  // 换页
-  handleTableChange = pagination => {
-    const { current } = pagination;
-    this.setState({
-      pagination: current,
-    });
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'indexs/fetchAds',
-      payload: {
-        pagination: current,
-      },
-    });
   };
   normFile = e => {
     console.log('Upload event:', e);
@@ -274,7 +261,17 @@ export default class TableList extends PureComponent {
     );
     return (
       <Form onSubmit={this.handleSubmit.bind(this, 0)} hideRequiredMark style={{ marginTop: 8 }}>
-        <FormItem label="广告简介">
+        <FormItem label="直播标题">
+          {getFieldDecorator('title', {
+            rules: [
+              {
+                required: true,
+                message: '请输入标题',
+              },
+            ],
+          })(<Input />)}
+        </FormItem>
+        <FormItem label="直播简介">
           {getFieldDecorator('desc', {
             rules: [
               {
@@ -285,16 +282,6 @@ export default class TableList extends PureComponent {
           })(<TextArea placeholder="请输入简介" autosize />)}
         </FormItem>
         {uploadItem}
-        <FormItem label="广告排序">
-          {getFieldDecorator('sort', {
-            rules: [
-              {
-                required: true,
-                message: '请输入简介',
-              },
-            ],
-          })(<InputNumber />)}
-        </FormItem>
         <FormItem tyle={{ marginTop: 32 }}>
           <Button type="primary" htmlType="submit" loading={loading}>
             提交
@@ -308,13 +295,13 @@ export default class TableList extends PureComponent {
     const { header, editData, fileList, previewVisible } = this.state;
     let { previewImage } = this.state;
     const desc = editData.desc;
-    if (editData.pic) {
+    if (editData.cover) {
       const img = {
         uid: -1,
         status: 'done',
       };
       img.name = `${editData.id}.png`;
-      img.url = editData.pic;
+      img.url = editData.cover;
       previewImage = img.url;
       fileList[0] = img;
     }
@@ -352,29 +339,29 @@ export default class TableList extends PureComponent {
     );
     return (
       <Form onSubmit={this.handleSubmit.bind(this, 1)} hideRequiredMark style={{ marginTop: 8 }}>
-        <FormItem label="广告简介">
-          {getFieldDecorator('desc', {
-            initialValue: desc,
-            rules: [
-              {
-                required: true,
-                message: '请输入广告简介',
-              },
-            ],
-          })(<TextArea placeholder="请输入简介" autosize />)}
-        </FormItem>
-        {editData.pic !== 1 ? uploadItem : null}
-        <FormItem label="广告排序">
-          {getFieldDecorator('sort', {
-            initialValue: editData.sort,
+        <FormItem label="直播标题">
+          {getFieldDecorator('title', {
+            initialValue: editData.title,
             rules: [
               {
                 required: true,
                 message: '请输入简介',
               },
             ],
-          })(<InputNumber />)}
+          })(<Input />)}
         </FormItem>
+        <FormItem label="直播简介">
+          {getFieldDecorator('desc', {
+            initialValue: desc,
+            rules: [
+              {
+                required: true,
+                message: '请输入直播简介',
+              },
+            ],
+          })(<TextArea placeholder="请输入简介" autosize />)}
+        </FormItem>
+        {editData.cover !== 1 ? uploadItem : null}
         <FormItem tyle={{ marginTop: 32 }}>
           <Button type="primary" htmlType="submit" loading={loading}>
             修改
@@ -390,24 +377,24 @@ export default class TableList extends PureComponent {
     return length ? this.renderEditForm() : this.renderAddForm();
   }
   render() {
-    const { indexs: { adsList: datas, adsListPage }, loading } = this.props;
+    const { live: { liveList: datas, liveListPage }, loading } = this.props;
     // const { getFieldDecorator } = this.props.form;
     const { addUserVisible } = this.state;
     const progressColumns = [
       {
-        title: '广告简介',
+        title: '直播标题',
+        dataIndex: 'title',
+        key: 'title',
+      },
+      {
+        title: '直播简介',
         dataIndex: 'desc',
         key: 'desc',
       },
       {
-        title: '广告封面',
-        dataIndex: 'pic',
+        title: '直播封面',
+        dataIndex: 'cover',
         render: val => (val ? <img src={val} alt="图片" /> : null),
-      },
-      {
-        title: '排序',
-        dataIndex: 'sort',
-        key: 'sort',
       },
       {
         title: '创建时间',
@@ -434,7 +421,7 @@ export default class TableList extends PureComponent {
     ];
 
     return (
-      <PageHeaderLayout title="广告分类">
+      <PageHeaderLayout title="直播列表">
         <Card bordered={false}>
           <div className={styles.tableList}>
             <div className={styles.tableListOperator}>
@@ -443,12 +430,11 @@ export default class TableList extends PureComponent {
               </Button>
             </div>
             <Table
-              onChange={this.handleTableChange}
               dataSource={datas}
               rowKey={record => record.id}
               loading={loading}
               columns={progressColumns}
-              pagination={adsListPage}
+              pagination={liveListPage}
             />
           </div>
         </Card>

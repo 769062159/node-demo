@@ -47,6 +47,10 @@ export const menuData = [
         name: '商品添加',
         path: 'step-form',
       },
+      {
+        name: '商品品牌',
+        path: 'good-brand',
+      },
     ],
   },
   {
@@ -57,6 +61,17 @@ export const menuData = [
       {
         name: '广告',
         path: 'ads',
+      },
+    ],
+  },
+  {
+    name: '直播',
+    icon: 'smile',
+    path: 'live',
+    children: [
+      {
+        name: '直播列表',
+        path: 'list',
       },
     ],
   },

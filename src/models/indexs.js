@@ -10,7 +10,7 @@ export default {
 
   effects: {
     *fetchAds({ payload }, { call, put }) {
-      const response = yield call(getAds, payload);
+      const response = yield call(getAds, { page: payload.pagination });
       if (response.code === 200) {
         yield put({
           type: 'getAds',
@@ -20,7 +20,7 @@ export default {
     },
     *addAds({ payload }, { call, put }) {
       yield call(addAds, payload);
-      const response = yield call(getAds);
+      const response = yield call(getAds, { page: payload.pagination });
       if (response.code === 200) {
         yield put({
           type: 'getAds',
@@ -30,7 +30,7 @@ export default {
     },
     *editAds({ payload }, { call, put }) {
       yield call(updateAds, payload);
-      const response = yield call(getAds);
+      const response = yield call(getAds, { page: payload.pagination });
       if (response.code === 200) {
         yield put({
           type: 'getAds',
@@ -40,7 +40,7 @@ export default {
     },
     *deleteAds({ payload }, { call, put }) {
       yield call(deleteAds, payload);
-      const response = yield call(getAds);
+      const response = yield call(getAds, { page: payload.pagination });
       if (response.code === 200) {
         yield put({
           type: 'getAds',

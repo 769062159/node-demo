@@ -168,6 +168,13 @@ export async function getAllGoods(params) {
     body: params,
   });
 }
+// 上传图片
+export async function uploadImg(params) {
+  return request('/admin/upload', {
+    method: 'POST',
+    body: params,
+  });
+}
 export async function fakeRegister(params) {
   return request('/api/register', {
     method: 'POST',

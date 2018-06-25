@@ -1,6 +1,5 @@
 import request from '../utils/request';
 
-
 // 所有商品
 export async function getAllGoods(params) {
   return request('/admin/goods/list', {
@@ -68,6 +67,46 @@ export async function editGoodAttr(params) {
 // 初始化商品数据
 export async function initGoodAttr(params) {
   return request('/admin/goods/init', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+// 品牌列表
+export async function getBrand(params) {
+  return request('/admin/goods/brand/lists', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+// 品牌创建
+export async function addBrand(params) {
+  return request('/admin/goods/brand/create', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+// 品牌删除
+export async function deleteBrand(params) {
+  return request('/admin/goods/brand/delete', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+// 品牌更新
+export async function updateBrand(params) {
+  return request('/admin/goods/brand/update', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+// 品牌更新
+export async function getBrandDetail(params) {
+  return request('/admin/goods/brand/detail', {
     method: 'POST',
     body: params,
   });
