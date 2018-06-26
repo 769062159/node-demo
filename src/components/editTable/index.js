@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Table, Input, Icon, Popconfirm, Upload, Menu, Dropdown, Modal } from 'antd';
+import { Table, Input, Icon, Popconfirm, Upload, Modal, Row, Col, Form } from 'antd';
 
 class EditableCell extends PureComponent {
   state = {
@@ -103,6 +103,7 @@ class EditInput extends PureComponent {
     );
   }
 }
+
 class UploadImg extends PureComponent {
   state = {
     // value: this.props.value,
@@ -111,28 +112,15 @@ class UploadImg extends PureComponent {
     payload: {
       type: 2,
     },
-    fileList: this.props.fileList,
+    fileList: [],
     header: {
       Authorization: `Bearer ${localStorage.getItem('token')}`,
     },
   };
-  // componentWillReceiveProps(nextProps) {
-  //   const { fileList } = this.props;
-  //   const { fileList: nextfileList } = nextProps;
-  //   if (fileList.length !== nextfileList.length) {
-  //     this.setState({
-  //       fileList: nextfileList,
-  //     })
-  //   }
-  // }
-  // componentWillUpdate(nextProps, nextState) {
-  //   console.log(8888);
-  //   console.log(nextState);
-  //   // console.log(this.state.fileList);
-  // }
-  componentWillReceiveProps(nextProps) {
-    console.log(111);
-    console.log(nextProps);
+  componentWillMount() {
+    this.setState({
+      fileList: this.props.fileList,
+    });
   }
   handleCancel = () => this.setState({ previewVisible: false });
   handlePreview = file => {
@@ -144,7 +132,6 @@ class UploadImg extends PureComponent {
   handleChangeImg = ({ fileList }) => {
     if (fileList.length) {
       fileList.forEach(item => {
-        console.log(item);
         if (item.status === 'done' && item.uploaded !== 'done') {
           const img = {};
           img.status = 'done';
@@ -156,18 +143,18 @@ class UploadImg extends PureComponent {
           // return img;
           this.props.onChange([img]);
         }
+        // return item;
       });
     }
     this.setState({ fileList });
+    // this.props.onChange(fileList);
   };
   removeImg = () => {
     this.props.onChange([]);
   };
   render() {
     const { previewVisible, previewImage, payload, header, fileList } = this.state;
-    console.log(99);
-    console.log(fileList);
-    console.log(this.props);
+    // const { fileList } = this.props;
     const uploadButton = (
       <div>
         <Icon type="plus" />
@@ -196,19 +183,34 @@ class UploadImg extends PureComponent {
     );
   }
 }
-
+@Form.create()
 export default class EditableTable extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      attrTable: props.attrTable,
+      attrTable: [],
+      showData: [],
+      levelVisible: false,
+      index: 1,
     };
   }
   componentWillReceiveProps(nextProps) {
+    const { attrTable, levelPartialSon } = nextProps;
+    attrTable.forEach(res => {
+      console.log(res.profit);
+      if (!res.profit.length) {
+        res.profit = levelPartialSon;
+      }
+    });
     this.setState({
-      attrTable: nextProps.attrTable,
+      attrTable,
     });
   }
+  // componentWillReceiveProps(nextProps) {
+  //   this.setState({
+  //     attrTable: nextProps.attrTable,
+  //   });
+  // }
 
   onCellChange = (index, dataIndex) => {
     return value => {
@@ -239,33 +241,67 @@ export default class EditableTable extends PureComponent {
   //       count: count + 1,
   //     });
   //   }
-  onClickMenu = (index, { key }) => {
-    console.log(key);
-    console.log(index);
-    this.props.changeLevel(index, key);
-  };
-  render() {
-    const { rowKey } = this.props;
+  levelSetting = index => {
     const { attrTable } = this.state;
-    const menu = index => (
-      <Menu onClick={this.onClickMenu.bind(this, index)}>
-        <Menu.Item key="0">
-          <span>一级</span>
-        </Menu.Item>
-        <Menu.Item key="1">
-          <span>二级</span>
-        </Menu.Item>
-        <Menu.Item key="2">
-          <span>三级</span>
-        </Menu.Item>
-        <Menu.Item key="3">
-          <span>四级</span>
-        </Menu.Item>
-        <Menu.Item key="4">
-          <span>五级</span>
-        </Menu.Item>
-      </Menu>
-    );
+    const arr = attrTable.slice(index);
+    const showData = arr[0].profit;
+    this.setState({
+      levelVisible: true,
+      showData,
+      index,
+    });
+  };
+  handleCancelLevel = () => {
+    const { showData, attrTable } = this.state;
+    console.log(showData);
+    console.log(attrTable);
+    this.setState({
+      levelVisible: false,
+    });
+  };
+  modalOk = () => {
+    // const { index, showData, attrTable } = this.state;
+    // attrTable[index].profit = showData;
+    // this.setState({
+    //   levelVisible: false,
+    //   attrTable,
+    // })
+    // this.props.handleEmail(attrTable);
+    const { form } = this.props;
+    const { validateFields } = form;
+    validateFields((err, values) => {
+      if (!err) {
+        const { index, attrTable } = this.state;
+        const arr = [];
+        for (const i of Object.keys(values)) {
+          arr.push(values[i]); // 属性
+        }
+        attrTable[index].profit = arr;
+        console.log(attrTable);
+        this.setState({
+          levelVisible: false,
+        });
+      }
+    });
+  };
+  chgLevelHas = (index, e) => {
+    console.log(7777);
+    const { showData } = this.state;
+    showData[index] = e.target.value;
+    console.log(showData);
+    this.setState({
+      showData,
+    });
+  };
+  // chgLevelHas = (index, event) => {
+  //   console.log(index);
+  //   console.log(event);
+  // }
+  render() {
+    const { rowKey, form } = this.props;
+    const { attrTable, levelVisible, showData } = this.state;
+    const { getFieldDecorator } = form;
+
     const columns = [
       {
         title: '图片',
@@ -311,20 +347,11 @@ export default class EditableTable extends PureComponent {
         dataIndex: 'level',
         render: (text, record, index) => {
           return (
-            <Dropdown overlay={menu(index)}>
-              <a className="ant-dropdown-link">
-                选择等级<Icon type="down" />
-              </a>
-            </Dropdown>
+            <a className="ant-dropdown-link" onClick={this.levelSetting.bind(this, index)}>
+              设置值
+            </a>
           );
         },
-      },
-      {
-        title: '分佣值',
-        dataIndex: 'profit_price',
-        render: (text, record, index) => (
-          <EditInputNumber value={text} step={2} onChange={this.onCellChange(index, 'price')} />
-        ),
       },
       {
         title: '操作',
@@ -340,20 +367,7 @@ export default class EditableTable extends PureComponent {
         },
       },
     ];
-    console.log(attrTable);
-    // if (attrTable.length) {
-    //   for (const key in attrTable[0]) {
-    //     if (key !== 'count' && key !== 'price' && key !== 'AttrArrMap') {
-    //       columns.unshift({
-    //         title: 'sku属性',
-    //         dataIndex: key,
-    //         render: (text, record, index) => (
-    //           <EditableCell value={text} onChange={this.onCellChange(index, key)} />
-    //         ),
-    //       });
-    //     }
-    //   }
-    // }
+    console.log(showData);
     return (
       <div>
         <Table
@@ -363,6 +377,82 @@ export default class EditableTable extends PureComponent {
           columns={columns}
           scroll={{ x: 1300 }}
         />
+        <Modal
+          visible={levelVisible}
+          onOk={this.modalOk}
+          onCancel={this.handleCancelLevel}
+          destroyOnClose="true"
+        >
+          <Form layout="horizontal">
+            <Row gutter={24}>
+              {/* <Col span={4}>
+                一级
+              </Col> */}
+              <Col span={12}>
+                {/* <Input defaultValue={showData[0]} /> */}
+                <Form.Item label="一级">
+                  {getFieldDecorator('one', {
+                    initialValue: showData[0],
+                    rules: [{ required: true, message: '请填写商品名称' }],
+                  })(<Input />)}
+                </Form.Item>
+              </Col>
+              {/* <Col span={4}>
+                二级
+              </Col> */}
+              <Col span={12}>
+                <Form.Item label="二级">
+                  {getFieldDecorator('two', {
+                    initialValue: showData[1],
+                    rules: [{ required: true, message: '请填写商品名称' }],
+                  })(<Input />)}
+                </Form.Item>
+                {/* <Input defaultValue={showData[1]} onChange={(e) => this.chgLevelHas(1, e)} /> */}
+              </Col>
+            </Row>
+            <Row gutter={24}>
+              {/* <Col span={4}>
+                三级
+              </Col> */}
+              <Col span={12}>
+                <Form.Item label="三级">
+                  {getFieldDecorator('three', {
+                    initialValue: showData[2],
+                    rules: [{ required: true, message: '请填写商品名称' }],
+                  })(<Input />)}
+                </Form.Item>
+                {/* <Input defaultValue={showData[2]} onChange={(e) => this.chgLevelHas(2, e)} /> */}
+              </Col>
+              {/* <Col span={4}>
+                四级
+              </Col> */}
+              <Col span={12}>
+                <Form.Item label="四级">
+                  {getFieldDecorator('four', {
+                    initialValue: showData[3],
+                    rules: [{ required: true, message: '请填写商品名称' }],
+                  })(<Input />)}
+                </Form.Item>
+                {/* <Input defaultValue={showData[3]} onChange={(e) => this.chgLevelHas(3, e)} /> */}
+              </Col>
+            </Row>
+            <Row gutter={24}>
+              {/* <Col span={4}>
+                五级
+              </Col> */}
+              <Col span={12}>
+                <Form.Item label="五级">
+                  {getFieldDecorator('five', {
+                    initialValue: showData[4],
+                    rules: [{ required: true, message: '请填写商品名称' }],
+                  })(<Input />)}
+                </Form.Item>
+                {/* <Input defaultValue={showData[4]} onChange={(e) => this.chgLevelHas(4, e)} /> */}
+              </Col>
+            </Row>
+          </Form>
+          {/* { showDataItem } */}
+        </Modal>
       </div>
     );
   }

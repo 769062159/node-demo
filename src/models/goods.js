@@ -12,6 +12,7 @@ import {
   addBrand,
   deleteBrand,
   updateBrand,
+  addGood,
 } from '../services/goods';
 import { uploadImg } from '../services/api';
 
@@ -71,6 +72,7 @@ const toGet = (arr, attrArr, AttrArrMap) => {
     arr.push({
       sku_goods_name: res,
       goods_sku_attr: param,
+      profit: [],
       price: 0,
       store_nums: 0,
       goods_sku_sn: '',
@@ -93,12 +95,40 @@ export default {
     typeName: '', // 选中的商品分类
     attrTable: [], // 属性table
     AttrArrMap: new Map(), // 用来对比的map
-    // tableHeader: {}, // table头部
+    typePartial: '0', // 分佣类型
+    totalPrice: 0, // 总价
+    levelPartial: [], // 分佣等级
+    levelPartialSon: [], // 传给子的分佣等级
     brandList: [], // 品牌列表
     brandListPage: {}, // 品牌页脚
+    goodsPlace: [], // 商品地址
   },
 
   effects: {
+    *addShop({ payload }, { call }) {
+      yield call(addGood, { ...payload });
+      // if (response.code === 200) {
+
+      // }
+    },
+    *changeTotalPrice({ payload }, { put }) {
+      yield put({
+        type: 'changeTotalPrices',
+        payload,
+      });
+    },
+    *setLevelPartial({ payload }, { put }) {
+      yield put({
+        type: 'setLevelPartials',
+        payload,
+      });
+    },
+    *changeTypePartial({ payload }, { put }) {
+      yield put({
+        type: 'changeTypePartials',
+        payload,
+      });
+    },
     *fetchBrand({ payload }, { call, put }) {
       const response = yield call(getBrand, { page: payload.pagination });
       if (response.code === 200) {
@@ -139,8 +169,7 @@ export default {
       }
     },
     *uploadImg({ payload }, { call }) {
-      const response = yield call(uploadImg, payload);
-      console.log(response);
+      yield call(uploadImg, payload);
     },
     *clearAttrTabe(_, { put }) {
       yield put({
@@ -151,6 +180,8 @@ export default {
       const response = yield call(initGoodAttr);
       if (response.code === 200) {
         const goodsClass = response.data.goods_class;
+        const goodsBrand = response.data.goods_brand; // 商品品牌
+        const goodsPlace = response.data.goods_place; // 商品品牌
         const type = Number(payload.type);
         const typeSon = Number(payload.typeSon);
         const selectType = goodsClass.filter(res => {
@@ -164,7 +195,7 @@ export default {
           }
         }
         const AttrArrMap = new Map();
-        selectType[0].ha_many_attr_class.forEach(ele => {
+        selectType[0].has_many_attr_class.forEach(ele => {
           const AttrArr = [];
           ele.has_many_attr.forEach(res => {
             if (res.status === 0) {
@@ -185,8 +216,10 @@ export default {
           type: 'init',
           payload: {
             typeName,
-            initGoodsAttr: selectType[0].ha_many_attr_class,
+            initGoodsAttr: selectType[0].has_many_attr_class,
             AttrArrMap,
+            brandList: goodsBrand,
+            goodsPlace, // 品牌地址
           },
         });
       }
@@ -281,6 +314,32 @@ export default {
   },
 
   reducers: {
+    changeTotalPrices(state, { payload }) {
+      return {
+        ...state,
+        totalPrice: payload.e,
+      };
+    },
+    setLevelPartials(state, { payload }) {
+      const { levelPartial, typePartial, totalPrice, levelPartialSon } = state;
+      levelPartial[payload.index] = payload.value;
+      if (typePartial === '1') {
+        levelPartialSon[payload.index] = payload.value;
+      } else {
+        levelPartialSon[payload.index] = Number((totalPrice * payload.value / 100).toFixed(2));
+      }
+      return {
+        ...state,
+        levelPartial,
+        levelPartialSon,
+      };
+    },
+    changeTypePartials(state, { payload }) {
+      return {
+        ...state,
+        typePartial: payload.e,
+      };
+    },
     getBrands(state, { payload }) {
       return {
         ...state,

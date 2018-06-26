@@ -72,6 +72,14 @@ export async function initGoodAttr(params) {
   });
 }
 
+// 初始化商品数据
+export async function addGood(params) {
+  return request('/admin/goods/create', {
+    method: 'POST',
+    body: params,
+  });
+}
+
 // 品牌列表
 export async function getBrand(params) {
   return request('/admin/goods/brand/lists', {

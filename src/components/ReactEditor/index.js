@@ -6,11 +6,12 @@ import 'braft-editor/dist/braft.css';
 
 export default class Demo extends React.Component {
   handleChange = content => {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'form/addEditor',
-      payload: content,
-    });
+    const { setDescription } = this.props;
+    setDescription(content);
+    // dispatch({
+    //   type: 'form/addEditor',
+    //   payload: content,
+    // });
   };
 
   // handleRawChange = (rawContent) => {
@@ -69,14 +70,14 @@ export default class Demo extends React.Component {
       xhr.send(fd);
     };
     const editorProps = {
-      height: 500,
+      height: 200,
       contentFormat: 'html',
       initialContent: '',
       media: {
         uploadFn,
       },
       onChange: this.handleChange,
-      onRawChange: this.handleRawChange,
+      // onRawChange: this.handleRawChange,
     };
 
     return (
