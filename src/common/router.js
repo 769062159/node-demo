@@ -156,24 +156,43 @@ export const getRouterConfig = app => {
     '/good/good-brand': {
       component: dynamicWrapper(app, ['goods'], () => import('../routes/Goods/GoodBrand')),
     },
-    '/good/step-form': {
+    '/good/add-goods': {
       identity: 'common',
       component: dynamicWrapper(app, ['form'], () => import('../routes/Goods/StepForm')),
     },
-    '/good/step-form/info': {
+    '/good/add-goods/info': {
       identity: 'common',
       // name: '分步表单（填写转账信息）',
       component: dynamicWrapper(app, ['goods'], () => import('../routes/Goods/StepForm/Step1')),
     },
-    '/good/step-form/confirm/:type': {
+    '/good/add-goods/confirm/:type': {
       identity: 'common',
       // name: '分步表单（确认转账信息）',
       component: dynamicWrapper(app, ['goods'], () => import('../routes/Goods/StepForm/Step2')),
     },
-    '/good/step-form/result': {
+    '/good/add-goods/result': {
       identity: 'common',
       // name: '分步表单（完成）',
       component: dynamicWrapper(app, ['goods'], () => import('../routes/Goods/StepForm/Step3')),
+    },
+    '/good/edit-goods': {
+      identity: 'common',
+      component: dynamicWrapper(app, ['form'], () => import('../routes/Goods/EditGoods')),
+    },
+    // '/good/edit-goods/info': {
+    //   identity: 'common',
+    //   // name: '分步表单（填写转账信息）',
+    //   component: dynamicWrapper(app, ['goods'], () => import('../routes/Goods/EditGoods/Step1')),
+    // },
+    '/good/edit-goods/confirm/:id': {
+      identity: 'common',
+      // name: '分步表单（确认转账信息）',
+      component: dynamicWrapper(app, ['goods'], () => import('../routes/Goods/EditGoods/Step2')),
+    },
+    '/good/edit-goods/result': {
+      identity: 'common',
+      // name: '分步表单（完成）',
+      component: dynamicWrapper(app, ['goods'], () => import('../routes/Goods/EditGoods/Step3')),
     },
     // 用户相关信息
     '/users/group': {

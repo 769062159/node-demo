@@ -36,7 +36,7 @@ class Step1 extends React.PureComponent {
         if (!err) {
           console.log(values);
           if (values.type.length === 2) {
-            dispatch(routerRedux.push(`/good/add-goods/confirm/${values.type}`));
+            dispatch(routerRedux.push(`/good/step-form/confirm/${values.type}`));
           } else {
             message.error('请选择正确的分类！');
           }

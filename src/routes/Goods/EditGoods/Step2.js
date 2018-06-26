@@ -17,6 +17,7 @@ import {
   Card,
   message,
 } from 'antd';
+import moment from 'moment';
 import { routerRedux } from 'dva/router';
 import ReactEditor from 'components/ReactEditor';
 // import { digitUppercase } from '../../../utils/utils';
@@ -70,21 +71,19 @@ class Step2 extends React.PureComponent {
     },
   };
   componentDidMount() {
-    let { type } = this.props.match.params;
+    const { id } = this.props.match.params;
     const { dispatch } = this.props;
-    type = type.split(',');
     dispatch({
       type: 'goods/initGoodAttr',
       payload: {
-        type: type[0],
-        typeSon: type[1],
+        goods_id: id,
       },
     });
-    // const { dispatch } = this.props;
     dispatch({
       type: 'goods/clearAttrTabe',
     });
   }
+
   // componentWillUnmount() {
   //   const { dispatch } = this.props;
   //   dispatch({
@@ -162,7 +161,6 @@ class Step2 extends React.PureComponent {
     const { setFieldsValue } = form;
     const obj = {};
     obj[key] = value;
-    console.log(obj);
     setFieldsValue(obj);
   };
   handleEmail = event => {
@@ -283,10 +281,12 @@ class Step2 extends React.PureComponent {
         initGoodsAttr,
         attrTable,
         typePartial,
+        levelPartial,
         levelPartialSon,
         goodsPlace,
         brandList,
         totalPrice,
+        goodsDetail,
       },
     } = this.props;
     const goodsPlaceItem = [];
@@ -307,6 +307,12 @@ class Step2 extends React.PureComponent {
     });
     // const typePartials = typePartial.toString();
     const { validateFields, getFieldDecorator } = form;
+    // if (Object.keys(goodsDetail).length) {
+    //   const formData = {
+    //     'goods_name': 222,
+    //   };
+    //   setFieldsValue(formData);
+    // }
     // console.log(getFieldValue('goods_name'));
     const { fileList, previewVisible, previewImage, payload, header } = this.state;
     const uploadButton = (
@@ -346,7 +352,9 @@ class Step2 extends React.PureComponent {
 
     const onValidateForm = e => {
       e.preventDefault();
+      console.log(attrTable);
       validateFields((err, values) => {
+        console.log(values);
         if (!err) {
           const { fileList } = this.state;
           if (!fileList.length) {
@@ -379,6 +387,8 @@ class Step2 extends React.PureComponent {
           values.profit_type = typePartial;
           values.goods_shelves_time = values.goods_shelves_time._d.getTime();
           console.log(values);
+          // console.log(values.goods_shelves_time._d);
+          // console.log(values.goods_shelves_time._d.getTime());
           dispatch({
             type: 'goods/addShop',
             payload: {
@@ -410,6 +420,7 @@ class Step2 extends React.PureComponent {
             <Col span={12}>
               <Form.Item {...formItemLayouts} label="商品名称">
                 {getFieldDecorator('goods_name', {
+                  initialValue: goodsDetail.goods_name,
                   rules: [{ required: true, message: '请填写商品名称' }],
                 })(<Input />)}
               </Form.Item>
@@ -417,6 +428,7 @@ class Step2 extends React.PureComponent {
             <Col span={12}>
               <Form.Item {...formItemLayouts} label="商品SN">
                 {getFieldDecorator('goods_sn', {
+                  initialValue: goodsDetail.goods_sn,
                   rules: [{ required: true, message: '请填写商品SN' }],
                 })(<Input />)}
               </Form.Item>
@@ -424,6 +436,7 @@ class Step2 extends React.PureComponent {
             <Col span={12}>
               <Form.Item {...formItemLayouts} label="商品品牌">
                 {getFieldDecorator('brand_id', {
+                  initialValue: goodsDetail.brand_id || '',
                   rules: [{ required: true, message: '请填写商品品牌' }],
                 })(<Select>{brandListItem}</Select>)}
               </Form.Item>
@@ -431,6 +444,7 @@ class Step2 extends React.PureComponent {
             <Col span={12}>
               <Form.Item {...formItemLayouts} label="列表标题">
                 {getFieldDecorator('goods_list_title', {
+                  initialValue: goodsDetail.goods_list_title,
                   rules: [{ required: true, message: '请填写列表标题' }],
                 })(<Input />)}
               </Form.Item>
@@ -438,6 +452,7 @@ class Step2 extends React.PureComponent {
             <Col span={12}>
               <Form.Item {...formItemLayouts} label="商品标题">
                 {getFieldDecorator('goods_title', {
+                  initialValue: goodsDetail.goods_title,
                   rules: [{ required: true, message: '请填写商品标题' }],
                 })(<Input />)}
               </Form.Item>
@@ -445,6 +460,7 @@ class Step2 extends React.PureComponent {
             <Col span={12}>
               <Form.Item {...formItemLayouts} label="商品描述">
                 {getFieldDecorator('goods_des', {
+                  initialValue: goodsDetail.goods_des,
                   rules: [{ required: true, message: '请填写商品描述' }],
                 })(<TextArea placeholder="请填写商品描述" autosize />)}
               </Form.Item>
@@ -452,6 +468,7 @@ class Step2 extends React.PureComponent {
             <Col span={12}>
               <Form.Item {...formItemLayouts} label="销售价格">
                 {getFieldDecorator('sell_goods_price', {
+                  initialValue: goodsDetail.sell_goods_price,
                   rules: [{ required: true, message: '请填写商品销售价格' }],
                 })(
                   <InputNumber
@@ -467,6 +484,7 @@ class Step2 extends React.PureComponent {
             <Col span={12}>
               <Form.Item {...formItemLayouts} label="市场价">
                 {getFieldDecorator('goods_price', {
+                  initialValue: goodsDetail.goods_price,
                   rules: [{ required: true, message: '请填写商品市场价' }],
                 })(<InputNumber step={0.01} precision={2} min={0.01} style={{ width: '200px' }} />)}
               </Form.Item>
@@ -474,6 +492,7 @@ class Step2 extends React.PureComponent {
             <Col span={12}>
               <Form.Item {...formItemLayouts} label="商品类型">
                 {getFieldDecorator('goods_type', {
+                  initialValue: (goodsDetail.goods_type || 0).toString(),
                   rules: [{ required: true, message: '请填写商品类型' }],
                 })(
                   <Select>
@@ -488,6 +507,7 @@ class Step2 extends React.PureComponent {
             <Col span={12}>
               <Form.Item {...formItemLayouts} label="产品总库存">
                 {getFieldDecorator('goods_total_inventory', {
+                  initialValue: goodsDetail.goods_total_inventory,
                   rules: [{ required: true, message: '请填写产品总库存' }],
                 })(<InputNumber step={1} min={1} style={{ width: '200px' }} />)}
               </Form.Item>
@@ -497,6 +517,7 @@ class Step2 extends React.PureComponent {
             <Col span={12}>
               <Form.Item {...formItemLayouts} label="商品状态">
                 {getFieldDecorator('goods_status', {
+                  initialValue: (goodsDetail.goods_status || 0).toString(),
                   rules: [{ required: true, message: '请填写商品状态' }],
                 })(
                   <Select>
@@ -510,6 +531,7 @@ class Step2 extends React.PureComponent {
             <Col span={12}>
               <Form.Item {...formItemLayouts} label="排序">
                 {getFieldDecorator('goods_sort', {
+                  initialValue: goodsDetail.goods_sort,
                   rules: [{ required: true, message: '请填写商品排序' }],
                 })(<InputNumber step={1} min={1} style={{ width: '200px' }} />)}
               </Form.Item>
@@ -547,6 +569,7 @@ class Step2 extends React.PureComponent {
         <Card>
           <Form.Item {...formItemLayout} label="是否设置预警">
             {getFieldDecorator('goods_warning_status', {
+              initialValue: goodsDetail.goods_warning_status,
               rules: [{ required: true, message: '请填写设置预警' }],
             })(
               <RadioGroup>
@@ -559,6 +582,7 @@ class Step2 extends React.PureComponent {
             <Col span={12}>
               <Form.Item {...formItemLayouts} label="预警值">
                 {getFieldDecorator('goods_nums_warning', {
+                  initialValue: goodsDetail.goods_nums_warning,
                   rules: [{ required: true, message: '请填写预警值' }],
                 })(<InputNumber step={1} min={1} style={{ width: '200px' }} />)}
               </Form.Item>
@@ -566,6 +590,7 @@ class Step2 extends React.PureComponent {
             <Col span={12}>
               <Form.Item {...formItemLayouts} label="采购地">
                 {getFieldDecorator('goods_country_id', {
+                  initialValue: goodsDetail.goods_country_id,
                   rules: [{ required: true, message: '请填写采购地' }],
                 })(<Select>{goodsPlaceItem}</Select>)}
               </Form.Item>
@@ -575,6 +600,7 @@ class Step2 extends React.PureComponent {
             <Col span={12}>
               <Form.Item {...formItemLayouts} label="出货类型">
                 {getFieldDecorator('goods_warehouse_type', {
+                  initialValue: (goodsDetail.goods_warehouse_type || 0).toString(),
                   rules: [{ required: true, message: '请填写出货类型' }],
                 })(
                   <Select>
@@ -587,6 +613,7 @@ class Step2 extends React.PureComponent {
             <Col span={12}>
               <Form.Item {...formItemLayouts} label="发货仓库">
                 {getFieldDecorator('warehouse_id', {
+                  initialValue: goodsDetail.warehouse_id,
                   rules: [{ required: true, message: '请填写发货仓库' }],
                 })(<Input />)}
               </Form.Item>
@@ -596,6 +623,7 @@ class Step2 extends React.PureComponent {
             <Col span={12}>
               <Form.Item {...formItemLayouts} label="供应商ID">
                 {getFieldDecorator('supplier_id', {
+                  initialValue: goodsDetail.supplier_id,
                   rules: [{ required: true, message: '请填写供应商ID' }],
                 })(<Input />)}
               </Form.Item>
@@ -603,6 +631,7 @@ class Step2 extends React.PureComponent {
             <Col span={12}>
               <Form.Item {...formItemLayouts} label="运送模板">
                 {getFieldDecorator('shop_shipping_type', {
+                  initialValue: (goodsDetail.shop_shipping_type || 0).toString(),
                   rules: [{ required: true, message: '请填写运送模板' }],
                 })(
                   <Select style={{ width: 200 }}>
@@ -618,6 +647,7 @@ class Step2 extends React.PureComponent {
             <Col span={12}>
               <Form.Item {...formItemLayouts} label="快递类型">
                 {getFieldDecorator('shop_shipping_calculation_type', {
+                  initialValue: (goodsDetail.shop_shipping_calculation_type || 0).toString(),
                   rules: [{ required: true, message: '请填写快递类型' }],
                 })(
                   <Select style={{ width: 200 }}>
@@ -630,6 +660,7 @@ class Step2 extends React.PureComponent {
             <Col span={12}>
               <Form.Item {...formItemLayouts} label="运费价格">
                 {getFieldDecorator('shop_shipping_price', {
+                  initialValue: goodsDetail.shop_shipping_price,
                   rules: [{ required: true, message: '请填写运费价格' }],
                 })(<InputNumber step={0.01} precision={2} min={0.01} style={{ width: '200px' }} />)}
               </Form.Item>
@@ -639,6 +670,7 @@ class Step2 extends React.PureComponent {
             <Col span={12}>
               <Form.Item {...formItemLayouts} label="减库存方式">
                 {getFieldDecorator('shop_goods_reduced_inventory', {
+                  initialValue: (goodsDetail.shop_goods_reduced_inventory || 0).toString(),
                   rules: [{ required: true, message: '请填写减库存方式' }],
                 })(
                   <Select style={{ width: 200 }}>
@@ -654,6 +686,7 @@ class Step2 extends React.PureComponent {
             <Col span={12}>
               <Form.Item {...formItemLayouts} label="上架方式">
                 {getFieldDecorator('goods_shelves_type', {
+                  initialValue: (goodsDetail.goods_shelves_type || '').toString(),
                   rules: [{ required: true, message: '请填写上架方式' }],
                 })(
                   <Select>
@@ -667,6 +700,7 @@ class Step2 extends React.PureComponent {
             <Col span={12}>
               <Form.Item {...formItemLayouts} label="上架时间">
                 {getFieldDecorator('goods_shelves_time', {
+                  initialValue: moment(goodsDetail.goods_shelves_time, 'YYYY-MM-DD HH:mm:ss'),
                   rules: [{ required: true, message: '请填写商品上架时间' }],
                 })(<DatePicker showTime format="YYYY-MM-DD HH:mm:ss" placeholder="Select Time" />)}
               </Form.Item>
@@ -674,6 +708,7 @@ class Step2 extends React.PureComponent {
           </Row>
           <Form.Item label="描述">
             {getFieldDecorator('goods_description', {
+              initialValue: goodsDetail.goods_description,
               rules: [{ required: true, message: '请填写描述' }],
             })(<ReactEditor setDescription={this.setDescription} />)}
           </Form.Item>
@@ -683,6 +718,7 @@ class Step2 extends React.PureComponent {
             <Col span={12}>
               <Form.Item {...formItemLayouts} label="无忧售后">
                 {getFieldDecorator('goods_is_worry_free_sale', {
+                  initialValue: goodsDetail.goods_is_worry_free_sale,
                   rules: [{ required: true, message: '请填写是否无忧售后' }],
                 })(
                   <RadioGroup>
@@ -695,6 +731,7 @@ class Step2 extends React.PureComponent {
             <Col span={12}>
               <Form.Item {...formItemLayouts} label="商品显示">
                 {getFieldDecorator('goods_is_show', {
+                  initialValue: goodsDetail.goods_is_show,
                   rules: [{ required: true, message: '请填写是否商品显示' }],
                 })(
                   <RadioGroup>
@@ -709,6 +746,7 @@ class Step2 extends React.PureComponent {
             <Col span={12}>
               <Form.Item {...formItemLayouts} label="支持退款">
                 {getFieldDecorator('goods_is_refund', {
+                  initialValue: goodsDetail.goods_is_refund,
                   rules: [{ required: true, message: '请填写是否支持退款' }],
                 })(
                   <RadioGroup>
@@ -721,6 +759,7 @@ class Step2 extends React.PureComponent {
             <Col span={12}>
               <Form.Item {...formItemLayouts} label="支持退货">
                 {getFieldDecorator('goods_is_return_goods', {
+                  initialValue: goodsDetail.goods_is_return_goods,
                   rules: [{ required: true, message: '请填写是否支持退货' }],
                 })(
                   <RadioGroup>
@@ -735,6 +774,7 @@ class Step2 extends React.PureComponent {
             <Col span={12}>
               <Form.Item {...formItemLayouts} label="支持7天无理由退货">
                 {getFieldDecorator('goods_is_return_server', {
+                  initialValue: goodsDetail.goods_is_return_server,
                   rules: [{ required: true, message: '请填写是否支持7天无理由退货' }],
                 })(
                   <RadioGroup>
@@ -746,7 +786,8 @@ class Step2 extends React.PureComponent {
             </Col>
             <Col span={12}>
               <Form.Item {...formItemLayouts} label="急速发货">
-                {getFieldDecorator('goods_is_fast_delivery', {
+                {getFieldDecorator('goods_is_recommend_show', {
+                  initialValue: goodsDetail.goods_is_recommend_show,
                   rules: [{ required: true, message: '请填写是否急速发货' }],
                 })(
                   <RadioGroup>
@@ -761,6 +802,7 @@ class Step2 extends React.PureComponent {
             <Col span={12}>
               <Form.Item {...formItemLayouts} label="首页推荐">
                 {getFieldDecorator('goods_is_recommend_show', {
+                  initialValue: goodsDetail.goods_is_recommend_show,
                   rules: [{ required: true, message: '请填写首页推荐' }],
                 })(
                   <RadioGroup>
@@ -773,10 +815,10 @@ class Step2 extends React.PureComponent {
           </Row>
         </Card>
         <Card title="sku分佣">
-          <Form.Item {...formItemLayout} label="分拥类型">
+          <Form.Item {...formItemLayout} label="分佣类型">
             {getFieldDecorator('profit_type', {
               initialValue: typePartial,
-              rules: [{ required: true, message: '请填写分拥类型' }],
+              rules: [{ required: true, message: '请填写分佣类型' }],
             })(
               <Select onChange={e => this.chgTypeHas(e)}>
                 <Option value="0">百分比</Option>
@@ -790,6 +832,7 @@ class Step2 extends React.PureComponent {
               {/* {totalPrice} */}
               <Form.Item {...formItemLayouts} label="一级">
                 {getFieldDecorator('level_0', {
+                  initialValue: levelPartial[0],
                   rules: [{ required: true, message: '请填写一级' }],
                 })(
                   typePartial === '0' ? (
@@ -814,6 +857,7 @@ class Step2 extends React.PureComponent {
             <Col span={8}>
               <Form.Item {...formItemLayouts} label="二级">
                 {getFieldDecorator('level_1', {
+                  initialValue: levelPartial[1],
                   rules: [{ required: true, message: '请填写二级' }],
                 })(
                   typePartial === '0' ? (
@@ -838,6 +882,7 @@ class Step2 extends React.PureComponent {
             <Col span={8}>
               <Form.Item {...formItemLayouts} label="三级">
                 {getFieldDecorator('level_2', {
+                  initialValue: levelPartial[2],
                   rules: [{ required: true, message: '请填写三级' }],
                 })(
                   typePartial === '0' ? (
@@ -864,6 +909,7 @@ class Step2 extends React.PureComponent {
             <Col span={8}>
               <Form.Item {...formItemLayouts} label="四级">
                 {getFieldDecorator('level_3', {
+                  initialValue: levelPartial[3],
                   rules: [{ required: true, message: '请填写四级' }],
                 })(
                   typePartial === '0' ? (
@@ -888,6 +934,7 @@ class Step2 extends React.PureComponent {
             <Col span={8}>
               <Form.Item {...formItemLayouts} label="五级">
                 {getFieldDecorator('level_4', {
+                  initialValue: levelPartial[4],
                   rules: [{ required: true, message: '请填写五级' }],
                 })(
                   typePartial === '0' ? (

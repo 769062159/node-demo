@@ -55,13 +55,17 @@ export const menuData = [
         path: 'good-attr',
       },
       {
-        name: '商品添加',
-        path: 'step-form',
-      },
-      {
         name: '商品品牌',
         path: 'good-brand',
       },
+      {
+        name: '商品添加',
+        path: 'add-goods',
+      },
+      // {
+      //   name: '商品修改',
+      //   path: 'edit-goods',
+      // },
     ],
   },
   {

@@ -183,6 +183,10 @@ export default class TableList extends PureComponent {
     event.preventDefault();
     console.log(id);
   };
+  // 修改商品
+  // editGoods = id => {
+
+  // }
 
   renderSimpleForm() {
     const { getFieldDecorator } = this.props.form;
@@ -289,7 +293,7 @@ export default class TableList extends PureComponent {
               </InputGroup>
             </FormItem>
           </Col>
-          <Col md={8} sm={24}>
+          {/* <Col md={8} sm={24}>
             <FormItem label="使用状态">
               {getFieldDecorator('status3')(
                 <Select placeholder="请选择" style={{ width: '100%' }}>
@@ -308,7 +312,7 @@ export default class TableList extends PureComponent {
                 </Select>
               )}
             </FormItem>
-          </Col>
+          </Col> */}
         </Row>
         <div style={{ overflow: 'hidden' }}>
           <span style={{ float: 'right', marginBottom: 24 }}>
@@ -435,7 +439,7 @@ export default class TableList extends PureComponent {
         width: 150,
         render: record => (
           <Fragment>
-            <a href="">配置</a>
+            <a href={`#/good/edit-goods/confirm/${record.goods_id}`}>修改</a>
             <Divider type="vertical" />
             <a onClick={this.deleteGoods.bind(this, record.goods_id)}>删除</a>
           </Fragment>

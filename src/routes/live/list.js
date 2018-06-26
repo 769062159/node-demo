@@ -394,7 +394,7 @@ export default class TableList extends PureComponent {
       {
         title: '直播封面',
         dataIndex: 'cover',
-        render: val => (val ? <img src={val} alt="图片" /> : null),
+        render: val => (val ? <img src={val} style={{width: '200px'}} alt="图片" /> : null),
       },
       {
         title: '创建时间',

@@ -1,3 +1,5 @@
+import { routerRedux } from 'dva/router';
+import moment from 'moment';
 import {
   getAllGoods,
   editGoodType,
@@ -102,11 +104,20 @@ export default {
     brandList: [], // 品牌列表
     brandListPage: {}, // 品牌页脚
     goodsPlace: [], // 商品地址
+    goodsDetail: {},
   },
 
   effects: {
-    *addShop({ payload }, { call }) {
-      yield call(addGood, { ...payload });
+    *getGoodsDetail({ payload }, { call }) {
+      // 添加初始化
+      const response = yield call(initGoodAttr, { ...payload });
+      console.log(response);
+    },
+    *addShop({ payload }, { call, put }) {
+      const response = yield call(addGood, { ...payload });
+      if (response.code === 200) {
+        yield put(routerRedux.push('/goods/add-goods/result'));
+      }
       // if (response.code === 200) {
 
       // }
@@ -177,13 +188,24 @@ export default {
       });
     },
     *initGoodAttr({ payload }, { call, put }) {
-      const response = yield call(initGoodAttr);
+      // 添加初始化
+      const response = yield call(initGoodAttr, {
+        goods_id: payload.goods_id,
+      });
       if (response.code === 200) {
         const goodsClass = response.data.goods_class;
         const goodsBrand = response.data.goods_brand; // 商品品牌
         const goodsPlace = response.data.goods_place; // 商品品牌
-        const type = Number(payload.type);
-        const typeSon = Number(payload.typeSon);
+        const goodsDetail = response.data.goods; // 商品品牌
+        let type = '';
+        let typeSon = '';
+        if (payload.type) {
+          type = Number(payload.type);
+          typeSon = Number(payload.typeSon);
+        } else if (payload.goods_id) {
+          type = Number(goodsDetail.class_id);
+          typeSon = Number(goodsDetail.category_id);
+        }
         const selectType = goodsClass.filter(res => {
           return res.class_id === type;
         });
@@ -220,6 +242,7 @@ export default {
             AttrArrMap,
             brandList: goodsBrand,
             goodsPlace, // 品牌地址
+            goodsDetail, // 商品详情
           },
         });
       }
@@ -406,9 +429,36 @@ export default {
       };
     },
     init(state, { payload }) {
+      let { typePartial } = state;
+      const levelPartial = [];
+      let levelPartialSon = [];
+      let totalPrice = 0;
+      const { goodsDetail } = payload;
+      if (goodsDetail.goods_id) {
+        typePartial = goodsDetail.has_shop_goods_profit[0].profit_type.toString();
+        totalPrice = goodsDetail.sell_goods_price;
+        goodsDetail.has_shop_goods_profit.forEach(res => {
+          levelPartial.push(res.profit_value);
+        });
+        if (typePartial === '0') {
+          levelPartial.forEach(res => {
+            levelPartialSon.push((res * totalPrice / 100).toFixed(2));
+          });
+        } else {
+          levelPartialSon = levelPartial;
+        }
+        goodsDetail.goods_shelves_time = moment(goodsDetail.goods_shelves_time * 1000).format(
+          'YYYY-MM-DD HH:mm:ss'
+        );
+      }
+      payload.goodsDetail = goodsDetail;
       return {
         ...state,
         ...payload,
+        typePartial,
+        levelPartial,
+        levelPartialSon,
+        totalPrice,
       };
     },
     show(state, { payload }) {

@@ -16,28 +16,29 @@ class StepForm extends PureComponent {
     const { pathname } = location;
     const pathList = pathname.split('/');
     switch (pathList[3]) {
-      case 'info':
-        return 0;
+      // case 'info':
+      //   return 0;
       case 'confirm':
-        return 1;
+        return 0;
       case 'result':
-        return 2;
+        return 1;
       default:
         return 0;
     }
   }
   render() {
     const { match, routerData } = this.props;
+    const { id } = this.props.match.params;
+    const url = `/good/edit-goods/confirm/${id}`;
     return (
       <PageHeaderLayout
-        title="分步表单"
+        title="修改商品"
         // content="将一个冗长或用户不熟悉的表单任务分成多个步骤，指导用户完成。"
       >
         <Card bordered={false}>
           <Fragment>
             <Steps current={this.getCurrentStep()} className={styles.steps}>
-              <Step title="选择商品分类" />
-              <Step title="填写商品详细信息" />
+              <Step title="修改商品详细信息" />
               <Step title="完成" />
             </Steps>
             <Switch>
@@ -49,7 +50,7 @@ class StepForm extends PureComponent {
                   exact={item.exact}
                 />
               ))}
-              <Redirect exact from="/good/add-goods" to="/good/add-goods/info" />
+              <Redirect exact from="/good/edit-goods" to={url} />
               <Route render={NotFound} />
             </Switch>
           </Fragment>

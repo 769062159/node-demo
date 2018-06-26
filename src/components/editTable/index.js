@@ -131,6 +131,7 @@ class UploadImg extends PureComponent {
   };
   handleChangeImg = ({ fileList }) => {
     if (fileList.length) {
+      this.setState({ fileList });
       fileList.forEach(item => {
         if (item.status === 'done' && item.uploaded !== 'done') {
           const img = {};
@@ -146,7 +147,7 @@ class UploadImg extends PureComponent {
         // return item;
       });
     }
-    this.setState({ fileList });
+    // this.setState({ fileList });
     // this.props.onChange(fileList);
   };
   removeImg = () => {
