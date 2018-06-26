@@ -19,7 +19,7 @@ function isPromise(obj) {
  * @param { 未通过的组件 no pass components } Exception
  */
 const checkPermissions = (authority, currentAuthority, target, Exception) => {
-	/*console.group('checkPermissions');
+  /*console.group('checkPermissions');
 	console.log(authority, 1);
 	console.log(currentAuthority, 2);
 	console.log(target, 3);

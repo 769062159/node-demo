@@ -3,7 +3,7 @@ import pathToRegexp from 'path-to-regexp';
 
 /* 格式化处理menuData中的所有path,如果children中没有authority，就用父级的覆盖 */
 function formatter(data, parentPath = '/', parentAuthority) {
-  return data.map((item) => {
+  return data.map(item => {
     let { path } = item;
     if (!isUrl(path)) {
       path = parentPath + item.path;
@@ -23,7 +23,7 @@ function formatter(data, parentPath = '/', parentAuthority) {
 /*将menuData里面的数据展开  =>类似于router里面的routerConfig */
 export function getFlatMenuData(menusFormatterData) {
   let keys = {};
-  menusFormatterData.forEach((item) => {
+  menusFormatterData.forEach(item => {
     if (item.children) {
       keys[item.path] = { ...item };
       keys = { ...keys, ...getFlatMenuData(item.children) };
@@ -38,7 +38,7 @@ export function getFlatMenuData(menusFormatterData) {
  * 将mune里面的menuData(name,authority)和routerConfig进行合并得出新的routerData
  * get {name, authority} form getMenuData()
  * return {name, authority, ...routerConfig}
- * 
+ *
  * @author 何方
  */
 export const getRouterData = (routerConfig, menuData) => {
@@ -46,7 +46,7 @@ export const getRouterData = (routerConfig, menuData) => {
   // eg. {name,authority ...routerConfig }
   const routerData = {};
   // The route matches the menu
-  Object.keys(routerConfig).forEach((path) => {
+  Object.keys(routerConfig).forEach(path => {
     // Regular match item name
     // eg.  router /user/:id === /user/chen
     const pathRegexp = pathToRegexp(path);
@@ -68,8 +68,8 @@ export const getRouterData = (routerConfig, menuData) => {
     };
     routerData[path] = router;
   });
-  
+
   return routerData;
 };
 
-export const getMenuData = (menuData) => formatter(menuData);
+export const getMenuData = menuData => formatter(menuData);

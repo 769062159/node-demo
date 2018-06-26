@@ -12,7 +12,7 @@ const { SubMenu } = Menu;
 //   icon: 'setting',
 //   icon: 'http://demo.com/icon.png',
 //   icon: <Icon type="setting" />,
-const getIcon = (icon) => {
+const getIcon = icon => {
   if (typeof icon === 'string' && icon.indexOf('http') === 0) {
     return <img src={icon} alt="icon" className={styles.icon} />;
   }
@@ -27,7 +27,7 @@ const getIcon = (icon) => {
  * @param {String} path
  */
 export const getMeunMatcheys = (flatMenuKeys, path) => {
-  return flatMenuKeys.filter((item) => {
+  return flatMenuKeys.filter(item => {
     return pathToRegexp(item).test(path);
   });
 };
@@ -45,7 +45,7 @@ export default class SiderMenu extends PureComponent {
     };
   }
   componentWillReceiveProps(nextProps) {
-  	/* 第一个是当前的地址，第二个是从哪里过来的地址 */
+    /* 第一个是当前的地址，第二个是从哪里过来的地址 */
     if (nextProps.location.pathname !== this.props.location.pathname) {
       this.setState({
         openKeys: this.getDefaultCollapsedSubMenus(nextProps),
@@ -60,7 +60,7 @@ export default class SiderMenu extends PureComponent {
   getDefaultCollapsedSubMenus(props) {
     const { location: { pathname } } = props || this.props;
     return urlToList(pathname)
-      .map((item) => {
+      .map(item => {
         return getMeunMatcheys(this.flatMenuKeys, item)[0];
       })
       .filter(item => item);
@@ -72,7 +72,7 @@ export default class SiderMenu extends PureComponent {
    */
   getFlatMenuKeys(menus) {
     let keys = [];
-    menus.forEach((item) => {
+    menus.forEach(item => {
       if (item.children) {
         keys = keys.concat(this.getFlatMenuKeys(item.children));
       }
@@ -85,7 +85,7 @@ export default class SiderMenu extends PureComponent {
    * Judge whether it is http link.return a or Link
    * @memberof SiderMenu
    */
-  getMenuItemPath = (item) => {
+  getMenuItemPath = item => {
     const itemPath = this.conversionPath(item.path);
     const icon = getIcon(item.icon);
     const { target, name } = item;
@@ -119,7 +119,7 @@ export default class SiderMenu extends PureComponent {
   /**
    * get SubMenu or Item
    */
-  getSubMenuOrItem = (item) => {
+  getSubMenuOrItem = item => {
     if (item.children && item.children.some(child => child.name)) {
       const childrenItems = this.getNavMenuItems(item.children);
       // 当无子菜单时就不展示菜单
@@ -133,8 +133,8 @@ export default class SiderMenu extends PureComponent {
                   <span>{item.name}</span>
                 </span>
               ) : (
-                  item.name
-                )
+                item.name
+              )
             }
             key={item.path}
           >
@@ -144,22 +144,20 @@ export default class SiderMenu extends PureComponent {
       }
       return null;
     } else {
-      return (
-        <Menu.Item key={item.path}>{this.getMenuItemPath(item)}</Menu.Item>
-      );
+      return <Menu.Item key={item.path}>{this.getMenuItemPath(item)}</Menu.Item>;
     }
   };
   /**
    * @description 获取菜单节点并排列
    * @param {Array} menusData   =>menuData
    */
-  getNavMenuItems = (menusData) => {
+  getNavMenuItems = menusData => {
     if (!menusData) {
       return [];
     }
     return menusData
       .filter(item => item.name && !item.hideInMenu)
-      .map((item) => {
+      .map(item => {
         // make dom
         const ItemDom = this.getSubMenuOrItem(item);
         return this.checkPermissionItem(item.authority, ItemDom);
@@ -169,15 +167,13 @@ export default class SiderMenu extends PureComponent {
   /* 获取当前选定的菜单  =>[/a, /a/b, /a/b/c, ...] */
   getSelectedMenuKeys = () => {
     const { location: { pathname } } = this.props;
-    return urlToList(pathname).map(itemPath =>
-      {
-      	return getMeunMatcheys(this.flatMenuKeys, itemPath).pop();
-      }
-    );
+    return urlToList(pathname).map(itemPath => {
+      return getMeunMatcheys(this.flatMenuKeys, itemPath).pop();
+    });
   };
   // conversion Path
   // 转化路径
-  conversionPath = (path) => {
+  conversionPath = path => {
     if (path && path.indexOf('http') === 0) {
       return path;
     } else {
@@ -196,17 +192,14 @@ export default class SiderMenu extends PureComponent {
    * @description 判断链接是否在mainMenu中
    * @param {String} key   => '/list'
    */
-  isMainMenu = (key) => {
-    return this.menus.some(
-      item =>
-        key && (item.key === key || item.path === key),
-    );
-  }
+  isMainMenu = key => {
+    return this.menus.some(item => key && (item.key === key || item.path === key));
+  };
   /**
    * @description SubMenu 展开/关闭的回调 如果有多个元素在mainMenu中，则就选择刚打开的那个mainMenu
    * @param {Array} openKeys 如果是二级菜单 =>['/list', '/list/search'] Submenu切换时： =>['/list','/form']
    */
-  handleOpenChange = (openKeys) => {
+  handleOpenChange = openKeys => {
     const lastOpenKey = openKeys[openKeys.length - 1];
     const moreThanOne = openKeys.filter(openKey => this.isMainMenu(openKey)).length > 1;
     this.setState({
@@ -220,8 +213,8 @@ export default class SiderMenu extends PureComponent {
     const menuProps = collapsed
       ? {}
       : {
-        openKeys,
-      };
+          openKeys,
+        };
     // 如果路径不匹配，使用最近的父级的key
     let selectedKeys = this.getSelectedMenuKeys();
     if (!selectedKeys.length) {
@@ -233,7 +226,7 @@ export default class SiderMenu extends PureComponent {
         collapsible // 是否可收起
         collapsed={collapsed} // 当前可收起的状态
         breakpoint="lg"
-        onCollapse={onCollapse}  // 展开-收起时的回调函数，有点击 trigger 以及响应式反馈两种方式可以触发
+        onCollapse={onCollapse} // 展开-收起时的回调函数，有点击 trigger 以及响应式反馈两种方式可以触发
         width={256}
         className={styles.sider}
       >
