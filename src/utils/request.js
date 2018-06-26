@@ -35,7 +35,7 @@ function checkStatus(response) {
   error.response = response;
   throw error;
 }
-const apiurl = "http://hlsj.test.seastart.cn";
+const apiurl = 'http://hlsj.test.seastart.cn';
 // const apiurl = "";
 
 /**
@@ -52,10 +52,10 @@ export default async function request(url, options) {
   // console.log(token);
   // console.log(failTime);
   if (url !== '/admin/login' && failTime < new Date().getTime()) {
-    let nowToken = await fetch(`${apiurl}/admin/updatetoken`,{
+    let nowToken = await fetch(`${apiurl}/admin/updatetoken`, {
       method: 'post',
       headers: {
-        mode: "no-cors",
+        mode: 'no-cors',
         Accept: 'application/json',
         'Content-Type': 'application/json; charset=utf-8',
         Authorization: `Bearer ${token}`,
@@ -64,10 +64,10 @@ export default async function request(url, options) {
     nowToken = nowToken.json();
     await nowToken.then(res => {
       if (res.code === 200) {
-        const {token: nowTokens} = res.data;
+        const { token: nowTokens } = res.data;
         token = nowTokens;
-        localStorage.setItem('token',token);
-        localStorage.setItem('failTime',res.data.expired_time * 1000);
+        localStorage.setItem('token', token);
+        localStorage.setItem('failTime', res.data.expired_time * 1000);
       } else if (res.code === 400 || res.code === 404 || res.code === 405) {
         localStorage.setItem('token', '');
         const { dispatch } = store;
@@ -76,25 +76,24 @@ export default async function request(url, options) {
     });
   }
 
-
   // const defaultOptions = {
   //   credentials: 'include',
   // };
-  const newOptions = {...options };
+  const newOptions = { ...options };
   newOptions.headers = {
     Accept: 'application/json',
-    mode: "no-cors",
+    mode: 'no-cors',
     Authorization: `Bearer ${token}`,
     // 'Authorization': '',
     // 'JOKE': 'seastartmall!',
     // 'Device': 'xcx',
     // 'AppID': 'wxbfd3fb865c4ae400',
     // 'content-type': 'application/x-www-form-urlencoded',
-  }
+  };
   if (newOptions.method === 'POST' || newOptions.method === 'PUT') {
     if (!(newOptions.body instanceof FormData)) {
       newOptions.headers = {
-        mode: "no-cors",
+        mode: 'no-cors',
         Accept: 'application/json',
         'Content-Type': 'application/json; charset=utf-8',
         // Authorization: `Bearer ${token}`,
@@ -104,7 +103,7 @@ export default async function request(url, options) {
     } else {
       // newOptions.body is FormData
       newOptions.headers = {
-        mode: "no-cors",
+        mode: 'no-cors',
         Accept: 'application/json',
         // Authorization: `Bearer ${token}`,
         ...newOptions.headers,

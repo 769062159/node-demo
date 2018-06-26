@@ -145,7 +145,7 @@ function getRenderArr(routes) {
  * @param {routerData} routerData
  */
 export function getRoutes(path, routerData) {
- // 过滤掉根目录 /和没有/的路径
+  // 过滤掉根目录 /和没有/的路径
   let routes = Object.keys(routerData).filter(
     routePath => routePath.indexOf(path) === 0 && routePath !== path
   );
@@ -155,16 +155,16 @@ export function getRoutes(path, routerData) {
   /* 获取要呈现的路径以移除深绘制（路径） */
   const renderArr = getRenderArr(routes);
   const renderRoutes = renderArr.map(item => {
-  	/**
-  	 * *
-  	 * @description 判断是否item有被过滤掉的子元素  list => 'list/search'
-  	 * 有 => !true => false
-  	 * 无 => !false => true
-  	 * 
-  	 */
+    /**
+     * *
+     * @description 判断是否item有被过滤掉的子元素  list => 'list/search'
+     * 有 => !true => false
+     * 无 => !false => true
+     *
+     */
     const exact = !routes.some(route => {
-    	// item是否存在于routes中,而且不相等  =>list/search.indexOf('/list');
-    	return route !== item && getRelation(route, item) === 1;
+      // item是否存在于routes中,而且不相等  =>list/search.indexOf('/list');
+      return route !== item && getRelation(route, item) === 1;
     });
     return {
       exact,
@@ -177,7 +177,7 @@ export function getRoutes(path, routerData) {
 }
 
 export function getHfRoutes(path, routerData) {
- // 过滤掉根目录 /和没有/的路径
+  // 过滤掉根目录 /和没有/的路径
   let routes = Object.keys(routerData).filter(
     routePath => routePath.indexOf(path) === 0 && routePath !== path
   );
@@ -188,7 +188,7 @@ export function getHfRoutes(path, routerData) {
   const renderArr = getRenderArr(routes);
   // Conversion and stitching parameters
   const renderRoutes = routes.map(item => {
-//  const exact = !routes.some(route => route !== item && getRelation(route, item) === 1);
+    //  const exact = !routes.some(route => route !== item && getRelation(route, item) === 1);
     const exact = true;
     return {
       exact,
