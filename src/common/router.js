@@ -21,6 +21,12 @@ export const getRouterConfig = app => {
       identity: 'root',
       component: dynamicWrapper(app, ['user', 'login'], () => import('../layouts/BasicLayout')),
     },
+    '/front-users/front-user-list': {
+      identity: 'common',
+      component: dynamicWrapper(app, ['frontUser'], () =>
+        import('../routes/FrontUsers/FrontUserList')
+      ),
+    },
     '/dashboard/analysis': {
       identity: 'common',
       component: dynamicWrapper(app, ['chart'], () => import('../routes/Dashboard/Analysis')),
