@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Table, Input, Icon, Popconfirm, Upload, Modal, Row, Col, Form } from 'antd';
+import { Table, Input, Icon, Popconfirm, Upload, Modal, Row, Col, Form, InputNumber } from 'antd';
 
 class EditableCell extends PureComponent {
   state = {
@@ -45,8 +45,19 @@ class EditInputNumber extends PureComponent {
     value: this.props.value,
   };
   handleChange = e => {
-    const value = e.target.value;
-    this.setState({ value });
+    console.log();
+    let values = e.target.value;
+    const { totalStock, attrTable, value } = this.props;
+    if (attrTable && attrTable.length) {
+      let num = Number(totalStock) + parseInt(value, 10);
+      attrTable.forEach(ele => {
+        num -= ele.store_nums;
+      });
+      if (num < values) {
+        values = num;
+      }
+    }
+    this.setState({ value: values });
   };
   check = () => {
     if (this.props.onChange) {
@@ -198,7 +209,6 @@ export default class EditableTable extends PureComponent {
   componentWillReceiveProps(nextProps) {
     const { attrTable, levelPartialSon } = nextProps;
     attrTable.forEach(res => {
-      console.log(res.profit);
       if (!res.profit.length) {
         res.profit = levelPartialSon;
       }
@@ -217,15 +227,33 @@ export default class EditableTable extends PureComponent {
     return value => {
       console.log(value);
       const attrTable = [...this.state.attrTable];
+      // const { totalStock } = this.props;
+      // console.log(totalStock);
+      // if (dataIndex === 'store_nums') {
+      //   let num = totalStock;
+      //   attrTable.forEach(res => {
+      //     num -= res.store_nums;
+      //   })
+      //   console.log(num);
+      //   if (num < value) {
+      //     console.log(1);
+      //     attrTable[index][dataIndex] = num;
+      //   } else {
+      //     console.log(2);
+      //     attrTable[index][dataIndex] = value;
+      //   }
+      // } else {
+      //   attrTable[index][dataIndex] = value;
+      // }
       attrTable[index][dataIndex] = value;
       this.setState({ attrTable });
-      this.props.handleEmail(attrTable);
+      this.props.modifiedValue(attrTable);
     };
   };
   onDelete = key => {
     const attrTable = [...this.state.attrTable];
     attrTable.splice(key, 1);
-    this.props.handleEmail(attrTable);
+    this.props.modifiedValue(attrTable);
     this.setState({ attrTable });
   };
 
@@ -299,7 +327,7 @@ export default class EditableTable extends PureComponent {
   //   console.log(event);
   // }
   render() {
-    const { rowKey, form } = this.props;
+    const { rowKey, form, totalPrice, totalStock } = this.props;
     const { attrTable, levelVisible, showData } = this.state;
     const { getFieldDecorator } = form;
 
@@ -333,11 +361,13 @@ export default class EditableTable extends PureComponent {
         ),
       },
       {
-        title: '数量',
+        title: '库存',
         dataIndex: 'store_nums',
         render: (text, record, index) => (
           <EditInputNumber
             value={text}
+            totalStock={totalStock}
+            attrTable={attrTable}
             step={0}
             onChange={this.onCellChange(index, 'store_nums')}
           />
@@ -377,6 +407,9 @@ export default class EditableTable extends PureComponent {
           rowKey={rowKey}
           columns={columns}
           scroll={{ x: 1300 }}
+          locale={{
+            emptyText: '已为您设置默认sku',
+          }}
         />
         <Modal
           visible={levelVisible}
@@ -386,16 +419,12 @@ export default class EditableTable extends PureComponent {
         >
           <Form layout="horizontal">
             <Row gutter={24}>
-              {/* <Col span={4}>
-                一级
-              </Col> */}
               <Col span={12}>
-                {/* <Input defaultValue={showData[0]} /> */}
                 <Form.Item label="一级">
                   {getFieldDecorator('one', {
                     initialValue: showData[0],
-                    rules: [{ required: true, message: '请填写商品名称' }],
-                  })(<Input />)}
+                    rules: [{ required: true, message: '请填写一级分佣值' }],
+                  })(<InputNumber step={0.01} precision={2} min={0.01} max={totalPrice} />)}
                 </Form.Item>
               </Col>
               {/* <Col span={4}>
@@ -405,8 +434,8 @@ export default class EditableTable extends PureComponent {
                 <Form.Item label="二级">
                   {getFieldDecorator('two', {
                     initialValue: showData[1],
-                    rules: [{ required: true, message: '请填写商品名称' }],
-                  })(<Input />)}
+                    rules: [{ required: true, message: '请填写二级分佣值' }],
+                  })(<InputNumber step={0.01} precision={2} min={0.01} max={totalPrice} />)}
                 </Form.Item>
                 {/* <Input defaultValue={showData[1]} onChange={(e) => this.chgLevelHas(1, e)} /> */}
               </Col>
@@ -419,8 +448,8 @@ export default class EditableTable extends PureComponent {
                 <Form.Item label="三级">
                   {getFieldDecorator('three', {
                     initialValue: showData[2],
-                    rules: [{ required: true, message: '请填写商品名称' }],
-                  })(<Input />)}
+                    rules: [{ required: true, message: '请填写三级分佣值' }],
+                  })(<InputNumber step={0.01} precision={2} min={0.01} max={totalPrice} />)}
                 </Form.Item>
                 {/* <Input defaultValue={showData[2]} onChange={(e) => this.chgLevelHas(2, e)} /> */}
               </Col>
@@ -431,8 +460,8 @@ export default class EditableTable extends PureComponent {
                 <Form.Item label="四级">
                   {getFieldDecorator('four', {
                     initialValue: showData[3],
-                    rules: [{ required: true, message: '请填写商品名称' }],
-                  })(<Input />)}
+                    rules: [{ required: true, message: '请填写四级分佣值' }],
+                  })(<InputNumber step={0.01} precision={2} min={0.01} max={totalPrice} />)}
                 </Form.Item>
                 {/* <Input defaultValue={showData[3]} onChange={(e) => this.chgLevelHas(3, e)} /> */}
               </Col>
@@ -445,8 +474,8 @@ export default class EditableTable extends PureComponent {
                 <Form.Item label="五级">
                   {getFieldDecorator('five', {
                     initialValue: showData[4],
-                    rules: [{ required: true, message: '请填写商品名称' }],
-                  })(<Input />)}
+                    rules: [{ required: true, message: '请填写五级分佣值' }],
+                  })(<InputNumber step={0.01} precision={2} min={0.01} max={totalPrice} />)}
                 </Form.Item>
                 {/* <Input defaultValue={showData[4]} onChange={(e) => this.chgLevelHas(4, e)} /> */}
               </Col>

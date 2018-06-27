@@ -72,7 +72,7 @@ export default class Demo extends React.Component {
     const editorProps = {
       height: 200,
       contentFormat: 'html',
-      initialContent: '',
+      initialContent: this.props.valueSon,
       media: {
         uploadFn,
       },

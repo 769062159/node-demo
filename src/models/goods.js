@@ -43,7 +43,7 @@ const arrayCombination = (dyadicArray, type) => {
   }
 };
 // 将数据组合成列表，利用递归的特性
-const toGet = (arr, attrArr, AttrArrMap) => {
+const toGet = (arr, attrArr, AttrArrMap, totalPrice) => {
   const dyadicArray = [];
   const dyadicArrayId = [];
   attrArr.forEach(res => {
@@ -75,7 +75,7 @@ const toGet = (arr, attrArr, AttrArrMap) => {
       sku_goods_name: res,
       goods_sku_attr: param,
       profit: [],
-      price: 0,
+      price: totalPrice,
       store_nums: 0,
       goods_sku_sn: '',
       img: '',
@@ -99,28 +99,38 @@ export default {
     AttrArrMap: new Map(), // 用来对比的map
     typePartial: '0', // 分佣类型
     totalPrice: 0, // 总价
+    totalStock: 0, // 总库存
     levelPartial: [], // 分佣等级
     levelPartialSon: [], // 传给子的分佣等级
     brandList: [], // 品牌列表
     brandListPage: {}, // 品牌页脚
     goodsPlace: [], // 商品地址
+    uploadGoodsImg: [], // 商品主体图片
     goodsDetail: {},
   },
 
   effects: {
-    *getGoodsDetail({ payload }, { call }) {
-      // 添加初始化
-      const response = yield call(initGoodAttr, { ...payload });
-      console.log(response);
+    *changeTotalStock({ payload }, { put }) {
+      yield put({
+        type: 'changeTotalStocks',
+        payload,
+      });
+    },
+    *setGoodsImg({ payload }, { put }) {
+      yield put({
+        type: 'setGoodsImgs',
+        payload,
+      });
     },
     *addShop({ payload }, { call, put }) {
       const response = yield call(addGood, { ...payload });
       if (response.code === 200) {
-        yield put(routerRedux.push('/goods/add-goods/result'));
+        if (payload.goods_id) {
+          yield put(routerRedux.push('/good/edit-goods/result'));
+        } else {
+          yield put(routerRedux.push('/good/add-goods/result'));
+        }
       }
-      // if (response.code === 200) {
-
-      // }
     },
     *changeTotalPrice({ payload }, { put }) {
       yield put({
@@ -196,7 +206,7 @@ export default {
         const goodsClass = response.data.goods_class;
         const goodsBrand = response.data.goods_brand; // 商品品牌
         const goodsPlace = response.data.goods_place; // 商品品牌
-        const goodsDetail = response.data.goods; // 商品品牌
+        const goodsDetail = response.data.goods; // 商品详情
         let type = '';
         let typeSon = '';
         if (payload.type) {
@@ -337,6 +347,18 @@ export default {
   },
 
   reducers: {
+    setGoodsImgs(state, { payload }) {
+      return {
+        ...state,
+        uploadGoodsImg: payload.fileList,
+      };
+    },
+    changeTotalStocks(state, { payload }) {
+      return {
+        ...state,
+        totalStock: payload.e,
+      };
+    },
     changeTotalPrices(state, { payload }) {
       return {
         ...state,
@@ -344,7 +366,9 @@ export default {
       };
     },
     setLevelPartials(state, { payload }) {
-      const { levelPartial, typePartial, totalPrice, levelPartialSon } = state;
+      const { typePartial, totalPrice, levelPartial, levelPartialSon } = state;
+      // const levelPartial = [];
+      // const levelPartialSon = [];
       levelPartial[payload.index] = payload.value;
       if (typePartial === '1') {
         levelPartialSon[payload.index] = payload.value;
@@ -361,6 +385,8 @@ export default {
       return {
         ...state,
         typePartial: payload.e,
+        levelPartial: [],
+        levelPartialSon: [],
       };
     },
     getBrands(state, { payload }) {
@@ -401,13 +427,13 @@ export default {
       };
     },
     checkedLists(state, { payload }) {
-      const { initGoodsAttr, AttrArrMap } = state;
+      const { initGoodsAttr, AttrArrMap, totalPrice } = state;
       const arr = [];
       initGoodsAttr[payload.index].checkArr = payload.checkedList;
       const attrData = initGoodsAttr.filter(res => {
         return res.checked;
       });
-      toGet(arr, attrData, AttrArrMap);
+      toGet(arr, attrData, AttrArrMap, totalPrice);
       return {
         ...state,
         initGoodsAttr,
@@ -415,13 +441,15 @@ export default {
       };
     },
     checkeds(state, { payload }) {
-      const { initGoodsAttr, AttrArrMap } = state;
+      const { initGoodsAttr, AttrArrMap, totalPrice } = state;
       const arr = [];
+      // console.log(initGoodsAttr);
       initGoodsAttr[payload.index].checked = !initGoodsAttr[payload.index].checked;
+      // console.log(initGoodsAttr);
       const attrData = initGoodsAttr.filter(res => {
         return res.checked;
       });
-      toGet(arr, attrData, AttrArrMap);
+      toGet(arr, attrData, AttrArrMap, totalPrice);
       return {
         ...state,
         initGoodsAttr,
@@ -430,15 +458,82 @@ export default {
     },
     init(state, { payload }) {
       let { typePartial } = state;
+      console.log(payload.initGoodsAttr);
       const levelPartial = [];
       let levelPartialSon = [];
       let totalPrice = 0;
       const { goodsDetail } = payload;
+      const uploadGoodsImg = [];
+      const arr = [];
       if (goodsDetail.goods_id) {
+        const arrId = new Set();
+        const arrSonId = new Set();
+        payload.goodsDetail.has_shop_goods_sku.forEach(res => {
+          res.has_shop_goods_sku_attr.forEach(ele => {
+            arrId.add(ele.attr_class_id);
+            arrSonId.add(ele.attr_id);
+          });
+        });
+        payload.initGoodsAttr.forEach(res => {
+          if (arrId.has(res.id)) {
+            res.checked = true;
+          }
+          res.has_many_attr.forEach(ele => {
+            if (arrSonId.has(ele.id)) {
+              res.checkArr.push(ele.value);
+            }
+          });
+        });
+        const attrData = payload.initGoodsAttr.filter(res => {
+          return res.checked;
+        });
+        toGet(arr, attrData, payload.AttrArrMap, goodsDetail.sell_goods_price);
+        // console.log(goodsDetail.has_shop_goods_sku);
+        // console.log(arr);
+        goodsDetail.has_shop_goods_sku.forEach((res, index) => {
+          arr[index].goods_sku_sn = res.goods_sku_sn;
+          arr[index].price = res.price;
+          arr[index].store_nums = res.store_nums;
+          // arr[index].profit = res.sell_num;
+          res.has_shop_goods_sku_profit.forEach(res => {
+            arr[index].profit.push(res.price);
+          });
+          const img = res.has_shop_goods_img[0];
+          arr[index].img = img.http_url;
+          arr[index].sku_goods_name = res.sku_goods_name;
+          if (img.http_url) {
+            arr[index].fileList = [
+              {
+                img: img.http_url,
+                url: img.http_url,
+                status: 'done',
+                uploaded: 'done',
+                response: { status: 'success' },
+                name: img.create_time,
+                uid: img.create_time,
+              },
+            ];
+          }
+          // res.has_shop_goods_img.forEach(ele => {
+          //   res.
+          // })
+        });
+        goodsDetail.has_shop_goods_img.forEach(res => {
+          const img = {};
+          img.status = 'done';
+          img.uploaded = 'done';
+          img.response = { status: 'success' };
+          img.name = res.img_id;
+          img.uid = res.img_id;
+          img.url = res.http_url;
+          uploadGoodsImg.push(img);
+        });
         typePartial = goodsDetail.has_shop_goods_profit[0].profit_type.toString();
         totalPrice = goodsDetail.sell_goods_price;
         goodsDetail.has_shop_goods_profit.forEach(res => {
-          levelPartial.push(res.profit_value);
+          if (res.status === 0) {
+            levelPartial.push(res.profit_value);
+          }
         });
         if (typePartial === '0') {
           levelPartial.forEach(res => {
@@ -459,6 +554,8 @@ export default {
         levelPartial,
         levelPartialSon,
         totalPrice,
+        uploadGoodsImg,
+        attrTable: arr,
       };
     },
     show(state, { payload }) {

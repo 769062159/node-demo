@@ -61,7 +61,6 @@ class Step2 extends React.PureComponent {
   state = {
     previewVisible: false,
     previewImage: '',
-    fileList: [],
     payload: {
       type: 2,
     },
@@ -165,7 +164,7 @@ class Step2 extends React.PureComponent {
     console.log(obj);
     setFieldsValue(obj);
   };
-  handleEmail = event => {
+  modifiedValue = event => {
     const { dispatch } = this.props;
     dispatch({
       type: 'goods/setAttrTabes',
@@ -198,7 +197,14 @@ class Step2 extends React.PureComponent {
       }
       return item;
     });
-    this.setState({ fileList });
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'goods/setGoodsImg',
+      payload: {
+        fileList,
+      },
+    });
+    // this.setState({ fileList });
   };
   customRequest = data => {
     console.log(data);
@@ -247,11 +253,23 @@ class Step2 extends React.PureComponent {
       },
     });
   }
+  // 修改总价
   chgTotalProce(e) {
     console.log(e);
     const { dispatch } = this.props;
     dispatch({
       type: 'goods/changeTotalPrice',
+      payload: {
+        e,
+      },
+    });
+  }
+  // 修改总库存
+  chgTotalStock(e) {
+    console.log(e);
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'goods/changeTotalStock',
       payload: {
         e,
       },
@@ -287,6 +305,8 @@ class Step2 extends React.PureComponent {
         goodsPlace,
         brandList,
         totalPrice,
+        totalStock,
+        uploadGoodsImg,
       },
     } = this.props;
     const goodsPlaceItem = [];
@@ -308,7 +328,7 @@ class Step2 extends React.PureComponent {
     // const typePartials = typePartial.toString();
     const { validateFields, getFieldDecorator } = form;
     // console.log(getFieldValue('goods_name'));
-    const { fileList, previewVisible, previewImage, payload, header } = this.state;
+    const { previewVisible, previewImage, payload, header } = this.state;
     const uploadButton = (
       <div>
         <Icon type="plus" />
@@ -347,37 +367,72 @@ class Step2 extends React.PureComponent {
     const onValidateForm = e => {
       e.preventDefault();
       validateFields((err, values) => {
+        const { goods: { attrTable, levelPartial, typePartial } } = this.props;
+        console.log(attrTable);
         if (!err) {
-          const { fileList } = this.state;
-          if (!fileList.length) {
+          const { goods: { uploadGoodsImg } } = this.props;
+          if (!uploadGoodsImg.length) {
             message.error('请上传图片主体！');
             return;
           }
-          const { goods: { attrTable, levelPartial, typePartial } } = this.props;
-          attrTable.forEach(ele => {
+          // const { goods: { attrTable, levelPartial, typePartial } } = this.props;
+          if (attrTable.length) {
+            attrTable.forEach(ele => {
+              if (!ele.fileList.length) {
+                ele.img = '';
+              } else {
+                ele.img = ele.fileList[0].url;
+              }
+              const arr = [];
+              ele.profit.forEach(res => {
+                arr.push({
+                  price: res,
+                });
+              });
+              levelPartial.forEach((res, index) => {
+                arr[index].profit_value = res;
+              });
+              ele.profit = arr;
+            });
+          } else {
             const arr = [];
-            ele.profit.forEach(res => {
+            levelPartial.forEach(res => {
               arr.push({
                 price: res,
+                profit_value: res,
               });
             });
-            levelPartial.forEach((res, index) => {
-              arr[index].profit_value = res;
+            attrTable.push({
+              sku_goods_name: '默认',
+              store_nums: values.goods_total_inventory,
+              goods_sku_sn: values.goods_sn,
+              img: '',
+              goods_sku_attr: [
+                {
+                  attr_class_id: 1,
+                  attr_id: 1,
+                  attr_class_name: '默认',
+                  attr_name: '默认',
+                  profiz: arr,
+                },
+              ],
             });
-            ele.profit = arr;
-          });
+          }
           let { type } = this.props.match.params;
           type = type.split(',');
           values.class_id = type[0];
           values.category_id = type[1];
           values.goods_img = [];
-          fileList.forEach(res => {
+          uploadGoodsImg.forEach(res => {
             values.goods_img.push(res.url);
           });
           values.profit_value = levelPartial;
           values.goods_sku = attrTable;
           values.profit_type = typePartial;
-          values.goods_shelves_time = values.goods_shelves_time._d.getTime();
+          values.goods_shelves_time = Number.parseInt(
+            values.goods_shelves_time._d.getTime() / 1000,
+            10
+          );
           console.log(values);
           dispatch({
             type: 'goods/addShop',
@@ -489,7 +544,14 @@ class Step2 extends React.PureComponent {
               <Form.Item {...formItemLayouts} label="产品总库存">
                 {getFieldDecorator('goods_total_inventory', {
                   rules: [{ required: true, message: '请填写产品总库存' }],
-                })(<InputNumber step={1} min={1} style={{ width: '200px' }} />)}
+                })(
+                  <InputNumber
+                    step={1}
+                    min={1}
+                    onChange={e => this.chgTotalStock(e)}
+                    style={{ width: '200px' }}
+                  />
+                )}
               </Form.Item>
             </Col>
           </Row>
@@ -525,7 +587,7 @@ class Step2 extends React.PureComponent {
                     <Upload
                       action="http://hlsj.test.seastart.cn/admin/upload"
                       listType="picture-card"
-                      fileList={fileList}
+                      fileList={uploadGoodsImg}
                       onPreview={this.handlePreviewImg}
                       onChange={this.handleChangeImg}
                       // onSuccess={this.sucUpload}
@@ -533,7 +595,7 @@ class Step2 extends React.PureComponent {
                       data={payload}
                       headers={header}
                     >
-                      {fileList.length >= 6 ? null : uploadButton}
+                      {uploadGoodsImg.length >= 6 ? null : uploadButton}
                     </Upload>
                     <Modal visible={previewVisible} footer={null} onCancel={this.handleCancelImg}>
                       <img alt="example" style={{ width: '100%' }} src={previewImage} />
@@ -917,9 +979,11 @@ class Step2 extends React.PureComponent {
           {attrItemSon}
           <EditTable
             attrTable={attrTable}
+            totalPrice={totalPrice}
+            totalStock={totalStock}
             levelPartialSon={levelPartialSon}
             rowKey={index => JSON.stringify(index)}
-            handleEmail={this.handleEmail.bind(this)}
+            modifiedValue={this.modifiedValue.bind(this)}
           />
         </Card>
         <Form.Item

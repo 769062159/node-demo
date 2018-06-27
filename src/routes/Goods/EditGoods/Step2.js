@@ -18,7 +18,7 @@ import {
   message,
 } from 'antd';
 import moment from 'moment';
-import { routerRedux } from 'dva/router';
+// import { routerRedux } from 'dva/router';
 import ReactEditor from 'components/ReactEditor';
 // import { digitUppercase } from '../../../utils/utils';
 import EditTable from 'components/editTable';
@@ -62,7 +62,6 @@ class Step2 extends React.PureComponent {
   state = {
     previewVisible: false,
     previewImage: '',
-    fileList: [],
     payload: {
       type: 2,
     },
@@ -163,7 +162,7 @@ class Step2 extends React.PureComponent {
     obj[key] = value;
     setFieldsValue(obj);
   };
-  handleEmail = event => {
+  modifiedValue = event => {
     const { dispatch } = this.props;
     dispatch({
       type: 'goods/setAttrTabes',
@@ -196,7 +195,14 @@ class Step2 extends React.PureComponent {
       }
       return item;
     });
-    this.setState({ fileList });
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'goods/setGoodsImg',
+      payload: {
+        fileList,
+      },
+    });
+    // this.setState({ fileList });
   };
   customRequest = data => {
     console.log(data);
@@ -238,6 +244,7 @@ class Step2 extends React.PureComponent {
   };
   chgTypeHas(e) {
     const { dispatch } = this.props;
+    // this.chgFormVal('level_0', '');
     dispatch({
       type: 'goods/changeTypePartial',
       payload: {
@@ -245,11 +252,23 @@ class Step2 extends React.PureComponent {
       },
     });
   }
+  // 修改总价
   chgTotalProce(e) {
     console.log(e);
     const { dispatch } = this.props;
     dispatch({
       type: 'goods/changeTotalPrice',
+      payload: {
+        e,
+      },
+    });
+  }
+  // 修改总库存
+  chgTotalStock(e) {
+    console.log(e);
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'goods/changeTotalStock',
       payload: {
         e,
       },
@@ -286,7 +305,9 @@ class Step2 extends React.PureComponent {
         goodsPlace,
         brandList,
         totalPrice,
+        totalStock,
         goodsDetail,
+        uploadGoodsImg,
       },
     } = this.props;
     const goodsPlaceItem = [];
@@ -314,21 +335,22 @@ class Step2 extends React.PureComponent {
     //   setFieldsValue(formData);
     // }
     // console.log(getFieldValue('goods_name'));
-    const { fileList, previewVisible, previewImage, payload, header } = this.state;
+    const { previewVisible, previewImage, payload, header } = this.state;
     const uploadButton = (
       <div>
         <Icon type="plus" />
         <div className="ant-upload-text">主体图片</div>
       </div>
     );
-    const onPrev = () => {
-      dispatch(routerRedux.push('/good/step-form'));
-    };
     const attrItem = [];
     const attrItemSon = [];
     initGoodsAttr.forEach((res, index) => {
       attrItem.push(
-        <Checkbox onChange={this.onCheckAllAttr.bind(this, index)} key={res.id}>
+        <Checkbox
+          onChange={this.onCheckAllAttr.bind(this, index)}
+          checked={res.checked}
+          key={res.id}
+        >
           {res.name}
         </Checkbox>
       );
@@ -356,13 +378,18 @@ class Step2 extends React.PureComponent {
       validateFields((err, values) => {
         console.log(values);
         if (!err) {
-          const { fileList } = this.state;
-          if (!fileList.length) {
+          const { goods: { uploadGoodsImg } } = this.props;
+          if (!uploadGoodsImg.length) {
             message.error('请上传图片主体！');
             return;
           }
-          const { goods: { attrTable, levelPartial, typePartial } } = this.props;
+          const { goods: { attrTable, levelPartial, typePartial, goodsDetail } } = this.props;
           attrTable.forEach(ele => {
+            if (!ele.fileList.length) {
+              ele.img = '';
+            } else {
+              ele.img = ele.fileList[0].url;
+            }
             const arr = [];
             ele.profit.forEach(res => {
               arr.push({
@@ -374,12 +401,11 @@ class Step2 extends React.PureComponent {
             });
             ele.profit = arr;
           });
-          let { type } = this.props.match.params;
-          type = type.split(',');
-          values.class_id = type[0];
-          values.category_id = type[1];
+          values.class_id = goodsDetail.class_id;
+          values.category_id = goodsDetail.category_id;
+          values.goods_id = goodsDetail.goods_id;
           values.goods_img = [];
-          fileList.forEach(res => {
+          uploadGoodsImg.forEach(res => {
             values.goods_img.push(res.url);
           });
           values.profit_value = levelPartial;
@@ -509,7 +535,14 @@ class Step2 extends React.PureComponent {
                 {getFieldDecorator('goods_total_inventory', {
                   initialValue: goodsDetail.goods_total_inventory,
                   rules: [{ required: true, message: '请填写产品总库存' }],
-                })(<InputNumber step={1} min={1} style={{ width: '200px' }} />)}
+                })(
+                  <InputNumber
+                    step={1}
+                    min={1}
+                    onChange={e => this.chgTotalStock(e)}
+                    style={{ width: '200px' }}
+                  />
+                )}
               </Form.Item>
             </Col>
           </Row>
@@ -541,13 +574,14 @@ class Step2 extends React.PureComponent {
             <Col span={24}>
               <Form.Item {...formItemLayoutUploadImg} label="主体图片">
                 {getFieldDecorator('xxx', {
+                  initialValue: 11,
                   rules: [{ required: true, message: '请填写商品排序' }],
                 })(
                   <div className="clearfix">
                     <Upload
                       action="http://hlsj.test.seastart.cn/admin/upload"
                       listType="picture-card"
-                      fileList={fileList}
+                      fileList={uploadGoodsImg}
                       onPreview={this.handlePreviewImg}
                       onChange={this.handleChangeImg}
                       // onSuccess={this.sucUpload}
@@ -555,7 +589,7 @@ class Step2 extends React.PureComponent {
                       data={payload}
                       headers={header}
                     >
-                      {fileList.length >= 6 ? null : uploadButton}
+                      {uploadGoodsImg.length >= 6 ? null : uploadButton}
                     </Upload>
                     <Modal visible={previewVisible} footer={null} onCancel={this.handleCancelImg}>
                       <img alt="example" style={{ width: '100%' }} src={previewImage} />
@@ -710,7 +744,12 @@ class Step2 extends React.PureComponent {
             {getFieldDecorator('goods_description', {
               initialValue: goodsDetail.goods_description,
               rules: [{ required: true, message: '请填写描述' }],
-            })(<ReactEditor setDescription={this.setDescription} />)}
+            })(
+              <ReactEditor
+                setDescription={this.setDescription}
+                valueSon={goodsDetail.goods_description}
+              />
+            )}
           </Form.Item>
         </Card>
         <Card>
@@ -786,8 +825,8 @@ class Step2 extends React.PureComponent {
             </Col>
             <Col span={12}>
               <Form.Item {...formItemLayouts} label="急速发货">
-                {getFieldDecorator('goods_is_recommend_show', {
-                  initialValue: goodsDetail.goods_is_recommend_show,
+                {getFieldDecorator('goods_is_fast_delivery', {
+                  initialValue: goodsDetail.goods_is_fast_delivery,
                   rules: [{ required: true, message: '请填写是否急速发货' }],
                 })(
                   <RadioGroup>
@@ -841,7 +880,7 @@ class Step2 extends React.PureComponent {
                       max={100}
                       formatter={value => `${totalPrice ? value : 0}%`}
                       parser={value => value.replace('%', '')}
-                      onChange={e => this.chgLevelHas(0, e, 'level_0')}
+                      onChange={e => this.chgLevelHas(0, e)}
                     />
                   ) : (
                     <InputNumber
@@ -964,9 +1003,11 @@ class Step2 extends React.PureComponent {
           {attrItemSon}
           <EditTable
             attrTable={attrTable}
+            totalPrice={totalPrice}
+            totalStock={totalStock}
             levelPartialSon={levelPartialSon}
             rowKey={index => JSON.stringify(index)}
-            handleEmail={this.handleEmail.bind(this)}
+            modifiedValue={this.modifiedValue.bind(this)}
           />
         </Card>
         <Form.Item
@@ -983,9 +1024,9 @@ class Step2 extends React.PureComponent {
           <Button type="primary" onClick={onValidateForm} loading={submitting}>
             提交
           </Button>
-          <Button onClick={onPrev} style={{ marginLeft: 8 }}>
+          {/* <Button onClick={onPrev} style={{ marginLeft: 8 }}>
             上一步
-          </Button>
+          </Button> */}
         </Form.Item>
       </Form>
     );
