@@ -98,10 +98,12 @@ export default {
       //   payload: response,
       // });
       const response = yield call(queryCurrent);
-      yield put({
-        type: 'saveCurrentUser',
-        payload: response.data,
-      });
+      if (response) {
+        yield put({
+          type: 'saveCurrentUser',
+          payload: response.data,
+        });
+      }
     },
   },
 

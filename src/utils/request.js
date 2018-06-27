@@ -121,13 +121,13 @@ export default async function request(url, options) {
     .catch(e => {
       const status = e.name;
       const { dispatch } = store;
-      if (status === 401 || status === 400) {
+      if (status === 401) {
         dispatch({
           type: 'login/logout',
         });
         return;
       }
-      if (status === 405) {
+      if (status === 405 || status === 400) {
         dispatch(routerRedux.push('/user/login'));
         return;
       }
