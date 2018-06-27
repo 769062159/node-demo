@@ -366,7 +366,7 @@ export default class TableList extends PureComponent {
     // console.log(attrName);
     // console.log(this.props.form);
     return (
-      <PageHeaderLayout title="商品属性">
+      <PageHeaderLayout>
         <Card bordered={false}>
           <div className={styles.tableList}>
             <div className={styles.tableListOperator}>

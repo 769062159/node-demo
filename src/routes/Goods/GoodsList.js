@@ -189,7 +189,7 @@ export default class TableList extends PureComponent {
     const { dispatch } = this.props;
     const url = `/good/add-goods/info`;
     dispatch(routerRedux.push(url));
-  }
+  };
 
   renderSimpleForm() {
     const { getFieldDecorator } = this.props.form;
@@ -458,7 +458,7 @@ export default class TableList extends PureComponent {
     );
 
     return (
-      <PageHeaderLayout title="查询表格">
+      <PageHeaderLayout>
         <Card bordered={false}>
           <div className={styles.tableList}>
             <div className={styles.tableListForm}>{this.renderForm()}</div>

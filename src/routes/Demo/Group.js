@@ -163,7 +163,7 @@ export default class Group extends Component {
       };
     }
     return (
-      <PageHeaderLayout title="部门列表">
+      <PageHeaderLayout>
         <Card bordered={false}>
           <Button type="primary" onClick={this.showModal.bind(this)} style={{ marginBottom: 24 }}>
             新增部门

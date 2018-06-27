@@ -24,7 +24,7 @@ export const menuData = [
         path: 'group',
       },
       {
-        name: '用户列表',
+        name: '管理员',
         path: 'user-list',
       },
     ],
@@ -35,11 +35,11 @@ export const menuData = [
     path: 'router',
     children: [
       {
-        name: '菜单新增',
+        name: '路由新增',
         path: 'menu-add',
       },
       {
-        name: '菜单列表',
+        name: '路由列表',
         path: 'menu-list',
       },
     ],

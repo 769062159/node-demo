@@ -271,7 +271,7 @@ export default class Role extends Component {
     // const plainOptions = ['Apple', 'Pear', 'Orange'];
     // const defaultCheckedList = ['Apple', 'Orange'];
     return (
-      <PageHeaderLayout title="角色列表">
+      <PageHeaderLayout>
         <Card>
           <Button type="primary" onClick={this.showModal.bind(this)} style={{ marginBottom: 24 }}>
             新增角色

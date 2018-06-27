@@ -65,7 +65,7 @@ export default class TableList extends PureComponent {
     }
 
     return (
-      <PageHeaderLayout title="订单列表">
+      <PageHeaderLayout>
         <Card bordered={false}>
           <List
             itemLayout="vertical"

@@ -119,7 +119,7 @@ export default class Group extends Component {
       },
     ];
     return (
-      <PageHeaderLayout title="菜单列表">
+      <PageHeaderLayout>
         <Card bordered={false}>
           <Button type="primary" onClick={this.goPath} style={{ marginBottom: 24 }}>
             新增菜单

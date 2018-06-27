@@ -516,7 +516,7 @@ export default class TableList extends PureComponent {
     ];
 
     return (
-      <PageHeaderLayout title="商品分类">
+      <PageHeaderLayout>
         <Card bordered={false}>
           <div className={styles.tableList}>
             {/* <div className={styles.tableListForm}>{this.renderForm()}</div> */}
