@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react';
 import { Link, Redirect, Switch, Route } from 'dva/router';
+// Link,
 import DocumentTitle from 'react-document-title';
 import { Icon } from 'antd';
 import GlobalFooter from '../components/GlobalFooter';
@@ -9,27 +10,27 @@ import { getRoutes } from '../utils/utils';
 
 import AppNoMenu from '../components/utils/AppNoMenu';
 
-const links = [
-  {
-    key: 'help',
-    title: '帮助',
-    href: '',
-  },
-  {
-    key: 'privacy',
-    title: '隐私',
-    href: '',
-  },
-  {
-    key: 'terms',
-    title: '条款',
-    href: '',
-  },
-];
+// const links = [
+//   {
+//     key: 'help',
+//     title: '帮助',
+//     href: '',
+//   },
+//   {
+//     key: 'privacy',
+//     title: '隐私',
+//     href: '',
+//   },
+//   {
+//     key: 'terms',
+//     title: '条款',
+//     href: '',
+//   },
+// ];
 
 const copyright = (
   <Fragment>
-    Copyright <Icon type="copyright" /> 2018 蚂蚁金服体验技术部出品
+    Copyright <Icon type="copyright" /> 风远科技
   </Fragment>
 );
 
@@ -37,7 +38,7 @@ class UserLayout extends React.PureComponent {
   getPageTitle() {
     const { routerData, location } = this.props;
     const { pathname } = location;
-    let title = 'Ant Design Pro';
+    let title = '3.14';
     if (routerData[pathname] && routerData[pathname].name) {
       title = `${routerData[pathname].name} - Ant Design Pro`;
     }
@@ -50,13 +51,13 @@ class UserLayout extends React.PureComponent {
         <div className={styles.container}>
           <div className={styles.content}>
             <div className={styles.top}>
-              <div className={styles.header}>
+              <div className={styles.header} style={{visibility: 'hidden'}}>
                 <Link to="/">
                   <img alt="logo" className={styles.logo} src={logo} />
                   <span className={styles.title}>Ant Design</span>
                 </Link>
               </div>
-              <div className={styles.desc}>Ant Design 是西湖区最具影响力的 Web 设计规范</div>
+              <div className={styles.desc} style={{visibility: 'hidden'}}>Ant Design 是西湖区最具影响力的 Web 设计规范</div>
             </div>
             <Switch>
               {getRoutes(match.path, routerData).map(item => (
@@ -70,7 +71,8 @@ class UserLayout extends React.PureComponent {
               <Redirect exact from="/user" to="/user/login" />
             </Switch>
           </div>
-          <GlobalFooter links={links} copyright={copyright} />
+          <GlobalFooter copyright={copyright} />
+          {/* links={links} */}
         </div>
       </DocumentTitle>
     );
