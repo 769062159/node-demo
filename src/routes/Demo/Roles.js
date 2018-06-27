@@ -284,7 +284,7 @@ export default class Role extends Component {
             pagination={pagination}
           />
           <Modal
-            title="Title"
+            title="角色"
             visible={addUserVisible}
             onCancel={this.handleCancel.bind(this)}
             footer=""

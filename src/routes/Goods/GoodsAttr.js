@@ -388,7 +388,7 @@ export default class TableList extends PureComponent {
           </div>
         </Card>
         <Modal
-          title="Title"
+          title="属性"
           visible={addUserVisible}
           onCancel={this.handAddleCancel.bind(this)}
           destroyOnClose="true"
@@ -423,7 +423,7 @@ export default class TableList extends PureComponent {
             {formItems}
             <FormItem {...formItemLayoutWithOutLabel}>
               <Button type="dashed" onClick={this.add} style={{ width: '60%' }}>
-                <Icon type="plus" /> Add field
+                <Icon type="plus" /> 添加子属性
               </Button>
             </FormItem>
             <FormItem tyle={{ marginTop: 32 }}>

@@ -208,7 +208,7 @@ export default class Group extends Component {
             pagination={UserListPage}
           />
           <Modal
-            title="Title"
+            title="用户"
             visible={addUserVisible}
             onCancel={this.handleCancel.bind(this)}
             footer=""

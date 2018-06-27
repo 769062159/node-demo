@@ -402,7 +402,7 @@ export default class TableList extends PureComponent {
       {
         title: '广告封面',
         dataIndex: 'pic',
-        render: val => (val ? <img src={val} alt="图片" /> : null),
+        render: val => (val ? <img src={val} style={{ width: '120px' }} alt="图片" /> : null),
       },
       {
         title: '排序',
@@ -453,7 +453,7 @@ export default class TableList extends PureComponent {
           </div>
         </Card>
         <Modal
-          title="Title"
+          title="广告"
           visible={addUserVisible}
           onCancel={this.handAddleCancel.bind(this)}
           footer=""

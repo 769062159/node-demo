@@ -556,7 +556,7 @@ export default class TableList extends PureComponent {
           </div>
         </Card>
         <Modal
-          title="Title"
+          title="分类"
           visible={addUserVisible}
           onCancel={this.handAddleCancel.bind(this)}
           footer=""

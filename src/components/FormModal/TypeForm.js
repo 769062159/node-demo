@@ -17,7 +17,7 @@ class TypeForm extends Component {
 
     return (
       <Modal
-        title="Title"
+        title="分类"
         visible={FromVisible}
         onCancel={this.handAddleCancel.bind(this)}
         footer=""
