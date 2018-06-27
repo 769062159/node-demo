@@ -50,10 +50,6 @@ export const menuData = [
     path: 'good',
     children: [
       {
-        name: '商品列表',
-        path: 'good-list',
-      },
-      {
         name: '商品分类',
         path: 'good-type',
       },
@@ -68,6 +64,10 @@ export const menuData = [
       {
         name: '商品添加',
         path: 'add-goods',
+      },
+      {
+        name: '商品列表',
+        path: 'good-list',
       },
       // {
       //   name: '商品修改',
