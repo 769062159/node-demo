@@ -490,34 +490,33 @@ export default {
         toGet(arr, attrData, payload.AttrArrMap, goodsDetail.sell_goods_price);
         // console.log(goodsDetail.has_shop_goods_sku);
         // console.log(arr);
-        goodsDetail.has_shop_goods_sku.forEach((res, index) => {
-          arr[index].goods_sku_sn = res.goods_sku_sn;
-          arr[index].price = res.price;
-          arr[index].store_nums = res.store_nums;
-          // arr[index].profit = res.sell_num;
-          res.has_shop_goods_sku_profit.forEach(res => {
-            arr[index].profit.push(res.price);
+        if (arr.length) {
+          goodsDetail.has_shop_goods_sku.forEach((res, index) => {
+            arr[index].goods_sku_sn = res.goods_sku_sn;
+            arr[index].price = res.price;
+            arr[index].store_nums = res.store_nums;
+            // arr[index].profit = res.sell_num;
+            res.has_shop_goods_sku_profit.forEach(res => {
+              arr[index].profit.push(res.price);
+            });
+            const img = res.has_shop_goods_img[0];
+            arr[index].img = img.http_url;
+            arr[index].sku_goods_name = res.sku_goods_name;
+            if (img.http_url) {
+              arr[index].fileList = [
+                {
+                  img: img.http_url,
+                  url: img.http_url,
+                  status: 'done',
+                  uploaded: 'done',
+                  response: { status: 'success' },
+                  name: img.create_time,
+                  uid: img.create_time,
+                },
+              ];
+            }
           });
-          const img = res.has_shop_goods_img[0];
-          arr[index].img = img.http_url;
-          arr[index].sku_goods_name = res.sku_goods_name;
-          if (img.http_url) {
-            arr[index].fileList = [
-              {
-                img: img.http_url,
-                url: img.http_url,
-                status: 'done',
-                uploaded: 'done',
-                response: { status: 'success' },
-                name: img.create_time,
-                uid: img.create_time,
-              },
-            ];
-          }
-          // res.has_shop_goods_img.forEach(ele => {
-          //   res.
-          // })
-        });
+        }
         goodsDetail.has_shop_goods_img.forEach(res => {
           const img = {};
           img.status = 'done';
@@ -528,13 +527,14 @@ export default {
           img.url = res.http_url;
           uploadGoodsImg.push(img);
         });
-        typePartial = goodsDetail.has_shop_goods_profit[0].profit_type.toString();
         totalPrice = goodsDetail.sell_goods_price;
         goodsDetail.has_shop_goods_profit.forEach(res => {
           if (res.status === 0) {
+            typePartial = res.profit_type.toString();
             levelPartial.push(res.profit_value);
           }
         });
+        // typePartial = levelPartial[0].profit_type.toString();
         if (typePartial === '0') {
           levelPartial.forEach(res => {
             levelPartialSon.push((res * totalPrice / 100).toFixed(2));

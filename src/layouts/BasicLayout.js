@@ -105,12 +105,15 @@ class BasicLayout extends React.PureComponent {
     const urlParams = new URL(window.location.href);
 
     const redirect = urlParams.searchParams.get('redirect');
+    const token = localStorage.getItem('token');
     // Remove the parameters in the url
     if (redirect) {
       urlParams.searchParams.delete('redirect');
       window.history.replaceState(null, 'redirect', urlParams.href);
+    } else if (!token) {
+      return '/user/login';
     } else {
-      return '/dashboard/analysis';
+      return '/front-users/front-user-list';
     }
     return redirect;
   };

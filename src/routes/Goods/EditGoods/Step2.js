@@ -62,6 +62,7 @@ class Step2 extends React.PureComponent {
   state = {
     previewVisible: false,
     previewImage: '',
+    isTime: false,
     payload: {
       type: 2,
     },
@@ -82,38 +83,6 @@ class Step2 extends React.PureComponent {
       type: 'goods/clearAttrTabe',
     });
   }
-
-  // componentWillUnmount() {
-  //   const { dispatch } = this.props;
-  //   dispatch({
-  //     type: 'goods/clearAttrTabe',
-  //   });
-  // }
-  // onChangeAttr = (index, checkedList) => {
-  // const { goods: { initGoodsAttr }, dispatch } = this.props;
-  // dispatch({
-  //   type: 'goods/checkedList',
-  //   payload: {
-  //     checkedList,
-  //     index,
-  //   },
-  // });
-  //   if (checkedList.length === initGoodsAttr[index].AttrArr.length) {
-  //     dispatch({
-  //       type: 'goods/checked',
-  //       payload: {
-  //         index,
-  //       },
-  //     });
-  //   } else if (initGoodsAttr[index].checked) {
-  //     dispatch({
-  //       type: 'goods/checked',
-  //       payload: {
-  //         index,
-  //       },
-  //     });
-  //   }
-  // }
   onCheckAllAttr = index => {
     const { dispatch } = this.props;
     dispatch({
@@ -263,6 +232,18 @@ class Step2 extends React.PureComponent {
       },
     });
   }
+  // 更改上架方式
+  shelvesType = e => {
+    if (e === '2') {
+      this.setState({
+        isTime: true,
+      });
+    } else {
+      this.setState({
+        isTime: false,
+      });
+    }
+  };
   // 修改总库存
   chgTotalStock(e) {
     console.log(e);
@@ -326,16 +307,8 @@ class Step2 extends React.PureComponent {
         </Option>
       );
     });
-    // const typePartials = typePartial.toString();
     const { validateFields, getFieldDecorator } = form;
-    // if (Object.keys(goodsDetail).length) {
-    //   const formData = {
-    //     'goods_name': 222,
-    //   };
-    //   setFieldsValue(formData);
-    // }
-    // console.log(getFieldValue('goods_name'));
-    const { previewVisible, previewImage, payload, header } = this.state;
+    const { previewVisible, previewImage, payload, header, isTime } = this.state;
     const uploadButton = (
       <div>
         <Icon type="plus" />
@@ -374,9 +347,7 @@ class Step2 extends React.PureComponent {
 
     const onValidateForm = e => {
       e.preventDefault();
-      console.log(attrTable);
       validateFields((err, values) => {
-        console.log(values);
         if (!err) {
           const { goods: { uploadGoodsImg } } = this.props;
           if (!uploadGoodsImg.length) {
@@ -384,23 +355,76 @@ class Step2 extends React.PureComponent {
             return;
           }
           const { goods: { attrTable, levelPartial, typePartial, goodsDetail } } = this.props;
-          attrTable.forEach(ele => {
-            if (!ele.fileList.length) {
-              ele.img = '';
-            } else {
-              ele.img = ele.fileList[0].url;
-            }
-            const arr = [];
-            ele.profit.forEach(res => {
-              arr.push({
-                price: res,
+          if (attrTable.length) {
+            attrTable.forEach(ele => {
+              if (!ele.fileList.length) {
+                ele.img = '';
+              } else {
+                ele.img = ele.fileList[0].url;
+              }
+              const arr = [];
+              ele.profit.forEach(res => {
+                arr.push({
+                  price: res,
+                });
               });
+              levelPartial.forEach((res, index) => {
+                arr[index].profit_value = res;
+              });
+              ele.profit = arr;
             });
-            levelPartial.forEach((res, index) => {
-              arr[index].profit_value = res;
+          } else {
+            const arr = [];
+            if (values.profit_type === '1') {
+              levelPartial.forEach(res => {
+                arr.push({
+                  price: res,
+                  profit_value: res,
+                });
+              });
+            } else {
+              levelPartial.forEach(res => {
+                const nowPrice = (res * values.sell_goods_price / 100).toFixed(2);
+                arr.push({
+                  price: nowPrice,
+                  profit_value: nowPrice,
+                });
+              });
+            }
+            attrTable.push({
+              sku_goods_name: '默认',
+              store_nums: values.goods_total_inventory,
+              goods_sku_sn: values.goods_sn,
+              price: values.sell_goods_price,
+              img: '',
+              profit: arr,
+              goods_sku_attr: [
+                {
+                  attr_class_id: 1,
+                  attr_id: 1,
+                  attr_class_name: '默认',
+                  attr_name: '默认',
+                },
+              ],
             });
-            ele.profit = arr;
-          });
+          }
+          // attrTable.forEach(ele => {
+          //   if (!ele.fileList.length) {
+          //     ele.img = '';
+          //   } else {
+          //     ele.img = ele.fileList[0].url;
+          //   }
+          //   const arr = [];
+          //   ele.profit.forEach(res => {
+          //     arr.push({
+          //       price: res,
+          //     });
+          //   });
+          //   levelPartial.forEach((res, index) => {
+          //     arr[index].profit_value = res;
+          //   });
+          //   ele.profit = arr;
+          // });
           values.class_id = goodsDetail.class_id;
           values.category_id = goodsDetail.category_id;
           values.goods_id = goodsDetail.goods_id;
@@ -411,7 +435,14 @@ class Step2 extends React.PureComponent {
           values.profit_value = levelPartial;
           values.goods_sku = attrTable;
           values.profit_type = typePartial;
-          values.goods_shelves_time = values.goods_shelves_time._d.getTime();
+          if (values.goods_shelves_time) {
+            values.goods_shelves_time = Number.parseInt(
+              new Date(moment(values._d)).getTime() / 1000,
+              10
+            );
+          } else {
+            values.goods_shelves_time = 0;
+          }
           console.log(values);
           // console.log(values.goods_shelves_time._d);
           // console.log(values.goods_shelves_time._d.getTime());
@@ -427,7 +458,7 @@ class Step2 extends React.PureComponent {
 
     return (
       <Form layout="horizontal" className={styles.stepForm}>
-        <Card title="商品信息">
+        <Card title="商品信息" style={{ marginBottom: '20px' }}>
           {/* <Row gutter={24}>
             <Col span={12}>
               <Form.Item {...formItemLayouts} label="主体图片" >
@@ -442,23 +473,31 @@ class Step2 extends React.PureComponent {
               </Form.Item>
             </Col>
           </Row>
+          <Form.Item {...formItemLayout} label="商品名称">
+            {getFieldDecorator('goods_name', {
+              initialValue: goodsDetail.goods_name,
+              rules: [{ required: true, message: '请填写商品名称' }],
+            })(<Input />)}
+          </Form.Item>
+          <Form.Item {...formItemLayout} label="商品SN">
+            {getFieldDecorator('goods_sn', {
+              initialValue: goodsDetail.goods_sn,
+              rules: [{ required: true, message: '请填写商品SN' }],
+            })(<Input />)}
+          </Form.Item>
+          <Form.Item {...formItemLayout} label="列表标题">
+            {getFieldDecorator('goods_list_title', {
+              initialValue: goodsDetail.goods_list_title,
+              rules: [{ required: true, message: '请填写列表标题' }],
+            })(<Input />)}
+          </Form.Item>
+          <Form.Item {...formItemLayout} label="商品描述">
+            {getFieldDecorator('goods_des', {
+              initialValue: goodsDetail.goods_des,
+              rules: [{ required: true, message: '请填写商品描述' }],
+            })(<TextArea placeholder="请填写商品描述" autosize />)}
+          </Form.Item>
           <Row gutter={24}>
-            <Col span={12}>
-              <Form.Item {...formItemLayouts} label="商品名称">
-                {getFieldDecorator('goods_name', {
-                  initialValue: goodsDetail.goods_name,
-                  rules: [{ required: true, message: '请填写商品名称' }],
-                })(<Input />)}
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item {...formItemLayouts} label="商品SN">
-                {getFieldDecorator('goods_sn', {
-                  initialValue: goodsDetail.goods_sn,
-                  rules: [{ required: true, message: '请填写商品SN' }],
-                })(<Input />)}
-              </Form.Item>
-            </Col>
             <Col span={12}>
               <Form.Item {...formItemLayouts} label="商品品牌">
                 {getFieldDecorator('brand_id', {
@@ -468,27 +507,11 @@ class Step2 extends React.PureComponent {
               </Form.Item>
             </Col>
             <Col span={12}>
-              <Form.Item {...formItemLayouts} label="列表标题">
-                {getFieldDecorator('goods_list_title', {
-                  initialValue: goodsDetail.goods_list_title,
-                  rules: [{ required: true, message: '请填写列表标题' }],
-                })(<Input />)}
-              </Form.Item>
-            </Col>
-            <Col span={12}>
               <Form.Item {...formItemLayouts} label="商品标题">
                 {getFieldDecorator('goods_title', {
                   initialValue: goodsDetail.goods_title,
                   rules: [{ required: true, message: '请填写商品标题' }],
                 })(<Input />)}
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item {...formItemLayouts} label="商品描述">
-                {getFieldDecorator('goods_des', {
-                  initialValue: goodsDetail.goods_des,
-                  rules: [{ required: true, message: '请填写商品描述' }],
-                })(<TextArea placeholder="请填写商品描述" autosize />)}
               </Form.Item>
             </Col>
             <Col span={12}>
@@ -723,7 +746,7 @@ class Step2 extends React.PureComponent {
                   initialValue: (goodsDetail.goods_shelves_type || '').toString(),
                   rules: [{ required: true, message: '请填写上架方式' }],
                 })(
-                  <Select>
+                  <Select onChange={this.shelvesType}>
                     <Option value="1">立即</Option>
                     <Option value="2">时间设定</Option>
                     <Option value="3">放入仓库池</Option>
@@ -732,12 +755,16 @@ class Step2 extends React.PureComponent {
               </Form.Item>
             </Col>
             <Col span={12}>
-              <Form.Item {...formItemLayouts} label="上架时间">
-                {getFieldDecorator('goods_shelves_time', {
-                  initialValue: moment(goodsDetail.goods_shelves_time, 'YYYY-MM-DD HH:mm:ss'),
-                  rules: [{ required: true, message: '请填写商品上架时间' }],
-                })(<DatePicker showTime format="YYYY-MM-DD HH:mm:ss" placeholder="Select Time" />)}
-              </Form.Item>
+              {isTime ? (
+                <Form.Item {...formItemLayouts} label="上架时间">
+                  {getFieldDecorator('goods_shelves_time', {
+                    initialValue: moment(goodsDetail.goods_shelves_time, 'YYYY-MM-DD HH:mm:ss'),
+                    rules: [{ required: true, message: '请填写商品上架时间' }],
+                  })(
+                    <DatePicker showTime format="YYYY-MM-DD HH:mm:ss" placeholder="Select Time" />
+                  )}
+                </Form.Item>
+              ) : null}
             </Col>
           </Row>
           <Form.Item label="描述">
@@ -752,7 +779,7 @@ class Step2 extends React.PureComponent {
             )}
           </Form.Item>
         </Card>
-        <Card>
+        <Card style={{ margin: '20px 0' }}>
           <Row gutter={24}>
             <Col span={12}>
               <Form.Item {...formItemLayouts} label="无忧售后">

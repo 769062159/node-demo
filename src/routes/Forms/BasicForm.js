@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
+import moment from 'moment';
 import {
   Form,
   Input,
@@ -29,6 +30,9 @@ export default class BasicForms extends PureComponent {
   handleSubmit = e => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
+      console.log(values);
+      console.log(moment(values._d).format('YYYY-MM-DD HH:mm:ss'));
+      console.log(new Date(moment(values._d)).getTime());
       if (!err) {
         this.props.dispatch({
           type: 'form/submitRegularForm',
@@ -76,7 +80,7 @@ export default class BasicForms extends PureComponent {
                     message: '请输入标题',
                   },
                 ],
-              })(<Input placeholder="给目标起个名字" />)}
+              })(<DatePicker showTime format="YYYY-MM-DD HH:mm:ss" placeholder="Select Time" />)}
             </FormItem>
             <FormItem {...formItemLayout} label="起止日期">
               {getFieldDecorator('date', {

@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'dva';
+import moment from 'moment';
 import {
   Form,
   Button,
@@ -61,6 +62,7 @@ class Step2 extends React.PureComponent {
   state = {
     previewVisible: false,
     previewImage: '',
+    isTime: false,
     payload: {
       type: 2,
     },
@@ -84,37 +86,6 @@ class Step2 extends React.PureComponent {
       type: 'goods/clearAttrTabe',
     });
   }
-  // componentWillUnmount() {
-  //   const { dispatch } = this.props;
-  //   dispatch({
-  //     type: 'goods/clearAttrTabe',
-  //   });
-  // }
-  // onChangeAttr = (index, checkedList) => {
-  // const { goods: { initGoodsAttr }, dispatch } = this.props;
-  // dispatch({
-  //   type: 'goods/checkedList',
-  //   payload: {
-  //     checkedList,
-  //     index,
-  //   },
-  // });
-  //   if (checkedList.length === initGoodsAttr[index].AttrArr.length) {
-  //     dispatch({
-  //       type: 'goods/checked',
-  //       payload: {
-  //         index,
-  //       },
-  //     });
-  //   } else if (initGoodsAttr[index].checked) {
-  //     dispatch({
-  //       type: 'goods/checked',
-  //       payload: {
-  //         index,
-  //       },
-  //     });
-  //   }
-  // }
   onCheckAllAttr = index => {
     const { dispatch } = this.props;
     dispatch({
@@ -231,18 +202,6 @@ class Step2 extends React.PureComponent {
         },
       });
     }
-    // else if (totalPrice){
-    //   console.log(totalPrice)
-    //   console.log(e)
-    //   e = Number((totalPrice * e / 100).toFixed(2));
-    //   dispatch({
-    //     type: 'goods/setLevelPartial',
-    //     payload: {
-    //       index,
-    //       value: e,
-    //     },
-    //   });
-    // }
   };
   chgTypeHas(e) {
     const { dispatch } = this.props;
@@ -264,6 +223,18 @@ class Step2 extends React.PureComponent {
       },
     });
   }
+  // 更改上架方式
+  shelvesType = e => {
+    if (e === '2') {
+      this.setState({
+        isTime: true,
+      });
+    } else {
+      this.setState({
+        isTime: false,
+      });
+    }
+  };
   // 修改总库存
   chgTotalStock(e) {
     console.log(e);
@@ -328,7 +299,7 @@ class Step2 extends React.PureComponent {
     // const typePartials = typePartial.toString();
     const { validateFields, getFieldDecorator } = form;
     // console.log(getFieldValue('goods_name'));
-    const { previewVisible, previewImage, payload, header } = this.state;
+    const { previewVisible, previewImage, payload, header, isTime } = this.state;
     const uploadButton = (
       <div>
         <Icon type="plus" />
@@ -367,15 +338,13 @@ class Step2 extends React.PureComponent {
     const onValidateForm = e => {
       e.preventDefault();
       validateFields((err, values) => {
-        const { goods: { attrTable, levelPartial, typePartial } } = this.props;
-        console.log(attrTable);
         if (!err) {
           const { goods: { uploadGoodsImg } } = this.props;
           if (!uploadGoodsImg.length) {
             message.error('请上传图片主体！');
             return;
           }
-          // const { goods: { attrTable, levelPartial, typePartial } } = this.props;
+          const { goods: { attrTable, levelPartial, typePartial } } = this.props;
           if (attrTable.length) {
             attrTable.forEach(ele => {
               if (!ele.fileList.length) {
@@ -396,24 +365,35 @@ class Step2 extends React.PureComponent {
             });
           } else {
             const arr = [];
-            levelPartial.forEach(res => {
-              arr.push({
-                price: res,
-                profit_value: res,
+            if (values.profit_type === '1') {
+              levelPartial.forEach(res => {
+                arr.push({
+                  price: res,
+                  profit_value: res,
+                });
               });
-            });
+            } else {
+              levelPartial.forEach(res => {
+                const nowPrice = (res * values.sell_goods_price / 100).toFixed(2);
+                arr.push({
+                  price: nowPrice,
+                  profit_value: nowPrice,
+                });
+              });
+            }
             attrTable.push({
               sku_goods_name: '默认',
               store_nums: values.goods_total_inventory,
               goods_sku_sn: values.goods_sn,
+              price: values.sell_goods_price,
               img: '',
+              profit: arr,
               goods_sku_attr: [
                 {
                   attr_class_id: 1,
                   attr_id: 1,
                   attr_class_name: '默认',
                   attr_name: '默认',
-                  profiz: arr,
                 },
               ],
             });
@@ -429,10 +409,14 @@ class Step2 extends React.PureComponent {
           values.profit_value = levelPartial;
           values.goods_sku = attrTable;
           values.profit_type = typePartial;
-          values.goods_shelves_time = Number.parseInt(
-            values.goods_shelves_time._d.getTime() / 1000,
-            10
-          );
+          if (values.goods_shelves_time) {
+            values.goods_shelves_time = Number.parseInt(
+              new Date(moment(values._d)).getTime() / 1000,
+              10
+            );
+          } else {
+            values.goods_shelves_time = 0;
+          }
           console.log(values);
           dispatch({
             type: 'goods/addShop',
@@ -446,7 +430,7 @@ class Step2 extends React.PureComponent {
 
     return (
       <Form layout="horizontal" className={styles.stepForm}>
-        <Card title="商品信息">
+        <Card title="商品信息" style={{ marginBottom: '20px' }}>
           {/* <Row gutter={24}>
             <Col span={12}>
               <Form.Item {...formItemLayouts} label="主体图片" >
@@ -461,21 +445,27 @@ class Step2 extends React.PureComponent {
               </Form.Item>
             </Col>
           </Row>
+          <Form.Item {...formItemLayout} label="商品名称">
+            {getFieldDecorator('goods_name', {
+              rules: [{ required: true, message: '请填写商品名称' }],
+            })(<Input />)}
+          </Form.Item>
+          <Form.Item {...formItemLayout} label="商品SN">
+            {getFieldDecorator('goods_sn', {
+              rules: [{ required: true, message: '请填写商品SN' }],
+            })(<Input />)}
+          </Form.Item>
+          <Form.Item {...formItemLayout} label="列表标题">
+            {getFieldDecorator('goods_list_title', {
+              rules: [{ required: true, message: '请填写列表标题' }],
+            })(<Input />)}
+          </Form.Item>
+          <Form.Item {...formItemLayout} label="商品描述">
+            {getFieldDecorator('goods_des', {
+              rules: [{ required: true, message: '请填写商品描述' }],
+            })(<TextArea placeholder="请填写商品描述" autosize />)}
+          </Form.Item>
           <Row gutter={24}>
-            <Col span={12}>
-              <Form.Item {...formItemLayouts} label="商品名称">
-                {getFieldDecorator('goods_name', {
-                  rules: [{ required: true, message: '请填写商品名称' }],
-                })(<Input />)}
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item {...formItemLayouts} label="商品SN">
-                {getFieldDecorator('goods_sn', {
-                  rules: [{ required: true, message: '请填写商品SN' }],
-                })(<Input />)}
-              </Form.Item>
-            </Col>
             <Col span={12}>
               <Form.Item {...formItemLayouts} label="商品品牌">
                 {getFieldDecorator('brand_id', {
@@ -484,24 +474,10 @@ class Step2 extends React.PureComponent {
               </Form.Item>
             </Col>
             <Col span={12}>
-              <Form.Item {...formItemLayouts} label="列表标题">
-                {getFieldDecorator('goods_list_title', {
-                  rules: [{ required: true, message: '请填写列表标题' }],
-                })(<Input />)}
-              </Form.Item>
-            </Col>
-            <Col span={12}>
               <Form.Item {...formItemLayouts} label="商品标题">
                 {getFieldDecorator('goods_title', {
                   rules: [{ required: true, message: '请填写商品标题' }],
                 })(<Input />)}
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item {...formItemLayouts} label="商品描述">
-                {getFieldDecorator('goods_des', {
-                  rules: [{ required: true, message: '请填写商品描述' }],
-                })(<TextArea placeholder="请填写商品描述" autosize />)}
               </Form.Item>
             </Col>
             <Col span={12}>
@@ -718,7 +694,7 @@ class Step2 extends React.PureComponent {
                 {getFieldDecorator('goods_shelves_type', {
                   rules: [{ required: true, message: '请填写上架方式' }],
                 })(
-                  <Select>
+                  <Select onChange={this.shelvesType}>
                     <Option value="1">立即</Option>
                     <Option value="2">时间设定</Option>
                     <Option value="3">放入仓库池</Option>
@@ -727,11 +703,15 @@ class Step2 extends React.PureComponent {
               </Form.Item>
             </Col>
             <Col span={12}>
-              <Form.Item {...formItemLayouts} label="上架时间">
-                {getFieldDecorator('goods_shelves_time', {
-                  rules: [{ required: true, message: '请填写商品上架时间' }],
-                })(<DatePicker showTime format="YYYY-MM-DD HH:mm:ss" placeholder="Select Time" />)}
-              </Form.Item>
+              {isTime ? (
+                <Form.Item {...formItemLayouts} label="上架时间">
+                  {getFieldDecorator('goods_shelves_time', {
+                    rules: [{ required: { isTime }, message: '请填写商品上架时间' }],
+                  })(
+                    <DatePicker showTime format="YYYY-MM-DD HH:mm:ss" placeholder="Select Time" />
+                  )}
+                </Form.Item>
+              ) : null}
             </Col>
           </Row>
           <Form.Item label="描述">
@@ -740,7 +720,7 @@ class Step2 extends React.PureComponent {
             })(<ReactEditor setDescription={this.setDescription} />)}
           </Form.Item>
         </Card>
-        <Card>
+        <Card style={{ margin: '20px 0' }}>
           <Row gutter={24}>
             <Col span={12}>
               <Form.Item {...formItemLayouts} label="无忧售后">
