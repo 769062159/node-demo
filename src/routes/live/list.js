@@ -1,14 +1,62 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
+// import debounce from 'lodash/debounce'
 import moment from 'moment';
-import { Table, message, Upload, Modal, Card, Form, Input, Icon, Button, Divider } from 'antd';
+import { Table, message, Upload, Modal, Card, Form, Input, Icon, Button, Divider, Select } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
-
 import styles from './TableList.less';
+import request from '../../utils/request';
+// import querystring from 'querystring';
+const Option = Select.Option;
 
 const FormItem = Form.Item;
 const { TextArea } = Input;
 const { confirm } = Modal;
+let timeout;
+// let currentValue;
+function fetchData(value, callback) {
+  if (timeout) {
+    clearTimeout(timeout);
+    timeout = null;
+  }
+  // currentValue = value;
+
+  function fake() {
+    request('/admin/goods/list', {
+      method: 'POST',
+      body: {
+        goods_name: value,
+        goods_status: 0,
+      },
+    }).then(res => {
+      console.log(res.data.list);
+      callback(res.data.list);
+    })
+    // const str = querystring.encode({
+    //   code: 'utf-8',
+    //   q: value,
+    // });
+    // jsonp(`https://suggest.taobao.com/sug?${str}`)
+    //   .then(response => response.json())
+    //   .then((d) => {
+    //     if (currentValue === value) {
+    //       const result = d.result;
+    //       const data = [];
+    //       result.forEach((r) => {
+    //         data.push({
+    //           value: r[0],
+    //           text: r[0],
+    //         });
+    //       });
+    //       callback(data);
+    //     }
+    //   });
+
+    
+  }
+
+  timeout = setTimeout(fake, 300);
+}
 // const getValue = obj =>
 //   Object.keys(obj)
 //     .map(key => obj[key])
@@ -18,8 +66,9 @@ const { confirm } = Modal;
 // const goodsTypeStatus = ['普通商品', '一元购', '秒杀', '众筹'];
 // const payType = ['拍下减库存', '付款减库存'];
 
-@connect(({ live, loading }) => ({
+@connect(({ live, goods, loading }) => ({
   live,
+  goods,
   loading: loading.models.live,
 }))
 @Form.create()
@@ -32,6 +81,8 @@ export default class TableList extends PureComponent {
     previewVisible: false,
     previewImage: '',
     fileList: [],
+    data: [],
+    value: [],
     header: {
       Authorization: `Bearer ${localStorage.getItem('token')}`,
     },
@@ -46,46 +97,10 @@ export default class TableList extends PureComponent {
       },
     });
   }
-
-  // handleStandardTableChange = (pagination, filtersArg, sorter) => {
-  //   const { dispatch } = this.props;
-  //   const { formValues } = this.state;
-
-  //   const filters = Object.keys(filtersArg).reduce((obj, key) => {
-  //     const newObj = { ...obj };
-  //     newObj[key] = getValue(filtersArg[key]);
-  //     return newObj;
-  //   }, {});
-
-  //   const params = {
-  //     currentPage: pagination.current,
-  //     pageSize: pagination.pageSize,
-  //     ...formValues,
-  //     ...filters,
-  //   };
-  //   if (sorter.field) {
-  //     params.sorter = `${sorter.field}_${sorter.order}`;
-  //   }
-  //   console.log(99);
-  //   console.log(params);
-  //   dispatch({
-  //     type: 'goods/getAllType',
-  //     payload: params,
-  //   });
-  // };
-
-  // handleFormReset = () => {
-  //   const { form, dispatch } = this.props;
-  //   form.resetFields();
-  //   this.setState({
-  //     formValues: {},
-  //   });
-  //   console.log(999);
-  //   dispatch({
-  //     type: 'goods/getAllType',
-  //     payload: {},
-  //   });
-  // };
+  handleChanges = (value) => {
+    this.setState({ value });
+    fetchData(value, data => this.setState({ data }));
+  }
 
   toggleForm = () => {
     this.setState({
@@ -227,7 +242,8 @@ export default class TableList extends PureComponent {
   };
   renderAddForm() {
     const { loading } = this.props;
-    const { header, fileList, previewImage, previewVisible } = this.state;
+    const { header, fileList, previewImage, previewVisible, data } = this.state;
+    const options = data.map(d => <Option key={d.goods_id}>{d.goods_name}</Option>);
     // 上传icon
     const uploadButton = (
       <div>
@@ -282,6 +298,21 @@ export default class TableList extends PureComponent {
           })(<TextArea placeholder="请输入简介" autosize />)}
         </FormItem>
         {uploadItem}
+        <Select
+          mode="multiple"
+          value={this.state.value}
+          placeholder={this.props.placeholder}
+          style={this.props.style}
+          defaultActiveFirstOption={false}
+          showArrow={false}
+          filterOption={false}
+          onChange={this.handleChanges}
+        >
+          {options}
+          {/* <Option key={2}>{3}</Option>
+          <Option key={1}>{1}</Option>
+          <Option key={4}>{5}</Option> */}
+        </Select>
         <FormItem tyle={{ marginTop: 32 }}>
           <Button type="primary" htmlType="submit" loading={loading}>
             提交
