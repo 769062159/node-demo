@@ -1,5 +1,6 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
+import { routerRedux } from 'dva/router';
 import moment from 'moment';
 import {
   Row,
@@ -183,10 +184,12 @@ export default class TableList extends PureComponent {
     event.preventDefault();
     console.log(id);
   };
-  // 修改商品
-  // editGoods = id => {
-
-  // }
+  // 新建商品
+  goNew = () => {
+    const { dispatch } = this.props;
+    const url = `/good/add-goods/info`;
+    dispatch(routerRedux.push(url));
+  }
 
   renderSimpleForm() {
     const { getFieldDecorator } = this.props.form;
@@ -460,7 +463,7 @@ export default class TableList extends PureComponent {
           <div className={styles.tableList}>
             <div className={styles.tableListForm}>{this.renderForm()}</div>
             <div className={styles.tableListOperator}>
-              <Button icon="plus" type="primary">
+              <Button icon="plus" type="primary" onClick={this.goNew.bind(this)}>
                 新建
               </Button>
               {selectedRows.length > 0 && (

@@ -79,7 +79,7 @@ export default class Group extends Component {
   // 跳到角色
   goPath = () => {
     const { dispatch } = this.props;
-    const url = `/demo/demo-two`;
+    const url = `/users/menu-add`;
     dispatch(routerRedux.push(url));
   };
   render() {
