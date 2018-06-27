@@ -141,7 +141,11 @@ export const getRouterConfig = app => {
     },
     // 直播
     '/live/list': {
-      component: dynamicWrapper(app, ['live'], () => import('../routes/live/list')),
+      component: dynamicWrapper(app, ['live'], () => import('../routes/Live/list')),
+    },
+    // 订单
+    '/order/list': {
+      component: dynamicWrapper(app, ['order'], () => import('../routes/Order/list')),
     },
     // 商品
     '/good/good-list': {

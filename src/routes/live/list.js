@@ -1,8 +1,21 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
-// import debounce from 'lodash/debounce'
+import debounce from 'lodash/debounce';
 import moment from 'moment';
-import { Table, message, Upload, Modal, Card, Form, Input, Icon, Button, Divider, Select } from 'antd';
+import {
+  Table,
+  message,
+  Upload,
+  Modal,
+  Card,
+  Form,
+  Input,
+  Icon,
+  Button,
+  Divider,
+  Select,
+  Spin,
+} from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './TableList.less';
 import request from '../../utils/request';
@@ -12,51 +25,7 @@ const Option = Select.Option;
 const FormItem = Form.Item;
 const { TextArea } = Input;
 const { confirm } = Modal;
-let timeout;
-// let currentValue;
-function fetchData(value, callback) {
-  if (timeout) {
-    clearTimeout(timeout);
-    timeout = null;
-  }
-  // currentValue = value;
 
-  function fake() {
-    request('/admin/goods/list', {
-      method: 'POST',
-      body: {
-        goods_name: value,
-        goods_status: 0,
-      },
-    }).then(res => {
-      console.log(res.data.list);
-      callback(res.data.list);
-    })
-    // const str = querystring.encode({
-    //   code: 'utf-8',
-    //   q: value,
-    // });
-    // jsonp(`https://suggest.taobao.com/sug?${str}`)
-    //   .then(response => response.json())
-    //   .then((d) => {
-    //     if (currentValue === value) {
-    //       const result = d.result;
-    //       const data = [];
-    //       result.forEach((r) => {
-    //         data.push({
-    //           value: r[0],
-    //           text: r[0],
-    //         });
-    //       });
-    //       callback(data);
-    //     }
-    //   });
-
-    
-  }
-
-  timeout = setTimeout(fake, 300);
-}
 // const getValue = obj =>
 //   Object.keys(obj)
 //     .map(key => obj[key])
@@ -73,6 +42,11 @@ function fetchData(value, callback) {
 }))
 @Form.create()
 export default class TableList extends PureComponent {
+  constructor(props) {
+    super(props);
+    this.lastFetchId = 0;
+    this.fetchUser = debounce(this.fetchUser, 800);
+  }
   state = {
     pagination: 1,
     expandForm: false,
@@ -83,6 +57,7 @@ export default class TableList extends PureComponent {
     fileList: [],
     data: [],
     value: [],
+    fetching: false,
     header: {
       Authorization: `Bearer ${localStorage.getItem('token')}`,
     },
@@ -97,10 +72,38 @@ export default class TableList extends PureComponent {
       },
     });
   }
-  handleChanges = (value) => {
-    this.setState({ value });
-    fetchData(value, data => this.setState({ data }));
-  }
+  // 模糊查询
+  fetchUser = value => {
+    console.log('fetching user', value);
+    this.lastFetchId += 1;
+    const fetchId = this.lastFetchId;
+    this.setState({ data: [], fetching: true });
+    request('/admin/goods/list', {
+      method: 'POST',
+      body: {
+        goods_name: value,
+        goods_status: 0,
+      },
+    }).then(body => {
+      if (fetchId !== this.lastFetchId) {
+        // for fetch callback order
+        return;
+      }
+      console.log(body);
+      const data = body.data.list.map(user => ({
+        text: `${user.goods_id}`,
+        value: user.goods_name,
+      }));
+      this.setState({ data, fetching: false });
+    });
+  };
+  handleChanges = value => {
+    this.setState({
+      value,
+      data: [],
+      fetching: false,
+    });
+  };
 
   toggleForm = () => {
     this.setState({
@@ -159,6 +162,7 @@ export default class TableList extends PureComponent {
   // 新增修改提交
   handleSubmit = (type, e) => {
     e.preventDefault();
+    console.log(this.state);
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         if (this.state.fileList.length) {
@@ -242,8 +246,8 @@ export default class TableList extends PureComponent {
   };
   renderAddForm() {
     const { loading } = this.props;
-    const { header, fileList, previewImage, previewVisible, data } = this.state;
-    const options = data.map(d => <Option key={d.goods_id}>{d.goods_name}</Option>);
+    const { header, fileList, previewImage, previewVisible, data, fetching, value } = this.state;
+    // const options = data.map(d => <Option key={d.goods_id}>{d.goods_name}</Option>);
     // 上传icon
     const uploadButton = (
       <div>
@@ -300,18 +304,20 @@ export default class TableList extends PureComponent {
         {uploadItem}
         <Select
           mode="multiple"
-          value={this.state.value}
-          placeholder={this.props.placeholder}
-          style={this.props.style}
-          defaultActiveFirstOption={false}
-          showArrow={false}
+          labelInValue
+          value={value}
+          placeholder="Select users"
+          notFoundContent={fetching ? <Spin size="small" /> : null}
           filterOption={false}
+          onSearch={this.fetchUser}
           onChange={this.handleChanges}
+          style={{ width: '100%' }}
         >
-          {options}
-          {/* <Option key={2}>{3}</Option>
-          <Option key={1}>{1}</Option>
-          <Option key={4}>{5}</Option> */}
+          {data.map(d => (
+            <Option key={d.value} value={d.text}>
+              {d.value}
+            </Option>
+          ))}
         </Select>
         <FormItem tyle={{ marginTop: 32 }}>
           <Button type="primary" htmlType="submit" loading={loading}>
@@ -425,7 +431,7 @@ export default class TableList extends PureComponent {
       {
         title: '直播封面',
         dataIndex: 'cover',
-        render: val => (val ? <img src={val} style={{width: '200px'}} alt="图片" /> : null),
+        render: val => (val ? <img src={val} style={{ width: '200px' }} alt="图片" /> : null),
       },
       {
         title: '创建时间',

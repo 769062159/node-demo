@@ -80,6 +80,17 @@ export const menuData = [
     ],
   },
   {
+    name: '订单',
+    icon: 'smile',
+    path: 'order',
+    children: [
+      {
+        name: '订单列表',
+        path: 'list',
+      },
+    ],
+  },
+  {
     name: '直播',
     icon: 'smile',
     path: 'live',
