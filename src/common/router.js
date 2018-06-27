@@ -205,13 +205,13 @@ export const getRouterConfig = app => {
     '/users/role/:id': {
       component: dynamicWrapper(app, ['user', 'menu'], () => import('../routes/Demo/Roles')),
     },
-    '/users/menu-add': {
-      component: dynamicWrapper(app, ['menu'], () => import('../routes/Demo/DemoTwo')),
-    },
     '/users/user-list': {
       component: dynamicWrapper(app, [], () => import('../routes/Demo/DemoThree')),
     },
-    '/users/menu-list': {
+    '/router/menu-add': {
+      component: dynamicWrapper(app, ['menu'], () => import('../routes/Demo/DemoTwo')),
+    },
+    '/router/menu-list': {
       component: dynamicWrapper(app, ['menu'], () => import('../routes/Demo/MenuList')),
     },
     '/user': {

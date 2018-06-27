@@ -66,7 +66,7 @@ export default class FrontUserList extends PureComponent {
         key: 'avatar',
       },
       {
-        title: '创建时间',
+        title: '注册时间',
         dataIndex: 'create_time',
         render: val => <span>{moment(val * 1000).format('YYYY-MM-DD HH:mm:ss')}</span>,
         key: 'create_time',
@@ -80,7 +80,7 @@ export default class FrontUserList extends PureComponent {
     ];
 
     return (
-      <PageHeaderLayout title="前台用户">
+      <PageHeaderLayout>
         <Card bordered={false}>
           <div className={styles.tableList}>
             <Table

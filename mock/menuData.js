@@ -4,19 +4,19 @@ export const menuData = [
    * 		使用identity来控制权限，如果为common就是公用权限，不写则是没有权限=>403页面
    * */
   {
-    name: '前台用户',
-    icon: 'smile',
+    name: '用户管理',
+    icon: 'user',
     path: 'front-users',
     children: [
       {
-        name: '前台用户列表',
+        name: '用户列表',
         path: 'front-user-list',
       },
     ],
   },
   {
-    name: '用户',
-    icon: 'smile',
+    name: '系统用户',
+    icon: 'setting',
     path: 'users',
     children: [
       {
@@ -24,12 +24,19 @@ export const menuData = [
         path: 'group',
       },
       {
-        name: '菜单新增',
-        path: 'menu-add',
-      },
-      {
         name: '用户列表',
         path: 'user-list',
+      },
+    ],
+  },
+  {
+    name: '路由配置',
+    icon: 'tool',
+    path: 'router',
+    children: [
+      {
+        name: '菜单新增',
+        path: 'menu-add',
       },
       {
         name: '菜单列表',
@@ -39,7 +46,7 @@ export const menuData = [
   },
   {
     name: '商品',
-    icon: 'smile',
+    icon: 'shop',
     path: 'good',
     children: [
       {
@@ -70,7 +77,7 @@ export const menuData = [
   },
   {
     name: '首页',
-    icon: 'smile',
+    icon: 'home',
     path: 'index',
     children: [
       {
@@ -81,7 +88,7 @@ export const menuData = [
   },
   {
     name: '订单',
-    icon: 'smile',
+    icon: 'profile',
     path: 'order',
     children: [
       {
@@ -92,7 +99,7 @@ export const menuData = [
   },
   {
     name: '直播',
-    icon: 'smile',
+    icon: 'video-camera',
     path: 'live',
     children: [
       {
