@@ -127,7 +127,7 @@ export default async function request(url, options) {
         });
         return;
       }
-      if (status === 405 || status === 400) {
+      if (status === 405 || status === 400 || status === 505) {
         dispatch(routerRedux.push('/user/login'));
         return;
       }
