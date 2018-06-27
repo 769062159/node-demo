@@ -121,7 +121,7 @@ export default async function request(url, options) {
     .catch(e => {
       const status = e.name;
       const { dispatch } = store;
-      if (status === 401) {
+      if (status === 401 || status === 400) {
         dispatch({
           type: 'login/logout',
         });
