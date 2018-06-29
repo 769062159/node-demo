@@ -8,10 +8,6 @@ export default class Demo extends React.Component {
   handleChange = content => {
     const { setDescription } = this.props;
     setDescription(content);
-    // dispatch({
-    //   type: 'form/addEditor',
-    //   payload: content,
-    // });
   };
 
   // handleRawChange = (rawContent) => {

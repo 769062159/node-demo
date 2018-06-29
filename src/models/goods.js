@@ -42,8 +42,19 @@ const arrayCombination = (dyadicArray, type) => {
     return dyadicArray[0];
   }
 };
+// 判断一个数组是否包裹另一个数组 (number string一样的)
+const isContained = (arr1, arr2) => {
+  if (!(arr1 instanceof Array) || !(arr2 instanceof Array) || arr1.length < arr2.length) {
+    return false;
+  }
+  const aaStr = arr1.toString();
+  for (let i = 0; i < arr2.length; i++) {
+    if (aaStr.indexOf(arr2[i]) < 0) return false;
+  }
+  return true;
+};
 // 将数据组合成列表，利用递归的特性
-const toGet = (arr, attrArr, AttrArrMap, totalPrice) => {
+const toGet = (arr, attrArr, AttrArrMap, totalPrice, goodSN) => {
   const dyadicArray = [];
   const dyadicArrayId = [];
   attrArr.forEach(res => {
@@ -77,7 +88,8 @@ const toGet = (arr, attrArr, AttrArrMap, totalPrice) => {
       profit: [],
       price: totalPrice,
       store_nums: 0,
-      goods_sku_sn: '',
+      attrIdArr: arrId,
+      goods_sku_sn: goodSN,
       img: '',
       fileList: [],
     });
@@ -99,20 +111,20 @@ export default {
     AttrArrMap: new Map(), // 用来对比的map
     typePartial: '0', // 分佣类型
     totalPrice: 0, // 总价
-    totalStock: 0, // 总库存
     levelPartial: [], // 分佣等级
     levelPartialSon: [], // 传给子的分佣等级
     brandList: [], // 品牌列表
     brandListPage: {}, // 品牌页脚
     goodsPlace: [], // 商品地址
+    systemType: {}, // 系统类型
     uploadGoodsImg: [], // 商品主体图片
     goodsDetail: {},
   },
 
   effects: {
-    *changeTotalStock({ payload }, { put }) {
+    *changeFormVal({ payload }, { put }) {
       yield put({
-        type: 'changeTotalStocks',
+        type: 'changeFormVals',
         payload,
       });
     },
@@ -124,19 +136,13 @@ export default {
     },
     *addShop({ payload }, { call, put }) {
       const response = yield call(addGood, { ...payload });
-      if (response.code === 200) {
+      if (response && response.code === 200) {
         if (payload.goods_id) {
           yield put(routerRedux.push('/good/edit-goods/result'));
         } else {
           yield put(routerRedux.push('/good/add-goods/result'));
         }
       }
-    },
-    *changeTotalPrice({ payload }, { put }) {
-      yield put({
-        type: 'changeTotalPrices',
-        payload,
-      });
     },
     *setLevelPartial({ payload }, { put }) {
       yield put({
@@ -152,7 +158,7 @@ export default {
     },
     *fetchBrand({ payload }, { call, put }) {
       const response = yield call(getBrand, { page: payload.pagination });
-      if (response.code === 200) {
+      if (response && response.code === 200) {
         yield put({
           type: 'getBrands',
           payload: response.data,
@@ -162,7 +168,7 @@ export default {
     *addBrand({ payload }, { call, put }) {
       yield call(addBrand, payload);
       const response = yield call(getBrand, { page: payload.pagination });
-      if (response.code === 200) {
+      if (response && response.code === 200) {
         yield put({
           type: 'getBrands',
           payload: response.data,
@@ -172,7 +178,7 @@ export default {
     *editBrand({ payload }, { call, put }) {
       yield call(updateBrand, payload);
       const response = yield call(getBrand, { page: payload.pagination });
-      if (response.code === 200) {
+      if (response && response.code === 200) {
         yield put({
           type: 'getBrands',
           payload: response.data,
@@ -182,7 +188,7 @@ export default {
     *deleteBrand({ payload }, { call, put }) {
       yield call(deleteBrand, payload);
       const response = yield call(getBrand, { page: payload.pagination });
-      if (response.code === 200) {
+      if (response && response.code === 200) {
         yield put({
           type: 'getBrands',
           payload: response.data,
@@ -202,11 +208,12 @@ export default {
       const response = yield call(initGoodAttr, {
         goods_id: payload.goods_id,
       });
-      if (response.code === 200) {
+      if (response && response.code === 200) {
         const goodsClass = response.data.goods_class;
         const goodsBrand = response.data.goods_brand; // 商品品牌
         const goodsPlace = response.data.goods_place; // 商品品牌
         const goodsDetail = response.data.goods; // 商品详情
+        const systemType = response.data.system_type; // 商品详情
         let type = '';
         let typeSon = '';
         if (payload.type) {
@@ -219,6 +226,7 @@ export default {
         const selectType = goodsClass.filter(res => {
           return res.class_id === type;
         });
+        console.log(selectType);
         let typeName = `${selectType[0].class_name}`;
         for (const item of selectType[0].has_category) {
           if (item.class_id === typeSon) {
@@ -253,6 +261,7 @@ export default {
             brandList: goodsBrand,
             goodsPlace, // 品牌地址
             goodsDetail, // 商品详情
+            systemType,
           },
         });
       }
@@ -347,33 +356,38 @@ export default {
   },
 
   reducers: {
+    changeFormVals(state, { payload }) {
+      let { goodsDetail } = state;
+      goodsDetail = {
+        ...goodsDetail,
+        ...payload.obj,
+      };
+      return {
+        ...state,
+        goodsDetail,
+      };
+    },
     setGoodsImgs(state, { payload }) {
       return {
         ...state,
         uploadGoodsImg: payload.fileList,
       };
     },
-    changeTotalStocks(state, { payload }) {
-      return {
-        ...state,
-        totalStock: payload.e,
-      };
-    },
-    changeTotalPrices(state, { payload }) {
-      return {
-        ...state,
-        totalPrice: payload.e,
-      };
-    },
     setLevelPartials(state, { payload }) {
-      const { typePartial, totalPrice, levelPartial, levelPartialSon } = state;
-      // const levelPartial = [];
-      // const levelPartialSon = [];
+      // const { typePartial, totalPrice, levelPartial, levelPartialSon } = state;
+      const { goodsDetail, levelPartial, levelPartialSon } = state;
+      const {
+        profit_type: profitType,
+        cost_price: costPrice,
+        sell_goods_price: sellGoodsPrice,
+      } = goodsDetail;
       levelPartial[payload.index] = payload.value;
-      if (typePartial === '1') {
+      if (profitType === 1) {
         levelPartialSon[payload.index] = payload.value;
       } else {
-        levelPartialSon[payload.index] = Number((totalPrice * payload.value / 100).toFixed(2));
+        levelPartialSon[payload.index] = Number(
+          (((sellGoodsPrice || 0) - (costPrice || 0)) * payload.value / 100).toFixed(2)
+        );
       }
       return {
         ...state,
@@ -427,13 +441,13 @@ export default {
       };
     },
     checkedLists(state, { payload }) {
-      const { initGoodsAttr, AttrArrMap, totalPrice } = state;
+      const { initGoodsAttr, AttrArrMap, goodsDetail } = state;
       const arr = [];
       initGoodsAttr[payload.index].checkArr = payload.checkedList;
       const attrData = initGoodsAttr.filter(res => {
         return res.checked;
       });
-      toGet(arr, attrData, AttrArrMap, totalPrice);
+      toGet(arr, attrData, AttrArrMap, goodsDetail.sell_goods_price, goodsDetail.goods_sn);
       return {
         ...state,
         initGoodsAttr,
@@ -441,7 +455,7 @@ export default {
       };
     },
     checkeds(state, { payload }) {
-      const { initGoodsAttr, AttrArrMap, totalPrice } = state;
+      const { initGoodsAttr, AttrArrMap, goodsDetail } = state;
       const arr = [];
       // console.log(initGoodsAttr);
       initGoodsAttr[payload.index].checked = !initGoodsAttr[payload.index].checked;
@@ -449,7 +463,7 @@ export default {
       const attrData = initGoodsAttr.filter(res => {
         return res.checked;
       });
-      toGet(arr, attrData, AttrArrMap, totalPrice);
+      toGet(arr, attrData, AttrArrMap, goodsDetail.sell_goods_price, goodsDetail.goods_sn);
       return {
         ...state,
         initGoodsAttr,
@@ -457,7 +471,7 @@ export default {
       };
     },
     init(state, { payload }) {
-      let { typePartial } = state;
+      // 初始化
       console.log(payload.initGoodsAttr);
       const levelPartial = [];
       let levelPartialSon = [];
@@ -468,12 +482,18 @@ export default {
       if (goodsDetail.goods_id) {
         const arrId = new Set();
         const arrSonId = new Set();
+        const goodSku = new Map(); // 用于做对比
         payload.goodsDetail.has_shop_goods_sku.forEach(res => {
+          const AttrIdSet = new Set();
           res.has_shop_goods_sku_attr.forEach(ele => {
             arrId.add(ele.attr_class_id);
             arrSonId.add(ele.attr_id);
+            AttrIdSet.add(ele.attr_id);
           });
+          const arrAttrId = [...AttrIdSet];
+          goodSku.set(arrAttrId, res);
         });
+        console.log(goodSku);
         payload.initGoodsAttr.forEach(res => {
           if (arrId.has(res.id)) {
             res.checked = true;
@@ -487,34 +507,46 @@ export default {
         const attrData = payload.initGoodsAttr.filter(res => {
           return res.checked;
         });
-        toGet(arr, attrData, payload.AttrArrMap, goodsDetail.sell_goods_price);
-        // console.log(goodsDetail.has_shop_goods_sku);
-        // console.log(arr);
+        toGet(
+          arr,
+          attrData,
+          payload.AttrArrMap,
+          goodsDetail.sell_goods_price,
+          goodsDetail.goods_sn
+        );
         if (arr.length) {
-          goodsDetail.has_shop_goods_sku.forEach((res, index) => {
-            arr[index].goods_sku_sn = res.goods_sku_sn;
-            arr[index].price = res.price;
-            arr[index].store_nums = res.store_nums;
-            // arr[index].profit = res.sell_num;
-            res.has_shop_goods_sku_profit.forEach(res => {
-              arr[index].profit.push(res.price);
-            });
-            const img = res.has_shop_goods_img[0];
-            arr[index].img = img.http_url;
-            arr[index].sku_goods_name = res.sku_goods_name;
-            if (img.http_url) {
-              arr[index].fileList = [
-                {
-                  img: img.http_url,
-                  url: img.http_url,
-                  status: 'done',
-                  uploaded: 'done',
-                  response: { status: 'success' },
-                  name: img.create_time,
-                  uid: img.create_time,
-                },
-              ];
+          arr.forEach(res => {
+            for (const [key, value] of goodSku) {
+              if (isContained(key, res.attrIdArr)) {
+                res.goods_sku_sn = value.goods_sku_sn;
+                res.price = value.price;
+                res.store_nums = value.store_nums;
+                res.profit = [];
+                value.has_shop_goods_sku_profit.forEach(ele => {
+                  res.profit.push(ele.price);
+                });
+                const img = value.has_shop_goods_img[0];
+                res.img = img.http_url;
+                res.sku_goods_name = value.sku_goods_name;
+                res.flag = 1;
+                if (img.http_url) {
+                  res.fileList = [
+                    {
+                      img: img.http_url,
+                      url: img.http_url,
+                      status: 'done',
+                      uploaded: 'done',
+                      response: { status: 'success' },
+                      name: img.create_time,
+                      uid: img.create_time,
+                    },
+                  ];
+                }
+              }
             }
+          });
+          arr.filter(res => {
+            return res.flag;
           });
         }
         goodsDetail.has_shop_goods_img.forEach(res => {
@@ -528,14 +560,16 @@ export default {
           uploadGoodsImg.push(img);
         });
         totalPrice = goodsDetail.sell_goods_price;
+        let typePartial = 0;
         goodsDetail.has_shop_goods_profit.forEach(res => {
           if (res.status === 0) {
-            typePartial = res.profit_type.toString();
+            goodsDetail[`level_${res.level - 1}`] = res.profit_value;
+            typePartial = res.profit_type;
             levelPartial.push(res.profit_value);
           }
         });
-        // typePartial = levelPartial[0].profit_type.toString();
-        if (typePartial === '0') {
+        goodsDetail.profit_type = typePartial;
+        if (typePartial === 0) {
           levelPartial.forEach(res => {
             levelPartialSon.push((res * totalPrice / 100).toFixed(2));
           });
@@ -546,11 +580,12 @@ export default {
           'YYYY-MM-DD HH:mm:ss'
         );
       }
+      goodsDetail.profit_type = goodsDetail.profit_type || 0;
+      console.log(goodsDetail);
       payload.goodsDetail = goodsDetail;
       return {
         ...state,
         ...payload,
-        typePartial,
         levelPartial,
         levelPartialSon,
         totalPrice,

@@ -53,16 +53,874 @@ const formItemLayoutUploadImg = {
 };
 const CheckboxGroup = Checkbox.Group;
 
+const CustomizedForm = Form.create({
+  onFieldsChange(props, changedFields) {
+    props.onChange(changedFields);
+  },
+  mapPropsToFields(props) {
+    console.log(props);
+    const { goods: { goodsDetail } } = props;
+    return {
+      goods_name: Form.createFormField({
+        value: goodsDetail.goods_name,
+      }),
+      goods_sn: Form.createFormField({
+        value: goodsDetail.goods_sn,
+      }),
+      goods_list_title: Form.createFormField({
+        value: goodsDetail.goods_list_title,
+      }),
+      goods_des: Form.createFormField({
+        value: goodsDetail.goods_des,
+      }),
+      brand_id: Form.createFormField({
+        value: goodsDetail.brand_id,
+      }),
+      goods_title: Form.createFormField({
+        value: goodsDetail.goods_title,
+      }),
+      sell_goods_price: Form.createFormField({
+        value: goodsDetail.sell_goods_price,
+      }),
+      goods_price: Form.createFormField({
+        value: goodsDetail.goods_price,
+      }),
+      goods_type: Form.createFormField({
+        value: goodsDetail.goods_type,
+      }),
+      goods_total_inventory: Form.createFormField({
+        value: goodsDetail.goods_total_inventory,
+      }),
+      goods_status: Form.createFormField({
+        value: goodsDetail.goods_status,
+      }),
+      goods_sort: Form.createFormField({
+        value: goodsDetail.goods_sort,
+      }),
+      cost_price: Form.createFormField({
+        value: goodsDetail.cost_price,
+      }),
+      xxx: Form.createFormField({
+        value: goodsDetail.goods_des,
+      }),
+      goods_warning_status: Form.createFormField({
+        value: goodsDetail.goods_warning_status,
+      }),
+      goods_nums_warning: Form.createFormField({
+        value: goodsDetail.goods_nums_warning,
+      }),
+      goods_country_id: Form.createFormField({
+        value: goodsDetail.goods_country_id,
+      }),
+      goods_warehouse_type: Form.createFormField({
+        value: goodsDetail.goods_warehouse_type,
+      }),
+      supplier_id: Form.createFormField({
+        value: goodsDetail.supplier_id,
+      }),
+      warehouse_id: Form.createFormField({
+        value: goodsDetail.warehouse_id,
+      }),
+      shop_shipping_type: Form.createFormField({
+        value: goodsDetail.shop_shipping_type,
+      }),
+      shop_shipping_price: Form.createFormField({
+        value: goodsDetail.shop_shipping_price,
+      }),
+      shop_shipping_calculation_type: Form.createFormField({
+        value: goodsDetail.shop_shipping_calculation_type,
+      }),
+      shop_goods_reduced_inventory: Form.createFormField({
+        value: goodsDetail.shop_goods_reduced_inventory,
+      }),
+      goods_shelves_type: Form.createFormField({
+        value: goodsDetail.goods_shelves_type,
+      }),
+      goods_shelves_time: Form.createFormField({
+        value: moment(goodsDetail.goods_shelves_time, 'YYYY-MM-DD HH:mm:ss'),
+      }),
+      goods_description: Form.createFormField({
+        value: goodsDetail.goods_description,
+      }),
+      goods_is_worry_free_sale: Form.createFormField({
+        value: goodsDetail.goods_is_worry_free_sale,
+      }),
+      goods_is_show: Form.createFormField({
+        value: goodsDetail.goods_is_show,
+      }),
+      goods_is_refund: Form.createFormField({
+        value: goodsDetail.goods_is_refund,
+      }),
+      goods_is_return_goods: Form.createFormField({
+        value: goodsDetail.goods_is_return_goods,
+      }),
+      goods_is_return_server: Form.createFormField({
+        value: goodsDetail.goods_is_return_server,
+      }),
+      goods_is_fast_delivery: Form.createFormField({
+        value: goodsDetail.goods_is_fast_delivery,
+      }),
+      goods_is_recommend_show: Form.createFormField({
+        value: goodsDetail.goods_is_recommend_show,
+      }),
+      profit_type: Form.createFormField({
+        value: goodsDetail.profit_type,
+      }),
+      level_0: Form.createFormField({
+        value: goodsDetail.level_0,
+      }),
+      level_1: Form.createFormField({
+        value: goodsDetail.level_1,
+      }),
+      level_2: Form.createFormField({
+        value: goodsDetail.level_2,
+      }),
+      level_3: Form.createFormField({
+        value: goodsDetail.level_3,
+      }),
+      level_4: Form.createFormField({
+        value: goodsDetail.level_4,
+      }),
+      // goods_is_return_goods: Form.createFormField({
+      //   value: goodsDetail.goods_is_return_goods,
+      // }),
+    };
+  },
+  onValuesChange(_, values) {
+    console.log(values);
+  },
+})(props => {
+  //  111
+  const { getFieldDecorator, validateFields } = props.form;
+  const onValidateForm = e => {
+    e.preventDefault();
+    const { submitForm } = props;
+    validateFields((err, values) => {
+      if (!err) {
+        submitForm(values);
+      }
+    });
+  };
+  const {
+    goods: {
+      systemType,
+      brandList,
+      typeName,
+      uploadGoodsImg,
+      goodsPlace,
+      goodsDetail,
+      initGoodsAttr,
+      attrTable,
+      levelPartialSon,
+    },
+    payload,
+    header,
+    previewImage,
+    previewVisible,
+    handleChangeImg,
+    handlePreviewImg,
+    handleCancelImg,
+    setDescription,
+    onCheckAllAttr,
+    onChangeSon,
+    chgLevelHas,
+    modifiedValue,
+  } = props;
+  const brandListItem = [];
+  const attrItem = [];
+  const attrItemSon = [];
+  initGoodsAttr.forEach((res, index) => {
+    attrItem.push(
+      <Checkbox onChange={onCheckAllAttr.bind(this, index)} checked={res.checked} key={res.id}>
+        {res.name}
+      </Checkbox>
+    );
+    attrItemSon.push(
+      <div key={index} className={`${styles.borderList} ${res.checked ? '' : styles.borderHidden}`}>
+        <span key={res.id + index} style={{ marginRight: 10 }}>
+          {res.name}:
+        </span>
+        <CheckboxGroup
+          rowKey={index => index}
+          options={res.AttrArr}
+          value={res.checkArr}
+          onChange={onChangeSon.bind(this, index)}
+        />
+      </div>
+    );
+  });
+  brandList.forEach(res => {
+    brandListItem.push(
+      <Option key={res.brand_id} value={res.brand_id}>
+        {res.brand_name}
+      </Option>
+    );
+  });
+  // 上传按钮
+  const uploadButton = (
+    <div>
+      <Icon type="plus" />
+      <div className="ant-upload-text">主体图片</div>
+    </div>
+  );
+  // 地址
+  const goodsPlaceItem = [];
+  goodsPlace.forEach(res => {
+    goodsPlaceItem.push(
+      <Option key={res.place_id} value={res.place_id}>
+        {res.place_name}
+      </Option>
+    );
+  });
+  const goodsShelvesItem = []; // 上架方式
+  const goodsShippingItem = []; // 快递
+  const goodsStatusItem = []; // 商品状态
+  const goodsTypeItem = []; // 商品类型
+  const goodsWarehouseItem = []; // 商品发货方式
+  const isItem = []; // 是否
+  const isHotItem = []; // 是否首页推荐
+  const profitTypeItem = []; // 分拥类型
+  const reducedInventpryItem = []; // 减库存方式
+  const shippingTypeItem = []; // 运送模板
+  if (Object.keys(systemType).length) {
+    systemType.goods_shelves_type.forEach((res, index) => {
+      goodsShelvesItem.push(
+        <Option value={index} key={index}>
+          {res}
+        </Option>
+      );
+    });
+    systemType.goods_shipping_calculation_type.forEach((res, index) => {
+      goodsShippingItem.push(
+        <Option value={index} key={index}>
+          {res}
+        </Option>
+      );
+    });
+    systemType.goods_status.forEach((res, index) => {
+      goodsStatusItem.push(
+        <Option value={index} key={index}>
+          {res}
+        </Option>
+      );
+    });
+    systemType.goods_type.forEach((res, index) => {
+      goodsTypeItem.push(
+        <Option value={index} key={index}>
+          {res}
+        </Option>
+      );
+    });
+    systemType.goods_warehouse_type.forEach((res, index) => {
+      goodsWarehouseItem.push(
+        <Option value={index} key={index}>
+          {res}
+        </Option>
+      );
+    });
+    systemType.is.forEach((res, index) => {
+      isItem.push(
+        // <Option value={index} key={index}>{res}</Option>
+        <Radio value={index} key={index}>
+          {res}
+        </Radio>
+      );
+    });
+    systemType.is_hot.forEach((res, index) => {
+      isHotItem.push(
+        <Option value={index} key={index}>
+          {res}
+        </Option>
+      );
+    });
+    systemType.profit_type.forEach((res, index) => {
+      profitTypeItem.push(
+        <Option value={index} key={index}>
+          {res}
+        </Option>
+      );
+    });
+    systemType.reduced_inventpry.forEach((res, index) => {
+      reducedInventpryItem.push(
+        <Option value={index} key={index}>
+          {res}
+        </Option>
+      );
+    });
+    systemType.shipping_type.forEach((res, index) => {
+      shippingTypeItem.push(
+        <Option value={index} key={index}>
+          {res}
+        </Option>
+      );
+    });
+  }
+  return (
+    <Form layout="horizontal" className={styles.stepForm}>
+      <Card title="商品信息" style={{ marginBottom: '20px' }}>
+        <Row gutter={24}>
+          <Col span={12}>
+            <Form.Item {...formItemLayouts} label="商品类别">
+              <span>{typeName}</span>
+            </Form.Item>
+          </Col>
+        </Row>
+        <Form.Item {...formItemLayout} label="商品名称">
+          {getFieldDecorator('goods_name', {
+            rules: [{ required: true, message: '请填写商品名称' }],
+          })(<Input />)}
+        </Form.Item>
+        <Form.Item {...formItemLayout} label="商品SN">
+          {getFieldDecorator('goods_sn', {
+            rules: [{ required: true, message: '请填写商品SN' }],
+          })(<Input />)}
+        </Form.Item>
+        <Form.Item {...formItemLayout} label="列表标题">
+          {getFieldDecorator('goods_list_title', {
+            rules: [{ required: true, message: '请填写列表标题' }],
+          })(<Input />)}
+        </Form.Item>
+        <Form.Item {...formItemLayout} label="商品描述">
+          {getFieldDecorator('goods_des', {
+            rules: [{ required: true, message: '请填写商品描述' }],
+          })(<TextArea placeholder="请填写商品描述" autosize />)}
+        </Form.Item>
+        <Row gutter={24}>
+          <Col span={12}>
+            <Form.Item {...formItemLayouts} label="商品品牌">
+              {getFieldDecorator('brand_id', {
+                rules: [{ required: true, message: '请填写商品品牌' }],
+              })(<Select>{brandListItem}</Select>)}
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item {...formItemLayouts} label="商品标题">
+              {getFieldDecorator('goods_title', {
+                rules: [{ required: true, message: '请填写商品标题' }],
+              })(<Input />)}
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item {...formItemLayouts} label="销售价格">
+              {getFieldDecorator('sell_goods_price', {
+                rules: [{ required: true, message: '请填写商品销售价格' }],
+              })(<InputNumber step={0.01} precision={2} min={0.01} style={{ width: '200px' }} />)}
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item {...formItemLayouts} label="市场价">
+              {getFieldDecorator('goods_price', {
+                rules: [{ required: true, message: '请填写商品市场价' }],
+              })(<InputNumber step={0.01} precision={2} min={0.01} style={{ width: '200px' }} />)}
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item {...formItemLayouts} label="成本价">
+              {getFieldDecorator('cost_price', {
+                rules: [{ required: true, message: '请填写商品成本价' }],
+              })(
+                <InputNumber
+                  step={0.01}
+                  precision={2}
+                  min={0.01}
+                  max={Number(goodsDetail.sell_goods_price || 0)}
+                  style={{ width: '200px' }}
+                />
+              )}
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item {...formItemLayouts} label="商品类型">
+              {getFieldDecorator('goods_type', {
+                rules: [{ required: true, message: '请填写商品类型' }],
+              })(<Select>{goodsTypeItem}</Select>)}
+            </Form.Item>
+          </Col>
+        </Row>
+        <Row gutter={24}>
+          <Col span={12}>
+            <Form.Item {...formItemLayouts} label="商品状态">
+              {getFieldDecorator('goods_status', {
+                rules: [{ required: true, message: '请填写商品状态' }],
+              })(<Select>{goodsStatusItem}</Select>)}
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item {...formItemLayouts} label="产品总库存">
+              {getFieldDecorator('goods_total_inventory', {
+                rules: [{ required: true, message: '请填写产品总库存' }],
+              })(<InputNumber step={1} min={1} style={{ width: '200px' }} />)}
+            </Form.Item>
+          </Col>
+        </Row>
+        <Row>
+          <Col span={12}>
+            <Form.Item {...formItemLayouts} label="排序">
+              {getFieldDecorator('goods_sort', {
+                rules: [{ required: true, message: '请填写商品排序' }],
+              })(<InputNumber step={1} min={1} />)}
+            </Form.Item>
+          </Col>
+        </Row>
+        <Row gutter={24}>
+          <Col span={24}>
+            <Form.Item {...formItemLayoutUploadImg} label="主体图片">
+              {getFieldDecorator('xxx', {
+                rules: [{ required: true, message: '请填写商品排序' }],
+              })(
+                <div className="clearfix">
+                  <Upload
+                    action="http://hlsj.test.seastart.cn/admin/upload"
+                    listType="picture-card"
+                    fileList={uploadGoodsImg}
+                    onPreview={handlePreviewImg}
+                    onChange={handleChangeImg}
+                    data={payload}
+                    headers={header}
+                  >
+                    {uploadGoodsImg.length >= 6 ? null : uploadButton}
+                  </Upload>
+                  <Modal visible={previewVisible} footer={null} onCancel={handleCancelImg}>
+                    <img alt="example" style={{ width: '100%' }} src={previewImage} />
+                  </Modal>
+                </div>
+              )}
+            </Form.Item>
+          </Col>
+        </Row>
+      </Card>
+      <Card>
+        <Row gutter={24}>
+          <Col span={12}>
+            <Form.Item {...formItemLayouts} label="设置预警">
+              {getFieldDecorator('goods_warning_status', {
+                rules: [{ required: true, message: '请填写设置预警' }],
+              })(<RadioGroup>{isItem}</RadioGroup>)}
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            {goodsDetail.goods_warning_status === 1 ? (
+              <Form.Item {...formItemLayouts} label="预警值">
+                {getFieldDecorator('goods_nums_warning', {
+                  rules: [
+                    { required: goodsDetail.goods_warning_status === 1, message: '请填写预警值' },
+                  ],
+                })(<InputNumber step={1} min={1} style={{ width: 200 }} />)}
+              </Form.Item>
+            ) : null}
+          </Col>
+        </Row>
+        <Row gutter={24}>
+          <Col span={12}>
+            <Form.Item {...formItemLayouts} label="采购地">
+              {getFieldDecorator('goods_country_id', {
+                rules: [{ required: true, message: '请填写采购地' }],
+              })(<Select>{goodsPlaceItem}</Select>)}
+            </Form.Item>
+          </Col>
+        </Row>
+        <Row gutter={24}>
+          <Col span={12}>
+            <Form.Item {...formItemLayouts} label="出货类型">
+              {getFieldDecorator('goods_warehouse_type', {
+                rules: [{ required: true, message: '请填写出货类型' }],
+              })(<Select>{goodsWarehouseItem}</Select>)}
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            {goodsDetail.goods_warehouse_type === 1 ? (
+              <Form.Item {...formItemLayouts} label="供应商ID">
+                {getFieldDecorator('supplier_id', {
+                  rules: [
+                    { required: goodsDetail.goods_warehouse_type === 1, message: '请填写供应商ID' },
+                  ],
+                })(<Input />)}
+              </Form.Item>
+            ) : (
+              <Form.Item {...formItemLayouts} label="发货仓库">
+                {getFieldDecorator('warehouse_id', {
+                  rules: [
+                    { required: goodsDetail.goods_warehouse_type === 0, message: '请填写发货仓库' },
+                  ],
+                })(<Input />)}
+              </Form.Item>
+            )}
+          </Col>
+        </Row>
+        <Row gutter={24}>
+          {/* <Col span={12}>
+            <Form.Item {...formItemLayouts} label="供应商ID">
+              {getFieldDecorator('supplier_id', {
+                rules: [{ required: true, message: '请填写供应商ID' }],
+              })(<Input />)}
+            </Form.Item>
+          </Col> */}
+          <Col span={12}>
+            <Form.Item {...formItemLayouts} label="运送模板">
+              {getFieldDecorator('shop_shipping_type', {
+                rules: [{ required: true, message: '请填写运送模板' }],
+              })(
+                <Select onChange={this.changeShippingType}>
+                  {/* <Option value="0">运费模板 </Option>
+                  <Option value="1">固定运费</Option>
+                  <Option value="2">包邮</Option> */}
+                  {shippingTypeItem}
+                </Select>
+              )}
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            {goodsDetail.shop_shipping_type === 1 ? (
+              <Form.Item {...formItemLayouts} label="运费价格">
+                {getFieldDecorator('shop_shipping_price', {
+                  rules: [
+                    { required: goodsDetail.shop_shipping_type === 1, message: '请填写运费价格' },
+                  ],
+                })(<InputNumber step={0.01} precision={2} min={0.01} />)}
+              </Form.Item>
+            ) : null}
+          </Col>
+        </Row>
+        <Row gutter={24}>
+          <Col span={12}>
+            <Form.Item {...formItemLayouts} label="快递类型">
+              {getFieldDecorator('shop_shipping_calculation_type', {
+                rules: [{ required: true, message: '请填写快递类型' }],
+              })(
+                <Select>
+                  {/* <Option value="0">快递</Option>
+                  <Option value="1">EMS</Option> */}
+                  {goodsShippingItem}
+                </Select>
+              )}
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item {...formItemLayouts} label="减库存方式">
+              {getFieldDecorator('shop_goods_reduced_inventory', {
+                rules: [{ required: true, message: '请填写减库存方式' }],
+              })(
+                <Select>
+                  {/* <Option value="0">拍下减库存</Option>
+                  <Option value="1">付款减库存</Option> */}
+                  {reducedInventpryItem}
+                </Select>
+              )}
+            </Form.Item>
+          </Col>
+        </Row>
+
+        <Row gutter={24}>
+          <Col span={12}>
+            <Form.Item {...formItemLayouts} label="上架方式">
+              {getFieldDecorator('goods_shelves_type', {
+                rules: [{ required: true, message: '请填写上架方式' }],
+              })(<Select onChange={this.shelvesType}>{goodsShelvesItem}</Select>)}
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            {goodsDetail.goods_shelves_type === 1 ? (
+              <Form.Item {...formItemLayouts} label="上架时间">
+                {getFieldDecorator('goods_shelves_time', {
+                  rules: [
+                    {
+                      required: goodsDetail.goods_shelves_type === 1,
+                      message: '请填写商品上架时间',
+                    },
+                  ],
+                })(
+                  <DatePicker
+                    showTime
+                    format="YYYY-MM-DD HH:mm:ss"
+                    placeholder="选择商品上架时间"
+                  />
+                )}
+              </Form.Item>
+            ) : null}
+          </Col>
+        </Row>
+        <Form.Item label="描述">
+          {getFieldDecorator('goods_description', {
+            rules: [{ required: true, message: '请填写描述' }],
+          })(
+            <ReactEditor valueSon={goodsDetail.goods_description} setDescription={setDescription} />
+          )}
+        </Form.Item>
+      </Card>
+      <Card style={{ margin: '20px 0' }}>
+        <Row gutter={24}>
+          <Col span={12}>
+            <Form.Item {...formItemLayouts} label="无忧售后">
+              {getFieldDecorator('goods_is_worry_free_sale', {
+                rules: [{ required: true, message: '请填写是否无忧售后' }],
+              })(
+                <RadioGroup>
+                  {/* <Radio value={0}>否</Radio>
+                  <Radio value={1}>是</Radio> */}
+                  {isItem}
+                </RadioGroup>
+              )}
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item {...formItemLayouts} label="商品显示">
+              {getFieldDecorator('goods_is_show', {
+                rules: [{ required: true, message: '请填写是否商品显示' }],
+              })(
+                <RadioGroup>
+                  {/* <Radio value={0}>否</Radio>
+                  <Radio value={1}>是</Radio> */}
+                  {isItem}
+                </RadioGroup>
+              )}
+            </Form.Item>
+          </Col>
+        </Row>
+        <Row gutter={24}>
+          <Col span={12}>
+            <Form.Item {...formItemLayouts} label="支持退款">
+              {getFieldDecorator('goods_is_refund', {
+                rules: [{ required: true, message: '请填写是否支持退款' }],
+              })(
+                <RadioGroup>
+                  {/* <Radio value={0}>否</Radio>
+                  <Radio value={1}>是</Radio> */}
+                  {isItem}
+                </RadioGroup>
+              )}
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item {...formItemLayouts} label="支持退货">
+              {getFieldDecorator('goods_is_return_goods', {
+                rules: [{ required: true, message: '请填写是否支持退货' }],
+              })(<RadioGroup>{isItem}</RadioGroup>)}
+            </Form.Item>
+          </Col>
+        </Row>
+        <Row gutter={24}>
+          <Col span={12}>
+            <Form.Item {...formItemLayouts} label="支持7天无理由退货">
+              {getFieldDecorator('goods_is_return_server', {
+                rules: [{ required: true, message: '请填写是否支持7天无理由退货' }],
+              })(
+                <RadioGroup>
+                  {/* <Radio value={0}>否</Radio>
+                  <Radio value={1}>是</Radio> */}
+                  {isItem}
+                </RadioGroup>
+              )}
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Form.Item {...formItemLayouts} label="急速发货">
+              {getFieldDecorator('goods_is_fast_delivery', {
+                rules: [{ required: true, message: '请填写是否急速发货' }],
+              })(
+                <RadioGroup>
+                  {/* <Radio value={0}>否</Radio>
+                  <Radio value={1}>是</Radio> */}
+                  {isItem}
+                </RadioGroup>
+              )}
+            </Form.Item>
+          </Col>
+        </Row>
+        <Row gutter={24}>
+          <Col span={12}>
+            <Form.Item {...formItemLayouts} label="首页推荐">
+              {getFieldDecorator('goods_is_recommend_show', {
+                rules: [{ required: true, message: '请填写首页推荐' }],
+              })(<Select>{isHotItem}</Select>)}
+            </Form.Item>
+          </Col>
+        </Row>
+      </Card>
+      <Card title="sku分佣">
+        <Form.Item {...formItemLayout} label="分拥类型">
+          {getFieldDecorator('profit_type', {
+            rules: [{ required: true, message: '请填写分拥类型' }],
+          })(<Select>{profitTypeItem}</Select>)}
+        </Form.Item>
+        <div>分佣值</div>
+        <Row gutter={24}>
+          <Col span={8}>
+            {/* {totalPrice} */}
+            <Form.Item {...formItemLayouts} label="一级">
+              {getFieldDecorator('level_0', {
+                rules: [{ required: true, message: '请填写一级' }],
+              })(
+                goodsDetail.profit_type === 0 ? (
+                  <InputNumber
+                    min={0}
+                    max={100}
+                    formatter={value =>
+                      `${goodsDetail.sell_goods_price && goodsDetail.cost_price ? value : 0}%`
+                    }
+                    parser={value => value.replace('%', '')}
+                    onChange={e => chgLevelHas(0, e)}
+                  />
+                ) : (
+                  <InputNumber
+                    step={0.01}
+                    precision={2}
+                    min={0}
+                    onChange={e => chgLevelHas(0, e)}
+                  />
+                )
+              )}
+            </Form.Item>
+          </Col>
+          <Col span={8}>
+            <Form.Item {...formItemLayouts} label="二级">
+              {getFieldDecorator('level_1', {
+                rules: [{ required: true, message: '请填写二级' }],
+              })(
+                goodsDetail.profit_type === 0 ? (
+                  <InputNumber
+                    min={0}
+                    max={100}
+                    formatter={value =>
+                      `${goodsDetail.sell_goods_price && goodsDetail.cost_price ? value : 0}%`
+                    }
+                    parser={value => value.replace('%', '')}
+                    onChange={e => chgLevelHas(1, e)}
+                  />
+                ) : (
+                  <InputNumber
+                    step={0.01}
+                    precision={2}
+                    min={0}
+                    onChange={e => chgLevelHas(1, e)}
+                  />
+                )
+              )}
+            </Form.Item>
+          </Col>
+          <Col span={8}>
+            <Form.Item {...formItemLayouts} label="三级">
+              {getFieldDecorator('level_2', {
+                rules: [{ required: true, message: '请填写三级' }],
+              })(
+                goodsDetail.profit_type === 0 ? (
+                  <InputNumber
+                    min={0}
+                    max={100}
+                    formatter={value =>
+                      `${goodsDetail.sell_goods_price && goodsDetail.cost_price ? value : 0}%`
+                    }
+                    parser={value => value.replace('%', '')}
+                    onChange={e => chgLevelHas(2, e)}
+                  />
+                ) : (
+                  <InputNumber
+                    step={0.01}
+                    precision={2}
+                    min={0}
+                    onChange={e => chgLevelHas(2, e)}
+                  />
+                )
+              )}
+            </Form.Item>
+          </Col>
+        </Row>
+        <Row gutter={24}>
+          <Col span={8}>
+            <Form.Item {...formItemLayouts} label="四级">
+              {getFieldDecorator('level_3', {
+                rules: [{ required: true, message: '请填写四级' }],
+              })(
+                goodsDetail.profit_type === 0 ? (
+                  <InputNumber
+                    min={0}
+                    max={100}
+                    formatter={value =>
+                      `${goodsDetail.sell_goods_price && goodsDetail.cost_price ? value : 0}%`
+                    }
+                    parser={value => value.replace('%', '')}
+                    onChange={e => chgLevelHas(3, e)}
+                  />
+                ) : (
+                  <InputNumber
+                    step={0.01}
+                    precision={2}
+                    min={0}
+                    onChange={e => chgLevelHas(3, e)}
+                  />
+                )
+              )}
+            </Form.Item>
+          </Col>
+          <Col span={8}>
+            <Form.Item {...formItemLayouts} label="五级">
+              {getFieldDecorator('level_4', {
+                rules: [{ required: true, message: '请填写五级' }],
+              })(
+                goodsDetail.profit_type === 0 ? (
+                  <InputNumber
+                    min={0}
+                    max={100}
+                    formatter={value =>
+                      `${goodsDetail.sell_goods_price && goodsDetail.cost_price ? value : 0}%`
+                    }
+                    parser={value => value.replace('%', '')}
+                    onChange={e => chgLevelHas(4, e)}
+                  />
+                ) : (
+                  <InputNumber
+                    step={0.01}
+                    precision={2}
+                    min={0}
+                    onChange={e => chgLevelHas(4, e)}
+                  />
+                )
+              )}
+            </Form.Item>
+          </Col>
+        </Row>
+        <div className={styles.borderList}>
+          <span>属性名：</span>
+          {attrItem}
+        </div>
+        {attrItemSon}
+        <EditTable
+          attrTable={attrTable}
+          totalPrice={goodsDetail.sell_goods_price}
+          totalStock={goodsDetail.goods_total_inventory}
+          levelPartialSon={levelPartialSon}
+          rowKey={index => JSON.stringify(index)}
+          modifiedValue={modifiedValue.bind(this)}
+        />
+      </Card>
+      <Form.Item
+        style={{ marginBottom: 8 }}
+        wrapperCol={{
+          xs: { span: 24, offset: 0 },
+          sm: {
+            span: formItemLayout.wrapperCol.span,
+            offset: formItemLayout.labelCol.span,
+          },
+        }}
+        label=""
+      >
+        <Button type="primary" onClick={onValidateForm}>
+          提交
+        </Button>
+        <Button style={{ marginLeft: 8 }}>上一步</Button>
+      </Form.Item>
+    </Form>
+  );
+});
+
 @connect(({ goods, loading }) => ({
   goods,
   loading: loading.models.goods,
 }))
-@Form.create()
+// @Form.create()
 class Step2 extends React.PureComponent {
   state = {
     previewVisible: false,
     previewImage: '',
-    isTime: false,
     payload: {
       type: 2,
     },
@@ -109,27 +967,14 @@ class Step2 extends React.PureComponent {
       },
     });
   };
-  // onCellChange = () => {
-  //   console.log(1);
-  // }
+  // 富文本
   setDescription = e => {
-    // const { form } = this.props;
-    // const { setFieldsValue } = form;
-    if (e === '<p></p>') {
-      // setFieldsValue({'goods_description': ''});
-      this.chgFormVal('goods_description', '');
-    } else {
-      // setFieldsValue({'goods_description': e});
-      this.chgFormVal('goods_description', e);
-    }
-  };
-  // 修改表单内的值
-  chgFormVal = (key, value) => {
-    const { form } = this.props;
-    const { setFieldsValue } = form;
+    console.log(e);
     const obj = {};
-    obj[key] = value;
-    setFieldsValue(obj);
+    obj.goods_description = {
+      value: e,
+    };
+    this.changeFormVal(obj);
   };
   modifiedValue = event => {
     const { dispatch } = this.props;
@@ -171,23 +1016,19 @@ class Step2 extends React.PureComponent {
         fileList,
       },
     });
-    // this.setState({ fileList });
-  };
-  customRequest = data => {
-    console.log(data);
-    const { file } = data;
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'goods/uploadImg',
-      payload: {
-        file,
-        type: 2,
-      },
-    });
   };
   chgLevelHas = (index, e) => {
-    const { dispatch, goods: { typePartial, totalPrice } } = this.props;
-    if (typePartial === '0' && !totalPrice) {
+    const { dispatch, goods: { goodsDetail } } = this.props;
+    const {
+      profit_type: profitType,
+      cost_price: costPrice,
+      sell_goods_price: sellGoodsPrice,
+    } = goodsDetail;
+    if (typeof profitType === 'undefined') {
+      message.error('请选择分佣类型');
+    } else if (profitType === 0 && !costPrice) {
+      message.error('请填写成本价格！');
+    } else if (profitType === 0 && !sellGoodsPrice) {
       message.error('请填写销售价格！');
     } else {
       dispatch({
@@ -198,864 +1039,128 @@ class Step2 extends React.PureComponent {
         },
       });
     }
-    // else if (totalPrice){
-    //   console.log(totalPrice)
-    //   console.log(e)
-    //   e = Number((totalPrice * e / 100).toFixed(2));
-    //   dispatch({
-    //     type: 'goods/setLevelPartial',
-    //     payload: {
-    //       index,
-    //       value: e,
-    //     },
-    //   });
-    // }
   };
-  chgTypeHas(e) {
+  // 修改表单值
+  changeFormVal = val => {
     const { dispatch } = this.props;
-    // this.chgFormVal('level_0', '');
+    const obj = {};
+    for (const key of Object.keys(val)) {
+      obj[key] = val[key].value;
+    }
     dispatch({
-      type: 'goods/changeTypePartial',
+      type: 'goods/changeFormVal',
       payload: {
-        e,
+        obj,
       },
     });
-  }
-  // 修改总价
-  chgTotalProce(e) {
-    console.log(e);
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'goods/changeTotalPrice',
-      payload: {
-        e,
-      },
-    });
-  }
-  // 更改上架方式
-  shelvesType = e => {
-    if (e === '2') {
-      this.setState({
-        isTime: true,
+  };
+  // 提交表单
+  submitForm = values => {
+    const { goods: { uploadGoodsImg, goodsDetail }, dispatch } = this.props;
+    console.log(goodsDetail);
+    if (!uploadGoodsImg.length) {
+      message.error('请上传图片主体！');
+      return;
+    }
+    const { goods: { attrTable, levelPartial, typePartial } } = this.props;
+    if (attrTable.length) {
+      attrTable.forEach(ele => {
+        if (!ele.fileList.length) {
+          ele.img = '';
+        } else {
+          ele.img = ele.fileList[0].url;
+        }
+        const arr = [];
+        ele.profit.forEach(res => {
+          arr.push({
+            price: res,
+          });
+        });
+        levelPartial.forEach((res, index) => {
+          arr[index].profit_value = res;
+        });
+        ele.profit = arr;
       });
     } else {
-      this.setState({
-        isTime: false,
+      const arr = [];
+      if (values.profit_type === 1) {
+        levelPartial.forEach(res => {
+          arr.push({
+            price: res,
+            profit_value: res,
+          });
+        });
+      } else {
+        levelPartial.forEach(res => {
+          const nowPrice = (res * values.sell_goods_price / 100).toFixed(2);
+          arr.push({
+            price: nowPrice,
+            profit_value: nowPrice,
+          });
+        });
+      }
+      attrTable.push({
+        sku_goods_name: '默认',
+        store_nums: values.goods_total_inventory,
+        goods_sku_sn: values.goods_sn,
+        price: values.sell_goods_price,
+        img: '',
+        profit: arr,
+        goods_sku_attr: [
+          {
+            attr_class_id: 1,
+            attr_id: 1,
+            attr_class_name: '默认',
+            attr_name: '默认',
+          },
+        ],
       });
     }
-  };
-  // 修改总库存
-  chgTotalStock(e) {
-    console.log(e);
-    const { dispatch } = this.props;
+    values.class_id = goodsDetail.class_id;
+    values.category_id = goodsDetail.category_id;
+    values.goods_id = goodsDetail.goods_id;
+    values.goods_img = [];
+    uploadGoodsImg.forEach(res => {
+      values.goods_img.push(res.url);
+    });
+    // 新增需要加的
+    values.goods_nums_warning = values.goods_nums_warning || 0;
+    values.warehouse_id = values.warehouse_id || 0;
+    values.supplier_id = values.supplier_id || 0;
+    values.shop_shipping_price = values.shop_shipping_price || 0;
+    values.profit_value = levelPartial;
+    values.goods_sku = attrTable;
+    values.profit_type = typePartial;
+    if (values.goods_shelves_time) {
+      values.goods_shelves_time = Number.parseInt(new Date(moment(values._d)).getTime() / 1000, 10);
+    } else {
+      values.goods_shelves_time = 0;
+    }
+    console.log(values);
     dispatch({
-      type: 'goods/changeTotalStock',
+      type: 'goods/addShop',
       payload: {
-        e,
+        ...values,
       },
     });
-  }
+  };
 
-  // sucUpload = (e) => {
-  //   console.log(e);
-  //   const { data } = e;
-  //   const { fileList } = this.state;
-  //   const img = {};
-  //   img.status = 'done';
-  //   img.uploaded = 'done';
-  //   img.response = { status: 'success' };
-  //   img.name = data;
-  //   img.uid = data;
-  //   img.url = data;
-  //   fileList.push(img);
-  //   console.log(fileList);
-  //   this.setState({ fileList })
-  // }
   render() {
-    const {
-      form,
-      dispatch,
-      submitting,
-      goods: {
-        typeName,
-        initGoodsAttr,
-        attrTable,
-        typePartial,
-        levelPartial,
-        levelPartialSon,
-        goodsPlace,
-        brandList,
-        totalPrice,
-        totalStock,
-        goodsDetail,
-        uploadGoodsImg,
-      },
-    } = this.props;
-    const goodsPlaceItem = [];
-    goodsPlace.forEach(res => {
-      goodsPlaceItem.push(
-        <Option key={res.place_id} value={res.place_id}>
-          {res.place_name}
-        </Option>
-      );
-    });
-    const brandListItem = [];
-    brandList.forEach(res => {
-      brandListItem.push(
-        <Option key={res.brand_id} value={res.brand_id}>
-          {res.brand_name}
-        </Option>
-      );
-    });
-    const { validateFields, getFieldDecorator } = form;
-    const { previewVisible, previewImage, payload, header, isTime } = this.state;
-    const uploadButton = (
-      <div>
-        <Icon type="plus" />
-        <div className="ant-upload-text">主体图片</div>
-      </div>
-    );
-    const attrItem = [];
-    const attrItemSon = [];
-    initGoodsAttr.forEach((res, index) => {
-      attrItem.push(
-        <Checkbox
-          onChange={this.onCheckAllAttr.bind(this, index)}
-          checked={res.checked}
-          key={res.id}
-        >
-          {res.name}
-        </Checkbox>
-      );
-      attrItemSon.push(
-        <div
-          key={index}
-          className={`${styles.borderList} ${res.checked ? '' : styles.borderHidden}`}
-        >
-          <span key={res.id + index} style={{ marginRight: 10 }}>
-            {res.name}:
-          </span>
-          <CheckboxGroup
-            rowKey={index => index}
-            options={res.AttrArr}
-            value={res.checkArr}
-            onChange={this.onChangeSon.bind(this, index)}
-          />
-        </div>
-      );
-    });
-
-    const onValidateForm = e => {
-      e.preventDefault();
-      validateFields((err, values) => {
-        if (!err) {
-          const { goods: { uploadGoodsImg } } = this.props;
-          if (!uploadGoodsImg.length) {
-            message.error('请上传图片主体！');
-            return;
-          }
-          const { goods: { attrTable, levelPartial, typePartial, goodsDetail } } = this.props;
-          if (attrTable.length) {
-            attrTable.forEach(ele => {
-              if (!ele.fileList.length) {
-                ele.img = '';
-              } else {
-                ele.img = ele.fileList[0].url;
-              }
-              const arr = [];
-              ele.profit.forEach(res => {
-                arr.push({
-                  price: res,
-                });
-              });
-              levelPartial.forEach((res, index) => {
-                arr[index].profit_value = res;
-              });
-              ele.profit = arr;
-            });
-          } else {
-            const arr = [];
-            if (values.profit_type === '1') {
-              levelPartial.forEach(res => {
-                arr.push({
-                  price: res,
-                  profit_value: res,
-                });
-              });
-            } else {
-              levelPartial.forEach(res => {
-                const nowPrice = (res * values.sell_goods_price / 100).toFixed(2);
-                arr.push({
-                  price: nowPrice,
-                  profit_value: nowPrice,
-                });
-              });
-            }
-            attrTable.push({
-              sku_goods_name: '默认',
-              store_nums: values.goods_total_inventory,
-              goods_sku_sn: values.goods_sn,
-              price: values.sell_goods_price,
-              img: '',
-              profit: arr,
-              goods_sku_attr: [
-                {
-                  attr_class_id: 1,
-                  attr_id: 1,
-                  attr_class_name: '默认',
-                  attr_name: '默认',
-                },
-              ],
-            });
-          }
-          // attrTable.forEach(ele => {
-          //   if (!ele.fileList.length) {
-          //     ele.img = '';
-          //   } else {
-          //     ele.img = ele.fileList[0].url;
-          //   }
-          //   const arr = [];
-          //   ele.profit.forEach(res => {
-          //     arr.push({
-          //       price: res,
-          //     });
-          //   });
-          //   levelPartial.forEach((res, index) => {
-          //     arr[index].profit_value = res;
-          //   });
-          //   ele.profit = arr;
-          // });
-          values.class_id = goodsDetail.class_id;
-          values.category_id = goodsDetail.category_id;
-          values.goods_id = goodsDetail.goods_id;
-          values.goods_img = [];
-          uploadGoodsImg.forEach(res => {
-            values.goods_img.push(res.url);
-          });
-          values.profit_value = levelPartial;
-          values.goods_sku = attrTable;
-          values.profit_type = typePartial;
-          if (values.goods_shelves_time) {
-            values.goods_shelves_time = Number.parseInt(
-              new Date(moment(values._d)).getTime() / 1000,
-              10
-            );
-          } else {
-            values.goods_shelves_time = 0;
-          }
-          console.log(values);
-          // console.log(values.goods_shelves_time._d);
-          // console.log(values.goods_shelves_time._d.getTime());
-          dispatch({
-            type: 'goods/addShop',
-            payload: {
-              ...values,
-            },
-          });
-        }
-      });
-    };
-
     return (
-      <Form layout="horizontal" className={styles.stepForm}>
-        <Card title="商品信息" style={{ marginBottom: '20px' }}>
-          {/* <Row gutter={24}>
-            <Col span={12}>
-              <Form.Item {...formItemLayouts} label="主体图片" >
-                <span style={{color: 'red'}}>图片最多5张</span>
-              </Form.Item>
-            </Col>
-          </Row> */}
-          <Row gutter={24}>
-            <Col span={12}>
-              <Form.Item {...formItemLayouts} label="商品类别">
-                <span>{typeName}</span>
-              </Form.Item>
-            </Col>
-          </Row>
-          <Form.Item {...formItemLayout} label="商品名称">
-            {getFieldDecorator('goods_name', {
-              initialValue: goodsDetail.goods_name,
-              rules: [{ required: true, message: '请填写商品名称' }],
-            })(<Input />)}
-          </Form.Item>
-          <Form.Item {...formItemLayout} label="商品SN">
-            {getFieldDecorator('goods_sn', {
-              initialValue: goodsDetail.goods_sn,
-              rules: [{ required: true, message: '请填写商品SN' }],
-            })(<Input />)}
-          </Form.Item>
-          <Form.Item {...formItemLayout} label="列表标题">
-            {getFieldDecorator('goods_list_title', {
-              initialValue: goodsDetail.goods_list_title,
-              rules: [{ required: true, message: '请填写列表标题' }],
-            })(<Input />)}
-          </Form.Item>
-          <Form.Item {...formItemLayout} label="商品描述">
-            {getFieldDecorator('goods_des', {
-              initialValue: goodsDetail.goods_des,
-              rules: [{ required: true, message: '请填写商品描述' }],
-            })(<TextArea placeholder="请填写商品描述" autosize />)}
-          </Form.Item>
-          <Row gutter={24}>
-            <Col span={12}>
-              <Form.Item {...formItemLayouts} label="商品品牌">
-                {getFieldDecorator('brand_id', {
-                  initialValue: goodsDetail.brand_id || '',
-                  rules: [{ required: true, message: '请填写商品品牌' }],
-                })(<Select>{brandListItem}</Select>)}
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item {...formItemLayouts} label="商品标题">
-                {getFieldDecorator('goods_title', {
-                  initialValue: goodsDetail.goods_title,
-                  rules: [{ required: true, message: '请填写商品标题' }],
-                })(<Input />)}
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item {...formItemLayouts} label="销售价格">
-                {getFieldDecorator('sell_goods_price', {
-                  initialValue: goodsDetail.sell_goods_price,
-                  rules: [{ required: true, message: '请填写商品销售价格' }],
-                })(
-                  <InputNumber
-                    onChange={e => this.chgTotalProce(e)}
-                    step={0.01}
-                    precision={2}
-                    min={0.01}
-                    style={{ width: '200px' }}
-                  />
-                )}
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item {...formItemLayouts} label="市场价">
-                {getFieldDecorator('goods_price', {
-                  initialValue: goodsDetail.goods_price,
-                  rules: [{ required: true, message: '请填写商品市场价' }],
-                })(<InputNumber step={0.01} precision={2} min={0.01} style={{ width: '200px' }} />)}
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item {...formItemLayouts} label="商品类型">
-                {getFieldDecorator('goods_type', {
-                  initialValue: (goodsDetail.goods_type || 0).toString(),
-                  rules: [{ required: true, message: '请填写商品类型' }],
-                })(
-                  <Select>
-                    <Option value="0">普通商品 </Option>
-                    <Option value="1">一元购</Option>
-                    <Option value="2">秒杀</Option>
-                    <Option value="3">众筹</Option>
-                  </Select>
-                )}
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item {...formItemLayouts} label="产品总库存">
-                {getFieldDecorator('goods_total_inventory', {
-                  initialValue: goodsDetail.goods_total_inventory,
-                  rules: [{ required: true, message: '请填写产品总库存' }],
-                })(
-                  <InputNumber
-                    step={1}
-                    min={1}
-                    onChange={e => this.chgTotalStock(e)}
-                    style={{ width: '200px' }}
-                  />
-                )}
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={24}>
-            <Col span={12}>
-              <Form.Item {...formItemLayouts} label="商品状态">
-                {getFieldDecorator('goods_status', {
-                  initialValue: (goodsDetail.goods_status || 0).toString(),
-                  rules: [{ required: true, message: '请填写商品状态' }],
-                })(
-                  <Select>
-                    <Option value="0">上架</Option>
-                    <Option value="1">未上架</Option>
-                    <Option value="2">下架</Option>
-                  </Select>
-                )}
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item {...formItemLayouts} label="排序">
-                {getFieldDecorator('goods_sort', {
-                  initialValue: goodsDetail.goods_sort,
-                  rules: [{ required: true, message: '请填写商品排序' }],
-                })(<InputNumber step={1} min={1} style={{ width: '200px' }} />)}
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={24}>
-            <Col span={24}>
-              <Form.Item {...formItemLayoutUploadImg} label="主体图片">
-                {getFieldDecorator('xxx', {
-                  initialValue: 11,
-                  rules: [{ required: true, message: '请填写商品排序' }],
-                })(
-                  <div className="clearfix">
-                    <Upload
-                      action="http://hlsj.test.seastart.cn/admin/upload"
-                      listType="picture-card"
-                      fileList={uploadGoodsImg}
-                      onPreview={this.handlePreviewImg}
-                      onChange={this.handleChangeImg}
-                      // onSuccess={this.sucUpload}
-                      // customRequest={this.customRequest}
-                      data={payload}
-                      headers={header}
-                    >
-                      {uploadGoodsImg.length >= 6 ? null : uploadButton}
-                    </Upload>
-                    <Modal visible={previewVisible} footer={null} onCancel={this.handleCancelImg}>
-                      <img alt="example" style={{ width: '100%' }} src={previewImage} />
-                    </Modal>
-                  </div>
-                )}
-              </Form.Item>
-            </Col>
-          </Row>
-        </Card>
-        <Card>
-          <Form.Item {...formItemLayout} label="是否设置预警">
-            {getFieldDecorator('goods_warning_status', {
-              initialValue: goodsDetail.goods_warning_status,
-              rules: [{ required: true, message: '请填写设置预警' }],
-            })(
-              <RadioGroup>
-                <Radio value={0}>否</Radio>
-                <Radio value={1}>是</Radio>
-              </RadioGroup>
-            )}
-          </Form.Item>
-          <Row gutter={24}>
-            <Col span={12}>
-              <Form.Item {...formItemLayouts} label="预警值">
-                {getFieldDecorator('goods_nums_warning', {
-                  initialValue: goodsDetail.goods_nums_warning,
-                  rules: [{ required: true, message: '请填写预警值' }],
-                })(<InputNumber step={1} min={1} style={{ width: '200px' }} />)}
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item {...formItemLayouts} label="采购地">
-                {getFieldDecorator('goods_country_id', {
-                  initialValue: goodsDetail.goods_country_id,
-                  rules: [{ required: true, message: '请填写采购地' }],
-                })(<Select>{goodsPlaceItem}</Select>)}
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={24}>
-            <Col span={12}>
-              <Form.Item {...formItemLayouts} label="出货类型">
-                {getFieldDecorator('goods_warehouse_type', {
-                  initialValue: (goodsDetail.goods_warehouse_type || 0).toString(),
-                  rules: [{ required: true, message: '请填写出货类型' }],
-                })(
-                  <Select>
-                    <Option value="0">仓库发货 </Option>
-                    <Option value="1">供应商发货</Option>
-                  </Select>
-                )}
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item {...formItemLayouts} label="发货仓库">
-                {getFieldDecorator('warehouse_id', {
-                  initialValue: goodsDetail.warehouse_id,
-                  rules: [{ required: true, message: '请填写发货仓库' }],
-                })(<Input />)}
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={24}>
-            <Col span={12}>
-              <Form.Item {...formItemLayouts} label="供应商ID">
-                {getFieldDecorator('supplier_id', {
-                  initialValue: goodsDetail.supplier_id,
-                  rules: [{ required: true, message: '请填写供应商ID' }],
-                })(<Input />)}
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item {...formItemLayouts} label="运送模板">
-                {getFieldDecorator('shop_shipping_type', {
-                  initialValue: (goodsDetail.shop_shipping_type || 0).toString(),
-                  rules: [{ required: true, message: '请填写运送模板' }],
-                })(
-                  <Select style={{ width: 200 }}>
-                    <Option value="0">运费模板 </Option>
-                    <Option value="1">固定运费</Option>
-                    <Option value="2">包邮</Option>
-                  </Select>
-                )}
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={24}>
-            <Col span={12}>
-              <Form.Item {...formItemLayouts} label="快递类型">
-                {getFieldDecorator('shop_shipping_calculation_type', {
-                  initialValue: (goodsDetail.shop_shipping_calculation_type || 0).toString(),
-                  rules: [{ required: true, message: '请填写快递类型' }],
-                })(
-                  <Select style={{ width: 200 }}>
-                    <Option value="0">快递</Option>
-                    <Option value="1">EMS</Option>
-                  </Select>
-                )}
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item {...formItemLayouts} label="运费价格">
-                {getFieldDecorator('shop_shipping_price', {
-                  initialValue: goodsDetail.shop_shipping_price,
-                  rules: [{ required: true, message: '请填写运费价格' }],
-                })(<InputNumber step={0.01} precision={2} min={0.01} style={{ width: '200px' }} />)}
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={24}>
-            <Col span={12}>
-              <Form.Item {...formItemLayouts} label="减库存方式">
-                {getFieldDecorator('shop_goods_reduced_inventory', {
-                  initialValue: (goodsDetail.shop_goods_reduced_inventory || 0).toString(),
-                  rules: [{ required: true, message: '请填写减库存方式' }],
-                })(
-                  <Select style={{ width: 200 }}>
-                    <Option value="0">拍下减库存</Option>
-                    <Option value="1">付款减库存</Option>
-                  </Select>
-                )}
-              </Form.Item>
-            </Col>
-          </Row>
-
-          <Row gutter={24}>
-            <Col span={12}>
-              <Form.Item {...formItemLayouts} label="上架方式">
-                {getFieldDecorator('goods_shelves_type', {
-                  initialValue: (goodsDetail.goods_shelves_type || '').toString(),
-                  rules: [{ required: true, message: '请填写上架方式' }],
-                })(
-                  <Select onChange={this.shelvesType}>
-                    <Option value="1">立即</Option>
-                    <Option value="2">时间设定</Option>
-                    <Option value="3">放入仓库池</Option>
-                  </Select>
-                )}
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              {isTime ? (
-                <Form.Item {...formItemLayouts} label="上架时间">
-                  {getFieldDecorator('goods_shelves_time', {
-                    initialValue: moment(goodsDetail.goods_shelves_time, 'YYYY-MM-DD HH:mm:ss'),
-                    rules: [{ required: true, message: '请填写商品上架时间' }],
-                  })(
-                    <DatePicker showTime format="YYYY-MM-DD HH:mm:ss" placeholder="Select Time" />
-                  )}
-                </Form.Item>
-              ) : null}
-            </Col>
-          </Row>
-          <Form.Item label="描述">
-            {getFieldDecorator('goods_description', {
-              initialValue: goodsDetail.goods_description,
-              rules: [{ required: true, message: '请填写描述' }],
-            })(
-              <ReactEditor
-                setDescription={this.setDescription}
-                valueSon={goodsDetail.goods_description}
-              />
-            )}
-          </Form.Item>
-        </Card>
-        <Card style={{ margin: '20px 0' }}>
-          <Row gutter={24}>
-            <Col span={12}>
-              <Form.Item {...formItemLayouts} label="无忧售后">
-                {getFieldDecorator('goods_is_worry_free_sale', {
-                  initialValue: goodsDetail.goods_is_worry_free_sale,
-                  rules: [{ required: true, message: '请填写是否无忧售后' }],
-                })(
-                  <RadioGroup>
-                    <Radio value={0}>否</Radio>
-                    <Radio value={1}>是</Radio>
-                  </RadioGroup>
-                )}
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item {...formItemLayouts} label="商品显示">
-                {getFieldDecorator('goods_is_show', {
-                  initialValue: goodsDetail.goods_is_show,
-                  rules: [{ required: true, message: '请填写是否商品显示' }],
-                })(
-                  <RadioGroup>
-                    <Radio value={0}>否</Radio>
-                    <Radio value={1}>是</Radio>
-                  </RadioGroup>
-                )}
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={24}>
-            <Col span={12}>
-              <Form.Item {...formItemLayouts} label="支持退款">
-                {getFieldDecorator('goods_is_refund', {
-                  initialValue: goodsDetail.goods_is_refund,
-                  rules: [{ required: true, message: '请填写是否支持退款' }],
-                })(
-                  <RadioGroup>
-                    <Radio value={0}>否</Radio>
-                    <Radio value={1}>是</Radio>
-                  </RadioGroup>
-                )}
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item {...formItemLayouts} label="支持退货">
-                {getFieldDecorator('goods_is_return_goods', {
-                  initialValue: goodsDetail.goods_is_return_goods,
-                  rules: [{ required: true, message: '请填写是否支持退货' }],
-                })(
-                  <RadioGroup>
-                    <Radio value={0}>否</Radio>
-                    <Radio value={1}>是</Radio>
-                  </RadioGroup>
-                )}
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={24}>
-            <Col span={12}>
-              <Form.Item {...formItemLayouts} label="支持7天无理由退货">
-                {getFieldDecorator('goods_is_return_server', {
-                  initialValue: goodsDetail.goods_is_return_server,
-                  rules: [{ required: true, message: '请填写是否支持7天无理由退货' }],
-                })(
-                  <RadioGroup>
-                    <Radio value={0}>否</Radio>
-                    <Radio value={1}>是</Radio>
-                  </RadioGroup>
-                )}
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item {...formItemLayouts} label="急速发货">
-                {getFieldDecorator('goods_is_fast_delivery', {
-                  initialValue: goodsDetail.goods_is_fast_delivery,
-                  rules: [{ required: true, message: '请填写是否急速发货' }],
-                })(
-                  <RadioGroup>
-                    <Radio value={0}>否</Radio>
-                    <Radio value={1}>是</Radio>
-                  </RadioGroup>
-                )}
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={24}>
-            <Col span={12}>
-              <Form.Item {...formItemLayouts} label="首页推荐">
-                {getFieldDecorator('goods_is_recommend_show', {
-                  initialValue: goodsDetail.goods_is_recommend_show,
-                  rules: [{ required: true, message: '请填写首页推荐' }],
-                })(
-                  <RadioGroup>
-                    <Radio value={0}>否</Radio>
-                    <Radio value={1}>是</Radio>
-                  </RadioGroup>
-                )}
-              </Form.Item>
-            </Col>
-          </Row>
-        </Card>
-        <Card title="sku分佣">
-          <Form.Item {...formItemLayout} label="分佣类型">
-            {getFieldDecorator('profit_type', {
-              initialValue: typePartial,
-              rules: [{ required: true, message: '请填写分佣类型' }],
-            })(
-              <Select onChange={e => this.chgTypeHas(e)}>
-                <Option value="0">百分比</Option>
-                <Option value="1">数值</Option>
-              </Select>
-            )}
-          </Form.Item>
-          <div>分佣值</div>
-          <Row gutter={24}>
-            <Col span={8}>
-              {/* {totalPrice} */}
-              <Form.Item {...formItemLayouts} label="一级">
-                {getFieldDecorator('level_0', {
-                  initialValue: levelPartial[0],
-                  rules: [{ required: true, message: '请填写一级' }],
-                })(
-                  typePartial === '0' ? (
-                    <InputNumber
-                      min={0}
-                      max={100}
-                      formatter={value => `${totalPrice ? value : 0}%`}
-                      parser={value => value.replace('%', '')}
-                      onChange={e => this.chgLevelHas(0, e)}
-                    />
-                  ) : (
-                    <InputNumber
-                      step={0.01}
-                      precision={2}
-                      min={0.01}
-                      onChange={e => this.chgLevelHas(0, e)}
-                    />
-                  )
-                )}
-              </Form.Item>
-            </Col>
-            <Col span={8}>
-              <Form.Item {...formItemLayouts} label="二级">
-                {getFieldDecorator('level_1', {
-                  initialValue: levelPartial[1],
-                  rules: [{ required: true, message: '请填写二级' }],
-                })(
-                  typePartial === '0' ? (
-                    <InputNumber
-                      min={0}
-                      max={100}
-                      formatter={value => `${totalPrice ? value : 0}%`}
-                      parser={value => value.replace('%', '')}
-                      onChange={e => this.chgLevelHas(1, e)}
-                    />
-                  ) : (
-                    <InputNumber
-                      step={0.01}
-                      precision={2}
-                      min={0.01}
-                      onChange={e => this.chgLevelHas(1, e)}
-                    />
-                  )
-                )}
-              </Form.Item>
-            </Col>
-            <Col span={8}>
-              <Form.Item {...formItemLayouts} label="三级">
-                {getFieldDecorator('level_2', {
-                  initialValue: levelPartial[2],
-                  rules: [{ required: true, message: '请填写三级' }],
-                })(
-                  typePartial === '0' ? (
-                    <InputNumber
-                      min={0}
-                      max={100}
-                      formatter={value => `${totalPrice ? value : 0}%`}
-                      parser={value => value.replace('%', '')}
-                      onChange={e => this.chgLevelHas(2, e)}
-                    />
-                  ) : (
-                    <InputNumber
-                      step={0.01}
-                      precision={2}
-                      min={0.01}
-                      onChange={e => this.chgLevelHas(2, e)}
-                    />
-                  )
-                )}
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={24}>
-            <Col span={8}>
-              <Form.Item {...formItemLayouts} label="四级">
-                {getFieldDecorator('level_3', {
-                  initialValue: levelPartial[3],
-                  rules: [{ required: true, message: '请填写四级' }],
-                })(
-                  typePartial === '0' ? (
-                    <InputNumber
-                      min={0}
-                      max={100}
-                      formatter={value => `${totalPrice ? value : 0}%`}
-                      parser={value => value.replace('%', '')}
-                      onChange={e => this.chgLevelHas(3, e)}
-                    />
-                  ) : (
-                    <InputNumber
-                      step={0.01}
-                      precision={2}
-                      min={0.01}
-                      onChange={e => this.chgLevelHas(3, e)}
-                    />
-                  )
-                )}
-              </Form.Item>
-            </Col>
-            <Col span={8}>
-              <Form.Item {...formItemLayouts} label="五级">
-                {getFieldDecorator('level_4', {
-                  initialValue: levelPartial[4],
-                  rules: [{ required: true, message: '请填写五级' }],
-                })(
-                  typePartial === '0' ? (
-                    <InputNumber
-                      min={0}
-                      max={100}
-                      formatter={value => `${totalPrice ? value : 0}%`}
-                      parser={value => value.replace('%', '')}
-                      onChange={e => this.chgLevelHas(4, e)}
-                    />
-                  ) : (
-                    <InputNumber
-                      step={0.01}
-                      precision={2}
-                      min={0.01}
-                      onChange={e => this.chgLevelHas(4, e)}
-                    />
-                  )
-                )}
-              </Form.Item>
-            </Col>
-          </Row>
-          <div className={styles.borderList}>
-            <span>属性名：</span>
-            {attrItem}
-          </div>
-          {attrItemSon}
-          <EditTable
-            attrTable={attrTable}
-            totalPrice={totalPrice}
-            totalStock={totalStock}
-            levelPartialSon={levelPartialSon}
-            rowKey={index => JSON.stringify(index)}
-            modifiedValue={this.modifiedValue.bind(this)}
-          />
-        </Card>
-        <Form.Item
-          style={{ marginBottom: 8 }}
-          wrapperCol={{
-            xs: { span: 24, offset: 0 },
-            sm: {
-              span: formItemLayout.wrapperCol.span,
-              offset: formItemLayout.labelCol.span,
-            },
-          }}
-          label=""
-        >
-          <Button type="primary" onClick={onValidateForm} loading={submitting}>
-            提交
-          </Button>
-          {/* <Button onClick={onPrev} style={{ marginLeft: 8 }}>
-            上一步
-          </Button> */}
-        </Form.Item>
-      </Form>
+      <CustomizedForm
+        {...this.state}
+        submitForm={this.submitForm}
+        handleChangeImg={this.handleChangeImg}
+        handlePreviewImg={this.handlePreviewImg}
+        handleCancelImg={this.handleCancelImg}
+        onChange={this.changeFormVal}
+        {...this.props}
+        setDescription={this.setDescription}
+        onCheckAllAttr={this.onCheckAllAttr}
+        onChangeSon={this.onChangeSon}
+        chgLevelHas={this.chgLevelHas}
+        modifiedValue={this.modifiedValue}
+      />
     );
   }
 }

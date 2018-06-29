@@ -43,23 +43,32 @@ class EditableCell extends PureComponent {
 class EditInputNumber extends PureComponent {
   state = {
     value: this.props.value,
+    editable: false,
   };
   handleChange = e => {
     console.log();
     let values = e.target.value;
     const { totalStock, attrTable, value } = this.props;
     if (attrTable && attrTable.length) {
-      let num = Number(totalStock) + parseInt(value, 10);
-      attrTable.forEach(ele => {
-        num -= ele.store_nums;
-      });
-      if (num < values) {
-        values = num;
+      if (typeof totalStock === 'undefined') {
+        values = 0;
+      } else {
+        let num = Number(totalStock) + parseInt(value, 10);
+        attrTable.forEach(ele => {
+          num -= ele.store_nums;
+        });
+        if (num < values) {
+          values = num;
+        }
       }
     }
     this.setState({ value: values });
   };
+  edit = () => {
+    this.setState({ editable: true });
+  };
   check = () => {
+    this.setState({ editable: false });
     if (this.props.onChange) {
       const { step } = this.props;
       let { value } = this.state;
@@ -74,15 +83,22 @@ class EditInputNumber extends PureComponent {
     }
   };
   render() {
-    const { value } = this.state;
+    const { value, editable } = this.state;
     return (
       <div className="editable-cell">
-        <Input
-          value={value}
-          onChange={this.handleChange}
-          onPressEnter={this.check}
-          suffix={<Icon type="check" className="editable-cell-icon-check" onClick={this.check} />}
-        />
+        {editable ? (
+          <Input
+            value={value}
+            onChange={this.handleChange}
+            onPressEnter={this.check}
+            suffix={<Icon type="check" className="editable-cell-icon-check" onClick={this.check} />}
+          />
+        ) : (
+          <div style={{ paddingRight: 24 }}>
+            {value || ' '}
+            <Icon type="edit" className="editable-cell-icon" onClick={this.edit} />
+          </div>
+        )}
       </div>
     );
   }
@@ -94,6 +110,7 @@ class EditInput extends PureComponent {
   handleChange = e => {
     const value = e.target.value;
     this.setState({ value });
+    // this.props.onChange(value);
   };
   check = () => {
     if (this.props.onChange) {
@@ -340,13 +357,6 @@ export default class EditableTable extends PureComponent {
         ),
       },
       {
-        title: 'SKUSN',
-        dataIndex: 'goods_sku_sn',
-        render: (text, record, index) => (
-          <EditInput value={text} onChange={this.onCellChange(index, 'goods_sku_sn')} />
-        ),
-      },
-      {
         title: 'sku属性',
         dataIndex: 'sku_goods_name',
         render: (text, record, index) => (
@@ -383,6 +393,13 @@ export default class EditableTable extends PureComponent {
             </a>
           );
         },
+      },
+      {
+        title: 'SKUSN',
+        dataIndex: 'goods_sku_sn',
+        render: (text, record, index) => (
+          <EditInput value={text} onChange={this.onCellChange(index, 'goods_sku_sn')} />
+        ),
       },
       {
         title: '操作',
