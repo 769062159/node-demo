@@ -10,7 +10,7 @@ export default {
 
   effects: {
     *fetchOrder({ payload }, { call, put }) {
-      const response = yield call(getOrderList, { payload });
+      const response = yield call(getOrderList, { ...payload });
       if (response.code === 200) {
         yield put({
           type: 'getOrder',

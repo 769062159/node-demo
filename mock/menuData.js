@@ -34,10 +34,10 @@ export const menuData = [
     icon: 'tool',
     path: 'router',
     children: [
-      {
-        name: '路由新增',
-        path: 'menu-add',
-      },
+      // {
+      //   name: '路由新增',
+      //   path: 'menu-add',
+      // },
       {
         name: '路由列表',
         path: 'menu-list',

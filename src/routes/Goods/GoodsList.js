@@ -399,12 +399,12 @@ export default class TableList extends PureComponent {
         dataIndex: 'goods_type',
         render: val => <span>{goodsTypeStatus[val]}</span>,
       },
-      {
-        title: '商品上架时间',
-        dataIndex: 'goods_shelves_time',
-        sorter: true,
-        render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
-      },
+      // {
+      //   title: '商品上架时间',
+      //   dataIndex: 'goods_shelves_time',
+      //   sorter: true,
+      //   render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
+      // },
       {
         title: '创建时间',
         dataIndex: 'create_time',

@@ -137,7 +137,7 @@ const CustomizedForm = Form.create({
         value: goodsDetail.goods_shelves_type,
       }),
       goods_shelves_time: Form.createFormField({
-        value: moment(goodsDetail.goods_shelves_time, 'YYYY-MM-DD HH:mm:ss'),
+        value: goodsDetail.goods_shelves_time,
       }),
       goods_description: Form.createFormField({
         value: goodsDetail.goods_description,

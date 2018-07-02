@@ -208,9 +208,9 @@ export const getRouterConfig = app => {
     '/users/user-list': {
       component: dynamicWrapper(app, [], () => import('../routes/Demo/DemoThree')),
     },
-    '/router/menu-add': {
-      component: dynamicWrapper(app, ['menu'], () => import('../routes/Demo/DemoTwo')),
-    },
+    // '/router/menu-add': {
+    //   component: dynamicWrapper(app, ['menu'], () => import('../routes/Demo/DemoTwo')),
+    // },
     '/router/menu-list': {
       component: dynamicWrapper(app, ['menu'], () => import('../routes/Demo/MenuList')),
     },
