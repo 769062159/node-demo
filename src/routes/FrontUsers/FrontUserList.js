@@ -190,7 +190,7 @@ export default class FrontUserList extends PureComponent {
         title: '会员',
         dataIndex: 'avatar',
         render: (val, text) => (
-          <Row>
+          <Row style={{ width: 500 }}>
             <Col span={4}>
               <img style={{ height: 80 }} src={val} alt="头像" />
             </Col>
