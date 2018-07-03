@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 import moment from 'moment';
-import { Card, Form, Row, Col, List, Button, Icon, Input, Select } from 'antd';
+import { Card, Form, Row, Col, List, Button, Icon, Input, Select, Modal } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
 import styles from './List.less';
@@ -17,8 +17,8 @@ import styles from './List.less';
 const FormItem = Form.Item;
 const InputGroup = Input.Group;
 const { Option } = Select;
-const oredrStatus = ['未支付', '已取消', '已发货', '已收货', '已评价'];
-const packStatus = ['订单正常', '订单已确认收货', '订单已取消', '订单已关闭'];
+const oredrStatus = ['未支付', '已取消', '已支付', '已发货', '已收货', '已评价'];
+// const packStatus = ['订单正常', '订单已确认收货', '订单已取消', '订单已关闭'];
 const warehouseType = ['仓库', '供应商', '本地仓库供应商货'];
 const bigStyle = {
   width: '90%',
@@ -38,7 +38,7 @@ const allStyle = {
 
 @connect(({ order, loading }) => ({
   order,
-  loading: loading.models.indexs,
+  loading: loading.models.order,
 }))
 @Form.create()
 export default class TableList extends PureComponent {
@@ -46,6 +46,10 @@ export default class TableList extends PureComponent {
     expandForm: false,
     maxPrice: '',
     minPrice: '',
+    sn: '', // 需要修改的包裹的sn
+    isSnModal: false,
+    shipNumber: '',
+    expressId: '',
     // pagination: 1, // 页脚
   };
 
@@ -71,6 +75,9 @@ export default class TableList extends PureComponent {
       type: 'order/fetchOrder',
       payload: {},
     });
+    dispatch({
+      type: 'order/fetchExpressList',
+    });
   }
   // 设置最小值
   setMin = e => {
@@ -82,9 +89,41 @@ export default class TableList extends PureComponent {
     const { value } = e.target;
     this.setState({ maxPrice: value });
   };
-  caozuo = () => {
-    console.log(11);
-  }
+  setShip = () => {
+    const { shipNumber, sn, expressId } = this.state;
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'order/shipGood',
+      payload: {
+        order_pack_id: sn,
+        express_id: expressId,
+        no: shipNumber,
+      },
+    });
+    this.handShipCancel();
+  };
+  ship = sn => {
+    this.setState({
+      sn,
+      isSnModal: true,
+    });
+  };
+  //  取消发货
+  handShipCancel = () => {
+    this.setState({
+      isSnModal: false,
+    });
+  };
+  changeShipNumber = e => {
+    this.setState({
+      shipNumber: e.target.value,
+    });
+  };
+  handleChangeExp = value => {
+    this.setState({
+      expressId: value,
+    });
+  };
   toggleForm = () => {
     this.setState({
       expandForm: !this.state.expandForm,
@@ -104,7 +143,6 @@ export default class TableList extends PureComponent {
   };
   handleSearch = e => {
     e.preventDefault();
-
     const { dispatch, form } = this.props;
 
     form.validateFields((err, fieldsValue) => {
@@ -115,9 +153,6 @@ export default class TableList extends PureComponent {
         updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
       };
 
-      // this.setState({
-      //   formValues: values,
-      // });
       console.log(9999);
       const { minPrice, maxPrice } = this.state;
       console.log(minPrice);
@@ -144,12 +179,14 @@ export default class TableList extends PureComponent {
           </Col>
           <Col md={8} sm={24}>
             <FormItem label="包裹订单状态">
-              {getFieldDecorator('pack_order_status')(
+              {getFieldDecorator('order_status')(
                 <Select placeholder="请选择" style={{ width: '100%' }}>
-                  <Option value="0">订单正常</Option>
-                  <Option value="1">订单已确认收货</Option>
-                  <Option value="2">订单已取消</Option>
-                  <Option value="3">订单已关闭</Option>
+                  <Option value="0">未支付</Option>
+                  <Option value="1">已取消</Option>
+                  <Option value="2">已支付</Option>
+                  <Option value="3">已发货</Option>
+                  <Option value="4">已收货</Option>
+                  <Option value="5">已评价</Option>
                 </Select>
               )}
             </FormItem>
@@ -184,26 +221,21 @@ export default class TableList extends PureComponent {
           </Col>
           <Col md={8} sm={24}>
             <FormItem label="包裹订单状态">
-              {getFieldDecorator('pack_order_status')(
+              {getFieldDecorator('order_status')(
                 <Select placeholder="请选择" style={{ width: '100%' }}>
-                  <Option value="0">订单正常</Option>
-                  <Option value="1">订单已确认收货</Option>
-                  <Option value="2">订单已取消</Option>
-                  <Option value="3">订单已关闭</Option>
+                  <Option value="0">未支付</Option>
+                  <Option value="1">已取消</Option>
+                  <Option value="2">已支付</Option>
+                  <Option value="3">已发货</Option>
+                  <Option value="4">已收货</Option>
+                  <Option value="4">已评价</Option>
                 </Select>
               )}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
-            <FormItem label="包裹快递状态">
-              {getFieldDecorator('pack_shipping_status')(
-                <Select placeholder="请选择" style={{ width: '100%' }}>
-                  <Option value="0">待发货</Option>
-                  <Option value="1">已发货</Option>
-                  <Option value="2">已收货</Option>
-                  <Option value="3">备货中</Option>
-                </Select>
-              )}
+            <FormItem label="联系人">
+              {getFieldDecorator('consignee')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
         </Row>
@@ -240,11 +272,6 @@ export default class TableList extends PureComponent {
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
-            <FormItem label="联系人">
-              {getFieldDecorator('consignee')(<Input placeholder="请输入" />)}
-            </FormItem>
-          </Col>
-          <Col md={8} sm={24}>
             <FormItem label="联系人手机">
               {getFieldDecorator('mobile')(<Input placeholder="请输入" />)}
             </FormItem>
@@ -272,7 +299,18 @@ export default class TableList extends PureComponent {
   }
 
   render() {
-    const { order: { orderList } } = this.props;
+    const { order: { orderList, orderListPage, expressList }, loading } = this.props;
+    const { isSnModal } = this.state;
+    const expressListItem = [];
+    if (expressList.length) {
+      expressList.forEach(res => {
+        expressListItem.push(
+          <Option value={res.id} key={res.id}>
+            {res.name}
+          </Option>
+        );
+      });
+    }
 
     return (
       <PageHeaderLayout>
@@ -287,7 +325,7 @@ export default class TableList extends PureComponent {
               onChange: page => {
                 console.log(page);
               },
-              pageSize: 3,
+              ...orderListPage,
             }}
             dataSource={orderList}
             // footer={<div><b>ant design</b> footer part</div>}
@@ -295,126 +333,84 @@ export default class TableList extends PureComponent {
               <List.Item key={item.order_sn} className={styles.listItem}>
                 <Card className={styles.RowItem} hoverable={false}>
                   <Card.Grid style={bigStyle}>
-                    <Row >
-                      <Col span={5}>
-                        订单号：{item.order_sn}
-                      </Col>
-                      <Col span={3}>
-                        总金额：{item.total_amount}
-                      </Col>
-                      <Col span={6}>
-                        联系电话：{item.mobile}
-                      </Col>
+                    <Row>
+                      <Col span={5}>订单号：{item.order_sn}</Col>
+                      <Col span={3}>总金额：{item.total_amount}</Col>
+                      <Col span={6}>联系电话：{item.mobile}</Col>
                       <Col span={6}>
                         下单时间：{moment(item.create_time * 1000).format('YYYY-MM-DD HH:mm:ss')}
                       </Col>
-                      <Col span={4}>
-                        订单状态：{oredrStatus[item.order_status]}
-                      </Col>
+                      <Col span={4}>订单状态：{oredrStatus[item.order_status]}</Col>
                     </Row>
                   </Card.Grid>
                   <Card.Grid style={smallStyle}>
                     <Row>
-                      <Col>
-                        操作
-                      </Col>
+                      <Col>发货</Col>
                     </Row>
                   </Card.Grid>
                   {item.has_order_pack.map((res, index) => {
                     return (
-                      <div key={index}>
+                      <div key={res.order_id}>
                         <Card.Grid style={bigStyle}>
                           <Card bordered={false} hoverable={false}>
                             <Card.Grid style={allStyle}>
-                              <Row gutter={24} >
-                                <Col span={2}>
-                                  包裹{ index + 1 }
-                                </Col>
-                                <Col span={5}>
-                                  sn：{res.order_sn}
-                                </Col>
-                                <Col span={3}>
-                                  状态：{packStatus[res.pack_order_status]}
-                                </Col>
-                                <Col span={3}>
-                                  运费：{res.pack_shipping_fee}
-                                </Col>
-                                <Col span={3}>
-                                  发货类型：{warehouseType[res.warehouse_type]}
-                                </Col>
-                                {
-                                  res.pack_express_sn ? (
-                                    <Col span={3}>
-                                      快递单号：{res.pack_express_sn}
-                                    </Col>
-                                  ) : null
-                                }
-                                {
-                                  res.pack_express_name ? (
-                                    <Col span={3}>
-                                      快递公司：{res.pack_express_name}
-                                    </Col>
-                                  ) : null
-                                }
-                                {
-                                  res.pack_shipping_time ? (
-                                    <Col span={3}>
-                                      配送时间：{moment(res.pack_shipping_time * 1000).format('YYYY-MM-DD HH:mm:ss')}
-                                    </Col>
-                                  ) : null
-                                }
+                              <Row gutter={24}>
+                                <Col span={2}>包裹{index + 1}</Col>
+                                <Col span={5}>sn：{res.order_sn}</Col>
+                                <Col span={4}>状态：{oredrStatus[res.order_status]}</Col>
+                                <Col span={3}>运费：{res.pack_shipping_fee}</Col>
+                                <Col span={3}>发货类型：{warehouseType[res.warehouse_type]}</Col>
+                                {res.pack_express_sn ? (
+                                  <Col span={3}>快递单号：{res.pack_express_sn}</Col>
+                                ) : null}
+                                {res.pack_express_name ? (
+                                  <Col span={3}>快递公司：{res.pack_express_name}</Col>
+                                ) : null}
+                                {res.pack_shipping_time ? (
+                                  <Col span={3}>
+                                    配送时间：{moment(res.pack_shipping_time * 1000).format(
+                                      'YYYY-MM-DD HH:mm:ss'
+                                    )}
+                                  </Col>
+                                ) : null}
                               </Row>
                             </Card.Grid>
                           </Card>
                           <Row gutter={24}>
-                            <Col span={4}>
-                              图片
-                            </Col>
-                            <Col span={4}>
-                              商品名
-                            </Col>
-                            <Col span={4}>
-                              数量
-                            </Col>
-                            <Col span={4}>
-                              单价
-                            </Col>
-                            <Col span={4}>
-                              总价
-                            </Col>
-                            <Col span={4}>
-                              状态
-                            </Col>
+                            <Col span={4}>图片</Col>
+                            <Col span={4}>商品名</Col>
+                            <Col span={4}>数量</Col>
+                            <Col span={4}>单价</Col>
+                            <Col span={4}>总价</Col>
+                            <Col span={4}>状态</Col>
                           </Row>
-                          {res.has_order_goods.map((ele, eleIndex) => {
+                          {res.has_order_goods.map(ele => {
                             return (
-                              <Row key={eleIndex} align="middle" type="flex">
+                              <Row key={ele.order_pack_id} align="middle" type="flex">
                                 <Col span={4}>
-                                  <img src={ele.has_order_goods_sku.http_url} alt="图片" style={{width: '80%'}} />
+                                  <img
+                                    src={ele.has_order_goods_sku.http_url}
+                                    alt="图片"
+                                    style={{ width: '80%' }}
+                                  />
                                 </Col>
-                                <Col span={4}>
-                                  {ele.goods_name}
-                                </Col>
-                                <Col span={4}>
-                                  {ele.has_order_goods_sku.total_goods_number}
-                                </Col>
-                                <Col span={4}>
-                                  {ele.has_order_goods_sku.unit_price}
-                                </Col>
-                                <Col span={4}>
-                                  {ele.sell_goods_price}
-                                </Col>
-                                <Col span={4}>
-                                  {ele.goods_name}
-                                </Col>
+                                <Col span={4}>{ele.goods_name}</Col>
+                                <Col span={4}>{ele.has_order_goods_sku.total_goods_number}</Col>
+                                <Col span={4}>{ele.has_order_goods_sku.unit_price}</Col>
+                                <Col span={4}>{ele.sell_goods_price}</Col>
+                                <Col span={4}>{ele.goods_name}</Col>
                               </Row>
-                            )}
-                          )}
+                            );
+                          })}
                         </Card.Grid>
                         <Card.Grid style={smallStyle}>
                           <Row>
                             <Col>
-                              <Button type="primary" onClick={this.caozuo}>操作</Button>
+                              {res.order_status === 2 ? (
+                                <Button type="primary" onClick={this.ship.bind(this, res.order_id)}>
+                                  发货
+                                </Button>
+                              ) : null}
                             </Col>
                           </Row>
                         </Card.Grid>
@@ -426,6 +422,28 @@ export default class TableList extends PureComponent {
             )}
           />
         </Card>
+        <Modal title="发货" visible={isSnModal} onCancel={this.handShipCancel.bind(this)} footer="">
+          <Select
+            showSearch
+            style={{ width: 200 }}
+            placeholder="选择快递"
+            optionFilterProp="children"
+            onChange={this.handleChangeExp.bind(this)}
+            filterOption={(input, option) =>
+              option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+            }
+          >
+            {expressListItem}
+          </Select>
+          <Input
+            placeholder="请输入发货单号"
+            style={{ margin: '20px 0' }}
+            onChange={this.changeShipNumber}
+          />
+          <Button type="primary" loading={loading} onClick={this.setShip}>
+            确认发货
+          </Button>
+        </Modal>
       </PageHeaderLayout>
     );
   }

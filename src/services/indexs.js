@@ -31,3 +31,34 @@ export async function updateAds(params) {
     body: params,
   });
 }
+
+// 所有首页
+export async function getHome() {
+  return request('/admin/index/list', {
+    method: 'POST',
+  });
+}
+
+// 首页创建
+export async function addHome(params) {
+  return request('/admin/index/create', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+// 首页删除
+export async function deleteHome(params) {
+  return request('/admin/index/delete', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+// 首页更新
+export async function updateHome(params) {
+  return request('/admin/index/update', {
+    method: 'POST',
+    body: params,
+  });
+}

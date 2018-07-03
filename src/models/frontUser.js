@@ -10,7 +10,7 @@ export default {
 
   effects: {
     *fetchFrontUserList({ payload }, { call, put }) {
-      const response = yield call(getFrontUserList, { page: payload.pagination });
+      const response = yield call(getFrontUserList, { ...payload });
       if (response.code === 200) {
         yield put({
           type: 'getFrontUserList',

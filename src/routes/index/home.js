@@ -1,6 +1,5 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
-import debounce from 'lodash/debounce';
 import moment from 'moment';
 import {
   Table,
@@ -14,25 +13,15 @@ import {
   Button,
   Divider,
   Select,
-  Spin,
 } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
-import styles from './TableList.less';
-import request from '../../utils/request';
 
-const Option = Select.Option;
+import styles from './TableList.less';
 
 const FormItem = Form.Item;
-const { TextArea } = Input;
+const Option = Select.Option;
+// const { TextArea } = Input;
 const { confirm } = Modal;
-
-// const getValue = obj =>
-//   Object.keys(obj)
-//     .map(key => obj[key])
-//     .join(',');
-// const statusMap = ['processing', 'processing', 'error'];
-// const goodsStatus = ['上架', '未上架', '下架'];
-// const goodsTypeStatus = ['普通商品', '一元购', '秒杀', '众筹'];
 // const payType = ['拍下减库存', '付款减库存'];
 const formItemLayout = {
   labelCol: {
@@ -58,14 +47,23 @@ const CustomizedForm = Form.create({
   mapPropsToFields(props) {
     console.log(props);
     return {
-      desc: Form.createFormField({
-        value: props.liveForm.desc,
+      type: Form.createFormField({
+        value: props.homeForm.type,
       }),
       title: Form.createFormField({
-        value: props.liveForm.title,
+        value: props.homeForm.title,
+      }),
+      jump_type: Form.createFormField({
+        value: props.homeForm.jump_type,
+      }),
+      target_id: Form.createFormField({
+        value: props.homeForm.target_id,
+      }),
+      url: Form.createFormField({
+        value: props.homeForm.url,
       }),
       xxx: Form.createFormField({
-        value: props.liveForm.xxx,
+        value: props.homeForm.xxx,
       }),
     };
   },
@@ -93,23 +91,21 @@ const CustomizedForm = Form.create({
   const payload = {
     type: 2,
   };
+  const header = {
+    Authorization: `Bearer ${localStorage.getItem('token')}`,
+  };
   const {
-    uploadLiveImg,
+    uploadHomeImg,
     handlePreviewImg,
     handleChangeImg,
-    header,
     previewVisible,
     previewImage,
     handleCancelImg,
-    fetching,
-    data,
-    fetchUser,
-    handleChangesShop,
-    liveGoods,
+    homeForm,
   } = props;
   return (
     <Form>
-      <FormItem {...formItemLayout} label="直播标题">
+      <FormItem {...formItemLayout} label="标题">
         {getFieldDecorator('title', {
           rules: [
             {
@@ -119,31 +115,80 @@ const CustomizedForm = Form.create({
           ],
         })(<Input />)}
       </FormItem>
-      <FormItem {...formItemLayout} label="直播简介">
-        {getFieldDecorator('desc', {
+      <FormItem {...formItemLayout} label="类型">
+        {getFieldDecorator('type', {
           rules: [
             {
               required: true,
-              message: '请输入简介',
+              message: '请输入类型',
             },
           ],
-        })(<TextArea placeholder="请输入简介" autosize />)}
+        })(
+          <Select style={{ width: 120 }}>
+            <Option value="1">热销商品</Option>
+            <Option value="2">直播商品</Option>
+            <Option value="3">轮播图</Option>
+          </Select>
+        )}
       </FormItem>
-      <Form.Item {...formItemLayout} label="直播封面">
+      <FormItem {...formItemLayout} label="跳转类型">
+        {getFieldDecorator('jump_type', {
+          rules: [
+            {
+              required: true,
+              message: '请输入跳转类型',
+            },
+          ],
+        })(
+          <Select style={{ width: 200 }}>
+            <Option value="1">跳转商品</Option>
+            <Option value="2">跳转外部链接</Option>
+            <Option value="3">不跳转</Option>
+          </Select>
+        )}
+      </FormItem>
+      {homeForm.jump_type === '1' ? (
+        <FormItem {...formItemLayout} label="商品">
+          {getFieldDecorator('target_id', {
+            rules: [
+              {
+                required: true,
+                message: '请输入商品',
+              },
+            ],
+          })(
+            <Select style={{ width: 200 }}>
+              <Option value="1">商品</Option>
+            </Select>
+          )}
+        </FormItem>
+      ) : homeForm.jump_type === '2' ? (
+        <FormItem {...formItemLayout} label="跳转链接">
+          {getFieldDecorator('url', {
+            rules: [
+              {
+                required: true,
+                message: '请输入跳转链接',
+              },
+            ],
+          })(<Input />)}
+        </FormItem>
+      ) : null}
+      <Form.Item {...formItemLayout} label="封面">
         {getFieldDecorator('xxx', {
-          rules: [{ required: true, message: '请填写直播封面' }],
+          rules: [{ required: true, message: '请填写封面' }],
         })(
           <div className="clearfix">
             <Upload
               action="http://hlsj.test.seastart.cn/admin/upload"
               listType="picture-card"
-              fileList={uploadLiveImg}
+              fileList={uploadHomeImg}
               onPreview={handlePreviewImg}
               onChange={handleChangeImg}
               data={payload}
               headers={header}
             >
-              {uploadLiveImg.length >= 1 ? null : uploadButton}
+              {uploadHomeImg.length >= 1 ? null : uploadButton}
             </Upload>
             <Modal visible={previewVisible} footer={null} onCancel={handleCancelImg}>
               <img alt="example" style={{ width: '100%' }} src={previewImage} />
@@ -151,25 +196,7 @@ const CustomizedForm = Form.create({
           </div>
         )}
       </Form.Item>
-      <FormItem {...formItemLayout} label="直播商品">
-        <Select
-          mode="multiple"
-          labelInValue
-          value={liveGoods}
-          placeholder="Select users"
-          notFoundContent={fetching ? <Spin size="small" /> : null}
-          filterOption={false}
-          onSearch={fetchUser}
-          onChange={handleChangesShop}
-          style={{ width: '100%' }}
-        >
-          {data.map(d => (
-            <Option key={d.value} value={d.text}>
-              {d.value}
-            </Option>
-          ))}
-        </Select>
-      </FormItem>
+
       <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
         <Button type="primary" htmlType="submit" onClick={onValidateForm}>
           提交
@@ -179,79 +206,29 @@ const CustomizedForm = Form.create({
   );
 });
 
-@connect(({ live, goods, loading }) => ({
-  live,
-  goods,
-  loading: loading.models.live,
+@connect(({ indexs, loading }) => ({
+  indexs,
+  loading: loading.models.indexs,
 }))
-@Form.create()
 export default class TableList extends PureComponent {
-  constructor(props) {
-    super(props);
-    this.lastFetchId = 0;
-    this.fetchUser = debounce(this.fetchUser, 800);
-  }
   state = {
-    pagination: 1,
     expandForm: false,
-    liveVisible: false,
+    homeVisible: false,
+    // formValues: {},
     previewVisible: false,
     previewImage: '',
-    data: [],
-    value: [],
-    fetching: false,
-    header: {
-      Authorization: `Bearer ${localStorage.getItem('token')}`,
-    },
+    pagination: 1, // 页脚
   };
   componentDidMount() {
     const { dispatch } = this.props;
     const { pagination } = this.state;
     dispatch({
-      type: 'live/fetchLive',
+      type: 'indexs/fetchHome',
       payload: {
         pagination,
       },
     });
   }
-  // 模糊查询
-  fetchUser = value => {
-    console.log('fetching user', value);
-    this.lastFetchId += 1;
-    const fetchId = this.lastFetchId;
-    this.setState({ data: [], fetching: true });
-    request('/admin/goods/list', {
-      method: 'POST',
-      body: {
-        goods_name: value,
-        goods_status: 0,
-      },
-    }).then(body => {
-      if (fetchId !== this.lastFetchId) {
-        // for fetch callback order
-        return;
-      }
-      console.log(body);
-      const data = body.data.list.map(user => ({
-        text: `${user.goods_id}`,
-        value: user.goods_name,
-      }));
-      this.setState({ data, fetching: false });
-    });
-  };
-  handleChangesShop = value => {
-    this.setState({
-      data: [],
-      fetching: false,
-    });
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'live/setLiveShop',
-      payload: {
-        value,
-      },
-    });
-  };
 
   toggleForm = () => {
     this.setState({
@@ -272,7 +249,7 @@ export default class TableList extends PureComponent {
         const { dispatch } = that.props;
         const { pagination } = that.state;
         dispatch({
-          type: 'live/deleteLive',
+          type: 'indexs/deleteHome',
           payload: {
             ad_id: id,
             pagination,
@@ -284,37 +261,9 @@ export default class TableList extends PureComponent {
       },
     });
   };
-  // 修改信息
-  editGoods = (data, e) => {
-    e.preventDefault();
-    this.showModal();
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'live/editLiveMsg',
-      payload: {
-        data,
-      },
-    });
-  };
-  // 新增modal显示
-  showModal = () => {
-    this.setState({
-      liveVisible: true,
-    });
-  };
-  // 新增取消
-  handAddleCancel = () => {
-    this.setState({
-      liveVisible: false,
-    });
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'live/clearLiveMsg',
-    });
-  };
   // 新增修改提交
   handleSubmit = () => {
-    const { dispatch, live: { liveForm, uploadLiveImg, liveGoods } } = this.props;
+    const { dispatch, indexs: { liveForm, uploadLiveImg, liveGoods } } = this.props;
     if (!uploadLiveImg.length) {
       message.error('请上传封面');
       return;
@@ -333,34 +282,36 @@ export default class TableList extends PureComponent {
     if (liveForm.id) {
       liveForm.live_id = liveForm.id;
       dispatch({
-        type: 'live/editLive',
+        type: 'live/editHome',
         payload: liveForm,
       });
       message.success('修改成功');
     } else {
       dispatch({
-        type: 'live/addLive',
+        type: 'live/addHome',
         payload: liveForm,
       });
       message.success('添加成功');
     }
     this.handAddleCancel();
   };
-  // 换页
-  handleTableChange = pagination => {
-    const { current } = pagination;
+  // 修改信息
+  editGoods = (data, e) => {
+    e.preventDefault();
+    this.showModal();
+  };
+  // 新增modal显示
+  showModal = () => {
     this.setState({
-      pagination: current,
-    });
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'live/fetchLive',
-      payload: {
-        pagination: current,
-      },
+      homeVisible: true,
     });
   };
-
+  // 新增取消
+  handAddleCancel = () => {
+    this.setState({
+      homeVisible: false,
+    });
+  };
   // 修改表单值
   changeFormVal = val => {
     const { dispatch } = this.props;
@@ -369,7 +320,7 @@ export default class TableList extends PureComponent {
       obj[key] = val[key].value;
     }
     dispatch({
-      type: 'live/changeFormVal',
+      type: 'indexs/changeFormVal',
       payload: {
         obj,
       },
@@ -402,34 +353,49 @@ export default class TableList extends PureComponent {
     });
     const { dispatch } = this.props;
     dispatch({
-      type: 'live/setLiveImg',
+      type: 'indexs/setHomeImgs',
       payload: {
         fileList,
       },
     });
   };
+  // 换页
+  handleTableChange = pagination => {
+    const { current } = pagination;
+    this.setState({
+      pagination: current,
+    });
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'indexs/fetchHome',
+      payload: {
+        pagination: current,
+      },
+    });
+  };
+
   render() {
     const {
-      live: { liveList: datas, liveListPage, liveForm, uploadLiveImg, liveGoods },
+      indexs: { homeList: datas, homeListPage, uploadHomeImg, homeForm },
       loading,
     } = this.props;
     // const { getFieldDecorator } = this.props.form;
-    const { liveVisible, header, previewVisible, previewImage, fetching, value, data } = this.state;
+    const { homeVisible, previewVisible, previewImage } = this.state;
     const progressColumns = [
       {
-        title: '直播标题',
-        dataIndex: 'title',
-        key: 'title',
-      },
-      {
-        title: '直播简介',
+        title: '广告简介',
         dataIndex: 'desc',
         key: 'desc',
       },
       {
-        title: '直播封面',
-        dataIndex: 'cover',
-        render: val => (val ? <img src={val} style={{ width: '200px' }} alt="图片" /> : null),
+        title: '广告封面',
+        dataIndex: 'pic',
+        render: val => (val ? <img src={val} style={{ width: '120px' }} alt="图片" /> : null),
+      },
+      {
+        title: '排序',
+        dataIndex: 'sort',
+        key: 'sort',
       },
       {
         title: '创建时间',
@@ -465,37 +431,31 @@ export default class TableList extends PureComponent {
               </Button>
             </div>
             <Table
+              onChange={this.handleTableChange}
               dataSource={datas}
               rowKey={record => record.id}
               loading={loading}
               columns={progressColumns}
-              pagination={liveListPage}
+              pagination={homeListPage}
             />
           </div>
         </Card>
         <Modal
-          title="直播"
-          visible={liveVisible}
+          title="首页"
+          visible={homeVisible}
           onCancel={this.handAddleCancel.bind(this)}
           footer=""
         >
           <CustomizedForm
-            liveForm={liveForm}
             onChange={this.changeFormVal}
-            handleSubmit={this.handleSubmit}
-            handlePreviewImg={this.handlePreviewImg}
-            handleChangeImg={this.handleChangeImg}
-            header={header}
             previewVisible={previewVisible}
+            uploadHomeImg={uploadHomeImg}
+            homeForm={homeForm}
             previewImage={previewImage}
-            uploadLiveImg={uploadLiveImg}
+            handleSubmit={this.handleSubmit}
             handleCancelImg={this.handleCancelImg}
-            fetching={fetching}
-            value={value}
-            data={data}
-            fetchUser={this.fetchUser}
-            handleChangesShop={this.handleChangesShop}
-            liveGoods={liveGoods}
+            handleChangeImg={this.handleChangeImg}
+            handlePreviewImg={this.handlePreviewImg}
           />
         </Modal>
       </PageHeaderLayout>

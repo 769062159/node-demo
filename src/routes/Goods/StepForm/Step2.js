@@ -473,7 +473,7 @@ const CustomizedForm = Form.create({
           <Col span={24}>
             <Form.Item {...formItemLayoutUploadImg} label="主体图片">
               {getFieldDecorator('xxx', {
-                rules: [{ required: true, message: '请填写商品排序' }],
+                rules: [{ required: true, message: '请填写主体图片' }],
               })(
                 <div className="clearfix">
                   <Upload

@@ -135,9 +135,12 @@ export const getRouterConfig = app => {
         import('../routes/Exception/triggerException')
       ),
     },
-    // 首页 广告
-    '/index/ads': {
+    // 首页 广告 营销
+    '/market/ads': {
       component: dynamicWrapper(app, ['indexs'], () => import('../routes/index/ads')),
+    },
+    '/market/index': {
+      component: dynamicWrapper(app, ['indexs'], () => import('../routes/index/home')),
     },
     // 直播
     '/live/list': {

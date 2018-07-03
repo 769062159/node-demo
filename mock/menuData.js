@@ -76,10 +76,14 @@ export const menuData = [
     ],
   },
   {
-    name: '首页',
+    name: '营销',
     icon: 'home',
-    path: 'index',
+    path: 'market',
     children: [
+      {
+        name: '首页',
+        path: 'index',
+      },
       {
         name: '广告',
         path: 'ads',

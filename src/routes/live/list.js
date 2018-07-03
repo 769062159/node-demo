@@ -1,6 +1,6 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
-// import debounce from 'lodash/debounce';
+import debounce from 'lodash/debounce';
 import moment from 'moment';
 import {
   Table,
@@ -13,13 +13,14 @@ import {
   Icon,
   Button,
   Divider,
-  // Select,
-  // Spin,
+  Select,
+  Spin,
 } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './TableList.less';
-// import request from '../../utils/request';
-// const Option = Select.Option;
+import request from '../../utils/request';
+
+const Option = Select.Option;
 
 const FormItem = Form.Item;
 const { TextArea } = Input;
@@ -33,6 +34,150 @@ const { confirm } = Modal;
 // const goodsStatus = ['上架', '未上架', '下架'];
 // const goodsTypeStatus = ['普通商品', '一元购', '秒杀', '众筹'];
 // const payType = ['拍下减库存', '付款减库存'];
+const formItemLayout = {
+  labelCol: {
+    xs: { span: 24 },
+    sm: { span: 7 },
+  },
+  wrapperCol: {
+    xs: { span: 24 },
+    sm: { span: 12 },
+    md: { span: 10 },
+  },
+};
+const submitFormLayout = {
+  wrapperCol: {
+    xs: { span: 24, offset: 0 },
+    sm: { span: 10, offset: 7 },
+  },
+};
+const CustomizedForm = Form.create({
+  onFieldsChange(props, changedFields) {
+    props.onChange(changedFields);
+  },
+  mapPropsToFields(props) {
+    console.log(props);
+    return {
+      desc: Form.createFormField({
+        value: props.liveForm.desc,
+      }),
+      title: Form.createFormField({
+        value: props.liveForm.title,
+      }),
+      xxx: Form.createFormField({
+        value: props.liveForm.xxx,
+      }),
+    };
+  },
+  onValuesChange(_, values) {
+    console.log(values);
+  },
+})(props => {
+  const { getFieldDecorator, validateFields } = props.form;
+  const onValidateForm = e => {
+    e.preventDefault();
+    const { handleSubmit } = props;
+    validateFields(err => {
+      if (!err) {
+        handleSubmit();
+      }
+    });
+  };
+  const uploadButton = (
+    <div>
+      <Icon type="plus" />
+      <div className="ant-upload-text">上传</div>
+    </div>
+  );
+  // 上传图片参数
+  const payload = {
+    type: 2,
+  };
+  const {
+    uploadLiveImg,
+    handlePreviewImg,
+    handleChangeImg,
+    header,
+    previewVisible,
+    previewImage,
+    handleCancelImg,
+    fetching,
+    data,
+    fetchUser,
+    handleChangesShop,
+    liveGoods,
+  } = props;
+  return (
+    <Form>
+      <FormItem {...formItemLayout} label="直播标题">
+        {getFieldDecorator('title', {
+          rules: [
+            {
+              required: true,
+              message: '请输入标题',
+            },
+          ],
+        })(<Input />)}
+      </FormItem>
+      <FormItem {...formItemLayout} label="直播简介">
+        {getFieldDecorator('desc', {
+          rules: [
+            {
+              required: true,
+              message: '请输入简介',
+            },
+          ],
+        })(<TextArea placeholder="请输入简介" autosize />)}
+      </FormItem>
+      <Form.Item {...formItemLayout} label="直播封面">
+        {getFieldDecorator('xxx', {
+          rules: [{ required: true, message: '请填写直播封面' }],
+        })(
+          <div className="clearfix">
+            <Upload
+              action="http://hlsj.test.seastart.cn/admin/upload"
+              listType="picture-card"
+              fileList={uploadLiveImg}
+              onPreview={handlePreviewImg}
+              onChange={handleChangeImg}
+              data={payload}
+              headers={header}
+            >
+              {uploadLiveImg.length >= 1 ? null : uploadButton}
+            </Upload>
+            <Modal visible={previewVisible} footer={null} onCancel={handleCancelImg}>
+              <img alt="example" style={{ width: '100%' }} src={previewImage} />
+            </Modal>
+          </div>
+        )}
+      </Form.Item>
+      <FormItem {...formItemLayout} label="直播商品">
+        <Select
+          mode="multiple"
+          labelInValue
+          value={liveGoods}
+          placeholder="Select users"
+          notFoundContent={fetching ? <Spin size="small" /> : null}
+          filterOption={false}
+          onSearch={fetchUser}
+          onChange={handleChangesShop}
+          style={{ width: '100%' }}
+        >
+          {data.map(d => (
+            <Option key={d.value} value={d.text}>
+              {d.value}
+            </Option>
+          ))}
+        </Select>
+      </FormItem>
+      <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
+        <Button type="primary" htmlType="submit" onClick={onValidateForm}>
+          提交
+        </Button>
+      </FormItem>
+    </Form>
+  );
+});
 
 @connect(({ live, goods, loading }) => ({
   live,
@@ -41,22 +186,20 @@ const { confirm } = Modal;
 }))
 @Form.create()
 export default class TableList extends PureComponent {
-  // constructor(props) {
-  //   super(props);
-  //   this.lastFetchId = 0;
-  //   this.fetchUser = debounce(this.fetchUser, 800);
-  // }
+  constructor(props) {
+    super(props);
+    this.lastFetchId = 0;
+    this.fetchUser = debounce(this.fetchUser, 800);
+  }
   state = {
     pagination: 1,
     expandForm: false,
-    editData: {},
-    addUserVisible: false,
+    liveVisible: false,
     previewVisible: false,
     previewImage: '',
-    fileList: [],
-    // data: [],
-    // value: [],
-    // fetching: false,
+    data: [],
+    value: [],
+    fetching: false,
     header: {
       Authorization: `Bearer ${localStorage.getItem('token')}`,
     },
@@ -72,37 +215,43 @@ export default class TableList extends PureComponent {
     });
   }
   // 模糊查询
-  // fetchUser = value => {
-  //   console.log('fetching user', value);
-  //   this.lastFetchId += 1;
-  //   const fetchId = this.lastFetchId;
-  //   this.setState({ data: [], fetching: true });
-  //   request('/admin/goods/list', {
-  //     method: 'POST',
-  //     body: {
-  //       goods_name: value,
-  //       goods_status: 0,
-  //     },
-  //   }).then(body => {
-  //     if (fetchId !== this.lastFetchId) {
-  //       // for fetch callback order
-  //       return;
-  //     }
-  //     console.log(body);
-  //     const data = body.data.list.map(user => ({
-  //       text: `${user.goods_id}`,
-  //       value: user.goods_name,
-  //     }));
-  //     this.setState({ data, fetching: false });
-  //   });
-  // };
-  // handleChanges = value => {
-  //   this.setState({
-  //     value,
-  //     data: [],
-  //     fetching: false,
-  //   });
-  // };
+  fetchUser = value => {
+    console.log('fetching user', value);
+    this.lastFetchId += 1;
+    const fetchId = this.lastFetchId;
+    this.setState({ data: [], fetching: true });
+    request('/admin/goods/list', {
+      method: 'POST',
+      body: {
+        goods_name: value,
+        goods_status: 0,
+      },
+    }).then(body => {
+      if (fetchId !== this.lastFetchId) {
+        // for fetch callback order
+        return;
+      }
+      console.log(body);
+      const data = body.data.list.map(user => ({
+        text: `${user.goods_id}`,
+        value: user.goods_name,
+      }));
+      this.setState({ data, fetching: false });
+    });
+  };
+  handleChangesShop = value => {
+    this.setState({
+      data: [],
+      fetching: false,
+    });
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'live/setLiveShop',
+      payload: {
+        value,
+      },
+    });
+  };
 
   toggleForm = () => {
     this.setState({
@@ -138,77 +287,64 @@ export default class TableList extends PureComponent {
   // 修改信息
   editGoods = (data, e) => {
     e.preventDefault();
-    this.setState({
-      editData: data,
-    });
     this.showModal();
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'live/editLiveMsg',
+      payload: {
+        data,
+      },
+    });
   };
   // 新增modal显示
   showModal = () => {
     this.setState({
-      addUserVisible: true,
+      liveVisible: true,
     });
-    this.renderForm();
   };
   // 新增取消
   handAddleCancel = () => {
     this.setState({
-      addUserVisible: false,
-      editData: {},
-      fileList: [],
+      liveVisible: false,
+    });
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'live/clearLiveMsg',
     });
   };
   // 新增修改提交
-  handleSubmit = (type, e) => {
-    e.preventDefault();
-    this.props.form.validateFieldsAndScroll((err, values) => {
-      if (!err) {
-        if (this.state.fileList.length) {
-          values.cover = this.state.fileList[0].url;
-        } else {
-          message.error('请上传直播封面');
-          return false;
-        }
-        const { dispatch } = this.props;
-        const { editData, pagination } = this.state;
-        values.pagination = pagination;
-        if (Object.keys(editData).length) {
-          values.ad_id = editData.id;
-          dispatch({
-            type: 'live/editLive',
-            payload: values,
-          });
-          message.success('修改成功');
-        } else {
-          // const { value } = this.state;
-          // const arrId = [];
-          // value.forEach(res => {
-          //   arrId.push(res.key);
-          // })
-          // values.goods_ids = arrId;
-          dispatch({
-            type: 'live/addLive',
-            payload: values,
-          });
-          message.success('添加成功');
-        }
-        this.handAddleCancel();
-      }
+  handleSubmit = () => {
+    const { dispatch, live: { liveForm, uploadLiveImg, liveGoods } } = this.props;
+    if (!uploadLiveImg.length) {
+      message.error('请上传封面');
+      return;
+    }
+    const { pagination } = this.state;
+    const arrId = [];
+    const arrName = [];
+    liveGoods.forEach(res => {
+      arrId.push(res.key);
+      arrName.push(res.label);
     });
-  };
-  // 上传图片
-  handleCancel = () => this.setState({ previewVisible: false });
-  removeImg = () => {
-    const { editData } = this.state;
-    editData.cover = '';
-    this.setState({ editData });
-  };
-  // 放大图片
-  handlePreview = file => {
-    this.setState({
-      previewImage: file.url || file.thumbUrl,
-      previewVisible: true,
-    });
+    liveForm.goods_ids = arrId;
+    liveForm.goods_names = arrName;
+    liveForm.pagination = pagination;
+    liveForm.cover = uploadLiveImg[0].url;
+    if (liveForm.id) {
+      liveForm.live_id = liveForm.id;
+      dispatch({
+        type: 'live/editLive',
+        payload: liveForm,
+      });
+      message.success('修改成功');
+    } else {
+      dispatch({
+        type: 'live/addLive',
+        payload: liveForm,
+      });
+      message.success('添加成功');
+    }
+    this.handAddleCancel();
   };
   // 换页
   handleTableChange = pagination => {
@@ -225,12 +361,37 @@ export default class TableList extends PureComponent {
     });
   };
 
-  handleChange = ({ fileList }) => {
-    // const { response } = fileList;
+  // 修改表单值
+  changeFormVal = val => {
+    const { dispatch } = this.props;
+    const obj = {};
+    for (const key of Object.keys(val)) {
+      obj[key] = val[key].value;
+    }
+    dispatch({
+      type: 'live/changeFormVal',
+      payload: {
+        obj,
+      },
+    });
+  };
+  // 放大图片
+  handlePreviewImg = file => {
+    this.setState({
+      previewImage: file.url || file.thumbUrl,
+      previewVisible: true,
+    });
+  };
+  // 关闭放大图片
+  handleCancelImg = () => this.setState({ previewVisible: false });
+  // 上传图片
+  handleChangeImg = data => {
+    let { fileList } = data;
     fileList = fileList.map(item => {
-      if (item.status === 'done') {
+      if (item.status === 'done' && item.uploaded !== 'done') {
         const img = {};
         img.status = 'done';
+        img.uploaded = 'done';
         img.response = { status: 'success' };
         img.name = item.name;
         img.uid = item.uid;
@@ -239,189 +400,21 @@ export default class TableList extends PureComponent {
       }
       return item;
     });
-    this.setState({ fileList });
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'live/setLiveImg',
+      payload: {
+        fileList,
+      },
+    });
   };
-  normFile = e => {
-    console.log('Upload event:', e);
-    if (Array.isArray(e)) {
-      return e;
-    }
-    return e && e.fileList;
-  };
-  renderAddForm() {
-    const { loading } = this.props;
-    const { header, fileList, previewImage, previewVisible } = this.state;
-    // , data, fetching, value
-    // const options = data.map(d => <Option key={d.goods_id}>{d.goods_name}</Option>);
-    // 上传icon
-    const uploadButton = (
-      <div>
-        <Icon type="plus" />
-        <div className="ant-upload-text">上传</div>
-      </div>
-    );
-    // 上传图片参数
-    const payload = {
-      type: 2,
-    };
-    const { getFieldDecorator } = this.props.form;
-    // 上传图片dom
-    const uploadItem = (
-      <div className="clearfix">
-        <Upload
-          action="http://hlsj.test.seastart.cn/admin/upload"
-          headers={header}
-          listType="picture-card"
-          fileList={fileList}
-          onPreview={this.handlePreview}
-          onChange={this.handleChange}
-          data={payload}
-        >
-          {fileList.length >= 1 ? null : uploadButton}
-        </Upload>
-        <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
-          <img alt="example" style={{ width: '100%' }} src={previewImage} />
-        </Modal>
-      </div>
-    );
-    return (
-      <Form onSubmit={this.handleSubmit.bind(this, 0)} hideRequiredMark style={{ marginTop: 8 }}>
-        <FormItem label="直播标题">
-          {getFieldDecorator('title', {
-            rules: [
-              {
-                required: true,
-                message: '请输入标题',
-              },
-            ],
-          })(<Input />)}
-        </FormItem>
-        <FormItem label="直播简介">
-          {getFieldDecorator('desc', {
-            rules: [
-              {
-                required: true,
-                message: '请输入简介',
-              },
-            ],
-          })(<TextArea placeholder="请输入简介" autosize />)}
-        </FormItem>
-        {uploadItem}
-        {/* <Select
-          mode="multiple"
-          labelInValue
-          value={value}
-          placeholder="Select users"
-          notFoundContent={fetching ? <Spin size="small" /> : null}
-          filterOption={false}
-          onSearch={this.fetchUser}
-          onChange={this.handleChanges}
-          style={{ width: '100%' }}
-        >
-          {data.map(d => (
-            <Option key={d.value} value={d.text}>
-              {d.value}
-            </Option>
-          ))}
-        </Select> */}
-        <FormItem tyle={{ marginTop: 32 }}>
-          <Button type="primary" htmlType="submit" loading={loading}>
-            提交
-          </Button>
-        </FormItem>
-      </Form>
-    );
-  }
-  renderEditForm() {
-    const { loading } = this.props;
-    const { header, editData, fileList, previewVisible } = this.state;
-    let { previewImage } = this.state;
-    const desc = editData.desc;
-    if (editData.cover) {
-      const img = {
-        uid: -1,
-        status: 'done',
-      };
-      img.name = `${editData.id}.png`;
-      img.url = editData.cover;
-      previewImage = img.url;
-      fileList[0] = img;
-    }
-    // 上传icon
-    const uploadButton = (
-      <div>
-        <Icon type="plus" />
-        <div className="ant-upload-text">Upload</div>
-      </div>
-    );
-    // 上传图片参数
-    const payload = {
-      type: 2,
-    };
-    const { getFieldDecorator } = this.props.form;
-    // 上传图片dom
-    const uploadItem = (
-      <div className="clearfix">
-        <Upload
-          action="http://hlsj.test.seastart.cn/admin/upload"
-          headers={header}
-          listType="picture-card"
-          fileList={fileList}
-          onPreview={this.handlePreview}
-          onChange={this.handleChange}
-          data={payload}
-          onRemove={this.removeImg}
-        >
-          {fileList.length >= 1 ? null : uploadButton}
-        </Upload>
-        <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
-          <img alt="example" style={{ width: '100%' }} src={previewImage} />
-        </Modal>
-      </div>
-    );
-    return (
-      <Form onSubmit={this.handleSubmit.bind(this, 1)} hideRequiredMark style={{ marginTop: 8 }}>
-        <FormItem label="直播标题">
-          {getFieldDecorator('title', {
-            initialValue: editData.title,
-            rules: [
-              {
-                required: true,
-                message: '请输入简介',
-              },
-            ],
-          })(<Input />)}
-        </FormItem>
-        <FormItem label="直播简介">
-          {getFieldDecorator('desc', {
-            initialValue: desc,
-            rules: [
-              {
-                required: true,
-                message: '请输入直播简介',
-              },
-            ],
-          })(<TextArea placeholder="请输入简介" autosize />)}
-        </FormItem>
-        {editData.cover !== 1 ? uploadItem : null}
-        <FormItem tyle={{ marginTop: 32 }}>
-          <Button type="primary" htmlType="submit" loading={loading}>
-            修改
-          </Button>
-        </FormItem>
-      </Form>
-    );
-  }
-  // 渲染修改还是新增
-  renderForm() {
-    const { editData } = this.state;
-    const length = Object.keys(editData).length;
-    return length ? this.renderEditForm() : this.renderAddForm();
-  }
   render() {
-    const { live: { liveList: datas, liveListPage }, loading } = this.props;
+    const {
+      live: { liveList: datas, liveListPage, liveForm, uploadLiveImg, liveGoods },
+      loading,
+    } = this.props;
     // const { getFieldDecorator } = this.props.form;
-    const { addUserVisible } = this.state;
+    const { liveVisible, header, previewVisible, previewImage, fetching, value, data } = this.state;
     const progressColumns = [
       {
         title: '直播标题',
@@ -482,11 +475,28 @@ export default class TableList extends PureComponent {
         </Card>
         <Modal
           title="直播"
-          visible={addUserVisible}
+          visible={liveVisible}
           onCancel={this.handAddleCancel.bind(this)}
           footer=""
         >
-          {this.renderForm()}
+          <CustomizedForm
+            liveForm={liveForm}
+            onChange={this.changeFormVal}
+            handleSubmit={this.handleSubmit}
+            handlePreviewImg={this.handlePreviewImg}
+            handleChangeImg={this.handleChangeImg}
+            header={header}
+            previewVisible={previewVisible}
+            previewImage={previewImage}
+            uploadLiveImg={uploadLiveImg}
+            handleCancelImg={this.handleCancelImg}
+            fetching={fetching}
+            value={value}
+            data={data}
+            fetchUser={this.fetchUser}
+            handleChangesShop={this.handleChangesShop}
+            liveGoods={liveGoods}
+          />
         </Modal>
       </PageHeaderLayout>
     );
