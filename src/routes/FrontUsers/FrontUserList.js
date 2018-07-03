@@ -190,14 +190,15 @@ export default class FrontUserList extends PureComponent {
         title: '会员',
         dataIndex: 'avatar',
         render: (val, text) => (
-          <Row style={{ width: 250 }}>
-            <Col span={10}>
+          <Row>
+            <Col span={4}>
               <img style={{ height: 80 }} src={val} alt="头像" />
             </Col>
             <Col span={14} style={{ fontSize: 14 }}>
               <div>{text.nickname}</div>
               <div>Id:{text.id}</div>
               <div>等级:{text.level}</div>
+              <div>上级:{text.referee && text.referee.nickname}</div>
             </Col>
           </Row>
         ),
@@ -206,12 +207,12 @@ export default class FrontUserList extends PureComponent {
       {
         title: '统计',
         dataIndex: 'has_account',
-        render: val => (
+        render: (val, text) => (
           <Row>
             <Col span={24} style={{ fontSize: 14 }}>
               <div>消费:{val.account_consume}</div>
-              {/* <div>余额:{text.id}</div>
-              <div>积分:{text.level}</div> */}
+              <div>佣金:{val.account_total_income}</div>
+              <div>注册渠道:{text.has_user_oauth.type === 0 ? '小程序' : ''}</div>
             </Col>
           </Row>
         ),
