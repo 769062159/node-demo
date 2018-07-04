@@ -185,7 +185,7 @@ export default class Group extends Component {
               onSubmit={this.handleSubmit}
               hideRequiredMark
               style={{ marginTop: 8 }}
-              AUTOCOMPLETE="OFF"
+              autoComplete="OFF"
             >
               <FormItem label="部门名">
                 {getFieldDecorator('role_name', {

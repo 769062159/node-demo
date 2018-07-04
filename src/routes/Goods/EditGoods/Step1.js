@@ -57,7 +57,7 @@ class Step1 extends React.PureComponent {
     // });
     return (
       <Fragment>
-        <Form layout="horizontal" className={styles.stepForm} hideRequiredMark AUTOCOMPLETE="OFF">
+        <Form layout="horizontal" className={styles.stepForm} hideRequiredMark autoComplete="OFF">
           <Form.Item {...formItemLayout} label="商品分类">
             {getFieldDecorator('type', {
               rules: [{ required: true, message: '请选择商品分类' }],

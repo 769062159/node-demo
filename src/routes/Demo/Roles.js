@@ -293,7 +293,7 @@ export default class Role extends Component {
               onSubmit={this.handleSubmits}
               hideRequiredMark
               style={{ marginTop: 8 }}
-              AUTOCOMPLETE="OFF"
+              autoComplete="OFF"
             >
               <FormItem label="角色名">
                 {getFieldDecorator('role_name', {

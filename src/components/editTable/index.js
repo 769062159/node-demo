@@ -434,7 +434,7 @@ export default class EditableTable extends PureComponent {
           onCancel={this.handleCancelLevel}
           destroyOnClose="true"
         >
-          <Form layout="horizontal" AUTOCOMPLETE="OFF">
+          <Form layout="horizontal" autoComplete="OFF">
             <Row gutter={24}>
               <Col span={12}>
                 <Form.Item label="一级">

@@ -141,7 +141,7 @@ export default class TableList extends PureComponent {
         onSubmit={this.handleSubmit.bind(this, 0)}
         hideRequiredMark
         style={{ marginTop: 8 }}
-        AUTOCOMPLETE="OFF"
+        autoComplete="OFF"
       >
         <FormItem label="等级名称">
           {getFieldDecorator('name', {
@@ -178,7 +178,7 @@ export default class TableList extends PureComponent {
                 message: '请输入升级所需金额',
               },
             ],
-          })(<InputNumber step={0.01} precision={2} min={0.01} />)}
+          })(<InputNumber step={0.01} precision={2} min={0} />)}
         </FormItem>
         <FormItem tyle={{ marginTop: 32 }}>
           <Button type="primary" htmlType="submit" loading={loading}>
@@ -197,7 +197,7 @@ export default class TableList extends PureComponent {
         onSubmit={this.handleSubmit.bind(this, 1)}
         hideRequiredMark
         style={{ marginTop: 8 }}
-        AUTOCOMPLETE="OFF"
+        autoComplete="OFF"
       >
         <FormItem label="等级名称">
           {getFieldDecorator('name', {
@@ -237,7 +237,7 @@ export default class TableList extends PureComponent {
                 message: '请输入升级所需金额',
               },
             ],
-          })(<InputNumber step={0.01} precision={2} min={0.01} />)}
+          })(<InputNumber step={0.01} precision={2} min={0} />)}
         </FormItem>
         <FormItem tyle={{ marginTop: 32 }}>
           <Button type="primary" htmlType="submit" loading={loading}>

@@ -398,7 +398,7 @@ export default class TableList extends PureComponent {
             onSubmit={this.handleSubmit}
             hideRequiredMark
             style={{ marginTop: 8 }}
-            AUTOCOMPLETE="OFF"
+            autoComplete="OFF"
           >
             <FormItem label="分类" {...formItemLayout}>
               {getFieldDecorator('goods_class_id', {

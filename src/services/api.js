@@ -186,6 +186,14 @@ export async function queryNotices() {
   return request('/api/notices');
 }
 
+// 地址列表
+export async function getAddressList(params) {
+    return request('/admin/region/index', {
+        method: 'POST',
+        body: params,
+    });
+}
+
 // 所有菜单列表
 export async function getAuthMenus() {
   return new Promise(resolve => {

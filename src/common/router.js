@@ -152,7 +152,7 @@ export const getRouterConfig = app => {
     },
     // 订单
     '/order/list': {
-      component: dynamicWrapper(app, ['order'], () => import('../routes/Order/list')),
+      component: dynamicWrapper(app, ['order', 'address'], () => import('../routes/Order/list')),
     },
     // 商品
     '/good/good-list': {

@@ -37,7 +37,7 @@ class Step2 extends React.PureComponent {
       });
     };
     return (
-      <Form layout="horizontal" className={styles.stepForm} AUTOCOMPLETE="OFF">
+      <Form layout="horizontal" className={styles.stepForm} autoComplete="OFF">
         <Alert
           closable
           showIcon

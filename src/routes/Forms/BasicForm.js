@@ -75,7 +75,7 @@ export default class BasicForms extends PureComponent {
             onSubmit={this.handleSubmit}
             hideRequiredMark
             style={{ marginTop: 8 }}
-            AUTOCOMPLETE="OFF"
+            autoComplete="OFF"
           >
             <FormItem {...formItemLayout} label="标题">
               {getFieldDecorator('title', {

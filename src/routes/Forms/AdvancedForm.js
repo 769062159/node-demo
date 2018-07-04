@@ -134,7 +134,7 @@ class AdvancedForm extends PureComponent {
         wrapperClassName={styles.advancedForm}
       >
         <Card title="仓库管理" className={styles.card} bordered={false}>
-          <Form layout="vertical" hideRequiredMark AUTOCOMPLETE="OFF">
+          <Form layout="vertical" hideRequiredMark autoComplete="OFF">
             <Row gutter={16}>
               <Col lg={6} md={12} sm={24}>
                 <Form.Item label={fieldLabels.name}>

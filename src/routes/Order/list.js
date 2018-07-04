@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 import moment from 'moment';
-import { Card, Form, Row, Col, List, Button, Icon, Input, Select, Modal } from 'antd';
+import { Card, Form, Row, Col, List, Button, Icon, Input, Select, Modal, Cascader } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
 import styles from './List.less';
@@ -36,22 +36,30 @@ const allStyle = {
   height: '100%',
 };
 
-@connect(({ order, loading }) => ({
+@connect(({ order, address, loading }) => ({
   order,
+  address,
   loading: loading.models.order,
+  addLoadig: loading.models.address,
 }))
 @Form.create()
 export default class TableList extends PureComponent {
   state = {
     expandForm: false,
+    isAddressModal: false,
     maxPrice: '',
     minPrice: '',
     sn: '', // 需要修改的包裹的sn
     isSnModal: false,
     shipNumber: '',
     expressId: '',
-    isEditType: 0, // 修改发货
-    // pagination: 1, // 页脚
+    isEditType: 0, // 修改发
+    page: 1, // 页脚
+    mobile: '',
+    addressInfo: '',
+    receiptName: '',
+    addressArr: [],
+    orderId: '',
   };
 
   // 换页
@@ -71,9 +79,15 @@ export default class TableList extends PureComponent {
 
   componentDidMount() {
     const { dispatch } = this.props;
-    // const { pagination } = this.state;
+    const { page } = this.state;
     dispatch({
       type: 'order/fetchOrder',
+      payload: {
+        page,
+      },
+    });
+    dispatch({
+      type: 'address/fetch',
       payload: {},
     });
     dispatch({
@@ -114,6 +128,23 @@ export default class TableList extends PureComponent {
     }
     this.handShipCancel();
   };
+  editAddressBtn = () => {
+    const { mobile, addressInfo, receiptName, addressArr, orderId } = this.state;
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'order/editShipGood',
+      payload: {
+        mobile,
+        name: receiptName,
+        address: addressInfo,
+        province: addressArr[0],
+        city: addressArr[1],
+        region: addressArr[2],
+        order_id: orderId,
+      },
+    });
+    this.handAddressCancel();
+  };
   ship = sn => {
     this.setState({
       sn,
@@ -130,6 +161,26 @@ export default class TableList extends PureComponent {
       isEditType: 1,
     });
   };
+  // 修改发货
+  editAddress = pack => {
+    console.log(pack);
+    const addressArr = [2, 3, 4];
+    this.setState({
+      isAddressModal: true,
+      addressArr,
+      receiptName: pack.consignee,
+      addressInfo: pack.address,
+      mobile: pack.mobile,
+      orderId: pack.order_id,
+    });
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'address/fetchAll',
+      payload: {
+        addressArr,
+      },
+    });
+  };
   //  取消发货
   handShipCancel = () => {
     this.setState({
@@ -139,9 +190,69 @@ export default class TableList extends PureComponent {
       sn: '',
     });
   };
+  // 取消修改地址
+  handAddressCancel = () => {
+    this.setState({
+      isAddressModal: false,
+      receiptName: '',
+      addressInfo: '',
+      mobile: '',
+      orderId: '',
+    });
+  };
+  changeAddress = value => {
+    this.setState({
+      addressArr: value,
+    });
+    const { dispatch, address: { addressList } } = this.props;
+    value = value[value.length - 1];
+    for (const val of addressList) {
+      if (val.id === value) {
+        if (!val.children) {
+          dispatch({
+            type: 'address/fetch',
+            payload: {
+              parent_id: value,
+            },
+          });
+        }
+        break;
+      }
+      if (val.children) {
+        for (const vals of val.children) {
+          if (vals.id === value) {
+            if (!vals.children) {
+              dispatch({
+                type: 'address/fetch',
+                payload: {
+                  parent_id: value,
+                },
+              });
+            }
+            break;
+          }
+        }
+      }
+    }
+  };
+  changeAddressInfo = e => {
+    this.setState({
+      addressInfo: e.target.value,
+    });
+  };
   changeShipNumber = e => {
     this.setState({
       shipNumber: e.target.value,
+    });
+  };
+  changeMobile = e => {
+    this.setState({
+      mobile: e.target.value,
+    });
+  };
+  changeReceiptName = e => {
+    this.setState({
+      receiptName: e.target.value,
     });
   };
   handleChangeExp = value => {
@@ -156,6 +267,7 @@ export default class TableList extends PureComponent {
   };
   handleFormReset = () => {
     const { form, dispatch } = this.props;
+    const { page } = this.state;
     form.resetFields();
     // this.setState({
     //   formValues: {},
@@ -163,12 +275,15 @@ export default class TableList extends PureComponent {
     console.log(999);
     dispatch({
       type: 'order/fetchOrder',
-      payload: {},
+      payload: {
+        page,
+      },
     });
   };
   handleSearch = e => {
     e.preventDefault();
     const { dispatch, form } = this.props;
+    const { page } = this.state;
 
     form.validateFields((err, fieldsValue) => {
       if (err) return;
@@ -178,10 +293,8 @@ export default class TableList extends PureComponent {
         updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
       };
 
-      console.log(9999);
       const { minPrice, maxPrice } = this.state;
-      console.log(minPrice);
-      console.log(maxPrice);
+      values.page = page;
       if (minPrice && maxPrice) {
         values.start_order_amount = minPrice;
         values.end_order_amount = maxPrice;
@@ -324,8 +437,21 @@ export default class TableList extends PureComponent {
   }
 
   render() {
-    const { order: { orderList, orderListPage, expressList }, loading } = this.props;
-    const { isSnModal, isEditType, shipNumber, expressId } = this.state;
+    const {
+      order: { orderList, orderListPage, expressList },
+      address: { addressList },
+      loading,
+    } = this.props;
+    const {
+      isSnModal,
+      isEditType,
+      shipNumber,
+      expressId,
+      isAddressModal,
+      addressInfo,
+      receiptName,
+      mobile,
+    } = this.state;
     const expressListItem = [];
     if (expressList.length) {
       expressList.forEach(res => {
@@ -348,7 +474,16 @@ export default class TableList extends PureComponent {
             size="small"
             pagination={{
               onChange: page => {
-                console.log(page);
+                this.setState({
+                  page,
+                });
+                const { dispatch } = this.props;
+                dispatch({
+                  type: 'order/fetchOrder',
+                  payload: {
+                    page,
+                  },
+                });
               },
               ...orderListPage,
             }}
@@ -370,7 +505,13 @@ export default class TableList extends PureComponent {
                   </Card.Grid>
                   <Card.Grid style={smallStyle}>
                     <Row>
-                      <Col>发货</Col>
+                      <Col>
+                        {item.order_status === 2 ? (
+                          <Button type="primary" onClick={this.editAddress.bind(this, item)}>
+                            修改地址
+                          </Button>
+                        ) : null}
+                      </Col>
                     </Row>
                   </Card.Grid>
                   {item.has_order_pack.map((res, index) => {
@@ -439,7 +580,7 @@ export default class TableList extends PureComponent {
                                 <Button type="primary" onClick={this.editShip.bind(this, res)}>
                                   修改发货
                                 </Button>
-                              ) : null}
+                              ) : res.order_status === 1 ? null : null}
                             </Col>
                           </Row>
                         </Card.Grid>
@@ -479,6 +620,38 @@ export default class TableList extends PureComponent {
           />
           <Button type="primary" loading={loading} onClick={this.setShip}>
             {isEditType ? '修改发货' : '确认发货'}
+          </Button>
+        </Modal>
+        <Modal
+          title="地址"
+          visible={isAddressModal}
+          onCancel={this.handAddressCancel.bind(this)}
+          footer=""
+          destroyOnClose="true"
+        >
+          <Input defaultValue={mobile} placeholder="请输入手机号码" onChange={this.changeMobile} />
+          <Input
+            defaultValue={receiptName}
+            placeholder="请输入收货人姓名"
+            style={{ margin: '20px 0' }}
+            onChange={this.changeReceiptName}
+          />
+          <Cascader
+            defaultValue={[2, 3, 4]}
+            style={{ width: 300 }}
+            options={addressList}
+            onChange={this.changeAddress}
+            filedNames={{ label: 'region_name', value: 'id' }}
+            changeOnSelect
+          />
+          <Input
+            defaultValue={addressInfo}
+            placeholder="请输入详情地址"
+            style={{ margin: '20px 0' }}
+            onChange={this.changeAddressInfo}
+          />
+          <Button type="primary" loading={loading} onClick={this.editAddressBtn}>
+            修改地址
           </Button>
         </Modal>
       </PageHeaderLayout>

@@ -351,7 +351,7 @@ export default class TableList extends PureComponent {
         onSubmit={this.handleSubmit.bind(this, 0)}
         hideRequiredMark
         style={{ marginTop: 8 }}
-        AUTOCOMPLETE="OFF"
+        autoComplete="OFF"
       >
         <FormItem label="分类名称">
           {getFieldDecorator('name', {
@@ -448,7 +448,7 @@ export default class TableList extends PureComponent {
         onSubmit={this.handleSubmit.bind(this, 1)}
         hideRequiredMark
         style={{ marginTop: 8 }}
-        AUTOCOMPLETE="OFF"
+        autoComplete="OFF"
       >
         <FormItem label="分类名称">
           {getFieldDecorator('name', {

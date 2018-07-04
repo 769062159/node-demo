@@ -90,7 +90,7 @@ class Login extends Component {
     });
     return (
       <div className={classNames(className, styles.login)}>
-        <Form onSubmit={this.handleSubmit} AUTOCOMPLETE="OFF">
+        <Form onSubmit={this.handleSubmit} autoComplete="OFF">
           {tabs.length ? (
             <div>
               <Tabs

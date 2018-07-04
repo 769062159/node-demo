@@ -26,7 +26,7 @@ class TypeForm extends Component {
           onSubmit={this.handleSubmit}
           hideRequiredMark
           style={{ marginTop: 8 }}
-          AUTOCOMPLETE="OFF"
+          autoComplete="OFF"
         >
           <FormItem label="分类名称">
             {getFieldDecorator('name', {
