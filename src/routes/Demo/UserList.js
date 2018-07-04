@@ -213,7 +213,7 @@ export default class Group extends Component {
             onCancel={this.handleCancel.bind(this)}
             footer=""
           >
-            <Form onSubmit={this.handleSubmit} hideRequiredMark style={{ marginTop: 8 }}>
+            <Form onSubmit={this.handleSubmit} hideRequiredMark style={{ marginTop: 8 }} AUTOCOMPLETE="OFF">
               <FormItem label="用户名">
                 {getFieldDecorator('user_name', {
                   rules: [

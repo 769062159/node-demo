@@ -87,7 +87,12 @@ export default class BasicForms extends PureComponent {
     return (
       <PageHeaderLayout>
         <Card bordered={false}>
-          <Form onSubmit={this.handleSubmit} hideRequiredMark style={{ marginTop: 8 }}>
+          <Form
+            onSubmit={this.handleSubmit}
+            hideRequiredMark
+            style={{ marginTop: 8 }}
+            AUTOCOMPLETE="OFF"
+          >
             <FormItem {...formItemLayout} label="菜单名">
               {getFieldDecorator('name', {
                 rules: [

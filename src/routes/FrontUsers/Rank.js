@@ -137,7 +137,12 @@ export default class TableList extends PureComponent {
     const { loading } = this.props;
     const { getFieldDecorator } = this.props.form;
     return (
-      <Form onSubmit={this.handleSubmit.bind(this, 0)} hideRequiredMark style={{ marginTop: 8 }}>
+      <Form
+        onSubmit={this.handleSubmit.bind(this, 0)}
+        hideRequiredMark
+        style={{ marginTop: 8 }}
+        AUTOCOMPLETE="OFF"
+      >
         <FormItem label="等级名称">
           {getFieldDecorator('name', {
             rules: [
@@ -156,7 +161,14 @@ export default class TableList extends PureComponent {
                 message: '请输入等级权重',
               },
             ],
-          })(<InputNumber step={1} min={0} />)}
+          })(
+            <div>
+              <InputNumber step={1} min={0} />
+              <Tag color="blue" style={{ marginLeft: 20 }}>
+                分销等级权重，值越大越重要
+              </Tag>
+            </div>
+          )}
         </FormItem>
         <FormItem label="升级金额">
           {getFieldDecorator('trade_amount', {
@@ -181,7 +193,12 @@ export default class TableList extends PureComponent {
     const { editData } = this.state;
     const { getFieldDecorator } = this.props.form;
     return (
-      <Form onSubmit={this.handleSubmit.bind(this, 1)} hideRequiredMark style={{ marginTop: 8 }}>
+      <Form
+        onSubmit={this.handleSubmit.bind(this, 1)}
+        hideRequiredMark
+        style={{ marginTop: 8 }}
+        AUTOCOMPLETE="OFF"
+      >
         <FormItem label="等级名称">
           {getFieldDecorator('name', {
             initialValue: editData.name,
@@ -202,7 +219,14 @@ export default class TableList extends PureComponent {
                 message: '请输入等级权重',
               },
             ],
-          })(<InputNumber step={1} min={0} />)}
+          })(
+            <div>
+              <InputNumber step={1} min={0} />
+              <Tag color="blue" style={{ marginLeft: 20 }}>
+                分销等级权重，值越大越重要
+              </Tag>
+            </div>
+          )}
         </FormItem>
         <FormItem label="升级金额">
           {getFieldDecorator('trade_amount', {
@@ -264,7 +288,9 @@ export default class TableList extends PureComponent {
     return (
       <PageHeaderLayout>
         <Card bordered={false}>
-          <Tag color="blue" style={{marginBottom: 20}}>升级条件：满足对应的交易完成金额</Tag>
+          <Tag color="blue" style={{ marginBottom: 20 }}>
+            升级条件：满足对应的交易完成金额
+          </Tag>
           <div className={styles.tableList}>
             <div className={styles.tableListOperator}>
               <Button icon="plus" type="primary" onClick={this.showModal.bind(this)}>

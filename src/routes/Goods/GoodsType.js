@@ -347,7 +347,12 @@ export default class TableList extends PureComponent {
       </div>
     );
     return (
-      <Form onSubmit={this.handleSubmit.bind(this, 0)} hideRequiredMark style={{ marginTop: 8 }}>
+      <Form
+        onSubmit={this.handleSubmit.bind(this, 0)}
+        hideRequiredMark
+        style={{ marginTop: 8 }}
+        AUTOCOMPLETE="OFF"
+      >
         <FormItem label="分类名称">
           {getFieldDecorator('name', {
             rules: [
@@ -439,7 +444,12 @@ export default class TableList extends PureComponent {
       </div>
     );
     return (
-      <Form onSubmit={this.handleSubmit.bind(this, 1)} hideRequiredMark style={{ marginTop: 8 }}>
+      <Form
+        onSubmit={this.handleSubmit.bind(this, 1)}
+        hideRequiredMark
+        style={{ marginTop: 8 }}
+        AUTOCOMPLETE="OFF"
+      >
         <FormItem label="分类名称">
           {getFieldDecorator('name', {
             initialValue: className,

@@ -213,7 +213,7 @@ export const getRouterConfig = app => {
       component: dynamicWrapper(app, ['user', 'menu'], () => import('../routes/Demo/Roles')),
     },
     '/users/user-list': {
-      component: dynamicWrapper(app, [], () => import('../routes/Demo/DemoThree')),
+      component: dynamicWrapper(app, [], () => import('../routes/Demo/UserList')),
     },
     // '/router/menu-add': {
     //   component: dynamicWrapper(app, ['menu'], () => import('../routes/Demo/DemoTwo')),

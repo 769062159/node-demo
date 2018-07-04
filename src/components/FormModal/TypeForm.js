@@ -22,7 +22,12 @@ class TypeForm extends Component {
         onCancel={this.handAddleCancel.bind(this)}
         footer=""
       >
-        <Form onSubmit={this.handleSubmit} hideRequiredMark style={{ marginTop: 8 }}>
+        <Form
+          onSubmit={this.handleSubmit}
+          hideRequiredMark
+          style={{ marginTop: 8 }}
+          AUTOCOMPLETE="OFF"
+        >
           <FormItem label="分类名称">
             {getFieldDecorator('name', {
               rules: [

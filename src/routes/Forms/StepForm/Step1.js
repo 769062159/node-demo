@@ -33,7 +33,7 @@ class Step1 extends React.PureComponent {
     };
     return (
       <Fragment>
-        <Form layout="horizontal" className={styles.stepForm} hideRequiredMark>
+        <Form layout="horizontal" className={styles.stepForm} hideRequiredMark AUTOCOMPLETE="OFF">
           <Form.Item {...formItemLayout} label="付款账户">
             {getFieldDecorator('payAccount', {
               initialValue: data.payAccount,

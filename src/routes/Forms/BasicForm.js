@@ -71,7 +71,12 @@ export default class BasicForms extends PureComponent {
       >
         <Card bordered={false}>
           <ReactEditor dispatch={dispatch} />
-          <Form onSubmit={this.handleSubmit} hideRequiredMark style={{ marginTop: 8 }}>
+          <Form
+            onSubmit={this.handleSubmit}
+            hideRequiredMark
+            style={{ marginTop: 8 }}
+            AUTOCOMPLETE="OFF"
+          >
             <FormItem {...formItemLayout} label="标题">
               {getFieldDecorator('title', {
                 rules: [

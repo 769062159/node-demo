@@ -394,7 +394,12 @@ export default class TableList extends PureComponent {
           destroyOnClose="true"
           footer=""
         >
-          <Form onSubmit={this.handleSubmit} hideRequiredMark style={{ marginTop: 8 }}>
+          <Form
+            onSubmit={this.handleSubmit}
+            hideRequiredMark
+            style={{ marginTop: 8 }}
+            AUTOCOMPLETE="OFF"
+          >
             <FormItem label="分类" {...formItemLayout}>
               {getFieldDecorator('goods_class_id', {
                 initialValue: editData.goods_class_id,

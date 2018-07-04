@@ -289,7 +289,12 @@ export default class Role extends Component {
             onCancel={this.handleCancel.bind(this)}
             footer=""
           >
-            <Form onSubmit={this.handleSubmits} hideRequiredMark style={{ marginTop: 8 }}>
+            <Form
+              onSubmit={this.handleSubmits}
+              hideRequiredMark
+              style={{ marginTop: 8 }}
+              AUTOCOMPLETE="OFF"
+            >
               <FormItem label="角色名">
                 {getFieldDecorator('role_name', {
                   // rules: [

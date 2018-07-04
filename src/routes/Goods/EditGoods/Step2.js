@@ -356,7 +356,7 @@ const CustomizedForm = Form.create({
     });
   }
   return (
-    <Form layout="horizontal" className={styles.stepForm}>
+    <Form layout="horizontal" className={styles.stepForm} AUTOCOMPLETE="OFF">
       <Card title="商品信息" style={{ marginBottom: '20px' }}>
         <Row gutter={24}>
           <Col span={12}>
