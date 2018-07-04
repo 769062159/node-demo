@@ -1,5 +1,6 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
+import debounce from 'lodash/debounce';
 import moment from 'moment';
 import {
   Table,
@@ -13,16 +14,19 @@ import {
   Button,
   Divider,
   Select,
+  Spin,
 } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
 import styles from './TableList.less';
+import request from '../../utils/request';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
 // const { TextArea } = Input;
 const { confirm } = Modal;
-// const payType = ['拍下减库存', '付款减库存'];
+const homeType = ['', '热销商品', '直播商品', '轮播图'];
+const jumpType = ['', '跳转商品', '跳转外部链接', '无跳转'];
 const formItemLayout = {
   labelCol: {
     xs: { span: 24 },
@@ -102,6 +106,11 @@ const CustomizedForm = Form.create({
     previewImage,
     handleCancelImg,
     homeForm,
+    homeGoods,
+    fetching,
+    fetchUser,
+    data,
+    handleChangesShop,
   } = props;
   return (
     <Form>
@@ -125,9 +134,9 @@ const CustomizedForm = Form.create({
           ],
         })(
           <Select style={{ width: 120 }}>
-            <Option value="1">热销商品</Option>
-            <Option value="2">直播商品</Option>
-            <Option value="3">轮播图</Option>
+            <Option value={1}>热销商品</Option>
+            <Option value={2}>直播商品</Option>
+            <Option value={3}>轮播图</Option>
           </Select>
         )}
       </FormItem>
@@ -141,28 +150,34 @@ const CustomizedForm = Form.create({
           ],
         })(
           <Select style={{ width: 200 }}>
-            <Option value="1">跳转商品</Option>
-            <Option value="2">跳转外部链接</Option>
-            <Option value="3">不跳转</Option>
+            <Option value={1}>跳转商品</Option>
+            <Option value={2}>跳转外部链接</Option>
+            <Option value={3}>不跳转</Option>
           </Select>
         )}
       </FormItem>
-      {homeForm.jump_type === '1' ? (
-        <FormItem {...formItemLayout} label="商品">
-          {getFieldDecorator('target_id', {
-            rules: [
-              {
-                required: true,
-                message: '请输入商品',
-              },
-            ],
-          })(
-            <Select style={{ width: 200 }}>
-              <Option value="1">商品</Option>
-            </Select>
-          )}
+      {homeForm.jump_type === 1 ? (
+        <FormItem {...formItemLayout} label="直播商品">
+          <Select
+            // mode="multiple"
+            showSearch
+            labelInValue
+            value={homeGoods}
+            placeholder="Select users"
+            notFoundContent={fetching ? <Spin size="small" /> : null}
+            filterOption={false}
+            onSearch={fetchUser}
+            onChange={handleChangesShop}
+            style={{ width: '100%' }}
+          >
+            {data.map(d => (
+              <Option key={d.value} value={d.text}>
+                {d.value}
+              </Option>
+            ))}
+          </Select>
         </FormItem>
-      ) : homeForm.jump_type === '2' ? (
+      ) : homeForm.jump_type === 2 ? (
         <FormItem {...formItemLayout} label="跳转链接">
           {getFieldDecorator('url', {
             rules: [
@@ -211,9 +226,16 @@ const CustomizedForm = Form.create({
   loading: loading.models.indexs,
 }))
 export default class TableList extends PureComponent {
+  constructor(props) {
+    super(props);
+    this.lastFetchId = 0;
+    this.fetchUser = debounce(this.fetchUser, 800);
+  }
   state = {
     expandForm: false,
     homeVisible: false,
+    fetching: false,
+    data: [],
     // formValues: {},
     previewVisible: false,
     previewImage: '',
@@ -229,10 +251,49 @@ export default class TableList extends PureComponent {
       },
     });
   }
+  // 模糊查询
+  fetchUser = value => {
+    console.log('fetching user', value);
+    this.lastFetchId += 1;
+    const fetchId = this.lastFetchId;
+    this.setState({ data: [], fetching: true });
+    request('/admin/goods/list', {
+      method: 'POST',
+      body: {
+        goods_name: value,
+        goods_status: 0,
+      },
+    }).then(body => {
+      console.log(999);
+      if (fetchId !== this.lastFetchId) {
+        // for fetch callback order
+        return;
+      }
+      console.log(body);
+      const data = body.data.list.map(user => ({
+        text: `${user.goods_id}`,
+        value: user.goods_name,
+      }));
+      this.setState({ data, fetching: false });
+    });
+  };
 
   toggleForm = () => {
     this.setState({
       expandForm: !this.state.expandForm,
+    });
+  };
+  handleChangesShop = value => {
+    this.setState({
+      data: [],
+      fetching: false,
+    });
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'indexs/setHomeShops',
+      payload: {
+        value,
+      },
     });
   };
 
@@ -251,7 +312,7 @@ export default class TableList extends PureComponent {
         dispatch({
           type: 'indexs/deleteHome',
           payload: {
-            ad_id: id,
+            id,
             pagination,
           },
         });
@@ -263,33 +324,31 @@ export default class TableList extends PureComponent {
   };
   // 新增修改提交
   handleSubmit = () => {
-    const { dispatch, indexs: { liveForm, uploadLiveImg, liveGoods } } = this.props;
-    if (!uploadLiveImg.length) {
+    const { dispatch, indexs: { homeForm, uploadHomeImg, homeGoods } } = this.props;
+    if (!uploadHomeImg.length) {
       message.error('请上传封面');
       return;
     }
     const { pagination } = this.state;
-    const arrId = [];
-    const arrName = [];
-    liveGoods.forEach(res => {
-      arrId.push(res.key);
-      arrName.push(res.label);
-    });
-    liveForm.goods_ids = arrId;
-    liveForm.goods_names = arrName;
-    liveForm.pagination = pagination;
-    liveForm.cover = uploadLiveImg[0].url;
-    if (liveForm.id) {
-      liveForm.live_id = liveForm.id;
+    if (homeForm.jump_type === 1) {
+      homeForm.remark = homeGoods.label;
+      homeForm.target_id = homeGoods.key;
+    } else {
+      homeForm.remark = '';
+      homeForm.target_id = '';
+    }
+    homeForm.pagination = pagination;
+    homeForm.cover = uploadHomeImg[0].url;
+    if (homeForm.id) {
       dispatch({
-        type: 'live/editHome',
-        payload: liveForm,
+        type: 'indexs/editHome',
+        payload: homeForm,
       });
       message.success('修改成功');
     } else {
       dispatch({
-        type: 'live/addHome',
-        payload: liveForm,
+        type: 'indexs/addHome',
+        payload: homeForm,
       });
       message.success('添加成功');
     }
@@ -299,6 +358,13 @@ export default class TableList extends PureComponent {
   editGoods = (data, e) => {
     e.preventDefault();
     this.showModal();
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'indexs/editHomeMsgs',
+      payload: {
+        data,
+      },
+    });
   };
   // 新增modal显示
   showModal = () => {
@@ -310,6 +376,10 @@ export default class TableList extends PureComponent {
   handAddleCancel = () => {
     this.setState({
       homeVisible: false,
+    });
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'indexs/clearHomeMsgs',
     });
   };
   // 修改表单值
@@ -376,26 +446,38 @@ export default class TableList extends PureComponent {
 
   render() {
     const {
-      indexs: { homeList: datas, homeListPage, uploadHomeImg, homeForm },
+      indexs: { homeList: datas, homeListPage, uploadHomeImg, homeForm, homeGoods },
       loading,
     } = this.props;
     // const { getFieldDecorator } = this.props.form;
-    const { homeVisible, previewVisible, previewImage } = this.state;
+    const { homeVisible, previewVisible, previewImage, fetching, data } = this.state;
     const progressColumns = [
       {
-        title: '广告简介',
-        dataIndex: 'desc',
-        key: 'desc',
+        title: '标题',
+        dataIndex: 'title',
+        key: 'title',
       },
       {
-        title: '广告封面',
-        dataIndex: 'pic',
+        title: '封面',
+        dataIndex: 'cover',
         render: val => (val ? <img src={val} style={{ width: '120px' }} alt="图片" /> : null),
       },
       {
-        title: '排序',
-        dataIndex: 'sort',
-        key: 'sort',
+        title: '类型',
+        dataIndex: 'type',
+        key: 'type',
+        render: val => homeType[val],
+      },
+      {
+        title: '跳转类型',
+        dataIndex: 'jump_type',
+        key: 'jump_type',
+        render: val => jumpType[val],
+      },
+      {
+        title: '跳转关联',
+        dataIndex: 'jump_type',
+        render: (val, text) => (val === 1 ? text.remark : val === 2 ? text.url : '无关联'),
       },
       {
         title: '创建时间',
@@ -456,6 +538,11 @@ export default class TableList extends PureComponent {
             handleCancelImg={this.handleCancelImg}
             handleChangeImg={this.handleChangeImg}
             handlePreviewImg={this.handlePreviewImg}
+            homeGoods={homeGoods}
+            fetching={fetching}
+            data={data}
+            fetchUser={this.fetchUser}
+            handleChangesShop={this.handleChangesShop}
           />
         </Modal>
       </PageHeaderLayout>

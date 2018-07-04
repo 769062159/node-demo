@@ -27,6 +27,10 @@ export const getRouterConfig = app => {
         import('../routes/FrontUsers/FrontUserList')
       ),
     },
+    '/front-users/rank': {
+      identity: 'common',
+      component: dynamicWrapper(app, ['frontUser'], () => import('../routes/FrontUsers/Rank')),
+    },
     '/dashboard/analysis': {
       identity: 'common',
       component: dynamicWrapper(app, ['chart'], () => import('../routes/Dashboard/Analysis')),

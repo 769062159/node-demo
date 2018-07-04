@@ -22,3 +22,11 @@ export async function shipshop(params) {
       body: params,
     });
 }
+
+// 修改发货
+export async function editShip(params) {
+    return request('/admin/order/deliver/update', {
+      method: 'POST',
+      body: params,
+    });
+}

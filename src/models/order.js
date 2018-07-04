@@ -1,5 +1,5 @@
 import { message } from 'antd';
-import { getOrderList, getExpressList, shipshop } from '../services/order';
+import { getOrderList, getExpressList, shipshop, editShip } from '../services/order';
 
 export default {
   namespace: 'order',
@@ -11,10 +11,21 @@ export default {
   },
 
   effects: {
+    *editShipGood({ payload }, { call, put }) {
+      yield call(editShip, { ...payload });
+      message.success('修改成功');
+      const response = yield call(getOrderList, { page: payload.page });
+      if (response.code === 200) {
+        yield put({
+          type: 'getOrder',
+          payload: response.data,
+        });
+      }
+    },
     *shipGood({ payload }, { call, put }) {
       yield call(shipshop, { ...payload });
       message.success('发货成功');
-      const response = yield call(getOrderList, { ...payload });
+      const response = yield call(getOrderList, { page: payload.page });
       if (response.code === 200) {
         yield put({
           type: 'getOrder',

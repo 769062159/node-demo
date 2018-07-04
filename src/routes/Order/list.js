@@ -50,6 +50,7 @@ export default class TableList extends PureComponent {
     isSnModal: false,
     shipNumber: '',
     expressId: '',
+    isEditType: 0, // 修改发货
     // pagination: 1, // 页脚
   };
 
@@ -90,28 +91,52 @@ export default class TableList extends PureComponent {
     this.setState({ maxPrice: value });
   };
   setShip = () => {
-    const { shipNumber, sn, expressId } = this.state;
+    const { shipNumber, sn, expressId, isEditType } = this.state;
     const { dispatch } = this.props;
-    dispatch({
-      type: 'order/shipGood',
-      payload: {
-        order_pack_id: sn,
-        express_id: expressId,
-        no: shipNumber,
-      },
-    });
+    if (isEditType) {
+      dispatch({
+        type: 'order/editShipGood',
+        payload: {
+          order_pack_id: sn,
+          express_id: expressId,
+          no: shipNumber,
+        },
+      });
+    } else {
+      dispatch({
+        type: 'order/shipGood',
+        payload: {
+          order_pack_id: sn,
+          express_id: expressId,
+          no: shipNumber,
+        },
+      });
+    }
     this.handShipCancel();
   };
   ship = sn => {
     this.setState({
       sn,
       isSnModal: true,
+      isEditType: 0,
+    });
+  };
+  editShip = pack => {
+    this.setState({
+      sn: pack.order_id,
+      isSnModal: true,
+      shipNumber: pack.pack_express_code,
+      expressId: pack.pack_express_id,
+      isEditType: 1,
     });
   };
   //  取消发货
   handShipCancel = () => {
     this.setState({
       isSnModal: false,
+      shipNumber: '',
+      expressId: '',
+      sn: '',
     });
   };
   changeShipNumber = e => {
@@ -300,7 +325,7 @@ export default class TableList extends PureComponent {
 
   render() {
     const { order: { orderList, orderListPage, expressList }, loading } = this.props;
-    const { isSnModal } = this.state;
+    const { isSnModal, isEditType, shipNumber, expressId } = this.state;
     const expressListItem = [];
     if (expressList.length) {
       expressList.forEach(res => {
@@ -410,6 +435,10 @@ export default class TableList extends PureComponent {
                                 <Button type="primary" onClick={this.ship.bind(this, res.order_id)}>
                                   发货
                                 </Button>
+                              ) : res.order_status === 3 ? (
+                                <Button type="primary" onClick={this.editShip.bind(this, res)}>
+                                  修改发货
+                                </Button>
                               ) : null}
                             </Col>
                           </Row>
@@ -422,8 +451,15 @@ export default class TableList extends PureComponent {
             )}
           />
         </Card>
-        <Modal title="发货" visible={isSnModal} onCancel={this.handShipCancel.bind(this)} footer="">
+        <Modal
+          title="发货"
+          visible={isSnModal}
+          onCancel={this.handShipCancel.bind(this)}
+          footer=""
+          destroyOnClose="true"
+        >
           <Select
+            defaultValue={expressId}
             showSearch
             style={{ width: 200 }}
             placeholder="选择快递"
@@ -436,12 +472,13 @@ export default class TableList extends PureComponent {
             {expressListItem}
           </Select>
           <Input
+            defaultValue={shipNumber}
             placeholder="请输入发货单号"
             style={{ margin: '20px 0' }}
             onChange={this.changeShipNumber}
           />
           <Button type="primary" loading={loading} onClick={this.setShip}>
-            确认发货
+            {isEditType ? '修改发货' : '确认发货'}
           </Button>
         </Modal>
       </PageHeaderLayout>

@@ -12,6 +12,10 @@ export const menuData = [
         name: '用户列表',
         path: 'front-user-list',
       },
+      {
+        name: '用户等级',
+        path: 'rank',
+      },
     ],
   },
   {

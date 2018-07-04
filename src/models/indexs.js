@@ -19,6 +19,7 @@ export default {
     homeForm: {}, // 首页表单
     uploadHomeImg: [], // 首页封面
     homeListPage: {}, // 首页封面页脚
+    homeGoods: {}, // 首页跳转商品
   },
 
   effects: {
@@ -115,6 +116,47 @@ export default {
   },
 
   reducers: {
+    editHomeMsgs(state, { payload }) {
+      console.log(payload);
+      const { data } = payload;
+      data.xxx = data.cover;
+      const imgArr = [];
+      if (data.cover) {
+        imgArr.push({
+          status: 'done',
+          response: { status: 'success' },
+          name: data.title,
+          uid: data.id,
+          url: data.cover,
+        });
+      }
+      const homeGoods = {};
+      if (data.jump_type === 1) {
+        homeGoods.label = data.remark;
+        homeGoods.key = data.target_id;
+      }
+      return {
+        ...state,
+        homeForm: data,
+        uploadHomeImg: imgArr,
+        homeGoods,
+      };
+    },
+    setHomeShops(state, { payload }) {
+      console.log(payload);
+      return {
+        ...state,
+        homeGoods: payload.value,
+      };
+    },
+    clearHomeMsgs(state) {
+      return {
+        ...state,
+        homeForm: {}, // 直播间创建表单
+        uploadHomeImg: [], // 直播封面
+        homeGoods: [], // 直播商品
+      };
+    },
     getHome(state, { payload }) {
       return {
         ...state,
