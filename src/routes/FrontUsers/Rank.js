@@ -1,6 +1,6 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
-import { Table, message, Modal, Card, Form, Input, Button, Divider, InputNumber } from 'antd';
+import { Table, message, Modal, Card, Form, Input, Button, Divider, InputNumber, Tag } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
 import styles from './TableList.less';
@@ -264,6 +264,7 @@ export default class TableList extends PureComponent {
     return (
       <PageHeaderLayout>
         <Card bordered={false}>
+          <Tag color="blue" style={{marginBottom: 20}}>升级条件：满足对应的交易完成金额</Tag>
           <div className={styles.tableList}>
             <div className={styles.tableListOperator}>
               <Button icon="plus" type="primary" onClick={this.showModal.bind(this)}>
