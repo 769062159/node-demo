@@ -1,20 +1,12 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
-import { Table, message, Modal, Card, Form, Input, Button, Divider, InputNumber, Tag } from 'antd';
+import { Table, message, Modal, Card, Form, Input, Button, InputNumber, Tag } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
 import styles from './TableList.less';
 
 const FormItem = Form.Item;
-const { confirm } = Modal;
-// const getValue = obj =>
-//   Object.keys(obj)
-//     .map(key => obj[key])
-//     .join(',');
-// const statusMap = ['processing', 'processing', 'error'];
-// const goodsStatus = ['上架', '未上架', '下架'];
-// const goodsTypeStatus = ['普通商品', '一元购', '秒杀', '众筹'];
-// const payType = ['拍下减库存', '付款减库存'];
+// const { confirm } = Modal;
 
 @connect(({ frontUser, loading }) => ({
   frontUser,
@@ -47,30 +39,30 @@ export default class TableList extends PureComponent {
   };
 
   // 删除商品
-  deleteGoods = id => {
-    event.preventDefault();
-    const that = this;
-    confirm({
-      content: '你确定删除这个吗？',
-      okText: '确定',
-      okType: 'danger',
-      cancelText: '取消',
-      onOk() {
-        const { dispatch } = that.props;
-        const { pagination } = that.state;
-        dispatch({
-          type: 'frontUser/delUserRank',
-          payload: {
-            level_id: id,
-            pagination,
-          },
-        });
-      },
-      onCancel() {
-        console.log('Cancel');
-      },
-    });
-  };
+  //   deleteGoods = id => {
+  //     event.preventDefault();
+  //     const that = this;
+  //     confirm({
+  //       content: '你确定删除这个吗？',
+  //       okText: '确定',
+  //       okType: 'danger',
+  //       cancelText: '取消',
+  //       onOk() {
+  //         const { dispatch } = that.props;
+  //         const { pagination } = that.state;
+  //         dispatch({
+  //           type: 'frontUser/delUserRank',
+  //           payload: {
+  //             level_id: id,
+  //             pagination,
+  //           },
+  //         });
+  //       },
+  //       onCancel() {
+  //         console.log('Cancel');
+  //       },
+  //     });
+  //   };
   // 修改信息
   editGoods = (data, e) => {
     e.preventDefault();
@@ -278,8 +270,8 @@ export default class TableList extends PureComponent {
         render: (text, record) => (
           <Fragment>
             <a onClick={this.editGoods.bind(this, record)}>修改</a>
-            <Divider type="vertical" />
-            <a onClick={this.deleteGoods.bind(this, record.id)}>删除</a>
+            {/* <Divider type="vertical" />
+            <a onClick={this.deleteGoods.bind(this, record.id)}>删除</a> */}
           </Fragment>
         ),
       },

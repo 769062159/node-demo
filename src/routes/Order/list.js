@@ -163,8 +163,10 @@ export default class TableList extends PureComponent {
   };
   // 修改发货
   editAddress = pack => {
-    console.log(pack);
-    const addressArr = [2, 3, 4];
+    const addressArr = [];
+    addressArr.push(pack.province);
+    addressArr.push(pack.city);
+    addressArr.push(pack.district);
     this.setState({
       isAddressModal: true,
       addressArr,
@@ -451,6 +453,7 @@ export default class TableList extends PureComponent {
       addressInfo,
       receiptName,
       mobile,
+      addressArr,
     } = this.state;
     const expressListItem = [];
     if (expressList.length) {
@@ -503,7 +506,18 @@ export default class TableList extends PureComponent {
                       <Col span={4}>订单状态：{oredrStatus[item.order_status]}</Col>
                     </Row>
                   </Card.Grid>
-                  <Card.Grid style={smallStyle}>
+                  {item.order_status === 2 ? (
+                    <Card.Grid style={smallStyle}>
+                      <Row>
+                        <Col>
+                          <Button type="primary" onClick={this.editAddress.bind(this, item)}>
+                            修改地址
+                          </Button>
+                        </Col>
+                      </Row>
+                    </Card.Grid>
+                  ) : null}
+                  {/* <Card.Grid style={smallStyle}>
                     <Row>
                       <Col>
                         {item.order_status === 2 ? (
@@ -513,7 +527,7 @@ export default class TableList extends PureComponent {
                         ) : null}
                       </Col>
                     </Row>
-                  </Card.Grid>
+                  </Card.Grid> */}
                   {item.has_order_pack.map((res, index) => {
                     return (
                       <div key={res.order_id}>
@@ -599,25 +613,38 @@ export default class TableList extends PureComponent {
           footer=""
           destroyOnClose="true"
         >
-          <Select
-            defaultValue={expressId}
-            showSearch
-            style={{ width: 200 }}
-            placeholder="选择快递"
-            optionFilterProp="children"
-            onChange={this.handleChangeExp.bind(this)}
-            filterOption={(input, option) =>
-              option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-            }
-          >
-            {expressListItem}
-          </Select>
-          <Input
-            defaultValue={shipNumber}
-            placeholder="请输入发货单号"
-            style={{ margin: '20px 0' }}
-            onChange={this.changeShipNumber}
-          />
+          <Row>
+            <Col span={4}>
+              快递公司
+            </Col>
+            <Col span={20}>
+              <Select
+                defaultValue={expressId}
+                showSearch
+                style={{ width: 200 }}
+                placeholder="选择快递"
+                optionFilterProp="children"
+                onChange={this.handleChangeExp.bind(this)}
+                filterOption={(input, option) =>
+                option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                }
+              >
+                {expressListItem}
+              </Select>
+            </Col>
+          </Row>
+          <Row style={{ margin: '20px 0' }}>
+            <Col span={4}>
+              发货单号
+            </Col>
+            <Col span={20}>
+              <Input
+                defaultValue={shipNumber}
+                placeholder="请输入发货单号"
+                onChange={this.changeShipNumber}
+              />
+            </Col>
+          </Row>
           <Button type="primary" loading={loading} onClick={this.setShip}>
             {isEditType ? '修改发货' : '确认发货'}
           </Button>
@@ -629,27 +656,53 @@ export default class TableList extends PureComponent {
           footer=""
           destroyOnClose="true"
         >
-          <Input defaultValue={mobile} placeholder="请输入手机号码" onChange={this.changeMobile} />
-          <Input
-            defaultValue={receiptName}
-            placeholder="请输入收货人姓名"
-            style={{ margin: '20px 0' }}
-            onChange={this.changeReceiptName}
-          />
-          <Cascader
-            defaultValue={[2, 3, 4]}
-            style={{ width: 300 }}
-            options={addressList}
-            onChange={this.changeAddress}
-            filedNames={{ label: 'region_name', value: 'id' }}
-            changeOnSelect
-          />
-          <Input
-            defaultValue={addressInfo}
-            placeholder="请输入详情地址"
-            style={{ margin: '20px 0' }}
-            onChange={this.changeAddressInfo}
-          />
+          <Row>
+            <Col span={4}>
+                手机号码
+            </Col>
+            <Col span={20}>
+              <Input defaultValue={mobile} placeholder="请输入手机号码" onChange={this.changeMobile} />
+            </Col>
+          </Row>
+          <Row style={{ margin: '20px 0' }}>
+            <Col span={4}>
+              收货人
+            </Col>
+            <Col span={20}>
+              <Input
+                defaultValue={receiptName}
+                placeholder="请输入收货人姓名"
+                onChange={this.changeReceiptName}
+              />
+            </Col>
+          </Row>
+          <Row>
+            <Col span={4}>
+                省市区
+            </Col>
+            <Col span={20}>
+              <Cascader
+                defaultValue={addressArr}
+                style={{ width: 300 }}
+                options={addressList}
+                onChange={this.changeAddress}
+                filedNames={{ label: 'region_name', value: 'id' }}
+                changeOnSelect
+              />
+            </Col>
+          </Row>
+          <Row style={{ margin: '20px 0' }}>
+            <Col span={4}>
+                详细地址
+            </Col>
+            <Col span={20}>
+              <Input
+                defaultValue={addressInfo}
+                placeholder="请输入详情地址"
+                onChange={this.changeAddressInfo}
+              />
+            </Col>
+          </Row>
           <Button type="primary" loading={loading} onClick={this.editAddressBtn}>
             修改地址
           </Button>
