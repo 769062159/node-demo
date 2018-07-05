@@ -132,7 +132,7 @@ export default class TableList extends PureComponent {
     const { mobile, addressInfo, receiptName, addressArr, orderId } = this.state;
     const { dispatch } = this.props;
     dispatch({
-      type: 'order/editShipGood',
+      type: 'order/editAddress',
       payload: {
         mobile,
         name: receiptName,
@@ -614,9 +614,7 @@ export default class TableList extends PureComponent {
           destroyOnClose="true"
         >
           <Row>
-            <Col span={4}>
-              快递公司
-            </Col>
+            <Col span={4}>快递公司</Col>
             <Col span={20}>
               <Select
                 defaultValue={expressId}
@@ -626,7 +624,7 @@ export default class TableList extends PureComponent {
                 optionFilterProp="children"
                 onChange={this.handleChangeExp.bind(this)}
                 filterOption={(input, option) =>
-                option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                  option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                 }
               >
                 {expressListItem}
@@ -634,9 +632,7 @@ export default class TableList extends PureComponent {
             </Col>
           </Row>
           <Row style={{ margin: '20px 0' }}>
-            <Col span={4}>
-              发货单号
-            </Col>
+            <Col span={4}>发货单号</Col>
             <Col span={20}>
               <Input
                 defaultValue={shipNumber}
@@ -657,17 +653,17 @@ export default class TableList extends PureComponent {
           destroyOnClose="true"
         >
           <Row>
-            <Col span={4}>
-                手机号码
-            </Col>
+            <Col span={4}>手机号码</Col>
             <Col span={20}>
-              <Input defaultValue={mobile} placeholder="请输入手机号码" onChange={this.changeMobile} />
+              <Input
+                defaultValue={mobile}
+                placeholder="请输入手机号码"
+                onChange={this.changeMobile}
+              />
             </Col>
           </Row>
           <Row style={{ margin: '20px 0' }}>
-            <Col span={4}>
-              收货人
-            </Col>
+            <Col span={4}>收货人</Col>
             <Col span={20}>
               <Input
                 defaultValue={receiptName}
@@ -677,9 +673,7 @@ export default class TableList extends PureComponent {
             </Col>
           </Row>
           <Row>
-            <Col span={4}>
-                省市区
-            </Col>
+            <Col span={4}>省市区</Col>
             <Col span={20}>
               <Cascader
                 defaultValue={addressArr}
@@ -692,9 +686,7 @@ export default class TableList extends PureComponent {
             </Col>
           </Row>
           <Row style={{ margin: '20px 0' }}>
-            <Col span={4}>
-                详细地址
-            </Col>
+            <Col span={4}>详细地址</Col>
             <Col span={20}>
               <Input
                 defaultValue={addressInfo}

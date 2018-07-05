@@ -25,6 +25,14 @@ export async function shipshop(params) {
 
 // 修改发货
 export async function editShip(params) {
+    return request('/admin/order/deliver/update', {
+      method: 'POST',
+      body: params,
+    });
+}
+
+// 修改发货地址
+export async function editAdress(params) {
     return request('/admin/order/address/update', {
       method: 'POST',
       body: params,
