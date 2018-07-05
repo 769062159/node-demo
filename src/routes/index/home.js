@@ -471,7 +471,6 @@ export default class TableList extends PureComponent {
       {
         title: '跳转类型',
         dataIndex: 'jump_type',
-        key: 'jump_type',
         render: val => jumpType[val],
       },
       {

@@ -136,7 +136,7 @@ export default {
     },
     *addShop({ payload }, { call, put }) {
       const response = yield call(addGood, { ...payload });
-      if (response && response.code === 200) {
+      if (response) {
         if (payload.goods_id) {
           yield put(routerRedux.push('/good/edit-goods/result'));
         } else {
@@ -158,7 +158,7 @@ export default {
     },
     *fetchBrand({ payload }, { call, put }) {
       const response = yield call(getBrand, { page: payload.pagination });
-      if (response && response.code === 200) {
+      if (response) {
         yield put({
           type: 'getBrands',
           payload: response.data,
@@ -168,7 +168,7 @@ export default {
     *addBrand({ payload }, { call, put }) {
       yield call(addBrand, payload);
       const response = yield call(getBrand, { page: payload.pagination });
-      if (response && response.code === 200) {
+      if (response) {
         yield put({
           type: 'getBrands',
           payload: response.data,
@@ -178,7 +178,7 @@ export default {
     *editBrand({ payload }, { call, put }) {
       yield call(updateBrand, payload);
       const response = yield call(getBrand, { page: payload.pagination });
-      if (response && response.code === 200) {
+      if (response) {
         yield put({
           type: 'getBrands',
           payload: response.data,
@@ -188,7 +188,7 @@ export default {
     *deleteBrand({ payload }, { call, put }) {
       yield call(deleteBrand, payload);
       const response = yield call(getBrand, { page: payload.pagination });
-      if (response && response.code === 200) {
+      if (response) {
         yield put({
           type: 'getBrands',
           payload: response.data,
@@ -208,7 +208,7 @@ export default {
       const response = yield call(initGoodAttr, {
         goods_id: payload.goods_id,
       });
-      if (response && response.code === 200) {
+      if (response) {
         const goodsClass = response.data.goods_class;
         const goodsBrand = response.data.goods_brand; // 商品品牌
         const goodsPlace = response.data.goods_place; // 商品品牌

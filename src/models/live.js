@@ -43,7 +43,7 @@ export default {
     },
     *fetchLive({ payload }, { call, put }) {
       const response = yield call(getLive, { page: payload.pagination });
-      if (response.code === 200) {
+      if (response) {
         yield put({
           type: 'getLive',
           payload: response.data,
@@ -53,7 +53,7 @@ export default {
     *addLive({ payload }, { call, put }) {
       yield call(addLive, payload);
       const response = yield call(getLive, { page: payload.pagination });
-      if (response.code === 200) {
+      if (response) {
         yield put({
           type: 'getLive',
           payload: response.data,
@@ -63,7 +63,7 @@ export default {
     *editLive({ payload }, { call, put }) {
       yield call(updateLive, payload);
       const response = yield call(getLive, { page: payload.pagination });
-      if (response.code === 200) {
+      if (response) {
         yield put({
           type: 'getLive',
           payload: response.data,
@@ -73,7 +73,7 @@ export default {
     *deleteLive({ payload }, { call, put }) {
       yield call(deleteLive, payload);
       const response = yield call(getLive, { page: payload.pagination });
-      if (response.code === 200) {
+      if (response) {
         yield put({
           type: 'getLive',
           payload: response.data,

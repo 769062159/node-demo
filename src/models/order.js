@@ -15,7 +15,7 @@ export default {
       yield call(editAdress, { ...payload });
       message.success('修改成功');
       const response = yield call(getOrderList, { page: payload.page });
-      if (response.code === 200) {
+      if (response) {
         yield put({
           type: 'getOrder',
           payload: response.data,
@@ -26,7 +26,7 @@ export default {
       yield call(editShip, { ...payload });
       message.success('修改成功');
       const response = yield call(getOrderList, { page: payload.page });
-      if (response.code === 200) {
+      if (response) {
         yield put({
           type: 'getOrder',
           payload: response.data,
@@ -37,7 +37,7 @@ export default {
       yield call(shipshop, { ...payload });
       message.success('发货成功');
       const response = yield call(getOrderList, { page: payload.page });
-      if (response.code === 200) {
+      if (response) {
         yield put({
           type: 'getOrder',
           payload: response.data,
@@ -46,7 +46,7 @@ export default {
     },
     *fetchExpressList(_, { call, put }) {
       const response = yield call(getExpressList);
-      if (response.code === 200) {
+      if (response) {
         yield put({
           type: 'getExpressLists',
           payload: response.data,
@@ -55,7 +55,7 @@ export default {
     },
     *fetchOrder({ payload }, { call, put }) {
       const response = yield call(getOrderList, { ...payload });
-      if (response.code === 200) {
+      if (response) {
         yield put({
           type: 'getOrder',
           payload: response.data,

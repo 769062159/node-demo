@@ -18,7 +18,7 @@ export default {
         payload: response,
       });
       // Login successfully
-      if (response.code === 200) {
+      if (response) {
         // console.log(response);
         const failTime = response.data.expired_time * 1000;
         localStorage.setItem('token', response.data.token);
@@ -31,7 +31,7 @@ export default {
       try {
         const response = yield call(fakeAccountLogout, 'out');
         console.log(response);
-        if (response.code === 200) {
+        if (response) {
           localStorage.removeItem('token');
           // get location pathname
           const urlParams = new URL(window.location.href);

@@ -25,7 +25,7 @@ export default {
   effects: {
     *fetchHome(_, { call, put }) {
       const response = yield call(getHome);
-      if (response.code === 200) {
+      if (response) {
         yield put({
           type: 'getHome',
           payload: response.data,
@@ -35,7 +35,7 @@ export default {
     *addHome({ payload }, { call, put }) {
       yield call(addHome, payload);
       const response = yield call(getHome);
-      if (response.code === 200) {
+      if (response) {
         yield put({
           type: 'getHome',
           payload: response.data,
@@ -45,7 +45,7 @@ export default {
     *editHome({ payload }, { call, put }) {
       yield call(updateHome, payload);
       const response = yield call(getHome);
-      if (response.code === 200) {
+      if (response) {
         yield put({
           type: 'getHome',
           payload: response.data,
@@ -55,7 +55,7 @@ export default {
     *deleteHome({ payload }, { call, put }) {
       yield call(deleteHome, payload);
       const response = yield call(getHome);
-      if (response.code === 200) {
+      if (response) {
         yield put({
           type: 'getHome',
           payload: response.data,
@@ -76,7 +76,7 @@ export default {
     },
     *fetchAds({ payload }, { call, put }) {
       const response = yield call(getAds, { page: payload.pagination });
-      if (response.code === 200) {
+      if (response) {
         yield put({
           type: 'getAds',
           payload: response.data,
@@ -86,7 +86,7 @@ export default {
     *addAds({ payload }, { call, put }) {
       yield call(addAds, payload);
       const response = yield call(getAds, { page: payload.pagination });
-      if (response.code === 200) {
+      if (response) {
         yield put({
           type: 'getAds',
           payload: response.data,
@@ -96,7 +96,7 @@ export default {
     *editAds({ payload }, { call, put }) {
       yield call(updateAds, payload);
       const response = yield call(getAds, { page: payload.pagination });
-      if (response.code === 200) {
+      if (response) {
         yield put({
           type: 'getAds',
           payload: response.data,
@@ -106,7 +106,7 @@ export default {
     *deleteAds({ payload }, { call, put }) {
       yield call(deleteAds, payload);
       const response = yield call(getAds, { page: payload.pagination });
-      if (response.code === 200) {
+      if (response) {
         yield put({
           type: 'getAds',
           payload: response.data,

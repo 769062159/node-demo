@@ -49,7 +49,7 @@ export default {
     },
     *fetchFrontUserList({ payload }, { call, put }) {
       const response = yield call(getFrontUserList, { ...payload });
-      if (response.code === 200) {
+      if (response) {
         yield put({
           type: 'getFrontUserList',
           payload: response.data,
