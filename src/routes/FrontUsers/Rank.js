@@ -6,6 +6,14 @@ import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './TableList.less';
 
 const FormItem = Form.Item;
+const formItemLayout = {
+    labelCol: {
+      span: 5,
+    },
+    wrapperCol: {
+      span: 19,
+    },
+};
 // const { confirm } = Modal;
 
 @connect(({ frontUser, loading }) => ({
@@ -39,30 +47,30 @@ export default class TableList extends PureComponent {
   };
 
   // 删除商品
-  //   deleteGoods = id => {
-  //     event.preventDefault();
-  //     const that = this;
-  //     confirm({
-  //       content: '你确定删除这个吗？',
-  //       okText: '确定',
-  //       okType: 'danger',
-  //       cancelText: '取消',
-  //       onOk() {
-  //         const { dispatch } = that.props;
-  //         const { pagination } = that.state;
-  //         dispatch({
-  //           type: 'frontUser/delUserRank',
-  //           payload: {
-  //             level_id: id,
-  //             pagination,
-  //           },
-  //         });
-  //       },
-  //       onCancel() {
-  //         console.log('Cancel');
-  //       },
-  //     });
-  //   };
+// deleteGoods = id => {
+//   event.preventDefault();
+//   const that = this;
+//   confirm({
+//     content: '你确定删除这个吗？',
+//     okText: '确定',
+//     okType: 'danger',
+//     cancelText: '取消',
+//     onOk() {
+//       const { dispatch } = that.props;
+//       const { pagination } = that.state;
+//       dispatch({
+//         type: 'frontUser/delUserRank',
+//         payload: {
+//           level_id: id,
+//           pagination,
+//         },
+//       });
+//     },
+//     onCancel() {
+//       console.log('Cancel');
+//     },
+//   });
+// };
   // 修改信息
   editGoods = (data, e) => {
     e.preventDefault();
@@ -135,7 +143,7 @@ export default class TableList extends PureComponent {
         style={{ marginTop: 8 }}
         autoComplete="OFF"
       >
-        <FormItem label="等级名称">
+        <FormItem {...formItemLayout} label="等级名称">
           {getFieldDecorator('name', {
             rules: [
               {
@@ -145,7 +153,7 @@ export default class TableList extends PureComponent {
             ],
           })(<Input placeholder="请输入等级名称" />)}
         </FormItem>
-        <FormItem label="等级权重">
+        <FormItem {...formItemLayout} label="等级权重" extra={<Tag color="blue">分销等级权重，值越大越重要</Tag>}>
           {getFieldDecorator('level', {
             rules: [
               {
@@ -154,15 +162,10 @@ export default class TableList extends PureComponent {
               },
             ],
           })(
-            <div>
-              <InputNumber step={1} min={0} />
-              <Tag color="blue" style={{ marginLeft: 20 }}>
-                分销等级权重，值越大越重要
-              </Tag>
-            </div>
+            <InputNumber step={1} min={0} />
           )}
         </FormItem>
-        <FormItem label="升级金额">
+        <FormItem {...formItemLayout} label="升级金额">
           {getFieldDecorator('trade_amount', {
             rules: [
               {
@@ -191,7 +194,7 @@ export default class TableList extends PureComponent {
         style={{ marginTop: 8 }}
         autoComplete="OFF"
       >
-        <FormItem label="等级名称">
+        <FormItem {...formItemLayout} label="等级名称">
           {getFieldDecorator('name', {
             initialValue: editData.name,
             rules: [
@@ -202,7 +205,7 @@ export default class TableList extends PureComponent {
             ],
           })(<Input placeholder="请输入等级名称" />)}
         </FormItem>
-        <FormItem label="等级权重">
+        <FormItem {...formItemLayout} label="等级权重" extra={<Tag color="blue">分销等级权重，值越大越重要</Tag>}>
           {getFieldDecorator('level', {
             initialValue: editData.level,
             rules: [
@@ -212,15 +215,16 @@ export default class TableList extends PureComponent {
               },
             ],
           })(
-            <div>
-              <InputNumber step={1} min={0} />
-              <Tag color="blue" style={{ marginLeft: 20 }}>
-                分销等级权重，值越大越重要
-              </Tag>
-            </div>
+            <InputNumber step={1} min={0} />
+            // <div>
+            //   <InputNumber defaultValue={editData.level} step={1} min={0} />
+            //   <Tag color="blue" style={{ marginLeft: 20 }}>
+            //     分销等级权重，值越大越重要
+            //   </Tag>
+            // </div>
           )}
         </FormItem>
-        <FormItem label="升级金额">
+        <FormItem {...formItemLayout} label="升级金额">
           {getFieldDecorator('trade_amount', {
             initialValue: editData.trade_amount,
             rules: [
@@ -270,8 +274,8 @@ export default class TableList extends PureComponent {
         render: (text, record) => (
           <Fragment>
             <a onClick={this.editGoods.bind(this, record)}>修改</a>
-            {/* <Divider type="vertical" />
-            <a onClick={this.deleteGoods.bind(this, record.id)}>删除</a> */}
+            {/* <Divider type="vertical" /> */}
+            {/* <a onClick={this.deleteGoods.bind(this, record.id)}>删除</a> */}
           </Fragment>
         ),
       },
@@ -304,6 +308,7 @@ export default class TableList extends PureComponent {
           visible={addUserVisible}
           onCancel={this.handAddleCancel.bind(this)}
           footer=""
+          destroyOnClose="true"
         >
           {this.renderForm()}
         </Modal>
