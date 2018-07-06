@@ -340,13 +340,13 @@ export default class GoodsList extends PureComponent {
 
   render() {
     // console.log(this.props);
-    const { goods: { goodsList: datas }, loading } = this.props;
+    const { goods: { goodsList: datas, goodsListPage }, loading } = this.props;
+    console.log(datas);
     const data = {
-      list: datas.list,
+      list: datas,
       pagination: {
+        ...goodsListPage,
         current: 1,
-        pageSize: datas.page,
-        total: datas.total,
       },
     };
     const { selectedRows } = this.state;

@@ -105,7 +105,9 @@ export default {
   namespace: 'goods',
 
   state: {
-    goodsList: {},
+    goodsList: [],
+    goodsListPage: {},
+    selectGoodsList: [], // 直播间选中的商品列表
     goodType: [],
     goodAttr: [],
     goodsAttrPage: {},
@@ -332,7 +334,7 @@ export default {
       const response = yield call(getAllGoods, payload);
       yield put({
         type: 'show',
-        payload: response.data,
+        payload: response,
       });
     },
     *editGoodType({ payload }, { call, put }) {
@@ -400,6 +402,34 @@ export default {
   },
 
   reducers: {
+    deleteLiveGood(state, { payload }) {
+      let { selectGoodsList } = state;
+      const { goodsList } = state;
+      const { goods_id: id } = payload.goods;
+      selectGoodsList = selectGoodsList.filter(res => {
+        return res.goods_id !== id;
+      });
+      goodsList.push(payload.goods);
+      return {
+        ...state,
+        selectGoodsList,
+        goodsList,
+      };
+    },
+    selectLiveGood(state, { payload }) {
+      const { selectGoodsList } = state;
+      let { goodsList } = state;
+      const { goods_id: id } = payload.goods;
+      goodsList = goodsList.filter(res => {
+        return res.goods_id !== id;
+      });
+      selectGoodsList.push(payload.goods);
+      return {
+        ...state,
+        selectGoodsList,
+        goodsList,
+      };
+    },
     fetchFreights(state, { payload }) {
       return {
         ...state,
@@ -528,7 +558,7 @@ export default {
       let totalPrice = 0;
       const { goodsDetail } = payload;
       const uploadGoodsImg = [];
-      const arr = [];
+      let arr = [];
       if (goodsDetail.goods_id) {
         const arrId = new Set();
         const arrSonId = new Set();
@@ -595,7 +625,7 @@ export default {
               }
             }
           });
-          arr.filter(res => {
+          arr = arr.filter(res => {
             return res.flag;
           });
         }
@@ -645,9 +675,14 @@ export default {
     },
     show(state, { payload }) {
       // state.menuList = payload;
+      const { data } = payload;
       return {
         ...state,
-        goodsList: payload,
+        goodsList: data.list,
+        goodsListPage: {
+          pageSize: data.page,
+          total: data.total,
+        },
       };
     },
     fetchType(state, { payload }) {

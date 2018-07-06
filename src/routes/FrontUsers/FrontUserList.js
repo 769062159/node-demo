@@ -197,7 +197,7 @@ export default class FrontUserList extends PureComponent {
             <Col span={14} style={{ fontSize: 14 }}>
               <div>{text.nickname}</div>
               <div>Id:{text.id}</div>
-              <div>等级:{text.level}</div>
+              <div>等级:{text.account_level}</div>
               <div>上级:{text.referee && text.referee.nickname}</div>
             </Col>
           </Row>

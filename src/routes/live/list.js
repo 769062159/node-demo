@@ -19,6 +19,7 @@ import {
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './TableList.less';
 import request from '../../utils/request';
+// import LiveGoodTable from '../../components/LiveGoodTable';
 
 const Option = Select.Option;
 
@@ -465,6 +466,7 @@ export default class Live extends PureComponent {
               pagination={liveListPage}
             />
           </div>
+          {/* <LiveGoodTable /> */}
         </Card>
         <Modal
           title="直播"
