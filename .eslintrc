@@ -32,6 +32,7 @@
       }
     ],
     "no-else-return": [0],
+    "font-family-no-missing-generic-family-keyword": [0],
     "react/no-multi-comp": [0],
     "no-shadow": [0],
     "no-alert": [0],
