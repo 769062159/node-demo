@@ -568,7 +568,7 @@ export default class Order extends PureComponent {
                                 <Col span={4}>{ele.goods_name}</Col>
                                 <Col span={4}>{ele.has_order_goods_sku.total_goods_number}</Col>
                                 <Col span={4}>{ele.has_order_goods_sku.unit_price}</Col>
-                                <Col span={4}>{ele.sell_goods_price}</Col>
+                                <Col span={4}>{ele.has_order_goods_sku.price}</Col>
                                 <Col span={4}>{ele.goods_name}</Col>
                               </Row>
                             );
