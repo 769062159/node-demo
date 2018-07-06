@@ -25,42 +25,34 @@ export default {
   effects: {
     *fetchHome(_, { call, put }) {
       const response = yield call(getHome);
-      if (response) {
-        yield put({
-          type: 'getHome',
-          payload: response.data,
-        });
-      }
+      yield put({
+        type: 'getHome',
+        payload: response,
+      });
     },
     *addHome({ payload }, { call, put }) {
       yield call(addHome, payload);
       const response = yield call(getHome);
-      if (response) {
-        yield put({
-          type: 'getHome',
-          payload: response.data,
-        });
-      }
+      yield put({
+        type: 'getHome',
+        payload: response,
+      });
     },
     *editHome({ payload }, { call, put }) {
       yield call(updateHome, payload);
       const response = yield call(getHome);
-      if (response) {
-        yield put({
-          type: 'getHome',
-          payload: response.data,
-        });
-      }
+      yield put({
+        type: 'getHome',
+        payload: response,
+      });
     },
     *deleteHome({ payload }, { call, put }) {
       yield call(deleteHome, payload);
       const response = yield call(getHome);
-      if (response) {
-        yield put({
-          type: 'getHome',
-          payload: response.data,
-        });
-      }
+      yield put({
+        type: 'getHome',
+        payload: response,
+      });
     },
     *setHomeImg({ payload }, { put }) {
       yield put({
@@ -158,12 +150,13 @@ export default {
       };
     },
     getHome(state, { payload }) {
+      const { data } = payload;
       return {
         ...state,
-        homeList: payload.list,
+        homeList: data.list,
         homeListPage: {
-          pageSize: payload.page,
-          total: payload.total,
+          pageSize: data.page,
+          total: data.total,
         },
       };
     },
