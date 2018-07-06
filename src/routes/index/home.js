@@ -225,7 +225,7 @@ const CustomizedForm = Form.create({
   indexs,
   loading: loading.models.indexs,
 }))
-export default class TableList extends PureComponent {
+export default class Home extends PureComponent {
   constructor(props) {
     super(props);
     this.lastFetchId = 0;
@@ -298,7 +298,7 @@ export default class TableList extends PureComponent {
   };
 
   // 删除商品
-  deleteGoods = id => {
+  deleteDataMsg = id => {
     event.preventDefault();
     const that = this;
     confirm({
@@ -356,7 +356,7 @@ export default class TableList extends PureComponent {
     this.handAddleCancel();
   };
   // 修改信息
-  editGoods = (data, e) => {
+  editDataMsg = (data, e) => {
     e.preventDefault();
     this.showModal();
     const { dispatch } = this.props;
@@ -495,9 +495,9 @@ export default class TableList extends PureComponent {
         // width: 150,
         render: (text, record) => (
           <Fragment>
-            <a onClick={this.editGoods.bind(this, record)}>修改</a>
+            <a onClick={this.editDataMsg.bind(this, record)}>修改</a>
             <Divider type="vertical" />
-            <a onClick={this.deleteGoods.bind(this, record.id)}>删除</a>
+            <a onClick={this.deleteDataMsg.bind(this, record.id)}>删除</a>
           </Fragment>
         ),
       },

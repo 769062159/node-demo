@@ -7,12 +7,12 @@ import styles from './TableList.less';
 
 const FormItem = Form.Item;
 const formItemLayout = {
-    labelCol: {
-      span: 5,
-    },
-    wrapperCol: {
-      span: 19,
-    },
+  labelCol: {
+    span: 5,
+  },
+  wrapperCol: {
+    span: 19,
+  },
 };
 // const { confirm } = Modal;
 
@@ -21,11 +21,11 @@ const formItemLayout = {
   loading: loading.models.frontUser,
 }))
 @Form.create()
-export default class TableList extends PureComponent {
+export default class Rank extends PureComponent {
   state = {
     expandForm: false,
     editData: {},
-    addUserVisible: false,
+    formVisible: false,
     // formValues: {},
     pagination: 1, // 页脚
   };
@@ -47,32 +47,32 @@ export default class TableList extends PureComponent {
   };
 
   // 删除商品
-// deleteGoods = id => {
-//   event.preventDefault();
-//   const that = this;
-//   confirm({
-//     content: '你确定删除这个吗？',
-//     okText: '确定',
-//     okType: 'danger',
-//     cancelText: '取消',
-//     onOk() {
-//       const { dispatch } = that.props;
-//       const { pagination } = that.state;
-//       dispatch({
-//         type: 'frontUser/delUserRank',
-//         payload: {
-//           level_id: id,
-//           pagination,
-//         },
-//       });
-//     },
-//     onCancel() {
-//       console.log('Cancel');
-//     },
-//   });
-// };
+  // deleteGoods = id => {
+  //   event.preventDefault();
+  //   const that = this;
+  //   confirm({
+  //     content: '你确定删除这个吗？',
+  //     okText: '确定',
+  //     okType: 'danger',
+  //     cancelText: '取消',
+  //     onOk() {
+  //       const { dispatch } = that.props;
+  //       const { pagination } = that.state;
+  //       dispatch({
+  //         type: 'frontUser/delUserRank',
+  //         payload: {
+  //           level_id: id,
+  //           pagination,
+  //         },
+  //       });
+  //     },
+  //     onCancel() {
+  //       console.log('Cancel');
+  //     },
+  //   });
+  // };
   // 修改信息
-  editGoods = (data, e) => {
+  editDataMsg = (data, e) => {
     e.preventDefault();
     this.setState({
       editData: data,
@@ -82,14 +82,14 @@ export default class TableList extends PureComponent {
   // 新增modal显示
   showModal = () => {
     this.setState({
-      addUserVisible: true,
+      formVisible: true,
     });
     this.renderForm();
   };
   // 新增取消
   handAddleCancel = () => {
     this.setState({
-      addUserVisible: false,
+      formVisible: false,
       editData: {},
     });
   };
@@ -153,7 +153,11 @@ export default class TableList extends PureComponent {
             ],
           })(<Input placeholder="请输入等级名称" />)}
         </FormItem>
-        <FormItem {...formItemLayout} label="等级权重" extra={<Tag color="blue">分销等级权重，值越大越重要</Tag>}>
+        <FormItem
+          {...formItemLayout}
+          label="等级权重"
+          extra={<Tag color="blue">分销等级权重，值越大越重要</Tag>}
+        >
           {getFieldDecorator('level', {
             rules: [
               {
@@ -161,9 +165,7 @@ export default class TableList extends PureComponent {
                 message: '请输入等级权重',
               },
             ],
-          })(
-            <InputNumber step={1} min={0} />
-          )}
+          })(<InputNumber step={1} min={0} />)}
         </FormItem>
         <FormItem {...formItemLayout} label="升级金额">
           {getFieldDecorator('trade_amount', {
@@ -205,7 +207,11 @@ export default class TableList extends PureComponent {
             ],
           })(<Input placeholder="请输入等级名称" />)}
         </FormItem>
-        <FormItem {...formItemLayout} label="等级权重" extra={<Tag color="blue">分销等级权重，值越大越重要</Tag>}>
+        <FormItem
+          {...formItemLayout}
+          label="等级权重"
+          extra={<Tag color="blue">分销等级权重，值越大越重要</Tag>}
+        >
           {getFieldDecorator('level', {
             initialValue: editData.level,
             rules: [
@@ -252,7 +258,7 @@ export default class TableList extends PureComponent {
   render() {
     const { frontUser: { userRankList: datas }, loading } = this.props;
     // const { getFieldDecorator } = this.props.form;
-    const { addUserVisible } = this.state;
+    const { formVisible } = this.state;
     const progressColumns = [
       {
         title: '等级名称',
@@ -273,7 +279,7 @@ export default class TableList extends PureComponent {
         // width: 150,
         render: (text, record) => (
           <Fragment>
-            <a onClick={this.editGoods.bind(this, record)}>修改</a>
+            <a onClick={this.editDataMsg.bind(this, record)}>修改</a>
             {/* <Divider type="vertical" /> */}
             {/* <a onClick={this.deleteGoods.bind(this, record.id)}>删除</a> */}
           </Fragment>
@@ -305,7 +311,7 @@ export default class TableList extends PureComponent {
         </Card>
         <Modal
           title="等级"
-          visible={addUserVisible}
+          visible={formVisible}
           onCancel={this.handAddleCancel.bind(this)}
           footer=""
           destroyOnClose="true"

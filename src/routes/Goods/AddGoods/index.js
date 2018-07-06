@@ -10,7 +10,7 @@ import AppMenu from '../../../components/utils/AppMenu';
 
 const { Step } = Steps;
 
-class StepForm extends PureComponent {
+class AddGood extends PureComponent {
   getCurrentStep() {
     const { location } = this.props;
     const { pathname } = location;
@@ -56,4 +56,4 @@ class StepForm extends PureComponent {
   }
 }
 
-export default AppMenu(StepForm);
+export default AppMenu(AddGood);

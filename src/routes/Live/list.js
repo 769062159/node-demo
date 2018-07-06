@@ -185,7 +185,7 @@ const CustomizedForm = Form.create({
   loading: loading.models.live,
 }))
 @Form.create()
-export default class TableList extends PureComponent {
+export default class Live extends PureComponent {
   constructor(props) {
     super(props);
     this.lastFetchId = 0;
@@ -193,7 +193,6 @@ export default class TableList extends PureComponent {
   }
   state = {
     pagination: 1,
-    expandForm: false,
     liveVisible: false,
     previewVisible: false,
     previewImage: '',
@@ -253,14 +252,8 @@ export default class TableList extends PureComponent {
     });
   };
 
-  toggleForm = () => {
-    this.setState({
-      expandForm: !this.state.expandForm,
-    });
-  };
-
   // 删除商品
-  deleteGoods = id => {
+  deleteDataMsg = id => {
     event.preventDefault();
     const that = this;
     confirm({
@@ -285,7 +278,7 @@ export default class TableList extends PureComponent {
     });
   };
   // 修改信息
-  editGoods = (data, e) => {
+  editDataMsg = (data, e) => {
     e.preventDefault();
     this.showModal();
     const { dispatch } = this.props;
@@ -447,9 +440,9 @@ export default class TableList extends PureComponent {
         // width: 150,
         render: (text, record) => (
           <Fragment>
-            <a onClick={this.editGoods.bind(this, record)}>修改</a>
+            <a onClick={this.editDataMsg.bind(this, record)}>修改</a>
             <Divider type="vertical" />
-            <a onClick={this.deleteGoods.bind(this, record.id)}>删除</a>
+            <a onClick={this.deleteDataMsg.bind(this, record.id)}>删除</a>
           </Fragment>
         ),
       },

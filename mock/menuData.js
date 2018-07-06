@@ -73,14 +73,21 @@ export const menuData = [
         name: '商品列表',
         path: 'good-list',
       },
-      {
-        name: '运费模版',
-        path: 'freight',
-      },
       // {
       //   name: '商品修改',
       //   path: 'edit-goods',
       // },
+    ],
+  },
+  {
+    name: ' 物流',
+    icon: 'logistics',
+    path: 'logistics',
+    children: [
+      {
+        name: '运费模版',
+        path: 'freight',
+      },
     ],
   },
   {

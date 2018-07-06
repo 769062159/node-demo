@@ -20,7 +20,7 @@ const formItemLayout = {
   loading: loading.models.goods,
 }))
 @Form.create()
-class Step1 extends React.PureComponent {
+class EditGoodStep1 extends React.PureComponent {
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
@@ -94,4 +94,4 @@ class Step1 extends React.PureComponent {
 
 export default connect(({ form }) => ({
   data: form.step,
-}))(Step1);
+}))(EditGoodStep1);

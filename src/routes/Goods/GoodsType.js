@@ -43,11 +43,11 @@ const getValue = obj =>
   loading: loading.models.goods,
 }))
 @Form.create()
-export default class TableList extends PureComponent {
+export default class GoodsType extends PureComponent {
   state = {
     expandForm: false,
     dataIndex: {},
-    addUserVisible: false,
+    formVisible: false,
     // selectedRows: [],
     formValues: {},
     previewVisible: false,
@@ -167,7 +167,7 @@ export default class TableList extends PureComponent {
   // };
 
   // 删除商品
-  deleteGoods = id => {
+  deleteDataMsg = id => {
     event.preventDefault();
     const that = this;
     confirm({
@@ -193,7 +193,7 @@ export default class TableList extends PureComponent {
     });
   };
   // 修改信息
-  editGoods = (id, e) => {
+  editDataMsg = (id, e) => {
     e.preventDefault();
     this.setState({
       dataIndex: id,
@@ -203,14 +203,14 @@ export default class TableList extends PureComponent {
   // 新增modal显示
   showModal = () => {
     this.setState({
-      addUserVisible: true,
+      formVisible: true,
     });
     this.renderForm();
   };
   // 新增取消
   handAddleCancel = () => {
     this.setState({
-      addUserVisible: false,
+      formVisible: false,
       dataIndex: {},
       fileList: [],
     });
@@ -494,7 +494,7 @@ export default class TableList extends PureComponent {
   render() {
     const { goods: { goodType: datas }, loading } = this.props;
     // const { getFieldDecorator } = this.props.form;
-    const { addUserVisible } = this.state;
+    const { formVisible } = this.state;
     const progressColumns = [
       {
         title: '分类名',
@@ -517,9 +517,9 @@ export default class TableList extends PureComponent {
         // width: 150,
         render: (text, record) => (
           <Fragment>
-            <a onClick={this.editGoods.bind(this, record)}>修改</a>
+            <a onClick={this.editDataMsg.bind(this, record)}>修改</a>
             <Divider type="vertical" />
-            <a onClick={this.deleteGoods.bind(this, record.class_id)}>删除</a>
+            <a onClick={this.deleteDataMsg.bind(this, record.class_id)}>删除</a>
           </Fragment>
         ),
       },
@@ -567,7 +567,7 @@ export default class TableList extends PureComponent {
         </Card>
         <Modal
           title="分类"
-          visible={addUserVisible}
+          visible={formVisible}
           onCancel={this.handAddleCancel.bind(this)}
           footer=""
         >

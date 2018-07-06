@@ -42,7 +42,7 @@ const isTrue = ['是', '否'];
   loading: loading.models.rule,
 }))
 @Form.create()
-export default class TableList extends PureComponent {
+export default class GoodsList extends PureComponent {
   state = {
     expandForm: false,
     selectedRows: [],

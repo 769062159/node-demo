@@ -6,19 +6,10 @@ import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
 import styles from './List.less';
 
-// const getValue = obj =>
-//   Object.keys(obj)
-//     .map(key => obj[key])
-//     .join(',');
-// const statusMap = ['processing', 'processing', 'error'];
-// const goodsStatus = ['上架', '未上架', '下架'];
-// const goodsTypeStatus = ['普通商品', '一元购', '秒杀', '众筹'];
-// const payType = ['拍下减库存', '付款减库存'];
 const FormItem = Form.Item;
 const InputGroup = Input.Group;
 const { Option } = Select;
 const oredrStatus = ['未支付', '已取消', '已支付', '已发货', '已收货', '已评价'];
-// const packStatus = ['订单正常', '订单已确认收货', '订单已取消', '订单已关闭'];
 const warehouseType = ['仓库', '供应商', '本地仓库供应商货'];
 const bigStyle = {
   width: '90%',
@@ -43,7 +34,7 @@ const allStyle = {
   addLoadig: loading.models.address,
 }))
 @Form.create()
-export default class TableList extends PureComponent {
+export default class Order extends PureComponent {
   state = {
     expandForm: false,
     isAddressModal: false,

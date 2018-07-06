@@ -35,11 +35,10 @@ const { confirm } = Modal;
   loading: loading.models.indexs,
 }))
 @Form.create()
-export default class TableList extends PureComponent {
+export default class Ads extends PureComponent {
   state = {
-    expandForm: false,
     editData: {},
-    addUserVisible: false,
+    formVisible: false,
     // formValues: {},
     previewVisible: false,
     previewImage: '',
@@ -100,14 +99,8 @@ export default class TableList extends PureComponent {
   //   });
   // };
 
-  toggleForm = () => {
-    this.setState({
-      expandForm: !this.state.expandForm,
-    });
-  };
-
   // 删除商品
-  deleteGoods = id => {
+  deleteDataMsg = id => {
     event.preventDefault();
     const that = this;
     confirm({
@@ -132,7 +125,7 @@ export default class TableList extends PureComponent {
     });
   };
   // 修改信息
-  editGoods = (data, e) => {
+  editDataMsg = (data, e) => {
     e.preventDefault();
     this.setState({
       editData: data,
@@ -142,14 +135,14 @@ export default class TableList extends PureComponent {
   // 新增modal显示
   showModal = () => {
     this.setState({
-      addUserVisible: true,
+      formVisible: true,
     });
     this.renderForm();
   };
   // 新增取消
   handAddleCancel = () => {
     this.setState({
-      addUserVisible: false,
+      formVisible: false,
       editData: {},
       fileList: [],
     });
@@ -230,13 +223,6 @@ export default class TableList extends PureComponent {
         pagination: current,
       },
     });
-  };
-  normFile = e => {
-    console.log('Upload event:', e);
-    if (Array.isArray(e)) {
-      return e;
-    }
-    return e && e.fileList;
   };
   renderAddForm() {
     const { loading } = this.props;
@@ -402,7 +388,7 @@ export default class TableList extends PureComponent {
   render() {
     const { indexs: { adsList: datas, adsListPage }, loading } = this.props;
     // const { getFieldDecorator } = this.props.form;
-    const { addUserVisible } = this.state;
+    const { formVisible } = this.state;
     const progressColumns = [
       {
         title: '广告简介',
@@ -435,9 +421,9 @@ export default class TableList extends PureComponent {
         // width: 150,
         render: (text, record) => (
           <Fragment>
-            <a onClick={this.editGoods.bind(this, record)}>修改</a>
+            <a onClick={this.editDataMsg.bind(this, record)}>修改</a>
             <Divider type="vertical" />
-            <a onClick={this.deleteGoods.bind(this, record.id)}>删除</a>
+            <a onClick={this.deleteDataMsg.bind(this, record.id)}>删除</a>
           </Fragment>
         ),
       },
@@ -464,7 +450,7 @@ export default class TableList extends PureComponent {
         </Card>
         <Modal
           title="广告"
-          visible={addUserVisible}
+          visible={formVisible}
           onCancel={this.handAddleCancel.bind(this)}
           footer=""
         >

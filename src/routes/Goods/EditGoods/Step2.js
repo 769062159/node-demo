@@ -917,7 +917,7 @@ const CustomizedForm = Form.create({
   loading: loading.models.goods,
 }))
 // @Form.create()
-class Step2 extends React.PureComponent {
+class EditGoodStep2 extends React.PureComponent {
   state = {
     previewVisible: false,
     previewImage: '',
@@ -1166,6 +1166,6 @@ class Step2 extends React.PureComponent {
 }
 
 export default connect(({ form, loading }) => ({
-  submitting: loading.effects['form/submitStepForm'],
+  submitting: loading.effects['goods/addShop'],
   data: form.step,
-}))(Step2);
+}))(EditGoodStep2);
