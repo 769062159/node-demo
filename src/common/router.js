@@ -173,7 +173,7 @@ export const getRouterConfig = app => {
     },
     '/good/add-goods': {
       identity: 'common',
-      component: dynamicWrapper(app, ['form'], () => import('../routes/Goods/StepForm')),
+      component: dynamicWrapper(app, ['form'], () => import('../routes/Goods/AddGoods')),
     },
     '/good/add-goods/info': {
       identity: 'common',
