@@ -167,6 +167,9 @@ export const getRouterConfig = app => {
     '/good/good-brand': {
       component: dynamicWrapper(app, ['goods'], () => import('../routes/Goods/GoodBrand')),
     },
+    '/good/freight': {
+      component: dynamicWrapper(app, ['goods'], () => import('../routes/Goods/Freight')),
+    },
     '/good/add-goods': {
       identity: 'common',
       component: dynamicWrapper(app, ['form'], () => import('../routes/Goods/StepForm')),

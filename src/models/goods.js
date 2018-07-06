@@ -15,6 +15,10 @@ import {
   deleteBrand,
   updateBrand,
   addGood,
+  addFreight,
+  delFreight,
+  getFreightList,
+  updateFreight,
 } from '../services/goods';
 import { uploadImg } from '../services/api';
 
@@ -119,9 +123,49 @@ export default {
     systemType: {}, // 系统类型
     uploadGoodsImg: [], // 商品主体图片
     goodsDetail: {},
+    freightList: [], // 运费模版列表
   },
 
   effects: {
+    *fetchFreight({ payload }, { call, put }) {
+      const response = yield call(getFreightList, { ...payload });
+      if (response) {
+        yield put({
+          type: 'fetchFreights',
+          payload: response.data,
+        });
+      }
+    },
+    *addFreight({ payload }, { call, put }) {
+      yield call(addFreight, { ...payload });
+      const response = yield call(getFreightList, { ...payload });
+      if (response) {
+        yield put({
+          type: 'fetchFreights',
+          payload: response.data,
+        });
+      }
+    },
+    *updateFreight({ payload }, { call, put }) {
+      yield call(updateFreight, { ...payload });
+      const response = yield call(getFreightList, { ...payload });
+      if (response) {
+        yield put({
+          type: 'fetchFreights',
+          payload: response.data,
+        });
+      }
+    },
+    *delFreight({ payload }, { call, put }) {
+      yield call(delFreight, { ...payload });
+      const response = yield call(getFreightList, { ...payload });
+      if (response) {
+        yield put({
+          type: 'fetchFreights',
+          payload: response.data,
+        });
+      }
+    },
     *changeFormVal({ payload }, { put }) {
       yield put({
         type: 'changeFormVals',
@@ -356,6 +400,12 @@ export default {
   },
 
   reducers: {
+    fetchFreights(state, { payload }) {
+      return {
+        ...state,
+        freightList: payload,
+      };
+    },
     changeFormVals(state, { payload }) {
       let { goodsDetail } = state;
       goodsDetail = {

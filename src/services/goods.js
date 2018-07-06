@@ -119,3 +119,35 @@ export async function getBrandDetail(params) {
     body: params,
   });
 }
+
+// 创建运费模版
+export async function addFreight(params) {
+    return request('/admin/goods/freight/create', {
+      method: 'POST',
+      body: params,
+    });
+}
+
+// 删除运费模版
+export async function delFreight(params) {
+    return request('/admin/goods/freight/delete', {
+      method: 'POST',
+      body: params,
+    });
+}
+
+// 运费模版列表
+export async function getFreightList(params) {
+    return request('/admin/goods/freight/lists', {
+      method: 'POST',
+      body: params,
+    });
+}
+
+// 更新运费模版
+export async function updateFreight(params) {
+    return request('/admin/goods/freight/update', {
+      method: 'POST',
+      body: params,
+    });
+}
