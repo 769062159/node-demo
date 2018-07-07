@@ -226,7 +226,7 @@ export default class EditableTable extends PureComponent {
   componentWillReceiveProps(nextProps) {
     const { attrTable, levelPartialSon } = nextProps;
     attrTable.forEach(res => {
-      if (!Object.keys(res.values).length) {
+      if (res.values && !Object.keys(res.values).length) {
         // res.profit = levelPartialSon;
         levelPartialSon.forEach(res => {
           res.values[res.id] = res.value;

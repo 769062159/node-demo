@@ -1042,6 +1042,7 @@ class EditGoodStep2 extends React.PureComponent {
     values.goods_nums_warning = values.goods_nums_warning || 0;
     values.warehouse_id = values.warehouse_id || 0;
     values.supplier_id = values.supplier_id || 0;
+    values.shipping_template_id = values.shipping_template_id || 0;
     values.shop_shipping_price = values.shop_shipping_price || 0;
     values.profit_value = levelPartial;
     values.goods_sku = attrTable;

@@ -1,5 +1,6 @@
 import { routerRedux } from 'dva/router';
 import moment from 'moment';
+import { deepCopy } from '../utils/utils';
 import {
   getAllGoods,
   editGoodType,
@@ -45,19 +46,6 @@ const arrayCombination = (dyadicArray, type) => {
   } else {
     return dyadicArray[0];
   }
-};
-// 深拷贝
-const deepCopy = source => {
-  const result = source.constructor === Array ? [] : {}; // 用三目运算判断他是数组还是对象
-  for (const key in source) {
-    if (typeof source[key] === 'object') {
-      result[key] = deepCopy(source[key]);
-    } else {
-      result[key] = source[key];
-    }
-    // result[key] = typeof source[key]==='object' ? deepCopy(source[key]): source[key];
-  }
-  return result;
 };
 // 判断一个数组是否包裹另一个数组 (number string一样的)
 const isContained = (arr1, arr2) => {

@@ -4,6 +4,19 @@ export function fixedZero(val) {
   return val * 1 < 10 ? `0${val}` : val;
 }
 
+// 深拷贝
+export function deepCopy (source) {
+    const result = source.constructor === Array ? [] : {}; // 用三目运算判断他是数组还是对象
+    for (const key in source) {
+      if (typeof source[key] === 'object') {
+        result[key] = deepCopy(source[key]);
+      } else {
+        result[key] = source[key];
+      }
+    }
+    return result;
+};
+
 export function getTimeDistance(type) {
   const now = new Date();
   const oneDay = 1000 * 60 * 60 * 24;
@@ -185,7 +198,7 @@ export function getHfRoutes(path, routerData) {
   routes = routes.map(item => item.replace(path, ''));
   // Get the route to be rendered to remove the deep rendering
   /* 获取要呈现的路径以移除深绘制（路径） */
-  const renderArr = getRenderArr(routes);
+//   const renderArr = getRenderArr(routes);
   // Conversion and stitching parameters
   const renderRoutes = routes.map(item => {
     //  const exact = !routes.some(route => route !== item && getRelation(route, item) === 1);
