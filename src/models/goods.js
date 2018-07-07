@@ -46,6 +46,19 @@ const arrayCombination = (dyadicArray, type) => {
     return dyadicArray[0];
   }
 };
+// 深拷贝
+const deepCopy = source => {
+  const result = source.constructor === Array ? [] : {}; // 用三目运算判断他是数组还是对象
+  for (const key in source) {
+    if (typeof source[key] === 'object') {
+      result[key] = deepCopy(source[key]);
+    } else {
+      result[key] = source[key];
+    }
+    // result[key] = typeof source[key]==='object' ? deepCopy(source[key]): source[key];
+  }
+  return result;
+};
 // 判断一个数组是否包裹另一个数组 (number string一样的)
 const isContained = (arr1, arr2) => {
   if (!(arr1 instanceof Array) || !(arr2 instanceof Array) || arr1.length < arr2.length) {
@@ -58,7 +71,7 @@ const isContained = (arr1, arr2) => {
   return true;
 };
 // 将数据组合成列表，利用递归的特性
-const toGet = (arr, attrArr, AttrArrMap, totalPrice, goodSN) => {
+const toGet = (arr, attrArr, AttrArrMap, totalPrice, goodSN, weight) => {
   const dyadicArray = [];
   const dyadicArrayId = [];
   attrArr.forEach(res => {
@@ -93,6 +106,7 @@ const toGet = (arr, attrArr, AttrArrMap, totalPrice, goodSN) => {
       price: totalPrice,
       store_nums: 0,
       attrIdArr: arrId,
+      weight,
       goods_sku_sn: goodSN,
       img: '',
       fileList: [],
@@ -419,11 +433,20 @@ export default {
     selectLiveGood(state, { payload }) {
       const { selectGoodsList } = state;
       let { goodsList } = state;
-      const { goods_id: id } = payload.goods;
-      goodsList = goodsList.filter(res => {
-        return res.goods_id !== id;
-      });
-      selectGoodsList.push(payload.goods);
+      const { goods } = payload;
+      if (typeof goods === 'object') {
+        goodsList = goodsList.filter(res => {
+          return res !== goods;
+        });
+        selectGoodsList.push(goods);
+      } else {
+        goods.forEach(ele => {
+          goodsList = goodsList.filter(res => {
+            return res !== ele;
+          });
+          selectGoodsList.push(ele);
+        });
+      }
       return {
         ...state,
         selectGoodsList,
@@ -455,19 +478,34 @@ export default {
     },
     setLevelPartials(state, { payload }) {
       // const { typePartial, totalPrice, levelPartial, levelPartialSon } = state;
-      const { goodsDetail, levelPartial, levelPartialSon } = state;
+      const { goodsDetail } = state;
+      const { levelPartial, levelPartialSon } = state;
       const {
         profit_type: profitType,
         cost_price: costPrice,
         sell_goods_price: sellGoodsPrice,
       } = goodsDetail;
       levelPartial[payload.index] = payload.value;
+      const id = payload.data.id;
+      levelPartial.forEach(res => {
+        if (res.id === id) {
+          res.value = payload.value;
+        }
+      });
       if (profitType === 1) {
-        levelPartialSon[payload.index] = payload.value;
+        levelPartialSon.forEach(res => {
+          if (res.id === id) {
+            res.value = payload.value;
+          }
+        });
       } else {
-        levelPartialSon[payload.index] = Number(
-          (((sellGoodsPrice || 0) - (costPrice || 0)) * payload.value / 100).toFixed(2)
-        );
+        levelPartialSon.forEach(res => {
+          if (res.id === id) {
+            res.value = Number(
+              (((sellGoodsPrice || 0) - (costPrice || 0)) * payload.value / 100).toFixed(2)
+            );
+          }
+        });
       }
       return {
         ...state,
@@ -527,7 +565,14 @@ export default {
       const attrData = initGoodsAttr.filter(res => {
         return res.checked;
       });
-      toGet(arr, attrData, AttrArrMap, goodsDetail.sell_goods_price, goodsDetail.goods_sn);
+      toGet(
+        arr,
+        attrData,
+        AttrArrMap,
+        goodsDetail.sell_goods_price,
+        goodsDetail.goods_sn,
+        goodsDetail.weight
+      );
       return {
         ...state,
         initGoodsAttr,
@@ -543,7 +588,14 @@ export default {
       const attrData = initGoodsAttr.filter(res => {
         return res.checked;
       });
-      toGet(arr, attrData, AttrArrMap, goodsDetail.sell_goods_price, goodsDetail.goods_sn);
+      toGet(
+        arr,
+        attrData,
+        AttrArrMap,
+        goodsDetail.sell_goods_price,
+        goodsDetail.goods_sn,
+        goodsDetail.weight
+      );
       return {
         ...state,
         initGoodsAttr,
@@ -554,11 +606,23 @@ export default {
       // 初始化
       console.log(payload.initGoodsAttr);
       const levelPartial = [];
-      let levelPartialSon = [];
+      const levelPartialSon = [];
       let totalPrice = 0;
-      const { goodsDetail } = payload;
+      const { goodsDetail, systemType } = payload;
+      systemType.user_levels.forEach(res => {
+        levelPartial.push({
+          id: res.id,
+          name: res.name,
+          value: '',
+        });
+        levelPartialSon.push({
+          id: res.id,
+          name: res.name,
+          value: '',
+        });
+      });
       const uploadGoodsImg = [];
-      let arr = [];
+      let attrTable = [];
       if (goodsDetail.goods_id) {
         const arrId = new Set();
         const arrSonId = new Set();
@@ -584,27 +648,63 @@ export default {
             }
           });
         });
+        // 分佣代码
+        totalPrice = goodsDetail.sell_goods_price - goodsDetail.cost_price;
+        let typePartial = 0;
+        goodsDetail.has_shop_goods_profit.forEach(res => {
+          if (res.status === 0) {
+            goodsDetail[`level_${res.level}`] = res.profit_value;
+            typePartial = res.profit_type;
+            levelPartial.forEach(ele => {
+              if (ele.id === res.level) {
+                ele.value = res.profit_value;
+              }
+            });
+          }
+        });
+        goodsDetail.profit_type = typePartial;
+        // if (typePartial === 0) {
+        //   levelPartialSon = levelPartial.map(res => {
+        //     res.value = (res.value * totalPrice / 100).toFixed(2)
+        //     return res;
+        //   });
+        // } else {
+        //   levelPartialSon = levelPartial;
+        // }
         const attrData = payload.initGoodsAttr.filter(res => {
           return res.checked;
         });
         toGet(
-          arr,
+          attrTable,
           attrData,
           payload.AttrArrMap,
           goodsDetail.sell_goods_price,
-          goodsDetail.goods_sn
+          goodsDetail.goods_sn,
+          goodsDetail.weight
         );
-        if (arr.length) {
-          arr.forEach(res => {
+        if (attrTable.length) {
+          attrTable.forEach(res => {
             for (const [key, value] of goodSku) {
               if (isContained(key, res.attrIdArr)) {
                 res.goods_sku_sn = value.goods_sku_sn;
                 res.price = value.price;
                 res.store_nums = value.store_nums;
-                res.profit = [];
-                value.has_shop_goods_sku_profit.forEach(ele => {
-                  res.profit.push(ele.price);
+                let cacheArr = [];
+                res.profit = deepCopy(levelPartialSon);
+                res.profit.forEach(v => {
+                  cacheArr[v.id] = v;
                 });
+                value.has_shop_goods_sku_profit.forEach(v => {
+                  if (cacheArr[v.level]) {
+                    cacheArr[v.level].value = v.price;
+                  }
+                });
+                res.values = {};
+                console.log(res.profit);
+                res.profit.forEach(ele => {
+                  res.values[ele.id] = ele.value;
+                });
+                cacheArr = null;
                 const img = value.has_shop_goods_img[0];
                 res.img = img.http_url;
                 res.sku_goods_name = value.sku_goods_name;
@@ -625,7 +725,7 @@ export default {
               }
             }
           });
-          arr = arr.filter(res => {
+          attrTable = attrTable.filter(res => {
             return res.flag;
           });
         }
@@ -639,29 +739,11 @@ export default {
           img.url = res.http_url;
           uploadGoodsImg.push(img);
         });
-        totalPrice = goodsDetail.sell_goods_price;
-        let typePartial = 0;
-        goodsDetail.has_shop_goods_profit.forEach(res => {
-          if (res.status === 0) {
-            goodsDetail[`level_${res.level - 1}`] = res.profit_value;
-            typePartial = res.profit_type;
-            levelPartial.push(res.profit_value);
-          }
-        });
-        goodsDetail.profit_type = typePartial;
-        if (typePartial === 0) {
-          levelPartial.forEach(res => {
-            levelPartialSon.push((res * totalPrice / 100).toFixed(2));
-          });
-        } else {
-          levelPartialSon = levelPartial;
-        }
         goodsDetail.goods_shelves_time = moment(goodsDetail.goods_shelves_time * 1000).format(
           'YYYY-MM-DD HH:mm:ss'
         );
       }
       goodsDetail.profit_type = goodsDetail.profit_type || 0;
-      console.log(goodsDetail);
       payload.goodsDetail = goodsDetail;
       return {
         ...state,
@@ -670,7 +752,7 @@ export default {
         levelPartialSon,
         totalPrice,
         uploadGoodsImg,
-        attrTable: arr,
+        attrTable,
       };
     },
     show(state, { payload }) {

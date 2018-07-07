@@ -59,8 +59,8 @@ const CustomizedForm = Form.create({
   },
   mapPropsToFields(props) {
     console.log(props);
-    const { goods: { goodsDetail } } = props;
-    return {
+    const { goods: { goodsDetail, systemType } } = props;
+    const arr = {
       goods_name: Form.createFormField({
         value: goodsDetail.goods_name,
       }),
@@ -69,6 +69,9 @@ const CustomizedForm = Form.create({
       }),
       goods_list_title: Form.createFormField({
         value: goodsDetail.goods_list_title,
+      }),
+      weight: Form.createFormField({
+        value: goodsDetail.weight,
       }),
       goods_des: Form.createFormField({
         value: goodsDetail.goods_des,
@@ -124,8 +127,8 @@ const CustomizedForm = Form.create({
       shop_shipping_type: Form.createFormField({
         value: goodsDetail.shop_shipping_type,
       }),
-      shop_shipping_price: Form.createFormField({
-        value: goodsDetail.shop_shipping_price,
+      shipping_template_id: Form.createFormField({
+        value: goodsDetail.goods_shipping_template_id,
       }),
       shop_shipping_calculation_type: Form.createFormField({
         value: goodsDetail.shop_shipping_calculation_type,
@@ -166,25 +169,15 @@ const CustomizedForm = Form.create({
       profit_type: Form.createFormField({
         value: goodsDetail.profit_type,
       }),
-      level_0: Form.createFormField({
-        value: goodsDetail.level_0,
-      }),
-      level_1: Form.createFormField({
-        value: goodsDetail.level_1,
-      }),
-      level_2: Form.createFormField({
-        value: goodsDetail.level_2,
-      }),
-      level_3: Form.createFormField({
-        value: goodsDetail.level_3,
-      }),
-      level_4: Form.createFormField({
-        value: goodsDetail.level_4,
-      }),
-      // goods_is_return_goods: Form.createFormField({
-      //   value: goodsDetail.goods_is_return_goods,
-      // }),
     };
+    if (systemType.user_levels && systemType.user_levels.length) {
+      systemType.user_levels.forEach(res => {
+        arr[`level_${res.id}`] = Form.createFormField({
+          value: goodsDetail[`level_${res.id}`],
+        });
+      });
+    }
+    return arr;
   },
   onValuesChange(_, values) {
     console.log(values);
@@ -273,6 +266,8 @@ const CustomizedForm = Form.create({
     );
   });
   const goodsShelvesItem = []; // 上架方式
+  const levelNumberItem = []; // 分佣等级
+  const shippingTemplatesItem = []; // 运送模版
   const goodsShippingItem = []; // 快递
   const goodsStatusItem = []; // 商品状态
   const goodsTypeItem = []; // 商品类型
@@ -283,6 +278,36 @@ const CustomizedForm = Form.create({
   const reducedInventpryItem = []; // 减库存方式
   const shippingTypeItem = []; // 运送模板
   if (Object.keys(systemType).length) {
+    systemType.user_levels.forEach(res => {
+      levelNumberItem.push(
+        <Col span={8} key={res.id}>
+          <Form.Item {...formItemLayouts} label={res.name}>
+            {getFieldDecorator(`level_${res.id}`, {
+              rules: [{ required: true, message: `${res.name}` }],
+            })(
+              goodsDetail.profit_type === 0 ? (
+                <InputNumber
+                  min={0}
+                  max={100}
+                  formatter={value =>
+                    `${goodsDetail.sell_goods_price && goodsDetail.cost_price ? value : 0}%`
+                  }
+                  parser={value => value.replace('%', '')}
+                  onChange={e => chgLevelHas(res, e)}
+                />
+              ) : (
+                <InputNumber
+                  step={0.01}
+                  precision={2}
+                  min={0}
+                  onChange={e => chgLevelHas(res, e)}
+                />
+              )
+            )}
+          </Form.Item>
+        </Col>
+      );
+    });
     systemType.goods_shelves_type.forEach((res, index) => {
       goodsShelvesItem.push(
         <Option value={index} key={index}>
@@ -315,6 +340,13 @@ const CustomizedForm = Form.create({
       goodsWarehouseItem.push(
         <Option value={index} key={index}>
           {res}
+        </Option>
+      );
+    });
+    systemType.shipping_templates.forEach(res => {
+      shippingTemplatesItem.push(
+        <Option value={res.id} key={res.id}>
+          {res.name}
         </Option>
       );
     });
@@ -455,6 +487,13 @@ const CustomizedForm = Form.create({
         </Row>
         <Row>
           <Col span={12}>
+            <Form.Item {...formItemLayouts} label="商品重量">
+              {getFieldDecorator('weight', {
+                rules: [{ required: true, message: '请填写商品重量' }],
+              })(<InputNumber step={0.01} precision={2} min={0} />)}
+            </Form.Item>
+          </Col>
+          <Col span={12}>
             <Form.Item {...formItemLayouts} label="排序">
               {getFieldDecorator('goods_sort', {
                 rules: [{ required: true, message: '请填写商品排序' }],
@@ -556,11 +595,11 @@ const CustomizedForm = Form.create({
             </Form.Item>
           </Col> */}
           <Col span={12}>
-            <Form.Item {...formItemLayouts} label="运送模板">
+            <Form.Item {...formItemLayouts} label="运送类型">
               {getFieldDecorator('shop_shipping_type', {
-                rules: [{ required: true, message: '请填写运送模板' }],
+                rules: [{ required: true, message: '请填写运送类型' }],
               })(
-                <Select onChange={this.changeShippingType}>
+                <Select>
                   {/* <Option value="0">运费模板 </Option>
                   <Option value="1">固定运费</Option>
                   <Option value="2">包邮</Option> */}
@@ -570,13 +609,13 @@ const CustomizedForm = Form.create({
             </Form.Item>
           </Col>
           <Col span={12}>
-            {goodsDetail.shop_shipping_type === 1 ? (
-              <Form.Item {...formItemLayouts} label="运费价格">
-                {getFieldDecorator('shop_shipping_price', {
+            {goodsDetail.shop_shipping_type === 0 ? (
+              <Form.Item {...formItemLayouts} label="运费模版">
+                {getFieldDecorator('shipping_template_id', {
                   rules: [
-                    { required: goodsDetail.shop_shipping_type === 1, message: '请填写运费价格' },
+                    { required: goodsDetail.shop_shipping_type === 0, message: '请填写运费模版' },
                   ],
-                })(<InputNumber step={0.01} precision={2} min={0.01} />)}
+                })(<Select>{shippingTemplatesItem}</Select>)}
               </Form.Item>
             ) : null}
           </Col>
@@ -615,7 +654,7 @@ const CustomizedForm = Form.create({
             <Form.Item {...formItemLayouts} label="上架方式">
               {getFieldDecorator('goods_shelves_type', {
                 rules: [{ required: true, message: '请填写上架方式' }],
-              })(<Select onChange={this.shelvesType}>{goodsShelvesItem}</Select>)}
+              })(<Select>{goodsShelvesItem}</Select>)}
             </Form.Item>
           </Col>
           <Col span={12}>
@@ -743,141 +782,7 @@ const CustomizedForm = Form.create({
           })(<Select>{profitTypeItem}</Select>)}
         </Form.Item>
         <div>分佣值</div>
-        <Row gutter={24}>
-          <Col span={8}>
-            {/* {totalPrice} */}
-            <Form.Item {...formItemLayouts} label="一级">
-              {getFieldDecorator('level_0', {
-                rules: [{ required: true, message: '请填写一级' }],
-              })(
-                goodsDetail.profit_type === 0 ? (
-                  <InputNumber
-                    min={0}
-                    max={100}
-                    formatter={value =>
-                      `${goodsDetail.sell_goods_price && goodsDetail.cost_price ? value : 0}%`
-                    }
-                    parser={value => value.replace('%', '')}
-                    onChange={e => chgLevelHas(0, e)}
-                  />
-                ) : (
-                  <InputNumber
-                    step={0.01}
-                    precision={2}
-                    min={0}
-                    onChange={e => chgLevelHas(0, e)}
-                  />
-                )
-              )}
-            </Form.Item>
-          </Col>
-          <Col span={8}>
-            <Form.Item {...formItemLayouts} label="二级">
-              {getFieldDecorator('level_1', {
-                rules: [{ required: true, message: '请填写二级' }],
-              })(
-                goodsDetail.profit_type === 0 ? (
-                  <InputNumber
-                    min={0}
-                    max={100}
-                    formatter={value =>
-                      `${goodsDetail.sell_goods_price && goodsDetail.cost_price ? value : 0}%`
-                    }
-                    parser={value => value.replace('%', '')}
-                    onChange={e => chgLevelHas(1, e)}
-                  />
-                ) : (
-                  <InputNumber
-                    step={0.01}
-                    precision={2}
-                    min={0}
-                    onChange={e => chgLevelHas(1, e)}
-                  />
-                )
-              )}
-            </Form.Item>
-          </Col>
-          <Col span={8}>
-            <Form.Item {...formItemLayouts} label="三级">
-              {getFieldDecorator('level_2', {
-                rules: [{ required: true, message: '请填写三级' }],
-              })(
-                goodsDetail.profit_type === 0 ? (
-                  <InputNumber
-                    min={0}
-                    max={100}
-                    formatter={value =>
-                      `${goodsDetail.sell_goods_price && goodsDetail.cost_price ? value : 0}%`
-                    }
-                    parser={value => value.replace('%', '')}
-                    onChange={e => chgLevelHas(2, e)}
-                  />
-                ) : (
-                  <InputNumber
-                    step={0.01}
-                    precision={2}
-                    min={0}
-                    onChange={e => chgLevelHas(2, e)}
-                  />
-                )
-              )}
-            </Form.Item>
-          </Col>
-        </Row>
-        <Row gutter={24}>
-          <Col span={8}>
-            <Form.Item {...formItemLayouts} label="四级">
-              {getFieldDecorator('level_3', {
-                rules: [{ required: true, message: '请填写四级' }],
-              })(
-                goodsDetail.profit_type === 0 ? (
-                  <InputNumber
-                    min={0}
-                    max={100}
-                    formatter={value =>
-                      `${goodsDetail.sell_goods_price && goodsDetail.cost_price ? value : 0}%`
-                    }
-                    parser={value => value.replace('%', '')}
-                    onChange={e => chgLevelHas(3, e)}
-                  />
-                ) : (
-                  <InputNumber
-                    step={0.01}
-                    precision={2}
-                    min={0}
-                    onChange={e => chgLevelHas(3, e)}
-                  />
-                )
-              )}
-            </Form.Item>
-          </Col>
-          <Col span={8}>
-            <Form.Item {...formItemLayouts} label="五级">
-              {getFieldDecorator('level_4', {
-                rules: [{ required: true, message: '请填写五级' }],
-              })(
-                goodsDetail.profit_type === 0 ? (
-                  <InputNumber
-                    min={0}
-                    max={100}
-                    formatter={value =>
-                      `${goodsDetail.sell_goods_price && goodsDetail.cost_price ? value : 0}%`
-                    }
-                    parser={value => value.replace('%', '')}
-                    onChange={e => chgLevelHas(4, e)}
-                  />
-                ) : (
-                  <InputNumber
-                    step={0.01}
-                    precision={2}
-                    min={0}
-                    onChange={e => chgLevelHas(4, e)}
-                  />
-                )
-              )}
-            </Form.Item>
-          </Col>
-        </Row>
+        <Row>{levelNumberItem}</Row>
         <div className={styles.borderList}>
           <span>属性名：</span>
           {attrItem}
@@ -1071,31 +976,40 @@ class EditGoodStep2 extends React.PureComponent {
           ele.img = ele.fileList[0].url;
         }
         const arr = [];
+        const obj = {};
+        levelPartial.forEach(res => {
+          obj[res.id] = res.value;
+        });
         ele.profit.forEach(res => {
           arr.push({
-            price: res,
+            price: ele.values[res.id],
+            id: res.id,
+            profit_value: obj[res.id],
           });
-        });
-        levelPartial.forEach((res, index) => {
-          arr[index].profit_value = res;
         });
         ele.profit = arr;
       });
     } else {
       const arr = [];
-      if (values.profit_type === 1) {
+      if (values.profit_type === '1') {
         levelPartial.forEach(res => {
           arr.push({
-            price: res,
-            profit_value: res,
+            price: res.value,
+            profit_value: res.value,
+            id: res.id,
           });
         });
       } else {
         levelPartial.forEach(res => {
-          const nowPrice = (res * values.sell_goods_price / 100).toFixed(2);
+          const nowPrice = (
+            res.value *
+            (values.sell_goods_price - values.cost_price) /
+            100
+          ).toFixed(2);
           arr.push({
             price: nowPrice,
             profit_value: nowPrice,
+            id: res.id,
           });
         });
       }
@@ -1103,6 +1017,7 @@ class EditGoodStep2 extends React.PureComponent {
         sku_goods_name: '默认',
         store_nums: values.goods_total_inventory,
         goods_sku_sn: values.goods_sn,
+        weight: values.weight,
         price: values.sell_goods_price,
         img: '',
         profit: arr,

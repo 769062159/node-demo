@@ -27,13 +27,21 @@ export default class Live extends PureComponent {
     dispatch({
       type: 'goods/fetchGoods',
       payload: {
-        pagination,
+        page: pagination,
         goods_status: 0,
+        page_number: 3,
       },
     });
   }
 
   joinSelect = goods => {
+    let { selectList } = this.state;
+    selectList = selectList.filter(res => {
+      return res !== goods;
+    });
+    this.setState({
+      selectList,
+    });
     const { dispatch } = this.props;
     dispatch({
       type: 'goods/selectLiveGood',
@@ -60,18 +68,25 @@ export default class Live extends PureComponent {
     const { current } = pagination;
     this.setState({
       pagination: current,
+      selectList: [],
     });
     const { dispatch } = this.props;
     dispatch({
       type: 'goods/fetchGoods',
       payload: {
-        pagination: current,
+        page: current,
         goods_status: 0,
+        page_number: 3,
       },
     });
   };
   selectGoods = selectList => {
-    this.setState({ selectList });
+    const { goods: { goodsList: datas } } = this.props;
+    const arrSet = new Set(selectList);
+    const data = datas.filter(res => {
+      return arrSet.has(res.goods_id);
+    });
+    this.setState({ selectList: data });
   };
 
   render() {
@@ -149,6 +164,7 @@ export default class Live extends PureComponent {
             loading={loading}
             columns={progressColumns}
             pagination={goodsListPage}
+            onChange={this.handleTableChange}
             footer={() => (
               <Button
                 type="primary"
