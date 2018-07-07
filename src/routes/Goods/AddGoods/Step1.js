@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { connect } from 'dva';
-import { Form, Button, Cascader, message } from 'antd';
+import { Form, Button, Select } from 'antd';
 import { routerRedux } from 'dva/router';
 import styles from './style.less';
 
@@ -14,6 +14,7 @@ const formItemLayout = {
     span: 19,
   },
 };
+const Option = Select.Option;
 
 @connect(({ goods, loading }) => ({
   goods,
@@ -35,11 +36,12 @@ class AddGoodStep1 extends React.PureComponent {
       validateFields((err, values) => {
         if (!err) {
           console.log(values);
-          if (values.type.length === 2) {
-            dispatch(routerRedux.push(`/good/add-goods/confirm/${values.type}`));
-          } else {
-            message.error('请选择正确的分类！');
-          }
+          dispatch(routerRedux.push(`/good/add-goods/confirm/${values.type}`));
+          //   if (values.type.length === 2) {
+          //     dispatch(routerRedux.push(`/good/add-goods/confirm/${values.type}`));
+          //   } else {
+          //     message.error('请选择正确的分类！');
+          //   }
           // dispatch({
           //   type: 'form/saveStepFormData',
           //   payload: values,
@@ -47,14 +49,14 @@ class AddGoodStep1 extends React.PureComponent {
         }
       });
     };
-    // const selectItem = [];
-    // datas.forEach(res => {
-    //   selectItem.push(
-    //     <Option key={res.class_id} value={res.class_id}>
-    //       {res.class_name}
-    //     </Option>
-    //   );
-    // });
+    const selectItem = [];
+    datas.forEach(res => {
+      selectItem.push(
+        <Option key={res.class_id} value={res.class_id}>
+          {res.class_name}
+        </Option>
+      );
+    });
     return (
       <Fragment>
         <Form layout="horizontal" className={styles.stepForm} hideRequiredMark autoComplete="OFF">
@@ -62,14 +64,12 @@ class AddGoodStep1 extends React.PureComponent {
             {getFieldDecorator('type', {
               rules: [{ required: true, message: '请选择商品分类' }],
             })(
-              <Cascader
-                options={datas}
-                changeOnSelect
-                filedNames={{ label: 'class_name', value: 'class_id', children: 'has_category' }}
-              />
-              // <Select style={{ width: 120 }} >
-              //   {selectItem}
-              // </Select>
+              //   <Cascader
+              //     options={datas}
+              //     changeOnSelect
+              //     filedNames={{ label: 'class_name', value: 'class_id', children: 'has_category' }}
+              //   />
+              <Select style={{ width: 120 }}>{selectItem}</Select>
             )}
           </Form.Item>
           <Form.Item

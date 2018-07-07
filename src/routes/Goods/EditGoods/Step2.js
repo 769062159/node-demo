@@ -25,7 +25,7 @@ import EditTable from 'components/editTable';
 import styles from './style.less';
 
 const { TextArea } = Input;
-const RadioGroup = Radio.Group;
+// const RadioGroup = Radio.Group;
 const Option = Select.Option;
 const formItemLayout = {
   labelCol: {
@@ -402,7 +402,7 @@ const CustomizedForm = Form.create({
             rules: [{ required: true, message: '请填写商品名称' }],
           })(<Input />)}
         </Form.Item>
-        <Form.Item {...formItemLayout} label="商品SN">
+        {/* <Form.Item {...formItemLayout} label="商品SN">
           {getFieldDecorator('goods_sn', {
             rules: [{ required: true, message: '请填写商品SN' }],
           })(<Input />)}
@@ -411,7 +411,7 @@ const CustomizedForm = Form.create({
           {getFieldDecorator('goods_list_title', {
             rules: [{ required: true, message: '请填写列表标题' }],
           })(<Input />)}
-        </Form.Item>
+        </Form.Item> */}
         <Form.Item {...formItemLayout} label="商品描述">
           {getFieldDecorator('goods_des', {
             rules: [{ required: true, message: '请填写商品描述' }],
@@ -461,13 +461,13 @@ const CustomizedForm = Form.create({
               )}
             </Form.Item>
           </Col>
-          <Col span={12}>
+          {/* <Col span={12}>
             <Form.Item {...formItemLayouts} label="商品类型">
               {getFieldDecorator('goods_type', {
                 rules: [{ required: true, message: '请填写商品类型' }],
               })(<Select>{goodsTypeItem}</Select>)}
             </Form.Item>
-          </Col>
+          </Col> */}
         </Row>
         <Row gutter={24}>
           <Col span={12}>
@@ -529,7 +529,7 @@ const CustomizedForm = Form.create({
         </Row>
       </Card>
       <Card>
-        <Row gutter={24}>
+        {/* <Row gutter={24}>
           <Col span={12}>
             <Form.Item {...formItemLayouts} label="设置预警">
               {getFieldDecorator('goods_warning_status', {
@@ -548,8 +548,8 @@ const CustomizedForm = Form.create({
               </Form.Item>
             ) : null}
           </Col>
-        </Row>
-        <Row gutter={24}>
+        </Row> */}
+        {/* <Row gutter={24}>
           <Col span={12}>
             <Form.Item {...formItemLayouts} label="采购地">
               {getFieldDecorator('goods_country_id', {
@@ -557,8 +557,8 @@ const CustomizedForm = Form.create({
               })(<Select>{goodsPlaceItem}</Select>)}
             </Form.Item>
           </Col>
-        </Row>
-        <Row gutter={24}>
+        </Row> */}
+        {/* <Row gutter={24}>
           <Col span={12}>
             <Form.Item {...formItemLayouts} label="出货类型">
               {getFieldDecorator('goods_warehouse_type', {
@@ -585,27 +585,13 @@ const CustomizedForm = Form.create({
               </Form.Item>
             )}
           </Col>
-        </Row>
+        </Row> */}
         <Row gutter={24}>
-          {/* <Col span={12}>
-            <Form.Item {...formItemLayouts} label="供应商ID">
-              {getFieldDecorator('supplier_id', {
-                rules: [{ required: true, message: '请填写供应商ID' }],
-              })(<Input />)}
-            </Form.Item>
-          </Col> */}
           <Col span={12}>
             <Form.Item {...formItemLayouts} label="运送类型">
               {getFieldDecorator('shop_shipping_type', {
                 rules: [{ required: true, message: '请填写运送类型' }],
-              })(
-                <Select>
-                  {/* <Option value="0">运费模板 </Option>
-                  <Option value="1">固定运费</Option>
-                  <Option value="2">包邮</Option> */}
-                  {shippingTypeItem}
-                </Select>
-              )}
+              })(<Select>{shippingTypeItem}</Select>)}
             </Form.Item>
           </Col>
           <Col span={12}>
@@ -620,15 +606,13 @@ const CustomizedForm = Form.create({
             ) : null}
           </Col>
         </Row>
-        <Row gutter={24}>
+        {/* <Row gutter={24}>
           <Col span={12}>
             <Form.Item {...formItemLayouts} label="快递类型">
               {getFieldDecorator('shop_shipping_calculation_type', {
                 rules: [{ required: true, message: '请填写快递类型' }],
               })(
                 <Select>
-                  {/* <Option value="0">快递</Option>
-                  <Option value="1">EMS</Option> */}
                   {goodsShippingItem}
                 </Select>
               )}
@@ -640,14 +624,12 @@ const CustomizedForm = Form.create({
                 rules: [{ required: true, message: '请填写减库存方式' }],
               })(
                 <Select>
-                  {/* <Option value="0">拍下减库存</Option>
-                  <Option value="1">付款减库存</Option> */}
                   {reducedInventpryItem}
                 </Select>
               )}
             </Form.Item>
           </Col>
-        </Row>
+        </Row> */}
 
         <Row gutter={24}>
           <Col span={12}>
@@ -686,7 +668,7 @@ const CustomizedForm = Form.create({
           )}
         </Form.Item>
       </Card>
-      <Card style={{ margin: '20px 0' }}>
+      {/* <Card style={{ margin: '20px 0' }}>
         <Row gutter={24}>
           <Col span={12}>
             <Form.Item {...formItemLayouts} label="无忧售后">
@@ -694,8 +676,6 @@ const CustomizedForm = Form.create({
                 rules: [{ required: true, message: '请填写是否无忧售后' }],
               })(
                 <RadioGroup>
-                  {/* <Radio value={0}>否</Radio>
-                  <Radio value={1}>是</Radio> */}
                   {isItem}
                 </RadioGroup>
               )}
@@ -707,8 +687,6 @@ const CustomizedForm = Form.create({
                 rules: [{ required: true, message: '请填写是否商品显示' }],
               })(
                 <RadioGroup>
-                  {/* <Radio value={0}>否</Radio>
-                  <Radio value={1}>是</Radio> */}
                   {isItem}
                 </RadioGroup>
               )}
@@ -722,8 +700,6 @@ const CustomizedForm = Form.create({
                 rules: [{ required: true, message: '请填写是否支持退款' }],
               })(
                 <RadioGroup>
-                  {/* <Radio value={0}>否</Radio>
-                  <Radio value={1}>是</Radio> */}
                   {isItem}
                 </RadioGroup>
               )}
@@ -744,8 +720,6 @@ const CustomizedForm = Form.create({
                 rules: [{ required: true, message: '请填写是否支持7天无理由退货' }],
               })(
                 <RadioGroup>
-                  {/* <Radio value={0}>否</Radio>
-                  <Radio value={1}>是</Radio> */}
                   {isItem}
                 </RadioGroup>
               )}
@@ -757,8 +731,6 @@ const CustomizedForm = Form.create({
                 rules: [{ required: true, message: '请填写是否急速发货' }],
               })(
                 <RadioGroup>
-                  {/* <Radio value={0}>否</Radio>
-                  <Radio value={1}>是</Radio> */}
                   {isItem}
                 </RadioGroup>
               )}
@@ -774,7 +746,7 @@ const CustomizedForm = Form.create({
             </Form.Item>
           </Col>
         </Row>
-      </Card>
+      </Card> */}
       <Card title="sku分佣">
         <Form.Item {...formItemLayout} label="分拥类型">
           {getFieldDecorator('profit_type', {
@@ -967,6 +939,8 @@ class EditGoodStep2 extends React.PureComponent {
       message.error('请上传图片主体！');
       return;
     }
+    // 暂时写死的
+    values.goods_sn = ' ';
     const { goods: { attrTable, levelPartial, typePartial } } = this.props;
     if (attrTable.length) {
       attrTable.forEach(ele => {
@@ -1047,6 +1021,21 @@ class EditGoodStep2 extends React.PureComponent {
     values.profit_value = levelPartial;
     values.goods_sku = attrTable;
     values.profit_type = typePartial;
+    // 暂时写死的字段
+    values.goods_list_title = 0;
+    values.goods_is_refund = 1;
+    values.goods_type = 0;
+    values.goods_warning_status = 0;
+    values.goods_country_id = 1;
+    values.goods_warehouse_type = 0;
+    values.shop_shipping_calculation_type = 0;
+    values.shop_goods_reduced_inventory = 0;
+    values.goods_is_worry_free_sale = 1;
+    values.goods_is_show = 1;
+    values.goods_is_return_goods = 1;
+    values.goods_is_return_server = 1;
+    values.goods_is_fast_delivery = 1;
+    values.goods_is_recommend_show = 0;
     if (values.goods_shelves_time) {
       values.goods_shelves_time = Number.parseInt(new Date(moment(values._d)).getTime() / 1000, 10);
     } else {

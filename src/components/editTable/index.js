@@ -227,9 +227,8 @@ export default class EditableTable extends PureComponent {
     const { attrTable, levelPartialSon } = nextProps;
     attrTable.forEach(res => {
       if (res.values && !Object.keys(res.values).length) {
-        // res.profit = levelPartialSon;
-        levelPartialSon.forEach(res => {
-          res.values[res.id] = res.value;
+        levelPartialSon.forEach(ele => {
+          res.values[ele.id] = ele.value;
         });
       }
     });

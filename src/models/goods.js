@@ -98,6 +98,7 @@ const toGet = (arr, attrArr, AttrArrMap, totalPrice, goodSN, weight) => {
       goods_sku_sn: goodSN,
       img: '',
       fileList: [],
+      values: {},
     });
   });
   return arr;
@@ -263,25 +264,21 @@ export default {
         const goodsDetail = response.data.goods; // 商品详情
         const systemType = response.data.system_type; // 商品详情
         let type = '';
-        let typeSon = '';
         if (payload.type) {
           type = Number(payload.type);
-          typeSon = Number(payload.typeSon);
         } else if (payload.goods_id) {
-          type = Number(goodsDetail.class_id);
-          typeSon = Number(goodsDetail.category_id);
+          type = Number(goodsDetail.category_id);
         }
         const selectType = goodsClass.filter(res => {
           return res.class_id === type;
         });
-        console.log(selectType);
-        let typeName = `${selectType[0].class_name}`;
-        for (const item of selectType[0].has_category) {
-          if (item.class_id === typeSon) {
-            typeName += ` >> ${item.class_name}`;
-            break;
-          }
-        }
+        const typeName = `${selectType[0].class_name}`;
+        // for (const item of selectType[0].has_category) {
+        //   if (item.class_id === typeSon) {
+        //     typeName += ` >> ${item.class_name}`;
+        //     break;
+        //   }
+        // }
         const AttrArrMap = new Map();
         selectType[0].has_many_attr_class.forEach(ele => {
           const AttrArr = [];

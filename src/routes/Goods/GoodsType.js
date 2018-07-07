@@ -11,9 +11,11 @@ import {
   Card,
   Form,
   Input,
-  Select,
+  Tag,
+  //   Select,
   Icon,
   Button,
+  InputNumber,
   // Dropdown,
   // Menu,
   // InputNumber,
@@ -28,7 +30,15 @@ import styles from './TableList.less';
 
 const FormItem = Form.Item;
 const { confirm } = Modal;
-const { Option } = Select;
+const formItemLayout = {
+  labelCol: {
+    span: 5,
+  },
+  wrapperCol: {
+    span: 19,
+  },
+};
+// const { Option } = Select;
 const getValue = obj =>
   Object.keys(obj)
     .map(key => obj[key])
@@ -56,7 +66,7 @@ export default class GoodsType extends PureComponent {
     header: {
       Authorization: `Bearer ${localStorage.getItem('token')}`,
     },
-    selectOption: 0,
+    // selectOption: 0,
   };
   componentDidMount() {
     const { dispatch } = this.props;
@@ -223,15 +233,11 @@ export default class GoodsType extends PureComponent {
         const data = {
           ...values,
         };
-        if (values.parent_id) {
-          if (this.state.fileList.length) {
-            data.image = this.state.fileList[0].url;
-          } else {
-            message.error('二级分类请上传图片');
-            return false;
-          }
+        if (this.state.fileList.length) {
+          data.image = this.state.fileList[0].url;
         } else {
-          data.parent_id = 0;
+          message.error('请上传图片');
+          return false;
         }
         const { dispatch } = this.props;
         const { dataIndex } = this.state;
@@ -255,12 +261,12 @@ export default class GoodsType extends PureComponent {
     });
   };
   // 选择option
-  selectOption = value => {
-    console.log(value);
-    this.setState({
-      selectOption: value,
-    });
-  };
+  //   selectOption = value => {
+  //     console.log(value);
+  //     this.setState({
+  //       selectOption: value,
+  //     });
+  //   };
   // 上传图片
   handleCancel = () => this.setState({ previewVisible: false });
   removeImg = () => {
@@ -292,16 +298,9 @@ export default class GoodsType extends PureComponent {
     });
     this.setState({ fileList });
   };
-  normFile = e => {
-    console.log('Upload event:', e);
-    if (Array.isArray(e)) {
-      return e;
-    }
-    return e && e.fileList;
-  };
   renderAdvancedForm() {
-    const { goods: { goodType: datas }, loading } = this.props;
-    const { header, fileList, previewImage, previewVisible, selectOption } = this.state;
+    const { loading } = this.props;
+    const { header, fileList, previewImage, previewVisible } = this.state;
     // 上传icon
     const uploadButton = (
       <div>
@@ -314,19 +313,19 @@ export default class GoodsType extends PureComponent {
       type: 2,
     };
     const { getFieldDecorator } = this.props.form;
-    const selectItem = [];
-    selectItem.push(
-      <Option key={9999} value={0}>
-        顶级分类
-      </Option>
-    );
-    datas.forEach(res => {
-      selectItem.push(
-        <Option key={res.class_id} value={res.class_id}>
-          {res.class_name}
-        </Option>
-      );
-    });
+    // const selectItem = [];
+    // selectItem.push(
+    //   <Option key={9999} value={0}>
+    //     顶级分类
+    //   </Option>
+    // );
+    // datas.forEach(res => {
+    //   selectItem.push(
+    //     <Option key={res.class_id} value={res.class_id}>
+    //       {res.class_name}
+    //     </Option>
+    //   );
+    // });
     // 上传图片dom
     const uploadItem = (
       <div className="clearfix">
@@ -353,7 +352,7 @@ export default class GoodsType extends PureComponent {
         style={{ marginTop: 8 }}
         autoComplete="OFF"
       >
-        <FormItem label="分类名称">
+        <FormItem label="分类名称" {...formItemLayout}>
           {getFieldDecorator('name', {
             rules: [
               {
@@ -363,14 +362,31 @@ export default class GoodsType extends PureComponent {
             ],
           })(<Input placeholder="给分类起个名字" />)}
         </FormItem>
-        <FormItem label="上级分类">
+        <FormItem
+          label="排序"
+          {...formItemLayout}
+          extra={<Tag color="blue">排序数值越大，类别排得越前面</Tag>}
+        >
+          {getFieldDecorator('sort', {
+            rules: [
+              {
+                required: true,
+                message: '请输入排序',
+              },
+            ],
+          })(<InputNumber placeholder="排序" min={0} />)}
+        </FormItem>
+        {/* <FormItem label="上级分类">
           {getFieldDecorator('parent_id', {})(
             <Select style={{ width: 120 }} onChange={this.selectOption}>
               {selectItem}
             </Select>
           )}
+        </FormItem> */}
+        {/* {selectOption ? uploadItem : null} */}
+        <FormItem {...formItemLayout} label="图片">
+          {uploadItem}
         </FormItem>
-        {selectOption ? uploadItem : null}
         <FormItem tyle={{ marginTop: 32 }}>
           <Button type="primary" htmlType="submit" loading={loading}>
             提交
@@ -380,11 +396,11 @@ export default class GoodsType extends PureComponent {
     );
   }
   renderSimpleForm() {
-    const { goods: { goodType: datas }, loading } = this.props;
+    const { loading } = this.props;
     const { header, dataIndex, fileList, previewVisible } = this.state;
     let { previewImage } = this.state;
     const className = dataIndex.class_name;
-    const classParentId = dataIndex.class_parent_id || 0;
+    // const classParentId = dataIndex.class_parent_id || 0;
     if (dataIndex.class_img_url) {
       const img = {
         uid: -1,
@@ -407,22 +423,22 @@ export default class GoodsType extends PureComponent {
       type: 2,
     };
     const { getFieldDecorator } = this.props.form;
-    const selectItem = [];
-    if (dataIndex.class_level === 1) {
-      selectItem.push(
-        <Option key={999} value={0}>
-          顶级分类
-        </Option>
-      );
-    } else {
-      datas.forEach(res => {
-        selectItem.push(
-          <Option key={res.class_id} value={res.class_id}>
-            {res.class_name}
-          </Option>
-        );
-      });
-    }
+    // const selectItem = [];
+    // if (dataIndex.class_level === 1) {
+    //   selectItem.push(
+    //     <Option key={999} value={0}>
+    //       顶级分类
+    //     </Option>
+    //   );
+    // } else {
+    //   datas.forEach(res => {
+    //     selectItem.push(
+    //       <Option key={res.class_id} value={res.class_id}>
+    //         {res.class_name}
+    //       </Option>
+    //     );
+    //   });
+    // }
     // 上传图片dom
     const uploadItem = (
       <div className="clearfix">
@@ -450,7 +466,7 @@ export default class GoodsType extends PureComponent {
         style={{ marginTop: 8 }}
         autoComplete="OFF"
       >
-        <FormItem label="分类名称">
+        <FormItem label="分类名称" {...formItemLayout}>
           {getFieldDecorator('name', {
             initialValue: className,
             rules: [
@@ -461,7 +477,22 @@ export default class GoodsType extends PureComponent {
             ],
           })(<Input placeholder="给分类起个名字" />)}
         </FormItem>
-        <FormItem label="上级分类">
+        <FormItem
+          label="排序"
+          {...formItemLayout}
+          extra={<Tag color="blue">排序数值越大，类别排得越前面</Tag>}
+        >
+          {getFieldDecorator('sort', {
+            initialValue: dataIndex.sort,
+            rules: [
+              {
+                required: true,
+                message: '请输入排序',
+              },
+            ],
+          })(<InputNumber placeholder="排序" min={0} />)}
+        </FormItem>
+        {/* <FormItem label="上级分类">
           {getFieldDecorator('parent_id', {
             initialValue: classParentId,
             rules: [
@@ -475,8 +506,11 @@ export default class GoodsType extends PureComponent {
               {selectItem}
             </Select>
           )}
+        </FormItem> */}
+        {/* {dataIndex.class_level !== 1 ? uploadItem : null} */}
+        <FormItem {...formItemLayout} label="图片">
+          {uploadItem}
         </FormItem>
-        {dataIndex.class_level !== 1 ? uploadItem : null}
         <FormItem tyle={{ marginTop: 32 }}>
           <Button type="primary" htmlType="submit" loading={loading}>
             修改
@@ -502,14 +536,19 @@ export default class GoodsType extends PureComponent {
         key: 'class_name',
       },
       {
-        title: '创建时间',
-        dataIndex: 'create_time',
+        title: '排序',
+        dataIndex: 'sort',
         // render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
       },
       {
         title: '显示',
         dataIndex: 'class_img_url',
-        render: val => (val ? <img src={val} alt="图片" /> : null),
+        render: val => (val ? <img src={val} style={{ width: 80 }} alt="图片" /> : null),
+      },
+      {
+        title: '创建时间',
+        dataIndex: 'create_time',
+        // render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
       },
       {
         title: '操作',
@@ -568,6 +607,7 @@ export default class GoodsType extends PureComponent {
         <Modal
           title="分类"
           visible={formVisible}
+          destroyOnClose="true"
           onCancel={this.handAddleCancel.bind(this)}
           footer=""
         >
