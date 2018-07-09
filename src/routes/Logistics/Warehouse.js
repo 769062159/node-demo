@@ -116,6 +116,42 @@ export default class Warehouse extends PureComponent {
       },
     });
   };
+  loadData = value => {
+    this.setState({
+      addressArr: value,
+    });
+    const { dispatch, address: { addressList } } = this.props;
+    value = value[value.length - 1];
+    const id = value.id;
+    for (const val of addressList) {
+      if (val.id === id) {
+        if (!val.children) {
+          dispatch({
+            type: 'address/fetch',
+            payload: {
+              parent_id: id,
+            },
+          });
+        }
+        break;
+      }
+      if (val.children) {
+        for (const vals of val.children) {
+          if (vals.id === id) {
+            if (!vals.children) {
+              dispatch({
+                type: 'address/fetch',
+                payload: {
+                  parent_id: id,
+                },
+              });
+            }
+            break;
+          }
+        }
+      }
+    }
+  };
   // 新增modal显示
   showModal = () => {
     this.setState({
@@ -165,41 +201,43 @@ export default class Warehouse extends PureComponent {
       }
     });
   };
-  changeAddress = value => {
-    this.setState({
-      addressArr: value,
-    });
-    const { dispatch, address: { addressList } } = this.props;
-    value = value[value.length - 1];
-    for (const val of addressList) {
-      if (val.id === value) {
-        if (!val.children) {
-          dispatch({
-            type: 'address/fetch',
-            payload: {
-              parent_id: value,
-            },
-          });
-        }
-        break;
-      }
-      if (val.children) {
-        for (const vals of val.children) {
-          if (vals.id === value) {
-            if (!vals.children) {
-              dispatch({
-                type: 'address/fetch',
-                payload: {
-                  parent_id: value,
-                },
-              });
-            }
-            break;
-          }
-        }
-      }
-    }
-  };
+  //   changeAddress = value => {
+  //       console.log(77);
+  //     console.log(value);
+  //     this.setState({
+  //       addressArr: value,
+  //     });
+  //     const { dispatch, address: { addressList } } = this.props;
+  //     value = value[value.length - 1];
+  //     for (const val of addressList) {
+  //       if (val.id === value) {
+  //         if (!val.children) {
+  //           dispatch({
+  //             type: 'address/fetch',
+  //             payload: {
+  //               parent_id: value,
+  //             },
+  //           });
+  //         }
+  //         break;
+  //       }
+  //       if (val.children) {
+  //         for (const vals of val.children) {
+  //           if (vals.id === value) {
+  //             if (!vals.children) {
+  //               dispatch({
+  //                 type: 'address/fetch',
+  //                 payload: {
+  //                   parent_id: value,
+  //                 },
+  //               });
+  //             }
+  //             break;
+  //           }
+  //         }
+  //       }
+  //     }
+  //   };
   // 换页
   handleTableChange = pagination => {
     const { current } = pagination;
@@ -247,7 +285,8 @@ export default class Warehouse extends PureComponent {
           <Cascader
             style={{ width: 300 }}
             options={addressList}
-            onChange={this.changeAddress}
+            // onChange={this.changeAddress}
+            loadData={this.loadData}
             filedNames={{ label: 'region_name', value: 'id' }}
             changeOnSelect
           />
@@ -305,7 +344,8 @@ export default class Warehouse extends PureComponent {
             defaultValue={addressArr}
             style={{ width: 300 }}
             options={addressList}
-            onChange={this.changeAddress}
+            // onChange={this.changeAddress}
+            loadData={this.loadData}
             filedNames={{ label: 'region_name', value: 'id' }}
             changeOnSelect
           />
@@ -355,8 +395,8 @@ export default class Warehouse extends PureComponent {
         title: '地址',
         dataIndex: 'address',
         render: (val, text) => {
-          const str = text.province_name + text.district_name + text.city_name + val;
-          return str || '';
+          const str = text.province_name + text.district_name + text.city_name + (val || '');
+          return str;
         },
       },
       {

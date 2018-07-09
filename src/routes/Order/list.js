@@ -193,41 +193,78 @@ export default class Order extends PureComponent {
       orderId: '',
     });
   };
-  changeAddress = value => {
+  loadData = (value) => {
     this.setState({
-      addressArr: value,
+        addressArr: value,
     });
     const { dispatch, address: { addressList } } = this.props;
     value = value[value.length - 1];
+    const id = value.id;
     for (const val of addressList) {
-      if (val.id === value) {
-        if (!val.children) {
-          dispatch({
-            type: 'address/fetch',
-            payload: {
-              parent_id: value,
-            },
-          });
-        }
-        break;
-      }
-      if (val.children) {
-        for (const vals of val.children) {
-          if (vals.id === value) {
-            if (!vals.children) {
-              dispatch({
-                type: 'address/fetch',
-                payload: {
-                  parent_id: value,
-                },
-              });
+        if (val.id === id) {
+            if (!val.children) {
+                dispatch({
+                    type: 'address/fetch',
+                    payload: {
+                        parent_id: id,
+                    },
+                });
             }
             break;
-          }
         }
-      }
+        if (val.children) {
+            for (const vals of val.children) {
+                if (vals.id === id) {
+                    if (!vals.children) {
+                        dispatch({
+                            type: 'address/fetch',
+                            payload: {
+                                parent_id: id,
+                            },
+                        });
+                    }
+                    break;
+                }
+            }
+        }
     }
-  };
+    
+  }
+//   changeAddress = value => {
+//     this.setState({
+//       addressArr: value,
+//     });
+//     const { dispatch, address: { addressList } } = this.props;
+//     value = value[value.length - 1];
+//     for (const val of addressList) {
+//       if (val.id === value) {
+//         if (!val.children) {
+//           dispatch({
+//             type: 'address/fetch',
+//             payload: {
+//               parent_id: value,
+//             },
+//           });
+//         }
+//         break;
+//       }
+//       if (val.children) {
+//         for (const vals of val.children) {
+//           if (vals.id === value) {
+//             if (!vals.children) {
+//               dispatch({
+//                 type: 'address/fetch',
+//                 payload: {
+//                   parent_id: value,
+//                 },
+//               });
+//             }
+//             break;
+//           }
+//         }
+//       }
+//     }
+//   };
   changeAddressInfo = e => {
     this.setState({
       addressInfo: e.target.value,
@@ -670,7 +707,8 @@ export default class Order extends PureComponent {
                 defaultValue={addressArr}
                 style={{ width: 300 }}
                 options={addressList}
-                onChange={this.changeAddress}
+                // onChange={this.changeAddress}
+                loadData={this.loadData}
                 filedNames={{ label: 'region_name', value: 'id' }}
                 changeOnSelect
               />

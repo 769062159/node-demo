@@ -10,6 +10,11 @@ export default {
   effects: {
     *fetch({ payload }, { call, put }) {
       const { data } = yield call(getAddressList, payload);
+      if (data.length) {
+        data.forEach(element => {
+          element.isLeaf = false;
+        });
+      }
       yield put({
         type: 'save',
         payload: {
