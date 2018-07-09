@@ -49,7 +49,7 @@ export default {
       const response = yield call(getOrderList, { ...payload });
       yield put({
         type: 'getOrder',
-        payload: response.data,
+        payload: response,
       });
     },
   },
