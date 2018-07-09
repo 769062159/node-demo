@@ -138,7 +138,7 @@ export async function delFreight(params) {
 
 // 运费模版列表
 export async function getFreightList(params) {
-    return request('/admin/goods/freight/lists', {
+    return request('/admin/goods/freight/list', {
       method: 'POST',
       body: params,
     });
