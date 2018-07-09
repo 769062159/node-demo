@@ -198,6 +198,7 @@ const CustomizedForm = Form.create({
     goods: {
       systemType,
       brandList,
+      warehouseList,
       typeName,
       uploadGoodsImg,
       goodsPlace,
@@ -220,6 +221,7 @@ const CustomizedForm = Form.create({
     modifiedValue,
   } = props;
   const brandListItem = [];
+  const warehouseItem = []; // 仓库
   const attrItem = [];
   const attrItemSon = [];
   initGoodsAttr.forEach((res, index) => {
@@ -246,6 +248,13 @@ const CustomizedForm = Form.create({
     brandListItem.push(
       <Option key={res.brand_id} value={res.brand_id}>
         {res.brand_name}
+      </Option>
+    );
+  });
+  warehouseList.forEach(res => {
+    warehouseItem.push(
+      <Option key={res.id} value={res.id}>
+        {res.name}
       </Option>
     );
   });
@@ -626,6 +635,15 @@ const CustomizedForm = Form.create({
             ) : null}
           </Col>
         </Row>
+        <Row>
+          <Col span={12}>
+            <Form.Item {...formItemLayouts} label="发货仓库">
+              {getFieldDecorator('warehouse_id', {
+                rules: [{ required: true, message: '请填写发货仓库' }],
+              })(<Select style={{ width: 200 }}>{warehouseItem}</Select>)}
+            </Form.Item>
+          </Col>
+        </Row>
         {/* <Row gutter={24}>
           <Col span={12}>
             <Form.Item {...formItemLayouts} label="快递类型">
@@ -967,6 +985,7 @@ class AddGoodStep2 extends React.PureComponent {
     const { goods: { attrTable, levelPartial } } = this.props;
     if (attrTable.length) {
       attrTable.forEach(ele => {
+        ele.goods_sku_sn = ' ';
         if (!ele.fileList.length) {
           ele.img = '';
         } else {
@@ -1039,7 +1058,7 @@ class AddGoodStep2 extends React.PureComponent {
     values.category_id = type;
     // 新增需要加的
     values.goods_nums_warning = values.goods_nums_warning || 0;
-    values.warehouse_id = values.warehouse_id || 0;
+    // values.warehouse_id = values.warehouse_id || 0;
     values.supplier_id = values.supplier_id || 0;
     values.shipping_template_id = values.shipping_template_id || 0;
     values.shop_shipping_price = values.shop_shipping_price || 0;

@@ -103,34 +103,34 @@ class EditInputNumber extends PureComponent {
     );
   }
 }
-class EditInput extends PureComponent {
-  state = {
-    value: this.props.value,
-  };
-  handleChange = e => {
-    const value = e.target.value;
-    this.setState({ value });
-    // this.props.onChange(value);
-  };
-  check = () => {
-    if (this.props.onChange) {
-      this.props.onChange(this.state.value);
-    }
-  };
-  render() {
-    const { value } = this.state;
-    return (
-      <div className="editable-cell">
-        <Input
-          value={value}
-          onChange={this.handleChange}
-          onPressEnter={this.check}
-          suffix={<Icon type="check" className="editable-cell-icon-check" onClick={this.check} />}
-        />
-      </div>
-    );
-  }
-}
+// class EditInput extends PureComponent {
+//   state = {
+//     value: this.props.value,
+//   };
+//   handleChange = e => {
+//     const value = e.target.value;
+//     this.setState({ value });
+//     // this.props.onChange(value);
+//   };
+//   check = () => {
+//     if (this.props.onChange) {
+//       this.props.onChange(this.state.value);
+//     }
+//   };
+//   render() {
+//     const { value } = this.state;
+//     return (
+//       <div className="editable-cell">
+//         <Input
+//           value={value}
+//           onChange={this.handleChange}
+//           onPressEnter={this.check}
+//           suffix={<Icon type="check" className="editable-cell-icon-check" onClick={this.check} />}
+//         />
+//       </div>
+//     );
+//   }
+// }
 
 class UploadImg extends PureComponent {
   state = {
@@ -424,13 +424,13 @@ export default class EditableTable extends PureComponent {
           );
         },
       },
-      {
-        title: 'SKUSN',
-        dataIndex: 'goods_sku_sn',
-        render: (text, record, index) => (
-          <EditInput value={text} onChange={this.onCellChange(index, 'goods_sku_sn')} />
-        ),
-      },
+      //   {
+      //     title: 'SKUSN',
+      //     dataIndex: 'goods_sku_sn',
+      //     render: (text, record, index) => (
+      //       <EditInput value={text} onChange={this.onCellChange(index, 'goods_sku_sn')} />
+      //     ),
+      //   },
       {
         title: '操作',
         dataIndex: 'operation',

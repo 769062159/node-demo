@@ -123,6 +123,7 @@ export default {
     levelPartial: [], // 分佣等级
     levelPartialSon: [], // 传给子的分佣等级
     brandList: [], // 品牌列表
+    warehouseList: [], // 仓库列表
     brandListPage: {}, // 品牌页脚
     goodsPlace: [], // 商品地址
     systemType: {}, // 系统类型
@@ -244,7 +245,8 @@ export default {
       if (response) {
         const goodsClass = response.data.goods_class;
         const goodsBrand = response.data.goods_brand; // 商品品牌
-        const goodsPlace = response.data.goods_place; // 商品品牌
+        const goodsPlace = response.data.goods_place; // 地址
+        const warehouseList = response.data.warehouse; // 仓库
         const goodsDetail = response.data.goods; // 商品详情
         const systemType = response.data.system_type; // 商品详情
         let type = '';
@@ -288,6 +290,7 @@ export default {
             initGoodsAttr: selectType[0].has_many_attr_class,
             AttrArrMap,
             brandList: goodsBrand,
+            warehouseList,
             goodsPlace, // 品牌地址
             goodsDetail, // 商品详情
             systemType,
