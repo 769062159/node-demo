@@ -44,6 +44,14 @@ const profitLayout = {
     span: 16,
   },
 };
+const spcialLayouts = {
+  labelCol: {
+    span: 10,
+  },
+  wrapperCol: {
+    span: 14,
+  },
+};
 const formItemLayouts = {
   labelCol: {
     span: 5,
@@ -610,7 +618,7 @@ const CustomizedForm = Form.create({
         </Row> */}
         <Row gutter={24}>
           <Col span={12}>
-            <Form.Item {...formItemLayouts} label="运送类型">
+            <Form.Item {...spcialLayouts} label="运送类型">
               {getFieldDecorator('shop_shipping_type', {
                 rules: [{ required: true, message: '请填写运送类型' }],
               })(<Select>{shippingTypeItem}</Select>)}
@@ -618,7 +626,7 @@ const CustomizedForm = Form.create({
           </Col>
           <Col span={12}>
             {goodsDetail.shop_shipping_type === 0 ? (
-              <Form.Item {...formItemLayouts} label="运费模版">
+              <Form.Item {...spcialLayouts} label="运费模版">
                 {getFieldDecorator('shipping_template_id', {
                   rules: [
                     { required: goodsDetail.shop_shipping_type === 0, message: '请填写运费模版' },
@@ -629,7 +637,7 @@ const CustomizedForm = Form.create({
           </Col>
         </Row>
         <Row>
-          <Col span={12}>
+          <Col span={24}>
             <Form.Item {...formItemLayouts} label="发货仓库">
               {getFieldDecorator('warehouse_id', {
                 rules: [{ required: true, message: '请填写发货仓库' }],
@@ -664,7 +672,7 @@ const CustomizedForm = Form.create({
 
         <Row gutter={24}>
           <Col span={12}>
-            <Form.Item {...formItemLayouts} label="上架方式">
+            <Form.Item {...spcialLayouts} label="上架方式">
               {getFieldDecorator('goods_shelves_type', {
                 rules: [{ required: true, message: '请填写上架方式' }],
               })(<Select>{goodsShelvesItem}</Select>)}
@@ -672,7 +680,7 @@ const CustomizedForm = Form.create({
           </Col>
           <Col span={12}>
             {goodsDetail.goods_shelves_type === 1 ? (
-              <Form.Item {...formItemLayouts} label="上架时间">
+              <Form.Item {...spcialLayouts} label="上架时间">
                 {getFieldDecorator('goods_shelves_time', {
                   rules: [
                     {
