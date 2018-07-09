@@ -280,7 +280,7 @@ const CustomizedForm = Form.create({
   if (Object.keys(systemType).length) {
     systemType.user_levels.forEach(res => {
       levelNumberItem.push(
-        <Col span={8} key={res.id}>
+        <Col span={24} key={res.id}>
           <Form.Item {...formItemLayouts} label={res.name}>
             {getFieldDecorator(`level_${res.id}`, {
               rules: [{ required: true, message: `${res.name}` }],
@@ -431,6 +431,13 @@ const CustomizedForm = Form.create({
             </Form.Item>
           </Col>
           <Col span={24}>
+            <Form.Item {...formItemLayouts} label="销售价格">
+              {getFieldDecorator('sell_goods_price', {
+                rules: [{ required: true, message: '请填写商品销售价格' }],
+              })(<InputNumber step={0.01} precision={2} min={0.01} style={{ width: '200px' }} />)}
+            </Form.Item>
+          </Col>
+          <Col span={24}>
             <Form.Item {...formItemLayouts} label="成本价">
               {getFieldDecorator('cost_price', {
                 rules: [{ required: true, message: '请填写商品成本价' }],
@@ -438,18 +445,11 @@ const CustomizedForm = Form.create({
                 <InputNumber
                   step={0.01}
                   precision={2}
-                  min={0.01}
+                  min={0}
                   max={Number(goodsDetail.sell_goods_price || 0)}
                   style={{ width: '200px' }}
                 />
               )}
-            </Form.Item>
-          </Col>
-          <Col span={24}>
-            <Form.Item {...formItemLayouts} label="销售价格">
-              {getFieldDecorator('sell_goods_price', {
-                rules: [{ required: true, message: '请填写商品销售价格' }],
-              })(<InputNumber step={0.01} precision={2} min={0.01} style={{ width: '200px' }} />)}
             </Form.Item>
           </Col>
           <Col span={24}>
@@ -768,12 +768,11 @@ const CustomizedForm = Form.create({
         </Row>
       </Card> */}
       <Card title="sku分佣">
-        <Form.Item {...formItemLayout} label="分拥类型">
+        <Form.Item {...formItemLayout} label="分佣类型">
           {getFieldDecorator('profit_type', {
             rules: [{ required: true, message: '请填写分拥类型' }],
           })(<Select>{profitTypeItem}</Select>)}
         </Form.Item>
-        <div>分佣值</div>
         <Row>{levelNumberItem}</Row>
         <div className={styles.borderList}>
           <span>属性名：</span>
@@ -930,6 +929,18 @@ class AddGoodStep2 extends React.PureComponent {
       });
     }
   };
+  // 修改分佣等级
+  //   chgTypeHas = (e) => {
+  //     console.log(e);
+  //     const { dispatch } = this.props;
+  //     // this.chgFormVal('level_0', '');
+  //     dispatch({
+  //       type: 'goods/changeTypePartial',
+  //       payload: {
+  //         e,
+  //       },
+  //     });
+  //   }
   // 修改表单值
   changeFormVal = val => {
     const { dispatch } = this.props;
@@ -953,7 +964,7 @@ class AddGoodStep2 extends React.PureComponent {
     }
     // 暂时写死的
     values.goods_sn = ' ';
-    const { goods: { attrTable, levelPartial, typePartial } } = this.props;
+    const { goods: { attrTable, levelPartial } } = this.props;
     if (attrTable.length) {
       attrTable.forEach(ele => {
         if (!ele.fileList.length) {
@@ -1034,7 +1045,6 @@ class AddGoodStep2 extends React.PureComponent {
     values.shop_shipping_price = values.shop_shipping_price || 0;
     values.profit_value = levelPartial;
     values.goods_sku = attrTable;
-    values.profit_type = typePartial;
     // 暂时写死的字段
     values.goods_list_title = 0;
     values.goods_is_refund = 1;
