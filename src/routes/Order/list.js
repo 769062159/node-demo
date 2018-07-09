@@ -615,7 +615,7 @@ export default class Order extends PureComponent {
                           <Row>
                             <Col>
                               {res.order_status === 2 ? (
-                                <Button type="primary" onClick={this.ship.bind(this, res.order_id)}>
+                                <Button type="primary" onClick={this.ship.bind(this, res.pack_id)}>
                                   发货
                                 </Button>
                               ) : res.order_status === 3 ? (
