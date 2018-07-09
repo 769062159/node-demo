@@ -42,6 +42,14 @@ const formItemLayouts = {
     span: 19,
   },
 };
+const profitLayout = {
+  labelCol: {
+    span: 8,
+  },
+  wrapperCol: {
+    span: 16,
+  },
+};
 const formItemLayoutUploadImg = {
   labelCol: {
     span: 5,
@@ -289,8 +297,8 @@ const CustomizedForm = Form.create({
   if (Object.keys(systemType).length) {
     systemType.user_levels.forEach(res => {
       levelNumberItem.push(
-        <Col span={24} key={res.id}>
-          <Form.Item {...formItemLayouts} label={res.name}>
+        <Col span={8} key={res.id}>
+          <Form.Item {...profitLayout} label={res.name}>
             {getFieldDecorator(`level_${res.id}`, {
               rules: [{ required: true, message: `${res.name}` }],
             })(
@@ -542,8 +550,6 @@ const CustomizedForm = Form.create({
             </Form.Item>
           </Col>
         </Row>
-      </Card>
-      <Card>
         {/* <Row gutter={24}>
           <Col span={12}>
             <Form.Item {...formItemLayouts} label="设置预警">
@@ -786,11 +792,15 @@ const CustomizedForm = Form.create({
         </Row>
       </Card> */}
       <Card title="sku分佣">
-        <Form.Item {...formItemLayout} label="分佣类型">
-          {getFieldDecorator('profit_type', {
-            rules: [{ required: true, message: '请填写分拥类型' }],
-          })(<Select>{profitTypeItem}</Select>)}
-        </Form.Item>
+        <Row>
+          <Col span={8}>
+            <Form.Item {...profitLayout} label="分佣类型">
+              {getFieldDecorator('profit_type', {
+                rules: [{ required: true, message: '请填写分拥类型' }],
+              })(<Select>{profitTypeItem}</Select>)}
+            </Form.Item>
+          </Col>
+        </Row>
         <Row>{levelNumberItem}</Row>
         <div className={styles.borderList}>
           <span>属性名：</span>

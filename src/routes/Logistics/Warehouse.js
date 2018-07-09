@@ -117,6 +117,10 @@ export default class Warehouse extends PureComponent {
     });
   };
   loadData = value => {
+    //   console.log(value);
+    // if (value.length === 3) {
+
+    // }
     this.setState({
       addressArr: value,
     });
@@ -178,9 +182,9 @@ export default class Warehouse extends PureComponent {
           return;
         }
         if (addressArr.length === 3) {
-          values.province_id = addressArr[0];
-          values.city_id = addressArr[1];
-          values.district_id = addressArr[2];
+          values.province_id = addressArr[0].id;
+          values.city_id = addressArr[1].id;
+          values.district_id = addressArr[2].id;
         }
         values.page = page;
         if (Object.keys(editData).length) {

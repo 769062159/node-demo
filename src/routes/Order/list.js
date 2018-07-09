@@ -128,9 +128,9 @@ export default class Order extends PureComponent {
         mobile,
         name: receiptName,
         address: addressInfo,
-        province: addressArr[0],
-        city: addressArr[1],
-        region: addressArr[2],
+        province: addressArr[0].id,
+        city: addressArr[1].id,
+        region: addressArr[2].id,
         order_id: orderId,
       },
     });
