@@ -23,8 +23,8 @@ export default {
   },
 
   effects: {
-    *fetchHome(_, { call, put }) {
-      const response = yield call(getHome);
+    *fetchHome({ payload }, { call, put }) {
+      const response = yield call(getHome, payload);
       yield put({
         type: 'getHome',
         payload: response,
@@ -32,7 +32,7 @@ export default {
     },
     *addHome({ payload }, { call, put }) {
       yield call(addHome, payload);
-      const response = yield call(getHome);
+      const response = yield call(getHome, { page: payload.page });
       yield put({
         type: 'getHome',
         payload: response,
@@ -40,7 +40,7 @@ export default {
     },
     *editHome({ payload }, { call, put }) {
       yield call(updateHome, payload);
-      const response = yield call(getHome);
+      const response = yield call(getHome, { page: payload.page });
       yield put({
         type: 'getHome',
         payload: response,
@@ -48,7 +48,7 @@ export default {
     },
     *deleteHome({ payload }, { call, put }) {
       yield call(deleteHome, payload);
-      const response = yield call(getHome);
+      const response = yield call(getHome, { page: payload.page });
       yield put({
         type: 'getHome',
         payload: response,
@@ -68,42 +68,34 @@ export default {
     },
     *fetchAds({ payload }, { call, put }) {
       const response = yield call(getAds, { page: payload.pagination });
-      if (response) {
-        yield put({
-          type: 'getAds',
-          payload: response.data,
-        });
-      }
+      yield put({
+        type: 'getAds',
+        payload: response,
+      });
     },
     *addAds({ payload }, { call, put }) {
       yield call(addAds, payload);
       const response = yield call(getAds, { page: payload.pagination });
-      if (response) {
-        yield put({
-          type: 'getAds',
-          payload: response.data,
-        });
-      }
+      yield put({
+        type: 'getAds',
+        payload: response,
+      });
     },
     *editAds({ payload }, { call, put }) {
       yield call(updateAds, payload);
       const response = yield call(getAds, { page: payload.pagination });
-      if (response) {
-        yield put({
-          type: 'getAds',
-          payload: response.data,
-        });
-      }
+      yield put({
+        type: 'getAds',
+        payload: response,
+      });
     },
     *deleteAds({ payload }, { call, put }) {
       yield call(deleteAds, payload);
       const response = yield call(getAds, { page: payload.pagination });
-      if (response) {
-        yield put({
-          type: 'getAds',
-          payload: response.data,
-        });
-      }
+      yield put({
+        type: 'getAds',
+        payload: response,
+      });
     },
   },
 
@@ -178,12 +170,13 @@ export default {
       };
     },
     getAds(state, { payload }) {
+      const { data } = payload;
       return {
         ...state,
-        adsList: payload.list,
+        adsList: data.list,
         adsListPage: {
-          pageSize: payload.page,
-          total: payload.total,
+          pageSize: data.page,
+          total: data.total,
         },
       };
     },

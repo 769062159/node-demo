@@ -134,42 +134,34 @@ export default {
   effects: {
     *fetchFreight({ payload }, { call, put }) {
       const response = yield call(getFreightList, { ...payload });
-      if (response) {
-        yield put({
-          type: 'fetchFreights',
-          payload: response.data,
-        });
-      }
+      yield put({
+        type: 'fetchFreights',
+        payload: response,
+      });
     },
     *addFreight({ payload }, { call, put }) {
       yield call(addFreight, { ...payload });
       const response = yield call(getFreightList, { ...payload });
-      if (response) {
-        yield put({
-          type: 'fetchFreights',
-          payload: response.data,
-        });
-      }
+      yield put({
+        type: 'fetchFreights',
+        payload: response.data,
+      });
     },
     *updateFreight({ payload }, { call, put }) {
       yield call(updateFreight, { ...payload });
       const response = yield call(getFreightList, { ...payload });
-      if (response) {
-        yield put({
-          type: 'fetchFreights',
-          payload: response.data,
-        });
-      }
+      yield put({
+        type: 'fetchFreights',
+        payload: response.data,
+      });
     },
     *delFreight({ payload }, { call, put }) {
       yield call(delFreight, { ...payload });
       const response = yield call(getFreightList, { ...payload });
-      if (response) {
-        yield put({
-          type: 'fetchFreights',
-          payload: response.data,
-        });
-      }
+      yield put({
+        type: 'fetchFreights',
+        payload: response.data,
+      });
     },
     *changeFormVal({ payload }, { put }) {
       yield put({
@@ -206,43 +198,35 @@ export default {
       });
     },
     *fetchBrand({ payload }, { call, put }) {
-      const response = yield call(getBrand, { page: payload.pagination });
-      if (response) {
-        yield put({
-          type: 'getBrands',
-          payload: response.data,
-        });
-      }
+      const response = yield call(getBrand, payload);
+      yield put({
+        type: 'getBrands',
+        payload: response,
+      });
     },
     *addBrand({ payload }, { call, put }) {
       yield call(addBrand, payload);
       const response = yield call(getBrand, { page: payload.pagination });
-      if (response) {
-        yield put({
-          type: 'getBrands',
-          payload: response.data,
-        });
-      }
+      yield put({
+        type: 'getBrands',
+        payload: response,
+      });
     },
     *editBrand({ payload }, { call, put }) {
       yield call(updateBrand, payload);
       const response = yield call(getBrand, { page: payload.pagination });
-      if (response) {
-        yield put({
-          type: 'getBrands',
-          payload: response.data,
-        });
-      }
+      yield put({
+        type: 'getBrands',
+        payload: response,
+      });
     },
     *deleteBrand({ payload }, { call, put }) {
       yield call(deleteBrand, payload);
       const response = yield call(getBrand, { page: payload.pagination });
-      if (response) {
-        yield put({
-          type: 'getBrands',
-          payload: response.data,
-        });
-      }
+      yield put({
+        type: 'getBrands',
+        payload: response,
+      });
     },
     *uploadImg({ payload }, { call }) {
       yield call(uploadImg, payload);
@@ -341,14 +325,14 @@ export default {
       const response = yield call(getAllType, payload);
       yield put({
         type: 'fetchType',
-        payload: response.data,
+        payload: response,
       });
     },
     *getAllType({ payload }, { call, put }) {
       const response = yield call(getAllType, payload);
       yield put({
         type: 'fetchType',
-        payload: response.data,
+        payload: response,
       });
     },
     *addGoodType({ payload }, { call, put }) {
@@ -356,7 +340,7 @@ export default {
       const response = yield call(getAllType, payload);
       yield put({
         type: 'fetchType',
-        payload: response.data,
+        payload: response,
       });
     },
     *delGoodType({ payload }, { call, put }) {
@@ -364,24 +348,22 @@ export default {
       const response = yield call(getAllType, payload);
       yield put({
         type: 'fetchType',
-        payload: response.data,
+        payload: response,
       });
     },
     *getAllAttr({ payload }, { call, put }) {
       const response = yield call(getAttrList, payload) || {};
-      if (response) {
-        yield put({
-          type: 'fetchAttr',
-          payload: response.data,
-        });
-      }
+      yield put({
+        type: 'fetchAttr',
+        payload: response,
+      });
     },
     *addGoodAttr({ payload }, { call, put }) {
       yield call(addGoodAttr, payload);
       const response = yield call(getAttrList);
       yield put({
         type: 'fetchAttr',
-        payload: response.data,
+        payload: response,
       });
     },
     *setAttrTabe({ payload }, { put }) {
@@ -395,7 +377,7 @@ export default {
       const response = yield call(getAttrList, payload);
       yield put({
         type: 'fetchAttr',
-        payload: response.data,
+        payload: response,
       });
     },
   },
@@ -439,9 +421,10 @@ export default {
       };
     },
     fetchFreights(state, { payload }) {
+      const { data } = payload;
       return {
         ...state,
-        freightList: payload,
+        freightList: data,
       };
     },
     changeFormVals(state, { payload }) {
@@ -507,12 +490,13 @@ export default {
       };
     },
     getBrands(state, { payload }) {
+      const { data } = payload;
       return {
         ...state,
-        brandList: payload.list,
+        brandList: data.list,
         brandListPage: {
-          pageSize: payload.page,
-          total: payload.total,
+          pageSize: data.page,
+          total: data.total,
         },
       };
     },
@@ -753,7 +737,8 @@ export default {
       };
     },
     fetchType(state, { payload }) {
-      payload = payload.map(res => {
+      let { data } = payload;
+      data = data.map(res => {
         if (res.has_category.length) {
           res.children = res.has_category;
         }
@@ -762,12 +747,13 @@ export default {
       // state.menuList = payload;
       return {
         ...state,
-        goodType: payload,
+        goodType: data,
       };
     },
     fetchAttr(state, { payload }) {
       // state.menuList = payload;
-      const { list, total, page } = payload;
+      const { data } = payload;
+      const { list, total, page } = data;
       return {
         ...state,
         goodAttr: list,

@@ -88,6 +88,10 @@ export const menuData = [
         name: '运费模版',
         path: 'freight',
       },
+      {
+        name: '仓库',
+        path: 'warehouse',
+      },
     ],
   },
   {

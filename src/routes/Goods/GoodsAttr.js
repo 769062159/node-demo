@@ -40,6 +40,7 @@ export default class GoodsAttr extends PureComponent {
     isFromEdit: false, // 从修改打开modal
     // selectedRows: [],
     formValues: {},
+    // page: 1, // 页脚
   };
 
   componentDidMount() {
@@ -123,11 +124,13 @@ export default class GoodsAttr extends PureComponent {
       cancelText: '取消',
       onOk() {
         const { dispatch } = that.props;
+        // const { page } = that.state;
         dispatch({
           type: 'goods/addGoodAttr',
           payload: {
             ...data,
             status: 1,
+            // page,
           },
         });
         // that.setState({
@@ -169,6 +172,7 @@ export default class GoodsAttr extends PureComponent {
             return res.status === 0;
           });
           const length = sonAttr.length - 1;
+          //   values.page = page;
           values.values.forEach((res, index) => {
             if (index > length) {
               attrData.push({
@@ -229,6 +233,20 @@ export default class GoodsAttr extends PureComponent {
       keys: nextKeys,
     });
   };
+  // 换页
+  //   handleTableChange = pagination => {
+  //     const { current } = pagination;
+  //     this.setState({
+  //       page: current,
+  //     });
+  //     const { dispatch } = this.props;
+  //     dispatch({
+  //       type: 'goods/fetchBrand',
+  //       payload: {
+  //         page: current,
+  //       },
+  //     });
+  //   };
 
   render() {
     const { goods: { goodAttr: datas, goodsAttrPage, goodType }, loading } = this.props;
@@ -361,17 +379,6 @@ export default class GoodsAttr extends PureComponent {
         </FormItem>
       );
     });
-    // console.log(formItems);
-    // console.log(editData.has_many_attr);
-
-    // 修改的属性名
-    // const attrName =  isFromEdit ? editData.name : '';
-    // // 修改的属性排序
-    // const attrSort =  isFromEdit ? editData.sort : '';
-    // // // 修改的属性父id
-    // const attrId =  isFromEdit ? editData.goods_class_id : '';
-    // console.log(attrName);
-    // console.log(this.props.form);
     return (
       <PageHeaderLayout>
         <Card bordered={false}>
@@ -382,8 +389,8 @@ export default class GoodsAttr extends PureComponent {
               </Button>
             </div>
             <Table
+              //   onChange={this.handleTableChange}  // 换页
               className="components-table-demo-nested"
-              // onChange={this.handleTableChange}
               expandedRowRender={record => expandedRowRender(record.has_many_attr)}
               // expandedRowRender={record => <p style={{ margin: 0 }}>{record.description}</p>}
               dataSource={datas}

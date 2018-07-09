@@ -260,7 +260,7 @@ export default class Home extends PureComponent {
     dispatch({
       type: 'indexs/fetchHome',
       payload: {
-        pagination,
+        page: pagination,
       },
     });
   }
@@ -326,7 +326,7 @@ export default class Home extends PureComponent {
           type: 'indexs/deleteHome',
           payload: {
             id,
-            pagination,
+            page: pagination,
           },
         });
       },
@@ -351,7 +351,7 @@ export default class Home extends PureComponent {
       homeForm.remark = '';
       homeForm.target_id = '';
     }
-    homeForm.pagination = pagination;
+    homeForm.page = pagination;
     homeForm.cover = uploadHomeImg[0].url;
     if (homeForm.id) {
       dispatch({
@@ -453,7 +453,7 @@ export default class Home extends PureComponent {
     dispatch({
       type: 'indexs/fetchHome',
       payload: {
-        pagination: current,
+        page: current,
       },
     });
   };
@@ -489,8 +489,9 @@ export default class Home extends PureComponent {
       },
       {
         title: '跳转关联',
-        dataIndex: 'jump_type',
-        render: (val, text) => (val === 1 ? text.remark : val === 2 ? text.url : '无关联'),
+        dataIndex: 'remark',
+        render: (val, text) =>
+          text.jump_type === 1 ? val : text.jump_type === 2 ? text.url : '无关联',
       },
       {
         title: '创建时间',

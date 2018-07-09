@@ -39,7 +39,7 @@ const formSubmitLayout = {
 @Form.create()
 export default class GoodBrand extends PureComponent {
   state = {
-    pagination: 1,
+    page: 1,
     expandForm: false,
     editData: {},
     formVisible: false,
@@ -52,11 +52,11 @@ export default class GoodBrand extends PureComponent {
   };
   componentDidMount() {
     const { dispatch } = this.props;
-    const { pagination } = this.state;
+    const { page } = this.state;
     dispatch({
       type: 'goods/fetchBrand',
       payload: {
-        pagination,
+        page,
       },
     });
   }
@@ -78,12 +78,12 @@ export default class GoodBrand extends PureComponent {
       cancelText: '取消',
       onOk() {
         const { dispatch } = that.props;
-        const { pagination } = that.state;
+        const { page } = that.state;
         dispatch({
           type: 'goods/deleteBrand',
           payload: {
             brand_id: id,
-            pagination,
+            page,
           },
         });
       },
@@ -127,8 +127,8 @@ export default class GoodBrand extends PureComponent {
           return false;
         }
         const { dispatch } = this.props;
-        const { editData, pagination } = this.state;
-        values.pagination = pagination;
+        const { editData, page } = this.state;
+        values.page = page;
         if (Object.keys(editData).length) {
           values.brand_id = editData.brand_id;
           dispatch({
@@ -165,13 +165,13 @@ export default class GoodBrand extends PureComponent {
   handleTableChange = pagination => {
     const { current } = pagination;
     this.setState({
-      pagination: current,
+      page: current,
     });
     const { dispatch } = this.props;
     dispatch({
       type: 'goods/fetchBrand',
       payload: {
-        pagination: current,
+        page: current,
       },
     });
   };
@@ -411,6 +411,7 @@ export default class GoodBrand extends PureComponent {
               </Button>
             </div>
             <Table
+              onChange={this.handleTableChange}
               dataSource={datas}
               rowKey={record => record.brand_id}
               loading={loading}

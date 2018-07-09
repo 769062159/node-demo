@@ -49,12 +49,10 @@ export default {
     },
     *fetchFrontUserList({ payload }, { call, put }) {
       const response = yield call(getFrontUserList, { ...payload });
-      if (response) {
-        yield put({
-          type: 'getFrontUserList',
-          payload: response.data,
-        });
-      }
+      yield put({
+        type: 'getFrontUserList',
+        payload: response,
+      });
     },
   },
 
@@ -66,12 +64,13 @@ export default {
       };
     },
     getFrontUserList(state, { payload }) {
+      const { data } = payload;
       return {
         ...state,
-        frontUserList: payload.list,
+        frontUserList: data.list,
         frontUserListPage: {
-          pageSize: payload.page,
-          total: payload.total,
+          pageSize: data.page,
+          total: data.total,
         },
       };
     },

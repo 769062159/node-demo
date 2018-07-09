@@ -33,9 +33,10 @@ export async function updateAds(params) {
 }
 
 // 所有首页
-export async function getHome() {
+export async function getHome(params) {
   return request('/admin/index/list', {
     method: 'POST',
+    body: params,
   });
 }
 

@@ -158,6 +158,11 @@ export const getRouterConfig = app => {
     '/logistics/freight': {
       component: dynamicWrapper(app, ['goods'], () => import('../routes/Logistics/Freight')),
     },
+    '/logistics/warehouse': {
+      component: dynamicWrapper(app, ['logistics', 'address'], () =>
+        import('../routes/Logistics/Warehouse')
+      ),
+    },
     // 商品
     '/good/good-list': {
       component: dynamicWrapper(app, ['goods'], () => import('../routes/Goods/GoodsList')),

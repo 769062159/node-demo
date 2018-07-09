@@ -43,42 +43,34 @@ export default {
     },
     *fetchLive({ payload }, { call, put }) {
       const response = yield call(getLive, { page: payload.pagination });
-      if (response) {
-        yield put({
-          type: 'getLive',
-          payload: response.data,
-        });
-      }
+      yield put({
+        type: 'getLive',
+        payload: response,
+      });
     },
     *addLive({ payload }, { call, put }) {
       yield call(addLive, payload);
       const response = yield call(getLive, { page: payload.pagination });
-      if (response) {
-        yield put({
-          type: 'getLive',
-          payload: response.data,
-        });
-      }
+      yield put({
+        type: 'getLive',
+        payload: response,
+      });
     },
     *editLive({ payload }, { call, put }) {
       yield call(updateLive, payload);
       const response = yield call(getLive, { page: payload.pagination });
-      if (response) {
-        yield put({
-          type: 'getLive',
-          payload: response.data,
-        });
-      }
+      yield put({
+        type: 'getLive',
+        payload: response,
+      });
     },
     *deleteLive({ payload }, { call, put }) {
       yield call(deleteLive, payload);
       const response = yield call(getLive, { page: payload.pagination });
-      if (response) {
-        yield put({
-          type: 'getLive',
-          payload: response.data,
-        });
-      }
+      yield put({
+        type: 'getLive',
+        payload: response,
+      });
     },
   },
 
@@ -147,12 +139,13 @@ export default {
       };
     },
     getLive(state, { payload }) {
+      const { data } = payload;
       return {
         ...state,
-        liveList: payload.list,
+        liveList: data.list,
         liveListPage: {
-          pageSize: payload.page,
-          total: payload.total,
+          pageSize: data.page,
+          total: data.total,
         },
       };
     },

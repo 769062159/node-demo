@@ -79,17 +79,21 @@ export default class GoodsList extends PureComponent {
       return newObj;
     }, {});
 
+    // const params = {
+    //   currentPage: pagination.current,
+    //   pageSize: pagination.pageSize,
+    //   ...formValues,
+    //   ...filters,
+    // };
     const params = {
-      currentPage: pagination.current,
-      pageSize: pagination.pageSize,
+      page: pagination.current,
+      page_number: pagination.pageSize,
       ...formValues,
       ...filters,
     };
     if (sorter.field) {
       params.sorter = `${sorter.field}_${sorter.order}`;
     }
-    console.log(99);
-    console.log(params);
     dispatch({
       type: 'goods/fetchGoods',
       payload: params,
@@ -346,7 +350,6 @@ export default class GoodsList extends PureComponent {
       list: datas,
       pagination: {
         ...goodsListPage,
-        current: 1,
       },
     };
     const { selectedRows } = this.state;
