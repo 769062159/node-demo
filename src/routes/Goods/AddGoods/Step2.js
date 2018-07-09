@@ -16,6 +16,7 @@ import {
   Modal,
   Card,
   message,
+  Tag,
 } from 'antd';
 import moment from 'moment';
 import ReactEditor from 'components/ReactEditor';
@@ -35,10 +36,10 @@ const formItemLayout = {
 };
 const formItemLayouts = {
   labelCol: {
-    span: 10,
+    span: 5,
   },
   wrapperCol: {
-    span: 14,
+    span: 19,
   },
 };
 const formItemLayoutUploadImg = {
@@ -390,7 +391,7 @@ const CustomizedForm = Form.create({
     <Form layout="horizontal" className={styles.stepForm} autoComplete="OFF">
       <Card title="商品信息" style={{ marginBottom: '20px' }}>
         <Row gutter={24}>
-          <Col span={12}>
+          <Col span={24}>
             <Form.Item {...formItemLayouts} label="商品类别">
               <span>{typeName}</span>
             </Form.Item>
@@ -411,41 +412,25 @@ const CustomizedForm = Form.create({
             rules: [{ required: true, message: '请填写列表标题' }],
           })(<Input />)}
         </Form.Item> */}
+        <Form.Item {...formItemLayouts} label="商品标题">
+          {getFieldDecorator('goods_title', {
+            rules: [{ required: true, message: '请填写商品标题' }],
+          })(<Input />)}
+        </Form.Item>
         <Form.Item {...formItemLayout} label="商品描述">
           {getFieldDecorator('goods_des', {
             rules: [{ required: true, message: '请填写商品描述' }],
           })(<TextArea placeholder="请填写商品描述" autosize />)}
         </Form.Item>
         <Row gutter={24}>
-          <Col span={12}>
+          <Col span={24}>
             <Form.Item {...formItemLayouts} label="商品品牌">
               {getFieldDecorator('brand_id', {
                 rules: [{ required: true, message: '请填写商品品牌' }],
-              })(<Select>{brandListItem}</Select>)}
+              })(<Select style={{ width: 200 }}>{brandListItem}</Select>)}
             </Form.Item>
           </Col>
-          <Col span={12}>
-            <Form.Item {...formItemLayouts} label="商品标题">
-              {getFieldDecorator('goods_title', {
-                rules: [{ required: true, message: '请填写商品标题' }],
-              })(<Input />)}
-            </Form.Item>
-          </Col>
-          <Col span={12}>
-            <Form.Item {...formItemLayouts} label="销售价格">
-              {getFieldDecorator('sell_goods_price', {
-                rules: [{ required: true, message: '请填写商品销售价格' }],
-              })(<InputNumber step={0.01} precision={2} min={0.01} style={{ width: '200px' }} />)}
-            </Form.Item>
-          </Col>
-          <Col span={12}>
-            <Form.Item {...formItemLayouts} label="市场价">
-              {getFieldDecorator('goods_price', {
-                rules: [{ required: true, message: '请填写商品市场价' }],
-              })(<InputNumber step={0.01} precision={2} min={0.01} style={{ width: '200px' }} />)}
-            </Form.Item>
-          </Col>
-          <Col span={12}>
+          <Col span={24}>
             <Form.Item {...formItemLayouts} label="成本价">
               {getFieldDecorator('cost_price', {
                 rules: [{ required: true, message: '请填写商品成本价' }],
@@ -460,6 +445,20 @@ const CustomizedForm = Form.create({
               )}
             </Form.Item>
           </Col>
+          <Col span={24}>
+            <Form.Item {...formItemLayouts} label="销售价格">
+              {getFieldDecorator('sell_goods_price', {
+                rules: [{ required: true, message: '请填写商品销售价格' }],
+              })(<InputNumber step={0.01} precision={2} min={0.01} style={{ width: '200px' }} />)}
+            </Form.Item>
+          </Col>
+          <Col span={24}>
+            <Form.Item {...formItemLayouts} label="市场价">
+              {getFieldDecorator('goods_price', {
+                rules: [{ required: true, message: '请填写商品市场价' }],
+              })(<InputNumber step={0.01} precision={2} min={0.01} style={{ width: '200px' }} />)}
+            </Form.Item>
+          </Col>
           {/* <Col span={12}>
             <Form.Item {...formItemLayouts} label="商品类型">
               {getFieldDecorator('goods_type', {
@@ -469,47 +468,48 @@ const CustomizedForm = Form.create({
           </Col> */}
         </Row>
         <Row gutter={24}>
-          <Col span={12}>
-            <Form.Item {...formItemLayouts} label="商品状态">
-              {getFieldDecorator('goods_status', {
-                rules: [{ required: true, message: '请填写商品状态' }],
-              })(<Select>{goodsStatusItem}</Select>)}
-            </Form.Item>
-          </Col>
-          <Col span={12}>
+          <Col span={24}>
             <Form.Item {...formItemLayouts} label="产品总库存">
               {getFieldDecorator('goods_total_inventory', {
                 rules: [{ required: true, message: '请填写产品总库存' }],
-              })(
-                <InputNumber
-                  step={1}
-                  min={1}
-                  // onChange={e => this.chgTotalStock(e)}
-                  style={{ width: '200px' }}
-                />
-              )}
+              })(<InputNumber step={1} min={1} style={{ width: '200px' }} />)}
+            </Form.Item>
+          </Col>
+          <Col span={24}>
+            <Form.Item {...formItemLayouts} label="商品状态">
+              {getFieldDecorator('goods_status', {
+                rules: [{ required: true, message: '请填写商品状态' }],
+              })(<Select style={{ width: 200 }}>{goodsStatusItem}</Select>)}
             </Form.Item>
           </Col>
         </Row>
         <Row>
-          <Col span={12}>
+          <Col span={24}>
             <Form.Item {...formItemLayouts} label="商品重量">
               {getFieldDecorator('weight', {
                 rules: [{ required: true, message: '请填写商品重量' }],
-              })(<InputNumber step={0.01} precision={2} min={0} />)}
+              })(<InputNumber step={0.01} style={{ width: 200 }} precision={2} min={0} />)}
             </Form.Item>
           </Col>
-          <Col span={12}>
-            <Form.Item {...formItemLayouts} label="排序">
+          <Col span={24} className={styles.extraTag}>
+            <Form.Item
+              {...formItemLayouts}
+              label="排序"
+              extra={<Tag color="blue">序号大的排在前面</Tag>}
+            >
               {getFieldDecorator('goods_sort', {
                 rules: [{ required: true, message: '请填写商品排序' }],
-              })(<InputNumber step={1} min={1} />)}
+              })(<InputNumber step={1} style={{ width: 200 }} min={1} />)}
             </Form.Item>
           </Col>
         </Row>
         <Row gutter={24}>
           <Col span={24}>
-            <Form.Item {...formItemLayoutUploadImg} label="主体图片">
+            <Form.Item
+              {...formItemLayoutUploadImg}
+              label="主体图片"
+              extra={<Tag color="blue">大小750*750</Tag>}
+            >
               {getFieldDecorator('xxx', {
                 rules: [{ required: true, message: '请填写主体图片' }],
               })(

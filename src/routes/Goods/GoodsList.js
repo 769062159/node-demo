@@ -33,8 +33,8 @@ const getValue = obj =>
 // const statusMap = ['default', 'processing', 'success', 'error'];
 const statusMap = ['processing', 'processing', 'error'];
 const goodsStatus = ['上架', '未上架', '下架'];
-const goodsTypeStatus = ['普通商品', '一元购', '秒杀', '众筹'];
-const payType = ['拍下减库存', '付款减库存'];
+// const goodsTypeStatus = ['普通商品', '一元购', '秒杀', '众筹'];
+// const payType = ['拍下减库存', '付款减库存'];
 const isTrue = ['是', '否'];
 
 @connect(({ goods, loading }) => ({
@@ -353,24 +353,28 @@ export default class GoodsList extends PureComponent {
 
     const columns = [
       {
-        title: '商品名',
-        dataIndex: 'goods_name',
-        key: 'goods_name',
+        title: '商品',
+        dataIndex: 'goods_id',
+        key: 'goods_id',
+        render: (val, text) => (
+          <Row style={{ width: 360 }}>
+            <Col span={6}>
+              <img style={{ height: 80 }} src={text.img} alt="商品" />
+            </Col>
+            <Col span={18} style={{ fontSize: 14 }}>
+              <div>{text.goods_name}</div>
+              <div>销售价:{text.sell_goods_price}</div>
+              <div>库存:{text.goods_total_inventory}</div>
+              <div>分类:{text.category_name}</div>
+            </Col>
+          </Row>
+        ),
       },
       {
         title: '商品品牌',
         dataIndex: 'brand_name',
         key: 'brand_name',
       },
-      // {
-      //   title: '服务调用次数',
-      //   dataIndex: 'callNo',
-      //   sorter: true,
-      //   align: 'right',
-      //   render: val => `${val} 万`,
-      //   // mark to display a total number
-      //   needTotal: true,
-      // },
       {
         title: '状态',
         dataIndex: 'goods_status',
@@ -395,9 +399,8 @@ export default class GoodsList extends PureComponent {
         },
       },
       {
-        title: '商品类别',
-        dataIndex: 'goods_type',
-        render: val => <span>{goodsTypeStatus[val]}</span>,
+        title: '排序',
+        dataIndex: 'goods_sort',
       },
       // {
       //   title: '商品上架时间',
@@ -412,29 +415,9 @@ export default class GoodsList extends PureComponent {
         render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
       },
       {
-        title: '库存',
-        dataIndex: 'goods_total_store_nums',
-        key: 'goods_total_store_nums',
-      },
-      {
-        title: '付款方式',
-        dataIndex: 'shop_goods_reduced_inventory',
-        render: val => <span>{payType[val]}</span>,
-      },
-      {
         title: '包邮',
-        dataIndex: 'goods_free_shipping',
+        dataIndex: 'shop_shipping_type',
         render: val => <span>{isTrue[val]}</span>,
-      },
-      {
-        title: '显示',
-        dataIndex: 'goods_is_show',
-        render: val => <span>{isTrue[val]}</span>,
-      },
-      {
-        title: '快递费',
-        dataIndex: 'shop_shipping_exp',
-        key: 'shop_shipping_exp',
       },
       {
         title: '操作',
@@ -479,7 +462,7 @@ export default class GoodsList extends PureComponent {
             </div>
             <StandardTable
               rowKey={record => record.goods_id}
-              scroll={{ x: 1500 }}
+              scroll={{ x: 1200 }}
               selectedRows={selectedRows}
               loading={loading}
               data={data}

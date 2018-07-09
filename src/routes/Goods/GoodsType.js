@@ -38,6 +38,12 @@ const formItemLayout = {
     span: 19,
   },
 };
+const formSubmitLayout = {
+  wrapperCol: {
+    span: 19,
+    offset: 5,
+  },
+};
 // const { Option } = Select;
 const getValue = obj =>
   Object.keys(obj)
@@ -384,10 +390,10 @@ export default class GoodsType extends PureComponent {
           )}
         </FormItem> */}
         {/* {selectOption ? uploadItem : null} */}
-        <FormItem {...formItemLayout} label="图片">
+        <FormItem {...formItemLayout} label="图片" extra={<Tag color="blue">大小:80*80</Tag>}>
           {uploadItem}
         </FormItem>
-        <FormItem tyle={{ marginTop: 32 }}>
+        <FormItem style={{ marginTop: 32 }} {...formSubmitLayout}>
           <Button type="primary" htmlType="submit" loading={loading}>
             提交
           </Button>
@@ -508,10 +514,10 @@ export default class GoodsType extends PureComponent {
           )}
         </FormItem> */}
         {/* {dataIndex.class_level !== 1 ? uploadItem : null} */}
-        <FormItem {...formItemLayout} label="图片">
+        <FormItem {...formItemLayout} label="图片" extra={<Tag color="blue">大小:80*80</Tag>}>
           {uploadItem}
         </FormItem>
-        <FormItem tyle={{ marginTop: 32 }}>
+        <FormItem style={{ marginTop: 32 }} {...formSubmitLayout}>
           <Button type="primary" htmlType="submit" loading={loading}>
             修改
           </Button>
@@ -541,7 +547,7 @@ export default class GoodsType extends PureComponent {
         // render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
       },
       {
-        title: '显示',
+        title: '图标',
         dataIndex: 'class_img_url',
         render: val => (val ? <img src={val} style={{ width: 80 }} alt="图片" /> : null),
       },

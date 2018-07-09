@@ -15,6 +15,7 @@ import {
   Divider,
   Select,
   Spin,
+  Tag,
 } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './TableList.less';
@@ -130,7 +131,7 @@ const CustomizedForm = Form.create({
           ],
         })(<TextArea placeholder="请输入简介" autosize />)}
       </FormItem>
-      <Form.Item {...formItemLayout} label="直播封面">
+      <Form.Item {...formItemLayout} label="直播封面" extra={<Tag color="blue">大小:750*370</Tag>}>
         {getFieldDecorator('xxx', {
           rules: [{ required: true, message: '请填写直播封面' }],
         })(
@@ -466,7 +467,6 @@ export default class Live extends PureComponent {
               pagination={liveListPage}
             />
           </div>
-          {/* <LiveGoodTable /> */}
         </Card>
         <Modal
           title="直播"

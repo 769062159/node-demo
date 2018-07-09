@@ -61,7 +61,7 @@ class TypeForm extends Component {
               <img alt="example" style={{ width: '100%' }} src={previewImage} />
             </Modal> */}
           </div>
-          <FormItem tyle={{ marginTop: 32 }}>
+          <FormItem style={{ marginTop: 32 }}>
             <Button type="primary" htmlType="submit" loading={loading}>
               提交
             </Button>

@@ -8,10 +8,10 @@ import styles from './style.less';
 
 const formItemLayout = {
   labelCol: {
-    span: 5,
+    span: 11,
   },
   wrapperCol: {
-    span: 19,
+    span: 13,
   },
 };
 const Option = Select.Option;
@@ -63,14 +63,7 @@ class AddGoodStep1 extends React.PureComponent {
           <Form.Item {...formItemLayout} label="商品分类">
             {getFieldDecorator('type', {
               rules: [{ required: true, message: '请选择商品分类' }],
-            })(
-              //   <Cascader
-              //     options={datas}
-              //     changeOnSelect
-              //     filedNames={{ label: 'class_name', value: 'class_id', children: 'has_category' }}
-              //   />
-              <Select style={{ width: 120 }}>{selectItem}</Select>
-            )}
+            })(<Select style={{ width: 120 }}>{selectItem}</Select>)}
           </Form.Item>
           <Form.Item
             wrapperCol={{

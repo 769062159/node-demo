@@ -26,6 +26,7 @@ const getValue = obj =>
     .join(',');
 // 动态加减
 let uuid = 0;
+
 @connect(({ goods, loading }) => ({
   goods,
   loading: loading.models.goods,
@@ -288,6 +289,12 @@ export default class GoodsAttr extends PureComponent {
         sm: { span: 20 },
       },
     };
+    const formSubmitLayout = {
+      wrapperCol: {
+        xs: { span: 24, offset: 24 },
+        sm: { span: 20, offset: 4 },
+      },
+    };
     const formItemLayoutWithOutLabel = {
       wrapperCol: {
         xs: { span: 24, offset: 0 },
@@ -431,7 +438,7 @@ export default class GoodsAttr extends PureComponent {
                 <Icon type="plus" /> 添加子属性
               </Button>
             </FormItem>
-            <FormItem tyle={{ marginTop: 32 }}>
+            <FormItem style={{ marginTop: 32 }} {...formSubmitLayout}>
               <Button type="primary" htmlType="submit" loading={loading}>
                 {isFromEdit ? '修改' : '提交'}
               </Button>

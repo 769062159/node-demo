@@ -305,7 +305,7 @@ export default class Role extends Component {
                   // ],
                 })(<Input placeholder="给角色起个名字" />)}
               </FormItem>
-              <FormItem tyle={{ marginTop: 32 }}>
+              <FormItem style={{ marginTop: 32 }}>
                 <Button type="primary" htmlType="submit" loading={addUser}>
                   提交
                 </Button>

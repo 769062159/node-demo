@@ -13,6 +13,7 @@ import {
   Button,
   Divider,
   InputNumber,
+  Tag,
 } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
@@ -21,6 +22,20 @@ import styles from './TableList.less';
 const FormItem = Form.Item;
 const { TextArea } = Input;
 const { confirm } = Modal;
+const formItemLayout = {
+  labelCol: {
+    span: 5,
+  },
+  wrapperCol: {
+    span: 19,
+  },
+};
+const formSubmitLayout = {
+  wrapperCol: {
+    span: 19,
+    offset: 5,
+  },
+};
 // const getValue = obj =>
 //   Object.keys(obj)
 //     .map(key => obj[key])
@@ -265,7 +280,7 @@ export default class Ads extends PureComponent {
         style={{ marginTop: 8 }}
         autoComplete="OFF"
       >
-        <FormItem label="广告简介">
+        <FormItem label="广告简介" {...formItemLayout}>
           {getFieldDecorator('desc', {
             rules: [
               {
@@ -275,8 +290,10 @@ export default class Ads extends PureComponent {
             ],
           })(<TextArea placeholder="请输入简介" autosize />)}
         </FormItem>
-        {uploadItem}
-        <FormItem label="广告排序">
+        <FormItem label="广告封面" {...formItemLayout} extra={<Tag color="blue">大小:750*370</Tag>}>
+          {uploadItem}
+        </FormItem>
+        <FormItem label="广告排序" {...formItemLayout}>
           {getFieldDecorator('sort', {
             rules: [
               {
@@ -286,7 +303,7 @@ export default class Ads extends PureComponent {
             ],
           })(<InputNumber />)}
         </FormItem>
-        <FormItem tyle={{ marginTop: 32 }}>
+        <FormItem style={{ marginTop: 32 }} {...formSubmitLayout}>
           <Button type="primary" htmlType="submit" loading={loading}>
             提交
           </Button>
@@ -348,7 +365,7 @@ export default class Ads extends PureComponent {
         style={{ marginTop: 8 }}
         autoComplete="OFF"
       >
-        <FormItem label="广告简介">
+        <FormItem label="广告简介" {...formItemLayout}>
           {getFieldDecorator('desc', {
             initialValue: desc,
             rules: [
@@ -359,8 +376,10 @@ export default class Ads extends PureComponent {
             ],
           })(<TextArea placeholder="请输入简介" autosize />)}
         </FormItem>
-        {editData.pic !== 1 ? uploadItem : null}
-        <FormItem label="广告排序">
+        <FormItem label="广告封面" {...formItemLayout} extra={<Tag color="blue">大小:750*370</Tag>}>
+          {editData.pic !== 1 ? uploadItem : null}
+        </FormItem>
+        <FormItem label="广告排序" {...formItemLayout}>
           {getFieldDecorator('sort', {
             initialValue: editData.sort,
             rules: [
@@ -371,7 +390,7 @@ export default class Ads extends PureComponent {
             ],
           })(<InputNumber />)}
         </FormItem>
-        <FormItem tyle={{ marginTop: 32 }}>
+        <FormItem style={{ marginTop: 32 }} {...formSubmitLayout}>
           <Button type="primary" htmlType="submit" loading={loading}>
             修改
           </Button>

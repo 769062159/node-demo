@@ -15,6 +15,7 @@ import {
   Divider,
   Select,
   Spin,
+  Tag,
 } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
@@ -124,7 +125,19 @@ const CustomizedForm = Form.create({
           ],
         })(<Input />)}
       </FormItem>
-      <FormItem {...formItemLayout} label="类型">
+      <FormItem
+        {...formItemLayout}
+        label="类型"
+        extra={
+          homeForm.type === 3 ? (
+            <Tag color="blue">轮播图750*370</Tag>
+          ) : homeForm.type === 2 ? (
+            <Tag color="blue">直播商品220*240</Tag>
+          ) : (
+            <Tag color="blue">热销商品370*370</Tag>
+          )
+        }
+      >
         {getFieldDecorator('type', {
           rules: [
             {

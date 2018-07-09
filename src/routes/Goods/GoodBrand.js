@@ -9,6 +9,20 @@ import styles from './TableList.less';
 const FormItem = Form.Item;
 const { TextArea } = Input;
 const { confirm } = Modal;
+const formItemLayout = {
+  labelCol: {
+    span: 5,
+  },
+  wrapperCol: {
+    span: 19,
+  },
+};
+const formSubmitLayout = {
+  wrapperCol: {
+    span: 19,
+    offset: 5,
+  },
+};
 // const getValue = obj =>
 //   Object.keys(obj)
 //     .map(key => obj[key])
@@ -46,46 +60,6 @@ export default class GoodBrand extends PureComponent {
       },
     });
   }
-
-  // handleStandardTableChange = (pagination, filtersArg, sorter) => {
-  //   const { dispatch } = this.props;
-  //   const { formValues } = this.state;
-
-  //   const filters = Object.keys(filtersArg).reduce((obj, key) => {
-  //     const newObj = { ...obj };
-  //     newObj[key] = getValue(filtersArg[key]);
-  //     return newObj;
-  //   }, {});
-
-  //   const params = {
-  //     currentPage: pagination.current,
-  //     pageSize: pagination.pageSize,
-  //     ...formValues,
-  //     ...filters,
-  //   };
-  //   if (sorter.field) {
-  //     params.sorter = `${sorter.field}_${sorter.order}`;
-  //   }
-  //   console.log(99);
-  //   console.log(params);
-  //   dispatch({
-  //     type: 'goods/getAllType',
-  //     payload: params,
-  //   });
-  // };
-
-  // handleFormReset = () => {
-  //   const { form, dispatch } = this.props;
-  //   form.resetFields();
-  //   this.setState({
-  //     formValues: {},
-  //   });
-  //   console.log(999);
-  //   dispatch({
-  //     type: 'goods/getAllType',
-  //     payload: {},
-  //   });
-  // };
 
   toggleForm = () => {
     this.setState({
@@ -259,7 +233,7 @@ export default class GoodBrand extends PureComponent {
         style={{ marginTop: 8 }}
         autoComplete="OFF"
       >
-        <FormItem label="品牌名">
+        <FormItem label="品牌名" {...formItemLayout}>
           {getFieldDecorator('name', {
             rules: [
               {
@@ -269,7 +243,7 @@ export default class GoodBrand extends PureComponent {
             ],
           })(<Input />)}
         </FormItem>
-        <FormItem label="简介">
+        <FormItem label="简介" {...formItemLayout}>
           {getFieldDecorator('desc', {
             rules: [
               {
@@ -279,8 +253,10 @@ export default class GoodBrand extends PureComponent {
             ],
           })(<TextArea placeholder="请输入简介" autosize />)}
         </FormItem>
-        {uploadItem}
-        <FormItem tyle={{ marginTop: 32 }}>
+        <FormItem label="品牌封面" {...formItemLayout}>
+          {uploadItem}
+        </FormItem>
+        <FormItem style={{ marginTop: 32 }} {...formSubmitLayout}>
           <Button type="primary" htmlType="submit" loading={loading}>
             提交
           </Button>
@@ -342,7 +318,7 @@ export default class GoodBrand extends PureComponent {
         style={{ marginTop: 8 }}
         autoComplete="OFF"
       >
-        <FormItem label="品牌名">
+        <FormItem label="品牌名" {...formItemLayout}>
           {getFieldDecorator('name', {
             initialValue: editData.brand_name,
             rules: [
@@ -353,7 +329,7 @@ export default class GoodBrand extends PureComponent {
             ],
           })(<Input />)}
         </FormItem>
-        <FormItem label="简介">
+        <FormItem label="简介" {...formItemLayout}>
           {getFieldDecorator('desc', {
             initialValue: desc,
             rules: [
@@ -364,8 +340,10 @@ export default class GoodBrand extends PureComponent {
             ],
           })(<TextArea placeholder="请输入简介" autosize />)}
         </FormItem>
-        {editData.cover !== 1 ? uploadItem : null}
-        <FormItem tyle={{ marginTop: 32 }}>
+        <FormItem label="品牌封面" {...formItemLayout}>
+          {editData.cover !== 1 ? uploadItem : null}
+        </FormItem>
+        <FormItem style={{ marginTop: 32 }} {...formSubmitLayout}>
           <Button type="primary" htmlType="submit" loading={loading}>
             修改
           </Button>

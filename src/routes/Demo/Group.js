@@ -197,7 +197,7 @@ export default class Group extends Component {
                   ],
                 })(<Input placeholder="给部门起个名字" />)}
               </FormItem>
-              <FormItem tyle={{ marginTop: 32 }}>
+              <FormItem style={{ marginTop: 32 }}>
                 <Button type="primary" htmlType="submit" loading={submitting}>
                   提交
                 </Button>

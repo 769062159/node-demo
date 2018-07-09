@@ -14,6 +14,12 @@ const formItemLayout = {
     span: 19,
   },
 };
+const formSubmitLayout = {
+  wrapperCol: {
+    span: 19,
+    offset: 5,
+  },
+};
 // const { confirm } = Modal;
 
 @connect(({ frontUser, loading }) => ({
@@ -177,7 +183,7 @@ export default class Rank extends PureComponent {
             ],
           })(<InputNumber step={0.01} precision={2} min={0} />)}
         </FormItem>
-        <FormItem tyle={{ marginTop: 32 }}>
+        <FormItem style={{ marginTop: 32 }} {...formSubmitLayout}>
           <Button type="primary" htmlType="submit" loading={loading}>
             提交
           </Button>
@@ -241,7 +247,7 @@ export default class Rank extends PureComponent {
             ],
           })(<InputNumber step={0.01} precision={2} min={0} />)}
         </FormItem>
-        <FormItem tyle={{ marginTop: 32 }}>
+        <FormItem style={{ marginTop: 32 }} {...formSubmitLayout}>
           <Button type="primary" htmlType="submit" loading={loading}>
             修改
           </Button>

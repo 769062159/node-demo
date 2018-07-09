@@ -256,7 +256,7 @@ export default class UserList extends Component {
                 onChange={this.onDepChange}
                 changeOnSelect
               />
-              <FormItem tyle={{ marginTop: 32 }}>
+              <FormItem style={{ marginTop: 32 }}>
                 <Button type="primary" htmlType="submit" loading={submitting}>
                   提交
                 </Button>

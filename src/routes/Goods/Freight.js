@@ -221,7 +221,7 @@ export default class Freight extends PureComponent {
             ],
           })(<InputNumber step={0.01} precision={2} min={0} />)}
         </FormItem>
-        <FormItem tyle={{ marginTop: 32 }}>
+        <FormItem style={{ marginTop: 32 }}>
           <Button type="primary" htmlType="submit" loading={loading}>
             提交
           </Button>
@@ -311,7 +311,7 @@ export default class Freight extends PureComponent {
             ],
           })(<InputNumber step={0.01} precision={2} min={0} />)}
         </FormItem>
-        <FormItem tyle={{ marginTop: 32 }}>
+        <FormItem style={{ marginTop: 32 }}>
           <Button type="primary" htmlType="submit" loading={loading}>
             修改
           </Button>
