@@ -142,26 +142,26 @@ export default {
     },
     *addFreight({ payload }, { call, put }) {
       yield call(addFreight, { ...payload });
-      const response = yield call(getFreightList, { ...payload });
+      const response = yield call(getFreightList, { page: payload.pagination });
       yield put({
         type: 'fetchFreights',
-        payload: response.data,
+        payload: response,
       });
     },
     *updateFreight({ payload }, { call, put }) {
       yield call(updateFreight, { ...payload });
-      const response = yield call(getFreightList, { ...payload });
+      const response = yield call(getFreightList, { page: payload.pagination });
       yield put({
         type: 'fetchFreights',
-        payload: response.data,
+        payload: response,
       });
     },
     *delFreight({ payload }, { call, put }) {
       yield call(delFreight, { ...payload });
-      const response = yield call(getFreightList, { ...payload });
+      const response = yield call(getFreightList, { page: payload.pagination });
       yield put({
         type: 'fetchFreights',
-        payload: response.data,
+        payload: response,
       });
     },
     *changeFormVal({ payload }, { put }) {

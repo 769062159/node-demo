@@ -220,6 +220,7 @@ export default class Order extends PureComponent {
                             type: 'address/fetch',
                             payload: {
                                 parent_id: id,
+                                type: 1,
                             },
                         });
                     }
@@ -558,7 +559,7 @@ export default class Order extends PureComponent {
                   </Card.Grid> */}
                   {item.has_order_pack.map((res, index) => {
                     return (
-                      <div key={res.order_id}>
+                      <div key={res.pack_id}>
                         <Card.Grid style={bigStyle}>
                           <Card bordered={false} hoverable={false}>
                             <Card.Grid style={allStyle}>
@@ -594,7 +595,7 @@ export default class Order extends PureComponent {
                           </Row>
                           {res.has_order_goods.map(ele => {
                             return (
-                              <Row key={ele.order_pack_id} align="middle" type="flex">
+                              <Row key={ele.order_goods_id} align="middle" type="flex">
                                 <Col span={4}>
                                   <img
                                     src={ele.has_order_goods_sku.http_url}

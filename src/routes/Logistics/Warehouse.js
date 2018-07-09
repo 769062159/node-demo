@@ -147,6 +147,7 @@ export default class Warehouse extends PureComponent {
                 type: 'address/fetch',
                 payload: {
                   parent_id: id,
+                  type: 1,
                 },
               });
             }
