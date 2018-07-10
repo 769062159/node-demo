@@ -150,6 +150,9 @@ export const getRouterConfig = app => {
     '/live/list': {
       component: dynamicWrapper(app, ['live'], () => import('../routes/Live/list')),
     },
+    '/live/vod': {
+      component: dynamicWrapper(app, ['live'], () => import('../routes/Live/Vod')),
+    },
     '/live/add-live': {
       identity: 'common',
       component: dynamicWrapper(app, ['form'], () => import('../routes/Live/AddLive')),

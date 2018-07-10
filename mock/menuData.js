@@ -137,12 +137,16 @@ export const menuData = [
     path: 'live',
     children: [
       {
+        name: '直播新增',
+        path: 'add-live',
+      },
+      {
         name: '直播列表',
         path: 'list',
       },
       {
-        name: '直播新增',
-        path: 'add-live',
+        name: '录播列表',
+        path: 'vod',
       },
     ],
   },

@@ -133,10 +133,7 @@ const CustomizedForm = Form.create({
           ],
         })(<Input />)}
       </FormItem>
-      <FormItem
-        {...formItemLayout}
-        label="类型"
-      >
+      <FormItem {...formItemLayout} label="类型">
         {getFieldDecorator('type', {
           rules: [
             {
@@ -161,12 +158,22 @@ const CustomizedForm = Form.create({
             },
           ],
         })(
-          <Select style={{ width: 200 }}>
-            <Option value={1}>跳转商品</Option>
-            <Option value={2}>跳转外部链接</Option>
-            <Option value={3}>不跳转</Option>
-            <Option value={4}>跳转直播间</Option>
-          </Select>
+          homeForm.type === 2 ? (
+            <Select style={{ width: 200 }}>
+              <Option value={4}>跳转直播间</Option>
+            </Select>
+          ) : homeForm.type === 1 ? (
+            <Select style={{ width: 200 }}>
+              <Option value={1}>跳转商品</Option>
+            </Select>
+          ) : (
+            <Select style={{ width: 200 }}>
+              <Option value={1}>跳转商品</Option>
+              <Option value={2}>跳转外部链接</Option>
+              <Option value={3}>不跳转</Option>
+              <Option value={4}>跳转直播间</Option>
+            </Select>
+          )
         )}
       </FormItem>
       {homeForm.jump_type === 1 ? (
@@ -247,15 +254,15 @@ const CustomizedForm = Form.create({
       ) : null}
       <Form.Item
         {...formItemLayout}
-        label="封面" 
+        label="封面"
         extra={
-            homeForm.type === 3 ? (
-              <Tag color="blue">轮播图750*370</Tag>
-            ) : homeForm.type === 2 ? (
-              <Tag color="blue">直播商品220*240</Tag>
-            ) : homeForm.type === 1 ? (
-              <Tag color="blue">热销商品370*370</Tag>
-            ) : null
+          homeForm.type === 3 ? (
+            <Tag color="blue">轮播图750*370</Tag>
+          ) : homeForm.type === 2 ? (
+            <Tag color="blue">直播商品220*240</Tag>
+          ) : homeForm.type === 1 ? (
+            <Tag color="blue">热销商品370*370</Tag>
+          ) : null
         }
       >
         {getFieldDecorator('xxx', {
@@ -287,12 +294,7 @@ const CustomizedForm = Form.create({
               message: '请输入排序',
             },
           ],
-        })(
-          <InputNumber
-            step={1}
-            min={0}
-          />
-        )}
+        })(<InputNumber step={1} min={0} />)}
       </FormItem>
       <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
         <Button type="primary" htmlType="submit" onClick={onValidateForm}>
@@ -404,7 +406,7 @@ export default class Home extends PureComponent {
       },
     });
   };
-  handleChangesLive= value => {
+  handleChangesLive = value => {
     this.setState({
       live: [],
       fetching: false,
@@ -456,10 +458,10 @@ export default class Home extends PureComponent {
       homeForm.remark = homeGoods.label;
       homeForm.target_id = homeGoods.key;
     } else if (homeForm.jump_type === 4) {
-        homeForm.remark = homeGoods.label;
-        homeForm.target_id = homeGoods.key;
-        homeForm.target_name = homeLive.label;
-        homeForm.live_id = homeLive.key;
+      homeForm.remark = homeGoods.label;
+      homeForm.target_id = homeGoods.key;
+      homeForm.target_name = homeLive.label;
+      homeForm.live_id = homeLive.key;
     } else {
       homeForm.remark = '';
       homeForm.target_id = '';
@@ -604,7 +606,9 @@ export default class Home extends PureComponent {
         title: '跳转关联',
         dataIndex: 'remark',
         render: (val, text) =>
-          text.jump_type === 1 ? val : text.jump_type === 2 ? text.url : text.jump_type === 4 ? text.target_name : '无关联',
+          text.jump_type === 1
+            ? val
+            : text.jump_type === 2 ? text.url : text.jump_type === 4 ? text.target_name : '无关联',
       },
       {
         title: '创建时间',

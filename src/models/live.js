@@ -1,5 +1,5 @@
 import { routerRedux } from 'dva/router';
-import { updateLive, deleteLive, addLive, getLive, getLiveDetail } from '../services/live';
+import { updateLive, deleteLive, addLive, getLive, getLiveDetail, getVod } from '../services/live';
 import { getAllGoods } from '../services/goods';
 
 export default {
@@ -14,6 +14,8 @@ export default {
     liveGoods: [], // 直播商品
     goodsList: [], // 左table表
     goodsListPage: {}, // 页脚
+    vodList: [],
+    vodListPage: {},
   },
 
   effects: {
@@ -71,6 +73,13 @@ export default {
       yield put({
         type: 'changeFormVals',
         payload,
+      });
+    },
+    *fetchVod({ payload }, { call, put }) {
+      const response = yield call(getVod, { page: payload.pagination });
+      yield put({
+        type: 'getVod',
+        payload: response,
       });
     },
     *fetchLive({ payload }, { call, put }) {
@@ -267,6 +276,21 @@ export default {
         ...state,
         liveList: data.list,
         liveListPage: {
+          pageSize: data.page,
+          total: data.total,
+        },
+      };
+    },
+    getVod(state, { payload }) {
+      const { data } = payload;
+      const vodList = [];
+      data.models.forEach(res => {
+        vodList.push(res.vod);
+      });
+      return {
+        ...state,
+        vodList,
+        vodListPage: {
           pageSize: data.page,
           total: data.total,
         },

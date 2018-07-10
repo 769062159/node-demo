@@ -39,3 +39,11 @@ export async function updateLive(params) {
     body: params,
   });
 }
+
+// 所有录播
+export async function getVod(params) {
+    return request('/admin/vod/list', {
+      method: 'POST',
+      body: params,
+    });
+}
