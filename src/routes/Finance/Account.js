@@ -94,6 +94,10 @@ export default class Rank extends PureComponent {
         dataIndex: 'account_balance',
       },
       {
+        title: '账户佣金',
+        dataIndex: 'account_commission',
+      },
+      {
         title: '操作',
         // fixed: 'right',
         // width: 150,
