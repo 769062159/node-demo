@@ -202,26 +202,48 @@ const CustomizedForm = Form.create({
           })(<Input />)}
         </FormItem>
       ) : homeForm.jump_type === 4 ? (
-        <FormItem {...formItemLayout} label="直播间">
-          <Select
-            // mode="multiple"
-            showSearch
-            labelInValue
-            value={homeLive}
-            placeholder="输入直播间名字搜索"
-            notFoundContent={fetching ? <Spin size="small" /> : null}
-            filterOption={false}
-            onSearch={fetchLive}
-            onChange={handleChangesLive}
-            style={{ width: '100%' }}
-          >
-            {live.map(d => (
-              <Option key={d.value} value={d.text}>
-                {d.value}
-              </Option>
-            ))}
-          </Select>
-        </FormItem>
+        <div>
+          <FormItem {...formItemLayout} label="直播商品">
+            <Select
+              // mode="multiple"
+              showSearch
+              labelInValue
+              value={homeGoods}
+              placeholder="输入商品名字搜索"
+              notFoundContent={fetching ? <Spin size="small" /> : null}
+              filterOption={false}
+              onSearch={fetchUser}
+              onChange={handleChangesShop}
+              style={{ width: '100%' }}
+            >
+              {data.map(d => (
+                <Option key={d.value} value={d.text}>
+                  {d.value}
+                </Option>
+              ))}
+            </Select>
+          </FormItem>
+          <FormItem {...formItemLayout} label="直播间">
+            <Select
+              // mode="multiple"
+              showSearch
+              labelInValue
+              value={homeLive}
+              placeholder="输入直播间名字搜索"
+              notFoundContent={fetching ? <Spin size="small" /> : null}
+              filterOption={false}
+              onSearch={fetchLive}
+              onChange={handleChangesLive}
+              style={{ width: '100%' }}
+            >
+              {live.map(d => (
+                <Option key={d.value} value={d.text}>
+                  {d.value}
+                </Option>
+              ))}
+            </Select>
+          </FormItem>
+        </div>
       ) : null}
       <Form.Item
         {...formItemLayout}
@@ -434,8 +456,9 @@ export default class Home extends PureComponent {
       homeForm.remark = homeGoods.label;
       homeForm.target_id = homeGoods.key;
     } else if (homeForm.jump_type === 4) {
-        homeForm.remark = homeLive.label;
-        homeForm.target_id = homeLive.key;
+        homeForm.remark = homeGoods.label;
+        homeForm.target_id = homeGoods.key;
+        homeForm.target_name = homeLive.label;
         homeForm.live_id = homeLive.key;
     } else {
       homeForm.remark = '';
@@ -581,7 +604,7 @@ export default class Home extends PureComponent {
         title: '跳转关联',
         dataIndex: 'remark',
         render: (val, text) =>
-          text.jump_type === 1 ? val : text.jump_type === 2 ? text.url : text.jump_type === 4 ? val : '无关联',
+          text.jump_type === 1 ? val : text.jump_type === 2 ? text.url : text.jump_type === 4 ? text.target_name : '无关联',
       },
       {
         title: '创建时间',

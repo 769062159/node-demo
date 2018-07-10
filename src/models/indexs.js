@@ -121,8 +121,10 @@ export default {
         homeGoods.label = data.remark;
         homeGoods.key = data.target_id;
       } else if (data.jump_type === 4) {
-        homeLive.label = data.remark;
-        homeLive.key = data.target_id;
+        homeLive.label = data.target_name;
+        homeLive.key = data.live_id;
+        homeGoods.label = data.remark;
+        homeGoods.key = data.target_id;
       }
       return {
         ...state,
