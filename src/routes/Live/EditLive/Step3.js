@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import { connect } from 'dva';
 import copy from 'copy-to-clipboard';
-import { Button, Row, Icon, message } from 'antd';
+import { Button, Row, Col, message } from 'antd';
 import { routerRedux } from 'dva/router';
 import Result from 'components/Result';
 import styles from './style.less';
@@ -24,15 +24,19 @@ class EditLiveStep3 extends React.PureComponent {
     const actions = (
       <Fragment>
         <Row>
-          {url}
-          <Icon
-            type="copy"
-            style={{ display: 'inline-block' }}
-            onClick={this.copyBtn.bind(this, url)}
-          />
+          <Col>
+            <span>推流地址：</span>
+            {url}
+            <span
+              onClick={this.copyBtn.bind(this, url)}
+              style={{ color: 'blue', cursor: 'pointer' }}
+            >
+              复制
+            </span>
+          </Col>
         </Row>
         <Button type="primary" onClick={onFinish}>
-          直播列表
+          完成
         </Button>
         {/* <Button>查看账单</Button> */}
       </Fragment>

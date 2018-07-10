@@ -20,6 +20,7 @@ export default {
     uploadHomeImg: [], // 首页封面
     homeListPage: {}, // 首页封面页脚
     homeGoods: {}, // 首页跳转商品
+    homeLive: {}, // 首页调直播间
   },
 
   effects: {
@@ -115,15 +116,20 @@ export default {
         });
       }
       const homeGoods = {};
+      const homeLive = {};
       if (data.jump_type === 1) {
         homeGoods.label = data.remark;
         homeGoods.key = data.target_id;
+      } else if (data.jump_type === 4) {
+        homeLive.label = data.remark;
+        homeLive.key = data.target_id;
       }
       return {
         ...state,
         homeForm: data,
         uploadHomeImg: imgArr,
         homeGoods,
+        homeLive,
       };
     },
     setHomeShops(state, { payload }) {
@@ -131,6 +137,13 @@ export default {
       return {
         ...state,
         homeGoods: payload.value,
+      };
+    },
+    setHomeLive(state, { payload }) {
+      console.log(payload);
+      return {
+        ...state,
+        homeLive: payload.value,
       };
     },
     clearHomeMsgs(state) {

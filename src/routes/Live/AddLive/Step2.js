@@ -182,12 +182,12 @@ const CustomizedForm = Form.create({
           ))}
         </Select>
       </FormItem> */}
-      <FormItem {...formItemLayout} label="是否免费">
+      <FormItem {...formItemLayout} label="是否收费">
         {getFieldDecorator('is_free', {
           rules: [
             {
               required: true,
-              message: '请输入是否免费',
+              message: '请输入是否收费',
             },
           ],
         })(
@@ -237,6 +237,17 @@ class AddLiveStep2 extends React.PureComponent {
       Authorization: `Bearer ${localStorage.getItem('token')}`,
     },
   };
+  componentDidMount() {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'live/fetchAddGoods',
+      payload: {
+        page: 1,
+        goods_status: 0,
+        page_number: 3,
+      },
+    });
+  }
 
   // 模糊查询
   fetchUser = value => {

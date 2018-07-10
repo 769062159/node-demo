@@ -91,7 +91,7 @@ export default class Live extends PureComponent {
 
   render() {
     const { live: { goodsList: datas, goodsListPage, liveGoods }, loading } = this.props;
-    console.log(liveGoods);
+    console.log(datas);
     const { selectList } = this.state;
     const rowSelection = {
       selectList,
@@ -189,7 +189,7 @@ export default class Live extends PureComponent {
             dataSource={liveGoods}
             rowKey={record => record.goods_id}
             columns={progressColumnsdel}
-            pagination={false}
+            pagination={{ pageSize: 3 }}
             // footer={() => (
             //   <Button
             //     type="primary"

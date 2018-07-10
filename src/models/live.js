@@ -17,6 +17,13 @@ export default {
   },
 
   effects: {
+    *fetchAddGoods({ payload }, { call, put }) {
+      const good = yield call(getAllGoods, payload);
+      yield put({
+        type: 'getLiveGoods',
+        payload: good,
+      });
+    },
     *fetchLiveGoods({ payload }, { call, put }) {
       const response = yield call(getAllGoods, payload);
       yield put({

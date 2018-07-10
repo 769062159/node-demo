@@ -181,12 +181,12 @@ const CustomizedForm = Form.create({
           ))}
         </Select>
       </FormItem> */}
-      <FormItem {...formItemLayout} label="是否免费">
+      <FormItem {...formItemLayout} label="是否收费">
         {getFieldDecorator('is_free', {
           rules: [
             {
               required: true,
-              message: '请输入是否免费',
+              message: '请输入是否收费',
             },
           ],
         })(

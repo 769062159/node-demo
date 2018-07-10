@@ -16,6 +16,7 @@ import {
   Select,
   Spin,
   Tag,
+  InputNumber,
 } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
@@ -27,7 +28,7 @@ const Option = Select.Option;
 // const { TextArea } = Input;
 const { confirm } = Modal;
 const homeType = ['', '热销商品', '直播商品', '轮播图'];
-const jumpType = ['', '跳转商品', '跳转外部链接', '无跳转'];
+const jumpType = ['', '跳转商品', '跳转外部链接', '无跳转', '跳转直播间'];
 const formItemLayout = {
   labelCol: {
     xs: { span: 24 },
@@ -67,6 +68,9 @@ const CustomizedForm = Form.create({
       url: Form.createFormField({
         value: props.homeForm.url,
       }),
+      sort: Form.createFormField({
+        value: props.homeForm.sort,
+      }),
       xxx: Form.createFormField({
         value: props.homeForm.xxx,
       }),
@@ -101,15 +105,19 @@ const CustomizedForm = Form.create({
   };
   const {
     uploadHomeImg,
+    homeLive,
     handlePreviewImg,
     handleChangeImg,
     previewVisible,
     previewImage,
+    handleChangesLive,
     handleCancelImg,
     homeForm,
     homeGoods,
     fetching,
+    live,
     fetchUser,
+    fetchLive,
     data,
     handleChangesShop,
   } = props;
@@ -128,15 +136,6 @@ const CustomizedForm = Form.create({
       <FormItem
         {...formItemLayout}
         label="类型"
-        extra={
-          homeForm.type === 3 ? (
-            <Tag color="blue">轮播图750*370</Tag>
-          ) : homeForm.type === 2 ? (
-            <Tag color="blue">直播商品220*240</Tag>
-          ) : (
-            <Tag color="blue">热销商品370*370</Tag>
-          )
-        }
       >
         {getFieldDecorator('type', {
           rules: [
@@ -166,6 +165,7 @@ const CustomizedForm = Form.create({
             <Option value={1}>跳转商品</Option>
             <Option value={2}>跳转外部链接</Option>
             <Option value={3}>不跳转</Option>
+            <Option value={4}>跳转直播间</Option>
           </Select>
         )}
       </FormItem>
@@ -176,7 +176,7 @@ const CustomizedForm = Form.create({
             showSearch
             labelInValue
             value={homeGoods}
-            placeholder="Select users"
+            placeholder="输入商品名字搜索"
             notFoundContent={fetching ? <Spin size="small" /> : null}
             filterOption={false}
             onSearch={fetchUser}
@@ -201,8 +201,41 @@ const CustomizedForm = Form.create({
             ],
           })(<Input />)}
         </FormItem>
+      ) : homeForm.jump_type === 4 ? (
+        <FormItem {...formItemLayout} label="直播间">
+          <Select
+            // mode="multiple"
+            showSearch
+            labelInValue
+            value={homeLive}
+            placeholder="输入直播间名字搜索"
+            notFoundContent={fetching ? <Spin size="small" /> : null}
+            filterOption={false}
+            onSearch={fetchLive}
+            onChange={handleChangesLive}
+            style={{ width: '100%' }}
+          >
+            {live.map(d => (
+              <Option key={d.value} value={d.text}>
+                {d.value}
+              </Option>
+            ))}
+          </Select>
+        </FormItem>
       ) : null}
-      <Form.Item {...formItemLayout} label="封面">
+      <Form.Item
+        {...formItemLayout}
+        label="封面" 
+        extra={
+            homeForm.type === 3 ? (
+              <Tag color="blue">轮播图750*370</Tag>
+            ) : homeForm.type === 2 ? (
+              <Tag color="blue">直播商品220*240</Tag>
+            ) : homeForm.type === 1 ? (
+              <Tag color="blue">热销商品370*370</Tag>
+            ) : null
+        }
+      >
         {getFieldDecorator('xxx', {
           rules: [{ required: true, message: '请填写封面' }],
         })(
@@ -224,7 +257,21 @@ const CustomizedForm = Form.create({
           </div>
         )}
       </Form.Item>
-
+      <FormItem {...formItemLayout} label="排序">
+        {getFieldDecorator('sort', {
+          rules: [
+            {
+              required: true,
+              message: '请输入排序',
+            },
+          ],
+        })(
+          <InputNumber
+            step={1}
+            min={0}
+          />
+        )}
+      </FormItem>
       <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
         <Button type="primary" htmlType="submit" onClick={onValidateForm}>
           提交
@@ -243,12 +290,14 @@ export default class Home extends PureComponent {
     super(props);
     this.lastFetchId = 0;
     this.fetchUser = debounce(this.fetchUser, 800);
+    this.fetchLive = debounce(this.fetchLive, 800);
   }
   state = {
     expandForm: false,
     homeVisible: false,
     fetching: false,
     data: [],
+    live: [],
     // formValues: {},
     previewVisible: false,
     previewImage: '',
@@ -290,6 +339,30 @@ export default class Home extends PureComponent {
       this.setState({ data, fetching: false });
     });
   };
+  fetchLive = value => {
+    console.log('fetching user', value);
+    this.lastFetchId += 1;
+    const fetchId = this.lastFetchId;
+    this.setState({ data: [], fetching: true });
+    request('/admin/live/list', {
+      method: 'POST',
+      body: {
+        title: value,
+      },
+    }).then(body => {
+      console.log(999);
+      if (fetchId !== this.lastFetchId) {
+        // for fetch callback order
+        return;
+      }
+      console.log(body);
+      const live = body.data.list.map(user => ({
+        text: `${user.stv_live_id}`,
+        value: user.title,
+      }));
+      this.setState({ live, fetching: false });
+    });
+  };
 
   toggleForm = () => {
     this.setState({
@@ -304,6 +377,19 @@ export default class Home extends PureComponent {
     const { dispatch } = this.props;
     dispatch({
       type: 'indexs/setHomeShops',
+      payload: {
+        value,
+      },
+    });
+  };
+  handleChangesLive= value => {
+    this.setState({
+      live: [],
+      fetching: false,
+    });
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'indexs/setHomeLive',
       payload: {
         value,
       },
@@ -337,7 +423,7 @@ export default class Home extends PureComponent {
   };
   // 新增修改提交
   handleSubmit = () => {
-    const { dispatch, indexs: { homeForm, uploadHomeImg, homeGoods } } = this.props;
+    const { dispatch, indexs: { homeForm, uploadHomeImg, homeGoods, homeLive } } = this.props;
     if (!uploadHomeImg.length) {
       message.error('请上传封面');
       return;
@@ -347,6 +433,10 @@ export default class Home extends PureComponent {
     if (homeForm.jump_type === 1) {
       homeForm.remark = homeGoods.label;
       homeForm.target_id = homeGoods.key;
+    } else if (homeForm.jump_type === 4) {
+        homeForm.remark = homeLive.label;
+        homeForm.target_id = homeLive.key;
+        homeForm.live_id = homeLive.key;
     } else {
       homeForm.remark = '';
       homeForm.target_id = '';
@@ -460,11 +550,11 @@ export default class Home extends PureComponent {
 
   render() {
     const {
-      indexs: { homeList: datas, homeListPage, uploadHomeImg, homeForm, homeGoods },
+      indexs: { homeList: datas, homeListPage, uploadHomeImg, homeForm, homeGoods, homeLive },
       loading,
     } = this.props;
     // const { getFieldDecorator } = this.props.form;
-    const { homeVisible, previewVisible, previewImage, fetching, data } = this.state;
+    const { homeVisible, previewVisible, previewImage, fetching, data, live } = this.state;
     const progressColumns = [
       {
         title: '标题',
@@ -491,7 +581,7 @@ export default class Home extends PureComponent {
         title: '跳转关联',
         dataIndex: 'remark',
         render: (val, text) =>
-          text.jump_type === 1 ? val : text.jump_type === 2 ? text.url : '无关联',
+          text.jump_type === 1 ? val : text.jump_type === 2 ? text.url : text.jump_type === 4 ? val : '无关联',
       },
       {
         title: '创建时间',
@@ -555,7 +645,11 @@ export default class Home extends PureComponent {
             homeGoods={homeGoods}
             fetching={fetching}
             data={data}
+            live={live}
+            homeLive={homeLive}
             fetchUser={this.fetchUser}
+            fetchLive={this.fetchLive}
+            handleChangesLive={this.handleChangesLive}
             handleChangesShop={this.handleChangesShop}
           />
         </Modal>
