@@ -2,6 +2,7 @@ import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
 import debounce from 'lodash/debounce';
 import moment from 'moment';
+import copy from 'copy-to-clipboard';
 import {
   Table,
   message,
@@ -43,8 +44,8 @@ const formItemLayout = {
   },
   wrapperCol: {
     xs: { span: 24 },
-    sm: { span: 12 },
-    md: { span: 10 },
+    sm: { span: 15 },
+    md: { span: 15 },
   },
 };
 const submitFormLayout = {
@@ -65,6 +66,9 @@ const CustomizedForm = Form.create({
       }),
       title: Form.createFormField({
         value: props.liveForm.title,
+      }),
+      rtmp_push: Form.createFormField({
+        value: props.liveForm.rtmp_push,
       }),
       xxx: Form.createFormField({
         value: props.liveForm.xxx,
@@ -127,6 +131,16 @@ const CustomizedForm = Form.create({
             {
               required: true,
               message: '请输入简介',
+            },
+          ],
+        })(<TextArea placeholder="请输入简介" autosize />)}
+      </FormItem>
+      <FormItem {...formItemLayout} label="直播地址">
+        {getFieldDecorator('rtmp_push', {
+          rules: [
+            {
+              required: true,
+              message: '请输入直播地址',
             },
           ],
         })(<TextArea placeholder="请输入简介" autosize />)}
@@ -370,6 +384,10 @@ export default class Live extends PureComponent {
       },
     });
   };
+  copyBtn = val => {
+    copy(val);
+    message.success('成功复制到剪贴板');
+  };
   // 放大图片
   handlePreviewImg = file => {
     this.setState({
@@ -427,6 +445,18 @@ export default class Live extends PureComponent {
         render: val => (val ? <img src={val} style={{ width: '200px' }} alt="图片" /> : null),
       },
       {
+        title: '直播地址',
+        dataIndex: 'rtmp_push',
+        width: 280,
+        render: val => (
+          <span>
+            {val}
+            <Icon type="copy" onClick={this.copyBtn.bind(this, val)} />
+          </span>
+        ),
+        // render: val => (val ? <img src={val} style={{ width: '200px' }} alt="图片" /> : null),
+      },
+      {
         title: '创建时间',
         dataIndex: 'create_time',
         render: val => <span>{moment(val * 1000).format('YYYY-MM-DD HH:mm:ss')}</span>,
@@ -470,6 +500,7 @@ export default class Live extends PureComponent {
         </Card>
         <Modal
           title="直播"
+          width={700}
           visible={liveVisible}
           onCancel={this.handAddleCancel.bind(this)}
           footer=""

@@ -118,7 +118,7 @@ export default class Rank extends PureComponent {
             <Table
               onChange={this.handleTableChange}
               dataSource={datas}
-              rowKey={record => record.id}
+              rowKey={record => record.account_id}
               loading={loading}
               columns={progressColumns}
               pagination={accountListPage}
