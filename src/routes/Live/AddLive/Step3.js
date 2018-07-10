@@ -1,0 +1,67 @@
+import React, { Fragment } from 'react';
+import { connect } from 'dva';
+import { Button } from 'antd';
+import { routerRedux } from 'dva/router';
+import Result from 'components/Result';
+import styles from './style.less';
+
+class EditGoodStep3 extends React.PureComponent {
+  render() {
+    const { dispatch } = this.props;
+    const onFinish = () => {
+      dispatch(routerRedux.push('/good/good-list'));
+    };
+    // const information = (
+    //   <div className={styles.information}>
+    //     <Row>
+    //       <Col span={8} className={styles.label}>
+    //         付款账户：
+    //       </Col>
+    //       <Col span={16}>{data.payAccount}</Col>
+    //     </Row>
+    //     <Row>
+    //       <Col span={8} className={styles.label}>
+    //         收款账户：
+    //       </Col>
+    //       <Col span={16}>{data.receiverAccount}</Col>
+    //     </Row>
+    //     <Row>
+    //       <Col span={8} className={styles.label}>
+    //         收款人姓名：
+    //       </Col>
+    //       <Col span={16}>{data.receiverName}</Col>
+    //     </Row>
+    //     <Row>
+    //       <Col span={8} className={styles.label}>
+    //         转账金额：
+    //       </Col>
+    //       <Col span={16}>
+    //         <span className={styles.money}>{data.amount}</span> 元
+    //       </Col>
+    //     </Row>
+    //   </div>
+    // );
+    const actions = (
+      <Fragment>
+        <Button type="primary" onClick={onFinish}>
+          商品列表
+        </Button>
+        {/* <Button>查看账单</Button> */}
+      </Fragment>
+    );
+    return (
+      <Result
+        type="success"
+        title="修改成功"
+        // description="预计两小时内到账"
+        // extra={information}
+        actions={actions}
+        className={styles.result}
+      />
+    );
+  }
+}
+
+export default connect(({ form }) => ({
+  data: form.step,
+}))(EditGoodStep3);

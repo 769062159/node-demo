@@ -150,6 +150,30 @@ export const getRouterConfig = app => {
     '/live/list': {
       component: dynamicWrapper(app, ['live'], () => import('../routes/Live/list')),
     },
+    '/live/add-live': {
+      identity: 'common',
+      component: dynamicWrapper(app, ['form'], () => import('../routes/Live/AddLive')),
+    },
+    '/live/add-live/confirm': {
+      identity: 'common',
+      component: dynamicWrapper(app, ['live'], () => import('../routes/Live/AddLive/Step2')),
+    },
+    '/live/add-goliveods/result': {
+      identity: 'common',
+      component: dynamicWrapper(app, ['live'], () => import('../routes/Live/AddLive/Step3')),
+    },
+    '/live/edit-live': {
+      identity: 'common',
+      component: dynamicWrapper(app, ['form'], () => import('../routes/Live/EditLive')),
+    },
+    '/live/edit-live/confirm/:id': {
+      identity: 'common',
+      component: dynamicWrapper(app, ['live'], () => import('../routes/Live/EditLive/Step2')),
+    },
+    '/live/edit-live/result': {
+      identity: 'common',
+      component: dynamicWrapper(app, ['live'], () => import('../routes/Live/EditLive/Step3')),
+    },
     // 财务
     '/finance/account': {
       component: dynamicWrapper(app, ['finance'], () => import('../routes/Finance/Account')),

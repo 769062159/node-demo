@@ -2,7 +2,8 @@ import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
 import debounce from 'lodash/debounce';
 import moment from 'moment';
-import copy from 'copy-to-clipboard';
+// import copy from 'copy-to-clipboard';
+import { routerRedux } from 'dva/router';
 import {
   Table,
   message,
@@ -114,7 +115,7 @@ const CustomizedForm = Form.create({
     liveGoods,
   } = props;
   return (
-    <Form>
+    <Form autoComplete="OFF">
       <FormItem {...formItemLayout} label="直播标题">
         {getFieldDecorator('title', {
           rules: [
@@ -384,9 +385,10 @@ export default class Live extends PureComponent {
       },
     });
   };
-  copyBtn = val => {
-    copy(val);
-    message.success('成功复制到剪贴板');
+  goPath = () => {
+    const { dispatch } = this.props;
+    const url = `/live/add-live`;
+    dispatch(routerRedux.push(url));
   };
   // 放大图片
   handlePreviewImg = file => {
@@ -445,15 +447,9 @@ export default class Live extends PureComponent {
         render: val => (val ? <img src={val} style={{ width: '200px' }} alt="图片" /> : null),
       },
       {
-        title: '直播地址',
+        title: '推流地址',
         dataIndex: 'rtmp_push',
         width: 280,
-        render: val => (
-          <span>
-            {val}
-            <Icon type="copy" onClick={this.copyBtn.bind(this, val)} />
-          </span>
-        ),
         // render: val => (val ? <img src={val} style={{ width: '200px' }} alt="图片" /> : null),
       },
       {
@@ -462,17 +458,12 @@ export default class Live extends PureComponent {
         render: val => <span>{moment(val * 1000).format('YYYY-MM-DD HH:mm:ss')}</span>,
       },
       {
-        title: '修改时间',
-        dataIndex: 'update_time',
-        render: val => <span>{moment(val * 1000).format('YYYY-MM-DD HH:mm:ss')}</span>,
-      },
-      {
         title: '操作',
         // fixed: 'right',
         // width: 150,
         render: (text, record) => (
           <Fragment>
-            <a onClick={this.editDataMsg.bind(this, record)}>修改</a>
+            <a href={`#/live/edit-live/confirm/${record.id}`}>修改</a>
             <Divider type="vertical" />
             <a onClick={this.deleteDataMsg.bind(this, record.id)}>删除</a>
           </Fragment>
@@ -485,7 +476,7 @@ export default class Live extends PureComponent {
         <Card bordered={false}>
           <div className={styles.tableList}>
             <div className={styles.tableListOperator}>
-              <Button icon="plus" type="primary" onClick={this.showModal.bind(this)}>
+              <Button icon="plus" type="primary" onClick={this.goPath.bind(this)}>
                 新建
               </Button>
             </div>

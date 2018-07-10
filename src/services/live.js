@@ -16,6 +16,14 @@ export async function addLive(params) {
   });
 }
 
+// 直播详情
+export async function getLiveDetail(params) {
+    return request('/admin/live/detail', {
+      method: 'POST',
+      body: params,
+    });
+  }
+
 // 直播删除
 export async function deleteLive(params) {
   return request('/admin/live/delete', {

@@ -386,43 +386,6 @@ export default {
   },
 
   reducers: {
-    deleteLiveGood(state, { payload }) {
-      let { selectGoodsList } = state;
-      const { goodsList } = state;
-      const { goods_id: id } = payload.goods;
-      selectGoodsList = selectGoodsList.filter(res => {
-        return res.goods_id !== id;
-      });
-      goodsList.push(payload.goods);
-      return {
-        ...state,
-        selectGoodsList,
-        goodsList,
-      };
-    },
-    selectLiveGood(state, { payload }) {
-      const { selectGoodsList } = state;
-      let { goodsList } = state;
-      const { goods } = payload;
-      if (typeof goods === 'object') {
-        goodsList = goodsList.filter(res => {
-          return res !== goods;
-        });
-        selectGoodsList.push(goods);
-      } else {
-        goods.forEach(ele => {
-          goodsList = goodsList.filter(res => {
-            return res !== ele;
-          });
-          selectGoodsList.push(ele);
-        });
-      }
-      return {
-        ...state,
-        selectGoodsList,
-        goodsList,
-      };
-    },
     fetchFreights(state, { payload }) {
       const { data } = payload;
       return {
@@ -663,6 +626,7 @@ export default {
                 res.store_nums = value.store_nums;
                 let cacheArr = [];
                 res.profit = deepCopy(levelPartialSon);
+                // 两个数组匹配
                 res.profit.forEach(v => {
                   cacheArr[v.id] = v;
                 });

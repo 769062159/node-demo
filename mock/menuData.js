@@ -140,6 +140,10 @@ export const menuData = [
         name: '直播列表',
         path: 'list',
       },
+      {
+        name: '直播新增',
+        path: 'add-live',
+      },
     ],
   },
   // {
