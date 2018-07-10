@@ -150,6 +150,13 @@ export const getRouterConfig = app => {
     '/live/list': {
       component: dynamicWrapper(app, ['live'], () => import('../routes/Live/list')),
     },
+    // 财务
+    '/finance/account': {
+      component: dynamicWrapper(app, ['finance'], () => import('../routes/Finance/Account')),
+    },
+    '/finance/detail/:id': {
+      component: dynamicWrapper(app, ['finance'], () => import('../routes/Finance/Detail')),
+    },
     // 订单
     '/order/list': {
       component: dynamicWrapper(app, ['order', 'address'], () => import('../routes/Order/list')),

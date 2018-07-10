@@ -80,7 +80,7 @@ export const menuData = [
     ],
   },
   {
-    name: ' 物流',
+    name: '物流',
     icon: 'logistics',
     path: 'logistics',
     children: [
@@ -106,6 +106,17 @@ export const menuData = [
       {
         name: '广告',
         path: 'ads',
+      },
+    ],
+  },
+  {
+    name: '财务',
+    icon: 'finance',
+    path: 'finance',
+    children: [
+      {
+        name: '佣金',
+        path: 'account',
       },
     ],
   },
