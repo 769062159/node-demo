@@ -513,7 +513,16 @@ const CustomizedForm = Form.create({
             <Form.Item {...formItemLayouts} label="商品重量">
               {getFieldDecorator('weight', {
                 rules: [{ required: true, message: '请填写商品重量' }],
-              })(<InputNumber step={0.01} style={{ width: 200 }} precision={2} min={0} />)}
+              })(
+                <InputNumber
+                  step={0.01}
+                  style={{ width: 200 }}
+                  precision={2}
+                  min={0}
+                  formatter={value => `${value}KG`}
+                  parser={value => value.replace('KG', '')}
+                />
+              )}
             </Form.Item>
           </Col>
           <Col span={24} className={styles.extraTag}>

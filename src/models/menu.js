@@ -8,6 +8,8 @@ export default {
     data: [],
     RoleMenu: [],
     routerForm: {}, // 路由表单的内容
+    checkPowerArr: [], // 选中
+    checkPowerObj: {}, // 选中对象有半选的
   },
 
   effects: {
@@ -37,16 +39,11 @@ export default {
       const response = yield call(getRoleMenu, payload);
       yield put({
         type: 'RoleMenu',
-        payload: response.data,
+        payload: response,
       });
     },
     *setRoleMenu({ payload }, { call }) {
       yield call(setRoleMenu, payload);
-      // const responses = yield call(getRoleMenu, payload);
-      // yield put({
-      //   type: 'RoleMenu',
-      //   payload: responses.data,
-      // });
     },
     *delMenu({ payload }, { call, put }) {
       yield call(deleteMenu, payload);
@@ -59,6 +56,13 @@ export default {
   },
 
   reducers: {
+    selectPowerTree(state, { payload }) {
+      return {
+        ...state,
+        checkPowerArr: payload.checkedKeys,
+        checkPowerObj: payload.e,
+      };
+    },
     changeFormVals(state, { payload }) {
       let { routerForm } = state;
       routerForm = {
@@ -79,10 +83,21 @@ export default {
       };
     },
     RoleMenu(state, { payload }) {
-      // state.menuList = payload;
+      const { data } = payload;
+      const checkPowerArr = [];
+      if (data.length) {
+        data.forEach(res => {
+          res.children.forEach(ele => {
+            if (ele.permission) {
+              checkPowerArr.push(ele.id);
+            }
+          });
+        });
+      }
       return {
         ...state,
-        RoleMenu: payload,
+        RoleMenu: data,
+        checkPowerArr,
       };
     },
   },

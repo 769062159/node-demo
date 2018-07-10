@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Table, Form, Button, Modal, Input, Checkbox, Card } from 'antd';
+import { Table, Form, Button, Modal, Input, Card, Tree } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
 const ButtonGroup = Button.Group;
+const TreeNode = Tree.TreeNode;
 // const CheckboxGroup = Checkbox.Group;
 const FormItem = Form.Item;
 const { confirm } = Modal;
@@ -31,6 +32,8 @@ export default class Role extends Component {
     user: {},
     RoleMenu: [],
     roleId: '',
+    // expandedKeys: ['13'],
+    autoExpandParent: true,
     // targetKeys: [],
   };
   componentDidMount() {
@@ -69,10 +72,6 @@ export default class Role extends Component {
       payload: {
         role_id: id,
       },
-    }).then(() => {
-      this.setState((prevState, props) => ({
-        RoleMenu: props.menu.RoleMenu,
-      }));
     });
     // this.setState({ powerData, targetKeys });
   };
@@ -122,21 +121,19 @@ export default class Role extends Component {
   };
   // 权限提交
   okPower = () => {
+    const { menu: { checkPowerObj } } = this.props;
+    const arr = [];
+    checkPowerObj.checkedNodes.forEach(res => {
+      arr.push(res.key);
+    });
+    checkPowerObj.halfCheckedKeys.forEach(res => {
+      arr.push(res);
+    });
     const data = {};
-    data.id = [];
-    const { RoleMenu, roleId } = this.state;
+    const { roleId } = this.state;
     data.role_id = roleId;
     data.group_id = this.props.match.params.id;
-    RoleMenu.forEach(res => {
-      if (res.permission) {
-        data.id.push(res.id);
-      }
-      res.children.forEach(ele => {
-        if (ele.permission) {
-          data.id.push(ele.id);
-        }
-      });
-    });
+    data.id = arr;
     this.props
       .dispatch({
         type: 'menu/setRoleMenu',
@@ -201,10 +198,34 @@ export default class Role extends Component {
       powerVisible: false,
     });
   };
+
+  check = (checkedKeys, e) => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'menu/selectPowerTree',
+      payload: {
+        checkedKeys,
+        e,
+      },
+    });
+  };
+
+  renderTreeNodes = data => {
+    return data.map(item => {
+      if (item.children) {
+        return (
+          <TreeNode title={item.menu_name} key={item.id} dataRef={item}>
+            {this.renderTreeNodes(item.children)}
+          </TreeNode>
+        );
+      }
+      return <TreeNode title={item.menu_name} key={item.id} />;
+    });
+  };
   render() {
-    const { powerVisible, loading, addUserVisible, user, RoleMenu } = this.state;
+    const { powerVisible, loading, addUserVisible, user } = this.state;
     const { getFieldDecorator } = this.props.form;
-    const { addUser } = this.props;
+    const { addUser, menu: { checkPowerArr, RoleMenu } } = this.props;
     const progressColumns = [
       {
         title: '呢称',
@@ -239,37 +260,6 @@ export default class Role extends Component {
         total: RoleList.total,
       };
     }
-    // 渲染角色权限
-    const Role = [];
-    if (RoleMenu.length) {
-      RoleMenu.forEach((element, index) => {
-        // element.key = element.id;
-        Role.push(
-          <div key={index}>
-            <Checkbox
-              key={element.id}
-              onChange={this.onPowerChange.bind(this, index)}
-              checked={element.permission === 0 ? false : true}
-            >
-              {element.menu_name}
-            </Checkbox>
-          </div>
-        );
-        element.children.forEach((res, inx) => {
-          Role.push(
-            <Checkbox
-              key={res.id}
-              onChange={this.onPowerChange.bind(this, index, inx)}
-              checked={res.permission === 0 ? false : true}
-            >
-              {res.menu_name}
-            </Checkbox>
-          );
-        });
-      });
-    }
-    // const plainOptions = ['Apple', 'Pear', 'Orange'];
-    // const defaultCheckedList = ['Apple', 'Orange'];
     return (
       <PageHeaderLayout>
         <Card>
@@ -313,12 +303,23 @@ export default class Role extends Component {
             </Form>
           </Modal>
           <Modal
-            title="Titles"
+            title="权限"
             visible={powerVisible}
             onCancel={this.powerCancel.bind(this)}
             onOk={this.okPower.bind(this)}
           >
-            {Role}
+            <Tree
+              checkable
+              //   onExpand={this.onExpand}
+              //   expandedKeys={this.state.expandedKeys}
+              defaultExpandAll
+              autoExpandParent={this.state.autoExpandParent}
+              onCheck={this.check}
+              checkedKeys={{ checked: checkPowerArr }}
+            >
+              {this.renderTreeNodes(RoleMenu)}
+              {/* {RoleItem} */}
+            </Tree>
           </Modal>
         </Card>
       </PageHeaderLayout>
