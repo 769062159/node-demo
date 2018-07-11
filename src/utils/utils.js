@@ -17,6 +17,11 @@ export function deepCopy (source) {
     return result;
 };
 
+// 数组去重
+export function dedupe(array){
+    return Array.from(new Set(array));
+}
+
 export function getTimeDistance(type) {
   const now = new Date();
   const oneDay = 1000 * 60 * 60 * 24;

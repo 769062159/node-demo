@@ -11,7 +11,7 @@ const AppNoMenu = WrappedComponent => {
     render() {
       const routerData = getRouterDataSync(this.props.global.routerConfig, []);
       if (!routerData || routerData.length <= 0) {
-        return <Spin spinning={true} />;
+        return <Spin spinning />;
       } else {
         return <WrappedComponent {...this.props} routerData={routerData} />;
       }

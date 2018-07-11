@@ -1,5 +1,5 @@
-import { isUrl } from '../utils/utils';
 import pathToRegexp from 'path-to-regexp';
+import { isUrl } from '../utils/utils';
 
 /* 格式化处理menuData中的所有path,如果children中没有authority，就用父级的覆盖 */
 function formatter(data, parentPath = '/', parentAuthority) {
@@ -20,7 +20,7 @@ function formatter(data, parentPath = '/', parentAuthority) {
   });
 }
 
-/*将menuData里面的数据展开  =>类似于router里面的routerConfig */
+// 将menuData里面的数据展开  =>类似于router里面的routerConfig
 export function getFlatMenuData(menusFormatterData) {
   let keys = {};
   menusFormatterData.forEach(item => {

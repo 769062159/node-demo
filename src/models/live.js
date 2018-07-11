@@ -145,22 +145,35 @@ export default {
     selectLiveGood(state, { payload }) {
       const { liveGoods, goodsList } = state;
       const { goods } = payload;
-      if (typeof goods === 'object') {
+      if (!Array.isArray(goods)) {
         goodsList.forEach(res => {
-          if (res === goods) {
+          if (res.goods_id === goods.goods_id) {
             res.disabled = 1;
           }
         });
         liveGoods.push(goods);
       } else {
-        goods.forEach(ele => {
-          goodsList.forEach(res => {
-            if (res.goods_id === goods.goods_id) {
-              res.disabled = 1;
-            }
-          });
-          liveGoods.push(ele);
+        let cacheArr = {};
+        goodsList.forEach(v => {
+          cacheArr[v.goods_id] = v;
         });
+        goods.forEach(v => {
+          if (cacheArr[v.goods_id]) {
+            cacheArr[v.goods_id].disabled = 1;
+          }
+          liveGoods.push(v);
+        });
+        cacheArr = null;
+        console.log(goodsList);
+        console.log(liveGoods);
+        // goods.forEach(ele => {
+        //   goodsList.forEach(res => {
+        //     if (res.goods_id === ele.goods_id) {
+        //       res.disabled = 1;
+        //     }
+        //   });
+        //   liveGoods.push(ele);
+        // });
       }
       return {
         ...state,

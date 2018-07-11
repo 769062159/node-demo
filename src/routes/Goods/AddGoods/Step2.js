@@ -23,7 +23,7 @@ import ReactEditor from 'components/ReactEditor';
 import EditTable from 'components/editTable';
 import styles from './style.less';
 
-const { TextArea } = Input;
+// const { TextArea } = Input;
 // const RadioGroup = Radio.Group;
 const Option = Select.Option;
 const formItemLayout = {
@@ -442,11 +442,11 @@ const CustomizedForm = Form.create({
             rules: [{ required: true, message: '请填写商品标题' }],
           })(<Input />)}
         </Form.Item>
-        <Form.Item {...formItemLayout} label="商品描述">
+        {/* <Form.Item {...formItemLayout} label="商品描述">
           {getFieldDecorator('goods_des', {
             rules: [{ required: true, message: '请填写商品描述' }],
           })(<TextArea placeholder="请填写商品描述" autosize />)}
-        </Form.Item>
+        </Form.Item> */}
         <Row gutter={24}>
           <Col span={24}>
             <Form.Item {...formItemLayouts} label="商品品牌">
@@ -721,11 +721,24 @@ const CustomizedForm = Form.create({
             ) : null}
           </Col>
         </Row>
+        <Form.Item label="商品参数">
+          {getFieldDecorator('goods_des', {
+            rules: [{ required: true, message: '请填写商品参数' }],
+          })(
+            <ReactEditor
+              valueSon={goodsDetail.goods_des}
+              setDescription={setDescription.bind(this, 1)}
+            />
+          )}
+        </Form.Item>
         <Form.Item label="描述">
           {getFieldDecorator('goods_description', {
             rules: [{ required: true, message: '请填写描述' }],
           })(
-            <ReactEditor valueSon={goodsDetail.goods_description} setDescription={setDescription} />
+            <ReactEditor
+              valueSon={goodsDetail.goods_description}
+              setDescription={setDescription.bind(this, 2)}
+            />
           )}
         </Form.Item>
       </Card>
@@ -902,12 +915,17 @@ class AddGoodStep2 extends React.PureComponent {
     });
   };
   // 富文本
-  setDescription = e => {
-    console.log(e);
+  setDescription = (type, e) => {
     const obj = {};
-    obj.goods_description = {
-      value: e,
-    };
+    if (type === 1) {
+      obj.goods_des = {
+        value: e,
+      };
+    } else {
+      obj.goods_description = {
+        value: e,
+      };
+    }
     this.changeFormVal(obj);
   };
   modifiedValue = event => {

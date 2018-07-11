@@ -624,7 +624,7 @@ export default {
                 res.goods_sku_sn = value.goods_sku_sn;
                 res.price = value.price;
                 res.store_nums = value.store_nums;
-                let cacheArr = [];
+                let cacheArr = {};
                 res.profit = deepCopy(levelPartialSon);
                 // 两个数组匹配
                 res.profit.forEach(v => {

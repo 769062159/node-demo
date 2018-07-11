@@ -1,6 +1,7 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
-import { Table, Col, Form, Row } from 'antd';
+import { Table, Col, Form, Row, Button } from 'antd';
+import { dedupe } from '../../utils/utils';
 
 // const getValue = obj =>
 //   Object.keys(obj)
@@ -20,6 +21,7 @@ export default class Live extends PureComponent {
   state = {
     // pagination: 1,
     selectList: [],
+    selectArr: [],
   };
   //   componentDidMount() {
   // const {  } = this.props;
@@ -36,11 +38,14 @@ export default class Live extends PureComponent {
 
   joinSelect = goods => {
     let { selectList } = this.state;
+    const { selectArr } = this.state;
     selectList = selectList.filter(res => {
-      return res !== goods;
+      return res.goods_id !== goods.goods_id;
     });
+    selectArr.push(goods.goods_id);
     this.setState({
       selectList,
+      selectArr,
     });
     const { dispatch } = this.props;
     dispatch({
@@ -51,6 +56,14 @@ export default class Live extends PureComponent {
     });
   };
   deleteSelect = goods => {
+    let { selectArr } = this.state;
+    selectArr = selectArr.filter(res => {
+      return res !== goods.goods_id;
+    });
+    this.setState({
+      selectArr,
+    });
+    console.log(selectArr);
     const { dispatch } = this.props;
     dispatch({
       type: 'live/deleteLiveGood',
@@ -62,14 +75,23 @@ export default class Live extends PureComponent {
   allSelectAdd = () => {
     const { selectList } = this.state;
     console.log(selectList);
+    const { dispatch } = this.props;
+    this.setState({
+      selectList: [],
+    });
+    dispatch({
+      type: 'live/selectLiveGood',
+      payload: {
+        goods: selectList,
+      },
+    });
   };
   // 换页
   handleTableChange = pagination => {
     const { current } = pagination;
-    this.setState({
-      //   pagination: current,
-      selectList: [],
-    });
+    // this.setState({
+    //   selectList: [],
+    // });
     const { dispatch } = this.props;
     dispatch({
       type: 'live/fetchLiveGoods',
@@ -83,21 +105,27 @@ export default class Live extends PureComponent {
   selectGoods = selectList => {
     const { live: { goodsList: datas } } = this.props;
     const arrSet = new Set(selectList);
-    const data = datas.filter(res => {
-      return arrSet.has(res.goods_id);
+    // let data = datas.filter(res => {
+    //   return arrSet.has(res.goods_id) && res.disabled !== 1;
+    // });
+    const { selectList: list } = this.state;
+    let merge = dedupe(datas.concat(list));
+    merge = merge.filter(res => {
+      return arrSet.has(res.goods_id) && res.disabled !== 1;
     });
-    this.setState({ selectList: data });
+    this.setState({ selectList: merge, selectArr: selectList });
   };
 
   render() {
     const { live: { goodsList: datas, goodsListPage, liveGoods }, loading } = this.props;
+    const { selectArr, selectList } = this.state;
+    console.log(selectArr);
     console.log(datas);
-    const { selectList } = this.state;
     const rowSelection = {
-      selectList,
+      selectedRowKeys: selectArr,
       onChange: this.selectGoods,
       getCheckboxProps: record => ({
-        disabled: record.disabled === 1,
+        defaultChecked: record.disabled === 1,
       }),
     };
     const progressColumns = [
@@ -171,16 +199,16 @@ export default class Live extends PureComponent {
             columns={progressColumns}
             pagination={goodsListPage}
             onChange={this.handleTableChange}
-            // footer={() => (
-            //   <Button
-            //     type="primary"
-            //     onClick={this.allSelectAdd}
-            //     disabled={!selectList.length}
-            //     loading={loading}
-            //   >
-            //     批量添加
-            //   </Button>
-            // )}
+            footer={() => (
+              <Button
+                type="primary"
+                onClick={this.allSelectAdd}
+                disabled={!selectList.length}
+                loading={loading}
+              >
+                批量添加
+              </Button>
+            )}
           />
         </Col>
         <Col span={12}>
