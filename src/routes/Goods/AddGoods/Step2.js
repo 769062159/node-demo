@@ -157,7 +157,7 @@ const CustomizedForm = Form.create({
         value: goodsDetail.goods_shelves_type,
       }),
       goods_shelves_time: Form.createFormField({
-        value: goodsDetail.goods_shelves_time,
+        value: goodsDetail.goods_shelves_time || moment(new Date(), 'YYYY-MM-DD HH:mm:ss'),
       }),
       goods_description: Form.createFormField({
         value: goodsDetail.goods_description,
@@ -325,6 +325,7 @@ const CustomizedForm = Form.create({
                   step={0.01}
                   precision={2}
                   min={0}
+                  max={goodsDetail.sell_goods_price}
                   onChange={e => chgLevelHas(res, e)}
                 />
               )
@@ -430,11 +431,6 @@ const CustomizedForm = Form.create({
         {/* <Form.Item {...formItemLayout} label="商品SN">
           {getFieldDecorator('goods_sn', {
             rules: [{ required: true, message: '请填写商品SN' }],
-          })(<Input />)}
-        </Form.Item> */}
-        {/* <Form.Item {...formItemLayout} label="列表标题">
-          {getFieldDecorator('goods_list_title', {
-            rules: [{ required: true, message: '请填写列表标题' }],
           })(<Input />)}
         </Form.Item> */}
         <Form.Item {...formItemLayouts} label="商品标题">
@@ -986,7 +982,7 @@ class AddGoodStep2 extends React.PureComponent {
       dispatch({
         type: 'goods/setLevelPartial',
         payload: {
-          data,
+          data: data.id,
           value: e,
         },
       });

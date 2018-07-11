@@ -69,6 +69,7 @@ export default class Demo extends React.Component {
       height: 200,
       contentFormat: 'html',
       initialContent: this.props.valueSon,
+      contentId: this.props.goodsId,
       media: {
         uploadFn,
       },

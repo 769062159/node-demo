@@ -1,6 +1,7 @@
 import { routerRedux } from 'dva/router';
 import { updateLive, deleteLive, addLive, getLive, getLiveDetail, getVod } from '../services/live';
 import { getAllGoods } from '../services/goods';
+import { dedupe } from '../utils/utils';
 
 export default {
   namespace: 'live',
@@ -13,6 +14,10 @@ export default {
     shareImg: [], // 直播分享
     liveGoods: [], // 直播商品
     goodsList: [], // 左table表
+    leftKeyArr: [], // 左侧table选中数组
+    rightKeyArr: [], // 右侧table选中数组
+    leftBatchArr: [], // 左侧批量
+    rightBatchArr: [], // 右侧批量
     goodsListPage: {}, // 页脚
     vodList: [],
     vodListPage: {},
@@ -20,6 +25,7 @@ export default {
 
   effects: {
     *fetchAddGoods({ payload }, { call, put }) {
+      // 添加时请求第一页
       const good = yield call(getAllGoods, payload);
       yield put({
         type: 'getLiveGoods',
@@ -27,10 +33,14 @@ export default {
       });
     },
     *fetchLiveGoods({ payload }, { call, put }) {
+      // 换页
       const response = yield call(getAllGoods, payload);
       yield put({
         type: 'getLiveGoods',
         payload: response,
+      });
+      yield put({
+        type: 'clearLeftKey', // 换页清空已选择
       });
     },
     *fetchLiveDetail({ payload }, { call, put }) {
@@ -124,12 +134,28 @@ export default {
   },
 
   reducers: {
+    clearLeftKey(state) {
+      return {
+        ...state,
+        leftKeyArr: [],
+      };
+    },
+    leftSelectAction(state, { payload }) {
+      const { selectList } = payload;
+      return {
+        ...state,
+        leftKeyArr: selectList,
+      };
+    },
     deleteLiveGood(state, { payload }) {
-      let { liveGoods } = state;
+      let { liveGoods, leftKeyArr } = state;
       const { goodsList } = state;
       const { goods_id: id } = payload.goods;
       liveGoods = liveGoods.filter(res => {
         return res.goods_id !== id;
+      });
+      leftKeyArr = leftKeyArr.filter(res => {
+        return res !== id;
       });
       goodsList.forEach(res => {
         if (res.goods_id === id) {
@@ -139,11 +165,12 @@ export default {
       return {
         ...state,
         liveGoods,
+        leftKeyArr,
         goodsList,
       };
     },
     selectLiveGood(state, { payload }) {
-      const { liveGoods, goodsList } = state;
+      const { liveGoods, goodsList, leftKeyArr } = state;
       const { goods } = payload;
       if (!Array.isArray(goods)) {
         goodsList.forEach(res => {
@@ -152,6 +179,7 @@ export default {
           }
         });
         liveGoods.push(goods);
+        leftKeyArr.push(goods.goods_id);
       } else {
         let cacheArr = {};
         goodsList.forEach(v => {
@@ -164,39 +192,33 @@ export default {
           liveGoods.push(v);
         });
         cacheArr = null;
-        console.log(goodsList);
-        console.log(liveGoods);
-        // goods.forEach(ele => {
-        //   goodsList.forEach(res => {
-        //     if (res.goods_id === ele.goods_id) {
-        //       res.disabled = 1;
-        //     }
-        //   });
-        //   liveGoods.push(ele);
-        // });
       }
       return {
         ...state,
         liveGoods,
         goodsList,
+        leftKeyArr,
       };
     },
     getLiveGoods(state, { payload }) {
       const { data } = payload;
-      const { liveGoods } = state;
+      const { liveGoods, leftKeyArr } = state;
       let cacheArr = {};
       data.list.forEach(v => {
         cacheArr[v.goods_id] = v;
       });
       liveGoods.forEach(v => {
         if (cacheArr[v.goods_id]) {
+          leftKeyArr.push(v.goods_id);
           cacheArr[v.goods_id].disabled = 1;
         }
       });
+      const arr = dedupe(leftKeyArr);
       cacheArr = null;
       return {
         ...state,
         goodsList: data.list,
+        leftKeyArr: arr,
         goodsListPage: {
           pageSize: data.page,
           total: data.total,

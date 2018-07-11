@@ -1,7 +1,7 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
 import { Table, Col, Form, Row, Button } from 'antd';
-import { dedupe } from '../../utils/utils';
+// import { dedupe } from '../../utils/utils';
 
 // const getValue = obj =>
 //   Object.keys(obj)
@@ -21,7 +21,7 @@ export default class Live extends PureComponent {
   state = {
     // pagination: 1,
     selectList: [],
-    selectArr: [],
+    // selectArr: [],
   };
   //   componentDidMount() {
   // const {  } = this.props;
@@ -37,16 +37,6 @@ export default class Live extends PureComponent {
   //   }
 
   joinSelect = goods => {
-    let { selectList } = this.state;
-    const { selectArr } = this.state;
-    selectList = selectList.filter(res => {
-      return res.goods_id !== goods.goods_id;
-    });
-    selectArr.push(goods.goods_id);
-    this.setState({
-      selectList,
-      selectArr,
-    });
     const { dispatch } = this.props;
     dispatch({
       type: 'live/selectLiveGood',
@@ -56,14 +46,6 @@ export default class Live extends PureComponent {
     });
   };
   deleteSelect = goods => {
-    let { selectArr } = this.state;
-    selectArr = selectArr.filter(res => {
-      return res !== goods.goods_id;
-    });
-    this.setState({
-      selectArr,
-    });
-    console.log(selectArr);
     const { dispatch } = this.props;
     dispatch({
       type: 'live/deleteLiveGood',
@@ -103,30 +85,31 @@ export default class Live extends PureComponent {
     });
   };
   selectGoods = selectList => {
-    const { live: { goodsList: datas } } = this.props;
-    const arrSet = new Set(selectList);
-    // let data = datas.filter(res => {
-    //   return arrSet.has(res.goods_id) && res.disabled !== 1;
-    // });
-    const { selectList: list } = this.state;
-    let merge = dedupe(datas.concat(list));
-    merge = merge.filter(res => {
-      return arrSet.has(res.goods_id) && res.disabled !== 1;
+    console.log(selectList);
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'live/leftSelectAction',
+      payload: {
+        selectList,
+      },
     });
-    this.setState({ selectList: merge, selectArr: selectList });
   };
 
   render() {
-    const { live: { goodsList: datas, goodsListPage, liveGoods }, loading } = this.props;
-    const { selectArr, selectList } = this.state;
-    console.log(selectArr);
-    console.log(datas);
+    const {
+      live: { goodsList: datas, goodsListPage, liveGoods, leftBatchArr, leftKeyArr, rightKeyArr },
+      loading,
+    } = this.props;
+    // const { selectArr, selectList } = this.state;
+    console.log(leftBatchArr);
+    console.log(leftKeyArr);
     const rowSelection = {
-      selectedRowKeys: selectArr,
+      selectedRowKeys: leftKeyArr,
       onChange: this.selectGoods,
-      getCheckboxProps: record => ({
-        defaultChecked: record.disabled === 1,
-      }),
+    };
+    const rightSelection = {
+      selectedRowKeys: rightKeyArr,
+      // onChange: this.selectGoods,
     };
     const progressColumns = [
       {
@@ -203,7 +186,7 @@ export default class Live extends PureComponent {
               <Button
                 type="primary"
                 onClick={this.allSelectAdd}
-                disabled={!selectList.length}
+                disabled={!leftBatchArr.length}
                 loading={loading}
               >
                 批量添加
@@ -214,19 +197,16 @@ export default class Live extends PureComponent {
         <Col span={12}>
           <Table
             bordered
+            rowSelection={rightSelection}
             dataSource={liveGoods}
             rowKey={record => record.goods_id}
             columns={progressColumnsdel}
             pagination={{ pageSize: 3 }}
-            // footer={() => (
-            //   <Button
-            //     type="primary"
-            //     disabled={datas.length}
-            //     loading={loading}
-            //   >
-            //     批量移除
-            //   </Button>
-            // )}
+            footer={() => (
+              <Button type="primary" disabled={datas.length} loading={loading}>
+                批量移除
+              </Button>
+            )}
           />
         </Col>
       </Row>

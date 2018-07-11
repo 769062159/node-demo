@@ -411,6 +411,7 @@ export default {
       };
     },
     setLevelPartials(state, { payload }) {
+      console.log(payload);
       // const { typePartial, totalPrice, levelPartial, levelPartialSon } = state;
       const { goodsDetail } = state;
       const { levelPartial, levelPartialSon } = state;
@@ -419,8 +420,7 @@ export default {
         cost_price: costPrice,
         sell_goods_price: sellGoodsPrice,
       } = goodsDetail;
-      levelPartial[payload.index] = payload.value;
-      const id = payload.data.id;
+      const id = payload.index;
       levelPartial.forEach(res => {
         if (res.id === id) {
           res.value = payload.value;
@@ -588,6 +588,7 @@ export default {
         let typePartial = 0;
         goodsDetail.has_shop_goods_profit.forEach(res => {
           if (res.status === 0) {
+            console.log(res.profit_value);
             goodsDetail[`level_${res.level}`] = res.profit_value;
             typePartial = res.profit_type;
             levelPartial.forEach(ele => {
@@ -681,6 +682,8 @@ export default {
       }
       goodsDetail.profit_type = goodsDetail.profit_type || 0;
       payload.goodsDetail = goodsDetail;
+      console.log(999);
+      console.log(goodsDetail);
       return {
         ...state,
         ...payload,

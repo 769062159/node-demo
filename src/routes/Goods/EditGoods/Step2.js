@@ -326,6 +326,7 @@ const CustomizedForm = Form.create({
                   step={0.01}
                   precision={2}
                   min={0}
+                  max={goodsDetail.sell_goods_price}
                   onChange={e => chgLevelHas(res, e)}
                 />
               )
@@ -714,6 +715,7 @@ const CustomizedForm = Form.create({
           })(
             <ReactEditor
               valueSon={goodsDetail.goods_des}
+              goodsId={goodsDetail.goods_id}
               setDescription={setDescription.bind(this, 1)}
             />
           )}
@@ -723,6 +725,7 @@ const CustomizedForm = Form.create({
             rules: [{ required: true, message: '请填写描述' }],
           })(
             <ReactEditor
+              goodsId={goodsDetail.goods_id}
               valueSon={goodsDetail.goods_description}
               setDescription={setDescription.bind(this, 2)}
             />
@@ -980,7 +983,7 @@ class EditGoodStep2 extends React.PureComponent {
       dispatch({
         type: 'goods/setLevelPartial',
         payload: {
-          index,
+          index: index.id,
           value: e,
         },
       });
