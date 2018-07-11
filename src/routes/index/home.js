@@ -174,7 +174,7 @@ const CustomizedForm = Form.create({
           ) : (
             <Select style={{ width: 200 }}>
               <Option value={1}>跳转商品</Option>
-              <Option value={2}>跳转外部链接</Option>
+              {/* <Option value={2}>跳转外部链接</Option> */}
               <Option value={3}>不跳转</Option>
               <Option value={4}>跳转直播间</Option>
             </Select>
