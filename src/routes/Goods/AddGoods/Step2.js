@@ -542,7 +542,7 @@ const CustomizedForm = Form.create({
             <Form.Item
               {...formItemLayoutUploadImg}
               label="主体图片"
-              extra={<Tag color="blue">大小750*750</Tag>}
+              extra={<Tag color="blue">建议尺寸750px*675px</Tag>}
             >
               {getFieldDecorator('xxx', {
                 rules: [{ required: true, message: '请填写主体图片' }],
