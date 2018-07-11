@@ -151,7 +151,6 @@ export default class Live extends PureComponent {
       },
       {
         title: '操作',
-        // fixed: 'right',
         width: 100,
         render: (text, record) => (
           <Fragment>
@@ -215,7 +214,7 @@ export default class Live extends PureComponent {
             columns={progressColumns}
             pagination={goodsListPage}
             onChange={this.handleTableChange}
-            scroll={{ x: true, y: 280 }}
+            scroll={{ x: true, y: 480 }}
             // footer={() => (
             //   <Row>
             //     <Col span={8}>
@@ -246,7 +245,7 @@ export default class Live extends PureComponent {
             rowKey={record => record.goods_id}
             columns={progressColumnsdel}
             pagination={false}
-            scroll={{ x: true, y: 280 }}
+            scroll={{ x: true, y: 480 }}
             // footer={() => (
             //   <Button type="primary" disabled={!rightKeyArr.length} onClick={this.allSelectRemove}>
             //     批量移除

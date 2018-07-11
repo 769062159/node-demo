@@ -2,14 +2,15 @@ import React from 'react';
 import { connect } from 'dva';
 import copy from 'copy-to-clipboard';
 import debounce from 'lodash/debounce';
-import { Form, Button, Input, Select, Upload, Icon, Modal, Tag, message, InputNumber } from 'antd';
+// import { Form, Button, Input, Select, Upload, Icon, Modal, Tag, message, InputNumber } from 'antd';
+import { Form, Button, Input, Upload, Icon, Modal, Tag, message } from 'antd';
 import request from '../../../utils/request';
 import LiveGoodTable from '../../../components/LiveGoodTable';
 // import styles from './style.less';
 
 const { TextArea } = Input;
 const FormItem = Form.Item;
-const Option = Select.Option;
+// const Option = Select.Option;
 const formItemLayout = {
   labelCol: {
     xs: { span: 24 },
@@ -83,7 +84,7 @@ const CustomizedForm = Form.create({
     previewVisible,
     previewImage,
     handleCancelImg,
-    liveForm,
+    // liveForm,
   } = props;
 
   // 上传按钮
@@ -190,7 +191,7 @@ const CustomizedForm = Form.create({
           ))}
         </Select>
       </FormItem> */}
-      <FormItem {...formItemLayout} label="是否收费">
+      {/* <FormItem {...formItemLayout} label="是否收费">
         {getFieldDecorator('is_free', {
           rules: [
             {
@@ -211,7 +212,7 @@ const CustomizedForm = Form.create({
             rules: [{ required: true, message: '请填写费用' }],
           })(<InputNumber step={0.01} precision={2} min={0.01} style={{ width: '200px' }} />)}
         </Form.Item>
-      ) : null}
+      ) : null} */}
       <LiveGoodTable />
       <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
         <Button type="primary" htmlType="submit" onClick={onValidateForm}>
