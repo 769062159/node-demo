@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
 import debounce from 'lodash/debounce';
 import moment from 'moment';
@@ -14,7 +14,6 @@ import {
   Input,
   Icon,
   Button,
-  //   Divider,
   Select,
   Spin,
   Tag,
@@ -146,7 +145,11 @@ const CustomizedForm = Form.create({
           ],
         })(<TextArea placeholder="请输入简介" autosize />)}
       </FormItem>
-      <Form.Item {...formItemLayout} label="直播封面" extra={<Tag color="blue">大小:750*370</Tag>}>
+      <Form.Item
+        {...formItemLayout}
+        label="直播封面"
+        extra={<Tag color="blue">建议尺寸750px*370px</Tag>}
+      >
         {getFieldDecorator('xxx', {
           rules: [{ required: true, message: '请填写直播封面' }],
         })(
@@ -457,18 +460,15 @@ export default class Vod extends PureComponent {
         dataIndex: 'updated_at',
         render: val => <span>{moment(val * 1000).format('YYYY-MM-DD HH:mm:ss')}</span>,
       },
-      //   {
-      //     title: '操作',
-      // fixed: 'right',
-      // width: 150,
-      //     render: (text, record) => (
-      //       <Fragment>
-      //         <a href={`#/live/edit-live/confirm/${record.id}`}>修改</a>
-      //         <Divider type="vertical" />
-      //         <a onClick={this.deleteDataMsg.bind(this, record.id)}>删除</a>
-      //       </Fragment>
-      //     ),
-      //   },
+      {
+        title: '操作',
+        width: 100,
+        render: (text, record) => (
+          <Fragment>
+            <a href={`#/live/edit-vod/confirm/${record.id}`}>修改</a>
+          </Fragment>
+        ),
+      },
     ];
 
     return (

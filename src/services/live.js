@@ -22,7 +22,7 @@ export async function getLiveDetail(params) {
       method: 'POST',
       body: params,
     });
-  }
+}
 
 // 直播删除
 export async function deleteLive(params) {
@@ -43,6 +43,22 @@ export async function updateLive(params) {
 // 所有录播
 export async function getVod(params) {
     return request('/admin/vod/list', {
+      method: 'POST',
+      body: params,
+    });
+}
+
+// 录播详情
+export async function getVodDetail(params) {
+    return request('/admin/vod/detail', {
+      method: 'POST',
+      body: params,
+    });
+}
+
+// 录播详情修改
+export async function updateVodDetail(params) {
+    return request('/admin/vod/update', {
       method: 'POST',
       body: params,
     });

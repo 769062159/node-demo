@@ -173,9 +173,17 @@ export const getRouterConfig = app => {
       identity: 'common',
       component: dynamicWrapper(app, ['live'], () => import('../routes/Live/EditLive/Step2')),
     },
-    '/live/edit-live/result': {
+    '/live/edit-vod': {
       identity: 'common',
-      component: dynamicWrapper(app, ['live'], () => import('../routes/Live/EditLive/Step3')),
+      component: dynamicWrapper(app, ['form'], () => import('../routes/Live/EditVod')),
+    },
+    '/live/edit-vod/confirm/:id': {
+      identity: 'common',
+      component: dynamicWrapper(app, ['live'], () => import('../routes/Live/EditVod/Step2')),
+    },
+    '/live/edit-vod/result': {
+      identity: 'common',
+      component: dynamicWrapper(app, ['live'], () => import('../routes/Live/EditVod/Step3')),
     },
     // 财务
     '/finance/account': {

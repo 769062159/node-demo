@@ -290,7 +290,11 @@ export default class Ads extends PureComponent {
             ],
           })(<TextArea placeholder="请输入简介" autosize />)}
         </FormItem>
-        <FormItem label="广告封面" {...formItemLayout} extra={<Tag color="blue">大小:750*370</Tag>}>
+        <FormItem
+          label="广告封面"
+          {...formItemLayout}
+          extra={<Tag color="blue">建议尺寸750px*370px</Tag>}
+        >
           {uploadItem}
         </FormItem>
         <FormItem label="广告排序" {...formItemLayout}>
@@ -376,7 +380,11 @@ export default class Ads extends PureComponent {
             ],
           })(<TextArea placeholder="请输入简介" autosize />)}
         </FormItem>
-        <FormItem label="广告封面" {...formItemLayout} extra={<Tag color="blue">大小:750*370</Tag>}>
+        <FormItem
+          label="广告封面"
+          {...formItemLayout}
+          extra={<Tag color="blue">建议尺寸750px*370px</Tag>}
+        >
           {editData.pic !== 1 ? uploadItem : null}
         </FormItem>
         <FormItem label="广告排序" {...formItemLayout}>

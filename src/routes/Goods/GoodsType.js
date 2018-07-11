@@ -390,7 +390,11 @@ export default class GoodsType extends PureComponent {
           )}
         </FormItem> */}
         {/* {selectOption ? uploadItem : null} */}
-        <FormItem {...formItemLayout} label="图片" extra={<Tag color="blue">大小:80*80</Tag>}>
+        <FormItem
+          {...formItemLayout}
+          label="图片"
+          extra={<Tag color="blue">建议尺寸80px*80px</Tag>}
+        >
           {uploadItem}
         </FormItem>
         <FormItem style={{ marginTop: 32 }} {...formSubmitLayout}>
@@ -514,7 +518,11 @@ export default class GoodsType extends PureComponent {
           )}
         </FormItem> */}
         {/* {dataIndex.class_level !== 1 ? uploadItem : null} */}
-        <FormItem {...formItemLayout} label="图片" extra={<Tag color="blue">大小:80*80</Tag>}>
+        <FormItem
+          {...formItemLayout}
+          label="图片"
+          extra={<Tag color="blue">建议尺寸80px*80px</Tag>}
+        >
           {uploadItem}
         </FormItem>
         <FormItem style={{ marginTop: 32 }} {...formSubmitLayout}>

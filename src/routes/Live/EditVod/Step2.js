@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'dva';
-import copy from 'copy-to-clipboard';
 import debounce from 'lodash/debounce';
 import { Form, Button, Input, Select, Upload, Icon, Modal, Tag, message, InputNumber } from 'antd';
 import request from '../../../utils/request';
@@ -246,13 +245,15 @@ class AddLiveStep2 extends React.PureComponent {
     },
   };
   componentDidMount() {
+    const { id } = this.props.match.params;
     const { dispatch } = this.props;
     dispatch({
-      type: 'live/fetchAddGoods',
+      type: 'live/fetchVodDetail',
       payload: {
+        vod_id: id,
         page: 1,
         goods_status: 0,
-        page_number: 10,
+        page_number: 3,
       },
     });
   }
@@ -318,12 +319,11 @@ class AddLiveStep2 extends React.PureComponent {
     liveForm.pagination = pagination;
     liveForm.cover = uploadLiveImg[0].url;
     liveForm.share_cover = shareImg[0].url;
-    liveForm.live_id = liveForm.id;
+    liveForm.vod_id = liveForm.id;
     dispatch({
-      type: 'live/addLive',
+      type: 'live/editVod',
       payload: liveForm,
     });
-    message.success('添加成功');
   };
   // 修改表单值
   changeFormVal = val => {
@@ -338,10 +338,6 @@ class AddLiveStep2 extends React.PureComponent {
         obj,
       },
     });
-  };
-  copyBtn = val => {
-    copy(val);
-    message.success('成功复制到剪贴板');
   };
   // 放大图片
   handlePreviewImg = file => {

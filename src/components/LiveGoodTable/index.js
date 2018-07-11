@@ -1,8 +1,9 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
 import { Table, Col, Form, Row, Button } from 'antd';
+import styles from './List.less';
 // import { dedupe } from '../../utils/utils';
-
+// ant-table-thead
 // const getValue = obj =>
 //   Object.keys(obj)
 //     .map(key => obj[key])
@@ -73,6 +74,7 @@ export default class Live extends PureComponent {
   };
   // 换页
   handleTableChange = pagination => {
+    console.log(pagination);
     const { current } = pagination;
     // this.setState({
     //   selectList: [],
@@ -83,7 +85,7 @@ export default class Live extends PureComponent {
       payload: {
         page: current,
         goods_status: 0,
-        page_number: 3,
+        page_number: 10,
       },
     });
   };
@@ -112,6 +114,7 @@ export default class Live extends PureComponent {
       live: { goodsList: datas, goodsListPage, liveGoods, leftBatchArr, leftKeyArr, rightKeyArr },
       loading,
     } = this.props;
+    // const { current } = this.state;
     // const { selectArr, selectList } = this.state;
     console.log(leftBatchArr);
     console.log(leftKeyArr);
@@ -128,6 +131,7 @@ export default class Live extends PureComponent {
         title: '商品图片',
         dataIndex: 'img',
         key: 'goods_id',
+        width: 100,
         render: val => (val ? <img src={val} style={{ width: '60px' }} alt="图片" /> : null),
       },
       {
@@ -137,18 +141,24 @@ export default class Live extends PureComponent {
       },
       {
         title: '价格',
+        width: 70,
         dataIndex: 'goods_price',
+      },
+      {
+        title: '库存',
+        width: 80,
+        dataIndex: 'goods_total_inventory',
       },
       {
         title: '操作',
         // fixed: 'right',
-        // width: 150,
+        width: 100,
         render: (text, record) => (
           <Fragment>
-            {record.disabled === 1 ? (
-              '添加'
-            ) : (
-              <a onClick={this.joinSelect.bind(this, record)}>添加</a>
+            {record.disabled === 1 ? null : (
+              <Button type="primary" onClick={this.joinSelect.bind(this, record)}>
+                添加
+              </Button>
             )}
           </Fragment>
         ),
@@ -159,6 +169,7 @@ export default class Live extends PureComponent {
         title: '商品图片',
         dataIndex: 'img',
         key: 'goods_id',
+        width: 100,
         render: val => (val ? <img src={val} style={{ width: '60px' }} alt="图片" /> : null),
       },
       {
@@ -168,23 +179,33 @@ export default class Live extends PureComponent {
       },
       {
         title: '价格',
+        width: 70,
         dataIndex: 'goods_price',
+      },
+      {
+        title: '库存',
+        width: 80,
+        dataIndex: 'goods_total_inventory',
       },
       {
         title: '操作',
         // fixed: 'right',
-        // width: 150,
+        width: 100,
         render: (text, record) => (
           <Fragment>
-            <a onClick={this.deleteSelect.bind(this, record)}>移除</a>
+            <Button type="primary" onClick={this.deleteSelect.bind(this, record)}>
+              移除
+            </Button>
           </Fragment>
         ),
       },
     ];
-
+    console.log(goodsListPage);
     return (
       <Row>
-        <Col span={12}>
+        <Col span={12}>选择商品：</Col>
+        <Col span={12}>已选商品：</Col>
+        <Col span={12} className={styles.tableHeaders}>
           <Table
             bordered
             rowSelection={rowSelection}
@@ -194,27 +215,62 @@ export default class Live extends PureComponent {
             columns={progressColumns}
             pagination={goodsListPage}
             onChange={this.handleTableChange}
-            footer={() => (
-              <Button type="primary" onClick={this.allSelectAdd} disabled={!leftBatchArr.length}>
-                批量添加
-              </Button>
-            )}
+            scroll={{ x: true, y: 280 }}
+            // footer={() => (
+            //   <Row>
+            //     <Col span={8}>
+            //       <Button type="primary" onClick={this.allSelectAdd} disabled={!leftBatchArr.length}>
+            //         批量添加
+            //       </Button>
+            //     </Col>
+            //     <Col span={16}>
+            //       <Pagination {...goodsListPage}  onChange={this.handleTableChange} />
+            //     </Col>
+            //   </Row>
+            // )}
           />
+          <Button
+            style={{ position: 'reletive', top: '-50px', right: '-20px' }}
+            type="primary"
+            onClick={this.allSelectAdd}
+            disabled={!leftBatchArr.length}
+          >
+            批量添加
+          </Button>
         </Col>
-        <Col span={12}>
+        <Col span={12} className={styles.tableHeaders}>
           <Table
             bordered
             rowSelection={rightSelection}
             dataSource={liveGoods}
             rowKey={record => record.goods_id}
             columns={progressColumnsdel}
-            pagination={{ pageSize: 3 }}
-            footer={() => (
-              <Button type="primary" disabled={!rightKeyArr.length} onClick={this.allSelectRemove}>
-                批量移除
-              </Button>
-            )}
+            pagination={false}
+            scroll={{ x: true, y: 280 }}
+            // footer={() => (
+            //   <Button type="primary" disabled={!rightKeyArr.length} onClick={this.allSelectRemove}>
+            //     批量移除
+            //   </Button>
+            //   <Row>
+            //     <Col span={8}>
+            //       <Button type="primary" disabled={!rightKeyArr.length} onClick={this.allSelectRemove}>
+            //         批量移除
+            //       </Button>
+            //     </Col>
+            //     <Col span={16}>
+            //       <Pagination pageSize={3} total={liveGoods.length} current={current} onClick={this.rightPagination}  />
+            //     </Col>
+            //   </Row>
+            // )}
           />
+          <Button
+            style={{ position: 'reletive', top: '10px', right: '-20px' }}
+            type="primary"
+            disabled={!rightKeyArr.length}
+            onClick={this.allSelectRemove}
+          >
+            批量移除
+          </Button>
         </Col>
       </Row>
     );

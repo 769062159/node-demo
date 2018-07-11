@@ -1,5 +1,14 @@
 import { routerRedux } from 'dva/router';
-import { updateLive, deleteLive, addLive, getLive, getLiveDetail, getVod } from '../services/live';
+import {
+  updateLive,
+  deleteLive,
+  addLive,
+  getLive,
+  getLiveDetail,
+  getVod,
+  getVodDetail,
+  updateVodDetail,
+} from '../services/live';
 import { getAllGoods } from '../services/goods';
 import { dedupe } from '../utils/utils';
 
@@ -13,6 +22,8 @@ export default {
     uploadLiveImg: [], // 直播封面
     shareImg: [], // 直播分享
     liveGoods: [], // 直播商品 右table表
+    showLiveGoods: [], // 展示直播商品 右table表
+    rightCurrent: 1, // 右页脚
     goodsList: [], // 左table表
     leftKeyArr: [], // 左侧table选中数组
     rightKeyArr: [], // 右侧table选中数组
@@ -29,15 +40,21 @@ export default {
       const good = yield call(getAllGoods, payload);
       yield put({
         type: 'getLiveGoods',
-        payload: good,
+        payload: {
+          good,
+          defaultCurrent: payload.page,
+        },
       });
     },
     *fetchLiveGoods({ payload }, { call, put }) {
       // 换页
-      const response = yield call(getAllGoods, payload);
+      const good = yield call(getAllGoods, payload);
       yield put({
         type: 'getLiveGoods',
-        payload: response,
+        payload: {
+          good,
+          defaultCurrent: payload.page,
+        },
       });
       yield put({
         type: 'clearLeftKey', // 换页清理未移动到右的数据
@@ -53,7 +70,26 @@ export default {
       const good = yield call(getAllGoods, payload);
       yield put({
         type: 'getLiveGoods',
-        payload: good,
+        payload: {
+          good,
+          defaultCurrent: payload.page,
+        },
+      });
+    },
+    *fetchVodDetail({ payload }, { call, put }) {
+      const response = yield call(getVodDetail, payload);
+      yield put({
+        type: 'editVodMsgs',
+        payload: response,
+      });
+      // 子table请求
+      const good = yield call(getAllGoods, payload);
+      yield put({
+        type: 'getLiveGoods',
+        payload: {
+          good,
+          defaultCurrent: payload.page,
+        },
       });
     },
     *clearLiveMsg(_, { put }) {
@@ -113,9 +149,21 @@ export default {
     },
     *editLive({ payload }, { call, put }) {
       const data = yield call(updateLive, payload);
-      if (data.code === 200) {
+      if (data && data.code === 200) {
         localStorage.setItem('liveUrl', data.data.rtmp_push);
         yield put(routerRedux.push('/live/edit-live/result'));
+      }
+      //   const response = yield call(getLive, { page: payload.pagination });
+      //   yield put({
+      //     type: 'getLive',
+      //     payload: response,
+      //   });
+    },
+    *editVod({ payload }, { call, put }) {
+      const data = yield call(updateVodDetail, payload);
+      if (data && data.code === 200) {
+        localStorage.setItem('liveUrl', data.data.rtmp_push);
+        yield put(routerRedux.push('/live/edit-vod/result'));
       }
       //   const response = yield call(getLive, { page: payload.pagination });
       //   yield put({
@@ -288,6 +336,32 @@ export default {
       };
     },
     getLiveGoods(state, { payload }) {
+      const { good: { data }, defaultCurrent: current } = payload;
+      const { liveGoods, leftKeyArr } = state;
+      let cacheArr = {};
+      data.list.forEach(v => {
+        cacheArr[v.goods_id] = v;
+      });
+      liveGoods.forEach(v => {
+        if (cacheArr[v.goods_id]) {
+          leftKeyArr.push(v.goods_id);
+          cacheArr[v.goods_id].disabled = 1;
+        }
+      });
+      const arr = dedupe(leftKeyArr);
+      cacheArr = null;
+      return {
+        ...state,
+        goodsList: data.list,
+        leftKeyArr: arr,
+        goodsListPage: {
+          pageSize: data.page,
+          total: data.total,
+          current,
+        },
+      };
+    },
+    getVodGoods(state, { payload }) {
       const { data } = payload;
       const { liveGoods, leftKeyArr } = state;
       let cacheArr = {};
@@ -319,6 +393,53 @@ export default {
         uploadLiveImg: [], // 直播封面
         liveGoods: [], // 直播商品
         shareImg: [], // 直播商品
+      };
+    },
+    editVodMsgs(state, { payload }) {
+      console.log(payload);
+      const { data } = payload;
+      data.xxx = data.cover;
+      data.yyy = data.share_cover;
+      const imgArr = [];
+      const ShareArr = [];
+      if (data.cover) {
+        imgArr.push({
+          status: 'done',
+          response: { status: 'success' },
+          name: data.title,
+          uid: data.id,
+          url: data.cover,
+        });
+      }
+      if (data.share_cover) {
+        ShareArr.push({
+          status: 'done',
+          response: { status: 'success' },
+          name: data.title,
+          uid: data.id,
+          url: data.share_cover,
+        });
+      }
+      data.goods.forEach(res => {
+        res.disabled = 1;
+      });
+      const liveGoods = data.goods;
+      //   if (data.goods_ids) {
+      //     const arrId = data.goods_ids.split(',');
+      //     const arrName = data.goods_names.split(',');
+      //     arrId.forEach((res, index) => {
+      //       liveGoods.push({
+      //         key: res,
+      //         label: arrName[index],
+      //       });
+      //     });
+      //   }
+      return {
+        ...state,
+        liveForm: data,
+        uploadLiveImg: imgArr,
+        shareImg: ShareArr,
+        liveGoods,
       };
     },
     editLiveMsgs(state, { payload }) {
@@ -410,13 +531,9 @@ export default {
     },
     getVod(state, { payload }) {
       const { data } = payload;
-      const vodList = [];
-      data.models.forEach(res => {
-        vodList.push(res.vod);
-      });
       return {
         ...state,
-        vodList,
+        vodList: data.models,
         vodListPage: {
           pageSize: data.page,
           total: data.total,

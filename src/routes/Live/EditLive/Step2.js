@@ -118,7 +118,11 @@ const CustomizedForm = Form.create({
           ],
         })(<TextArea placeholder="请输入简介" autosize />)}
       </FormItem>
-      <Form.Item {...formItemLayout} label="直播封面" extra={<Tag color="blue">大小:750*370</Tag>}>
+      <Form.Item
+        {...formItemLayout}
+        label="直播封面"
+        extra={<Tag color="blue">建议尺寸750px*370px</Tag>}
+      >
         {getFieldDecorator('xxx', {
           rules: [{ required: true, message: '请填写直播封面' }],
         })(
@@ -140,7 +144,11 @@ const CustomizedForm = Form.create({
           </div>
         )}
       </Form.Item>
-      <Form.Item {...formItemLayout} label="分享图片" extra={<Tag color="blue">大小:300*300</Tag>}>
+      <Form.Item
+        {...formItemLayout}
+        label="分享图片"
+        extra={<Tag color="blue">建议尺寸300px*300px</Tag>}
+      >
         {getFieldDecorator('yyy', {
           rules: [{ required: true }],
         })(
@@ -245,7 +253,7 @@ class AddLiveStep2 extends React.PureComponent {
         live_id: id,
         page: 1,
         goods_status: 0,
-        page_number: 3,
+        page_number: 10,
       },
     });
   }

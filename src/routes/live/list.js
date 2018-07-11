@@ -146,7 +146,11 @@ const CustomizedForm = Form.create({
           ],
         })(<TextArea placeholder="请输入简介" autosize />)}
       </FormItem>
-      <Form.Item {...formItemLayout} label="直播封面" extra={<Tag color="blue">大小:750*370</Tag>}>
+      <Form.Item
+        {...formItemLayout}
+        label="直播封面"
+        extra={<Tag color="blue">建议尺寸750px*370px</Tag>}
+      >
         {getFieldDecorator('xxx', {
           rules: [{ required: true, message: '请填写直播封面' }],
         })(
