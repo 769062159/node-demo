@@ -20,9 +20,14 @@ import { Table, Col, Form, Row, Button } from 'antd';
 export default class Live extends PureComponent {
   state = {
     // pagination: 1,
-    selectList: [],
     // selectArr: [],
   };
+  componentWillUnmount() {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'live/destroyPages',
+    });
+  }
   //   componentDidMount() {
   // const {  } = this.props;
   // const { pagination } = this.state;
@@ -55,17 +60,15 @@ export default class Live extends PureComponent {
     });
   };
   allSelectAdd = () => {
-    const { selectList } = this.state;
-    console.log(selectList);
     const { dispatch } = this.props;
-    this.setState({
-      selectList: [],
-    });
     dispatch({
-      type: 'live/selectLiveGood',
-      payload: {
-        goods: selectList,
-      },
+      type: 'live/leftBatch',
+    });
+  };
+  allSelectRemove = () => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'live/rightBatch',
     });
   };
   // 换页
@@ -94,6 +97,15 @@ export default class Live extends PureComponent {
       },
     });
   };
+  rightSelect = selectList => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'live/rightSelectAction',
+      payload: {
+        selectList,
+      },
+    });
+  };
 
   render() {
     const {
@@ -109,7 +121,7 @@ export default class Live extends PureComponent {
     };
     const rightSelection = {
       selectedRowKeys: rightKeyArr,
-      // onChange: this.selectGoods,
+      onChange: this.rightSelect,
     };
     const progressColumns = [
       {
@@ -183,12 +195,7 @@ export default class Live extends PureComponent {
             pagination={goodsListPage}
             onChange={this.handleTableChange}
             footer={() => (
-              <Button
-                type="primary"
-                onClick={this.allSelectAdd}
-                disabled={!leftBatchArr.length}
-                loading={loading}
-              >
+              <Button type="primary" onClick={this.allSelectAdd} disabled={!leftBatchArr.length}>
                 批量添加
               </Button>
             )}
@@ -203,7 +210,7 @@ export default class Live extends PureComponent {
             columns={progressColumnsdel}
             pagination={{ pageSize: 3 }}
             footer={() => (
-              <Button type="primary" disabled={datas.length} loading={loading}>
+              <Button type="primary" disabled={!rightKeyArr.length} onClick={this.allSelectRemove}>
                 批量移除
               </Button>
             )}

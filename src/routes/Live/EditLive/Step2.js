@@ -249,13 +249,6 @@ class AddLiveStep2 extends React.PureComponent {
       },
     });
   }
-  componentWillUnmount() {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'live/clearLiveMsg',
-      payload: {},
-    });
-  }
 
   // 模糊查询
   fetchUser = value => {

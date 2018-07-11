@@ -12,7 +12,7 @@ export default {
     liveForm: {}, // 直播间创建表单
     uploadLiveImg: [], // 直播封面
     shareImg: [], // 直播分享
-    liveGoods: [], // 直播商品
+    liveGoods: [], // 直播商品 右table表
     goodsList: [], // 左table表
     leftKeyArr: [], // 左侧table选中数组
     rightKeyArr: [], // 右侧table选中数组
@@ -40,7 +40,7 @@ export default {
         payload: response,
       });
       yield put({
-        type: 'clearLeftKey', // 换页清空已选择
+        type: 'clearLeftKey', // 换页清理未移动到右的数据
       });
     },
     *fetchLiveDetail({ payload }, { call, put }) {
@@ -134,17 +134,107 @@ export default {
   },
 
   reducers: {
-    clearLeftKey(state) {
+    destroyPages(state) {
+      // 页面销毁
       return {
         ...state,
-        leftKeyArr: [],
+        liveGoods: [], // 直播商品 右table表
+        leftKeyArr: [], // 左侧table选中数组
+        rightKeyArr: [], // 右侧table选中数组
+        leftBatchArr: [], // 左侧批量
+        rightBatchArr: [], // 右侧批量
+      };
+    },
+    clearLeftKey(state) {
+      const { leftKeyArr, leftBatchArr } = state;
+      const set = new Set();
+      leftBatchArr.forEach(res => {
+        set.add(res.goods_id);
+      });
+      const arr = leftKeyArr.filter(res => {
+        return !set.has(res);
+      });
+      return {
+        ...state,
+        leftKeyArr: arr,
+        leftBatchArr: [],
+      };
+    },
+    leftBatch(state) {
+      const { leftBatchArr, leftKeyArr, goodsList, liveGoods } = state;
+      let cacheArr = {};
+      goodsList.forEach(v => {
+        cacheArr[v.goods_id] = v;
+      });
+      leftBatchArr.forEach(v => {
+        if (cacheArr[v.goods_id]) {
+          cacheArr[v.goods_id].disabled = 1;
+        }
+        liveGoods.push(v);
+        leftKeyArr.push(v.goods_id);
+      });
+      cacheArr = null;
+      return {
+        ...state,
+        leftBatchArr: [],
+        leftKeyArr,
+        liveGoods,
+      };
+    },
+    rightBatch(state) {
+      const { rightKeyArr, goodsList } = state;
+      let { liveGoods, leftKeyArr } = state;
+      const set = new Set(rightKeyArr);
+      liveGoods = liveGoods.filter(res => {
+        return !set.has(res.goods_id);
+      });
+      leftKeyArr = leftKeyArr.filter(res => {
+        return !set.has(res);
+      });
+      goodsList.forEach(res => {
+        if (set.has(res.goods_id)) {
+          res.disabled = 0;
+        }
+      });
+      return {
+        ...state,
+        goodsList,
+        leftKeyArr,
+        rightKeyArr: [],
+        liveGoods,
       };
     },
     leftSelectAction(state, { payload }) {
       const { selectList } = payload;
+      const { goodsList } = state;
+      const set = new Set(selectList);
+      const leftBatchArr = [];
+      goodsList.forEach(res => {
+        if (set.has(res.goods_id) && res.disabled !== 1) {
+          leftBatchArr.push(res);
+        }
+      });
       return {
         ...state,
         leftKeyArr: selectList,
+        leftBatchArr,
+      };
+    },
+    rightSelectAction(state, { payload }) {
+      const { selectList } = payload;
+      // const { liveGoods } = state;
+      // const set = new Set(selectList);
+      // const rightBatchArr = [];
+      // console.log(liveGoods);
+      // liveGoods.forEach(res => {
+      //     if(set.has(res.goods_id)) {
+      //         rightBatchArr.push(res);
+      //     }
+      // })
+      return {
+        ...state,
+        rightKeyArr: selectList,
+        //   rightBatchArr,
       };
     },
     deleteLiveGood(state, { payload }) {
@@ -172,27 +262,24 @@ export default {
     selectLiveGood(state, { payload }) {
       const { liveGoods, goodsList, leftKeyArr } = state;
       const { goods } = payload;
-      if (!Array.isArray(goods)) {
-        goodsList.forEach(res => {
-          if (res.goods_id === goods.goods_id) {
-            res.disabled = 1;
-          }
-        });
-        liveGoods.push(goods);
-        leftKeyArr.push(goods.goods_id);
-      } else {
-        let cacheArr = {};
-        goodsList.forEach(v => {
-          cacheArr[v.goods_id] = v;
-        });
-        goods.forEach(v => {
-          if (cacheArr[v.goods_id]) {
-            cacheArr[v.goods_id].disabled = 1;
-          }
-          liveGoods.push(v);
-        });
-        cacheArr = null;
-      }
+      goodsList.forEach(res => {
+        if (res.goods_id === goods.goods_id) {
+          res.disabled = 1;
+        }
+      });
+      liveGoods.push(goods);
+      leftKeyArr.push(goods.goods_id);
+      // let cacheArr = {};
+      // goodsList.forEach(v => {
+      //   cacheArr[v.goods_id] = v;
+      // });
+      // goods.forEach(v => {
+      //   if (cacheArr[v.goods_id]) {
+      //     cacheArr[v.goods_id].disabled = 1;
+      //   }
+      //   liveGoods.push(v);
+      // });
+      // cacheArr = null;
       return {
         ...state,
         liveGoods,
