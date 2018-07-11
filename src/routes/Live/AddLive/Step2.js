@@ -149,7 +149,7 @@ const CustomizedForm = Form.create({
       <Form.Item
         {...formItemLayout}
         label="分享图片"
-        extra={<Tag color="blue">建议尺寸300px*300px</Tag>}
+        extra={<Tag color="blue">建议尺寸300px*240px</Tag>}
       >
         {getFieldDecorator('yyy', {
           rules: [{ required: true }],
