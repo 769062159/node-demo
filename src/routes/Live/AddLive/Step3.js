@@ -1,50 +1,42 @@
 import React, { Fragment } from 'react';
 import { connect } from 'dva';
-import { Button } from 'antd';
+import copy from 'copy-to-clipboard';
+import { Button, Row, Col, message } from 'antd';
 import { routerRedux } from 'dva/router';
 import Result from 'components/Result';
 import styles from './style.less';
 
-class EditGoodStep3 extends React.PureComponent {
+class AddLiveStep3 extends React.PureComponent {
+  state = {
+    url: `${localStorage.getItem('liveUrl')}`,
+  };
+  copyBtn = val => {
+    copy(val);
+    message.success('成功复制到剪贴板');
+  };
   render() {
     const { dispatch } = this.props;
+    const { url } = this.state;
+    console.log(this.props);
     const onFinish = () => {
-      dispatch(routerRedux.push('/good/good-list'));
+      dispatch(routerRedux.push('/live/list'));
     };
-    // const information = (
-    //   <div className={styles.information}>
-    //     <Row>
-    //       <Col span={8} className={styles.label}>
-    //         付款账户：
-    //       </Col>
-    //       <Col span={16}>{data.payAccount}</Col>
-    //     </Row>
-    //     <Row>
-    //       <Col span={8} className={styles.label}>
-    //         收款账户：
-    //       </Col>
-    //       <Col span={16}>{data.receiverAccount}</Col>
-    //     </Row>
-    //     <Row>
-    //       <Col span={8} className={styles.label}>
-    //         收款人姓名：
-    //       </Col>
-    //       <Col span={16}>{data.receiverName}</Col>
-    //     </Row>
-    //     <Row>
-    //       <Col span={8} className={styles.label}>
-    //         转账金额：
-    //       </Col>
-    //       <Col span={16}>
-    //         <span className={styles.money}>{data.amount}</span> 元
-    //       </Col>
-    //     </Row>
-    //   </div>
-    // );
     const actions = (
       <Fragment>
+        <Row>
+          <Col>
+            <span>推流地址：</span>
+            {url}
+            <span
+              onClick={this.copyBtn.bind(this, url)}
+              style={{ color: 'blue', cursor: 'pointer' }}
+            >
+              复制
+            </span>
+          </Col>
+        </Row>
         <Button type="primary" onClick={onFinish}>
-          商品列表
+          完成
         </Button>
         {/* <Button>查看账单</Button> */}
       </Fragment>
@@ -52,8 +44,8 @@ class EditGoodStep3 extends React.PureComponent {
     return (
       <Result
         type="success"
-        title="修改成功"
-        // description="预计两小时内到账"
+        title="添加成功"
+        // description={this.state.url}
         // extra={information}
         actions={actions}
         className={styles.result}
@@ -64,4 +56,4 @@ class EditGoodStep3 extends React.PureComponent {
 
 export default connect(({ form }) => ({
   data: form.step,
-}))(EditGoodStep3);
+}))(AddLiveStep3);

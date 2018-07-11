@@ -284,7 +284,7 @@ export default class Live extends PureComponent {
         dispatch({
           type: 'live/deleteLive',
           payload: {
-            ad_id: id,
+            live_id: id,
             pagination,
           },
         });

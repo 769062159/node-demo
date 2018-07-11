@@ -90,12 +90,16 @@ export default {
       });
     },
     *addLive({ payload }, { call, put }) {
-      yield call(addLive, payload);
-      const response = yield call(getLive, { page: payload.pagination });
-      yield put({
-        type: 'getLive',
-        payload: response,
-      });
+      const data = yield call(addLive, payload);
+      if (data.code === 200) {
+        localStorage.setItem('liveUrl', data.data.rtmp_push);
+        yield put(routerRedux.push('/live/add-live/result'));
+      }
+      //   const response = yield call(getLive, { page: payload.pagination });
+      //   yield put({
+      //     type: 'getLive',
+      //     payload: response,
+      //   });
     },
     *editLive({ payload }, { call, put }) {
       const data = yield call(updateLive, payload);
@@ -103,11 +107,11 @@ export default {
         localStorage.setItem('liveUrl', data.data.rtmp_push);
         yield put(routerRedux.push('/live/edit-live/result'));
       }
-      const response = yield call(getLive, { page: payload.pagination });
-      yield put({
-        type: 'getLive',
-        payload: response,
-      });
+      //   const response = yield call(getLive, { page: payload.pagination });
+      //   yield put({
+      //     type: 'getLive',
+      //     payload: response,
+      //   });
     },
     *deleteLive({ payload }, { call, put }) {
       yield call(deleteLive, payload);
@@ -192,6 +196,7 @@ export default {
         liveForm: {}, // 直播间创建表单
         uploadLiveImg: [], // 直播封面
         liveGoods: [], // 直播商品
+        shareImg: [], // 直播商品
       };
     },
     editLiveMsgs(state, { payload }) {

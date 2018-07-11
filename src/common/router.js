@@ -161,7 +161,7 @@ export const getRouterConfig = app => {
       identity: 'common',
       component: dynamicWrapper(app, ['live'], () => import('../routes/Live/AddLive/Step2')),
     },
-    '/live/add-goliveods/result': {
+    '/live/add-live/result': {
       identity: 'common',
       component: dynamicWrapper(app, ['live'], () => import('../routes/Live/AddLive/Step3')),
     },

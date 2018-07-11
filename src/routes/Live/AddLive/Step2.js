@@ -248,6 +248,13 @@ class AddLiveStep2 extends React.PureComponent {
       },
     });
   }
+  componentWillUnmount() {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'live/clearLiveMsg',
+      payload: {},
+    });
+  }
 
   // 模糊查询
   fetchUser = value => {
@@ -289,11 +296,7 @@ class AddLiveStep2 extends React.PureComponent {
   };
   // 新增修改提交
   submitForm = () => {
-    const {
-      dispatch,
-      live: { liveForm, uploadLiveImg, shareImg },
-      goods: { selectGoodsList },
-    } = this.props;
+    const { dispatch, live: { liveForm, uploadLiveImg, shareImg, liveGoods } } = this.props;
     if (!uploadLiveImg.length) {
       message.error('请上传封面');
       return;
@@ -305,9 +308,9 @@ class AddLiveStep2 extends React.PureComponent {
     const { pagination } = this.state;
     const arrId = [];
     const arrName = [];
-    selectGoodsList.forEach(res => {
-      arrId.push(res.key);
-      arrName.push(res.label);
+    liveGoods.forEach(res => {
+      arrId.push(res.goods_id);
+      arrName.push(res.goods_name);
     });
     liveForm.goods_ids = arrId;
     liveForm.goods_names = arrName;
