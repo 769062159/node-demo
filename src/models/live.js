@@ -39,6 +39,9 @@ export default {
       // 添加时请求第一页
       const good = yield call(getAllGoods, payload);
       yield put({
+        type: 'clearForm',
+      });
+      yield put({
         type: 'getLiveGoods',
         payload: {
           good,
@@ -182,6 +185,14 @@ export default {
   },
 
   reducers: {
+    clearForm(state) {
+        return {
+            ...state,
+            liveForm: {},
+            shareImg: [],
+            liveGoods: [],
+        };
+    },
     destroyPages(state) {
       // 页面销毁
       return {
