@@ -254,7 +254,7 @@ class AddLiveStep2 extends React.PureComponent {
         vod_id: id,
         page: 1,
         goods_status: 0,
-        page_number: 3,
+        page_number: 10,
       },
     });
   }

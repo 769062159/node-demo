@@ -186,12 +186,13 @@ export default {
 
   reducers: {
     clearForm(state) {
-        return {
-            ...state,
-            liveForm: {},
-            shareImg: [],
-            liveGoods: [],
-        };
+      return {
+        ...state,
+        liveForm: {},
+        shareImg: [],
+        // liveGoods: [],
+        uploadLiveImg: [],
+      };
     },
     destroyPages(state) {
       // 页面销毁
