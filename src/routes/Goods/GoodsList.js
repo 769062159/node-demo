@@ -205,7 +205,7 @@ export default class GoodsList extends PureComponent {
               {getFieldDecorator('goods_name')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
-          <Col md={8} sm={24}>
+          {/* <Col md={8} sm={24}>
             <FormItem label="使用状态">
               {getFieldDecorator('goods_status')(
                 <Select placeholder="请选择" style={{ width: '100%' }}>
@@ -214,6 +214,37 @@ export default class GoodsList extends PureComponent {
                   <Option value="2">下架</Option>
                 </Select>
               )}
+            </FormItem>
+          </Col> */}
+          <Col md={8} sm={24}>
+            <FormItem label="价格区间">
+              <InputGroup compact>
+                <Input
+                  key={1}
+                  value={this.state.minPrice}
+                  style={{ width: 70, textAlign: 'center' }}
+                  onChange={this.setMin}
+                  placeholder="Min"
+                />
+                <Input
+                  key={2}
+                  style={{
+                    width: 30,
+                    borderLeft: 0,
+                    pointerEvents: 'none',
+                    backgroundColor: '#fff',
+                  }}
+                  placeholder="~"
+                  disabled
+                />
+                <Input
+                  key={3}
+                  value={this.state.maxPrice}
+                  style={{ width: 70, textAlign: 'center', borderLeft: 0 }}
+                  onChange={this.setMax}
+                  placeholder="Max"
+                />
+              </InputGroup>
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
@@ -224,9 +255,9 @@ export default class GoodsList extends PureComponent {
               <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>
                 重置
               </Button>
-              <a style={{ marginLeft: 8 }} onClick={this.toggleForm}>
+              {/* <a style={{ marginLeft: 8 }} onClick={this.toggleForm}>
                 展开 <Icon type="down" />
-              </a>
+              </a> */}
             </span>
           </Col>
         </Row>

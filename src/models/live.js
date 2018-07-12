@@ -19,6 +19,7 @@ export default {
     liveList: [], // table列表
     liveListPage: {}, // table 页脚
     liveForm: {}, // 直播间创建表单
+    homeVod: {}, // 直播间选中的录播
     uploadLiveImg: [], // 直播封面
     shareImg: [], // 直播分享
     liveGoods: [], // 直播商品 右table表
@@ -185,6 +186,12 @@ export default {
   },
 
   reducers: {
+    setHomeVod(state, { payload }) {
+      return {
+        ...state,
+        homeVod: payload.value,
+      };
+    },
     clearForm(state) {
       return {
         ...state,
@@ -455,7 +462,6 @@ export default {
       };
     },
     editLiveMsgs(state, { payload }) {
-      console.log(payload);
       const { data } = payload;
       data.xxx = data.cover;
       data.yyy = data.share_cover;
@@ -479,6 +485,11 @@ export default {
           url: data.share_cover,
         });
       }
+      const homeVod = {};
+      if (data.play_type === 1) {
+        homeVod.label = data.remark;
+        homeVod.key = data.vod_id;
+      }
       data.goods.forEach(res => {
         res.disabled = 1;
       });
@@ -499,6 +510,7 @@ export default {
         uploadLiveImg: imgArr,
         shareImg: ShareArr,
         liveGoods,
+        homeVod,
       };
     },
     setLiveShops(state, { payload }) {

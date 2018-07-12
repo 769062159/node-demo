@@ -6,7 +6,7 @@ import { routerRedux } from 'dva/router';
 import Result from 'components/Result';
 import styles from './style.less';
 
-class EditLiveStep3 extends React.PureComponent {
+class EditVodStep3 extends React.PureComponent {
   //   state = {
   //     url: `${localStorage.getItem('liveUrl')}`,
   //   };
@@ -56,4 +56,4 @@ class EditLiveStep3 extends React.PureComponent {
 
 export default connect(({ form }) => ({
   data: form.step,
-}))(EditLiveStep3);
+}))(EditVodStep3);

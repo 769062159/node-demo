@@ -1,15 +1,15 @@
 import React from 'react';
 import { connect } from 'dva';
 import debounce from 'lodash/debounce';
-// import { Form, Button, Input, Select, Upload, Icon, Modal, Tag, message, InputNumber } from 'antd';
-import { Form, Button, Input, Upload, Icon, Modal, Tag, message } from 'antd';
+import { Form, Button, Input, Select, Upload, Icon, Modal, Tag, message, Spin } from 'antd';
+// import { Form, Button, Input, Upload, Icon, Modal, Tag, message } from 'antd';
 import request from '../../../utils/request';
 import LiveGoodTable from '../../../components/LiveGoodTable';
 // import styles from './style.less';
 
 const { TextArea } = Input;
 const FormItem = Form.Item;
-// const Option = Select.Option;
+const Option = Select.Option;
 const formItemLayout = {
   labelCol: {
     xs: { span: 24 },
@@ -49,6 +49,12 @@ const CustomizedForm = Form.create({
       is_free: Form.createFormField({
         value: props.liveForm.is_free,
       }),
+      play_type: Form.createFormField({
+        value: props.liveForm.play_type || '',
+      }),
+      play_url: Form.createFormField({
+        value: props.liveForm.play_url,
+      }),
       xxx: Form.createFormField({
         value: props.liveForm.xxx,
       }),
@@ -83,8 +89,14 @@ const CustomizedForm = Form.create({
     previewVisible,
     previewImage,
     handleCancelImg,
-    // liveForm,
+    liveForm,
+    fetching,
+    homeVod,
+    fetchVod,
+    vod,
+    handleChangesVod,
   } = props;
+  console.log(homeVod);
 
   // 上传按钮
   const uploadButton = (
@@ -212,6 +224,40 @@ const CustomizedForm = Form.create({
           })(<InputNumber step={0.01} precision={2} min={0.01} style={{ width: '200px' }} />)}
         </Form.Item>
       ) : null} */}
+      <FormItem {...formItemLayout} label="播放类别">
+        {getFieldDecorator('play_type', {})(
+          <Select style={{ width: 200 }}>
+            <Option value={1}>播放指定录播</Option>
+            <Option value={2}>播放外部链接</Option>
+          </Select>
+        )}
+      </FormItem>
+      {liveForm.play_type === 1 ? (
+        <FormItem {...formItemLayout} label="录播">
+          <Select
+            // mode="multiple"
+            showSearch
+            labelInValue
+            value={homeVod}
+            placeholder="输入录播名字搜索"
+            notFoundContent={fetching ? <Spin size="small" /> : null}
+            filterOption={false}
+            onSearch={fetchVod}
+            onChange={handleChangesVod}
+            style={{ width: '100%' }}
+          >
+            {vod.map(d => (
+              <Option key={d.value} value={d.text}>
+                {d.value}
+              </Option>
+            ))}
+          </Select>
+        </FormItem>
+      ) : liveForm.play_type === 2 ? (
+        <Form.Item {...formItemLayout} label="播放地址">
+          {getFieldDecorator('play_url', {})(<Input style={{ width: '400px' }} />)}
+        </Form.Item>
+      ) : null}
       <LiveGoodTable />
       <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
         <Button type="primary" htmlType="submit" onClick={onValidateForm}>
@@ -228,18 +274,16 @@ const CustomizedForm = Form.create({
   loading: loading.models.live,
 }))
 // @Form.create()
-class AddLiveStep2 extends React.PureComponent {
+class EditLiveStep2 extends React.PureComponent {
   constructor(props) {
     super(props);
     this.lastFetchId = 0;
-    this.fetchUser = debounce(this.fetchUser, 800);
+    this.fetchVod = debounce(this.fetchVod, 800);
   }
   state = {
-    pagination: 1,
     previewVisible: false,
     previewImage: '',
-    data: [],
-    value: [],
+    vod: [],
     fetching: false,
     header: {
       Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -260,16 +304,17 @@ class AddLiveStep2 extends React.PureComponent {
   }
 
   // 模糊查询
-  fetchUser = value => {
-    console.log('fetching user', value);
+  fetchVod = value => {
+    const { live: { liveForm } } = this.props;
+    const liveId = liveForm.stv_live_id;
     this.lastFetchId += 1;
     const fetchId = this.lastFetchId;
-    this.setState({ data: [], fetching: true });
-    request('/admin/goods/list', {
+    this.setState({ vod: [], fetching: true });
+    request('/admin/vod/list', {
       method: 'POST',
       body: {
-        goods_name: value,
-        goods_status: 0,
+        title: value,
+        live_id: liveId,
       },
     }).then(body => {
       if (fetchId !== this.lastFetchId) {
@@ -277,21 +322,21 @@ class AddLiveStep2 extends React.PureComponent {
         return;
       }
       console.log(body);
-      const data = body.data.list.map(user => ({
-        text: `${user.goods_id}`,
-        value: user.goods_name,
+      const vod = body.data.models.map(user => ({
+        text: `${user.id}`,
+        value: user.title,
       }));
-      this.setState({ data, fetching: false });
+      this.setState({ vod, fetching: false });
     });
   };
-  handleChangesShop = value => {
+  handleChangesVod = value => {
     this.setState({
-      data: [],
+      vod: [],
       fetching: false,
     });
     const { dispatch } = this.props;
     dispatch({
-      type: 'live/setLiveShop',
+      type: 'live/setHomeVod',
       payload: {
         value,
       },
@@ -299,7 +344,10 @@ class AddLiveStep2 extends React.PureComponent {
   };
   // 新增修改提交
   submitForm = () => {
-    const { dispatch, live: { liveForm, uploadLiveImg, shareImg, liveGoods } } = this.props;
+    const {
+      dispatch,
+      live: { liveForm, uploadLiveImg, shareImg, liveGoods, homeVod },
+    } = this.props;
     if (!uploadLiveImg.length) {
       message.error('请上传封面');
       return;
@@ -308,7 +356,11 @@ class AddLiveStep2 extends React.PureComponent {
       message.error('请上传分享图片');
       return;
     }
-    const { pagination } = this.state;
+    if (liveForm.play_type === 1) {
+      liveForm.vod_id = homeVod.key;
+      liveForm.remark = homeVod.label;
+      liveForm.play_url = '';
+    }
     const arrId = [];
     const arrName = [];
     liveGoods.forEach(res => {
@@ -317,7 +369,6 @@ class AddLiveStep2 extends React.PureComponent {
     });
     liveForm.goods_ids = arrId;
     liveForm.goods_names = arrName;
-    liveForm.pagination = pagination;
     liveForm.cover = uploadLiveImg[0].url;
     liveForm.share_cover = shareImg[0].url;
     liveForm.live_id = liveForm.id;
@@ -397,8 +448,8 @@ class AddLiveStep2 extends React.PureComponent {
     });
   };
   render() {
-    const { live: { liveForm, uploadLiveImg, shareImg, liveGoods } } = this.props;
-    const { header, previewVisible, previewImage, fetching, value, data } = this.state;
+    const { live: { liveForm, uploadLiveImg, shareImg, liveGoods, homeVod } } = this.props;
+    const { header, previewVisible, previewImage, fetching, vod } = this.state;
     return (
       <CustomizedForm
         liveForm={liveForm}
@@ -412,11 +463,11 @@ class AddLiveStep2 extends React.PureComponent {
         uploadLiveImg={uploadLiveImg}
         handleCancelImg={this.handleCancelImg}
         fetching={fetching}
-        value={value}
-        data={data}
-        fetchUser={this.fetchUser}
+        vod={vod}
+        homeVod={homeVod}
+        handleChangesVod={this.handleChangesVod}
+        fetchVod={this.fetchVod}
         handleShareImg={this.handleShareImg}
-        handleChangesShop={this.handleChangesShop}
         liveGoods={liveGoods}
         submitForm={this.submitForm}
       />
@@ -427,4 +478,4 @@ class AddLiveStep2 extends React.PureComponent {
 export default connect(({ form, loading }) => ({
   submitting: loading.effects['goods/addShop'],
   data: form.step,
-}))(AddLiveStep2);
+}))(EditLiveStep2);

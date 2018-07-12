@@ -116,15 +116,12 @@ const CustomizedForm = Form.create({
     homeGoods,
     fetching,
     live,
-    vod,
-    homeVod,
-    handleChangesVod,
     fetchUser,
     fetchLive,
-    fetchVod,
     data,
     handleChangesShop,
   } = props;
+  console.log(homeLive);
   return (
     <Form>
       <FormItem {...formItemLayout} label="标题">
@@ -165,7 +162,7 @@ const CustomizedForm = Form.create({
           homeForm.type === 2 ? (
             <Select style={{ width: 200 }}>
               <Option value={4}>跳转直播间</Option>
-              <Option value={5}>跳转录播</Option>
+              {/* <Option value={5}>跳转录播</Option> */}
             </Select>
           ) : homeForm.type === 1 ? (
             <Select style={{ width: 200 }}>
@@ -256,49 +253,6 @@ const CustomizedForm = Form.create({
             </Select>
           </FormItem>
         </div>
-      ) : homeForm.jump_type === 5 ? (
-        <div>
-          <FormItem {...formItemLayout} label="直播商品">
-            <Select
-              // mode="multiple"
-              showSearch
-              labelInValue
-              value={homeGoods}
-              placeholder="输入商品名字搜索"
-              notFoundContent={fetching ? <Spin size="small" /> : null}
-              filterOption={false}
-              onSearch={fetchUser}
-              onChange={handleChangesShop}
-              style={{ width: '100%' }}
-            >
-              {data.map(d => (
-                <Option key={d.value} value={d.text}>
-                  {d.value}
-                </Option>
-              ))}
-            </Select>
-          </FormItem>
-          <FormItem {...formItemLayout} label="录播">
-            <Select
-              // mode="multiple"
-              showSearch
-              labelInValue
-              value={homeVod}
-              placeholder="输入录播名字搜索"
-              notFoundContent={fetching ? <Spin size="small" /> : null}
-              filterOption={false}
-              onSearch={fetchVod}
-              onChange={handleChangesVod}
-              style={{ width: '100%' }}
-            >
-              {vod.map(d => (
-                <Option key={d.value} value={d.text}>
-                  {d.value}
-                </Option>
-              ))}
-            </Select>
-          </FormItem>
-        </div>
       ) : null}
       <Form.Item
         {...formItemLayout}
@@ -363,7 +317,6 @@ export default class Home extends PureComponent {
     this.lastFetchId = 0;
     this.fetchUser = debounce(this.fetchUser, 800);
     this.fetchLive = debounce(this.fetchLive, 800);
-    this.fetchVod = debounce(this.fetchVod, 800);
   }
   state = {
     expandForm: false,
@@ -371,7 +324,6 @@ export default class Home extends PureComponent {
     fetching: false,
     data: [],
     live: [],
-    vod: [],
     // formValues: {},
     previewVisible: false,
     previewImage: '',
@@ -417,7 +369,7 @@ export default class Home extends PureComponent {
     console.log('fetching user', value);
     this.lastFetchId += 1;
     const fetchId = this.lastFetchId;
-    this.setState({ data: [], fetching: true });
+    this.setState({ live: [], fetching: true });
     request('/admin/live/list', {
       method: 'POST',
       body: {
@@ -435,30 +387,6 @@ export default class Home extends PureComponent {
         value: user.title,
       }));
       this.setState({ live, fetching: false });
-    });
-  };
-  fetchVod = value => {
-    console.log('fetching user', value);
-    this.lastFetchId += 1;
-    const fetchId = this.lastFetchId;
-    this.setState({ data: [], fetching: true });
-    request('/admin/vod/list', {
-      method: 'POST',
-      body: {
-        title: value,
-      },
-    }).then(body => {
-      console.log(999);
-      if (fetchId !== this.lastFetchId) {
-        // for fetch callback order
-        return;
-      }
-      console.log(body);
-      const vod = body.data.models.map(user => ({
-        text: `${user.id}`,
-        value: user.title,
-      }));
-      this.setState({ vod, fetching: false });
     });
   };
 
@@ -488,19 +416,6 @@ export default class Home extends PureComponent {
     const { dispatch } = this.props;
     dispatch({
       type: 'indexs/setHomeLive',
-      payload: {
-        value,
-      },
-    });
-  };
-  handleChangesVod = value => {
-    this.setState({
-      vod: [],
-      fetching: false,
-    });
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'indexs/setHomeVod',
       payload: {
         value,
       },
@@ -536,7 +451,7 @@ export default class Home extends PureComponent {
   handleSubmit = () => {
     const {
       dispatch,
-      indexs: { homeForm, uploadHomeImg, homeGoods, homeLive, homeVod },
+      indexs: { homeForm, uploadHomeImg, homeGoods, homeLive },
     } = this.props;
     if (!uploadHomeImg.length) {
       message.error('请上传封面');
@@ -552,11 +467,6 @@ export default class Home extends PureComponent {
       homeForm.target_id = homeGoods.key;
       homeForm.remark = homeLive.label;
       homeForm.live_id = homeLive.key;
-    } else if (homeForm.jump_type === 5) {
-      homeForm.target_name = homeGoods.label;
-      homeForm.target_id = homeGoods.key;
-      homeForm.remark = homeVod.label;
-      homeForm.vod_id = homeVod.key;
     } else {
       homeForm.remark = '';
       homeForm.target_id = '';
@@ -677,12 +587,11 @@ export default class Home extends PureComponent {
         homeForm,
         homeGoods,
         homeLive,
-        homeVod,
       },
       loading,
     } = this.props;
     // const { getFieldDecorator } = this.props.form;
-    const { homeVisible, previewVisible, previewImage, fetching, data, live, vod } = this.state;
+    const { homeVisible, previewVisible, previewImage, fetching, data, live } = this.state;
     const progressColumns = [
       {
         title: '标题',
@@ -778,13 +687,9 @@ export default class Home extends PureComponent {
             fetching={fetching}
             data={data}
             live={live}
-            vod={vod}
-            handleChangesVod={this.handleChangesVod}
             homeLive={homeLive}
-            homeVod={homeVod}
             fetchUser={this.fetchUser}
             fetchLive={this.fetchLive}
-            fetchVod={this.fetchVod}
             handleChangesLive={this.handleChangesLive}
             handleChangesShop={this.handleChangesShop}
           />

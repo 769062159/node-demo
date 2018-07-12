@@ -4,8 +4,7 @@ import debounce from 'lodash/debounce';
 // import { Form, Button, Input, Select, Upload, Icon, Modal, Tag, message, InputNumber } from 'antd';
 import { Form, Button, Input, Upload, Icon, Modal, Tag, message } from 'antd';
 import request from '../../../utils/request';
-import LiveGoodTable from '../../../components/LiveGoodTable';
-// import styles from './style.less';
+// import LiveGoodTable from '../../../components/LiveGoodTable';
 
 const { TextArea } = Input;
 const FormItem = Form.Item;
@@ -171,6 +170,9 @@ const CustomizedForm = Form.create({
           </div>
         )}
       </Form.Item>
+      <Form.Item {...formItemLayout} label="播放地址">
+        {getFieldDecorator('play_url', {})(<Input style={{ width: '400px' }} />)}
+      </Form.Item>
       {/* <FormItem {...formItemLayout} label="直播商品">
         <Select
           mode="multiple"
@@ -212,7 +214,7 @@ const CustomizedForm = Form.create({
           })(<InputNumber step={0.01} precision={2} min={0.01} style={{ width: '200px' }} />)}
         </Form.Item>
       ) : null} */}
-      <LiveGoodTable />
+      {/* <LiveGoodTable /> */}
       <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
         <Button type="primary" htmlType="submit" onClick={onValidateForm}>
           提交
@@ -228,14 +230,13 @@ const CustomizedForm = Form.create({
   loading: loading.models.live,
 }))
 // @Form.create()
-class AddLiveStep2 extends React.PureComponent {
+class EditVodStep2 extends React.PureComponent {
   constructor(props) {
     super(props);
     this.lastFetchId = 0;
     this.fetchUser = debounce(this.fetchUser, 800);
   }
   state = {
-    pagination: 1,
     previewVisible: false,
     previewImage: '',
     data: [],
@@ -299,7 +300,7 @@ class AddLiveStep2 extends React.PureComponent {
   };
   // 新增修改提交
   submitForm = () => {
-    const { dispatch, live: { liveForm, uploadLiveImg, shareImg, liveGoods } } = this.props;
+    const { dispatch, live: { liveForm, uploadLiveImg, shareImg } } = this.props;
     if (!uploadLiveImg.length) {
       message.error('请上传封面');
       return;
@@ -308,16 +309,14 @@ class AddLiveStep2 extends React.PureComponent {
       message.error('请上传分享图片');
       return;
     }
-    const { pagination } = this.state;
-    const arrId = [];
-    const arrName = [];
-    liveGoods.forEach(res => {
-      arrId.push(res.goods_id);
-      arrName.push(res.goods_name);
-    });
-    liveForm.goods_ids = arrId;
-    liveForm.goods_names = arrName;
-    liveForm.pagination = pagination;
+    // const arrId = [];
+    // const arrName = [];
+    // liveGoods.forEach(res => {
+    //   arrId.push(res.goods_id);
+    //   arrName.push(res.goods_name);
+    // });
+    // liveForm.goods_ids = arrId;
+    // liveForm.goods_names = arrName;
     liveForm.cover = uploadLiveImg[0].url;
     liveForm.share_cover = shareImg[0].url;
     liveForm.vod_id = liveForm.id;
@@ -427,4 +426,4 @@ class AddLiveStep2 extends React.PureComponent {
 export default connect(({ form, loading }) => ({
   submitting: loading.effects['goods/addShop'],
   data: form.step,
-}))(AddLiveStep2);
+}))(EditVodStep2);
