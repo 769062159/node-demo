@@ -248,7 +248,7 @@ export default {
         const goodsPlace = response.data.goods_place; // 地址
         const warehouseList = response.data.warehouse; // 仓库
         const goodsDetail = response.data.goods; // 商品详情
-        const systemType = response.data.system_type; // 商品详情
+        const systemType = response.data.system_type; // 默认值
         let type = '';
         if (payload.type) {
           type = Number(payload.type);
@@ -259,17 +259,13 @@ export default {
           return res.class_id === type;
         });
         const typeName = `${selectType[0].class_name}`;
-        // for (const item of selectType[0].has_category) {
-        //   if (item.class_id === typeSon) {
-        //     typeName += ` >> ${item.class_name}`;
-        //     break;
-        //   }
-        // }
         const AttrArrMap = new Map();
-        selectType[0].has_many_attr_class.forEach(ele => {
+        const initGoodsAttr = selectType[0].has_many_attr_class;
+        initGoodsAttr.forEach(ele => {
           const AttrArr = [];
           ele.has_many_attr.forEach(res => {
             if (res.status === 0) {
+              // 筛选调禁用掉的子属性
               AttrArr.push(res.value);
               AttrArrMap.set(res.id, {
                 attr_class_id: res.attr_class_id,
@@ -286,8 +282,8 @@ export default {
         yield put({
           type: 'init',
           payload: {
-            typeName,
-            initGoodsAttr: selectType[0].has_many_attr_class,
+            typeName, // 分类名
+            initGoodsAttr,
             AttrArrMap,
             brandList: goodsBrand,
             warehouseList,
@@ -411,8 +407,6 @@ export default {
       };
     },
     setLevelPartials(state, { payload }) {
-      console.log(payload);
-      // const { typePartial, totalPrice, levelPartial, levelPartialSon } = state;
       const { goodsDetail } = state;
       const { levelPartial, levelPartialSon } = state;
       const {
@@ -517,9 +511,7 @@ export default {
     checkeds(state, { payload }) {
       const { initGoodsAttr, AttrArrMap, goodsDetail } = state;
       const arr = [];
-      // console.log(initGoodsAttr);
       initGoodsAttr[payload.index].checked = !initGoodsAttr[payload.index].checked;
-      // console.log(initGoodsAttr);
       const attrData = initGoodsAttr.filter(res => {
         return res.checked;
       });
@@ -539,7 +531,6 @@ export default {
     },
     init(state, { payload }) {
       // 初始化
-      console.log(payload.initGoodsAttr);
       const levelPartial = [];
       const levelPartialSon = [];
       let totalPrice = 0;
@@ -572,7 +563,6 @@ export default {
           const arrAttrId = [...AttrIdSet];
           goodSku.set(arrAttrId, res);
         });
-        console.log(goodSku);
         payload.initGoodsAttr.forEach(res => {
           if (arrId.has(res.id)) {
             res.checked = true;
@@ -586,18 +576,25 @@ export default {
         // 分佣代码
         totalPrice = goodsDetail.sell_goods_price - goodsDetail.cost_price;
         let typePartial = 0;
+        let cache = {};
         goodsDetail.has_shop_goods_profit.forEach(res => {
           if (res.status === 0) {
-            console.log(res.profit_value);
             goodsDetail[`level_${res.level}`] = res.profit_value;
             typePartial = res.profit_type;
-            levelPartial.forEach(ele => {
-              if (ele.id === res.level) {
-                ele.value = res.profit_value;
-              }
-            });
+            cache[res.level] = res.profit_value;
+            // levelPartial.forEach(ele => {
+            //   if (ele.id === res.level) {
+            //     ele.value = res.profit_value;
+            //   }
+            // });
           }
         });
+        levelPartial.forEach(ele => {
+          if (cache[ele.id]) {
+            ele.value = cache[ele.id];
+          }
+        });
+        cache = null;
         goodsDetail.profit_type = typePartial;
         // if (typePartial === 0) {
         //   levelPartialSon = levelPartial.map(res => {
@@ -614,7 +611,7 @@ export default {
           attrTable,
           attrData,
           payload.AttrArrMap,
-          goodsDetail.sell_goods_price,
+          totalPrice,
           goodsDetail.goods_sn,
           goodsDetail.weight
         );
@@ -637,7 +634,6 @@ export default {
                   }
                 });
                 res.values = {};
-                console.log(res.profit);
                 res.profit.forEach(ele => {
                   res.values[ele.id] = ele.value;
                 });
@@ -682,8 +678,6 @@ export default {
       }
       goodsDetail.profit_type = goodsDetail.profit_type || 0;
       payload.goodsDetail = goodsDetail;
-      console.log(999);
-      console.log(goodsDetail);
       return {
         ...state,
         ...payload,

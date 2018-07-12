@@ -305,11 +305,11 @@ const CustomizedForm = Form.create({
         label="封面"
         extra={
           homeForm.type === 3 ? (
-            <Tag color="blue">轮播图750*370</Tag>
+            <Tag color="blue">建议尺寸750px*370px</Tag>
           ) : homeForm.type === 2 ? (
-            <Tag color="blue">直播商品220*240</Tag>
+            <Tag color="blue">建议尺寸220px*240px</Tag>
           ) : homeForm.type === 1 ? (
-            <Tag color="blue">热销商品370*370</Tag>
+            <Tag color="blue">建议尺寸370px*370px</Tag>
           ) : null
         }
       >
@@ -711,7 +711,9 @@ export default class Home extends PureComponent {
         render: (val, text) =>
           text.jump_type === 1
             ? val
-            : text.jump_type === 2 ? text.url : text.jump_type === 4 ? text.target_name : '无关联',
+            : text.jump_type === 2
+              ? text.url
+              : text.jump_type === 4 ? text.remark : text.jump_type === 5 ? text.remark : '无关联',
       },
       {
         title: '创建时间',

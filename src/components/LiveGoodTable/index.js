@@ -214,7 +214,7 @@ export default class Live extends PureComponent {
             columns={progressColumns}
             pagination={goodsListPage}
             onChange={this.handleTableChange}
-            scroll={{ x: true, y: 480 }}
+            scroll={{ x: true, y: 479 }}
             // footer={() => (
             //   <Row>
             //     <Col span={8}>
@@ -245,7 +245,7 @@ export default class Live extends PureComponent {
             rowKey={record => record.goods_id}
             columns={progressColumnsdel}
             pagination={false}
-            scroll={{ x: true, y: 480 }}
+            scroll={{ x: true, y: 479 }}
             // footer={() => (
             //   <Button type="primary" disabled={!rightKeyArr.length} onClick={this.allSelectRemove}>
             //     批量移除
@@ -263,7 +263,7 @@ export default class Live extends PureComponent {
             // )}
           />
           <Button
-            style={{ position: 'reletive', top: '10px', right: '-20px' }}
+            style={{ position: 'reletive', top: '16px', right: '-20px' }}
             type="primary"
             disabled={!rightKeyArr.length}
             onClick={this.allSelectRemove}

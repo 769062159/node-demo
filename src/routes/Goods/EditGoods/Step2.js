@@ -326,7 +326,7 @@ const CustomizedForm = Form.create({
                   step={0.01}
                   precision={2}
                   min={0}
-                  max={goodsDetail.sell_goods_price}
+                  max={Number(goodsDetail.sell_goods_price || 0)}
                   onChange={e => chgLevelHas(res, e)}
                 />
               )
@@ -1069,7 +1069,7 @@ class EditGoodStep2 extends React.PureComponent {
         goods_sku_sn: values.goods_sn,
         weight: values.weight,
         price: values.sell_goods_price,
-        img: '',
+        img: uploadGoodsImg[0].url,
         profit: arr,
         goods_sku_attr: [
           {
@@ -1112,7 +1112,8 @@ class EditGoodStep2 extends React.PureComponent {
     values.goods_is_fast_delivery = 1;
     values.goods_is_recommend_show = 0;
     if (values.goods_shelves_time) {
-      values.goods_shelves_time = Number.parseInt(new Date(moment(values._d)).getTime() / 1000, 10);
+      const date = moment(values.goods_shelves_time._d)._d;
+      values.goods_shelves_time = Number.parseInt(date.getTime() / 1000, 10);
     } else {
       values.goods_shelves_time = 0;
     }

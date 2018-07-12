@@ -22,6 +22,7 @@ import moment from 'moment';
 import ReactEditor from 'components/ReactEditor';
 import EditTable from 'components/editTable';
 import styles from './style.less';
+import { dedupe } from '../../../utils/utils';
 
 // const { TextArea } = Input;
 // const RadioGroup = Radio.Group;
@@ -74,6 +75,7 @@ const CustomizedForm = Form.create({
   },
   mapPropsToFields(props) {
     const { goods: { goodsDetail, systemType } } = props;
+    console.log(goodsDetail.goods_shelves_time);
     const arr = {
       goods_name: Form.createFormField({
         value: goodsDetail.goods_name,
@@ -157,7 +159,9 @@ const CustomizedForm = Form.create({
         value: goodsDetail.goods_shelves_type,
       }),
       goods_shelves_time: Form.createFormField({
-        value: goodsDetail.goods_shelves_time || moment(new Date(), 'YYYY-MM-DD HH:mm:ss'),
+        value: goodsDetail.goods_shelves_time
+          ? moment(goodsDetail.goods_shelves_time, 'YYYY-MM-DD HH:mm:ss')
+          : moment(new Date(), 'YYYY-MM-DD HH:mm:ss'),
       }),
       goods_description: Form.createFormField({
         value: goodsDetail.goods_description,
@@ -982,7 +986,7 @@ class AddGoodStep2 extends React.PureComponent {
       dispatch({
         type: 'goods/setLevelPartial',
         payload: {
-          data: data.id,
+          index: data.id,
           value: e,
         },
       });
@@ -1017,13 +1021,13 @@ class AddGoodStep2 extends React.PureComponent {
   // 提交表单
   submitForm = values => {
     const { goods: { uploadGoodsImg }, dispatch } = this.props;
+    const { goods: { attrTable, levelPartial } } = this.props;
     if (!uploadGoodsImg.length) {
       message.error('请上传图片主体！');
       return;
     }
     // 暂时写死的
     values.goods_sn = ' ';
-    const { goods: { attrTable, levelPartial } } = this.props;
     if (attrTable.length) {
       attrTable.forEach(ele => {
         ele.goods_sku_sn = ' ';
@@ -1037,6 +1041,7 @@ class AddGoodStep2 extends React.PureComponent {
         levelPartial.forEach(res => {
           obj[res.id] = res.value;
         });
+        ele.profit = dedupe(levelPartial);
         ele.profit.forEach(res => {
           arr.push({
             price: ele.values[res.id],
@@ -1048,7 +1053,7 @@ class AddGoodStep2 extends React.PureComponent {
       });
     } else {
       const arr = [];
-      if (values.profit_type === '1') {
+      if (values.profit_type === 1) {
         levelPartial.forEach(res => {
           arr.push({
             price: res.value,
@@ -1075,7 +1080,7 @@ class AddGoodStep2 extends React.PureComponent {
         store_nums: values.goods_total_inventory,
         goods_sku_sn: values.goods_sn,
         price: values.sell_goods_price,
-        img: '',
+        img: uploadGoodsImg[0].url,
         profit: arr,
         weight: values.weight,
         goods_sku_attr: [
@@ -1121,11 +1126,11 @@ class AddGoodStep2 extends React.PureComponent {
     values.goods_is_fast_delivery = 1;
     values.goods_is_recommend_show = 0;
     if (values.goods_shelves_time) {
-      values.goods_shelves_time = Number.parseInt(new Date(moment(values._d)).getTime() / 1000, 10);
+      const date = moment(values.goods_shelves_time._d)._d;
+      values.goods_shelves_time = Number.parseInt(date.getTime() / 1000, 10);
     } else {
       values.goods_shelves_time = 0;
     }
-    console.log(values);
     dispatch({
       type: 'goods/addShop',
       payload: {
