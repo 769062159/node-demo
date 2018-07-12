@@ -64,9 +64,19 @@ export default {
     },
     getOrder(state, { payload }) {
       const { data } = payload;
+      const { list } = data;
+      list.forEach(res => {
+        res.has_order_pack.forEach(ele => {
+          let price = 0;
+          ele.has_order_goods.forEach(gg => {
+            price = (price * 100 + gg.has_order_goods_sku.price * 100) / 100;
+          });
+          ele.total_price = price;
+        });
+      });
       return {
         ...state,
-        orderList: data.list,
+        orderList: list,
         orderListPage: {
           pageSize: data.page,
           total: data.total,

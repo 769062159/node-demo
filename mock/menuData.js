@@ -95,18 +95,26 @@ export const menuData = [
     ],
   },
   {
-    name: '营销',
+    name: '首页',
     icon: 'home',
     path: 'market',
     children: [
       {
-        name: '首页',
-        path: 'index',
+        name: '轮播图',
+        path: 'carousel',
       },
       {
-        name: '广告',
-        path: 'ads',
+        name: '直播特卖',
+        path: 'live-sale',
       },
+      {
+        name: '热卖商品',
+        path: 'hot-sale',
+      },
+      //   {
+      //     name: '广告',
+      //     path: 'ads',
+      //   },
     ],
   },
   {

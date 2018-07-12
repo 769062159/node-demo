@@ -7,7 +7,10 @@ import {
   addHome,
   deleteHome,
   updateHome,
+  homeDetail,
 } from '../services/indexs';
+import { getAllGoods } from '../services/goods';
+import { getLive } from '../services/live';
 
 export default {
   namespace: 'indexs',
@@ -22,9 +25,36 @@ export default {
     homeGoods: {}, // 首页跳转商品
     homeLive: {}, // 首页调直播间
     homeVod: {}, // 首页调录播
+    GoodList: [], // 热卖商品列表
+    GoodListPage: [], // 热卖商品列表页脚
+    LiveList: [], // 直播列表
+    LiveListPage: [], // 直播列表页脚
+    LiveKey: '',
+    GoodKey: '',
   },
 
   effects: {
+    *fetchDetail({ payload }, { call, put }) {
+      const response = yield call(homeDetail, payload);
+      yield put({
+        type: 'fetchDetails',
+        payload: response,
+      });
+    },
+    *fetchGoodList({ payload }, { call, put }) {
+      const response = yield call(getAllGoods, payload);
+      yield put({
+        type: 'getGoodList',
+        payload: response,
+      });
+    },
+    *fetchLiveList({ payload }, { call, put }) {
+      const response = yield call(getLive, payload);
+      yield put({
+        type: 'getLiveList',
+        payload: response,
+      });
+    },
     *fetchHome({ payload }, { call, put }) {
       const response = yield call(getHome, payload);
       yield put({
@@ -34,7 +64,7 @@ export default {
     },
     *addHome({ payload }, { call, put }) {
       yield call(addHome, payload);
-      const response = yield call(getHome, { page: payload.page });
+      const response = yield call(getHome, { page: payload.page, type: payload.type });
       yield put({
         type: 'getHome',
         payload: response,
@@ -42,7 +72,7 @@ export default {
     },
     *editHome({ payload }, { call, put }) {
       yield call(updateHome, payload);
-      const response = yield call(getHome, { page: payload.page });
+      const response = yield call(getHome, { page: payload.page, type: payload.type });
       yield put({
         type: 'getHome',
         payload: response,
@@ -102,6 +132,70 @@ export default {
   },
 
   reducers: {
+    fetchDetails(state, { payload }) {
+      const { data } = payload;
+      const imgArr = [];
+      if (data.cover) {
+        imgArr.push({
+          status: 'done',
+          response: { status: 'success' },
+          name: data.title,
+          uid: data.id,
+          url: data.cover,
+        });
+      }
+      let LiveKey = '';
+      let GoodKey = '';
+      if (data.jump_type === 1) {
+        GoodKey = data.target_id;
+      } else if (data.jump_type === 4) {
+        LiveKey = data.target_id;
+      }
+      return {
+        ...state,
+        homeForm: data,
+        uploadHomeImg: imgArr,
+        LiveKey,
+        GoodKey,
+      };
+    },
+    selectGood(state, { payload }) {
+      const { data } = payload;
+      console.log(data);
+      return {
+        ...state,
+        GoodKey: [data],
+      };
+    },
+    selectLive(state, { payload }) {
+      const { data } = payload;
+      return {
+        ...state,
+        LiveKey: [data],
+      };
+    },
+    getLiveList(state, { payload }) {
+      const { data } = payload;
+      return {
+        ...state,
+        LiveList: data.list,
+        LiveListPage: {
+          pageSize: data.page,
+          total: data.total,
+        },
+      };
+    },
+    getGoodList(state, { payload }) {
+      const { data } = payload;
+      return {
+        ...state,
+        GoodList: data.list,
+        GoodListPage: {
+          pageSize: data.page,
+          total: data.total,
+        },
+      };
+    },
     editHomeMsgs(state, { payload }) {
       console.log(payload);
       const { data } = payload;

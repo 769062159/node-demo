@@ -63,3 +63,11 @@ export async function updateHome(params) {
     body: params,
   });
 }
+
+// 首页详情
+export async function homeDetail(params) {
+    return request('/admin/index/detail', {
+      method: 'POST',
+      body: params,
+    });
+  }

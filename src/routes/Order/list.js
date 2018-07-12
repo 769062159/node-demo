@@ -1,7 +1,20 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 import moment from 'moment';
-import { Card, Form, Row, Col, List, Button, Icon, Input, Select, Modal, Cascader } from 'antd';
+import {
+  Card,
+  Form,
+  Row,
+  Col,
+  List,
+  Button,
+  Icon,
+  Input,
+  Select,
+  Modal,
+  Cascader,
+  Table,
+} from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
 import styles from './List.less';
@@ -10,22 +23,32 @@ const FormItem = Form.Item;
 const InputGroup = Input.Group;
 const { Option } = Select;
 const oredrStatus = ['未支付', '已取消', '已支付', '已发货', '已收货', '已评价'];
-const warehouseType = ['仓库', '供应商', '本地仓库供应商货'];
+// const warehouseType = ['仓库', '供应商', '本地仓库供应商货'];
 const bigStyle = {
   width: '90%',
   textAlign: 'center',
-  height: '100%',
+  height: '50px',
 };
 const smallStyle = {
   width: '10%',
   textAlign: 'center',
-  height: '100%',
+  height: '50px',
 };
-const allStyle = {
-  width: '100%',
-  textAlign: 'center',
-  height: '100%',
-};
+// const bigStyles = {
+//     width: '90%',
+//     textAlign: 'center',
+//     height: '100%',
+//   };
+//   const smallStyles = {
+//     width: '10%',
+//     textAlign: 'center',
+//     height: '100%',
+//   };
+// const allStyle = {
+//   width: '100%',
+//   textAlign: 'center',
+//   height: '100%',
+// };
 
 @connect(({ order, address, loading }) => ({
   order,
@@ -193,79 +216,43 @@ export default class Order extends PureComponent {
       orderId: '',
     });
   };
-  loadData = (value) => {
+  loadData = value => {
     this.setState({
-        addressArr: value,
+      addressArr: value,
     });
     const { dispatch, address: { addressList } } = this.props;
     value = value[value.length - 1];
     const id = value.id;
     for (const val of addressList) {
-        if (val.id === id) {
-            if (!val.children) {
-                dispatch({
-                    type: 'address/fetch',
-                    payload: {
-                        parent_id: id,
-                    },
-                });
+      if (val.id === id) {
+        if (!val.children) {
+          dispatch({
+            type: 'address/fetch',
+            payload: {
+              parent_id: id,
+            },
+          });
+        }
+        break;
+      }
+      if (val.children) {
+        for (const vals of val.children) {
+          if (vals.id === id) {
+            if (!vals.children) {
+              dispatch({
+                type: 'address/fetch',
+                payload: {
+                  parent_id: id,
+                  type: 1,
+                },
+              });
             }
             break;
+          }
         }
-        if (val.children) {
-            for (const vals of val.children) {
-                if (vals.id === id) {
-                    if (!vals.children) {
-                        dispatch({
-                            type: 'address/fetch',
-                            payload: {
-                                parent_id: id,
-                                type: 1,
-                            },
-                        });
-                    }
-                    break;
-                }
-            }
-        }
+      }
     }
-    
-  }
-//   changeAddress = value => {
-//     this.setState({
-//       addressArr: value,
-//     });
-//     const { dispatch, address: { addressList } } = this.props;
-//     value = value[value.length - 1];
-//     for (const val of addressList) {
-//       if (val.id === value) {
-//         if (!val.children) {
-//           dispatch({
-//             type: 'address/fetch',
-//             payload: {
-//               parent_id: value,
-//             },
-//           });
-//         }
-//         break;
-//       }
-//       if (val.children) {
-//         for (const vals of val.children) {
-//           if (vals.id === value) {
-//             if (!vals.children) {
-//               dispatch({
-//                 type: 'address/fetch',
-//                 payload: {
-//                   parent_id: value,
-//                 },
-//               });
-//             }
-//             break;
-//           }
-//         }
-//       }
-//     }
-//   };
+  };
   changeAddressInfo = e => {
     this.setState({
       addressInfo: e.target.value,
@@ -494,11 +481,80 @@ export default class Order extends PureComponent {
         );
       });
     }
+    const detailColumns = [
+      {
+        title: '直播标题',
+        width: '50%',
+        dataIndex: 'has_order_goods',
+        key: 'has_order_goods',
+        render: val =>
+          val.map(res => {
+            return (
+              <Row>
+                <Col span={6}>
+                  <img src={res.has_order_goods_sku.http_url} alt="图片" style={{ width: 60 }} />
+                </Col>
+                <Col span={13}>{res.goods_name}</Col>
+                <Col span={5}>
+                  <div>¥{res.has_order_goods_sku.unit_price}</div>
+                  <div>*{res.has_order_goods_sku.total_goods_number}</div>
+                </Col>
+              </Row>
+            );
+          }),
+      },
+      {
+        title: '213',
+        width: '12%',
+        dataIndex: 'total_price',
+      },
+      {
+        title: '21',
+        width: '8%',
+        dataIndex: 'warehouse_addr',
+      },
+      {
+        title: '直播简介',
+        width: '8%',
+        dataIndex: 'order_status',
+        render: val => oredrStatus[val],
+      },
+      {
+        title: '直播简介',
+        width: '16%',
+        render: (text, record) =>
+          record.order_status === 2 ? (
+            <Button type="primary" onClick={this.ship.bind(this, record.pack_id)}>
+              发货
+            </Button>
+          ) : record.order_status === 3 ? (
+            <Button type="primary" onClick={this.editShip.bind(this, record)}>
+              修改发货
+            </Button>
+          ) : record.order_status === 1 ? null : null,
+      },
+    ];
 
     return (
       <PageHeaderLayout>
         <Card bordered={false} hoverable={false}>
           <div className={styles.tableListForm}>{this.renderForm()}</div>
+          <Row
+            style={{
+              backgroundColor: '#F5F5F5',
+              height: 30,
+              marginBottom: 10,
+              textAlign: 'center',
+            }}
+            align="middle"
+            type="flex"
+          >
+            <Col span={13}>订单详情</Col>
+            <Col span={3}>金额</Col>
+            <Col span={2}>仓库</Col>
+            <Col span={2}>状态</Col>
+            <Col span={4}>操作</Col>
+          </Row>
           <List
             itemLayout="vertical"
             className={styles.noMouse}
@@ -524,43 +580,77 @@ export default class Order extends PureComponent {
             renderItem={item => (
               <List.Item key={item.order_sn} className={styles.listItem}>
                 <Card className={styles.RowItem} hoverable={false}>
+                  <Row
+                    style={{ backgroundColor: '#F5F5F5', height: 40 }}
+                    align="middle"
+                    type="flex"
+                  >
+                    <Col span={8}>
+                      {moment(item.create_time * 1000).format('YYYY-MM-DD HH:mm:ss')}
+                    </Col>
+                    <Col span={8}>订单号：{item.order_sn}</Col>
+                    <Col span={8}>总金额：{item.total_amount}</Col>
+                  </Row>
                   <Card.Grid style={bigStyle}>
-                    <Row>
-                      <Col span={5}>订单号：{item.order_sn}</Col>
-                      <Col span={3}>总金额：{item.total_amount}</Col>
+                    <Row style={{ height: '100%' }}>
+                      <Col span={5}>收货人：{item.consignee}</Col>
                       <Col span={6}>联系电话：{item.mobile}</Col>
-                      <Col span={6}>
-                        下单时间：{moment(item.create_time * 1000).format('YYYY-MM-DD HH:mm:ss')}
+                      <Col span={13}>
+                        地址：{item.province_name +
+                          item.city_name +
+                          item.district_name +
+                          item.address}
                       </Col>
-                      <Col span={4}>订单状态：{oredrStatus[item.order_status]}</Col>
                     </Row>
                   </Card.Grid>
                   {item.order_status === 2 ? (
                     <Card.Grid style={smallStyle}>
-                      <Row>
-                        <Col>
-                          <Button type="primary" onClick={this.editAddress.bind(this, item)}>
-                            修改地址
-                          </Button>
-                        </Col>
-                      </Row>
+                      <Button type="primary" onClick={this.editAddress.bind(this, item)}>
+                        修改地址
+                      </Button>
                     </Card.Grid>
                   ) : null}
-                  {/* <Card.Grid style={smallStyle}>
-                    <Row>
-                      <Col>
-                        {item.order_status === 2 ? (
-                          <Button type="primary" onClick={this.editAddress.bind(this, item)}>
-                            修改地址
-                          </Button>
-                        ) : null}
-                      </Col>
-                    </Row>
-                  </Card.Grid> */}
-                  {item.has_order_pack.map((res, index) => {
+                  {item.has_order_pack &&
+                    item.has_order_pack.map((res, index) => {
+                      return (
+                        <div key={res.pack_id}>
+                          <Row style={{ padding: 0, height: '100%' }}>
+                            <Card.Grid style={{ width: '100%' }}>
+                              <Col span={2}>包裹{index + 1}</Col>
+                              <Col span={5}>订单号：{res.order_sn}</Col>
+                              {/* <Col span={4}>状态：{oredrStatus[res.order_status]}</Col> */}
+                              <Col span={3}>运费：{res.pack_shipping_fee}</Col>
+                              {/* <Col span={3}>发货类型：{warehouseType[res.warehouse_type]}</Col>
+                            {res.pack_express_sn ? (
+                                <Col span={3}>快递单号：{res.pack_express_sn}</Col>
+                            ) : null}
+                            {res.pack_express_name ? (
+                                <Col span={3}>快递公司：{res.pack_express_name}</Col>
+                            ) : null}
+                            {res.pack_shipping_time ? (
+                                <Col span={3}>
+                                配送时间：{moment(res.pack_shipping_time * 1000).format(
+                                    'YYYY-MM-DD HH:mm:ss'
+                                )}
+                                </Col>
+                            ) : null} */}
+                            </Card.Grid>
+                          </Row>
+                        </div>
+                      );
+                    })}
+                  <Table
+                    bordered
+                    showHeader={false}
+                    dataSource={item.has_order_pack}
+                    rowKey={record => record.order_id}
+                    columns={detailColumns}
+                    pagination={false}
+                  />
+                  {/* {item.has_order_pack.map((res, index) => {
                     return (
                       <div key={res.pack_id}>
-                        <Card.Grid style={bigStyle}>
+                        <Card.Grid style={bigStyles}>
                           <Card bordered={false} hoverable={false}>
                             <Card.Grid style={allStyle}>
                               <Row gutter={24}>
@@ -612,7 +702,7 @@ export default class Order extends PureComponent {
                             );
                           })}
                         </Card.Grid>
-                        <Card.Grid style={smallStyle}>
+                        <Card.Grid style={smallStyles}>
                           <Row>
                             <Col>
                               {res.order_status === 2 ? (
@@ -629,7 +719,7 @@ export default class Order extends PureComponent {
                         </Card.Grid>
                       </div>
                     );
-                  })}
+                  })} */}
                 </Card>
               </List.Item>
             )}
