@@ -90,7 +90,7 @@ export default class FrontUserList extends PureComponent {
     dispatch({
       type: 'frontUser/fetchFrontUserList',
       payload: {
-        pagination: current,
+        page: current,
       },
     });
   };
