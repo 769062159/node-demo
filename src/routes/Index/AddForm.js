@@ -1,20 +1,9 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 // import moment from 'moment';
-import {
-  Table,
-  message,
-  Modal,
-  Form,
-  Input,
-  Button,
-  Tag,
-  InputNumber,
-  Upload,
-  Select,
-  Icon,
-} from 'antd';
+import { Table, message, Modal, Form, Button, InputNumber, Upload, Select, Icon, Tag } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
+import styles from './Style.less';
 
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -149,7 +138,7 @@ const CustomizedForm = Form.create({
   ];
   return (
     <Form>
-      <FormItem {...formItemLayout} label="标题">
+      {/* <FormItem {...formItemLayout} label="标题">
         {getFieldDecorator('title', {
           rules: [
             {
@@ -158,11 +147,11 @@ const CustomizedForm = Form.create({
             },
           ],
         })(<Input />)}
-      </FormItem>
+      </FormItem> */}
       <FormItem
         {...formItemLayout}
         label="排序"
-        extra={<Tag color="blue">建议尺寸220px*240px</Tag>}
+        // extra={<Tag color="blue">建议尺寸220px*240px</Tag>}
       >
         {getFieldDecorator('sort', {
           rules: [
@@ -174,36 +163,34 @@ const CustomizedForm = Form.create({
         })(<InputNumber step={1} min={0} />)}
       </FormItem>
       {type === '1' ? (
-        <FormItem {...formItemLayout} label="跳转类型">
-          {getFieldDecorator('jump_type', {
-            rules: [
-              {
-                required: true,
-                message: '请输入跳转类型',
-              },
-            ],
-          })(
-            <Select style={{ width: 200 }}>
-              <Option value={1}>跳转商品</Option>
-            </Select>
-          )}
+        <FormItem {...formItemLayout} label="商品列表" className={styles.tableHeaders}>
+          <Table
+            style={{ width: 600 }}
+            onChange={goodListChange}
+            // onSelect={goodSelect}
+            dataSource={GoodList}
+            rowSelection={{ type: 'radio', onSelect: goodSelect, selectedRowKeys: GoodKey }}
+            rowKey={record => record.goods_id}
+            loading={loading}
+            columns={goodListColumns}
+            pagination={GoodListPage}
+          />
         </FormItem>
       ) : type === '2' ? (
-        <FormItem {...formItemLayout} label="跳转类型">
-          {getFieldDecorator('jump_type', {
-            rules: [
-              {
-                required: true,
-                message: '请输入跳转类型',
-              },
-            ],
-          })(
-            <Select style={{ width: 200 }}>
-              <Option value={4}>跳转直播间</Option>
-            </Select>
-          )}
+        <FormItem {...formItemLayout} label="直播列表" className={styles.tableHeaders}>
+          <Table
+            style={{ width: 600 }}
+            onChange={goodLiveChange}
+            // onSelect={liveSelect}
+            dataSource={LiveList}
+            rowSelection={{ type: 'radio', onSelect: liveSelect, selectedRowKeys: LiveKey }}
+            rowKey={record => record.stv_live_id}
+            loading={loading}
+            columns={goodLiveColumns}
+            pagination={LiveListPage}
+          />
         </FormItem>
-      ) : (
+      ) : type === '3' ? (
         <div>
           <FormItem {...formItemLayout} label="跳转类型">
             {getFieldDecorator('jump_type', {
@@ -221,7 +208,11 @@ const CustomizedForm = Form.create({
               </Select>
             )}
           </FormItem>
-          <FormItem {...formItemLayout} label="封面">
+          <FormItem
+            {...formItemLayout}
+            label="封面"
+            extra={<Tag color="blue">建议尺寸为750px*370px</Tag>}
+          >
             <Upload
               action="http://hlsj.test.seastart.cn/admin/upload"
               listType="picture-card"
@@ -238,31 +229,37 @@ const CustomizedForm = Form.create({
             <img alt="example" style={{ width: '100%' }} src={previewImage} />
           </Modal>
         </div>
-      )}
-      {homeForm.jump_type === 1 ? (
-        <Table
-          onChange={goodListChange}
-          // onSelect={goodSelect}
-          dataSource={GoodList}
-          rowSelection={{ type: 'radio', onSelect: goodSelect, selectedRowKeys: GoodKey }}
-          rowKey={record => record.goods_id}
-          loading={loading}
-          columns={goodListColumns}
-          pagination={GoodListPage}
-        />
-      ) : homeForm.jump_type === 4 ? (
-        <Table
-          onChange={goodLiveChange}
-          // onSelect={liveSelect}
-          dataSource={LiveList}
-          rowSelection={{ type: 'radio', onSelect: liveSelect, selectedRowKeys: LiveKey }}
-          rowKey={record => record.stv_live_id}
-          loading={loading}
-          columns={goodLiveColumns}
-          pagination={LiveListPage}
-        />
       ) : null}
-      <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
+      {homeForm.jump_type === 1 ? (
+        <FormItem {...formItemLayout} label="商品列表" className={styles.tableHeaders}>
+          <Table
+            style={{ width: 600 }}
+            onChange={goodListChange}
+            // onSelect={goodSelect}
+            dataSource={GoodList}
+            rowSelection={{ type: 'radio', onSelect: goodSelect, selectedRowKeys: GoodKey }}
+            rowKey={record => record.goods_id}
+            loading={loading}
+            columns={goodListColumns}
+            pagination={GoodListPage}
+          />
+        </FormItem>
+      ) : homeForm.jump_type === 4 ? (
+        <FormItem {...formItemLayout} label="直播列表" className={styles.tableHeaders}>
+          <Table
+            style={{ width: 600 }}
+            onChange={goodLiveChange}
+            // onSelect={liveSelect}
+            dataSource={LiveList}
+            rowSelection={{ type: 'radio', onSelect: liveSelect, selectedRowKeys: LiveKey }}
+            rowKey={record => record.stv_live_id}
+            loading={loading}
+            columns={goodLiveColumns}
+            pagination={LiveListPage}
+          />
+        </FormItem>
+      ) : null}
+      <FormItem {...submitFormLayout}>
         <Button type="primary" htmlType="submit" onClick={onValidateForm}>
           提交
         </Button>
@@ -354,7 +351,12 @@ export default class Home extends PureComponent {
     }
     const { pagination } = this.state;
     const { type } = this.props.match.params;
-    homeForm.type = type;
+    homeForm.type = Number(type);
+    if (homeForm.type === 2) {
+      homeForm.jump_type = 4;
+    } else if (homeForm.type === 1) {
+      homeForm.jump_type = 1;
+    }
     if (homeForm.jump_type === 1) {
       homeForm.target_id = GoodKey[0];
     } else if (homeForm.jump_type === 4) {

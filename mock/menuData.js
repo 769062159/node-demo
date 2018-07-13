@@ -148,10 +148,10 @@ export const menuData = [
         name: '直播列表',
         path: 'list',
       },
-      {
-        name: '录播列表',
-        path: 'vod',
-      },
+      //   {
+      //     name: '录播列表',
+      //     path: 'vod',
+      //   },
     ],
   },
   // {

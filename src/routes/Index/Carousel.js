@@ -11,7 +11,6 @@ const FormItem = Form.Item;
 // const Option = Select.Option;
 // const { TextArea } = Input;
 const { confirm } = Modal;
-const homeType = ['', '热销商品', '直播商品', '轮播图'];
 const jumpType = ['', '跳转商品', '跳转外部链接', '无跳转', '跳转直播间', '跳转录播'];
 const formItemLayout = {
   labelCol: {
@@ -329,20 +328,9 @@ export default class Home extends PureComponent {
     const { homeVisible } = this.state;
     const progressColumns = [
       {
-        title: '标题',
-        dataIndex: 'title',
-        key: 'title',
-      },
-      {
         title: '封面',
         dataIndex: 'cover',
         render: val => (val ? <img src={val} style={{ width: '120px' }} alt="图片" /> : null),
-      },
-      {
-        title: '类型',
-        dataIndex: 'type',
-        key: 'type',
-        render: val => homeType[val],
       },
       {
         title: '跳转类型',

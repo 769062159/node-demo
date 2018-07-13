@@ -329,16 +329,6 @@ export default class Home extends PureComponent {
     const { homeVisible } = this.state;
     const progressColumns = [
       {
-        title: '标题',
-        dataIndex: 'title',
-        key: 'title',
-      },
-      {
-        title: '封面',
-        dataIndex: 'cover',
-        render: val => (val ? <img src={val} style={{ width: '120px' }} alt="图片" /> : null),
-      },
-      {
         title: '类型',
         dataIndex: 'type',
         key: 'type',

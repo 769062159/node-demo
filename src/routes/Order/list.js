@@ -24,15 +24,34 @@ const InputGroup = Input.Group;
 const { Option } = Select;
 const oredrStatus = ['未支付', '已取消', '已支付', '已发货', '已收货', '已评价'];
 // const warehouseType = ['仓库', '供应商', '本地仓库供应商货'];
-const bigStyle = {
+const bigStyles = {
+  display: 'inline-block',
+  verticalAlign: 'bottom',
+  borderTop: '1px solid #D2D2D2',
   width: '90%',
-  textAlign: 'center',
+  //   textAlign: 'center',
+  paddingLeft: 0,
   height: '50px',
+  backgroundColor: '#F5F5F5',
 };
 const smallStyle = {
+  display: 'inline-block',
+  borderTop: '1px solid #D2D2D2',
+  borderLeft: '1px solid #D2D2D2',
+  verticalAlign: 'bottom',
   width: '10%',
-  textAlign: 'center',
+  //   textAlign: 'center',
   height: '50px',
+  backgroundColor: '#F5F5F5',
+};
+const grayBtn = {
+  backgroundColor: '#E3E3E3',
+  width: 80,
+  height: 28,
+  color: '#000000',
+  borderRadius: 0,
+  textAlign: 'center',
+  fontSize: 11,
 };
 // const bigStyles = {
 //     width: '90%',
@@ -524,11 +543,11 @@ export default class Order extends PureComponent {
         width: '16%',
         render: (text, record) =>
           record.order_status === 2 ? (
-            <Button type="primary" onClick={this.ship.bind(this, record.pack_id)}>
+            <Button style={grayBtn} onClick={this.ship.bind(this, record.pack_id)}>
               发货
             </Button>
           ) : record.order_status === 3 ? (
-            <Button type="primary" onClick={this.editShip.bind(this, record)}>
+            <Button style={grayBtn} onClick={this.editShip.bind(this, record)}>
               修改发货
             </Button>
           ) : record.order_status === 1 ? null : null,
@@ -542,22 +561,32 @@ export default class Order extends PureComponent {
           <Row
             style={{
               backgroundColor: '#F5F5F5',
-              height: 30,
+              height: 34,
               marginBottom: 10,
-              textAlign: 'center',
+              fontSize: 12,
             }}
             align="middle"
             type="flex"
           >
-            <Col span={13}>订单详情</Col>
-            <Col span={3}>金额</Col>
-            <Col span={2}>仓库</Col>
-            <Col span={2}>状态</Col>
-            <Col span={4}>操作</Col>
+            <Col span={13} style={{ paddingLeft: 20 }}>
+              订单详情
+            </Col>
+            <Col span={3} style={{ paddingLeft: 10 }}>
+              金额
+            </Col>
+            <Col span={2} style={{ paddingLeft: 10 }}>
+              仓库
+            </Col>
+            <Col span={2} style={{ paddingLeft: 10 }}>
+              状态
+            </Col>
+            <Col span={4} style={{ paddingLeft: 10 }}>
+              操作
+            </Col>
           </Row>
           <List
             itemLayout="vertical"
-            className={styles.noMouse}
+            // className={styles.noMouse}
             // size="large"
             size="small"
             pagination={{
@@ -581,41 +610,55 @@ export default class Order extends PureComponent {
               <List.Item key={item.order_sn} className={styles.listItem}>
                 <Card className={styles.RowItem} hoverable={false}>
                   <Row
-                    style={{ backgroundColor: '#F5F5F5', height: 40 }}
+                    style={{ backgroundColor: '#F5F5F5', height: 48, fontSize: 12 }}
                     align="middle"
                     type="flex"
                   >
-                    <Col span={8}>
+                    <Col span={4} style={{ paddingLeft: 20 }}>
                       {moment(item.create_time * 1000).format('YYYY-MM-DD HH:mm:ss')}
                     </Col>
-                    <Col span={8}>订单号：{item.order_sn}</Col>
-                    <Col span={8}>总金额：{item.total_amount}</Col>
+                    <Col span={6} style={{ paddingLeft: 10 }}>
+                      订单号：{item.order_sn}
+                    </Col>
+                    <Col span={6} style={{ paddingLeft: 10 }}>
+                      总金额：{item.total_amount}
+                    </Col>
                   </Row>
-                  <Card.Grid style={bigStyle}>
-                    <Row style={{ height: '100%' }}>
-                      <Col span={5}>收货人：{item.consignee}</Col>
-                      <Col span={6}>联系电话：{item.mobile}</Col>
-                      <Col span={13}>
-                        地址：{item.province_name +
-                          item.city_name +
-                          item.district_name +
-                          item.address}
-                      </Col>
-                    </Row>
-                  </Card.Grid>
+                  {/* <Card.Grid style={bigStyles}> */}
+                  <Row style={bigStyles}>
+                    <Col span={5} style={{ paddingLeft: 20 }}>
+                      收货人：{item.consignee}
+                    </Col>
+                    <Col span={6} style={{ paddingLeft: 10 }}>
+                      联系电话：{item.mobile}
+                    </Col>
+                    <Col span={13}>
+                      地址：{item.province_name +
+                        item.city_name +
+                        item.district_name +
+                        item.address}
+                    </Col>
+                  </Row>
+                  {/* </Card.Grid> */}
                   {item.order_status === 2 ? (
-                    <Card.Grid style={smallStyle}>
-                      <Button type="primary" onClick={this.editAddress.bind(this, item)}>
+                    <Row style={smallStyle}>
+                      <Button style={grayBtn} onClick={this.editAddress.bind(this, item)}>
                         修改地址
                       </Button>
-                    </Card.Grid>
-                  ) : null}
+                    </Row>
+                  ) : (
+                    <Row style={smallStyle} />
+                  )}
                   {item.has_order_pack &&
                     item.has_order_pack.map((res, index) => {
                       return (
                         <div key={res.pack_id}>
-                          <Row style={{ padding: 0, height: '100%' }}>
-                            <Card.Grid style={{ width: '100%' }}>
+                          <Card.Grid style={{ padding: 0, width: '100%' }}>
+                            <Row
+                              style={{ padding: 0, height: 48, paddingLeft: 20, fontSize: 12 }}
+                              align="middle"
+                              type="flex"
+                            >
                               <Col span={2}>包裹{index + 1}</Col>
                               <Col span={5}>订单号：{res.order_sn}</Col>
                               {/* <Col span={4}>状态：{oredrStatus[res.order_status]}</Col> */}
@@ -634,8 +677,8 @@ export default class Order extends PureComponent {
                                 )}
                                 </Col>
                             ) : null} */}
-                            </Card.Grid>
-                          </Row>
+                            </Row>
+                          </Card.Grid>
                         </div>
                       );
                     })}
@@ -643,7 +686,7 @@ export default class Order extends PureComponent {
                     bordered
                     showHeader={false}
                     dataSource={item.has_order_pack}
-                    rowKey={record => record.order_id}
+                    rowKey={record => record.order_id + record.pack_id}
                     columns={detailColumns}
                     pagination={false}
                   />
@@ -760,7 +803,7 @@ export default class Order extends PureComponent {
               />
             </Col>
           </Row>
-          <Button type="primary" loading={loading} onClick={this.setShip}>
+          <Button loading={loading} onClick={this.setShip}>
             {isEditType ? '修改发货' : '确认发货'}
           </Button>
         </Modal>

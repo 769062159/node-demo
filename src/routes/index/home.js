@@ -449,10 +449,7 @@ export default class Home extends PureComponent {
   };
   // 新增修改提交
   handleSubmit = () => {
-    const {
-      dispatch,
-      indexs: { homeForm, uploadHomeImg, homeGoods, homeLive },
-    } = this.props;
+    const { dispatch, indexs: { homeForm, uploadHomeImg, homeGoods, homeLive } } = this.props;
     if (!uploadHomeImg.length) {
       message.error('请上传封面');
       return;
@@ -580,14 +577,7 @@ export default class Home extends PureComponent {
 
   render() {
     const {
-      indexs: {
-        homeList: datas,
-        homeListPage,
-        uploadHomeImg,
-        homeForm,
-        homeGoods,
-        homeLive,
-      },
+      indexs: { homeList: datas, homeListPage, uploadHomeImg, homeForm, homeGoods, homeLive },
       loading,
     } = this.props;
     // const { getFieldDecorator } = this.props.form;
