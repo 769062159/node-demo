@@ -33,6 +33,7 @@ const bigStyles = {
   paddingLeft: 0,
   height: '50px',
   backgroundColor: '#F5F5F5',
+  fontSize: 12,
 };
 const smallStyle = {
   display: 'inline-block',
@@ -43,6 +44,7 @@ const smallStyle = {
   //   textAlign: 'center',
   height: '50px',
   backgroundColor: '#F5F5F5',
+  fontSize: 12,
 };
 const grayBtn = {
   backgroundColor: '#E3E3E3',
@@ -93,22 +95,8 @@ export default class Order extends PureComponent {
     receiptName: '',
     addressArr: [],
     orderId: '',
+    values: {}, // form表单的查询条件
   };
-
-  // 换页
-  // handleTableChange = pagination => {
-  //   const { current } = pagination;
-  //   this.setState({
-  //     pagination: current,
-  //   });
-  //   const { dispatch } = this.props;
-  //   dispatch({
-  //     type: 'indexs/fetchAds',
-  //     payload: {
-  //       pagination: current,
-  //     },
-  //   });
-  // };
 
   componentDidMount() {
     const { dispatch } = this.props;
@@ -336,6 +324,9 @@ export default class Order extends PureComponent {
         values.start_order_amount = minPrice;
         values.end_order_amount = maxPrice;
       }
+      this.setState({
+        values,
+      });
       dispatch({
         type: 'order/fetchOrder',
         payload: values,
@@ -586,26 +577,23 @@ export default class Order extends PureComponent {
           </Row>
           <List
             itemLayout="vertical"
-            // className={styles.noMouse}
-            // size="large"
             size="small"
             pagination={{
               onChange: page => {
                 this.setState({
                   page,
                 });
+                const { values } = this.state;
+                values.page = page;
                 const { dispatch } = this.props;
                 dispatch({
                   type: 'order/fetchOrder',
-                  payload: {
-                    page,
-                  },
+                  payload: values,
                 });
               },
               ...orderListPage,
             }}
             dataSource={orderList}
-            // footer={<div><b>ant design</b> footer part</div>}
             renderItem={item => (
               <List.Item key={item.order_sn} className={styles.listItem}>
                 <Card className={styles.RowItem} hoverable={false}>
@@ -624,22 +612,22 @@ export default class Order extends PureComponent {
                       总金额：{item.total_amount}
                     </Col>
                   </Row>
-                  {/* <Card.Grid style={bigStyles}> */}
-                  <Row style={bigStyles}>
-                    <Col span={5} style={{ paddingLeft: 20 }}>
-                      收货人：{item.consignee}
-                    </Col>
-                    <Col span={6} style={{ paddingLeft: 10 }}>
-                      联系电话：{item.mobile}
-                    </Col>
-                    <Col span={13}>
-                      地址：{item.province_name +
-                        item.city_name +
-                        item.district_name +
-                        item.address}
-                    </Col>
-                  </Row>
-                  {/* </Card.Grid> */}
+                  <div style={bigStyles}>
+                    <Row align="middle" type="flex" style={{ height: '100%' }}>
+                      <Col span={5} style={{ paddingLeft: 20 }}>
+                        收货人：{item.consignee}
+                      </Col>
+                      <Col span={6} style={{ paddingLeft: 10 }}>
+                        联系电话：{item.mobile}
+                      </Col>
+                      <Col span={13}>
+                        地址：{item.province_name +
+                          item.city_name +
+                          item.district_name +
+                          item.address}
+                      </Col>
+                    </Row>
+                  </div>
                   {item.order_status === 2 ? (
                     <Row style={smallStyle}>
                       <Button style={grayBtn} onClick={this.editAddress.bind(this, item)}>
@@ -661,22 +649,7 @@ export default class Order extends PureComponent {
                             >
                               <Col span={2}>包裹{index + 1}</Col>
                               <Col span={5}>订单号：{res.order_sn}</Col>
-                              {/* <Col span={4}>状态：{oredrStatus[res.order_status]}</Col> */}
                               <Col span={3}>运费：{res.pack_shipping_fee}</Col>
-                              {/* <Col span={3}>发货类型：{warehouseType[res.warehouse_type]}</Col>
-                            {res.pack_express_sn ? (
-                                <Col span={3}>快递单号：{res.pack_express_sn}</Col>
-                            ) : null}
-                            {res.pack_express_name ? (
-                                <Col span={3}>快递公司：{res.pack_express_name}</Col>
-                            ) : null}
-                            {res.pack_shipping_time ? (
-                                <Col span={3}>
-                                配送时间：{moment(res.pack_shipping_time * 1000).format(
-                                    'YYYY-MM-DD HH:mm:ss'
-                                )}
-                                </Col>
-                            ) : null} */}
                             </Row>
                           </Card.Grid>
                         </div>
@@ -690,79 +663,6 @@ export default class Order extends PureComponent {
                     columns={detailColumns}
                     pagination={false}
                   />
-                  {/* {item.has_order_pack.map((res, index) => {
-                    return (
-                      <div key={res.pack_id}>
-                        <Card.Grid style={bigStyles}>
-                          <Card bordered={false} hoverable={false}>
-                            <Card.Grid style={allStyle}>
-                              <Row gutter={24}>
-                                <Col span={2}>包裹{index + 1}</Col>
-                                <Col span={5}>sn：{res.order_sn}</Col>
-                                <Col span={4}>状态：{oredrStatus[res.order_status]}</Col>
-                                <Col span={3}>运费：{res.pack_shipping_fee}</Col>
-                                <Col span={3}>发货类型：{warehouseType[res.warehouse_type]}</Col>
-                                {res.pack_express_sn ? (
-                                  <Col span={3}>快递单号：{res.pack_express_sn}</Col>
-                                ) : null}
-                                {res.pack_express_name ? (
-                                  <Col span={3}>快递公司：{res.pack_express_name}</Col>
-                                ) : null}
-                                {res.pack_shipping_time ? (
-                                  <Col span={3}>
-                                    配送时间：{moment(res.pack_shipping_time * 1000).format(
-                                      'YYYY-MM-DD HH:mm:ss'
-                                    )}
-                                  </Col>
-                                ) : null}
-                              </Row>
-                            </Card.Grid>
-                          </Card>
-                          <Row gutter={24}>
-                            <Col span={4}>图片</Col>
-                            <Col span={4}>商品名</Col>
-                            <Col span={4}>数量</Col>
-                            <Col span={4}>单价</Col>
-                            <Col span={4}>总价</Col>
-                            <Col span={4}>状态</Col>
-                          </Row>
-                          {res.has_order_goods.map(ele => {
-                            return (
-                              <Row key={ele.order_goods_id} align="middle" type="flex">
-                                <Col span={4}>
-                                  <img
-                                    src={ele.has_order_goods_sku.http_url}
-                                    alt="图片"
-                                    style={{ width: '80%' }}
-                                  />
-                                </Col>
-                                <Col span={4}>{ele.goods_name}</Col>
-                                <Col span={4}>{ele.has_order_goods_sku.total_goods_number}</Col>
-                                <Col span={4}>{ele.has_order_goods_sku.unit_price}</Col>
-                                <Col span={4}>{ele.has_order_goods_sku.price}</Col>
-                                <Col span={4}>{ele.goods_name}</Col>
-                              </Row>
-                            );
-                          })}
-                        </Card.Grid>
-                        <Card.Grid style={smallStyles}>
-                          <Row>
-                            <Col>
-                              {res.order_status === 2 ? (
-                                <Button type="primary" onClick={this.ship.bind(this, res.pack_id)}>
-                                  发货
-                                </Button>
-                              ) : res.order_status === 3 ? (
-                                <Button type="primary" onClick={this.editShip.bind(this, res)}>
-                                  修改发货
-                                </Button>
-                              ) : res.order_status === 1 ? null : null}
-                            </Col>
-                          </Row>
-                        </Card.Grid>
-                      </div>
-                    );
-                  })} */}
                 </Card>
               </List.Item>
             )}

@@ -10,9 +10,9 @@ import styles from './TableList.less';
 const FormItem = Form.Item;
 // const Option = Select.Option;
 // const { TextArea } = Input;
-const { confirm } = Modal;
-const homeType = ['', '热销商品', '直播商品', '轮播图'];
-const jumpType = ['', '跳转商品', '跳转外部链接', '无跳转', '跳转直播间', '跳转录播'];
+// const { confirm } = Modal;
+// const homeType = ['', '热销商品', '直播商品', '轮播图'];
+// const jumpType = ['', '跳转商品', '跳转外部链接', '无跳转', '跳转直播间', '跳转录播'];
 const formItemLayout = {
   labelCol: {
     xs: { span: 24 },
@@ -197,6 +197,7 @@ export default class Home extends PureComponent {
           type: 'indexs/deleteHome',
           payload: {
             id,
+            type: 1,
             page: pagination,
           },
         });
@@ -328,26 +329,24 @@ export default class Home extends PureComponent {
     // const { getFieldDecorator } = this.props.form;
     const { homeVisible } = this.state;
     const progressColumns = [
-      {
-        title: '类型',
-        dataIndex: 'type',
-        key: 'type',
-        render: val => homeType[val],
-      },
-      {
-        title: '跳转类型',
-        dataIndex: 'jump_type',
-        render: val => jumpType[val],
-      },
+      //   {
+      //     title: '类型',
+      //     dataIndex: 'type',
+      //     key: 'type',
+      //     render: val => homeType[val],
+      //   },
+      //   {
+      //     title: '跳转类型',
+      //     dataIndex: 'jump_type',
+      //     render: val => jumpType[val],
+      //   },
       {
         title: '跳转关联',
-        dataIndex: 'remark',
-        render: (val, text) =>
-          text.jump_type === 1
-            ? val
-            : text.jump_type === 2
-              ? text.url
-              : text.jump_type === 4 ? text.remark : text.jump_type === 5 ? text.remark : '无关联',
+        dataIndex: 'target_name',
+      },
+      {
+        title: '排序',
+        dataIndex: 'sort',
       },
       {
         title: '创建时间',

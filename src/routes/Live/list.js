@@ -448,7 +448,7 @@ export default class Live extends PureComponent {
       {
         title: '直播封面',
         dataIndex: 'cover',
-        render: val => (val ? <img src={val} style={{ width: '200px' }} alt="图片" /> : null),
+        render: val => (val ? <img src={val} style={{ width: '80px' }} alt="图片" /> : null),
       },
       {
         title: '推流地址',

@@ -49,6 +49,7 @@ export default class GoodsList extends PureComponent {
     formValues: {},
     minPrice: '',
     maxPrice: '',
+    page: 1, // 页脚
   };
 
   componentDidMount() {
@@ -154,7 +155,7 @@ export default class GoodsList extends PureComponent {
 
   handleSearch = e => {
     e.preventDefault();
-
+    const { page } = this.state;
     const { dispatch, form } = this.props;
 
     form.validateFields((err, fieldsValue) => {
@@ -163,15 +164,13 @@ export default class GoodsList extends PureComponent {
       const values = {
         ...fieldsValue,
         updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
+        page,
       };
 
       this.setState({
         formValues: values,
       });
-      console.log(9999);
       const { minPrice, maxPrice } = this.state;
-      console.log(minPrice);
-      console.log(maxPrice);
       if (minPrice && maxPrice) {
         values.sell_goods_price_start = minPrice;
         values.sell_goods_price_end = maxPrice;

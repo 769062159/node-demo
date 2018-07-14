@@ -29,14 +29,14 @@ export default class FrontUserList extends PureComponent {
     dispatch({
       type: 'frontUser/fetchFrontUserList',
       payload: {
-        pagination,
+        page: pagination,
       },
     });
   }
 
   handleSearch = e => {
     e.preventDefault();
-
+    const { pagination } = this.state;
     const { dispatch, form } = this.props;
 
     form.validateFields((err, fieldsValue) => {
@@ -45,6 +45,7 @@ export default class FrontUserList extends PureComponent {
       const values = {
         ...fieldsValue,
         updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
+        page: pagination,
       };
 
       //   this.setState({
@@ -69,7 +70,7 @@ export default class FrontUserList extends PureComponent {
     dispatch({
       type: 'frontUser/fetchFrontUserList',
       payload: {
-        pagination,
+        page: pagination,
       },
     });
   };
@@ -86,12 +87,25 @@ export default class FrontUserList extends PureComponent {
     this.setState({
       pagination: current,
     });
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'frontUser/fetchFrontUserList',
-      payload: {
+    const { dispatch, form } = this.props;
+
+    form.validateFields((err, fieldsValue) => {
+      if (err) return;
+
+      const values = {
+        ...fieldsValue,
+        updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
         page: current,
-      },
+      };
+
+      //   this.setState({
+      //     formValues: values,
+      //   });
+      console.log(values);
+      dispatch({
+        type: 'frontUser/fetchFrontUserList',
+        payload: values,
+      });
     });
   };
 

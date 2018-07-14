@@ -440,6 +440,7 @@ export default class Home extends PureComponent {
           type: 'indexs/deleteHome',
           payload: {
             id,
+            type: 2,
             page: pagination,
           },
         });
@@ -603,13 +604,11 @@ export default class Home extends PureComponent {
       //   },
       {
         title: '跳转关联',
-        dataIndex: 'remark',
-        render: (val, text) =>
-          text.jump_type === 1
-            ? val
-            : text.jump_type === 2
-              ? text.url
-              : text.jump_type === 4 ? text.remark : text.jump_type === 5 ? text.remark : '无关联',
+        dataIndex: 'target_name',
+      },
+      {
+        title: '排序',
+        dataIndex: 'sort',
       },
       {
         title: '创建时间',

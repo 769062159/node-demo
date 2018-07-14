@@ -31,6 +31,7 @@ export default {
     LiveListPage: [], // 直播列表页脚
     LiveKey: '',
     GoodKey: '',
+    remark: '', // 用于记录livekey和goodkey对应的名字
   },
 
   effects: {
@@ -80,7 +81,7 @@ export default {
     },
     *deleteHome({ payload }, { call, put }) {
       yield call(deleteHome, payload);
-      const response = yield call(getHome, { page: payload.page });
+      const response = yield call(getHome, { page: payload.page, type: payload.type });
       yield put({
         type: 'getHome',
         payload: response,
@@ -146,10 +147,13 @@ export default {
       }
       let LiveKey = '';
       let GoodKey = '';
+      let remark = '';
       if (data.jump_type === 1) {
         GoodKey = data.target_id;
+        remark = data.target_name;
       } else if (data.jump_type === 4) {
         LiveKey = data.target_id;
+        remark = data.target_name;
       }
       return {
         ...state,
@@ -157,21 +161,29 @@ export default {
         uploadHomeImg: imgArr,
         LiveKey,
         GoodKey,
+        remark,
       };
     },
     selectGood(state, { payload }) {
       const { data } = payload;
-      console.log(data);
+      const GoodKey = [];
+      GoodKey.push(data.goods_id);
+      const remark = data.goods_name;
       return {
         ...state,
-        GoodKey: [data],
+        GoodKey,
+        remark,
       };
     },
     selectLive(state, { payload }) {
       const { data } = payload;
+      const LiveKey = [];
+      LiveKey.push(data.stv_live_id);
+      const remark = data.title;
       return {
         ...state,
-        LiveKey: [data],
+        LiveKey,
+        remark,
       };
     },
     getLiveList(state, { payload }) {

@@ -265,7 +265,7 @@ export default class Home extends PureComponent {
   };
   componentDidMount() {
     const { dispatch } = this.props;
-    const { pagination } = this.state;
+    // const { pagination } = this.state;
     const { id } = this.props.match.params;
     dispatch({
       type: 'indexs/fetchDetail',
@@ -273,13 +273,13 @@ export default class Home extends PureComponent {
         index_id: id,
       },
     });
-    dispatch({
-      type: 'indexs/fetchHome',
-      payload: {
-        page: pagination,
-        type: 3,
-      },
-    });
+    // dispatch({
+    //   type: 'indexs/fetchHome',
+    //   payload: {
+    //     page: pagination,
+    //     type: 3,
+    //   },
+    // });
     dispatch({
       type: 'indexs/fetchGoodList',
       payload: {
@@ -335,7 +335,7 @@ export default class Home extends PureComponent {
   };
   // 新增修改提交
   handleSubmit = () => {
-    const { dispatch, indexs: { homeForm, uploadHomeImg, GoodKey, LiveKey } } = this.props;
+    const { dispatch, indexs: { homeForm, uploadHomeImg, GoodKey, LiveKey, remark } } = this.props;
     if (uploadHomeImg.length) {
       homeForm.cover = uploadHomeImg[0].url;
     }
@@ -351,6 +351,7 @@ export default class Home extends PureComponent {
     } else if (homeForm.jump_type === 4) {
       homeForm.target_id = LiveKey[0];
     }
+    homeForm.target_name = remark;
     homeForm.page = pagination;
     dispatch({
       type: 'indexs/editHome',
@@ -472,7 +473,7 @@ export default class Home extends PureComponent {
     dispatch({
       type: 'indexs/selectGood',
       payload: {
-        data: record.goods_id,
+        data: record,
       },
     });
   };
@@ -481,7 +482,7 @@ export default class Home extends PureComponent {
     dispatch({
       type: 'indexs/selectLive',
       payload: {
-        data: record.stv_live_id,
+        data: record,
       },
     });
   };
