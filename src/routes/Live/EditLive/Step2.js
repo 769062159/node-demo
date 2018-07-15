@@ -229,6 +229,7 @@ const CustomizedForm = Form.create({
           <Select style={{ width: 200 }}>
             <Option value={1}>播放指定录播</Option>
             <Option value={2}>播放外部链接</Option>
+            <Option value={3}>播放腾讯链接</Option>
           </Select>
         )}
       </FormItem>
@@ -253,7 +254,7 @@ const CustomizedForm = Form.create({
             ))}
           </Select>
         </FormItem>
-      ) : liveForm.play_type === 2 ? (
+      ) : liveForm.play_type === 2 || liveForm.play_type === 3 ? (
         <Form.Item {...formItemLayout} label="播放地址">
           {getFieldDecorator('play_url', {})(<Input style={{ width: '400px' }} />)}
         </Form.Item>
