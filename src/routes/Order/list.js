@@ -14,6 +14,7 @@ import {
   Modal,
   Cascader,
   Table,
+  message,
 } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
@@ -127,6 +128,12 @@ export default class Order extends PureComponent {
   };
   setShip = () => {
     const { shipNumber, sn, expressId, isEditType } = this.state;
+    if (!sn) {
+      message.error('请输入订单编号');
+    }
+    if (!expressId) {
+      message.error('请选择快递公司');
+    }
     const { dispatch } = this.props;
     if (isEditType) {
       dispatch({
@@ -175,7 +182,7 @@ export default class Order extends PureComponent {
   };
   editShip = pack => {
     this.setState({
-      sn: pack.order_id,
+      sn: pack.pack_id,
       isSnModal: true,
       shipNumber: pack.pack_express_code,
       expressId: pack.pack_express_id,
@@ -641,28 +648,28 @@ export default class Order extends PureComponent {
                     item.has_order_pack.map((res, index) => {
                       return (
                         <div key={res.pack_id}>
-                          <Card.Grid style={{ padding: 0, width: '100%' }}>
-                            <Row
-                              style={{ padding: 0, height: 48, paddingLeft: 20, fontSize: 12 }}
-                              align="middle"
-                              type="flex"
-                            >
-                              <Col span={2}>包裹{index + 1}</Col>
-                              <Col span={5}>订单号：{res.order_sn}</Col>
-                              <Col span={3}>运费：{res.pack_shipping_fee}</Col>
-                            </Row>
-                          </Card.Grid>
+                          {/* <Card.Grid style={{ padding: 0, width: '100%' }}> */}
+                          <Row
+                            style={{ padding: 0, height: 48, paddingLeft: 20, fontSize: 12, borderTop: '1px solid #D2D2D2', borderBottom: '1px solid #D2D2D2' }}
+                            align="middle"
+                            type="flex"
+                          >
+                            <Col span={2}>包裹{index + 1}</Col>
+                            <Col span={5}>订单号：{res.order_sn}</Col>
+                            <Col span={3}>运费：{res.pack_shipping_fee}</Col>
+                          </Row>
+                          <Table
+                            bordered
+                            showHeader={false}
+                            // dataSource={item.has_order_pack}
+                            dataSource={[res]}
+                            rowKey={record => record.order_id + record.pack_id}
+                            columns={detailColumns}
+                            pagination={false}
+                          />
                         </div>
                       );
                     })}
-                  <Table
-                    bordered
-                    showHeader={false}
-                    dataSource={item.has_order_pack}
-                    rowKey={record => record.order_id + record.pack_id}
-                    columns={detailColumns}
-                    pagination={false}
-                  />
                 </Card>
               </List.Item>
             )}

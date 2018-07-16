@@ -348,6 +348,10 @@ class AddLiveStep2 extends React.PureComponent {
       message.error('请上传封面');
       return;
     }
+    if (!liveGoods.length) {
+      message.error('请选择商品');
+      return;
+    }
     if (!shareImg.length) {
       message.error('请上传分享图片');
       return;

@@ -392,7 +392,7 @@ export default class GoodsList extends PureComponent {
         render: (val, text) => (
           <Row style={{ width: 360 }}>
             <Col span={6}>
-              <img style={{ height: 80 }} src={text.img} alt="商品" />
+              <img style={{ height: 80, width: 80 }} src={text.img} alt="商品" />
             </Col>
             <Col span={18} style={{ fontSize: 14 }}>
               <div>{text.goods_name}</div>
