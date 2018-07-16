@@ -208,6 +208,9 @@ export const getRouterConfig = app => {
     '/finance/account': {
       component: dynamicWrapper(app, ['finance'], () => import('../routes/Finance/Account')),
     },
+    '/finance/withdraw': {
+      component: dynamicWrapper(app, ['finance'], () => import('../routes/Finance/Withdraw')),
+    },
     '/finance/detail/:id': {
       component: dynamicWrapper(app, ['finance'], () => import('../routes/Finance/Detail')),
     },

@@ -1,4 +1,9 @@
-import { getAccountList, getAccountDetail } from '../services/finance';
+import {
+  getAccountList,
+  getAccountDetail,
+  getWithdrawList,
+  updateWithdraw,
+} from '../services/finance';
 
 export default {
   namespace: 'finance',
@@ -9,6 +14,8 @@ export default {
     detailMsg: {}, // 详情的个人信息
     detailList: [], // 详情列表
     detailListPage: [], // 详情列表页脚
+    withdrawList: [], // table列表
+    withdrawListPage: {}, // table 页脚
   },
 
   effects: {
@@ -26,9 +33,35 @@ export default {
         payload: response,
       });
     },
+    *fetchWithdraw({ payload }, { call, put }) {
+      const response = yield call(getWithdrawList, payload);
+      yield put({
+        type: 'getWithdraw',
+        payload: response,
+      });
+    },
+    *updateWithdraw({ payload }, { call, put }) {
+      yield call(updateWithdraw, payload);
+      const response = yield call(getWithdrawList, { page: payload.page });
+      yield put({
+        type: 'getWithdraw',
+        payload: response,
+      });
+    },
   },
 
   reducers: {
+    getWithdraw(state, { payload }) {
+      const { data } = payload;
+      return {
+        ...state,
+        withdrawList: data.list,
+        withdrawListPage: {
+          pageSize: data.page,
+          total: data.total,
+        },
+      };
+    },
     getAccountList(state, { payload }) {
       const { data } = payload;
       return {

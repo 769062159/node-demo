@@ -16,4 +16,20 @@ export async function getAccountDetail(params) {
   });
 }
 
+// 提现列表
+export async function getWithdrawList(params) {
+    return request('/admin/withdraw/list', {
+      method: 'POST',
+      body: params,
+    });
+}
+
+// 同意/拒绝提现
+export async function updateWithdraw(params) {
+    return request('/admin/withdraw/update', {
+      method: 'POST',
+      body: params,
+    });
+}
+
 

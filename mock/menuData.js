@@ -126,6 +126,10 @@ export const menuData = [
         name: '佣金',
         path: 'account',
       },
+      {
+        name: '提现',
+        path: 'withdraw',
+      },
     ],
   },
   {
