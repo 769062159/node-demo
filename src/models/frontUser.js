@@ -4,6 +4,8 @@ import {
   addUserRank,
   updateUserRank,
   delUserRank,
+  updateUpLevel,
+  updateMemberLevel,
 } from '../services/frontUser.js';
 
 export default {
@@ -37,6 +39,22 @@ export default {
       yield put({
         type: 'getUserRankLists',
         payload: response.data,
+      });
+    },
+    *updateUpLevel({ payload }, { call, put }) {
+      yield call(updateUpLevel, { ...payload });
+      const response = yield call(getFrontUserList, { page: payload.page });
+      yield put({
+        type: 'getFrontUserList',
+        payload: response,
+      });
+    },
+    *updateMemberLevel({ payload }, { call, put }) {
+      yield call(updateMemberLevel, { ...payload });
+      const response = yield call(getFrontUserList, { page: payload.page });
+      yield put({
+        type: 'getFrontUserList',
+        payload: response,
       });
     },
     *delUserRank({ payload }, { call, put }) {

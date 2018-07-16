@@ -1,13 +1,27 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
 import moment from 'moment';
-import { Table, Card, Form, Row, Col, Input, Select, Button, Icon } from 'antd';
+import { Table, Card, Form, Row, Col, Input, Select, Button, Icon, Modal, message } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
 import styles from './TableList.less';
 
 const FormItem = Form.Item;
 const { Option } = Select;
+const formItemLayout = {
+  labelCol: {
+    span: 5,
+  },
+  wrapperCol: {
+    span: 19,
+  },
+};
+const formSubmitLayout = {
+  wrapperCol: {
+    span: 19,
+    offset: 5,
+  },
+};
 
 @connect(({ frontUser, loading }) => ({
   frontUser,
@@ -17,6 +31,9 @@ const { Option } = Select;
 export default class FrontUserList extends PureComponent {
   state = {
     pagination: 1, // 页脚
+    formVisible: false,
+    editDataId: 0,
+    type: 0,
     // formValues: {},
     expandForm: false,
     // header: {
@@ -30,6 +47,12 @@ export default class FrontUserList extends PureComponent {
       type: 'frontUser/fetchFrontUserList',
       payload: {
         page: pagination,
+      },
+    });
+    dispatch({
+      type: 'frontUser/fetchUserRankList',
+      payload: {
+        pagination,
       },
     });
   }
@@ -79,6 +102,55 @@ export default class FrontUserList extends PureComponent {
       expandForm: !this.state.expandForm,
     });
   };
+  // 修改信息
+  editDataMsg = (id, type, e) => {
+    e.preventDefault();
+    this.setState({
+      editDataId: id,
+      type,
+    });
+    this.showModal();
+  };
+  // 新增modal显示
+  showModal = () => {
+    this.setState({
+      formVisible: true,
+    });
+    this.renderForm();
+  };
+  // 新增取消
+  handAddleCancel = () => {
+    this.setState({
+      formVisible: false,
+      editDataId: 0,
+    });
+  };
+  // 新增修改提交
+  handleSubmit = (type, e) => {
+    e.preventDefault();
+    this.props.form.validateFieldsAndScroll((err, values) => {
+      if (!err) {
+        const { dispatch } = this.props;
+        const { editDataId, pagination, type } = this.state;
+        values.page = pagination;
+        values.user_id = editDataId;
+        if (type === 1) {
+          values.referee_id = values.level_id;
+          dispatch({
+            type: 'frontUser/updateUpLevel',
+            payload: values,
+          });
+        } else {
+          dispatch({
+            type: 'frontUser/updateMemberLevel',
+            payload: values,
+          });
+        }
+        message.success('修改成功');
+        this.handAddleCancel();
+      }
+    });
+  };
 
   // 换页
   handleTableChange = pagination => {
@@ -96,10 +168,6 @@ export default class FrontUserList extends PureComponent {
         updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
         page: current,
       };
-
-      //   this.setState({
-      //     formValues: values,
-      //   });
       console.log(values);
       dispatch({
         type: 'frontUser/fetchFrontUserList',
@@ -107,6 +175,77 @@ export default class FrontUserList extends PureComponent {
       });
     });
   };
+  renderAddForm() {
+    const { loading } = this.props;
+    const { getFieldDecorator } = this.props.form;
+    return (
+      <Form
+        onSubmit={this.handleSubmit.bind(this, 0)}
+        hideRequiredMark
+        style={{ marginTop: 8 }}
+        autoComplete="OFF"
+      >
+        <FormItem {...formItemLayout} label="上级id">
+          {getFieldDecorator('level_id', {
+            rules: [
+              {
+                required: true,
+                message: '请输入上级id',
+              },
+            ],
+          })(<Input />)}
+        </FormItem>
+        <FormItem style={{ marginTop: 32 }} {...formSubmitLayout}>
+          <Button type="primary" htmlType="submit" loading={loading}>
+            提交
+          </Button>
+        </FormItem>
+      </Form>
+    );
+  }
+  renderEditForm() {
+    const { loading, frontUser: { userRankList: datas } } = this.props;
+    const levelItem = [];
+    if (datas.length) {
+      datas.forEach(res => {
+        levelItem.push(
+          <Option value={res.id} key={res.id}>
+            {res.name}
+          </Option>
+        );
+      });
+    }
+    const { getFieldDecorator } = this.props.form;
+    return (
+      <Form
+        onSubmit={this.handleSubmit.bind(this, 1)}
+        hideRequiredMark
+        style={{ marginTop: 8 }}
+        autoComplete="OFF"
+      >
+        <FormItem {...formItemLayout} label="用户等级">
+          {getFieldDecorator('level_id', {
+            rules: [
+              {
+                required: true,
+                message: '请输入用户等级',
+              },
+            ],
+          })(<Select>{levelItem}</Select>)}
+        </FormItem>
+        <FormItem style={{ marginTop: 32 }} {...formSubmitLayout}>
+          <Button type="primary" htmlType="submit" loading={loading}>
+            修改
+          </Button>
+        </FormItem>
+      </Form>
+    );
+  }
+  // 渲染修改还是新增
+  renderForm() {
+    const { type } = this.state;
+    return type === 1 ? this.renderAddForm() : this.renderEditForm();
+  }
 
   renderSimpleForm() {
     const { getFieldDecorator } = this.props.form;
@@ -192,12 +331,13 @@ export default class FrontUserList extends PureComponent {
     );
   }
 
-  renderForm() {
+  renderInquire() {
     return this.state.expandForm ? this.renderAdvancedForm() : this.renderSimpleForm();
   }
 
   render() {
     const { frontUser: { frontUserList: datas, frontUserListPage }, loading } = this.props;
+    const { formVisible } = this.state;
     const progressColumns = [
       {
         title: '会员',
@@ -237,12 +377,37 @@ export default class FrontUserList extends PureComponent {
         render: val => <span>{moment(val * 1000).format('YYYY-MM-DD HH:mm:ss')}</span>,
         key: 'create_time',
       },
+      {
+        title: '操作',
+        render: record => (
+          <Fragment>
+            <Row>
+              <Button
+                type="primary"
+                size="small"
+                onClick={this.editDataMsg.bind(this, record.id, 1)}
+              >
+                设上级
+              </Button>
+            </Row>
+            <Row style={{ margin: '10px 0' }}>
+              <Button
+                type="primary"
+                size="small"
+                onClick={this.editDataMsg.bind(this, record.id, 2)}
+              >
+                设置等级
+              </Button>
+            </Row>
+          </Fragment>
+        ),
+      },
     ];
 
     return (
       <PageHeaderLayout>
         <Card bordered={false}>
-          <div className={styles.tableListForm}>{this.renderForm()}</div>
+          <div className={styles.tableListForm}>{this.renderInquire()}</div>
           <div className={styles.tableList}>
             <Table
               onChange={this.handleTableChange}
@@ -254,6 +419,15 @@ export default class FrontUserList extends PureComponent {
             />
           </div>
         </Card>
+        <Modal
+          title="修改"
+          visible={formVisible}
+          onCancel={this.handAddleCancel.bind(this)}
+          footer=""
+          destroyOnClose="true"
+        >
+          {this.renderForm()}
+        </Modal>
       </PageHeaderLayout>
     );
   }

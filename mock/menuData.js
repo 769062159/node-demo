@@ -104,6 +104,10 @@ export const menuData = [
         path: 'carousel',
       },
       {
+        name: '直播特卖背景',
+        path: 'background',
+      },
+      {
         name: '直播特卖',
         path: 'live-sale',
       },

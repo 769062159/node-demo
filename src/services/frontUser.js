@@ -39,3 +39,19 @@ export async function delUserRank(params) {
     body: params,
   });
 }
+
+// 修改用户上级
+export async function updateUpLevel(params) {
+  return request('/admin/member/update/referee', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+// 修改用户等级
+export async function updateMemberLevel(params) {
+  return request('/admin/member/update/level', {
+    method: 'POST',
+    body: params,
+  });
+}

@@ -75,8 +75,8 @@ const CustomizedForm = Form.create({
     props.onChange(changedFields);
   },
   mapPropsToFields(props) {
-    console.log(props);
     const { goods: { goodsDetail, systemType } } = props;
+    console.log(goodsDetail.shipping_template_id);
     const arr = {
       goods_name: Form.createFormField({
         value: goodsDetail.goods_name,
@@ -145,7 +145,7 @@ const CustomizedForm = Form.create({
         value: goodsDetail.shop_shipping_type,
       }),
       shipping_template_id: Form.createFormField({
-        value: goodsDetail.goods_shipping_template_id,
+        value: goodsDetail.shipping_template_id,
       }),
       shop_shipping_calculation_type: Form.createFormField({
         value: goodsDetail.shop_shipping_calculation_type,
@@ -197,6 +197,7 @@ const CustomizedForm = Form.create({
     return arr;
   },
   onValuesChange(_, values) {
+    console.log(33);
     console.log(values);
   },
 })(props => {
@@ -634,16 +635,26 @@ const CustomizedForm = Form.create({
               })(<Select>{shippingTypeItem}</Select>)}
             </Form.Item>
           </Col>
-          <Col span={12}>
-            {goodsDetail.shop_shipping_type === 0 ? (
+          <Col
+            span={12}
+            className={`${goodsDetail.shop_shipping_type === 0 ? '' : styles.borderHidden}`}
+          >
+            {/* {goodsDetail.shop_shipping_type === 0 ? (
               <Form.Item {...spcialLayouts} label="运费模版">
                 {getFieldDecorator('shipping_template_id', {
                   rules: [
                     { required: goodsDetail.shop_shipping_type === 0, message: '请填写运费模版' },
                   ],
-                })(<Select>{shippingTemplatesItem}</Select>)}
+                })(<Select><Option value={3}>1212</Option></Select>)}
               </Form.Item>
-            ) : null}
+            ) : null} */}
+            <Form.Item {...spcialLayouts} label="运费模版">
+              {getFieldDecorator('shipping_template_id', {
+                rules: [
+                  { required: goodsDetail.shop_shipping_type === 0, message: '请填写运费模版' },
+                ],
+              })(<Select>{shippingTemplatesItem}</Select>)}
+            </Form.Item>
           </Col>
         </Row>
         <Row>
@@ -996,6 +1007,7 @@ class EditGoodStep2 extends React.PureComponent {
     for (const key of Object.keys(val)) {
       obj[key] = val[key].value;
     }
+    console.log(obj);
     dispatch({
       type: 'goods/changeFormVal',
       payload: {

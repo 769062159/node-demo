@@ -2,7 +2,7 @@ import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
 import debounce from 'lodash/debounce';
 import moment from 'moment';
-// import copy from 'copy-to-clipboard';
+import copy from 'copy-to-clipboard';
 import { routerRedux } from 'dva/router';
 import {
   Table,
@@ -374,6 +374,10 @@ export default class Live extends PureComponent {
       },
     });
   };
+  copyBtn = val => {
+    copy(val);
+    message.success('成功复制到剪贴板');
+  };
 
   // 修改表单值
   changeFormVal = val => {
@@ -454,7 +458,9 @@ export default class Live extends PureComponent {
         title: '推流地址',
         dataIndex: 'rtmp_push',
         width: 280,
-        // render: val => (val ? <img src={val} style={{ width: '200px' }} alt="图片" /> : null),
+        render: val => (
+          <Icon type="copy" onClick={this.copyBtn.bind(this, val)} style={{ fontSize: 20 }} />
+        ),
       },
       {
         title: '创建时间',

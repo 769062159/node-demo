@@ -152,6 +152,9 @@ export const getRouterConfig = app => {
     '/market/EditForm/:id': {
       component: dynamicWrapper(app, ['indexs'], () => import('../routes/Index/EditForm')),
     },
+    '/market/background': {
+      component: dynamicWrapper(app, ['config'], () => import('../routes/Index/Background')),
+    },
     '/market/carousel': {
       component: dynamicWrapper(app, ['indexs'], () => import('../routes/Index/Carousel')),
     },
@@ -203,6 +206,12 @@ export const getRouterConfig = app => {
     '/live/edit-vod/result': {
       identity: 'common',
       component: dynamicWrapper(app, ['live'], () => import('../routes/Live/EditVod/Step3')),
+    },
+    // 首页配置
+    '/configuration/background': {
+      component: dynamicWrapper(app, ['config'], () =>
+        import('../routes/Configuration/Background')
+      ),
     },
     // 财务
     '/finance/account': {

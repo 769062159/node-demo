@@ -48,7 +48,6 @@ class EditInputNumber extends PureComponent {
   handleChange = e => {
     let values = e.target.value;
     const { totalStock, attrTable, value } = this.props;
-    console.log(22);
     if (attrTable && attrTable.length) {
       if (typeof totalStock === 'undefined') {
         values = 0;
@@ -57,10 +56,6 @@ class EditInputNumber extends PureComponent {
         attrTable.forEach(ele => {
           num -= ele.store_nums;
         });
-        console.log(999);
-        console.log(num);
-        console.log(values);
-        console.log(attrTable);
         if (num < values) {
           values = num;
         }
@@ -82,10 +77,6 @@ class EditInputNumber extends PureComponent {
           attrTable.forEach(ele => {
             num -= ele.store_nums;
           });
-          console.log(999);
-          console.log(num);
-          console.log(value);
-          console.log(attrTable);
           if (num < value) {
             value = num < 0 ? 0 : num;
           }

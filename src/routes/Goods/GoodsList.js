@@ -35,7 +35,7 @@ const statusMap = ['processing', 'processing', 'error'];
 const goodsStatus = ['上架', '未上架', '下架'];
 // const goodsTypeStatus = ['普通商品', '一元购', '秒杀', '众筹'];
 // const payType = ['拍下减库存', '付款减库存'];
-const isTrue = ['是', '否'];
+const isTrue = ['否', '是'];
 
 @connect(({ goods, loading }) => ({
   goods,

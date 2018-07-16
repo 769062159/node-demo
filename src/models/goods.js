@@ -395,6 +395,7 @@ export default {
         ...goodsDetail,
         ...payload.obj,
       };
+      console.log(goodsDetail);
       return {
         ...state,
         goodsDetail,
@@ -550,6 +551,7 @@ export default {
       const uploadGoodsImg = [];
       let attrTable = [];
       if (goodsDetail.goods_id) {
+        goodsDetail.shipping_template_id = goodsDetail.goods_shipping_template_id;
         const arrId = new Set();
         const arrSonId = new Set();
         const goodSku = new Map(); // 用于做对比
