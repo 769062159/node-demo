@@ -114,7 +114,6 @@ export default class GoodsType extends PureComponent {
     this.setState({
       formValues: {},
     });
-    console.log(999);
     dispatch({
       type: 'goods/getAllType',
       payload: {},

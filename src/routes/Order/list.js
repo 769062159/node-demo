@@ -304,7 +304,6 @@ export default class Order extends PureComponent {
     // this.setState({
     //   formValues: {},
     // });
-    console.log(999);
     dispatch({
       type: 'order/fetchOrder',
       payload: {
@@ -650,7 +649,14 @@ export default class Order extends PureComponent {
                         <div key={res.pack_id}>
                           {/* <Card.Grid style={{ padding: 0, width: '100%' }}> */}
                           <Row
-                            style={{ padding: 0, height: 48, paddingLeft: 20, fontSize: 12, borderTop: '1px solid #D2D2D2', borderBottom: '1px solid #D2D2D2' }}
+                            style={{
+                              padding: 0,
+                              height: 48,
+                              paddingLeft: 20,
+                              fontSize: 12,
+                              borderTop: '1px solid #D2D2D2',
+                              borderBottom: '1px solid #D2D2D2',
+                            }}
                             align="middle"
                             type="flex"
                           >

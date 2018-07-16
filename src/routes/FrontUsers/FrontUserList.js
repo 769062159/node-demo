@@ -66,7 +66,6 @@ export default class FrontUserList extends PureComponent {
     // this.setState({
     //   formValues: {},
     // });
-    console.log(999);
     dispatch({
       type: 'frontUser/fetchFrontUserList',
       payload: {

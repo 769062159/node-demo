@@ -352,7 +352,6 @@ export default class Home extends PureComponent {
         goods_status: 0,
       },
     }).then(body => {
-      console.log(999);
       if (fetchId !== this.lastFetchId) {
         // for fetch callback order
         return;
@@ -376,7 +375,6 @@ export default class Home extends PureComponent {
         title: value,
       },
     }).then(body => {
-      console.log(999);
       if (fetchId !== this.lastFetchId) {
         // for fetch callback order
         return;

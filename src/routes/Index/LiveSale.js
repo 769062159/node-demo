@@ -354,12 +354,10 @@ export default class Home extends PureComponent {
         goods_status: 0,
       },
     }).then(body => {
-      console.log(999);
       if (fetchId !== this.lastFetchId) {
         // for fetch callback order
         return;
       }
-      console.log(body);
       const data = body.data.list.map(user => ({
         text: `${user.goods_id}`,
         value: user.goods_name,
@@ -378,12 +376,10 @@ export default class Home extends PureComponent {
         title: value,
       },
     }).then(body => {
-      console.log(999);
       if (fetchId !== this.lastFetchId) {
         // for fetch callback order
         return;
       }
-      console.log(body);
       const live = body.data.list.map(user => ({
         text: `${user.stv_live_id}`,
         value: user.title,

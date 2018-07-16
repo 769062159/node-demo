@@ -109,7 +109,6 @@ export default class GoodsList extends PureComponent {
       minPrice: '',
       maxPrice: '',
     });
-    console.log(999);
     dispatch({
       type: 'goods/fetchGoods',
       payload: {},
