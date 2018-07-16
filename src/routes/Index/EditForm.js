@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 // import moment from 'moment';
-import { Table, message, Modal, Form, Button, InputNumber, Upload, Select, Icon } from 'antd';
+import { Table, message, Modal, Form, Button, InputNumber, Upload, Select, Icon, Tag } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './Style.less';
 
@@ -195,7 +195,11 @@ const CustomizedForm = Form.create({
               </Select>
             )}
           </FormItem>
-          <FormItem {...formItemLayout} label="封面">
+          <FormItem
+            {...formItemLayout}
+            label="封面"
+            extra={<Tag color="blue">建议尺寸为750px*370px</Tag>}
+          >
             <Upload
               action="http://hlsj.test.seastart.cn/admin/upload"
               listType="picture-card"
