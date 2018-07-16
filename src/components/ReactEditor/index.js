@@ -65,6 +65,9 @@ export default class Demo extends React.Component {
       xhr.setRequestHeader('Authorization', token);
       xhr.send(fd);
     };
+    console.log(999);
+    console.log(this.props.valueSon);
+    console.log(this.props.goodsId);
     const editorProps = {
       height: 200,
       contentFormat: 'html',

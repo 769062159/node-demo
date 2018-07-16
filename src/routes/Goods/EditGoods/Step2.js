@@ -451,9 +451,9 @@ const CustomizedForm = Form.create({
         </Form.Item> */}
         <Row gutter={24}>
           <Col span={24}>
-            <Form.Item {...formItemLayouts} label="商品品牌">
+            <Form.Item {...formItemLayouts} label="商品店铺">
               {getFieldDecorator('brand_id', {
-                rules: [{ required: true, message: '请填写商品品牌' }],
+                rules: [{ required: true, message: '请填写商品店铺' }],
               })(<Select style={{ width: 200 }}>{brandListItem}</Select>)}
             </Form.Item>
           </Col>

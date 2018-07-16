@@ -233,12 +233,12 @@ export default class GoodBrand extends PureComponent {
         style={{ marginTop: 8 }}
         autoComplete="OFF"
       >
-        <FormItem label="品牌名" {...formItemLayout}>
+        <FormItem label="店铺" {...formItemLayout}>
           {getFieldDecorator('name', {
             rules: [
               {
                 required: true,
-                message: '请输入标题',
+                message: '请输入店铺',
               },
             ],
           })(<Input />)}
@@ -253,7 +253,7 @@ export default class GoodBrand extends PureComponent {
             ],
           })(<TextArea placeholder="请输入简介" autosize />)}
         </FormItem>
-        <FormItem label="品牌封面" {...formItemLayout}>
+        <FormItem label="店铺封面" {...formItemLayout}>
           {uploadItem}
         </FormItem>
         <FormItem style={{ marginTop: 32 }} {...formSubmitLayout}>
@@ -318,13 +318,13 @@ export default class GoodBrand extends PureComponent {
         style={{ marginTop: 8 }}
         autoComplete="OFF"
       >
-        <FormItem label="品牌名" {...formItemLayout}>
+        <FormItem label="店铺" {...formItemLayout}>
           {getFieldDecorator('name', {
             initialValue: editData.brand_name,
             rules: [
               {
                 required: true,
-                message: '请输入简介',
+                message: '请输入店铺',
               },
             ],
           })(<Input />)}
@@ -340,7 +340,7 @@ export default class GoodBrand extends PureComponent {
             ],
           })(<TextArea placeholder="请输入简介" autosize />)}
         </FormItem>
-        <FormItem label="品牌封面" {...formItemLayout}>
+        <FormItem label="店铺封面" {...formItemLayout}>
           {editData.cover !== 1 ? uploadItem : null}
         </FormItem>
         <FormItem style={{ marginTop: 32 }} {...formSubmitLayout}>
@@ -363,7 +363,7 @@ export default class GoodBrand extends PureComponent {
     const { formVisible } = this.state;
     const progressColumns = [
       {
-        title: '品牌名',
+        title: '店铺',
         dataIndex: 'brand_name',
         key: 'brand_name',
       },
@@ -375,7 +375,15 @@ export default class GoodBrand extends PureComponent {
       {
         title: '封面',
         dataIndex: 'logo_file_path',
-        render: val => (val ? <img src={val} style={{ width: '120px' }} alt="图片" /> : null),
+        render: val => (val ? <img src={val} style={{ width: '80px' }} alt="图片" /> : null),
+      },
+      {
+        title: '销售额',
+        dataIndex: 'sales_volume',
+      },
+      {
+        title: '销量',
+        dataIndex: 'sales_num',
       },
       {
         title: '创建时间',
@@ -421,7 +429,7 @@ export default class GoodBrand extends PureComponent {
           </div>
         </Card>
         <Modal
-          title="品牌"
+          title="店铺"
           visible={formVisible}
           onCancel={this.handAddleCancel.bind(this)}
           footer=""

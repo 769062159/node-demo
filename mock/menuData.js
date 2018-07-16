@@ -62,7 +62,7 @@ export const menuData = [
         path: 'good-attr',
       },
       {
-        name: '商品品牌',
+        name: '商品店铺',
         path: 'good-brand',
       },
       {

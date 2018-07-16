@@ -237,15 +237,17 @@ export default class Withdraw extends PureComponent {
       },
       {
         title: '操作',
+        dataIndex: 'status',
         // fixed: 'right',
         // width: 150,
-        render: (text, record) => (
-          <Fragment>
-            <a onClick={this.editDataMsg.bind(this, record, 2)}>驳回</a>
-            <Divider type="vertical" />
-            <a onClick={this.editDataMsg.bind(this, record, 1)}>同意</a>
-          </Fragment>
-        ),
+        render: (text, record) =>
+          text === 0 ? (
+            <Fragment>
+              <a onClick={this.editDataMsg.bind(this, record, 2)}>驳回</a>
+              <Divider type="vertical" />
+              <a onClick={this.editDataMsg.bind(this, record, 1)}>同意</a>
+            </Fragment>
+          ) : text === 1 ? null : null,
       },
     ];
 

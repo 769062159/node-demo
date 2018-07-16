@@ -227,9 +227,9 @@ const CustomizedForm = Form.create({
       <FormItem {...formItemLayout} label="播放类别">
         {getFieldDecorator('play_type', {})(
           <Select style={{ width: 200 }}>
-            <Option value={1}>播放拉流地址</Option>
-            <Option value={2}>播放点播地址</Option>
-            <Option value={3}>播放腾讯视频</Option>
+            <Option value={1}>拉流地址</Option>
+            <Option value={2}>点播地址</Option>
+            <Option value={3}>腾讯视频</Option>
           </Select>
         )}
       </FormItem>

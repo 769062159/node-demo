@@ -449,9 +449,9 @@ const CustomizedForm = Form.create({
         </Form.Item> */}
         <Row gutter={24}>
           <Col span={24}>
-            <Form.Item {...formItemLayouts} label="商品品牌">
+            <Form.Item {...formItemLayouts} label="商品店铺">
               {getFieldDecorator('brand_id', {
-                rules: [{ required: true, message: '请填写商品品牌' }],
+                rules: [{ required: true, message: '请填写商品店铺' }],
               })(<Select style={{ width: 200 }}>{brandListItem}</Select>)}
             </Form.Item>
           </Col>
@@ -726,7 +726,8 @@ const CustomizedForm = Form.create({
             rules: [{ required: true, message: '请填写商品参数' }],
           })(
             <ReactEditor
-              valueSon={goodsDetail.goods_des}
+              valueSon={goodsDetail.goods_des || ''}
+              goodsId={goodsDetail.goods_id}
               setDescription={setDescription.bind(this, 1)}
             />
           )}
@@ -736,7 +737,8 @@ const CustomizedForm = Form.create({
             rules: [{ required: true, message: '请填写描述' }],
           })(
             <ReactEditor
-              valueSon={goodsDetail.goods_description}
+              valueSon={goodsDetail.goods_description || ''}
+              goodsId={goodsDetail.goods_id}
               setDescription={setDescription.bind(this, 2)}
             />
           )}
@@ -895,6 +897,12 @@ class AddGoodStep2 extends React.PureComponent {
       type: 'goods/clearAttrTabe',
     });
   }
+  // componentWillUnmount() {
+  //   const { dispatch } = this.props;
+  //   dispatch({
+  //     type: 'goods/initGoodAttr',
+  //   });
+  // }
   onCheckAllAttr = index => {
     const { dispatch } = this.props;
     dispatch({

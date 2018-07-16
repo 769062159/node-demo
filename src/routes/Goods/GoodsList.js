@@ -404,7 +404,7 @@ export default class GoodsList extends PureComponent {
         ),
       },
       {
-        title: '商品品牌',
+        title: '商品店铺',
         dataIndex: 'brand_name',
         key: 'brand_name',
       },
