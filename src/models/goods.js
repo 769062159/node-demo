@@ -84,14 +84,23 @@ const toGet = (arr, attrArr, AttrArrMap, totalPrice, goodSN, weight) => {
   arrTable.forEach((res, index) => {
     const arrId = arrTableId[index].toString().split('|');
     const param = [];
+    const obj = {};
     arrId.forEach(ele => {
       param.push(AttrArrMap.get(Number(ele)));
     });
+    const classIdArr = [];
+    param.forEach(res => {
+      classIdArr.push(res.attr_class_id);
+      obj[`sku_class_name_${res.attr_class_id}`] = res.attr_class_name;
+      obj[`sku_attr_name_${res.attr_class_id}`] = res.attr_name;
+    });
     arr.push({
+      id: arrId.join(','),
       sku_goods_name: res,
       goods_sku_attr: param,
       profit: [],
       price: totalPrice,
+      classIdArr,
       store_nums: 0,
       attrIdArr: arrId,
       weight,
@@ -99,6 +108,7 @@ const toGet = (arr, attrArr, AttrArrMap, totalPrice, goodSN, weight) => {
       img: '',
       fileList: [],
       values: {},
+      ...obj,
     });
   });
   return arr;
@@ -117,6 +127,7 @@ export default {
     initGoodsAttr: [], // 初始化的商品分类数组
     typeName: '', // 选中的商品分类
     attrTable: [], // 属性table
+    attrTableCache: {}, // 属性table缓存
     AttrArrMap: new Map(), // 用来对比的map
     typePartial: '0', // 分佣类型
     totalPrice: 0, // 总价
@@ -489,8 +500,8 @@ export default {
       };
     },
     checkedLists(state, { payload }) {
-      const { initGoodsAttr, AttrArrMap, goodsDetail } = state;
-      const arr = [];
+      const { initGoodsAttr, AttrArrMap, goodsDetail, attrTableCache } = state;
+      let arr = [];
       initGoodsAttr[payload.index].checkArr = payload.checkedList;
       const attrData = initGoodsAttr.filter(res => {
         return res.checked;
@@ -503,6 +514,10 @@ export default {
         goodsDetail.goods_sn,
         goodsDetail.weight
       );
+      arr = arr.map(res => {
+        const arr = attrTableCache[res.id];
+        return arr ? arr : res;
+      });
       return {
         ...state,
         initGoodsAttr,
@@ -510,8 +525,8 @@ export default {
       };
     },
     checkeds(state, { payload }) {
-      const { initGoodsAttr, AttrArrMap, goodsDetail } = state;
-      const arr = [];
+      const { initGoodsAttr, AttrArrMap, goodsDetail, attrTableCache } = state;
+      let arr = [];
       initGoodsAttr[payload.index].checked = !initGoodsAttr[payload.index].checked;
       const attrData = initGoodsAttr.filter(res => {
         return res.checked;
@@ -524,6 +539,10 @@ export default {
         goodsDetail.goods_sn,
         goodsDetail.weight
       );
+      arr = arr.map(res => {
+        const arr = attrTableCache[res.id];
+        return arr ? arr : res;
+      });
       return {
         ...state,
         initGoodsAttr,
@@ -641,10 +660,10 @@ export default {
                 });
                 cacheArr = null;
                 const img = value.has_shop_goods_img[0];
-                res.img = img.http_url;
+                res.img = value.has_shop_goods_img.length ? img.http_url : '';
                 res.sku_goods_name = value.sku_goods_name;
                 res.flag = 1;
-                if (img.http_url) {
+                if (res.img) {
                   res.fileList = [
                     {
                       img: img.http_url,
@@ -680,6 +699,10 @@ export default {
       }
       goodsDetail.profit_type = goodsDetail.profit_type || 0;
       payload.goodsDetail = goodsDetail;
+      const attrTableCache = {};
+      attrTable.forEach(res => {
+        attrTableCache[res.id] = res;
+      });
       return {
         ...state,
         ...payload,
@@ -688,6 +711,7 @@ export default {
         totalPrice,
         uploadGoodsImg,
         attrTable,
+        attrTableCache,
       };
     },
     show(state, { payload }) {

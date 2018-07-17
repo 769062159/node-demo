@@ -22,7 +22,7 @@ export default {
       const response = yield call(getUserRankList, { ...payload });
       yield put({
         type: 'getUserRankLists',
-        payload: response.data,
+        payload: response,
       });
     },
     *addUserRank({ payload }, { call, put }) {
@@ -30,7 +30,7 @@ export default {
       const response = yield call(getUserRankList, { ...payload });
       yield put({
         type: 'getUserRankLists',
-        payload: response.data,
+        payload: response,
       });
     },
     *updateUserRank({ payload }, { call, put }) {
@@ -38,7 +38,7 @@ export default {
       const response = yield call(getUserRankList, { ...payload });
       yield put({
         type: 'getUserRankLists',
-        payload: response.data,
+        payload: response,
       });
     },
     *updateUpLevel({ payload }, { call, put }) {
@@ -62,7 +62,7 @@ export default {
       const response = yield call(getUserRankList, { ...payload });
       yield put({
         type: 'getUserRankLists',
-        payload: response.data,
+        payload: response,
       });
     },
     *fetchFrontUserList({ payload }, { call, put }) {
@@ -76,9 +76,10 @@ export default {
 
   reducers: {
     getUserRankLists(state, { payload }) {
+      const { data } = payload;
       return {
         ...state,
-        userRankList: payload.list,
+        userRankList: data.list,
       };
     },
     getFrontUserList(state, { payload }) {

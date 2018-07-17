@@ -116,14 +116,16 @@ export default class Warehouse extends PureComponent {
       },
     });
   };
+  changeAddress = (value, selectedOptions) => {
+    this.setState({
+      addressArr: selectedOptions,
+    });
+  };
   loadData = value => {
     //   console.log(value);
     // if (value.length === 3) {
 
     // }
-    this.setState({
-      addressArr: value,
-    });
     const { dispatch, address: { addressList } } = this.props;
     value = value[value.length - 1];
     const id = value.id;
@@ -290,7 +292,7 @@ export default class Warehouse extends PureComponent {
           <Cascader
             style={{ width: 300 }}
             options={addressList}
-            // onChange={this.changeAddress}
+            onChange={this.changeAddress}
             loadData={this.loadData}
             filedNames={{ label: 'region_name', value: 'id' }}
             changeOnSelect
@@ -349,7 +351,7 @@ export default class Warehouse extends PureComponent {
             defaultValue={addressArr}
             style={{ width: 300 }}
             options={addressList}
-            // onChange={this.changeAddress}
+            onChange={this.changeAddress}
             loadData={this.loadData}
             filedNames={{ label: 'region_name', value: 'id' }}
             changeOnSelect

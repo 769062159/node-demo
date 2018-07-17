@@ -10,13 +10,31 @@
 .content {
   padding: 32px 0;
   flex: 1;
+  z-index: 11;
+}
+
+.bgColor {
+  color: white;
+  div {
+    color: white !important;
+  }
+}
+
+.box {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  // width: 100%;
+  // height: 100%;
+  z-index: 11;
 }
 
 @media (min-width: @screen-md-min) {
   .container {
-    background-image: url('https://gw.alipayobjects.com/zos/rmsportal/TVYTbAXWheQpRcWDaDMu.svg');
+    // background-image: url('../../public/loginbg.jpg');
     background-repeat: no-repeat;
-    background-position: center 110px;
+    // background-position: center 110px;
     background-size: 100%;
   }
 

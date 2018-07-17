@@ -380,6 +380,22 @@ export default class EditableTable extends PureComponent {
         );
       });
     }
+    // console.log(77)
+    // console.log(attrTable);
+    // const columItem = [];
+    // if (attrTable.length) {
+    //   attrTable[0].attrIdArr.forEach(res => {
+    //     const str = `sku_class_name_${res}`;
+    //     const strs = `sku_attr_name_${res}`;
+    //     columItem.push(
+    //       <Column
+    //         title={str}
+    //         dataIndex={strs}
+    //         key={strs}
+    //       />
+    //     )
+    //   })
+    // }
 
     const columns = [
       {
@@ -389,13 +405,13 @@ export default class EditableTable extends PureComponent {
           <UploadImg fileList={text} onChange={this.onCellChange(index, 'fileList')} />
         ),
       },
-      {
-        title: 'sku属性',
-        dataIndex: 'sku_goods_name',
-        render: (text, record, index) => (
-          <EditableCell value={text} onChange={this.onCellChange(index, 'sku_goods_name')} />
-        ),
-      },
+      // {
+      //   title: 'sku属性',
+      //   dataIndex: 'sku_goods_name',
+      //   render: (text, record, index) => (
+      //     <EditableCell value={text} onChange={this.onCellChange(index, 'sku_goods_name')} />
+      //   ),
+      // },
       {
         title: '价格',
         dataIndex: 'price',
@@ -455,6 +471,20 @@ export default class EditableTable extends PureComponent {
         },
       },
     ];
+    console.log(attrTable);
+    if (attrTable.length) {
+      attrTable[0].classIdArr.forEach(res => {
+        const str = attrTable[0][`sku_class_name_${res}`];
+        const strs = `sku_attr_name_${res}`;
+        columns.unshift({
+          title: str,
+          dataIndex: strs,
+          render: (text, record, index) => (
+            <EditableCell value={text} onChange={this.onCellChange(index, strs)} />
+          ),
+        });
+      });
+    }
     return (
       <div>
         <Table

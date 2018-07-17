@@ -9,7 +9,6 @@ import {
   Modal,
   Row,
   Form,
-  Tag,
   //   Select,
   Icon,
   Button,
@@ -20,6 +19,7 @@ import {
 } from 'antd';
 // import StandardTable from 'components/StandardTable';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
+import styles from './Style.less';
 
 @connect(({ config, loading }) => ({
   config,
@@ -70,6 +70,8 @@ export default class Config extends PureComponent {
   };
   handleChange = ({ fileList }) => {
     if (fileList.length) {
+      console.log(999);
+      console.log(fileList);
       const arr = [];
       fileList.forEach(item => {
         if (item.status === 'done' && item.uploaded !== 'done') {
@@ -90,6 +92,8 @@ export default class Config extends PureComponent {
           //     fileList: [img],
           //   },
           // });
+        } else {
+          arr.push(item);
         }
         // return item;
       });
@@ -127,10 +131,7 @@ export default class Config extends PureComponent {
 
     return (
       <PageHeaderLayout>
-        <Row>
-          <Tag color="blue">首页直播商品背景图，尺寸为750px*460px</Tag>
-        </Row>
-        <Row style={{ margin: '10px 0' }}>
+        <Row style={{ margin: '10px 0' }} className={styles.uploadBtn}>
           <Upload
             action="http://hlsj.test.seastart.cn/admin/upload"
             headers={header}
@@ -143,11 +144,14 @@ export default class Config extends PureComponent {
           >
             {list.length >= 1 ? null : uploadButton}
           </Upload>
+          <div style={{ color: '#3E91F7', marginTop: 80 }}>
+            首页直播商品背景图，尺寸为750px*460px
+          </div>
         </Row>
         <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
           <img alt="example" style={{ width: '100%' }} src={previewImage} />
         </Modal>
-        <Row>
+        <Row type="flex" align="center">
           <Button type="primary" htmlType="submit" loading={loading} onClick={this.handleSubmit}>
             提交
           </Button>

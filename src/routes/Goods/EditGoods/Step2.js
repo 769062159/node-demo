@@ -1018,7 +1018,6 @@ class EditGoodStep2 extends React.PureComponent {
   // 提交表单
   submitForm = values => {
     const { goods: { uploadGoodsImg, goodsDetail }, dispatch } = this.props;
-    console.log(goodsDetail);
     if (!uploadGoodsImg.length) {
       message.error('请上传图片主体！');
       return;
@@ -1107,7 +1106,7 @@ class EditGoodStep2 extends React.PureComponent {
     values.shipping_template_id = values.shipping_template_id || 0;
     values.shop_shipping_price = values.shop_shipping_price || 0;
     values.profit_value = levelPartial;
-    values.goods_sku = attrTable;
+    // values.goods_sku = attrTable;
     // 暂时写死的字段
     values.goods_list_title = 0;
     values.goods_is_refund = 1;
@@ -1129,7 +1128,13 @@ class EditGoodStep2 extends React.PureComponent {
     } else {
       values.goods_shelves_time = 0;
     }
-    console.log(values);
+    // 附加sku_id
+    const skugoods = goodsDetail.has_shop_goods_sku;
+    attrTable.map((res, index) => {
+      res.sku_id = skugoods[index] ? skugoods[index].sku_id : 0;
+      return res;
+    });
+    values.goods_sku = attrTable;
     dispatch({
       type: 'goods/addShop',
       payload: {

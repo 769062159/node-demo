@@ -25,7 +25,25 @@
     }
   }
 }
-
+.uploadBtn {
+  display: flex;
+  justify-content: center;
+  border: 1px solid #bfbfbf;
+  padding: 50px 0;
+  flex-direction: column;
+  align-items: center;
+  :global {
+    .ant-upload-list-item {
+      width: 750px;
+      height: 460px;
+      border: none;
+      // th {
+      //   background: #3f90f6;
+      //   color: #fff;
+      // }
+    }
+  }
+}
 // .tableListForm {
 //   :global {
 //     .ant-form-item {

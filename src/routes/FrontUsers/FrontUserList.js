@@ -16,6 +16,7 @@ import {
   message,
 } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
+import EditForm from './EditForm';
 
 import styles from './TableList.less';
 
@@ -129,7 +130,7 @@ export default class FrontUserList extends PureComponent {
     this.setState({
       formVisible: true,
     });
-    this.renderForm();
+    // this.renderForm();
   };
   // 新增取消
   handAddleCancel = () => {
@@ -349,8 +350,11 @@ export default class FrontUserList extends PureComponent {
   }
 
   render() {
-    const { frontUser: { frontUserList: datas, frontUserListPage }, loading } = this.props;
-    const { formVisible } = this.state;
+    const {
+      frontUser: { frontUserList: datas, frontUserListPage, userRankList },
+      loading,
+    } = this.props;
+    const { formVisible, type, pagination, editDataId } = this.state;
     const progressColumns = [
       {
         title: '会员',
@@ -424,7 +428,15 @@ export default class FrontUserList extends PureComponent {
           footer=""
           destroyOnClose="true"
         >
-          {this.renderForm()}
+          {/* {this.renderForm()} */}
+          <EditForm
+            loading={loading}
+            userRankList={userRankList}
+            type={type}
+            editDataId={editDataId}
+            pagination={pagination}
+            handAddleCancel={this.handAddleCancel}
+          />
         </Modal>
       </PageHeaderLayout>
     );

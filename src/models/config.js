@@ -28,6 +28,7 @@ export default {
   reducers: {
     setAdsBackground(state, { payload }) {
       const { fileList } = payload;
+      console.log(fileList);
       return {
         ...state,
         list: fileList,
