@@ -396,7 +396,7 @@ export default class GoodsList extends PureComponent {
             <Col span={18} style={{ fontSize: 14 }}>
               <div>{text.goods_name}</div>
               <div>销售价:{text.sell_goods_price}</div>
-              <div>库存:{text.goods_total_inventory}</div>
+              <div>总库存:{text.goods_total_inventory}</div>
               <div>分类:{text.category_name}</div>
             </Col>
           </Row>
@@ -433,6 +433,11 @@ export default class GoodsList extends PureComponent {
       {
         title: '排序',
         dataIndex: 'goods_sort',
+      },
+      {
+        title: '剩余库存',
+        dataIndex: 'goods_total_inventory',
+        render: (val, record) => val - record.goods_total_sales,
       },
       // {
       //   title: '商品上架时间',

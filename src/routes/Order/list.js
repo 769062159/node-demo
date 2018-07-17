@@ -130,9 +130,11 @@ export default class Order extends PureComponent {
     const { shipNumber, sn, expressId, isEditType } = this.state;
     if (!sn) {
       message.error('请输入订单编号');
+      return false;
     }
     if (!expressId) {
       message.error('请选择快递公司');
+      return false;
     }
     const { dispatch } = this.props;
     if (isEditType) {
@@ -158,6 +160,7 @@ export default class Order extends PureComponent {
   };
   editAddressBtn = () => {
     const { mobile, addressInfo, receiptName, addressArr, orderId } = this.state;
+    console.log(addressArr);
     const { dispatch } = this.props;
     dispatch({
       type: 'order/editAddress',
@@ -230,10 +233,12 @@ export default class Order extends PureComponent {
       orderId: '',
     });
   };
-  loadData = value => {
+  changeAddress = (value, selectedOptions) => {
     this.setState({
-      addressArr: value,
+      addressArr: selectedOptions,
     });
+  };
+  loadData = value => {
     const { dispatch, address: { addressList } } = this.props;
     value = value[value.length - 1];
     const id = value.id;
@@ -754,7 +759,7 @@ export default class Order extends PureComponent {
                 defaultValue={addressArr}
                 style={{ width: 300 }}
                 options={addressList}
-                // onChange={this.changeAddress}
+                onChange={this.changeAddress}
                 loadData={this.loadData}
                 filedNames={{ label: 'region_name', value: 'id' }}
                 changeOnSelect

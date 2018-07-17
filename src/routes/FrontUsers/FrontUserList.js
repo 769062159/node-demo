@@ -1,7 +1,20 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
 import moment from 'moment';
-import { Table, Card, Form, Row, Col, Input, Select, Button, Icon, Modal, message } from 'antd';
+import {
+  Table,
+  Card,
+  Form,
+  Row,
+  Col,
+  Input,
+  Select,
+  Button,
+  Icon,
+  Divider,
+  Modal,
+  message,
+} from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
 import styles from './TableList.less';
@@ -381,24 +394,9 @@ export default class FrontUserList extends PureComponent {
         title: '操作',
         render: record => (
           <Fragment>
-            <Row>
-              <Button
-                type="primary"
-                size="small"
-                onClick={this.editDataMsg.bind(this, record.id, 1)}
-              >
-                设上级
-              </Button>
-            </Row>
-            <Row style={{ margin: '10px 0' }}>
-              <Button
-                type="primary"
-                size="small"
-                onClick={this.editDataMsg.bind(this, record.id, 2)}
-              >
-                设置等级
-              </Button>
-            </Row>
+            <a onClick={this.editDataMsg.bind(this, record.id, 1)}>设上级</a>
+            <Divider type="vertical" />
+            <a onClick={this.editDataMsg.bind(this, record.id, 2)}>设置等级</a>
           </Fragment>
         ),
       },

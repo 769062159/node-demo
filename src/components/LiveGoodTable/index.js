@@ -185,6 +185,7 @@ export default class Live extends PureComponent {
         title: '库存',
         width: 80,
         dataIndex: 'goods_total_inventory',
+        // render: (text, record) => (text - record.goods_total_sales),
       },
       {
         title: '操作',
