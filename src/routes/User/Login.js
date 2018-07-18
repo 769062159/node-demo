@@ -54,9 +54,12 @@ export default class LoginPage extends Component {
             login.type === 'account' &&
             !submitting &&
             this.renderMessage('账户或密码错误')}
-          <UserName name="user_name" placeholder="请输入账户" />
-          <Password name="password" placeholder="请输入密码" />
-          <Submit loading={submitting}>登录</Submit>
+          <div className={styles.title}>账户登录</div>
+          <div className={styles.inputBox}>
+            <UserName name="user_name" placeholder="请输入账户" />
+            <Password name="password" placeholder="请输入密码" />
+            <Submit loading={submitting}>登录</Submit>
+          </div>
         </Login>
       </div>
     );

@@ -208,7 +208,7 @@ export default class SiderMenu extends PureComponent {
     });
   };
   render() {
-    const { logo, collapsed, onCollapse } = this.props;
+    const { collapsed, onCollapse } = this.props;
     const { openKeys } = this.state;
     // 菜单栏折叠时不要显示弹出菜单
     const menuProps = collapsed
@@ -233,8 +233,8 @@ export default class SiderMenu extends PureComponent {
       >
         <div className={styles.logo} key="logo">
           <Link to="/">
-            <img src={logo} alt="logo" />
-            <h1>3.14</h1>
+            <img src="/logo/logo4.png" alt="logo" />
+            {/* <h1>量子加能</h1> */}
           </Link>
         </div>
         <Menu

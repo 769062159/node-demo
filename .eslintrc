@@ -58,6 +58,7 @@
     "no-bitwise": [0],
     "no-cond-assign": [0],
     "import/no-unresolved": [0],
+    "no-unused-vars": [0],
     "comma-dangle": [
       "error",
       {

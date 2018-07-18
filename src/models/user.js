@@ -87,8 +87,8 @@ export default {
       const response = yield call(getRoleList, payload);
       yield put({
         type: 'getRoleJoin',
-        payload: response.data,
-        param: payload.parent_id[0],
+        payload: response,
+        param: payload.parent_id,
       });
     },
     *fetchCurrent(_, { call, put }) {
@@ -125,6 +125,11 @@ export default {
     },
     joinGroup(state, { payload }) {
       const { list } = payload;
+      if (list.length) {
+        list.forEach(res => {
+          res.isLeaf = false;
+        });
+      }
       return {
         ...state,
         GroupRoleList: list,
@@ -137,9 +142,10 @@ export default {
       };
     },
     getRoleJoin(state, { payload, param }) {
+      const { data } = payload;
       state.GroupRoleList = state.GroupRoleList.map(res => {
         if (res.id === param) {
-          res.children = payload.list;
+          res.children = data.list;
         }
         return res;
       });

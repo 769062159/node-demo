@@ -22,7 +22,7 @@ import moment from 'moment';
 import ReactEditor from 'components/ReactEditor';
 import EditTable from 'components/editTable';
 import styles from './style.less';
-import { dedupe } from '../../../utils/utils';
+import { dedupe, deepCopy } from '../../../utils/utils';
 
 // const { TextArea } = Input;
 // const RadioGroup = Radio.Group;
@@ -75,7 +75,6 @@ const CustomizedForm = Form.create({
   },
   mapPropsToFields(props) {
     const { goods: { goodsDetail, systemType } } = props;
-    console.log(goodsDetail.goods_shelves_time);
     const arr = {
       goods_name: Form.createFormField({
         value: goodsDetail.goods_name,
@@ -200,9 +199,9 @@ const CustomizedForm = Form.create({
     }
     return arr;
   },
-  onValuesChange(_, values) {
-    console.log(values);
-  },
+  // onValuesChange(_, values) {
+  //   console.log(values);
+  // },
 })(props => {
   const { getFieldDecorator, validateFields } = props.form;
   const onValidateForm = e => {
@@ -330,6 +329,10 @@ const CustomizedForm = Form.create({
                   precision={2}
                   min={0}
                   max={goodsDetail.sell_goods_price}
+                  formatter={value =>
+                    `${goodsDetail.sell_goods_price && goodsDetail.cost_price ? value : 0}`
+                  }
+                  parser={value => value}
                   onChange={e => chgLevelHas(res, e)}
                 />
               )
@@ -826,7 +829,11 @@ const CustomizedForm = Form.create({
       <Card title="sku分佣">
         <Row>
           <Col span={8}>
-            <Form.Item {...profitLayout} label="分佣类型">
+            <Form.Item
+              {...profitLayout}
+              label="分佣类型"
+              extra={<Tag color="blue">请先输入销售价格和成本价</Tag>}
+            >
               {getFieldDecorator('profit_type', {
                 rules: [{ required: true, message: '请填写分拥类型' }],
               })(<Select>{profitTypeItem}</Select>)}
@@ -1101,7 +1108,6 @@ class AddGoodStep2 extends React.PureComponent {
         ],
       });
     }
-    console.log(attrTable);
     values.goods_img = [];
     uploadGoodsImg.forEach(res => {
       values.goods_img.push(res.url);
@@ -1117,7 +1123,7 @@ class AddGoodStep2 extends React.PureComponent {
     values.shipping_template_id = values.shipping_template_id || 0;
     values.shop_shipping_price = values.shop_shipping_price || 0;
     values.profit_value = levelPartial;
-    values.goods_sku = attrTable;
+    // values.goods_sku = attrTable;
     // 暂时写死的字段
     values.goods_list_title = 0;
     values.goods_is_refund = 1;
@@ -1139,6 +1145,15 @@ class AddGoodStep2 extends React.PureComponent {
     } else {
       values.goods_shelves_time = 0;
     }
+    attrTable.map(res => {
+      const arr = deepCopy(res.goods_sku_attr);
+      res.goods_sku_attr = arr.map(ele => {
+        ele.attr_name = res[`sku_attr_name_${ele.attr_class_id}`];
+        return ele;
+      });
+      return res;
+    });
+    values.goods_sku = attrTable;
     dispatch({
       type: 'goods/addShop',
       payload: {

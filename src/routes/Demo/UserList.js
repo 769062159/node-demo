@@ -34,26 +34,39 @@ export default class UserList extends Component {
     this.updataData();
   }
   // 更改部门
-  onDepChange = (value, selectedOptions) => {
-    this.state.depRole = value;
-    if (value.length > 1) {
-      return false;
-    }
-    const targetOption = selectedOptions[selectedOptions.length - 1];
-    targetOption.loading = true;
+  onDepChange = value => {
+    this.setState({
+      depRole: value,
+    });
+    // this.state.depRole = value;
+    // if (value.length > 1) {
+    //   return false;
+    // }
+    // const targetOption = selectedOptions[selectedOptions.length - 1];
+    // targetOption.loading = true;
 
-    // load options lazily
-    setTimeout(() => {
-      targetOption.loading = false;
-      const { dispatch } = this.props;
-      dispatch({
-        type: 'user/getJoinRole',
-        payload: {
-          status: 0,
-          parent_id: value,
-        },
-      });
-    }, 1000);
+    // setTimeout(() => {
+    //   targetOption.loading = false;
+    //   const { dispatch } = this.props;
+    //   dispatch({
+    //     type: 'user/getJoinRole',
+    //     payload: {
+    //       status: 0,
+    //       parent_id: value,
+    //     },
+    //   });
+    // }, 1000);
+  };
+  loadData = value => {
+    console.log(value);
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'user/getJoinRole',
+      payload: {
+        status: 0,
+        parent_id: value[0].id,
+      },
+    });
   };
   // 更新
   // update = () => {
@@ -153,7 +166,7 @@ export default class UserList extends Component {
     );
   };
   render() {
-    const { addUserVisible } = this.state;
+    const { addUserVisible, depRole } = this.state;
     const { loading, submitting, user: { UserList, UserListPage, GroupRoleList } } = this.props;
     console.log(GroupRoleList);
     const { getFieldDecorator } = this.props.form;
@@ -251,9 +264,11 @@ export default class UserList extends Component {
               </FormItem>
               <div>部门角色</div>
               <Cascader
-                filedNames={{ label: 'name', value: 'id' }}
+                defaultValue={depRole}
+                fieldNames={{ label: 'name', value: 'id' }}
                 options={GroupRoleList}
                 onChange={this.onDepChange}
+                loadData={this.loadData}
                 changeOnSelect
               />
               <FormItem style={{ marginTop: 32 }}>

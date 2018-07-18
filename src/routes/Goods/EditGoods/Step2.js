@@ -24,6 +24,7 @@ import ReactEditor from 'components/ReactEditor';
 // import { digitUppercase } from '../../../utils/utils';
 import EditTable from 'components/editTable';
 import styles from './style.less';
+import { deepCopy } from '../../../utils/utils';
 
 // const { TextArea } = Input;
 // const RadioGroup = Radio.Group;
@@ -825,7 +826,11 @@ const CustomizedForm = Form.create({
       <Card title="sku分佣">
         <Row>
           <Col span={8}>
-            <Form.Item {...profitLayout} label="分佣类型">
+            <Form.Item
+              {...profitLayout}
+              label="分佣类型"
+              extra={<Tag color="blue">请先输入销售价格和成本价</Tag>}
+            >
               {getFieldDecorator('profit_type', {
                 rules: [{ required: true, message: '请填写分拥类型' }],
               })(<Select>{profitTypeItem}</Select>)}
@@ -1007,7 +1012,6 @@ class EditGoodStep2 extends React.PureComponent {
     for (const key of Object.keys(val)) {
       obj[key] = val[key].value;
     }
-    console.log(obj);
     dispatch({
       type: 'goods/changeFormVal',
       payload: {
@@ -1132,8 +1136,21 @@ class EditGoodStep2 extends React.PureComponent {
     const skugoods = goodsDetail.has_shop_goods_sku;
     attrTable.map((res, index) => {
       res.sku_id = skugoods[index] ? skugoods[index].sku_id : 0;
+      const arr = deepCopy(res.goods_sku_attr);
+      res.goods_sku_attr = arr.map(ele => {
+        ele.attr_name = res[`sku_attr_name_${ele.attr_class_id}`];
+        return ele;
+      });
       return res;
     });
+    // attrTable.forEach(res => {
+    //   res.goods_sku_attr = res.goods_sku_attr.map(ele => {
+    //     ele.attr_name = res[`sku_attr_name_${ele.attr_class_id}`];
+    //     console.log(ele);
+    //     console.log(res[`sku_attr_name_${ele.attr_class_id}`]);
+    //     return ele;
+    //   })
+    // })
     values.goods_sku = attrTable;
     dispatch({
       type: 'goods/addShop',

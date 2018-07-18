@@ -401,12 +401,27 @@ export default {
       };
     },
     changeFormVals(state, { payload }) {
-      let { goodsDetail } = state;
+      let { goodsDetail, levelPartial, levelPartialSon } = state;
+      const { obj } = payload;
+      if (obj.profit_type === 0 || obj.profit_type === 1) {
+        if (levelPartial.length) {
+          levelPartial = levelPartial.map(res => {
+            goodsDetail[`level_${res.id}`] = 0;
+            res.value = 0;
+            return res;
+          });
+        }
+        if (levelPartialSon.length) {
+          levelPartialSon = levelPartialSon.map(res => {
+            res.value = 0;
+            return res;
+          });
+        }
+      }
       goodsDetail = {
         ...goodsDetail,
-        ...payload.obj,
+        ...obj,
       };
-      console.log(goodsDetail);
       return {
         ...state,
         goodsDetail,
@@ -628,6 +643,8 @@ export default {
         const attrData = payload.initGoodsAttr.filter(res => {
           return res.checked;
         });
+        console.log(888);
+        console.log(attrData);
         toGet(
           attrTable,
           attrData,
@@ -642,6 +659,7 @@ export default {
               if (isContained(key, res.attrIdArr)) {
                 res.goods_sku_sn = value.goods_sku_sn;
                 res.price = value.price;
+                res.weight = value.weight;
                 res.store_nums = value.store_nums;
                 let cacheArr = {};
                 res.profit = deepCopy(levelPartialSon);
@@ -663,6 +681,13 @@ export default {
                 res.img = value.has_shop_goods_img.length ? img.http_url : '';
                 res.sku_goods_name = value.sku_goods_name;
                 res.flag = 1;
+                // res.goods_sku_attr = deepCopy(value.has_shop_goods_sku_attr);
+                // console.log(11)
+                // console.log(res)
+                // console.log(value)
+                value.has_shop_goods_sku_attr.forEach(ele => {
+                  res[`sku_attr_name_${ele.attr_class_id}`] = ele.attr_value;
+                });
                 if (res.img) {
                   res.fileList = [
                     {

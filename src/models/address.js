@@ -27,6 +27,11 @@ export default {
     *fetchAll({ payload }, { call, put }) {
       const { addressArr } = payload;
       const { data } = yield call(getAddressList, { parent_id: addressArr[0] });
+      if (data.length) {
+        data.forEach(res => {
+          res.isLeaf = false;
+        });
+      }
       const { data: area } = yield call(getAddressList, { parent_id: addressArr[1] });
       yield put({
         type: 'save',

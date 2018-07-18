@@ -273,7 +273,7 @@ export default class FrontUserList extends PureComponent {
           </Col>
           <Col md={8} sm={24}>
             <FormItem label="用户id">
-              {getFieldDecorator('goods_name')(<Input placeholder="请输入" />)}
+              {getFieldDecorator('user_id')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
@@ -284,9 +284,9 @@ export default class FrontUserList extends PureComponent {
               <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>
                 重置
               </Button>
-              <a style={{ marginLeft: 8 }} onClick={this.toggleForm}>
+              {/* <a style={{ marginLeft: 8 }} onClick={this.toggleForm}>
                 展开 <Icon type="down" />
-              </a>
+              </a> */}
             </span>
           </Col>
         </Row>

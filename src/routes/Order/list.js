@@ -761,7 +761,7 @@ export default class Order extends PureComponent {
                 options={addressList}
                 onChange={this.changeAddress}
                 loadData={this.loadData}
-                filedNames={{ label: 'region_name', value: 'id' }}
+                fieldNames={{ label: 'region_name', value: 'id' }}
                 changeOnSelect
               />
             </Col>
