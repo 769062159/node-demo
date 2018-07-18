@@ -32,4 +32,11 @@ export async function updateWithdraw(params) {
     });
 }
 
+// 提现列表
+export async function getRefundList(params) {
+  return request('/admin/order/refund/list', {
+    method: 'POST',
+    body: params,
+  });
+}
 

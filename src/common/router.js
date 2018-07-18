@@ -223,6 +223,9 @@ export const getRouterConfig = app => {
     '/finance/detail/:id': {
       component: dynamicWrapper(app, ['finance'], () => import('../routes/Finance/Detail')),
     },
+    '/finance/refund': {
+      component: dynamicWrapper(app, ['finance'], () => import('../routes/Finance/Refund')),
+    },
     // 订单
     '/order/list': {
       component: dynamicWrapper(app, ['order', 'address'], () => import('../routes/Order/list')),

@@ -293,7 +293,7 @@ export default class Ads extends PureComponent {
         <FormItem
           label="广告封面"
           {...formItemLayout}
-          extra={<Tag color="blue">建议尺寸750px*370px</Tag>}
+          extra={<Tag color="blue">建议尺寸750px*370px，大小不得大于1M</Tag>}
         >
           {uploadItem}
         </FormItem>
@@ -383,7 +383,7 @@ export default class Ads extends PureComponent {
         <FormItem
           label="广告封面"
           {...formItemLayout}
-          extra={<Tag color="blue">建议尺寸750px*370px</Tag>}
+          extra={<Tag color="blue">建议尺寸750px*370px，大小不得大于1M</Tag>}
         >
           {editData.pic !== 1 ? uploadItem : null}
         </FormItem>

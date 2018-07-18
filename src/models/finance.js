@@ -3,6 +3,7 @@ import {
   getAccountDetail,
   getWithdrawList,
   updateWithdraw,
+  getRefundList,
 } from '../services/finance';
 
 export default {
@@ -11,6 +12,8 @@ export default {
   state: {
     accountList: [], // table列表
     accountListPage: {}, // table 页脚
+    refundList: [], // table列表
+    refundListPage: {}, // table 页脚
     detailMsg: {}, // 详情的个人信息
     detailList: [], // 详情列表
     detailListPage: [], // 详情列表页脚
@@ -23,6 +26,13 @@ export default {
       const response = yield call(getAccountList, payload);
       yield put({
         type: 'getAccountList',
+        payload: response,
+      });
+    },
+    *fetchRefundList({ payload }, { call, put }) {
+      const response = yield call(getRefundList, payload);
+      yield put({
+        type: 'getRefundList',
         payload: response,
       });
     },
@@ -51,6 +61,18 @@ export default {
   },
 
   reducers: {
+    getRefundList(state, { payload }) {
+      const { data } = payload;
+      console.log(data);
+      return {
+        ...state,
+        refundList: data.list,
+        refundListPage: {
+          pageSize: data.page,
+          total: data.total,
+        },
+      };
+    },
     getWithdraw(state, { payload }) {
       const { data } = payload;
       return {

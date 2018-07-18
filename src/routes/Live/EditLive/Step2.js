@@ -134,7 +134,7 @@ const CustomizedForm = Form.create({
       <Form.Item
         {...formItemLayout}
         label="直播封面"
-        extra={<Tag color="blue">建议尺寸750px*370px</Tag>}
+        extra={<Tag color="blue">建议尺寸750px*370px，大小不得大于1M</Tag>}
       >
         {getFieldDecorator('xxx', {
           rules: [{ required: true, message: '请填写直播封面' }],
@@ -160,7 +160,7 @@ const CustomizedForm = Form.create({
       <Form.Item
         {...formItemLayout}
         label="分享图片"
-        extra={<Tag color="blue">建议尺寸300px*240px</Tag>}
+        extra={<Tag color="blue">建议尺寸300px*240px，大小不得大于1M</Tag>}
       >
         {getFieldDecorator('yyy', {
           rules: [{ required: true }],

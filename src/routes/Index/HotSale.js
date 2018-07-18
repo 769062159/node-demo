@@ -125,7 +125,7 @@ const CustomizedForm = Form.create({
       <FormItem
         {...formItemLayout}
         label="排序"
-        extra={<Tag color="blue">建议尺寸220px*240px</Tag>}
+        extra={<Tag color="blue">建议尺寸220px*240px，大小不得大于1M</Tag>}
       >
         {getFieldDecorator('sort', {
           rules: [

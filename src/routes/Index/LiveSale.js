@@ -260,11 +260,11 @@ const CustomizedForm = Form.create({
         label="封面"
         extra={
           homeForm.type === 3 ? (
-            <Tag color="blue">建议尺寸750px*370px</Tag>
+            <Tag color="blue">建议尺寸750px*370px，大小不得大于1M</Tag>
           ) : homeForm.type === 2 ? (
-            <Tag color="blue">建议尺寸220px*240px</Tag>
+            <Tag color="blue">建议尺寸220px*240px，大小不得大于1M</Tag>
           ) : homeForm.type === 1 ? (
-            <Tag color="blue">建议尺寸370px*370px</Tag>
+            <Tag color="blue">建议尺寸370px*370px，大小不得大于1M</Tag>
           ) : null
         }
       >

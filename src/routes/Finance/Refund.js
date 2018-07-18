@@ -1,7 +1,7 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
 import moment from 'moment';
-import { Table, message, Modal, Card, Form, Input, Button, Tag, Divider } from 'antd';
+import { Table, message, Modal, Card, Form, Input, Button, Tag, Divider, Row, Col } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
 import styles from './TableList.less';
@@ -42,7 +42,7 @@ export default class Withdraw extends PureComponent {
     const { dispatch } = this.props;
     const { page } = this.state;
     dispatch({
-      type: 'finance/fetchWithdraw',
+      type: 'finance/fetchRefundList',
       payload: {
         page,
       },
@@ -105,7 +105,7 @@ export default class Withdraw extends PureComponent {
     });
     const { dispatch } = this.props;
     dispatch({
-      type: 'finance/fetchWithdraw',
+      type: 'finance/fetchRefundList',
       payload: {
         pagination: current,
       },
@@ -203,37 +203,40 @@ export default class Withdraw extends PureComponent {
     return type === 1 ? this.renderAgree() : this.renderRefuse();
   }
   render() {
-    const { finance: { withdrawList: datas, withdrawListPage }, loading } = this.props;
+    const { finance: { refundList: datas, refundListPage }, loading } = this.props;
+    console.log(datas);
     // const { getFieldDecorator } = this.props.form;
     const { formVisible } = this.state;
     const progressColumns = [
       {
-        title: '昵称/手机号',
-        dataIndex: 'real_name',
-        render: (val, record) => (
-          <div>
-            <div>{val}</div>
-            <div>{record.mobile}</div>
-          </div>
+        title: '退款商品',
+        dataIndex: 'http_url',
+        render: (val, text) => (
+          <Row style={{ width: 500 }}>
+            <Col span={4}>
+              <img style={{ height: 80, width: 80 }} src={val} alt="头像" />
+            </Col>
+            <Col span={14} style={{ fontSize: 14 }}>
+              <div>{text.goods_name}</div>
+              <div>属性:{text.attr_str}</div>
+              <div>总价:{text.price}</div>
+              {/* <div>上级:{text.referee && text.referee.nickname}</div> */}
+            </Col>
+          </Row>
         ),
       },
       {
         title: '申请时间',
         dataIndex: 'create_time',
-        render: val => <span>{moment(val * 1000).format('YYYY-MM-DD HH:mm:ss')}</span>,
+        render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
       },
       {
-        title: '申请金额（元）',
-        dataIndex: 'money',
+        title: '申请退款金额',
+        dataIndex: 'refund_apply_money',
       },
       {
-        title: '收款帐号/OpenID',
-        dataIndex: 'account_no',
-      },
-      {
-        title: '开户行',
-        dataIndex: 'bank_name',
-        render: (val, record) => <span>{record.bank_addr + val}</span>,
+        title: '退款理由',
+        dataIndex: 'refund_reason',
       },
       {
         title: '操作',
@@ -273,7 +276,7 @@ export default class Withdraw extends PureComponent {
               rowKey={record => record.id}
               loading={loading}
               columns={progressColumns}
-              pagination={withdrawListPage}
+              pagination={refundListPage}
             />
           </div>
         </Card>

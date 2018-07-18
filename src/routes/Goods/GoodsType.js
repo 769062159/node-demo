@@ -392,7 +392,7 @@ export default class GoodsType extends PureComponent {
         <FormItem
           {...formItemLayout}
           label="图片"
-          extra={<Tag color="blue">建议尺寸80px*80px</Tag>}
+          extra={<Tag color="blue">建议尺寸80px*80px，大小不得大于1M</Tag>}
         >
           {uploadItem}
         </FormItem>
@@ -520,7 +520,7 @@ export default class GoodsType extends PureComponent {
         <FormItem
           {...formItemLayout}
           label="图片"
-          extra={<Tag color="blue">建议尺寸80px*80px</Tag>}
+          extra={<Tag color="blue">建议尺寸80px*80px，大小不得大于1M</Tag>}
         >
           {uploadItem}
         </FormItem>
