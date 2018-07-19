@@ -77,7 +77,6 @@ const CustomizedForm = Form.create({
   },
   mapPropsToFields(props) {
     const { goods: { goodsDetail, systemType } } = props;
-    console.log(goodsDetail.shipping_template_id);
     const arr = {
       goods_name: Form.createFormField({
         value: goodsDetail.goods_name,
@@ -198,7 +197,6 @@ const CustomizedForm = Form.create({
     return arr;
   },
   onValuesChange(_, values) {
-    console.log(33);
     console.log(values);
   },
 })(props => {
@@ -824,7 +822,7 @@ const CustomizedForm = Form.create({
         </Row>
       </Card> */}
       <Card title="sku分佣">
-        <Row>
+        {/* <Row>
           <Col span={8}>
             <Form.Item
               {...profitLayout}
@@ -837,7 +835,7 @@ const CustomizedForm = Form.create({
             </Form.Item>
           </Col>
         </Row>
-        <Row>{levelNumberItem}</Row>
+        <Row>{levelNumberItem}</Row> */}
         <div className={styles.borderList}>
           <span>属性名：</span>
           {attrItem}
@@ -1021,6 +1019,7 @@ class EditGoodStep2 extends React.PureComponent {
     }
     // 暂时写死的
     values.goods_sn = ' ';
+    values.profit_type = goodsDetail.profit_type;
     const { goods: { attrTable, levelPartial } } = this.props;
     if (attrTable.length) {
       attrTable.forEach(ele => {
@@ -1047,9 +1046,23 @@ class EditGoodStep2 extends React.PureComponent {
         });
         ele.profit = arr;
       });
+      // 附加sku_id
+      const skugoods = goodsDetail.has_shop_goods_sku;
+      if (attrTable[0].sku_goods_name !== '默认') {
+        attrTable.map((res, index) => {
+          res.sku_id = skugoods[index] ? skugoods[index].sku_id : 0;
+          const arr = deepCopy(res.goods_sku_attr);
+          res.goods_sku_attr = arr.map(ele => {
+            ele.attr_name = res[`sku_attr_name_${ele.attr_class_id}`];
+            return ele;
+          });
+          return res;
+        });
+      }
+      values.goods_sku = deepCopy(attrTable);
     } else {
       const arr = [];
-      if (values.profit_type === '1') {
+      if (values.profit_type === 1) {
         levelPartial.forEach(res => {
           arr.push({
             price: res.value,
@@ -1065,13 +1078,17 @@ class EditGoodStep2 extends React.PureComponent {
             100
           ).toFixed(2);
           arr.push({
-            price: nowPrice,
+            price: res.value,
             profit_value: nowPrice,
             id: res.id,
           });
         });
       }
-      attrTable.push({
+      // 附加sku_id
+      const skugoodsId = goodsDetail.has_shop_goods_sku[0].sku_id;
+      const goodsSkuArr = [];
+      goodsSkuArr.push({
+        sku_id: skugoodsId,
         sku_goods_name: '默认',
         store_nums: values.goods_total_inventory,
         goods_sku_sn: values.goods_sn,
@@ -1088,6 +1105,7 @@ class EditGoodStep2 extends React.PureComponent {
           },
         ],
       });
+      values.goods_sku = goodsSkuArr;
     }
     values.class_id = goodsDetail.class_id;
     values.category_id = goodsDetail.category_id;
@@ -1102,7 +1120,7 @@ class EditGoodStep2 extends React.PureComponent {
     values.supplier_id = values.supplier_id || 0;
     values.shipping_template_id = values.shipping_template_id || 0;
     values.shop_shipping_price = values.shop_shipping_price || 0;
-    values.profit_value = levelPartial;
+    values.profit_value = deepCopy(levelPartial);
     // values.goods_sku = attrTable;
     // 暂时写死的字段
     values.goods_list_title = 0;
@@ -1125,17 +1143,6 @@ class EditGoodStep2 extends React.PureComponent {
     } else {
       values.goods_shelves_time = 0;
     }
-    // 附加sku_id
-    const skugoods = goodsDetail.has_shop_goods_sku;
-    attrTable.map((res, index) => {
-      res.sku_id = skugoods[index] ? skugoods[index].sku_id : 0;
-      const arr = deepCopy(res.goods_sku_attr);
-      res.goods_sku_attr = arr.map(ele => {
-        ele.attr_name = res[`sku_attr_name_${ele.attr_class_id}`];
-        return ele;
-      });
-      return res;
-    });
     // attrTable.forEach(res => {
     //   res.goods_sku_attr = res.goods_sku_attr.map(ele => {
     //     ele.attr_name = res[`sku_attr_name_${ele.attr_class_id}`];
@@ -1144,7 +1151,7 @@ class EditGoodStep2 extends React.PureComponent {
     //     return ele;
     //   })
     // })
-    values.goods_sku = attrTable;
+    console.log(99999);
     dispatch({
       type: 'goods/addShop',
       payload: {

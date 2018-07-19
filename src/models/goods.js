@@ -442,32 +442,33 @@ export default {
         sell_goods_price: sellGoodsPrice,
       } = goodsDetail;
       const id = payload.index;
-      levelPartial.forEach(res => {
+      const { value } = payload;
+      const levelPartialArr = deepCopy(levelPartial);
+      const levelPartialSonArr = deepCopy(levelPartialSon);
+      levelPartialArr.forEach(res => {
         if (res.id === id) {
-          res.value = payload.value;
+          res.value = value;
         }
       });
       if (profitType === 1) {
-        levelPartialSon.forEach(res => {
+        levelPartialSonArr.forEach(res => {
           if (res.id === id) {
-            res.value = payload.value;
+            res.value = deepCopy(value);
           }
         });
       } else {
-        levelPartialSon.forEach(res => {
+        levelPartialSonArr.forEach(res => {
           if (res.id === id) {
             res.value = Number(
-              (((sellGoodsPrice || 0) - (costPrice || 0)) * payload.value / 100).toFixed(2)
+              (((sellGoodsPrice || 0) - (costPrice || 0)) * value / 100).toFixed(2)
             );
           }
         });
       }
-      console.log(777);
-      console.log(levelPartial);
       return {
         ...state,
-        levelPartial,
-        levelPartialSon,
+        levelPartial: levelPartialArr,
+        levelPartialSon: levelPartialSonArr,
       };
     },
     changeTypePartials(state, { payload }) {
@@ -637,13 +638,12 @@ export default {
         // });
         // cache = null;
         goodsDetail.profit_type = typePartial;
+        levelPartialSon = deepCopy(levelPartial);
         if (typePartial === 0) {
-          levelPartialSon = levelPartial.map(res => {
+          levelPartialSon = levelPartialSon.map(res => {
             res.value = (res.value * totalPrice / 100).toFixed(2);
             return res;
           });
-        } else {
-          levelPartialSon = levelPartial;
         }
         const attrData = payload.initGoodsAttr.filter(res => {
           return res.checked;

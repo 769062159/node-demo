@@ -1036,13 +1036,14 @@ class AddGoodStep2 extends React.PureComponent {
   // 提交表单
   submitForm = values => {
     const { goods: { uploadGoodsImg }, dispatch } = this.props;
-    const { goods: { attrTable, levelPartial } } = this.props;
+    const { goods: { attrTable, levelPartial, goodsDetail } } = this.props;
     if (!uploadGoodsImg.length) {
       message.error('请上传图片主体！');
       return;
     }
     // 暂时写死的
     values.goods_sn = ' ';
+    values.profit_type = goodsDetail.profit_type;
     if (attrTable.length) {
       attrTable.forEach(ele => {
         ele.goods_sku_sn = ' ';
@@ -1066,6 +1067,15 @@ class AddGoodStep2 extends React.PureComponent {
         });
         ele.profit = arr;
       });
+      attrTable.map(res => {
+        const arr = deepCopy(res.goods_sku_attr);
+        res.goods_sku_attr = arr.map(ele => {
+          ele.attr_name = res[`sku_attr_name_${ele.attr_class_id}`];
+          return ele;
+        });
+        return res;
+      });
+      values.goods_sku = deepCopy(attrTable);
     } else {
       const arr = [];
       if (values.profit_type === 1) {
@@ -1084,13 +1094,14 @@ class AddGoodStep2 extends React.PureComponent {
             100
           ).toFixed(2);
           arr.push({
-            price: nowPrice,
+            price: res.value,
             profit_value: nowPrice,
             id: res.id,
           });
         });
       }
-      attrTable.push({
+      const goodsSkuArr = [];
+      goodsSkuArr.push({
         sku_goods_name: '默认',
         store_nums: values.goods_total_inventory,
         goods_sku_sn: values.goods_sn,
@@ -1107,6 +1118,7 @@ class AddGoodStep2 extends React.PureComponent {
           },
         ],
       });
+      values.goods_sku = goodsSkuArr;
     }
     values.goods_img = [];
     uploadGoodsImg.forEach(res => {
@@ -1122,7 +1134,7 @@ class AddGoodStep2 extends React.PureComponent {
     values.supplier_id = values.supplier_id || 0;
     values.shipping_template_id = values.shipping_template_id || 0;
     values.shop_shipping_price = values.shop_shipping_price || 0;
-    values.profit_value = levelPartial;
+    values.profit_value = deepCopy(levelPartial);
     // values.goods_sku = attrTable;
     // 暂时写死的字段
     values.goods_list_title = 0;
@@ -1145,15 +1157,17 @@ class AddGoodStep2 extends React.PureComponent {
     } else {
       values.goods_shelves_time = 0;
     }
-    attrTable.map(res => {
-      const arr = deepCopy(res.goods_sku_attr);
-      res.goods_sku_attr = arr.map(ele => {
-        ele.attr_name = res[`sku_attr_name_${ele.attr_class_id}`];
-        return ele;
-      });
-      return res;
-    });
-    values.goods_sku = attrTable;
+    // if (attrTable.length) {
+    //   attrTable.map(res => {
+    //     const arr = deepCopy(res.goods_sku_attr);
+    //     res.goods_sku_attr = arr.map(ele => {
+    //       ele.attr_name = res[`sku_attr_name_${ele.attr_class_id}`];
+    //       return ele;
+    //     });
+    //     return res;
+    //   });
+    // }
+    // values.goods_sku = deepCopy(attrTable);
     dispatch({
       type: 'goods/addShop',
       payload: {

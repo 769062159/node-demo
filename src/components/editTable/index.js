@@ -70,11 +70,11 @@ class EditInputNumber extends PureComponent {
   check = () => {
     this.setState({ editable: false });
     if (this.props.onChange) {
-      const { step, totalStock, attrTable } = this.props;
+      const { step, totalStock, attrTable, value: oldValue } = this.props;
       let { value } = this.state;
       if (attrTable && attrTable.length) {
         if (typeof totalStock !== 'undefined') {
-          let num = Number(totalStock);
+          let num = Number(totalStock) + parseInt(oldValue, 10);
           attrTable.forEach(ele => {
             num -= ele.store_nums;
           });
@@ -470,8 +470,7 @@ export default class EditableTable extends PureComponent {
         },
       },
     ];
-    console.log(attrTable);
-    if (attrTable.length) {
+    if (attrTable.length && attrTable[0].sku_goods_name !== '默认') {
       attrTable[0].classIdArr.forEach(res => {
         const str = attrTable[0][`sku_class_name_${res}`];
         const strs = `sku_attr_name_${res}`;
