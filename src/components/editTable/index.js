@@ -1,4 +1,5 @@
 import React, { PureComponent } from 'react';
+// import { deepCopy } from '../../utils/utils';
 import { Table, Input, Icon, Popconfirm, Upload, Modal, Row, Col, Form, InputNumber } from 'antd';
 
 class EditableCell extends PureComponent {
@@ -242,7 +243,6 @@ export default class EditableTable extends PureComponent {
         });
       }
     });
-    console.log(attrTable);
     this.setState({
       attrTable,
     });
@@ -255,7 +255,6 @@ export default class EditableTable extends PureComponent {
 
   onCellChange = (index, dataIndex) => {
     return value => {
-      console.log(value);
       const attrTable = [...this.state.attrTable];
       // const { totalStock } = this.props;
       // console.log(totalStock);
@@ -440,7 +439,7 @@ export default class EditableTable extends PureComponent {
         ),
       },
       {
-        title: '等级',
+        title: '分佣',
         dataIndex: 'level',
         render: (text, record, index) => {
           return (

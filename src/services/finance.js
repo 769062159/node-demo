@@ -40,3 +40,18 @@ export async function getRefundList(params) {
   });
 }
 
+// 修改提现状态
+export async function editRefundStatus(params) {
+  return request('/admin/order/refund/update/status', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+// 修改退款金额
+export async function editRefundMoney(params) {
+  return request('/admin/order/refund/update/money', {
+    method: 'POST',
+    body: params,
+  });
+}

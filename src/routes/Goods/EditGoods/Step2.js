@@ -911,13 +911,6 @@ class EditGoodStep2 extends React.PureComponent {
     });
   };
   onChangeSon = (index, checkedList) => {
-    // const arr = [];
-    // if (initGoodsAttr.length) {
-    //   const attrData = initGoodsAttr.filter(res => {
-    //     return res.checked
-    //   })
-    //   this.toGet(arr, {}, 0, attrData);
-    // }
     const { dispatch } = this.props;
     dispatch({
       type: 'goods/checkedList',

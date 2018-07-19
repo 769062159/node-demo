@@ -134,8 +134,15 @@ export const menuData = [
         name: '提现',
         path: 'withdraw',
       },
+    ],
+  },
+  {
+    name: '售后服务',
+    icon: 'shouhou',
+    path: 'saled',
+    children: [
       {
-        name: '退款',
+        name: '退款审核',
         path: 'refund',
       },
     ],

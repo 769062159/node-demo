@@ -1,7 +1,19 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
 import moment from 'moment';
-import { Table, message, Modal, Card, Form, Input, Button, Tag, Divider, Row, Col } from 'antd';
+import {
+  Table,
+  message,
+  Modal,
+  Card,
+  Form,
+  Input,
+  Button,
+  Divider,
+  Row,
+  Col,
+  InputNumber,
+} from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
 import styles from './TableList.less';
@@ -22,6 +34,8 @@ const formSubmitLayout = {
   },
 };
 const { TextArea } = Input;
+const refundType = ['默认', '退款', '退货'];
+const refundStatus = ['没有申请过退款', ' 退款申请中', '退款拒绝', '退款同意'];
 // const { confirm } = Modal;
 
 @connect(({ finance, loading }) => ({
@@ -64,6 +78,14 @@ export default class Withdraw extends PureComponent {
     });
     this.showModal();
   };
+  editMoney = (data, type, e) => {
+    e.preventDefault();
+    this.setState({
+      editData: data,
+      type,
+    });
+    this.showModal();
+  };
   // 新增modal显示
   showModal = () => {
     this.setState({
@@ -85,13 +107,26 @@ export default class Withdraw extends PureComponent {
       if (!err) {
         const { dispatch } = this.props;
         const { editData, page, type } = this.state;
-        values.page = page;
-        values.type = type;
-        values.id = editData.id;
-        dispatch({
-          type: 'finance/updateWithdraw',
-          payload: values,
-        });
+        if (type === 3) {
+          if (!values.money) {
+            message.error('请输入金额');
+            return false;
+          }
+          values.page = page;
+          values.order_goods_sku_id = editData.order_goods_sku_id;
+          dispatch({
+            type: 'finance/updateRefundMoney',
+            payload: values,
+          });
+        } else {
+          values.page = page;
+          values.type = type;
+          values.order_goods_sku_id = editData.order_goods_sku_id;
+          dispatch({
+            type: 'finance/updateRefundStatus',
+            payload: values,
+          });
+        }
         message.success('更新成功');
         this.handAddleCancel();
       }
@@ -111,6 +146,30 @@ export default class Withdraw extends PureComponent {
       },
     });
   };
+  moneyForm() {
+    const { loading } = this.props;
+    // const { editData } = this.state;
+    const { getFieldDecorator } = this.props.form;
+    return (
+      <Form
+        onSubmit={this.handleSubmit.bind(this)}
+        hideRequiredMark
+        style={{ marginTop: 8 }}
+        autoComplete="OFF"
+      >
+        <FormItem {...formItemLayout} label="修改金额">
+          {getFieldDecorator('money', {})(
+            <InputNumber step={0.01} precision={2} min={0.01} style={{ width: '200px' }} />
+          )}
+        </FormItem>
+        <FormItem style={{ marginTop: 32 }} {...formSubmitLayout}>
+          <Button type="primary" htmlType="submit" loading={loading}>
+            修改金额
+          </Button>
+        </FormItem>
+      </Form>
+    );
+  }
   renderAgree() {
     const { loading } = this.props;
     const { editData } = this.state;
@@ -149,16 +208,10 @@ export default class Withdraw extends PureComponent {
           </Col>
         </Row> */}
         <FormItem {...formItemLayout} style={{ marginBottom: 5 }} label="申请日期">
-          {moment(editData.create_time * 1000).format('YYYY-MM-DD HH:mm:ss')}
+          {moment(editData.create_time).format('YYYY-MM-DD HH:mm:ss')}
         </FormItem>
-        <FormItem {...formItemLayout} style={{ marginBottom: 5 }} label="申请金额">
-          {editData.money}
-        </FormItem>
-        <FormItem {...formItemLayout} style={{ marginBottom: 5 }} label="收款帐号">
-          {editData.account_no}
-        </FormItem>
-        <FormItem {...formItemLayout} style={{ marginBottom: 5 }} label="收款人">
-          {editData.real_name}
+        <FormItem {...formItemLayout} style={{ marginBottom: 5 }} label="提现金额">
+          {editData.refund_money}
         </FormItem>
         <FormItem {...formItemLayout} label="备注">
           {getFieldDecorator('remark', {
@@ -200,7 +253,7 @@ export default class Withdraw extends PureComponent {
   // 渲染修改还是新增
   renderForm() {
     const { type } = this.state;
-    return type === 1 ? this.renderAgree() : this.renderRefuse();
+    return type === 1 ? this.renderAgree() : type === 2 ? this.renderRefuse() : this.moneyForm();
   }
   render() {
     const { finance: { refundList: datas, refundListPage }, loading } = this.props;
@@ -211,19 +264,26 @@ export default class Withdraw extends PureComponent {
       {
         title: '退款商品',
         dataIndex: 'http_url',
+        width: 300,
         render: (val, text) => (
-          <Row style={{ width: 500 }}>
-            <Col span={4}>
+          <Row>
+            <Col style={{ display: 'inline-block', verticalAlign: 'top' }}>
               <img style={{ height: 80, width: 80 }} src={val} alt="头像" />
             </Col>
-            <Col span={14} style={{ fontSize: 14 }}>
+            <Col style={{ display: 'inline-block', marginLeft: 10 }}>
               <div>{text.goods_name}</div>
-              <div>属性:{text.attr_str}</div>
+              <div>属性:{text.attr_str.replace(/,/g, '')}</div>
               <div>总价:{text.price}</div>
               {/* <div>上级:{text.referee && text.referee.nickname}</div> */}
             </Col>
           </Row>
         ),
+      },
+      {
+        title: '用户昵称',
+        dataIndex: 'has_user',
+        width: 120,
+        render: val => val.nickname,
       },
       {
         title: '申请时间',
@@ -239,31 +299,36 @@ export default class Withdraw extends PureComponent {
         dataIndex: 'refund_reason',
       },
       {
+        title: '退款类型',
+        dataIndex: 'refund_type',
+        render: val => refundType[val],
+      },
+      {
+        title: '退款状态',
+        dataIndex: 'refund_status',
+        render: val => refundStatus[val],
+      },
+      {
         title: '操作',
-        dataIndex: 'status',
+        dataIndex: 'goods_id',
         // fixed: 'right',
         // width: 150,
         render: (text, record) =>
-          text === 0 ? (
+          record.refund_status === 1 ? (
             <Fragment>
               <a onClick={this.editDataMsg.bind(this, record, 2)}>驳回</a>
               <Divider type="vertical" />
               <a onClick={this.editDataMsg.bind(this, record, 1)}>同意</a>
+              <Divider type="vertical" />
+              <a onClick={this.editMoney.bind(this, record, 3)}>修改金额</a>
             </Fragment>
-          ) : text === 1 ? null : null,
+          ) : null,
       },
     ];
 
     return (
       <PageHeaderLayout>
         <Card bordered={false}>
-          <Tag
-            color="blue"
-            style={{ marginBottom: 20, width: '100%', whiteSpace: 'pre-wrap', height: 'auto' }}
-          >
-            由于发放佣金需要在微信商户平台开通企业付款到零钱这个功能才可以正常发放，所以请商户们需要提前开通此功能。此功能需要满足已入驻90日
-            ，有30天连续正常交易才可以去产品中心开通。详细请查看。微信支付企业付款
-          </Tag>
           <div className={styles.tableList}>
             {/* <div className={styles.tableListOperator}>
               <Button icon="plus" type="primary" onClick={this.showModal.bind(this)}>
@@ -273,7 +338,7 @@ export default class Withdraw extends PureComponent {
             <Table
               onChange={this.handleTableChange}
               dataSource={datas}
-              rowKey={record => record.id}
+              rowKey={record => record.order_goods_sku_id}
               loading={loading}
               columns={progressColumns}
               pagination={refundListPage}

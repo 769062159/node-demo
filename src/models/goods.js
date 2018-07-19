@@ -401,23 +401,23 @@ export default {
       };
     },
     changeFormVals(state, { payload }) {
-      let { goodsDetail, levelPartial, levelPartialSon } = state;
+      let { goodsDetail } = state;
       const { obj } = payload;
-      if (obj.profit_type === 0 || obj.profit_type === 1) {
-        if (levelPartial.length) {
-          levelPartial = levelPartial.map(res => {
-            goodsDetail[`level_${res.id}`] = 0;
-            res.value = 0;
-            return res;
-          });
-        }
-        if (levelPartialSon.length) {
-          levelPartialSon = levelPartialSon.map(res => {
-            res.value = 0;
-            return res;
-          });
-        }
-      }
+      // if (obj.profit_type === 0 || obj.profit_type === 1) {
+      //   if (levelPartial.length) {
+      //     levelPartial = levelPartial.map(res => {
+      //       goodsDetail[`level_${res.id}`] = 0;
+      //       res.value = 0;
+      //       return res;
+      //     });
+      //   }
+      //   if (levelPartialSon.length) {
+      //     levelPartialSon = levelPartialSon.map(res => {
+      //       res.value = 0;
+      //       return res;
+      //     });
+      //   }
+      // }
       goodsDetail = {
         ...goodsDetail,
         ...obj,
@@ -462,6 +462,8 @@ export default {
           }
         });
       }
+      console.log(777);
+      console.log(levelPartial);
       return {
         ...state,
         levelPartial,
@@ -529,10 +531,13 @@ export default {
         goodsDetail.goods_sn,
         goodsDetail.weight
       );
+      console.log(55);
+      console.log(deepCopy(arr));
       arr = arr.map(res => {
         const arr = attrTableCache[res.id];
         return arr ? arr : res;
       });
+      console.log(deepCopy(arr));
       return {
         ...state,
         initGoodsAttr,
@@ -567,7 +572,7 @@ export default {
     init(state, { payload }) {
       // 初始化
       const levelPartial = [];
-      const levelPartialSon = [];
+      let levelPartialSon = [];
       let totalPrice = 0;
       const { goodsDetail, systemType } = payload;
       systemType.user_levels.forEach(res => {
@@ -612,39 +617,37 @@ export default {
         // 分佣代码
         totalPrice = goodsDetail.sell_goods_price - goodsDetail.cost_price;
         let typePartial = 0;
-        let cache = {};
+        // let cache = {};
         goodsDetail.has_shop_goods_profit.forEach(res => {
           if (res.status === 0) {
             goodsDetail[`level_${res.level}`] = res.profit_value;
             typePartial = res.profit_type;
-            cache[res.level] = res.profit_value;
-            // levelPartial.forEach(ele => {
-            //   if (ele.id === res.level) {
-            //     ele.value = res.profit_value;
-            //   }
-            // });
+            // cache[res.level] = res.profit_value;
+            levelPartial.forEach(ele => {
+              if (ele.id === res.level) {
+                ele.value = res.profit_value;
+              }
+            });
           }
         });
-        levelPartial.forEach(ele => {
-          if (cache[ele.id]) {
-            ele.value = cache[ele.id];
-          }
-        });
-        cache = null;
+        // levelPartial.forEach(ele => {
+        //   if (cache[ele.id]) {
+        //     ele.value = cache[ele.id];
+        //   }
+        // });
+        // cache = null;
         goodsDetail.profit_type = typePartial;
-        // if (typePartial === 0) {
-        //   levelPartialSon = levelPartial.map(res => {
-        //     res.value = (res.value * totalPrice / 100).toFixed(2)
-        //     return res;
-        //   });
-        // } else {
-        //   levelPartialSon = levelPartial;
-        // }
+        if (typePartial === 0) {
+          levelPartialSon = levelPartial.map(res => {
+            res.value = (res.value * totalPrice / 100).toFixed(2);
+            return res;
+          });
+        } else {
+          levelPartialSon = levelPartial;
+        }
         const attrData = payload.initGoodsAttr.filter(res => {
           return res.checked;
         });
-        console.log(888);
-        console.log(attrData);
         toGet(
           attrTable,
           attrData,

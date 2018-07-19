@@ -4,6 +4,8 @@ import {
   getWithdrawList,
   updateWithdraw,
   getRefundList,
+  editRefundStatus,
+  editRefundMoney,
 } from '../services/finance';
 
 export default {
@@ -22,6 +24,22 @@ export default {
   },
 
   effects: {
+    *updateRefundStatus({ payload }, { call, put }) {
+      yield call(editRefundStatus, payload);
+      const response = yield call(getRefundList, payload);
+      yield put({
+        type: 'getRefundList',
+        payload: response,
+      });
+    },
+    *updateRefundMoney({ payload }, { call, put }) {
+      yield call(editRefundMoney, payload);
+      const response = yield call(getRefundList, payload);
+      yield put({
+        type: 'getRefundList',
+        payload: response,
+      });
+    },
     *fetchAccountList({ payload }, { call, put }) {
       const response = yield call(getAccountList, payload);
       yield put({
