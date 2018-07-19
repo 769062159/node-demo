@@ -22,7 +22,7 @@ import moment from 'moment';
 import ReactEditor from 'components/ReactEditor';
 import EditTable from 'components/editTable';
 import styles from './style.less';
-import { dedupe, deepCopy } from '../../../utils/utils';
+import { deepCopy } from '../../../utils/utils';
 
 // const { TextArea } = Input;
 // const RadioGroup = Radio.Group;
@@ -500,7 +500,7 @@ const CustomizedForm = Form.create({
             <Form.Item {...formItemLayouts} label="产品总库存">
               {getFieldDecorator('goods_total_inventory', {
                 rules: [{ required: true, message: '请填写产品总库存' }],
-              })(<InputNumber step={1} min={1} style={{ width: '200px' }} />)}
+              })(<InputNumber step={1} min={0} style={{ width: '200px' }} />)}
             </Form.Item>
           </Col>
           <Col span={24}>
@@ -1057,12 +1057,13 @@ class AddGoodStep2 extends React.PureComponent {
         levelPartial.forEach(res => {
           obj[res.id] = res.value;
         });
-        ele.profit = dedupe(levelPartial);
+        ele.profit = deepCopy(levelPartial);
         ele.profit.forEach(res => {
           arr.push({
-            price: ele.values[res.id],
+            price: obj[res.id],
             id: res.id,
-            profit_value: obj[res.id],
+            level: res.id,
+            profit_value: ele.values[res.id],
           });
         });
         ele.profit = arr;
@@ -1084,6 +1085,7 @@ class AddGoodStep2 extends React.PureComponent {
             price: res.value,
             profit_value: res.value,
             id: res.id,
+            level: res.id,
           });
         });
       } else {
@@ -1094,9 +1096,10 @@ class AddGoodStep2 extends React.PureComponent {
             100
           ).toFixed(2);
           arr.push({
-            price: res.value,
-            profit_value: nowPrice,
+            price: nowPrice,
+            profit_value: res.value,
             id: res.id,
+            level: res.id,
           });
         });
       }
@@ -1134,7 +1137,12 @@ class AddGoodStep2 extends React.PureComponent {
     values.supplier_id = values.supplier_id || 0;
     values.shipping_template_id = values.shipping_template_id || 0;
     values.shop_shipping_price = values.shop_shipping_price || 0;
-    values.profit_value = deepCopy(levelPartial);
+    // 参数变化id转成type
+    const levelPartialCache = deepCopy(levelPartial);
+    levelPartialCache.forEach(res => {
+      res.level = res.id;
+    });
+    values.profit_value = levelPartialCache;
     // values.goods_sku = attrTable;
     // 暂时写死的字段
     values.goods_list_title = 0;

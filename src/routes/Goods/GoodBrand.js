@@ -1,7 +1,7 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
 import moment from 'moment';
-import { Table, message, Upload, Modal, Card, Form, Input, Icon, Button, Divider } from 'antd';
+import { Table, message, Upload, Modal, Card, Form, Input, Icon, Button, Divider, Tag } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
 import styles from './TableList.less';
@@ -253,7 +253,7 @@ export default class GoodBrand extends PureComponent {
             ],
           })(<TextArea placeholder="请输入简介" autosize />)}
         </FormItem>
-        <FormItem label="店铺封面" {...formItemLayout}>
+        <FormItem label="店铺封面" {...formItemLayout} extra={<Tag color="blue">建议尺寸为100px*100px，大小不超过1M</Tag>}>
           {uploadItem}
         </FormItem>
         <FormItem style={{ marginTop: 32 }} {...formSubmitLayout}>
@@ -340,7 +340,7 @@ export default class GoodBrand extends PureComponent {
             ],
           })(<TextArea placeholder="请输入简介" autosize />)}
         </FormItem>
-        <FormItem label="店铺封面" {...formItemLayout}>
+        <FormItem label="店铺封面" {...formItemLayout} extra={<Tag color="blue">建议尺寸为100px*100px，大小不超过1M</Tag>}>
           {editData.cover !== 1 ? uploadItem : null}
         </FormItem>
         <FormItem style={{ marginTop: 32 }} {...formSubmitLayout}>

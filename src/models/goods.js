@@ -453,7 +453,7 @@ export default {
       if (profitType === 1) {
         levelPartialSonArr.forEach(res => {
           if (res.id === id) {
-            res.value = deepCopy(value);
+            res.value = value;
           }
         });
       } else {
@@ -672,7 +672,7 @@ export default {
                 });
                 value.has_shop_goods_sku_profit.forEach(v => {
                   if (cacheArr[v.level]) {
-                    cacheArr[v.level].value = v.price;
+                    cacheArr[v.level].value = v.profit_value;
                   }
                 });
                 res.values = {};

@@ -1,6 +1,18 @@
 import React, { PureComponent } from 'react';
 // import { deepCopy } from '../../utils/utils';
-import { Table, Input, Icon, Popconfirm, Upload, Modal, Row, Col, Form, InputNumber } from 'antd';
+import {
+  Table,
+  Input,
+  Icon,
+  Popconfirm,
+  Upload,
+  Modal,
+  Row,
+  Col,
+  Form,
+  InputNumber,
+  message,
+} from 'antd';
 
 class EditableCell extends PureComponent {
   state = {
@@ -332,22 +344,27 @@ export default class EditableTable extends PureComponent {
     //   attrTable,
     // })
     // this.props.handleEmail(attrTable);
-    const { form } = this.props;
+    const { form, totalPrice } = this.props;
     const { validateFields } = form;
     validateFields((err, values) => {
       if (!err) {
         const { index, attrTable } = this.state;
-        // const { profit } = attrTable[index];
-        attrTable[index].values = values;
-        // attrTable[index].profit = attrTable[index].profit.map(res => {
-        //     if (values[res.id]) {
-        //         res.value = values[res.id];
-        //     }
-        //     return res;
-        // })
-        this.setState({
-          levelVisible: false,
+        const price = Number(totalPrice * 100);
+        let flag = 0;
+        Object.keys(values).forEach(res => {
+          if (Number(values[res] * 100) > price) {
+            flag = 1;
+          }
         });
+        if (flag) {
+          message.error('输入金额请勿大于销售价格');
+        } else {
+          attrTable[index].values = values;
+          this.setState({
+            levelVisible: false,
+          });
+        }
+        // const { profit } = attrTable[index];
       }
     });
   };
@@ -359,7 +376,7 @@ export default class EditableTable extends PureComponent {
   //     });
   //   };
   render() {
-    const { rowKey, form, totalPrice, totalStock, levelPartialSon } = this.props;
+    const { rowKey, form, totalStock, levelPartialSon } = this.props;
     const { attrTable, levelVisible, showData } = this.state;
     const { getFieldDecorator } = form;
     const profitItem = [];
@@ -371,9 +388,7 @@ export default class EditableTable extends PureComponent {
               {getFieldDecorator(`${res.id}`, {
                 initialValue: showData[res.id],
                 rules: [{ required: true, message: `请填写${res.name}` }],
-              })(
-                <InputNumber step={0.01} precision={2} min={0.01} max={Number(totalPrice || 0)} />
-              )}
+              })(<InputNumber step={0.01} precision={2} min={0.01} />)}
             </Form.Item>
           </Col>
         );
