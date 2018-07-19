@@ -111,6 +111,9 @@ export default class Withdraw extends PureComponent {
           if (!values.money) {
             message.error('请输入金额');
             return false;
+          } else if (values.money * 100 > editData.refund_apply_money * 100) {
+            message.error('输入金额请勿大于申请金额');
+            return false;
           }
           values.page = page;
           values.order_goods_sku_id = editData.order_goods_sku_id;
@@ -293,6 +296,10 @@ export default class Withdraw extends PureComponent {
       {
         title: '申请退款金额',
         dataIndex: 'refund_apply_money',
+      },
+      {
+        title: '实际退款',
+        dataIndex: 'refund_money',
       },
       {
         title: '退款理由',

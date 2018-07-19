@@ -23,7 +23,7 @@ import styles from './List.less';
 const FormItem = Form.Item;
 const InputGroup = Input.Group;
 const { Option } = Select;
-const oredrStatus = ['未支付', '已取消', '已支付', '已发货', '已收货', '已评价'];
+const oredrStatus = ['未支付', '已取消', '已支付', '已发货', '已收货', '已评价', '退款成功'];
 // const warehouseType = ['仓库', '供应商', '本地仓库供应商货'];
 const bigStyles = {
   display: 'inline-block',
