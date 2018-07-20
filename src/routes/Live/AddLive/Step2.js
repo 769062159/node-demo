@@ -62,6 +62,9 @@ const CustomizedForm = Form.create({
       yyy: Form.createFormField({
         value: props.liveForm.yyy,
       }),
+      vod_play_url: Form.createFormField({
+        value: props.liveForm.vod_play_url,
+      }),
     };
     return arr;
   },
@@ -96,6 +99,7 @@ const CustomizedForm = Form.create({
     homeVod,
     fetchVod,
     liveForm,
+    uploadUrl,
   } = props;
 
   // 上传按钮
@@ -141,7 +145,7 @@ const CustomizedForm = Form.create({
         })(
           <div className="clearfix">
             <Upload
-              action={this.props.uploadUrl}
+              action={uploadUrl}
               listType="picture-card"
               fileList={uploadLiveImg}
               onPreview={handlePreviewImg}
@@ -167,7 +171,7 @@ const CustomizedForm = Form.create({
         })(
           <div className="clearfix">
             <Upload
-              action={this.props.uploadUrl}
+              action={uploadUrl}
               listType="picture-card"
               fileList={shareImg}
               onPreview={handlePreviewImg}
@@ -253,9 +257,13 @@ const CustomizedForm = Form.create({
             ))}
           </Select>
         </FormItem>
-      ) : liveForm.play_type === 2 || liveForm.play_type === 3 ? (
+      ) : liveForm.play_type === 3 ? (
         <Form.Item {...formItemLayout} label="播放地址">
-          {getFieldDecorator('play_url', {})(<Input style={{ width: '200px' }} />)}
+          {getFieldDecorator('play_url', {})(<Input style={{ width: '400px' }} />)}
+        </Form.Item>
+      ) : liveForm.play_type === 2 ? (
+        <Form.Item {...formItemLayout} label="播放地址">
+          {getFieldDecorator('vod_play_url', {})(<Input style={{ width: '400px' }} />)}
         </Form.Item>
       ) : null}
       <LiveGoodTable />
@@ -450,7 +458,10 @@ class AddLiveStep2 extends React.PureComponent {
     });
   };
   render() {
-    const { live: { liveForm, uploadLiveImg, shareImg, liveGoods, homeVod } } = this.props;
+    const {
+      live: { liveForm, uploadLiveImg, shareImg, liveGoods, homeVod },
+      uploadUrl,
+    } = this.props;
     const { header, previewVisible, previewImage, fetching, vod } = this.state;
     return (
       <CustomizedForm
@@ -472,6 +483,7 @@ class AddLiveStep2 extends React.PureComponent {
         handleChangesVod={this.handleChangesVod}
         liveGoods={liveGoods}
         submitForm={this.submitForm}
+        uploadUrl={uploadUrl}
       />
     );
   }

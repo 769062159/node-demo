@@ -416,7 +416,11 @@ export default class EditableTable extends PureComponent {
         title: '图片',
         dataIndex: 'fileList',
         render: (text, record, index) => (
-          <UploadImg fileList={text} onChange={this.onCellChange(index, 'fileList')} />
+          <UploadImg
+            uploadUrl={this.props.uploadUrl}
+            fileList={text}
+            onChange={this.onCellChange(index, 'fileList')}
+          />
         ),
       },
       // {

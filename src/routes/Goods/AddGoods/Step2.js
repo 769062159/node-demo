@@ -238,6 +238,7 @@ const CustomizedForm = Form.create({
     onChangeSon,
     chgLevelHas,
     modifiedValue,
+    uploadUrl,
   } = props;
   const brandListItem = [];
   const warehouseItem = []; // 仓库
@@ -552,7 +553,7 @@ const CustomizedForm = Form.create({
               })(
                 <div className="clearfix">
                   <Upload
-                    action={this.props.uploadUrl}
+                    action={uploadUrl}
                     listType="picture-card"
                     fileList={uploadGoodsImg}
                     onPreview={handlePreviewImg}
@@ -729,6 +730,7 @@ const CustomizedForm = Form.create({
             rules: [{ required: true, message: '请填写商品参数' }],
           })(
             <ReactEditor
+              uploadUrl={uploadUrl}
               valueSon={goodsDetail.goods_des || ''}
               goodsId={goodsDetail.goods_id}
               setDescription={setDescription.bind(this, 1)}
@@ -740,6 +742,7 @@ const CustomizedForm = Form.create({
             rules: [{ required: true, message: '请填写描述' }],
           })(
             <ReactEditor
+              uploadUrl={uploadUrl}
               valueSon={goodsDetail.goods_description || ''}
               goodsId={goodsDetail.goods_id}
               setDescription={setDescription.bind(this, 2)}
@@ -852,6 +855,7 @@ const CustomizedForm = Form.create({
           weight={goodsDetail.weight}
           totalStock={goodsDetail.goods_total_inventory}
           levelPartialSon={levelPartialSon}
+          uploadUrl={uploadUrl}
           rowKey={index => JSON.stringify(index)}
           modifiedValue={modifiedValue.bind(this)}
         />

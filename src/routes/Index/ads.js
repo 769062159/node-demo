@@ -240,7 +240,7 @@ export default class Ads extends PureComponent {
     });
   };
   renderAddForm() {
-    const { loading } = this.props;
+    const { loading, uploadUrl } = this.props;
     const { header, fileList, previewImage, previewVisible } = this.state;
     // 上传icon
     const uploadButton = (
@@ -258,7 +258,7 @@ export default class Ads extends PureComponent {
     const uploadItem = (
       <div className="clearfix">
         <Upload
-          action={this.props.uploadUrl}
+          action={uploadUrl}
           headers={header}
           listType="picture-card"
           fileList={fileList}
@@ -316,7 +316,7 @@ export default class Ads extends PureComponent {
     );
   }
   renderEditForm() {
-    const { loading } = this.props;
+    const { loading, uploadUrl } = this.props;
     const { header, editData, fileList, previewVisible } = this.state;
     let { previewImage } = this.state;
     const desc = editData.desc;
@@ -346,7 +346,7 @@ export default class Ads extends PureComponent {
     const uploadItem = (
       <div className="clearfix">
         <Upload
-          action={this.props.uploadUrl}
+          action={uploadUrl}
           headers={header}
           listType="picture-card"
           fileList={fileList}

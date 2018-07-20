@@ -236,6 +236,7 @@ const CustomizedForm = Form.create({
     onChangeSon,
     chgLevelHas,
     modifiedValue,
+    uploadUrl,
   } = props;
   const brandListItem = [];
   const warehouseItem = []; // 仓库
@@ -551,7 +552,7 @@ const CustomizedForm = Form.create({
               })(
                 <div className="clearfix">
                   <Upload
-                    action={this.props.uploadUrl}
+                    action={uploadUrl}
                     listType="picture-card"
                     fileList={uploadGoodsImg}
                     onPreview={handlePreviewImg}
@@ -725,6 +726,7 @@ const CustomizedForm = Form.create({
           })(
             <ReactEditor
               valueSon={goodsDetail.goods_des}
+              uploadUrl={uploadUrl}
               goodsId={goodsDetail.goods_id}
               setDescription={setDescription.bind(this, 1)}
             />
@@ -736,6 +738,7 @@ const CustomizedForm = Form.create({
           })(
             <ReactEditor
               goodsId={goodsDetail.goods_id}
+              uploadUrl={uploadUrl}
               valueSon={goodsDetail.goods_description}
               setDescription={setDescription.bind(this, 2)}
             />
@@ -843,6 +846,7 @@ const CustomizedForm = Form.create({
         {attrItemSon}
         <EditTable
           attrTable={attrTable}
+          uploadUrl={uploadUrl}
           totalPrice={goodsDetail.sell_goods_price}
           totalStock={goodsDetail.goods_total_inventory}
           levelPartialSon={levelPartialSon}
