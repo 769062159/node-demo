@@ -47,7 +47,7 @@ class TypeForm extends Component {
           </FormItem>
           <div className="clearfix">
             <Upload
-              action="http://hlsj.test.seastart.cn/admin/upload"
+              action={this.props.uploadUrl}
               headers={header}
               listType="picture-card"
               fileList={fileList}

@@ -130,7 +130,7 @@ export default class Config extends PureComponent {
         </Row>
         <Row>
           <Upload
-            action="http://hlsj.test.seastart.cn/admin/upload"
+            action={this.props.uploadUrl}
             headers={header}
             listType="picture-card"
             fileList={list}

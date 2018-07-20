@@ -217,7 +217,7 @@ class UploadImg extends PureComponent {
     return (
       <div className="clearfix">
         <Upload
-          action="http://hlsj.test.seastart.cn/admin/upload"
+          action={this.props.uploadUrl}
           headers={header}
           listType="picture-card"
           fileList={fileList}

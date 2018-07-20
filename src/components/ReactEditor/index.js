@@ -15,7 +15,9 @@ export default class Demo extends React.Component {
   // }
   render() {
     const uploadFn = param => {
-      const serverURL = 'http://hlsj.test.seastart.cn/admin/upload';
+      console.log(12);
+      console.log(this.props.uploadUrl);
+      const serverURL = this.props.uploadUrl;
       const xhr = new XMLHttpRequest();
       const fd = new FormData();
 

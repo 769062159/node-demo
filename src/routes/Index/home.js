@@ -272,7 +272,7 @@ const CustomizedForm = Form.create({
         })(
           <div className="clearfix">
             <Upload
-              action="http://hlsj.test.seastart.cn/admin/upload"
+              action={this.props.uploadUrl}
               listType="picture-card"
               fileList={uploadHomeImg}
               onPreview={handlePreviewImg}

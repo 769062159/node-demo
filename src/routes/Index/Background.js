@@ -133,7 +133,7 @@ export default class Config extends PureComponent {
       <PageHeaderLayout>
         <Row style={{ margin: '10px 0' }} className={styles.uploadBtn}>
           <Upload
-            action="http://hlsj.test.seastart.cn/admin/upload"
+            action={this.props.uploadUrl}
             headers={header}
             listType="picture-card"
             fileList={list}

@@ -552,7 +552,7 @@ const CustomizedForm = Form.create({
               })(
                 <div className="clearfix">
                   <Upload
-                    action="http://hlsj.test.seastart.cn/admin/upload"
+                    action={this.props.uploadUrl}
                     listType="picture-card"
                     fileList={uploadGoodsImg}
                     onPreview={handlePreviewImg}
@@ -832,7 +832,7 @@ const CustomizedForm = Form.create({
             <Form.Item
               {...profitLayout}
               label="分佣类型"
-              extra={<Tag color="blue">请先输入销售价格和成本价</Tag>}
+              extra={<Tag color="blue">请先输入销售价格和成本价,切换分佣类型请重新设置分佣值</Tag>}
             >
               {getFieldDecorator('profit_type', {
                 rules: [{ required: true, message: '请填写分拥类型' }],

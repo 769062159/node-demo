@@ -214,7 +214,7 @@ const CustomizedForm = Form.create({
             extra={<Tag color="blue">建议尺寸为750px*370px，大小不得大于1M</Tag>}
           >
             <Upload
-              action="http://hlsj.test.seastart.cn/admin/upload"
+              action={this.props.uploadUrl}
               listType="picture-card"
               fileList={uploadHomeImg}
               onPreview={handlePreviewImg}
@@ -309,6 +309,9 @@ export default class Home extends PureComponent {
     const { dispatch } = this.props;
     dispatch({
       type: 'indexs/clearHomeMsgs',
+    });
+    dispatch({
+      type: 'indexs/clearTable',
     });
   }
 

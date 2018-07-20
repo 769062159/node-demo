@@ -10,7 +10,7 @@ import styles from './TableList.less';
 const FormItem = Form.Item;
 // const Option = Select.Option;
 // const { TextArea } = Input;
-// const { confirm } = Modal;
+const { confirm } = Modal;
 // const homeType = ['', '热销商品', '直播商品', '轮播图'];
 // const jumpType = ['', '跳转商品', '跳转外部链接', '无跳转', '跳转直播间', '跳转录播'];
 const formItemLayout = {
@@ -158,6 +158,7 @@ export default class Home extends PureComponent {
   };
   componentDidMount() {
     const { dispatch } = this.props;
+    console.log(this.props);
     const { pagination } = this.state;
     dispatch({
       type: 'indexs/fetchHome',

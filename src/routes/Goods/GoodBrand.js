@@ -211,7 +211,7 @@ export default class GoodBrand extends PureComponent {
     const uploadItem = (
       <div className="clearfix">
         <Upload
-          action="http://hlsj.test.seastart.cn/admin/upload"
+          action={this.props.uploadUrl}
           headers={header}
           listType="picture-card"
           fileList={fileList}
@@ -253,7 +253,11 @@ export default class GoodBrand extends PureComponent {
             ],
           })(<TextArea placeholder="请输入简介" autosize />)}
         </FormItem>
-        <FormItem label="店铺封面" {...formItemLayout} extra={<Tag color="blue">建议尺寸为100px*100px，大小不超过1M</Tag>}>
+        <FormItem
+          label="店铺封面"
+          {...formItemLayout}
+          extra={<Tag color="blue">建议尺寸为100px*100px，大小不超过1M</Tag>}
+        >
           {uploadItem}
         </FormItem>
         <FormItem style={{ marginTop: 32 }} {...formSubmitLayout}>
@@ -295,7 +299,7 @@ export default class GoodBrand extends PureComponent {
     const uploadItem = (
       <div className="clearfix">
         <Upload
-          action="http://hlsj.test.seastart.cn/admin/upload"
+          action={this.props.uploadUrl}
           headers={header}
           listType="picture-card"
           fileList={fileList}
@@ -340,7 +344,11 @@ export default class GoodBrand extends PureComponent {
             ],
           })(<TextArea placeholder="请输入简介" autosize />)}
         </FormItem>
-        <FormItem label="店铺封面" {...formItemLayout} extra={<Tag color="blue">建议尺寸为100px*100px，大小不超过1M</Tag>}>
+        <FormItem
+          label="店铺封面"
+          {...formItemLayout}
+          extra={<Tag color="blue">建议尺寸为100px*100px，大小不超过1M</Tag>}
+        >
           {editData.cover !== 1 ? uploadItem : null}
         </FormItem>
         <FormItem style={{ marginTop: 32 }} {...formSubmitLayout}>

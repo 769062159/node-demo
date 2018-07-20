@@ -5,6 +5,7 @@ export default {
 
   state: {
     collapsed: false,
+    // uploadUrl: {this.props.uploadUrl},
     notices: [],
     // 存储菜单数据(全局缓存)
     menus: [],

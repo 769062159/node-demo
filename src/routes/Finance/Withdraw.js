@@ -22,6 +22,7 @@ const formSubmitLayout = {
   },
 };
 const { TextArea } = Input;
+const withdrawStatus = ['提现申请', '提现成功', '提现失败'];
 // const { confirm } = Modal;
 
 @connect(({ finance, loading }) => ({
@@ -86,7 +87,7 @@ export default class Withdraw extends PureComponent {
         const { dispatch } = this.props;
         const { editData, page, type } = this.state;
         values.page = page;
-        values.type = type;
+        values.status = type;
         values.id = editData.id;
         dispatch({
           type: 'finance/updateWithdraw',
@@ -234,6 +235,11 @@ export default class Withdraw extends PureComponent {
         title: '开户行',
         dataIndex: 'bank_name',
         render: (val, record) => <span>{record.bank_addr + val}</span>,
+      },
+      {
+        title: '状态',
+        dataIndex: 'status',
+        render: val => withdrawStatus[val],
       },
       {
         title: '操作',

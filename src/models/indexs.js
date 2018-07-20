@@ -133,6 +133,14 @@ export default {
   },
 
   reducers: {
+    clearTable(state) {
+      return {
+        ...state,
+        LiveKey: '',
+        GoodKey: '',
+        remark: '',
+      };
+    },
     fetchDetails(state, { payload }) {
       const { data } = payload;
       const imgArr = [];
