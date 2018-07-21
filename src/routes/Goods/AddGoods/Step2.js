@@ -1115,6 +1115,7 @@ class AddGoodStep2 extends React.PureComponent {
         store_nums: values.goods_total_inventory,
         goods_sku_sn: values.goods_sn,
         price: values.sell_goods_price,
+        cost_price: values.cost_price,
         img: uploadGoodsImg[0].url,
         profit: arr,
         weight: values.weight,

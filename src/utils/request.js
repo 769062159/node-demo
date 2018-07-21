@@ -54,7 +54,8 @@ export default async function request(url, options) {
   let token = localStorage.getItem('token');
   // console.log(token);
   // console.log(failTime);
-  if (url !== '/admin/login' && failTime < new Date().getTime()) {
+  const nowDate = new Date().getTime() - 60 * 60 * 1000;
+  if (url !== '/admin/login' && failTime < nowDate) {
     let nowToken = await fetch(`${apiurl}/admin/updatetoken`, {
       method: 'post',
       headers: {

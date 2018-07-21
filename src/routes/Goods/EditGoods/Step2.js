@@ -1098,6 +1098,7 @@ class EditGoodStep2 extends React.PureComponent {
         sku_id: skugoodsId,
         sku_goods_name: '默认',
         store_nums: values.goods_total_inventory,
+        cost_price: values.cost_price,
         goods_sku_sn: values.goods_sn,
         weight: values.weight,
         price: values.sell_goods_price,
