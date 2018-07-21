@@ -1,14 +1,14 @@
 import React, { Fragment } from 'react';
 import { connect } from 'dva';
 import copy from 'copy-to-clipboard';
-import { Button, Row, Col, message } from 'antd';
+import { Button, message } from 'antd';
 import { routerRedux } from 'dva/router';
 import Result from 'components/Result';
 import styles from './style.less';
 
 class EditLiveStep3 extends React.PureComponent {
   state = {
-    url: `${localStorage.getItem('liveUrl')}`,
+    // url: `${localStorage.getItem('liveUrl')}`,
   };
   copyBtn = val => {
     copy(val);
@@ -16,14 +16,14 @@ class EditLiveStep3 extends React.PureComponent {
   };
   render() {
     const { dispatch } = this.props;
-    const { url } = this.state;
-    console.log(this.props);
+    // const { url } = this.state;
+    // console.log(this.props);
     const onFinish = () => {
       dispatch(routerRedux.push('/live/list'));
     };
     const actions = (
       <Fragment>
-        <Row>
+        {/* <Row>
           <Col>
             <span>推流地址：</span>
             {url}
@@ -34,7 +34,7 @@ class EditLiveStep3 extends React.PureComponent {
               复制
             </span>
           </Col>
-        </Row>
+        </Row> */}
         <Button type="primary" onClick={onFinish}>
           完成
         </Button>

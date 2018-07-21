@@ -133,7 +133,7 @@ export default async function request(url, options) {
         });
         return;
       }
-      if (status === 405 || status === 400 || status === 423 || status === 505) {
+      if (( status >= 500 && status <= 505 ) || ( status >= 400 && status <= 406 )) {
         dispatch(routerRedux.push('/user/login'));
         return;
       }
