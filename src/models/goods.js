@@ -59,7 +59,7 @@ const isContained = (arr1, arr2) => {
   return true;
 };
 // 将数据组合成列表，利用递归的特性
-const toGet = (arr, attrArr, AttrArrMap, totalPrice, goodSN, weight) => {
+const toGet = (arr, attrArr, AttrArrMap, totalPrice, goodSN, weight, costPrice) => {
   const dyadicArray = [];
   const dyadicArrayId = [];
   attrArr.forEach(res => {
@@ -99,11 +99,12 @@ const toGet = (arr, attrArr, AttrArrMap, totalPrice, goodSN, weight) => {
       sku_goods_name: res,
       goods_sku_attr: param,
       profit: [],
-      price: totalPrice,
+      price: totalPrice || 0,
+      cost_price: costPrice || 0,
       classIdArr,
       store_nums: 0,
       attrIdArr: arrId,
-      weight,
+      weight: weight || 0,
       goods_sku_sn: goodSN,
       img: '',
       fileList: [],
@@ -129,7 +130,7 @@ export default {
     attrTable: [], // 属性table
     attrTableCache: {}, // 属性table缓存
     AttrArrMap: new Map(), // 用来对比的map
-    typePartial: '0', // 分佣类型
+    typePartial: 0, // 分佣类型
     totalPrice: 0, // 总价
     levelPartial: [], // 分佣等级
     levelPartialSon: [], // 传给子的分佣等级
@@ -475,8 +476,6 @@ export default {
       return {
         ...state,
         typePartial: payload.e,
-        levelPartial: [],
-        levelPartialSon: [],
       };
     },
     getBrands(state, { payload }) {
@@ -530,15 +529,13 @@ export default {
         AttrArrMap,
         goodsDetail.sell_goods_price,
         goodsDetail.goods_sn,
-        goodsDetail.weight
+        goodsDetail.weight,
+        goodsDetail.cost_price
       );
-      console.log(55);
-      console.log(deepCopy(arr));
       arr = arr.map(res => {
         const arr = attrTableCache[res.id];
         return arr ? arr : res;
       });
-      console.log(deepCopy(arr));
       return {
         ...state,
         initGoodsAttr,
@@ -558,7 +555,8 @@ export default {
         AttrArrMap,
         goodsDetail.sell_goods_price,
         goodsDetail.goods_sn,
-        goodsDetail.weight
+        goodsDetail.weight,
+        goodsDetail.cost_price
       );
       arr = arr.map(res => {
         const arr = attrTableCache[res.id];
@@ -590,6 +588,7 @@ export default {
       });
       const uploadGoodsImg = [];
       let attrTable = [];
+      let typePartial = 0; // 分佣类型
       if (goodsDetail.goods_id) {
         goodsDetail.shipping_template_id = goodsDetail.goods_shipping_template_id;
         const arrId = new Set();
@@ -617,7 +616,6 @@ export default {
         });
         // 分佣代码
         totalPrice = goodsDetail.sell_goods_price - goodsDetail.cost_price;
-        let typePartial = 0;
         // let cache = {};
         goodsDetail.has_shop_goods_profit.forEach(res => {
           if (res.status === 0) {
@@ -652,9 +650,10 @@ export default {
           attrTable,
           attrData,
           payload.AttrArrMap,
-          totalPrice,
+          goodsDetail.sell_goods_price,
           goodsDetail.goods_sn,
-          goodsDetail.weight
+          goodsDetail.weight,
+          goodsDetail.cost_price
         );
         if (attrTable.length) {
           attrTable.forEach(res => {
@@ -662,6 +661,7 @@ export default {
               if (isContained(key, res.attrIdArr)) {
                 res.goods_sku_sn = value.goods_sku_sn;
                 res.price = value.price;
+                res.cost_price = value.cost_price;
                 res.weight = value.weight;
                 res.store_nums = value.store_nums;
                 let cacheArr = {};
@@ -740,6 +740,7 @@ export default {
         uploadGoodsImg,
         attrTable,
         attrTableCache,
+        typePartial,
       };
     },
     show(state, { payload }) {

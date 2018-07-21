@@ -825,12 +825,12 @@ const CustomizedForm = Form.create({
         </Row>
       </Card> */}
       <Card title="sku分佣">
-        {/* <Row>
+        <Row>
           <Col span={8}>
             <Form.Item
               {...profitLayout}
               label="分佣类型"
-              extra={<Tag color="blue">请先输入销售价格和成本价</Tag>}
+              extra={<Tag color="blue">请先输入销售价格和成本价,切换分佣类型请重新设置分佣值</Tag>}
             >
               {getFieldDecorator('profit_type', {
                 rules: [{ required: true, message: '请填写分拥类型' }],
@@ -838,7 +838,7 @@ const CustomizedForm = Form.create({
             </Form.Item>
           </Col>
         </Row>
-        <Row>{levelNumberItem}</Row> */}
+        <Row>{levelNumberItem}</Row>
         <div className={styles.borderList}>
           <span>属性名：</span>
           {attrItem}
@@ -1084,8 +1084,8 @@ class EditGoodStep2 extends React.PureComponent {
             100
           ).toFixed(2);
           arr.push({
-            price: nowPrice,
-            profit_value: res.value,
+            profit_value: nowPrice,
+            price: res.value,
             id: res.id,
             level: res.id,
           });

@@ -306,6 +306,11 @@ export default class Withdraw extends PureComponent {
         dataIndex: 'refund_reason',
       },
       {
+        title: '返利时间',
+        dataIndex: 'profit_time',
+        render: val => (val ? <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span> : '未返利'),
+      },
+      {
         title: '退款类型',
         dataIndex: 'refund_type',
         render: val => refundType[val],
@@ -318,8 +323,8 @@ export default class Withdraw extends PureComponent {
       {
         title: '操作',
         dataIndex: 'goods_id',
-        // fixed: 'right',
-        // width: 150,
+        fixed: 'right',
+        width: 130,
         render: (text, record) =>
           record.refund_status === 1 ? (
             <Fragment>
@@ -344,6 +349,7 @@ export default class Withdraw extends PureComponent {
             </div> */}
             <Table
               onChange={this.handleTableChange}
+              scroll={{ x: 1200 }}
               dataSource={datas}
               rowKey={record => record.order_goods_sku_id}
               loading={loading}

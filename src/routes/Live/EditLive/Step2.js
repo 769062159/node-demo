@@ -259,7 +259,11 @@ const CustomizedForm = Form.create({
           </Select>
         </FormItem>
       ) : liveForm.play_type === 3 ? (
-        <Form.Item {...formItemLayout} label="播放地址">
+        <Form.Item
+          {...formItemLayout}
+          label="播放地址"
+          extra={<Tag color="blue">目前只支持腾讯视频，一定要填写带有vid的视频地址</Tag>}
+        >
           {getFieldDecorator('play_url', {})(<Input style={{ width: '400px' }} />)}
         </Form.Item>
       ) : liveForm.play_type === 2 ? (

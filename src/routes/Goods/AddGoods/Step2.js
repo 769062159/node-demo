@@ -225,6 +225,7 @@ const CustomizedForm = Form.create({
       initGoodsAttr,
       attrTable,
       levelPartialSon,
+      typePartial,
     },
     payload,
     header,
@@ -239,6 +240,7 @@ const CustomizedForm = Form.create({
     chgLevelHas,
     modifiedValue,
     uploadUrl,
+    changeTypePartial,
   } = props;
   const brandListItem = [];
   const warehouseItem = []; // 仓库
@@ -839,7 +841,7 @@ const CustomizedForm = Form.create({
             >
               {getFieldDecorator('profit_type', {
                 rules: [{ required: true, message: '请填写分拥类型' }],
-              })(<Select>{profitTypeItem}</Select>)}
+              })(<Select onChange={changeTypePartial}>{profitTypeItem}</Select>)}
             </Form.Item>
           </Col>
         </Row>
@@ -851,6 +853,7 @@ const CustomizedForm = Form.create({
         {attrItemSon}
         <EditTable
           attrTable={attrTable}
+          typePartial={typePartial}
           totalPrice={goodsDetail.sell_goods_price}
           weight={goodsDetail.weight}
           totalStock={goodsDetail.goods_total_inventory}
@@ -1012,17 +1015,16 @@ class AddGoodStep2 extends React.PureComponent {
     }
   };
   // 修改分佣等级
-  //   chgTypeHas = (e) => {
-  //     console.log(e);
-  //     const { dispatch } = this.props;
-  //     // this.chgFormVal('level_0', '');
-  //     dispatch({
-  //       type: 'goods/changeTypePartial',
-  //       payload: {
-  //         e,
-  //       },
-  //     });
-  //   }
+  changeTypePartial = e => {
+    console.log(e);
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'goods/changeTypePartials',
+      payload: {
+        e,
+      },
+    });
+  };
   // 修改表单值
   changeFormVal = val => {
     const { dispatch } = this.props;
@@ -1100,8 +1102,8 @@ class AddGoodStep2 extends React.PureComponent {
             100
           ).toFixed(2);
           arr.push({
-            price: nowPrice,
-            profit_value: res.value,
+            profit_value: nowPrice,
+            price: res.value,
             id: res.id,
             level: res.id,
           });
@@ -1203,6 +1205,7 @@ class AddGoodStep2 extends React.PureComponent {
         onChangeSon={this.onChangeSon}
         chgLevelHas={this.chgLevelHas}
         modifiedValue={this.modifiedValue}
+        changeTypePartial={this.changeTypePartial}
       />
     );
   }

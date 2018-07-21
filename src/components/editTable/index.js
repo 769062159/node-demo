@@ -412,6 +412,17 @@ export default class EditableTable extends PureComponent {
     // }
 
     const columns = [
+      // {
+      //   title: '分佣',
+      //   dataIndex: 'level',
+      //   render: (text, record, index) => {
+      //     return (
+      //       <a className="ant-dropdown-link" onClick={this.levelSetting.bind(this, index)}>
+      //         设置值
+      //       </a>
+      //     );
+      //   },
+      // },
       {
         title: '图片',
         dataIndex: 'fileList',
@@ -431,10 +442,21 @@ export default class EditableTable extends PureComponent {
       //   ),
       // },
       {
-        title: '价格',
+        title: '销售价格',
         dataIndex: 'price',
         render: (text, record, index) => (
           <EditInputNumber value={text} step={2} onChange={this.onCellChange(index, 'price')} />
+        ),
+      },
+      {
+        title: '成本价格',
+        dataIndex: 'cost_price',
+        render: (text, record, index) => (
+          <EditInputNumber
+            value={text}
+            step={2}
+            onChange={this.onCellChange(index, 'cost_price')}
+          />
         ),
       },
       {
@@ -456,17 +478,6 @@ export default class EditableTable extends PureComponent {
         render: (text, record, index) => (
           <EditInputNumber value={text} step={2} onChange={this.onCellChange(index, 'weight')} />
         ),
-      },
-      {
-        title: '分佣',
-        dataIndex: 'level',
-        render: (text, record, index) => {
-          return (
-            <a className="ant-dropdown-link" onClick={this.levelSetting.bind(this, index)}>
-              设置值
-            </a>
-          );
-        },
       },
       //   {
       //     title: 'SKUSN',
