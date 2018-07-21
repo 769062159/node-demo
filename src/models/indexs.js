@@ -144,8 +144,6 @@ export default {
     fetchDetails(state, { payload }) {
       const { data } = payload;
       const imgArr = [];
-      console.log(22);
-      console.log(data);
       if (data.cover) {
         imgArr.push({
           status: 'done',
@@ -155,14 +153,14 @@ export default {
           url: data.cover,
         });
       }
-      let LiveKey = '';
-      let GoodKey = '';
+      const LiveKey = [];
+      const GoodKey = [];
       let remark = '';
       if (data.jump_type === 1) {
-        GoodKey = data.target_id;
+        GoodKey.push(data.target_id);
         remark = data.target_name;
       } else if (data.jump_type === 4) {
-        LiveKey = data.target_id;
+        LiveKey.push(data.target_id);
         remark = data.target_name;
       }
       return {
