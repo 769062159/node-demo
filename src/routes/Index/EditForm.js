@@ -353,7 +353,7 @@ export default class Home extends PureComponent {
     if (homeForm.jump_type === 1) {
       homeForm.target_id = GoodKey[0];
     } else if (homeForm.jump_type === 4) {
-      homeForm.target_id = LiveKey[0];
+      homeForm.target_id = LiveKey;
     }
     homeForm.target_name = remark;
     homeForm.page = pagination;

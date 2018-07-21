@@ -144,6 +144,8 @@ export default {
     fetchDetails(state, { payload }) {
       const { data } = payload;
       const imgArr = [];
+      console.log(22);
+      console.log(data);
       if (data.cover) {
         imgArr.push({
           status: 'done',
@@ -217,7 +219,6 @@ export default {
       };
     },
     editHomeMsgs(state, { payload }) {
-      console.log(payload);
       const { data } = payload;
       data.xxx = data.cover;
       const imgArr = [];
