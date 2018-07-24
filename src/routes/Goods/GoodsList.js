@@ -32,7 +32,7 @@ const getValue = obj =>
     .join(',');
 // const statusMap = ['default', 'processing', 'success', 'error'];
 const statusMap = ['processing', 'processing', 'error'];
-const goodsStatus = ['上架', '未上架', '下架'];
+const goodsStatus = ['上架', '下架', '仓库中'];
 // const goodsTypeStatus = ['普通商品', '一元购', '秒杀', '众筹'];
 // const payType = ['拍下减库存', '付款减库存'];
 const isTrue = ['否', '是'];
@@ -278,8 +278,8 @@ export default class GoodsList extends PureComponent {
               {getFieldDecorator('goods_status')(
                 <Select placeholder="请选择" style={{ width: '100%' }}>
                   <Option value="0">上架中</Option>
-                  <Option value="1">未上架</Option>
-                  <Option value="2">下架</Option>
+                  <Option value="1">下架中</Option>
+                  <Option value="2">仓库中</Option>
                 </Select>
               )}
             </FormItem>
@@ -396,7 +396,7 @@ export default class GoodsList extends PureComponent {
             <Col span={18} style={{ fontSize: 14 }}>
               <div>{text.goods_name}</div>
               <div>销售价:{text.sell_goods_price}</div>
-              <div>总库存:{text.goods_total_inventory}</div>
+              <div>库存:{text.goods_total_inventory}</div>
               <div>分类:{text.category_name}</div>
             </Col>
           </Row>
@@ -425,6 +425,7 @@ export default class GoodsList extends PureComponent {
             value: 2,
           },
         ],
+        filterMultiple: false,
         onFilter: (value, record) => record.goods_status.toString() === value,
         render(val) {
           return <Badge status={statusMap[val]} text={goodsStatus[val]} />;
@@ -434,11 +435,11 @@ export default class GoodsList extends PureComponent {
         title: '排序',
         dataIndex: 'goods_sort',
       },
-      {
-        title: '剩余库存',
-        dataIndex: 'goods_total_inventory',
-        render: (val, record) => val - record.goods_total_sales,
-      },
+      // {
+      //   title: '剩余库存',
+      //   dataIndex: 'goods_total_inventory',
+      //   render: (val, record) => val - record.goods_total_sales,
+      // },
       // {
       //   title: '商品上架时间',
       //   dataIndex: 'goods_shelves_time',

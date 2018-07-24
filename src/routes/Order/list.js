@@ -309,6 +309,11 @@ export default class Order extends PureComponent {
     // this.setState({
     //   formValues: {},
     // });
+    this.setState({
+      values: {},
+      minPrice: '',
+      maxPrice: '',
+    });
     dispatch({
       type: 'order/fetchOrder',
       payload: {
@@ -347,10 +352,10 @@ export default class Order extends PureComponent {
   renderSimpleForm() {
     const { getFieldDecorator } = this.props.form;
     return (
-      <Form onSubmit={this.handleSearch} layout="inline">
+      <Form onSubmit={this.handleSearch} layout="inline" autoComplete="OFF">
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
-            <FormItem label="订单sn">
+            <FormItem label="包裹订单sn">
               {getFieldDecorator('pack_order_sn')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
@@ -389,7 +394,7 @@ export default class Order extends PureComponent {
   renderAdvancedForm() {
     const { getFieldDecorator } = this.props.form;
     return (
-      <Form onSubmit={this.handleSearch} layout="inline">
+      <Form onSubmit={this.handleSearch} layout="inline" autoComplete="OFF" >
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
             <FormItem label="订单sn">
@@ -666,7 +671,7 @@ export default class Order extends PureComponent {
                             type="flex"
                           >
                             <Col span={2}>包裹{index + 1}</Col>
-                            <Col span={5}>订单号：{res.order_sn}</Col>
+                            <Col span={5}>包裹订单号：{res.order_sn}</Col>
                             <Col span={3}>运费：{res.pack_shipping_fee}</Col>
                           </Row>
                           <Table

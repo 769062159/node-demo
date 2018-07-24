@@ -102,6 +102,7 @@ const CustomizedForm = Form.create({
     liveSelect,
     GoodKey,
     LiveKey,
+    uploadUrl,
   } = props;
   const goodListColumns = [
     {
@@ -201,7 +202,7 @@ const CustomizedForm = Form.create({
             extra={<Tag color="blue">建议尺寸为750px*370px，大小不得大于1M</Tag>}
           >
             <Upload
-              action={this.props.uploadUrl}
+              action={uploadUrl}
               listType="picture-card"
               fileList={uploadHomeImg}
               onPreview={handlePreviewImg}
@@ -504,6 +505,7 @@ export default class Home extends PureComponent {
         GoodKey,
       },
       loading,
+      uploadUrl,
     } = this.props;
     const { previewVisible, previewImage } = this.state;
 
@@ -530,6 +532,7 @@ export default class Home extends PureComponent {
           liveSelect={this.liveSelect}
           GoodKey={GoodKey}
           LiveKey={LiveKey}
+          uploadUrl={uploadUrl}
         />
       </PageHeaderLayout>
     );

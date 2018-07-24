@@ -10,7 +10,7 @@ import {
   Radio,
   Row,
   Col,
-  DatePicker,
+  // DatePicker,
   Upload,
   Icon,
   Modal,
@@ -698,7 +698,7 @@ const CustomizedForm = Form.create({
           </Col>
         </Row> */}
 
-        <Row gutter={24}>
+        {/* <Row gutter={24}>
           <Col span={12}>
             <Form.Item {...spcialLayouts} label="上架方式">
               {getFieldDecorator('goods_shelves_type', {
@@ -726,7 +726,7 @@ const CustomizedForm = Form.create({
               </Form.Item>
             ) : null}
           </Col>
-        </Row>
+        </Row> */}
         <Form.Item label="商品参数">
           {getFieldDecorator('goods_des', {
             rules: [{ required: true, message: '请填写商品参数' }],
