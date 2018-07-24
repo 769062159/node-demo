@@ -454,14 +454,11 @@ export default class Live extends PureComponent {
         dataIndex: 'cover',
         render: val => (val ? <img src={val} style={{ width: '80px' }} alt="图片" /> : null),
       },
-      // {
-      //   title: '推流地址',
-      //   dataIndex: 'rtmp_push',
-      //   width: 280,
-      //   render: val => (
-      //     <Icon type="copy" onClick={this.copyBtn.bind(this, val)} style={{ fontSize: 20 }} />
-      //   ),
-      // },
+      {
+        title: '分享路径',
+        dataIndex: 'stv_live_id',
+        render: val => `/pages/live/main?live_id=${val}&referee_id=`,
+      },
       {
         title: '创建时间',
         dataIndex: 'create_time',
