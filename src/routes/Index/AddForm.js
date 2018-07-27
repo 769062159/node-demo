@@ -109,12 +109,13 @@ const CustomizedForm = Form.create({
     {
       title: '商品名',
       dataIndex: 'goods_name',
+      width: 200,
       key: 'goods_name',
     },
     {
       title: '封面',
       dataIndex: 'img',
-      render: val => (val ? <img src={val} style={{ width: '120px' }} alt="图片" /> : null),
+      render: val => (val ? <img src={val} style={{ width: '80px' }} alt="图片" /> : null),
     },
     {
       title: '价格',

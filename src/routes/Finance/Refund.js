@@ -145,7 +145,7 @@ export default class Withdraw extends PureComponent {
     dispatch({
       type: 'finance/fetchRefundList',
       payload: {
-        pagination: current,
+        page: current,
       },
     });
   };
