@@ -260,7 +260,16 @@ export default class Withdraw extends PureComponent {
           <div className={styles.shopTable}>
             <img style={{ height: 80, width: 80 }} src={val} alt="头像" />
             <div>
-              <div className={styles.shopName}>{text.goods_name}</div>
+              <div
+                className={styles.shopName}
+                style={{
+                  '-webkit-box-orient': 'vertical',
+                  '-webkit-line-clamp': 2,
+                  overflow: 'hidden',
+                }}
+              >
+                {text.goods_name}
+              </div>
               <div className={styles.space} />
               <div>属性:{text.attr_str.replace(/,/g, '')}</div>
               <div>总价:{text.price}</div>
