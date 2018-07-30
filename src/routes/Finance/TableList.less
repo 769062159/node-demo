@@ -34,6 +34,41 @@
     margin-bottom: 24px;
   }
 }
+.shopTable {
+  display: flex;
+  justify-content: space-between;
+  >div {
+    display: flex;
+    flex-direction: column;
+    width: 230px;
+    margin-left: 10px;
+    .space {
+      flex-grow: 1;
+    }
+    .shopName {
+      width: 230px;
+      position: relative;
+      height: 40px;
+      line-height: 20px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      -o-text-overflow: ellipsis;
+      display: -webkit-box!important;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      word-break: break-all;
+    }
+    // .shopName:after {
+    //   content: '...';
+    //   font-weight: bold;
+    //   position: absolute;
+    //   bottom: 0;
+    //   right: 0;
+    //   padding: 0 20px 1px 45px;
+    //   background: url(http://css88.b0.upaiyun.com/css88/2014/09/ellipsis_bg.png) repeat-y;
+    // }
+  }
+}
 
 @media screen and (max-width: @screen-lg) {
   .tableListForm :global(.ant-form-item) {

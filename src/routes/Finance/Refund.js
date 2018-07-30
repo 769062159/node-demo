@@ -1,19 +1,7 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
 import moment from 'moment';
-import {
-  Table,
-  message,
-  Modal,
-  Card,
-  Form,
-  Input,
-  Button,
-  Divider,
-  Row,
-  Col,
-  InputNumber,
-} from 'antd';
+import { Table, message, Modal, Card, Form, Input, Button, Divider, InputNumber } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
 import styles from './TableList.less';
@@ -269,17 +257,15 @@ export default class Withdraw extends PureComponent {
         dataIndex: 'http_url',
         width: 320,
         render: (val, text) => (
-          <Row>
-            <Col style={{ display: 'inline-block', verticalAlign: 'top', width: '40%' }}>
-              <img style={{ height: 80, width: 80 }} src={val} alt="头像" />
-            </Col>
-            <Col style={{ display: 'inline-block', width: '60%' }}>
-              <div>{text.goods_name}</div>
+          <div className={styles.shopTable}>
+            <img style={{ height: 80, width: 80 }} src={val} alt="头像" />
+            <div>
+              <div className={styles.shopName}>{text.goods_name}</div>
+              <div className={styles.space} />
               <div>属性:{text.attr_str.replace(/,/g, '')}</div>
               <div>总价:{text.price}</div>
-              {/* <div>上级:{text.referee && text.referee.nickname}</div> */}
-            </Col>
-          </Row>
+            </div>
+          </div>
         ),
       },
       {
