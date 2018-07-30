@@ -267,13 +267,13 @@ export default class Withdraw extends PureComponent {
       {
         title: '退款商品',
         dataIndex: 'http_url',
-        width: 300,
+        width: 320,
         render: (val, text) => (
           <Row>
-            <Col style={{ display: 'inline-block', verticalAlign: 'top' }}>
+            <Col style={{ display: 'inline-block', verticalAlign: 'top', width: '40%' }}>
               <img style={{ height: 80, width: 80 }} src={val} alt="头像" />
             </Col>
-            <Col style={{ display: 'inline-block', marginLeft: 10 }}>
+            <Col style={{ display: 'inline-block', width: '60%' }}>
               <div>{text.goods_name}</div>
               <div>属性:{text.attr_str.replace(/,/g, '')}</div>
               <div>总价:{text.price}</div>

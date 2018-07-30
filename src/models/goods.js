@@ -121,6 +121,7 @@ export default {
   state: {
     goodsList: [],
     goodsListPage: {},
+    goodsClass: [], // 商品分类
     selectGoodsList: [], // 直播间选中的商品列表
     goodType: [],
     goodAttr: [],
@@ -255,12 +256,22 @@ export default {
         goods_id: payload.goods_id,
       });
       if (response) {
-        const goodsClass = response.data.goods_class;
-        const goodsBrand = response.data.goods_brand; // 商品品牌
-        const goodsPlace = response.data.goods_place; // 地址
-        const warehouseList = response.data.warehouse; // 仓库
-        const goodsDetail = response.data.goods; // 商品详情
-        const systemType = response.data.system_type; // 默认值
+        const {
+          data: {
+            goods_brand: goodsBrand,
+            goods_place: goodsPlace,
+            warehouse: warehouseList,
+            goods: goodsDetail,
+            system_type: systemType,
+            goods_class: goodsClass,
+          },
+        } = response;
+        // const goodsBrand = response.data.goods_brand; // 商品品牌
+        // const goodsPlace = response.data.goods_place; // 地址
+        // const warehouseList = response.data.warehouse; // 仓库
+        // const goodsDetail = response.data.goods; // 商品详情
+        // const systemType = response.data.system_type; // 默认值
+        // const goodType = response.data.goods_class; // 商品类别
         let type = '';
         if (payload.type) {
           type = Number(payload.type);
@@ -294,6 +305,7 @@ export default {
         yield put({
           type: 'init',
           payload: {
+            goodsClass,
             typeName, // 分类名
             initGoodsAttr,
             AttrArrMap,
