@@ -140,30 +140,24 @@ export const getRouterConfig = app => {
       ),
     },
     // 首页 广告 营销
-    // '/market/ads': {
-    //   component: dynamicWrapper(app, ['indexs'], () => import('../routes/index/ads')),
-    // },
-    // '/market/index': {
-    //   component: dynamicWrapper(app, ['indexs'], () => import('../routes/index/home')),
-    // },
-    // '/market/AddForm/:type': {
-    //   component: dynamicWrapper(app, ['indexs'], () => import('../routes/Index/AddForm')),
-    // },
-    // '/market/EditForm/:id': {
-    //   component: dynamicWrapper(app, ['indexs'], () => import('../routes/Index/EditForm')),
-    // },
-    // '/market/background': {
-    //   component: dynamicWrapper(app, ['config'], () => import('../routes/Index/Background')),
-    // },
-    // '/market/carousel': {
-    //   component: dynamicWrapper(app, ['indexs'], () => import('../routes/Index/Carousel')),
-    // },
-    // '/market/live-sale': {
-    //   component: dynamicWrapper(app, ['indexs'], () => import('../routes/Index/LiveSale')),
-    // },
-    // '/market/hot-sale': {
-    //   component: dynamicWrapper(app, ['indexs'], () => import('../routes/Index/HotSale')),
-    // },
+    '/market/AddForm/:type': {
+      component: dynamicWrapper(app, ['indexs'], () => import('../routes/Index/AddForm')),
+    },
+    '/market/EditForm/:id': {
+      component: dynamicWrapper(app, ['indexs'], () => import('../routes/Index/EditForm')),
+    },
+    '/market/background': {
+      component: dynamicWrapper(app, ['config'], () => import('../routes/Index/Background')),
+    },
+    '/market/carousel': {
+      component: dynamicWrapper(app, ['indexs'], () => import('../routes/Index/Carousel')),
+    },
+    '/market/live-sale': {
+      component: dynamicWrapper(app, ['indexs'], () => import('../routes/Index/LiveSale')),
+    },
+    '/market/hot-sale': {
+      component: dynamicWrapper(app, ['indexs'], () => import('../routes/Index/HotSale')),
+    },
     // 直播
     '/live/list': {
       component: dynamicWrapper(app, ['live'], () => import('../routes/Live/list')),
@@ -289,21 +283,19 @@ export const getRouterConfig = app => {
       component: dynamicWrapper(app, ['goods'], () => import('../routes/Goods/EditGoods/Step3')),
     },
     // 用户相关信息
-    '/users/group': {
-      component: dynamicWrapper(app, ['user'], () => import('../routes/Demo/Group')),
-    },
-    '/users/role/:id': {
-      component: dynamicWrapper(app, ['user', 'menu'], () => import('../routes/Demo/Roles')),
-    },
-    '/users/user-list': {
-      component: dynamicWrapper(app, [], () => import('../routes/Demo/UserList')),
-    },
-    // '/router/menu-add': {
-    //   component: dynamicWrapper(app, ['menu'], () => import('../routes/Demo/DemoTwo')),
+    // '/users/group': {
+    //   component: dynamicWrapper(app, ['user'], () => import('../routes/Demo/Group')),
     // },
-    '/router/menu-list': {
-      component: dynamicWrapper(app, ['menu'], () => import('../routes/Demo/MenuList')),
-    },
+    // '/users/role/:id': {
+    //   component: dynamicWrapper(app, ['user', 'menu'], () => import('../routes/Demo/Roles')),
+    // },
+    // '/users/user-list': {
+    //   component: dynamicWrapper(app, [], () => import('../routes/Demo/UserList')),
+    // },
+    // 路由配置
+    // '/router/menu-list': {
+    //   component: dynamicWrapper(app, ['menu'], () => import('../routes/Demo/MenuList')),
+    // },
     '/user': {
       identity: 'common',
       component: dynamicWrapper(app, [], () => import('../layouts/UserLayout')),

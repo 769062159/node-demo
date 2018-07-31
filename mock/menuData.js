@@ -18,36 +18,32 @@ export const menuData = [
       },
     ],
   },
-  {
-    name: '系统用户',
-    icon: 'setting',
-    path: 'users',
-    children: [
-      {
-        name: '部门角色',
-        path: 'group',
-      },
-      {
-        name: '管理员',
-        path: 'user-list',
-      },
-    ],
-  },
-  {
-    name: '路由配置',
-    icon: 'tool',
-    path: 'router',
-    children: [
-      // {
-      //   name: '路由新增',
-      //   path: 'menu-add',
-      // },
-      {
-        name: '路由列表',
-        path: 'menu-list',
-      },
-    ],
-  },
+  // {
+  //   name: '系统用户',
+  //   icon: 'setting',
+  //   path: 'users',
+  //   children: [
+  //     {
+  //       name: '部门角色',
+  //       path: 'group',
+  //     },
+  //     {
+  //       name: '管理员',
+  //       path: 'user-list',
+  //     },
+  //   ],
+  // },
+  // {
+  //   name: '路由配置',
+  //   icon: 'tool',
+  //   path: 'router',
+  //   children: [
+  //     {
+  //       name: '路由列表',
+  //       path: 'menu-list',
+  //     },
+  //   ],
+  // },
   {
     name: '商品',
     icon: 'shop',
@@ -94,33 +90,33 @@ export const menuData = [
       },
     ],
   },
-  // {
-  //   name: '首页',
-  //   icon: 'home',
-  //   path: 'market',
-  //   children: [
-  //     {
-  //       name: '轮播图',
-  //       path: 'carousel',
-  //     },
-  //     {
-  //       name: '直播特卖背景',
-  //       path: 'background',
-  //     },
-  //     {
-  //       name: '直播特卖',
-  //       path: 'live-sale',
-  //     },
-  //     {
-  //       name: '热卖商品',
-  //       path: 'hot-sale',
-  //     },
-  //     //   {
-  //     //     name: '广告',
-  //     //     path: 'ads',
-  //     //   },
-  //   ],
-  // },
+  {
+    name: '首页',
+    icon: 'home',
+    path: 'market',
+    children: [
+      {
+        name: '轮播图',
+        path: 'carousel',
+      },
+      {
+        name: '直播特卖背景',
+        path: 'background',
+      },
+      {
+        name: '直播特卖',
+        path: 'live-sale',
+      },
+      {
+        name: '热卖商品',
+        path: 'hot-sale',
+      },
+      //   {
+      //     name: '广告',
+      //     path: 'ads',
+      //   },
+    ],
+  },
   {
     name: '财务',
     icon: 'finance',
