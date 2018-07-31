@@ -12,6 +12,7 @@ export default {
 
   effects: {
     *login({ payload }, { call, put }) {
+      payload.mobile = payload.user_name;
       const response = yield call(fakeAccountLogin, payload);
       yield put({
         type: 'changeLoginStatus',

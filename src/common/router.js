@@ -146,24 +146,24 @@ export const getRouterConfig = app => {
     // '/market/index': {
     //   component: dynamicWrapper(app, ['indexs'], () => import('../routes/index/home')),
     // },
-    '/market/AddForm/:type': {
-      component: dynamicWrapper(app, ['indexs'], () => import('../routes/Index/AddForm')),
-    },
-    '/market/EditForm/:id': {
-      component: dynamicWrapper(app, ['indexs'], () => import('../routes/Index/EditForm')),
-    },
-    '/market/background': {
-      component: dynamicWrapper(app, ['config'], () => import('../routes/Index/Background')),
-    },
-    '/market/carousel': {
-      component: dynamicWrapper(app, ['indexs'], () => import('../routes/Index/Carousel')),
-    },
-    '/market/live-sale': {
-      component: dynamicWrapper(app, ['indexs'], () => import('../routes/Index/LiveSale')),
-    },
-    '/market/hot-sale': {
-      component: dynamicWrapper(app, ['indexs'], () => import('../routes/Index/HotSale')),
-    },
+    // '/market/AddForm/:type': {
+    //   component: dynamicWrapper(app, ['indexs'], () => import('../routes/Index/AddForm')),
+    // },
+    // '/market/EditForm/:id': {
+    //   component: dynamicWrapper(app, ['indexs'], () => import('../routes/Index/EditForm')),
+    // },
+    // '/market/background': {
+    //   component: dynamicWrapper(app, ['config'], () => import('../routes/Index/Background')),
+    // },
+    // '/market/carousel': {
+    //   component: dynamicWrapper(app, ['indexs'], () => import('../routes/Index/Carousel')),
+    // },
+    // '/market/live-sale': {
+    //   component: dynamicWrapper(app, ['indexs'], () => import('../routes/Index/LiveSale')),
+    // },
+    // '/market/hot-sale': {
+    //   component: dynamicWrapper(app, ['indexs'], () => import('../routes/Index/HotSale')),
+    // },
     // 直播
     '/live/list': {
       component: dynamicWrapper(app, ['live'], () => import('../routes/Live/list')),

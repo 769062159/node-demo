@@ -94,33 +94,33 @@ export const menuData = [
       },
     ],
   },
-  {
-    name: '首页',
-    icon: 'home',
-    path: 'market',
-    children: [
-      {
-        name: '轮播图',
-        path: 'carousel',
-      },
-      {
-        name: '直播特卖背景',
-        path: 'background',
-      },
-      {
-        name: '直播特卖',
-        path: 'live-sale',
-      },
-      {
-        name: '热卖商品',
-        path: 'hot-sale',
-      },
-      //   {
-      //     name: '广告',
-      //     path: 'ads',
-      //   },
-    ],
-  },
+  // {
+  //   name: '首页',
+  //   icon: 'home',
+  //   path: 'market',
+  //   children: [
+  //     {
+  //       name: '轮播图',
+  //       path: 'carousel',
+  //     },
+  //     {
+  //       name: '直播特卖背景',
+  //       path: 'background',
+  //     },
+  //     {
+  //       name: '直播特卖',
+  //       path: 'live-sale',
+  //     },
+  //     {
+  //       name: '热卖商品',
+  //       path: 'hot-sale',
+  //     },
+  //     //   {
+  //     //     name: '广告',
+  //     //     path: 'ads',
+  //     //   },
+  //   ],
+  // },
   {
     name: '财务',
     icon: 'finance',
