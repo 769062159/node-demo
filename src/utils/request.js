@@ -55,8 +55,8 @@ export default async function request(url, options) {
   // console.log(token);
   // console.log(failTime);
   const nowDate = new Date().getTime() - 60 * 60 * 1000;
-  if (url !== '/admin/login' && failTime < nowDate) {
-    let nowToken = await fetch(`${apiurl}/admin/updatetoken`, {
+  if (url !== '/merchant/login' && failTime < nowDate) {
+    let nowToken = await fetch(`${apiurl}/merchant/updatetoken`, {
       method: 'post',
       headers: {
         mode: 'no-cors',

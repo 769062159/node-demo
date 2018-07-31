@@ -2,7 +2,7 @@ import request from '../utils/request';
 
 // 订单列表
 export async function getOrderList(params) {
-  return request('/admin/order/list', {
+  return request('/merchant/order/list', {
     method: 'POST',
     body: params,
   });
@@ -10,31 +10,31 @@ export async function getOrderList(params) {
 
 // 快递列表
 export async function getExpressList() {
-    return request('/admin/order/express/list', {
-      method: 'POST',
-    });
+  return request('/merchant/order/express/list', {
+    method: 'POST',
+  });
 }
 
 // 发货
 export async function shipshop(params) {
-    return request('/admin/order/deliver', {
-      method: 'POST',
-      body: params,
-    });
+  return request('/merchant/order/deliver', {
+    method: 'POST',
+    body: params,
+  });
 }
 
 // 修改发货
 export async function editShip(params) {
-    return request('/admin/order/deliver/update', {
-      method: 'POST',
-      body: params,
-    });
+  return request('/merchant/order/deliver/update', {
+    method: 'POST',
+    body: params,
+  });
 }
 
 // 修改发货地址
 export async function editAdress(params) {
-    return request('/admin/order/address/update', {
-      method: 'POST',
-      body: params,
-    });
+  return request('/merchant/order/address/update', {
+    method: 'POST',
+    body: params,
+  });
 }

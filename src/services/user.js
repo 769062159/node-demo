@@ -9,7 +9,7 @@ export async function query() {
 // }
 
 export async function queryCurrent() {
-  return request('/admin/myinfo', {
+  return request('/merchant/myinfo', {
     method: 'POST',
   });
 }

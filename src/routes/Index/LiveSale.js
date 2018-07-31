@@ -347,7 +347,7 @@ export default class Home extends PureComponent {
     this.lastFetchId += 1;
     const fetchId = this.lastFetchId;
     this.setState({ data: [], fetching: true });
-    request('/admin/goods/list', {
+    request('/merchant/goods/list', {
       method: 'POST',
       body: {
         goods_name: value,
@@ -370,7 +370,7 @@ export default class Home extends PureComponent {
     this.lastFetchId += 1;
     const fetchId = this.lastFetchId;
     this.setState({ live: [], fetching: true });
-    request('/admin/live/list', {
+    request('/merchant/live/list', {
       method: 'POST',
       body: {
         title: value,

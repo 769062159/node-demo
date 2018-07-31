@@ -44,7 +44,7 @@ export async function fakeSubmitForm(params) {
 }
 
 export async function fakeChartData() {
-  return request('/admin/myinfo', { method: 'POST' });
+  return request('/merchant/myinfo', { method: 'POST' });
 }
 
 export async function queryTags() {
@@ -65,112 +65,112 @@ export async function queryFakeList(params) {
 
 // 登陆
 export async function fakeAccountLogin(params) {
-  return request('/admin/login', {
+  return request('/merchant/login', {
     method: 'POST',
     body: params,
   });
 }
 // 退出
 export async function fakeAccountLogout() {
-  return request('/admin/logout', {
+  return request('/merchant/logout', {
     method: 'POST',
   });
 }
 
 // 获取所有的菜单
 export async function getAllMenu() {
-  return request('/admin/menu/list', {
+  return request('/merchant/menu/list', {
     method: 'POST',
   });
 }
 
 // 创建菜单
 export async function addMenu(params) {
-  return request('/admin/menu/create', {
+  return request('/merchant/menu/create', {
     method: 'POST',
     body: params,
   });
 }
 // 删除菜单
 export async function deleteMenu(params) {
-  return request('/admin/menu/delete', {
+  return request('/merchant/menu/delete', {
     method: 'POST',
     body: params,
   });
 }
 // 角色列表
 export async function getRoleList(params) {
-  return request('/admin/gr/role/list', {
+  return request('/merchant/gr/role/list', {
     method: 'POST',
     body: params,
   });
 }
 // 设置角色菜单
 export async function setRoleMenu(params) {
-  return request('/admin/menu/setmenu', {
+  return request('/merchant/menu/setmenu', {
     method: 'POST',
     body: params,
   });
 }
 // 获取角色菜单
 export async function getRoleMenu(params) {
-  return request('/admin/menu/rolelist', {
+  return request('/merchant/menu/rolelist', {
     method: 'POST',
     body: params,
   });
 }
 // 部门列表
 export async function getGroupList(params) {
-  return request('/admin/gr/group/list', {
+  return request('/merchant/gr/group/list', {
     method: 'POST',
     body: params,
   });
 }
 // 用户列表
 export async function getUserList(params) {
-  return request('/admin/user/list', {
+  return request('/merchant/user/list', {
     method: 'POST',
     body: params,
   });
 }
 // 删除用户
 export async function deleteUser(params) {
-  return request('/admin/user/status', {
+  return request('/merchant/user/status', {
     method: 'POST',
     body: params,
   });
 }
 // 用户[创建部门/角色]
 export async function addDep(params) {
-  return request('/admin/gr/create', {
+  return request('/merchant/gr/create', {
     method: 'POST',
     body: params,
   });
 }
 // 用户[删除部门/角色]
 export async function delDep(params) {
-  return request('/admin/gr/delete', {
+  return request('/merchant/gr/delete', {
     method: 'POST',
     body: params,
   });
 }
 // 用户创建
 export async function addUser(params) {
-  return request('/admin/user/create', {
+  return request('/merchant/user/create', {
     method: 'POST',
     body: params,
   });
 }
 // 所有商品
 export async function getAllGoods(params) {
-  return request('/admin/goods/list', {
+  return request('/merchant/goods/list', {
     method: 'POST',
     body: params,
   });
 }
 // 上传图片
 export async function uploadImg(params) {
-  return request('/admin/upload', {
+  return request('/merchant/upload', {
     method: 'POST',
     body: params,
   });
@@ -188,10 +188,10 @@ export async function queryNotices() {
 
 // 地址列表
 export async function getAddressList(params) {
-    return request('/admin/region/index', {
-        method: 'POST',
-        body: params,
-    });
+  return request('/merchant/region/index', {
+    method: 'POST',
+    body: params,
+  });
 }
 
 // 所有菜单列表
@@ -202,7 +202,7 @@ export async function getAuthMenus() {
 }
 // 我的菜单列表
 // export async function getAuthMenus() {
-// 	return request('/admin/menu/list', { method: 'POST'}).then((datas) => {
+// 	return request('/merchant/menu/list', { method: 'POST'}).then((datas) => {
 //     const menu = datas.data;
 //     menu.forEach(element => {
 //       element.name = element.menu_name;
@@ -216,7 +216,7 @@ export async function getAuthMenus() {
 // 	});
 // }
 // export async function getAuthMenus() {
-// 	return request('/admin/menu/list', {
+// 	return request('/merchant/menu/list', {
 //     method: 'POST',
 //   });
 // }

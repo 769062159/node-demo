@@ -266,7 +266,7 @@ class EditVodStep2 extends React.PureComponent {
     this.lastFetchId += 1;
     const fetchId = this.lastFetchId;
     this.setState({ data: [], fetching: true });
-    request('/admin/goods/list', {
+    request('/merchant/goods/list', {
       method: 'POST',
       body: {
         goods_name: value,

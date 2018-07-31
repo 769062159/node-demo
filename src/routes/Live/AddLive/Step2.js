@@ -321,7 +321,7 @@ class AddLiveStep2 extends React.PureComponent {
     this.lastFetchId += 1;
     const fetchId = this.lastFetchId;
     this.setState({ vod: [], fetching: true });
-    request('/admin/vod/list', {
+    request('/merchant/vod/list', {
       method: 'POST',
       body: {
         goods_name: value,

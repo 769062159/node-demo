@@ -2,7 +2,7 @@ import request from '../utils/request';
 
 // 所有商品
 export async function getAllGoods(params) {
-  return request('/admin/goods/list', {
+  return request('/merchant/goods/list', {
     method: 'POST',
     body: params,
   });
@@ -10,7 +10,7 @@ export async function getAllGoods(params) {
 
 // 商品分类修改
 export async function editGoodType(params) {
-  return request('/admin/goods/class/update', {
+  return request('/merchant/goods/class/update', {
     method: 'POST',
     body: params,
   });
@@ -18,7 +18,7 @@ export async function editGoodType(params) {
 
 // 所有商品分类
 export async function getAllType(params) {
-  return request('/admin/goods/class/lists', {
+  return request('/merchant/goods/class/lists', {
     method: 'POST',
     body: params,
   });
@@ -26,7 +26,7 @@ export async function getAllType(params) {
 
 // 创建商品分类
 export async function addGoodType(params) {
-  return request('/admin/goods/class/create', {
+  return request('/merchant/goods/class/create', {
     method: 'POST',
     body: params,
   });
@@ -34,7 +34,7 @@ export async function addGoodType(params) {
 
 // 分类删除
 export async function delGoodType(params) {
-  return request('/admin/goods/class/delete', {
+  return request('/merchant/goods/class/delete', {
     method: 'POST',
     body: params,
   });
@@ -42,7 +42,7 @@ export async function delGoodType(params) {
 
 // 属性增加 修改 删除  后台合并了
 export async function addGoodAttr(params) {
-  return request('/admin/goods/attr/create', {
+  return request('/merchant/goods/attr/create', {
     method: 'POST',
     body: params,
   });
@@ -50,7 +50,7 @@ export async function addGoodAttr(params) {
 
 // 属性列表
 export async function getAttrList(params) {
-  return request('/admin/goods/attr/lists', {
+  return request('/merchant/goods/attr/lists', {
     method: 'POST',
     body: params,
   });
@@ -66,7 +66,7 @@ export async function editGoodAttr(params) {
 
 // 初始化商品数据
 export async function initGoodAttr(params) {
-  return request('/admin/goods/init', {
+  return request('/merchant/goods/init', {
     method: 'POST',
     body: params,
   });
@@ -74,7 +74,7 @@ export async function initGoodAttr(params) {
 
 // 初始化商品数据
 export async function addGood(params) {
-  return request('/admin/goods/create', {
+  return request('/merchant/goods/create', {
     method: 'POST',
     body: params,
   });
@@ -82,7 +82,7 @@ export async function addGood(params) {
 
 // 品牌列表
 export async function getBrand(params) {
-  return request('/admin/goods/brand/lists', {
+  return request('/merchant/goods/brand/lists', {
     method: 'POST',
     body: params,
   });
@@ -90,7 +90,7 @@ export async function getBrand(params) {
 
 // 品牌创建
 export async function addBrand(params) {
-  return request('/admin/goods/brand/create', {
+  return request('/merchant/goods/brand/create', {
     method: 'POST',
     body: params,
   });
@@ -98,7 +98,7 @@ export async function addBrand(params) {
 
 // 品牌删除
 export async function deleteBrand(params) {
-  return request('/admin/goods/brand/delete', {
+  return request('/merchant/goods/brand/delete', {
     method: 'POST',
     body: params,
   });
@@ -106,7 +106,7 @@ export async function deleteBrand(params) {
 
 // 品牌更新
 export async function updateBrand(params) {
-  return request('/admin/goods/brand/update', {
+  return request('/merchant/goods/brand/update', {
     method: 'POST',
     body: params,
   });
@@ -114,7 +114,7 @@ export async function updateBrand(params) {
 
 // 品牌更新
 export async function getBrandDetail(params) {
-  return request('/admin/goods/brand/detail', {
+  return request('/merchant/goods/brand/detail', {
     method: 'POST',
     body: params,
   });
@@ -122,32 +122,32 @@ export async function getBrandDetail(params) {
 
 // 创建运费模版
 export async function addFreight(params) {
-    return request('/admin/goods/freight/create', {
-      method: 'POST',
-      body: params,
-    });
+  return request('/merchant/goods/freight/create', {
+    method: 'POST',
+    body: params,
+  });
 }
 
 // 删除运费模版
 export async function delFreight(params) {
-    return request('/admin/goods/freight/delete', {
-      method: 'POST',
-      body: params,
-    });
+  return request('/merchant/goods/freight/delete', {
+    method: 'POST',
+    body: params,
+  });
 }
 
 // 运费模版列表
 export async function getFreightList(params) {
-    return request('/admin/goods/freight/list', {
-      method: 'POST',
-      body: params,
-    });
+  return request('/merchant/goods/freight/list', {
+    method: 'POST',
+    body: params,
+  });
 }
 
 // 更新运费模版
 export async function updateFreight(params) {
-    return request('/admin/goods/freight/update', {
-      method: 'POST',
-      body: params,
-    });
+  return request('/merchant/goods/freight/update', {
+    method: 'POST',
+    body: params,
+  });
 }

@@ -2,7 +2,7 @@ import request from '../utils/request';
 
 // 账户列表
 export async function getAccountList(params) {
-  return request('/admin/account/lists', {
+  return request('/merchant/account/lists', {
     method: 'POST',
     body: params,
   });
@@ -10,7 +10,7 @@ export async function getAccountList(params) {
 
 // 账户详情
 export async function getAccountDetail(params) {
-  return request('/admin/account/detail', {
+  return request('/merchant/account/detail', {
     method: 'POST',
     body: params,
   });
@@ -18,23 +18,23 @@ export async function getAccountDetail(params) {
 
 // 提现列表
 export async function getWithdrawList(params) {
-    return request('/admin/withdraw/list', {
-      method: 'POST',
-      body: params,
-    });
+  return request('/merchant/withdraw/list', {
+    method: 'POST',
+    body: params,
+  });
 }
 
 // 同意/拒绝提现
 export async function updateWithdraw(params) {
-    return request('/admin/withdraw/update', {
-      method: 'POST',
-      body: params,
-    });
+  return request('/merchant/withdraw/update', {
+    method: 'POST',
+    body: params,
+  });
 }
 
 // 提现列表
 export async function getRefundList(params) {
-  return request('/admin/order/refund/list', {
+  return request('/merchant/order/refund/list', {
     method: 'POST',
     body: params,
   });
@@ -42,7 +42,7 @@ export async function getRefundList(params) {
 
 // 修改提现状态
 export async function editRefundStatus(params) {
-  return request('/admin/order/refund/update/status', {
+  return request('/merchant/order/refund/update/status', {
     method: 'POST',
     body: params,
   });
@@ -50,7 +50,7 @@ export async function editRefundStatus(params) {
 
 // 修改退款金额
 export async function editRefundMoney(params) {
-  return request('/admin/order/refund/update/money', {
+  return request('/merchant/order/refund/update/money', {
     method: 'POST',
     body: params,
   });
