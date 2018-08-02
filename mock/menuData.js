@@ -163,10 +163,17 @@ export const menuData = [
         name: '直播列表',
         path: 'list',
       },
-      //   {
-      //     name: '录播列表',
-      //     path: 'vod',
-      //   },
+    ],
+  },
+  {
+    name: '小程序',
+    icon: 'program',
+    path: 'my-program',
+    children: [
+      {
+        name: '我的小程序',
+        path: 'my',
+      },
     ],
   },
   // {

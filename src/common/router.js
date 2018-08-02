@@ -296,6 +296,13 @@ export const getRouterConfig = app => {
     // '/router/menu-list': {
     //   component: dynamicWrapper(app, ['menu'], () => import('../routes/Demo/MenuList')),
     // },
+    // 我的小程序
+    '/my-program/my': {
+      component: dynamicWrapper(app, ['program'], () => import('../routes/Myprogram/My')),
+    },
+    '/my-program/setting/:id': {
+      component: dynamicWrapper(app, ['program'], () => import('../routes/Myprogram/Setting')),
+    },
     '/user': {
       identity: 'common',
       component: dynamicWrapper(app, [], () => import('../layouts/UserLayout')),

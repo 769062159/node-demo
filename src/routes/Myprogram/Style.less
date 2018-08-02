@@ -1,0 +1,74 @@
+.rightBox {
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 20px;
+  text-align: right;
+  .word {
+    margin-right: 20px;
+  }
+}
+.CardProgramList {
+  display: flex;
+  flex-wrap: wrap;
+  .CardProgram {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 50%;
+    box-sizing: border-box;
+    padding: 10px 20px;
+    .card {
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      width: 340px;
+      height: 170px;
+      padding: 0 20px;
+      border-radius: 14px;
+      border: 1px solid #e0e0e0;
+      cursor: pointer;
+      img {
+        width: 54px;
+        height: 54px;
+        border-radius: 50%;
+        margin-right: 10px;
+      }
+      p {
+        display: flex;
+        flex-direction: column;
+        justify-items: center;
+        margin-bottom: 0;
+      }
+      .released {
+        position: absolute;
+        top: 10px;
+        right: -30px;
+        display: inline-block;
+        width: 110px;
+        height: 30px;
+        line-height: 30px;
+        /* border: 1px solid #eee; */
+        /* border-radius: 50%; */
+        font-size: 12px;
+        color: #606066;
+        text-align: center;
+        transform: rotate(45deg);
+        -webkit-transform: rotate(45deg);
+        -ms-transform: rotate(45deg);
+      }
+      .unrel {
+        background: #bbb;
+        color: #747981;
+      }
+    }
+    .rightBtn {
+      width: 340px;
+      text-align: right;
+    }
+    .deleteBtn {
+      margin-top: 10px;
+      background: #ffb752;
+      border-color: #ffb752;
+    }
+  }
+}

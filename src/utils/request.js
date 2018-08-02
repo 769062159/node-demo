@@ -39,6 +39,7 @@ function checkStatus(response) {
 }
 const apiurl = 'http://hlsj.test.seastart.cn';
 // const apiurl = 'http://api.store.314live.cn';
+const wxapiurl = 'http://wechat.store.314live.cn';
 // const apiurl = "";
 
 /**
@@ -49,7 +50,12 @@ const apiurl = 'http://hlsj.test.seastart.cn';
  * @return {object}           An object containing either "data" or "err"
  */
 export default async function request(url, options) {
-  const newUrl = apiurl + url;
+  let newUrl = '';
+  if (url.indexOf('/wx/') === 0 ) {
+    newUrl = wxapiurl + url;
+  } else {
+    newUrl = apiurl + url;
+  }
   const failTime = localStorage.getItem('failTime');
   let token = localStorage.getItem('token');
   // console.log(token);
