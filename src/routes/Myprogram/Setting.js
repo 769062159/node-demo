@@ -123,19 +123,19 @@ export default class Setting extends PureComponent {
     const datas = [
       {
         name: '小程序appId',
-        setting: '',
+        setting: programDetail.appid,
         remark: '小程序的唯一标识。不可更改。',
         id: 1,
       },
       {
         name: '微信商户号',
-        setting: '',
+        setting: programDetail.mchid,
         remark: '必填。用于实现以下功能：微信支付；退款。',
         id: 2,
       },
       {
         name: '微信商户号密钥',
-        setting: '',
+        setting: programDetail.key,
         remark: '必填。用于实现以下功能：微信支付；退款。',
         id: 3,
       },
