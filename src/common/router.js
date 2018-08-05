@@ -348,8 +348,9 @@ function dynamicWrapper(app, models, component) {
       return createElement(component().default, {
         ...props,
         routerConfig: routerConfigCache,
-        uploadUrl: 'http://hlsj.test.seastart.cn/merchant/upload', // 全局上传图片路径
-        // uploadUrl: 'http://api.store.314live.cn/merchant/upload',  // 全局上传图片路径
+        // uploadUrl: 'http://hlsj.test.seastart.cn/merchant/upload', // 全局上传图片路径
+        uploadUrl: 'http://api.store.314live.cn/merchant/upload', // 全局上传图片路径
+        uploadFile: 'http://wechat.store.314live.cn/wx/wechataccount/upload', // 全局上传图片路径
       });
     };
   }

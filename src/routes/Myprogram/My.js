@@ -99,8 +99,8 @@ export default class My extends PureComponent {
     const CardItem = [];
     programList.forEach(res => {
       CardItem.push(
-        <div key={res.id} className={styles.CardProgram} onClick={this.jumpTo.bind(this, res.id)}>
-          <div className={styles.card}>
+        <div key={res.id} className={styles.CardProgram}>
+          <div className={styles.card} onClick={this.jumpTo.bind(this, res.id)}>
             <span className={`${styles.released} ${styles.unrel}`}>未发布</span>
             <img src="/img/xiaochengxu.jpg" alt="小程序" />
             <p>
@@ -141,6 +141,12 @@ export default class My extends PureComponent {
             <FormItem label="小程序名字" {...formItemLayout}>
               {getFieldDecorator('name', {
                 // initialValue: editData.goods_class_id,
+                rules: [
+                  {
+                    required: true,
+                    message: '请输入小程序名字',
+                  },
+                ],
               })(<Input />)}
             </FormItem>
             <FormItem style={{ marginTop: 32 }} {...formSubmitLayout}>

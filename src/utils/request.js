@@ -37,8 +37,8 @@ function checkStatus(response) {
   error.response = response;
   throw error;
 }
-const apiurl = 'http://hlsj.test.seastart.cn';
-// const apiurl = 'http://api.store.314live.cn';
+// const apiurl = 'http://hlsj.test.seastart.cn';
+const apiurl = 'http://api.store.314live.cn';
 const wxapiurl = 'http://wechat.store.314live.cn';
 // const apiurl = "";
 
