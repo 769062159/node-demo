@@ -49,6 +49,30 @@ export default class Setting extends PureComponent {
       payload: {
         account_id: id,
       },
+      callback: url => {
+        setTimeout(() => {
+          window.open(url);
+        }, 5000);
+        // const form = document.createElement('form');
+        // form.action = url;
+        // form.target = '_blank';
+        // form.method = 'POST';
+        // console.log(form);
+        // document.body.appendChild(form);
+        // form.submit();
+        // const a = document.createElement("a");
+        // a.setAttribute('target','_blank');
+        // a.href = url;
+        // console.log(a);
+        // const e = document.createEvent('MouseEvents');
+        // e.initEvent('click', true, true );
+        // a.dispatchEvent(e)
+        // console.log(url);
+        // window.open(url, 'about:blank');
+        // const w = window.open('about:blank');
+        // console.log(w);
+        // w.location.href = url;
+      },
     });
   };
   editDataMsg = () => {
@@ -90,7 +114,7 @@ export default class Setting extends PureComponent {
     });
   };
   render() {
-    const { loading, form, program: { programDetail }, uploadFile } = this.props;
+    const { loading, form, program: { programDetail, authorizationUrl }, uploadFile } = this.props;
     const { formVisible, type } = this.state;
     const { getFieldDecorator } = form;
     const modalTitle = type === 2 ? '微信商户号' : '微信商户号密钥';
@@ -114,9 +138,14 @@ export default class Setting extends PureComponent {
         render: record =>
           record.id === 1 ? (
             !programDetail.appid ? (
-              <Button type="primary" onClick={this.settingProgram}>
-                已有小程序，立即设置
-              </Button>
+              // <Button type="primary" onClick={this.settingProgram}>
+              //   已有小程序，立即设置
+              // </Button>
+              <a target="_blank"  href={authorizationUrl}>
+                <Button type="primary" >
+                  已有小程序，立即设置
+                </Button>
+              </a>
             ) : null
           ) : (
             <a onClick={this.showModal.bind(this, record.id)}>修改</a>

@@ -46,6 +46,13 @@ export default {
         type: 'setProgramDetail',
         payload: response,
       });
+      if (response && response.code === 200 && !response.data.appid) {
+        const authorizationUrl = yield call(getAuthorizationUrl, { ...payload });
+        yield put({
+          type: 'setAuthorizationUrl',
+          authorizationUrl,
+        });
+      }
     },
     *editProgramDetail({ payload }, { call, put }) {
       yield call(editProgramDetail, { ...payload });
@@ -55,12 +62,13 @@ export default {
         payload: response,
       });
     },
-    *getAuthorizationUrl({ payload }, { call, put }) {
+    *getAuthorizationUrl({ payload, callback }, { call }) {
       const response = yield call(getAuthorizationUrl, { ...payload });
-      yield put({
-        type: 'setAuthorizationUrl',
-        payload: response,
-      });
+      if (response && response.code === 200 && callback) callback(response.data.authorization_url);
+      // yield put({
+      //   type: 'setAuthorizationUrl',
+      //   payload: response,
+      // });
     },
   },
 
@@ -72,14 +80,8 @@ export default {
         programList: data,
       };
     },
-    setAuthorizationUrl(state, { payload }) {
-      const { data: { authorization_url: url } } = payload;
-      console.log(url);
-      if (url) {
-        // window.open(url, '_blank');
-        const w = window.open('about:blank');
-        w.location.href = url;
-      }
+    setAuthorizationUrl(state, { authorizationUrl }) {
+      const { data: { authorization_url: url } } = authorizationUrl;
       return {
         ...state,
         authorizationUrl: url,

@@ -36,9 +36,10 @@ export default class UploadFile extends PureComponent {
       message.error('请先激活小程序appid！');
       return false;
     }
-    const { type } = file;
-    console.log(type);
-    const isTrue = type === 'application/x-x509-ca-cert';
+    let { name } = file;
+    name = name.split('.')[1];
+    console.log(name);
+    const isTrue = name === 'pem';
     if (!isTrue) {
       message.error('请上传正确格式的证书！');
     }
