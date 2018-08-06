@@ -37,6 +37,7 @@ export default class UploadFile extends PureComponent {
       return false;
     }
     const { type } = file;
+    console.log(type);
     const isTrue = type === 'application/x-x509-ca-cert';
     if (!isTrue) {
       message.error('请上传正确格式的证书！');
@@ -44,8 +45,9 @@ export default class UploadFile extends PureComponent {
     return isTrue;
   };
   render() {
-    const { uploadUrl, status } = this.props;
+    const { uploadUrl, status, id } = this.props;
     const { header, payload } = this.state;
+    payload.account_id = id;
     return (
       <Upload
         action={uploadUrl}

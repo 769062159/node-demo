@@ -76,7 +76,9 @@ export default {
       const { data: { authorization_url: url } } = payload;
       console.log(url);
       if (url) {
-        window.open(url, '_blank');
+        // window.open(url, '_blank');
+        const w = window.open('about:blank');
+        w.location.href = url;
       }
       return {
         ...state,

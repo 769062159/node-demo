@@ -113,7 +113,7 @@ export default class Setting extends PureComponent {
         title: '操作',
         render: record =>
           record.id === 1 ? (
-            record.appid ? (
+            !programDetail.appid ? (
               <Button type="primary" onClick={this.settingProgram}>
                 已有小程序，立即设置
               </Button>
@@ -143,7 +143,7 @@ export default class Setting extends PureComponent {
         id: 3,
       },
     ];
-    console.log(programDetail.is_upload_key);
+    console.log(programDetail.id);
     return (
       <PageHeaderLayout>
         <Table
