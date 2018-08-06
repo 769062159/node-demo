@@ -101,7 +101,11 @@ export default class My extends PureComponent {
       CardItem.push(
         <div key={res.id} className={styles.CardProgram}>
           <div className={styles.card} onClick={this.jumpTo.bind(this, res.id)}>
-            <span className={`${styles.released} ${styles.unrel}`}>未发布</span>
+            <span
+              className={`${styles.released} ${res.release_status ? styles.deno : styles.unrel}`}
+            >
+              {res.release_status ? '已发布' : '未发布'}
+            </span>
             <img src="/img/xiaochengxu.jpg" alt="小程序" />
             <p>
               <span>{res.name}</span>
@@ -109,9 +113,16 @@ export default class My extends PureComponent {
             </p>
           </div>
           <div className={styles.rightBtn} onClick={this.deleteProgram.bind(this, res.id)}>
-            <Button type="primary" className={styles.deleteBtn}>
-              删除
-            </Button>
+            {!res.release_status ? (
+              <Button
+                type="primary"
+                size="small"
+                className={styles.deleteBtn}
+                onClick={this.deleteProgram.bind(this, res.id)}
+              >
+                删除
+              </Button>
+            ) : null}
           </div>
         </div>
       );

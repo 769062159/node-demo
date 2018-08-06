@@ -58,6 +58,7 @@
     "no-bitwise": [0],
     "no-cond-assign": [0],
     "import/no-unresolved": [0],
+    "react/jsx-no-target-blank": [0],
     "comma-dangle": [
       "error",
       {

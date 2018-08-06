@@ -46,3 +46,27 @@ export async function editProgramDetail(params) {
     body: params,
   });
 }
+
+//  查看小程序绑定的开放平台
+export async function getWxOpen(params) {
+  return request('/wx/open/get', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+//  绑定小程序到开放平台
+export async function bindWxOpen(params) {
+  return request('/wx/open/bind', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+//  解除绑定小程序到开放平台
+export async function unbindWxOpen(params) {
+  return request('/wx/open/unbind', {
+    method: 'POST',
+    body: params,
+  });
+}

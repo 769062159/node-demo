@@ -5,6 +5,7 @@ import {
   deleteProgram,
   getProgramDetail,
   editProgramDetail,
+  getWxOpen,
 } from '../services/program';
 
 export default {
@@ -14,9 +15,17 @@ export default {
     programList: [],
     authorizationUrl: '',
     programDetail: {},
+    wxOpen: '',
   },
 
   effects: {
+    *getWxOpen({ payload }, { call, put }) {
+      const response = yield call(getWxOpen, { ...payload });
+      yield put({
+        type: 'getWxOpens',
+        payload: response,
+      });
+    },
     *fetchProgramList(_, { call, put }) {
       const response = yield call(getProgramList);
       yield put({
@@ -73,6 +82,13 @@ export default {
   },
 
   reducers: {
+    getWxOpens(state, { payload }) {
+      const { data } = payload;
+      return {
+        ...state,
+        wxOpen: data,
+      };
+    },
     getProgramList(state, { payload }) {
       const { data } = payload;
       return {

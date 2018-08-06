@@ -1,6 +1,6 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
-import { Form, Button, Table, Modal, Input, Row, Col } from 'antd';
+import { Form, Button, Table, Modal, Input, Row, Col, Tag } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import UploadFile from '../../components/UploadFile';
 
@@ -36,6 +36,12 @@ export default class Setting extends PureComponent {
     const { dispatch } = this.props;
     dispatch({
       type: 'program/getProgramDetail',
+      payload: {
+        account_id: id,
+      },
+    });
+    dispatch({
+      type: 'program/getWxOpen',
       payload: {
         account_id: id,
       },
@@ -114,7 +120,12 @@ export default class Setting extends PureComponent {
     });
   };
   render() {
-    const { loading, form, program: { programDetail, authorizationUrl }, uploadFile } = this.props;
+    const {
+      loading,
+      form,
+      program: { programDetail, authorizationUrl, wxOpen },
+      uploadFile,
+    } = this.props;
     const { formVisible, type } = this.state;
     const { getFieldDecorator } = form;
     const modalTitle = type === 2 ? '微信商户号' : '微信商户号密钥';
@@ -141,11 +152,13 @@ export default class Setting extends PureComponent {
               // <Button type="primary" onClick={this.settingProgram}>
               //   已有小程序，立即设置
               // </Button>
-              <a target="_blank"  href={authorizationUrl}>
-                <Button type="primary" >
-                  已有小程序，立即设置
-                </Button>
-              </a>
+              <Fragment>
+                <a target="_blank" href={authorizationUrl}>
+                  <Button type="primary">已有小程序，立即设置</Button>
+                </a>
+                <br />
+                <Tag style={{ marginTop: 10 }}>若已过期,请刷新页面</Tag>
+              </Fragment>
             ) : null
           ) : (
             <a onClick={this.showModal.bind(this, record.id)}>修改</a>
@@ -170,6 +183,11 @@ export default class Setting extends PureComponent {
         setting: programDetail.key,
         remark: '必填。用于实现以下功能：微信支付；退款。',
         id: 3,
+      },
+      {
+        name: '微信开放平台',
+        setting: `${wxOpen ? '已绑定' : '未绑定'}`,
+        id: 4,
       },
     ];
     console.log(programDetail.id);
