@@ -40,12 +40,12 @@ export default class Setting extends PureComponent {
         account_id: id,
       },
     });
-    dispatch({
-      type: 'program/getWxOpen',
-      payload: {
-        account_id: id,
-      },
-    });
+    // dispatch({
+    //   type: 'program/getWxOpen',
+    //   payload: {
+    //     account_id: id,
+    //   },
+    // });
   }
   settingProgram = () => {
     const { id } = this.props.match.params;
@@ -123,7 +123,7 @@ export default class Setting extends PureComponent {
     const {
       loading,
       form,
-      program: { programDetail, authorizationUrl, wxOpen },
+      program: { programDetail, authorizationUrl },
       uploadFile,
     } = this.props;
     const { formVisible, type } = this.state;
@@ -184,11 +184,11 @@ export default class Setting extends PureComponent {
         remark: '必填。用于实现以下功能：微信支付；退款。',
         id: 3,
       },
-      {
-        name: '微信开放平台',
-        setting: `${wxOpen ? '已绑定' : '未绑定'}`,
-        id: 4,
-      },
+      // {
+      //   name: '微信开放平台',
+      //   setting: `${wxOpen ? '已绑定' : '未绑定'}`,
+      //   id: 4,
+      // },
     ];
     console.log(programDetail.id);
     return (

@@ -67,6 +67,12 @@ export default class My extends PureComponent {
     });
   };
   jumpTo = id => {
+    // if (record.status === 1) {
+    //   const { dispatch } = this.props;
+    //   dispatch(routerRedux.push(`/my-program/setting/${record.id}`));
+    // } else {
+    //   message.error('请先绑定小程序');
+    // }
     const { dispatch } = this.props;
     dispatch(routerRedux.push(`/my-program/setting/${id}`));
   };
@@ -129,12 +135,14 @@ export default class My extends PureComponent {
     });
     return (
       <PageHeaderLayout>
-        <Row className={styles.rightBox}>
-          <span className={styles.word}>一键创建小程序</span>
-          <Button type="primary" loading={loading} onClick={this.showModal.bind(this)}>
-            +创建小程序
-          </Button>
-        </Row>
+        {programList.length ? null : (
+          <Row className={styles.rightBox}>
+            <span className={styles.word}>一键创建小程序</span>
+            <Button type="primary" loading={loading} onClick={this.showModal.bind(this)}>
+              +创建小程序
+            </Button>
+          </Row>
+        )}
         <div className={styles.CardProgramList}>{CardItem}</div>
         <Modal
           title="小程序"

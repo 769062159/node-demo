@@ -161,6 +161,10 @@ export default {
     },
     saveCurrentUser(state, { payload }) {
       const { data } = payload;
+      const logo = document.querySelector('[type="image/x-icon"]');
+      if (data.logo) {
+        logo.href = data.logo;
+      }
       return {
         ...state,
         currentUser: data,

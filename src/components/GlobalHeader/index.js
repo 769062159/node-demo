@@ -166,10 +166,7 @@ export default class GlobalHeader extends PureComponent {
                   <Avatar
                     size="small"
                     className={styles.avatar}
-                    src={
-                      currentUser.avatar ||
-                      'https://gw.alipayobjects.com/zos/rmsportal/BiazfanxmamNRoxxVxka.png'
-                    }
+                    src={currentUser.logo || '/logo/logo1.png'}
                   />
                   <span className={styles.name}>{currentUser.nick_name}</span>
                 </span>

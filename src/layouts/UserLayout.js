@@ -59,6 +59,7 @@ class UserLayout extends React.PureComponent {
     };
     // 在 element 地方使用 config 渲染效果
     const cn = new CanvasNest(this.myRef.current, config);
+    console.log(cn);
   }
   getPageTitle() {
     const { routerData, location } = this.props;
@@ -75,14 +76,11 @@ class UserLayout extends React.PureComponent {
       <DocumentTitle title={this.getPageTitle()}>
         <div className={styles.container} ref={this.myRef}>
           <div className={styles.content}>
-            <div className={styles.top}>
+            {/* <div className={styles.top}>
               <div className={styles.header}>
                 <img alt="logo" className={styles.logo} src="/logo/logo4.png" />
-                {/* <Link to="/">
-                  <img alt="logo" className={styles.logo} src='/logo/logo3.png' />
-                </Link> */}
               </div>
-            </div>
+            </div> */}
             <Switch>
               {getRoutes(match.path, routerData).map(item => (
                 <Route

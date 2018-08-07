@@ -91,11 +91,11 @@ class BasicLayout extends React.PureComponent {
     });
   }
   getPageTitle() {
-    const { routerData, location } = this.props;
+    const { routerData, location, currentUser } = this.props;
     const { pathname } = location;
-    let title = '量子加能';
+    let title = currentUser.user_name || '量子加能';
     if (routerData[pathname] && routerData[pathname].name) {
-      title = `${routerData[pathname].name} - 量子加能`;
+      title = `${routerData[pathname].name} - ${title}`;
     }
     return title;
   }
@@ -168,6 +168,7 @@ class BasicLayout extends React.PureComponent {
           // If you do not have the Authorized parameter
           // you will be forced to jump to the 403 interface without permission
           Authorized={Authorized}
+          currentUser={currentUser}
           menuData={menus}
           collapsed={collapsed}
           location={location}

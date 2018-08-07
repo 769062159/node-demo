@@ -382,7 +382,7 @@ export default class FrontUserList extends PureComponent {
             <Col span={24} style={{ fontSize: 14 }}>
               <div>消费:{val.account_consume}</div>
               <div>佣金:{val.account_total_income}</div>
-              <div>注册渠道:{text.has_user_oauth.type === 0 ? '小程序' : ''}</div>
+              <div>注册渠道:{text.wechat_account_name}</div>
             </Col>
           </Row>
         ),

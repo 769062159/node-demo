@@ -305,7 +305,7 @@ export const getRouterConfig = app => {
     },
     '/user': {
       identity: 'common',
-      component: dynamicWrapper(app, [], () => import('../layouts/UserLayout')),
+      component: dynamicWrapper(app, ['frontUser'], () => import('../layouts/UserLayout')),
     },
     '/user/login': {
       identity: 'common',
