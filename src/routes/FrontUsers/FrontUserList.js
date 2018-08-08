@@ -354,6 +354,28 @@ export default class FrontUserList extends PureComponent {
       frontUser: { frontUserList: datas, frontUserListPage, userRankList },
       loading,
     } = this.props;
+    const hasAccountDefault = {
+      account_balance: '0.00',
+      account_commission: '0.00',
+      account_confirming: '0.00',
+      account_consume: '0.00',
+      account_expenditure: '0.00',
+      account_id: 0,
+      account_total_income: '0.00',
+      account_withdrawed_cash: '0.00',
+      account_withdrawing_cash: '0.00',
+      level: '0.00',
+      level_id: 0,
+      merchant_id: 0,
+      projected_income: '0.00',
+      update_time: 0,
+      user_id: 0,
+      user_oauth_id: 0,
+      wechat_account_id: 1,
+    };
+    datas.forEach(item => {
+      item.has_account = item.has_account || hasAccountDefault;
+    });
     const { formVisible, type, pagination, editDataId } = this.state;
     const progressColumns = [
       {
