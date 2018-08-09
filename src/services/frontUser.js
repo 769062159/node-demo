@@ -55,3 +55,19 @@ export async function updateMemberLevel(params) {
     body: params,
   });
 }
+
+// 设置默认用户
+export async function setDefaultId(params) {
+  return request('/merchant/member/set/default', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+// 获取默认用户
+export async function getDefault(params) {
+  return request('/merchant/member/get/default', {
+    method: 'POST',
+    body: params,
+  });
+}

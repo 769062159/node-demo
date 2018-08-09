@@ -230,7 +230,7 @@ export default class Live extends PureComponent {
             // )}
           />
           <Button
-            style={{ position: 'reletive', top: '-50px', right: '-20px' }}
+            style={{ position: 'reletive', top: '16px', right: '-20px' }}
             type="primary"
             onClick={this.allSelectAdd}
             disabled={!leftBatchArr.length}

@@ -48,6 +48,7 @@ export default class FrontUserList extends PureComponent {
     formVisible: false,
     editDataId: 0,
     type: 0,
+    defaultId: '',
     // formValues: {},
     expandForm: false,
     // header: {
@@ -69,8 +70,33 @@ export default class FrontUserList extends PureComponent {
         pagination,
       },
     });
+    dispatch({
+      type: 'frontUser/getDefaultList',
+    });
   }
-
+  setDefaultValue = e => {
+    this.setState({
+      defaultId: e.target.value,
+    });
+  };
+  setDefault = () => {
+    const { defaultId } = this.state;
+    if (defaultId) {
+      console.log(defaultId);
+      const { dispatch } = this.props;
+      dispatch({
+        type: 'frontUser/setDefault',
+        payload: {
+          user_id: defaultId,
+        },
+        callback: () => {
+          message.success('设置成功');
+        },
+      });
+    } else {
+      message.error('请输入默认用户id');
+    }
+  };
   handleSearch = e => {
     e.preventDefault();
     const { pagination } = this.state;
@@ -351,7 +377,7 @@ export default class FrontUserList extends PureComponent {
 
   render() {
     const {
-      frontUser: { frontUserList: datas, frontUserListPage, userRankList },
+      frontUser: { frontUserList: datas, frontUserListPage, userRankList, getDefaultList },
       loading,
     } = this.props;
     const hasAccountDefault = {
@@ -427,9 +453,51 @@ export default class FrontUserList extends PureComponent {
         ),
       },
     ];
+    const deflutColumns = [
+      {
+        title: '头像',
+        dataIndex: 'avatar',
+        key: 'avatar',
+        render: val => <img style={{ height: 80 }} src={val} alt="头像" />,
+      },
+      {
+        title: '姓名',
+        dataIndex: 'nickname',
+      },
+      {
+        title: '用户id',
+        dataIndex: 'id',
+      },
+    ];
 
     return (
       <PageHeaderLayout>
+        <Card>
+          <Row type="flex" align="middle" style={{ marginBottom: 10 }}>
+            <Col span={4} style={{ textAlign: 'right', paddingRight: 10 }}>
+              请输入默认用户id
+            </Col>
+            <Col span={8}>
+              <Input placeholder="请输入默认用户id" onChange={this.setDefaultValue} />
+            </Col>
+            <Col span={2}>
+              <Button type="primary" style={{ marginLeft: 8 }} onClick={this.setDefault}>
+                确定
+              </Button>
+            </Col>
+          </Row>
+          <Table
+            dataSource={getDefaultList}
+            rowKey={record => record.id}
+            loading={loading}
+            columns={deflutColumns}
+            pagination={false}
+            // showHeader={false}
+            locale={{
+              emptyText: '暂无默认用户id',
+            }}
+          />
+        </Card>
         <Card bordered={false}>
           <div className={styles.tableListForm}>{this.renderInquire()}</div>
           <div className={styles.tableList}>

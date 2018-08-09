@@ -6,6 +6,8 @@ import {
   delUserRank,
   updateUpLevel,
   updateMemberLevel,
+  setDefaultId,
+  getDefault,
 } from '../services/frontUser.js';
 
 export default {
@@ -15,9 +17,28 @@ export default {
     frontUserList: [], // table列表
     frontUserListPage: {}, // table 页脚
     userRankList: [], // 用户等级列表
+    getDefaultList: [], // 默认用户列表
   },
 
   effects: {
+    *setDefault({ payload, callback }, { call, put }) {
+      const data = yield call(setDefaultId, { ...payload });
+      if (data && data.code === 200) {
+        callback();
+        const response = yield call(getDefault);
+        yield put({
+          type: 'getDefaultLists',
+          payload: response,
+        });
+      }
+    },
+    *getDefaultList(_, { call, put }) {
+      const response = yield call(getDefault);
+      yield put({
+        type: 'getDefaultLists',
+        payload: response,
+      });
+    },
     *fetchUserRankList({ payload }, { call, put }) {
       const response = yield call(getUserRankList, { ...payload });
       yield put({
@@ -75,6 +96,19 @@ export default {
   },
 
   reducers: {
+    getDefaultLists(state, { payload }) {
+      console.log(payload);
+      let { data } = payload;
+      if (data) {
+        data = [data];
+      } else {
+        data = [];
+      }
+      return {
+        ...state,
+        getDefaultList: data,
+      };
+    },
     getUserRankLists(state, { payload }) {
       const { data } = payload;
       return {

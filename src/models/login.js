@@ -28,18 +28,18 @@ export default {
         yield put(routerRedux.push('/'));
       }
     },
-    *logout(_, { call, put, select }) {
+    *logout(_, { call, put }) {
       try {
         const response = yield call(fakeAccountLogout, 'out');
         console.log(response);
         if (response) {
           localStorage.removeItem('token');
           // get location pathname
-          const urlParams = new URL(window.location.href);
-          const pathname = yield select(state => state.routing.location.pathname);
+          // const urlParams = new URL(window.location.href);
+          // const pathname = yield select(state => state.routing.location.pathname);
           // add the parameters in the url
-          urlParams.searchParams.set('redirect', pathname);
-          window.history.replaceState(null, 'login', urlParams.href);
+          // urlParams.searchParams.set('redirect', pathname);
+          // window.history.replaceState(null, 'login', urlParams.href);
         }
       } finally {
         yield put({
