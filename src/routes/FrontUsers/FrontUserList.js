@@ -94,7 +94,7 @@ export default class FrontUserList extends PureComponent {
         },
       });
     } else {
-      message.error('请输入默认用户id');
+      message.error('请输入站长id');
     }
   };
   handleSearch = e => {
@@ -472,19 +472,17 @@ export default class FrontUserList extends PureComponent {
 
     return (
       <PageHeaderLayout>
-        <Card>
+        <Card style={{ marginBottom: 10 }}>
           <Row type="flex" align="middle" style={{ marginBottom: 10 }}>
-            <Col span={4} style={{ textAlign: 'right', paddingRight: 10 }}>
-              请输入默认用户id
-            </Col>
-            <Col span={8}>
-              <Input placeholder="请输入默认用户id" onChange={this.setDefaultValue} />
-            </Col>
-            <Col span={2}>
+            <span style={{ textAlign: 'right', paddingRight: 10 }}>请输入站长id</span>
+            <span>
+              <Input placeholder="请输入站长id" onChange={this.setDefaultValue} />
+            </span>
+            <span>
               <Button type="primary" style={{ marginLeft: 8 }} onClick={this.setDefault}>
                 确定
               </Button>
-            </Col>
+            </span>
           </Row>
           <Table
             dataSource={getDefaultList}
@@ -494,7 +492,7 @@ export default class FrontUserList extends PureComponent {
             pagination={false}
             // showHeader={false}
             locale={{
-              emptyText: '暂无默认用户id',
+              emptyText: '暂无站长id',
             }}
           />
         </Card>

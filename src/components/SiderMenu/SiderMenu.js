@@ -233,19 +233,23 @@ export default class SiderMenu extends PureComponent {
       >
         <div className={styles.logo} key="logo">
           <Link to="/">
-            {currentUser.logo && currentUser.user_name ? (
-              !collapsed ? (
-                <div>
-                  <img src={currentUser.logo} className={styles.logoImg} alt="logo" />
-                  {currentUser.user_name}
-                </div>
-              ) : (
-                <div>
-                  <img src={currentUser.logo} className={styles.logoImg} alt="logo" />
-                </div>
-              )
+            {!collapsed ? (
+              <div>
+                <img
+                  src={currentUser.logo || '/logo/logo1.png'}
+                  className={styles.logoImg}
+                  alt="logo"
+                />
+                {currentUser.user_name || '商城小程序'}
+              </div>
             ) : (
-              <img src="/logo/logo4.png" alt="logo" />
+              <div>
+                <img
+                  src={currentUser.logo || '/logo/logo1/png'}
+                  className={styles.logoImg}
+                  alt="logo"
+                />
+              </div>
             )}
           </Link>
         </div>

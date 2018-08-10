@@ -93,7 +93,7 @@ class BasicLayout extends React.PureComponent {
   getPageTitle() {
     const { routerData, location, currentUser } = this.props;
     const { pathname } = location;
-    let title = currentUser.user_name || '量子加能';
+    let title = currentUser.user_name || '商城小程序';
     if (routerData[pathname] && routerData[pathname].name) {
       title = `${routerData[pathname].name} - ${title}`;
     }
@@ -227,7 +227,7 @@ class BasicLayout extends React.PureComponent {
             // }]}
             copyright={
               <div>
-                Copyright <Icon type="copyright" /> 2018 风远科技
+                Copyright <Icon type="copyright" /> 2018 三点一视
               </div>
             }
           />

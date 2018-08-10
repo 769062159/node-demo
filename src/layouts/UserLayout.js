@@ -37,7 +37,7 @@ import AppNoMenu from '../components/utils/AppNoMenu';
 
 const copyright = (
   <Fragment>
-    Copyright <Icon type="copyright" /> 风远科技
+    Copyright <Icon type="copyright" /> 三点一视
   </Fragment>
 );
 
@@ -64,9 +64,9 @@ class UserLayout extends React.PureComponent {
   getPageTitle() {
     const { routerData, location } = this.props;
     const { pathname } = location;
-    let title = '量子加能';
+    let title = '商城小程序';
     if (routerData[pathname] && routerData[pathname].name) {
-      title = `${routerData[pathname].name} - 量子加能`;
+      title = `${routerData[pathname].name} - 商城小程序`;
     }
     return title;
   }

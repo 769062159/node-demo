@@ -148,18 +148,13 @@ export default class Setting extends PureComponent {
         title: '操作',
         render: record =>
           record.id === 1 ? (
-            !programDetail.appid ? (
-              // <Button type="primary" onClick={this.settingProgram}>
-              //   已有小程序，立即设置
-              // </Button>
-              <Fragment>
-                <a target="_blank" href={authorizationUrl}>
-                  <Button type="primary">已有小程序，立即设置</Button>
-                </a>
-                <br />
-                <Tag style={{ marginTop: 10 }}>若已过期,请刷新页面</Tag>
-              </Fragment>
-            ) : null
+            <Fragment>
+              <a target="_blank" href={authorizationUrl}>
+                <Button type="primary">已有小程序，立即设置</Button>
+              </a>
+              <br />
+              <Tag style={{ marginTop: 10 }}>若已过期,请刷新页面</Tag>
+            </Fragment>
           ) : (
             <a onClick={this.showModal.bind(this, record.id)}>修改</a>
           ),
@@ -193,6 +188,9 @@ export default class Setting extends PureComponent {
     console.log(programDetail.id);
     return (
       <PageHeaderLayout>
+        <Tag color="blue">
+          如需开通直播，请您在小程序管理后台，“设置”-“接口设置”中自助开通该直播权限
+        </Tag>
         <Table
           //   onChange={this.handleTableChange}  // 换页
           className="components-table-demo-nested"
