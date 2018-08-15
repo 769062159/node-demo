@@ -23,7 +23,7 @@ import styles from './List.less';
 const FormItem = Form.Item;
 const InputGroup = Input.Group;
 const { Option } = Select;
-const oredrStatus = ['未支付', '已取消', '已支付', '已发货', '已收货', '已评价', '退款成功'];
+const oredrStatus = ['未支付', '已取消', '待发货', '已发货', '待评价', '已评价', '退款成功'];
 // const warehouseType = ['仓库', '供应商', '本地仓库供应商货'];
 const bigStyles = {
   display: 'inline-block',
@@ -365,9 +365,9 @@ export default class Order extends PureComponent {
                 <Select placeholder="请选择" style={{ width: '100%' }}>
                   <Option value="0">未支付</Option>
                   <Option value="1">已取消</Option>
-                  <Option value="2">已支付</Option>
+                  <Option value="2">待发货</Option>
                   <Option value="3">已发货</Option>
-                  <Option value="4">已收货</Option>
+                  <Option value="4">待评价</Option>
                   <Option value="5">已评价</Option>
                 </Select>
               )}
@@ -407,9 +407,9 @@ export default class Order extends PureComponent {
                 <Select placeholder="请选择" style={{ width: '100%' }}>
                   <Option value="0">未支付</Option>
                   <Option value="1">已取消</Option>
-                  <Option value="2">已支付</Option>
+                  <Option value="2">待发货</Option>
                   <Option value="3">已发货</Option>
-                  <Option value="4">已收货</Option>
+                  <Option value="4">待评价</Option>
                   <Option value="4">已评价</Option>
                 </Select>
               )}

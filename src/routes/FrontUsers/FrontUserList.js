@@ -410,7 +410,7 @@ export default class FrontUserList extends PureComponent {
         render: (val, text) => (
           <Row style={{ width: 500 }}>
             <Col span={4}>
-              <img style={{ height: 80 }} src={val} alt="头像" />
+              <img style={{ height: 80, width: 80 }} src={val} alt="头像" />
             </Col>
             <Col span={14} style={{ fontSize: 14 }}>
               <div>{text.nickname}</div>
