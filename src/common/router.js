@@ -139,6 +139,11 @@ export const getRouterConfig = app => {
         import('../routes/Exception/triggerException')
       ),
     },
+    // 门店
+    '/shop/add-store': {
+      identity: 'common',
+      component: dynamicWrapper(app, ['shop'], () => import('../routes/Shop/AddStore')),
+    },
     // 首页 广告 营销
     '/market/AddForm/:type': {
       component: dynamicWrapper(app, ['indexs'], () => import('../routes/Index/AddForm')),

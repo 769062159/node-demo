@@ -46,7 +46,7 @@ export const menuData = [
   // },
   {
     name: '商品',
-    icon: 'shop',
+    icon: 'shopgood',
     path: 'good',
     children: [
       {
@@ -162,6 +162,17 @@ export const menuData = [
       {
         name: '直播列表',
         path: 'list',
+      },
+    ],
+  },
+  {
+    name: '门店',
+    icon: 'shop',
+    path: 'shop',
+    children: [
+      {
+        name: '新建门店',
+        path: 'add-store',
       },
     ],
   },
