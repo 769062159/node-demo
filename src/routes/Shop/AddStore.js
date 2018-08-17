@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 // import moment from 'moment';
 // import { routerRedux } from 'dva/router';
-import { Form, Input, Button, Cascader } from 'antd';
+import { message, Form, Input, Button, Cascader } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
 // import styles from './TableList.less';
@@ -184,6 +184,10 @@ export default class Home extends PureComponent {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
       console.log(values);
+      const { address } = values;
+      if (!address.length) {
+        message.error('请选择地址！');
+      }
       // const { addressArr } = this.state;
       // console.log(addressArr);
       // if (!err) {
