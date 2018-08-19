@@ -353,8 +353,8 @@ function dynamicWrapper(app, models, component) {
       return createElement(component().default, {
         ...props,
         routerConfig: routerConfigCache,
-        uploadUrl: 'http://api.store.314live.cn/merchant/upload', // 正式全局上传图片路径
-        // uploadUrl: 'http://dev-api.store.314live.cn/merchant/upload', // 测试全局上传图片路径
+        // uploadUrl: 'http://api.store.314live.cn/merchant/upload', // 正式全局上传图片路径
+        uploadUrl: 'http://dev-api.store.314live.cn/merchant/upload', // 测试全局上传图片路径
         uploadFile: 'http://wechat.store.314live.cn/wx/wechataccount/upload', // 证书上传
       });
     };
