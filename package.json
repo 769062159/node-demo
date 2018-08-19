@@ -4,7 +4,6 @@
   "description": "An out-of-box UI solution for enterprise applications",
   "private": true,
   "scripts": {
-    "precommit": "npm run lint-staged",
     "start": "set port=8080 && cross-env ESLINT=none roadhog dev",
     "start:no-proxy": "cross-env NO_PROXY=true ESLINT=none roadhog dev",
     "build": "cross-env ESLINT=none roadhog build",
@@ -93,10 +92,7 @@
       "git add"
     ],
     "**/*.{js,jsx}": "lint-staged:js",
-    "**/*.less": "stylelint --syntax less",
-    "ignore": [
-      "/src/components/Map/index.js"
-    ]
+    "**/*.less": "stylelint --syntax less"
   },
   "engines": {
     "node": ">=8.0.0"
