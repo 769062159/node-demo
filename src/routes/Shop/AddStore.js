@@ -4,6 +4,7 @@ import { connect } from 'dva';
 // import { routerRedux } from 'dva/router';
 import { message, Form, Input, Button, Cascader } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
+import Maps from '../../components/Map/index';
 
 // import styles from './TableList.less';
 
@@ -230,7 +231,7 @@ export default class Home extends PureComponent {
 
     return (
       <PageHeaderLayout>
-        <Form autoComplete="OFF" onSubmit={this.handleSubmit}>
+        <Form autoComplete="OFF" >
           <FormItem {...formItemLayout} label="门店名称">
             {getFieldDecorator('title', {
               rules: [
@@ -276,8 +277,15 @@ export default class Home extends PureComponent {
               ],
             })(<Input />)}
           </FormItem>
+          <FormItem
+            {...formItemLayout}
+            label="地图"
+          >
+            {getFieldDecorator('maps', {
+            })(<Maps />)}
+          </FormItem>
           <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
-            <Button type="primary" htmlType="submit" loading={loading}>
+            <Button type="primary" htmlType="submit" loading={loading} onClick={this.handleSubmit}>
               提交
             </Button>
           </FormItem>

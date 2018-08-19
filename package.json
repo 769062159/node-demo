@@ -44,6 +44,7 @@
     "qs": "^6.5.0",
     "rc-drawer-menu": "^0.5.0",
     "react": "^16.2.0",
+    "react-amap": "^1.2.7",
     "react-container-query": "^0.9.1",
     "react-document-title": "^2.0.3",
     "react-dom": "^16.2.0",
@@ -92,7 +93,10 @@
       "git add"
     ],
     "**/*.{js,jsx}": "lint-staged:js",
-    "**/*.less": "stylelint --syntax less"
+    "**/*.less": "stylelint --syntax less",
+    "ignore": [
+      "/src/components/Map/index.js"
+    ]
   },
   "engines": {
     "node": ">=8.0.0"
