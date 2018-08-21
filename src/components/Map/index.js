@@ -1,4 +1,5 @@
 import React from 'react';
+import { message } from 'antd';
 import { Map, Marker } from 'react-amap';
 import styles from './index.less';
 
@@ -18,7 +19,7 @@ export default class MyMap extends React.Component {
         _this.map = map;
         AMap.plugin('AMap.Geocoder', () => {
           _this.geocoder = new AMap.Geocoder({
-            city: '010', // 城市，默认：“全国”
+            // city: '010', // 城市，默认：“全国”
           });
         });
       },
@@ -28,10 +29,12 @@ export default class MyMap extends React.Component {
           position: lnglat,
           currentLocation: 'loading...',
         });
-        console.log(lnglat);
+        const { handleMapAddress } = _this.props;
         _this.geocoder &&
           _this.geocoder.getAddress(lnglat, (status, result) => {
-            console.log(result);
+            const { regeocode: { addressComponent: { district }, formattedAddress } } = result;
+            const address = formattedAddress.split(district)[1];
+            handleMapAddress(lnglat, address);
             if (status === 'complete') {
               if (result.regeocode) {
                 _this.setState({
@@ -52,14 +55,39 @@ export default class MyMap extends React.Component {
     };
     this.markerEvents = {};
     this.state = {
-      position: { longitude: 120, latitude: 30 },
+      position: { longitude: 120.209092, latitude: 30.245326 },
       currentLocation: '点击地图',
     };
+  }
+  componentWillReceiveProps(prevProps) {
+    const { propsAddress } = prevProps;
+    const { propsAddress: oldpropsAddress, handleMapAddress } = this.props;
+    console.log(propsAddress);
+    console.log(oldpropsAddress);
+    if (propsAddress && propsAddress !== oldpropsAddress) {
+      this.geocoder.getLocation(propsAddress, (status, result) => {
+        if (status === 'complete' && result.info === 'OK') {
+          const location = result.geocodes[0].location;
+          const currentLocation = result.geocodes[0].formattedAddress;
+          handleMapAddress(location);
+          const position = {
+            longitude: location.lng,
+            latitude: location.lat,
+          };
+          this.setState({
+            position,
+            currentLocation,
+          });
+        } else {
+          message.error('搜索不到该地址！');
+        }
+    });
+    }
   }
   render() {
     return (
       <div style={{ width: '100%', height: 370 }}>
-        <Map center={this.state.position} events={this.mapEvents} zoom={12}>
+        <Map center={this.state.position} events={this.mapEvents} zoom={10}>
           <Marker position={this.state.position} events={this.markerEvents} />
           <div className={styles.location}>{this.state.currentLocation}</div>
         </Map>

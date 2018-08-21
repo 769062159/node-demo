@@ -6,11 +6,8 @@ import { connect } from 'dva';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import Maps from '../../components/Map/index';
 
-// import styles from './TableList.less';
 const { TextArea } = Input;
 const FormItem = Form.Item;
-// const Option = Select.Option;
-// const { TextArea } = Input;
 const formItemLayout = {
   labelCol: {
     xs: { span: 24 },
@@ -40,14 +37,38 @@ export default class AddShop extends Component {
     // expandForm: false,
     addressArr: [],
     Jingwei: {},
-    propsAddress: '',
+    // propsAddress: '',
   };
   componentDidMount() {
+    const { id } = this.props.match.params;
     const { dispatch } = this.props;
     dispatch({
       type: 'address/fetch',
       payload: {},
     });
+    dispatch({
+      type: 'shop/fetchShopDetail',
+      payload: {
+        store_id: id,
+      },
+      callback: () => {
+        const { shop: { shopDetail } } = this.props;
+        const addressArr = [];
+        addressArr.push(shopDetail.province_id);
+        addressArr.push(shopDetail.city_id);
+        addressArr.push(shopDetail.region_id);
+        dispatch({
+          type: 'address/fetchAll',
+          payload: {
+            addressArr,
+          },
+        });
+      }
+    });
+    // dispatch({
+    //   type: 'address/fetch',
+    //   payload: {},
+    // });
   }
   componentWillUnmount() {
     const { dispatch } = this.props;
@@ -142,7 +163,7 @@ export default class AddShop extends Component {
     });
   };
   location = () => {
-    const { form } = this.props;
+    const { form, dispatch } = this.props;
     let propsAddress = form.getFieldValue('address');
     const { addressArr } = this.state;
     if (addressArr.length) {
@@ -152,9 +173,12 @@ export default class AddShop extends Component {
       })
       propsAddress = str + propsAddress;
     }
-    this.setState({
-      propsAddress,
-    })
+    dispatch({
+      type: 'shop/setPropsAddress',
+      payload: {
+        propsAddress
+      },
+    });
   }
   // 修改信息
   editDataMsg = (data, e) => {
@@ -186,15 +210,24 @@ export default class AddShop extends Component {
   render() {
     const {
         address: { addressList },
+        shop: { shopDetail },
         loading,
     } = this.props;
     const { getFieldDecorator } = this.props.form;
-    const { propsAddress } = this.state;
+    const { propsAddress } = shopDetail;
+    const addressArr = [];
+    if (shopDetail.province_id) {
+      addressArr.push(shopDetail.province_id);
+      addressArr.push(shopDetail.city_id);
+      addressArr.push(shopDetail.region_id);
+    }
+    console.log(propsAddress);
     return (
       <PageHeaderLayout>
         <Form autoComplete="OFF" >
           <FormItem {...formItemLayout} label="门店名称">
             {getFieldDecorator('shop_name', {
+              initialValue: shopDetail.shop_name,
               rules: [
                 {
                   required: true,
@@ -208,6 +241,7 @@ export default class AddShop extends Component {
             label="门店地址"
           >
             {getFieldDecorator('addressBig', {
+              initialValue: addressArr,
               rules: [
                 {
                   required: true,
@@ -231,6 +265,7 @@ export default class AddShop extends Component {
             extra={<Button size="small" onClick={this.location}>定位</Button>}
           >
             {getFieldDecorator('address', {
+              initialValue: shopDetail.address,
               rules: [
                 {
                   required: true,
@@ -248,6 +283,7 @@ export default class AddShop extends Component {
           </FormItem>
           <FormItem {...formItemLayout} label="店铺简介">
             {getFieldDecorator('shop_desc', {
+              initialValue: shopDetail.shop_desc,
               rules: [
                 {
                   required: true,
@@ -258,16 +294,19 @@ export default class AddShop extends Component {
           </FormItem>
           <FormItem {...formItemLayout} label="店铺电话">
             {getFieldDecorator('mobile', {
+              initialValue: shopDetail.mobile,
             })(<InputNumber style={{ width: 200}} />)}
           </FormItem>
           <FormItem {...formItemLayout} label="开业时间">
             {getFieldDecorator('open_time', {
+              initialValue: shopDetail.open_time,
             })(
               <Input />
             )}
           </FormItem>
           <FormItem {...formItemLayout} label="关门时间">
             {getFieldDecorator('close_time', {
+              initialValue: shopDetail.close_time,
             })(
               <Input />
             )}

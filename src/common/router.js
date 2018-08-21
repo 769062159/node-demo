@@ -144,6 +144,14 @@ export const getRouterConfig = app => {
       identity: 'common',
       component: dynamicWrapper(app, ['shop'], () => import('../routes/Shop/AddStore')),
     },
+    '/shop/edit-store/:id': {
+      identity: 'common',
+      component: dynamicWrapper(app, ['shop'], () => import('../routes/Shop/EditStore')),
+    },
+    '/shop/store': {
+      identity: 'common',
+      component: dynamicWrapper(app, ['shop'], () => import('../routes/Shop/Store')),
+    },
     // 首页 广告 营销
     '/market/AddForm/:type': {
       component: dynamicWrapper(app, ['indexs'], () => import('../routes/Index/AddForm')),

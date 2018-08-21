@@ -174,6 +174,10 @@ export const menuData = [
         name: '新建门店',
         path: 'add-store',
       },
+      {
+        name: '门店列表',
+        path: 'store',
+      },
     ],
   },
   {

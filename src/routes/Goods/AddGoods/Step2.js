@@ -10,7 +10,7 @@ import {
   Radio,
   Row,
   Col,
-  // DatePicker,
+  DatePicker,
   Upload,
   Icon,
   Modal,
@@ -22,7 +22,7 @@ import moment from 'moment';
 import ReactEditor from 'components/ReactEditor';
 import EditTable from 'components/editTable';
 import styles from './style.less';
-import { deepCopy } from '../../../utils/utils';
+import { deepCopy, correctionTime } from '../../../utils/utils';
 
 // const { TextArea } = Input;
 // const RadioGroup = Radio.Group;
@@ -76,6 +76,18 @@ const CustomizedForm = Form.create({
   mapPropsToFields(props) {
     const { goods: { goodsDetail, systemType } } = props;
     const arr = {
+      sale_channel: Form.createFormField({
+        value: goodsDetail.sale_channel,
+      }),
+      group_pick_up_duration: Form.createFormField({
+        value: goodsDetail.group_pick_up_duration,
+      }),
+      group_num: Form.createFormField({
+        value: goodsDetail.group_num,
+      }),
+      group_duration: Form.createFormField({
+        value: goodsDetail.group_duration,
+      }),
       goods_name: Form.createFormField({
         value: goodsDetail.goods_name,
       }),
@@ -157,10 +169,20 @@ const CustomizedForm = Form.create({
       goods_shelves_type: Form.createFormField({
         value: goodsDetail.goods_shelves_type,
       }),
-      goods_shelves_time: Form.createFormField({
-        value: goodsDetail.goods_shelves_time
-          ? moment(goodsDetail.goods_shelves_time, 'YYYY-MM-DD HH:mm:ss')
-          : moment(new Date(), 'YYYY-MM-DD HH:mm:ss'),
+      // goods_shelves_time: Form.createFormField({
+      //   value: goodsDetail.goods_shelves_time,
+      //     // ? moment(goodsDetail.goods_shelves_time, 'YYYY-MM-DD HH:mm:ss')
+      //     // : null,
+      // }),
+      group_start_time: Form.createFormField({
+        value: goodsDetail.group_start_time
+          ? moment(goodsDetail.group_start_time, 'YYYY-MM-DD HH:mm:ss')
+          : null,
+      }),
+      group_end_time: Form.createFormField({
+        value: goodsDetail.group_end_time
+          ? moment(goodsDetail.group_end_time, 'YYYY-MM-DD HH:mm:ss')
+          : null,
       }),
       goods_description: Form.createFormField({
         value: goodsDetail.goods_description,
@@ -199,9 +221,9 @@ const CustomizedForm = Form.create({
     }
     return arr;
   },
-  // onValuesChange(_, values) {
-  //   console.log(values);
-  // },
+  onValuesChange(_, values) {
+    console.log(values);
+  },
 })(props => {
   const { getFieldDecorator, validateFields } = props.form;
   const onValidateForm = e => {
@@ -296,6 +318,7 @@ const CustomizedForm = Form.create({
       </Option>
     );
   });
+  const saleChannelsItem = []; // 线上商品线下商品
   const goodsShelvesItem = []; // 上架方式
   const levelNumberItem = []; // 分佣等级
   const shippingTemplatesItem = []; // 运送模版
@@ -342,6 +365,13 @@ const CustomizedForm = Form.create({
             )}
           </Form.Item>
         </Col>
+      );
+    });
+    systemType.sale_channels.forEach((res, index) => {
+      saleChannelsItem.push(
+        <Option value={index} key={index}>
+          {res}
+        </Option>
       );
     });
     systemType.goods_shelves_type.forEach((res, index) => {
@@ -672,7 +702,85 @@ const CustomizedForm = Form.create({
               })(<Select style={{ width: 200 }}>{warehouseItem}</Select>)}
             </Form.Item>
           </Col>
+          <Col span={24}>
+            <Form.Item {...formItemLayouts} label="商品类型">
+              {getFieldDecorator('sale_channel', {
+                rules: [{ required: true, message: '请选择商品类型' }],
+              })(<Select>{saleChannelsItem}</Select>)}
+            </Form.Item>
+          </Col>
         </Row>
+        {
+          goodsDetail.sale_channel === 1 ? (
+            <Row gutter={24}>
+              <Col span={12}>
+                <Form.Item {...spcialLayouts} label="团购人数">
+                  {getFieldDecorator('group_num', {
+                    rules: [{ required: goodsDetail.sale_channel === 1, message: '请选择团购人数' }],
+                  })(<InputNumber min={1} />)}
+                </Form.Item>
+              </Col>
+              <Col span={12}  className={styles.inlineExtra}>
+                <Form.Item {...spcialLayouts} label="拼团时长" extra="小时">
+                  {getFieldDecorator('group_duration', {
+                    rules: [{ required: goodsDetail.sale_channel === 1, message: '请选择拼团时长' }],
+                  })(<InputNumber min={0} />)}
+                </Form.Item>
+              </Col>
+              <Col span={12} className={styles.inlineExtra}>
+                <Form.Item {...spcialLayouts} label="取货时间" extra="天">
+                  {getFieldDecorator('group_pick_up_duration', {
+                    rules: [{ required: goodsDetail.sale_channel === 1, message: '请选择取货时间' }],
+                  })(<InputNumber min={0} />)}
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <Form.Item {...spcialLayouts} label="团购开始时间" >
+                  {getFieldDecorator('group_start_time', {
+                    rules: [
+                      {
+                        required: goodsDetail.sale_channel === 1,
+                        message: '请填写团购开始时间',
+                      },
+                    ],
+                    getValueFromEvent: (date, dateString) => {
+                      return dateString;
+                    }
+                  })(
+                    <DatePicker
+                      style={{width: 200}}
+                      showTime
+                      format="YYYY-MM-DD HH:mm:ss"
+                      placeholder="选择团购开始时间"
+                    />
+                  )}
+                </Form.Item>
+              </Col>
+              <Col span={12}>
+                <Form.Item {...spcialLayouts} label="团购结束时间">
+                  {getFieldDecorator('group_end_time', {
+                    rules: [
+                      {
+                        required: goodsDetail.sale_channel === 1,
+                        message: '请填写团购结束时间',
+                      },
+                    ],
+                    getValueFromEvent: (date, dateString) => {
+                      return dateString;
+                    }
+                  })(
+                    <DatePicker
+                      style={{width: 200}}
+                      showTime
+                      format="YYYY-MM-DD HH:mm:ss"
+                      placeholder="选择团购结束时间"
+                    />
+                  )}
+                </Form.Item>
+              </Col>
+            </Row>
+          ) : null
+        }
         {/* <Row gutter={24}>
           <Col span={12}>
             <Form.Item {...formItemLayouts} label="快递类型">
@@ -1167,11 +1275,28 @@ class AddGoodStep2 extends React.PureComponent {
     values.goods_is_fast_delivery = 1;
     values.goods_is_recommend_show = 0;
     if (values.goods_shelves_time) {
-      const date = moment(values.goods_shelves_time._d)._d;
+      const date = correctionTime(values.goods_shelves_time._d);
       values.goods_shelves_time = Number.parseInt(date.getTime() / 1000, 10);
     } else {
       values.goods_shelves_time = 0;
     }
+    // 团购新加的字段
+    const { group_start_time, group_end_time } = values;
+    if (group_start_time && typeof group_start_time === 'object') {
+      values.group_start_time = new Date(values.group_start_time._i).getTime() / 1000;
+      // values.group_start_time = Number.parseInt(date.getTime() / 1000, 10);
+    }else {
+      values.group_start_time = group_start_time || 0;
+    }
+    if (group_end_time && typeof group_end_time === 'object') {
+      values.group_end_time = new Date(values.group_end_time._i).getTime() / 1000;
+      // values.group_end_time = Number.parseInt(date.getTime() / 1000, 10);
+    } else {
+      values.group_end_time = group_end_time || 0;
+    }
+    values.group_pick_up_duration = values.group_pick_up_duration || '';
+    values.group_duration = values.group_duration || 0;
+    values.group_num = values.group_num || 0;
     // if (attrTable.length) {
     //   attrTable.map(res => {
     //     const arr = deepCopy(res.goods_sku_attr);
