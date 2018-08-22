@@ -678,6 +678,7 @@ export default {
                 res.goods_sku_sn = value.goods_sku_sn;
                 res.price = value.price;
                 res.cost_price = value.cost_price;
+                res.group_price = value.group_price;
                 res.weight = value.weight;
                 res.store_nums = value.store_nums;
                 let cacheArr = {};
