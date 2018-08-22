@@ -59,7 +59,7 @@ const isContained = (arr1, arr2) => {
   return true;
 };
 // 将数据组合成列表，利用递归的特性
-const toGet = (arr, attrArr, AttrArrMap, totalPrice, goodSN, weight, costPrice) => {
+const toGet = (arr, attrArr, AttrArrMap, totalPrice, goodSN, weight, costPrice, groupPrice) => {
   const dyadicArray = [];
   const dyadicArrayId = [];
   attrArr.forEach(res => {
@@ -100,6 +100,7 @@ const toGet = (arr, attrArr, AttrArrMap, totalPrice, goodSN, weight, costPrice) 
       goods_sku_attr: param,
       profit: [],
       price: totalPrice || 0,
+      group_price: groupPrice || 0,
       cost_price: costPrice || 0,
       classIdArr,
       store_nums: 0,
@@ -542,7 +543,8 @@ export default {
         goodsDetail.sell_goods_price,
         goodsDetail.goods_sn,
         goodsDetail.weight,
-        goodsDetail.cost_price
+        goodsDetail.cost_price,
+        goodsDetail.group_price
       );
       arr = arr.map(res => {
         const arr = attrTableCache[res.id];
@@ -568,7 +570,8 @@ export default {
         goodsDetail.sell_goods_price,
         goodsDetail.goods_sn,
         goodsDetail.weight,
-        goodsDetail.cost_price
+        goodsDetail.cost_price,
+        goodsDetail.group_price
       );
       arr = arr.map(res => {
         const arr = attrTableCache[res.id];
@@ -665,7 +668,8 @@ export default {
           goodsDetail.sell_goods_price,
           goodsDetail.goods_sn,
           goodsDetail.weight,
-          goodsDetail.cost_price
+          goodsDetail.cost_price,
+          goodsDetail.group_price
         );
         if (attrTable.length) {
           attrTable.forEach(res => {

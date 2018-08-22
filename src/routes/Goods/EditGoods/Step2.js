@@ -79,6 +79,15 @@ const CustomizedForm = Form.create({
   mapPropsToFields(props) {
     const { goods: { goodsDetail, systemType } } = props;
     const arr = {
+      is_group: Form.createFormField({
+        value: goodsDetail.is_group,
+      }),
+      limit_buy: Form.createFormField({
+        value: goodsDetail.limit_buy,
+      }),
+      group_price: Form.createFormField({
+        value: goodsDetail.group_price,
+      }),
       sale_channel: Form.createFormField({
         value: goodsDetail.sale_channel,
       }),
@@ -717,29 +726,59 @@ const CustomizedForm = Form.create({
               })(<Select>{saleChannelsItem}</Select>)}
             </Form.Item>
           </Col>
+          <Col span={24}>
+            <Form.Item {...formItemLayouts} label="是否拼团">
+              {getFieldDecorator('is_group', {
+                rules: [{ required: true, message: '请选择是否拼团' }],
+              })(
+              <Select>
+                <Option value={1} key={1}>
+                  参加
+                </Option>
+                <Option value={0} key={0}>
+                  不参加
+                </Option>
+              </Select>
+            )}
+            </Form.Item>
+          </Col>
         </Row>
         {
-          goodsDetail.sale_channel === 1 ? (
+          goodsDetail.is_group === 1 ? (
             <Row gutter={24}>
               <Col span={12}>
                 <Form.Item {...spcialLayouts} label="团购人数">
                   {getFieldDecorator('group_num', {
-                    rules: [{ required: goodsDetail.sale_channel === 1, message: '请选择团购人数' }],
+                    rules: [{ required: goodsDetail.is_group === 1, message: '请选择团购人数' }],
                   })(<InputNumber min={1} />)}
                 </Form.Item>
               </Col>
               <Col span={12}  className={styles.inlineExtra}>
                 <Form.Item {...spcialLayouts} label="拼团时长" extra="小时">
                   {getFieldDecorator('group_duration', {
-                    rules: [{ required: goodsDetail.sale_channel === 1, message: '请选择拼团时长' }],
+                    rules: [{ required: goodsDetail.is_group === 1, message: '请选择拼团时长' }],
                   })(<InputNumber min={0} />)}
                 </Form.Item>
               </Col>
               <Col span={12} className={styles.inlineExtra}>
                 <Form.Item {...spcialLayouts} label="取货时间" extra="天">
                   {getFieldDecorator('group_pick_up_duration', {
-                    rules: [{ required: goodsDetail.sale_channel === 1, message: '请选择取货时间' }],
+                    rules: [{ required: goodsDetail.is_group === 1, message: '请选择取货时间' }],
                   })(<InputNumber min={0} />)}
+                </Form.Item>
+              </Col>
+              <Col span={12} >
+                <Form.Item {...spcialLayouts} label="单人限购数量" extra="0为不限购">
+                  {getFieldDecorator('limit_buy', {
+                    rules: [{ required: goodsDetail.is_group === 1, message: '请选择限购数量' }],
+                  })(<InputNumber min={0} />)}
+                </Form.Item>
+              </Col>
+              <Col span={12} >
+                <Form.Item {...spcialLayouts} label="团购价格">
+                  {getFieldDecorator('group_price', {
+                    rules: [{ required: goodsDetail.is_group === 1, message: '请选择团购价格' }],
+                  })(<InputNumber min={0} step={0.01} precision={2} />)}
                 </Form.Item>
               </Col>
               <Col span={12}>
@@ -747,7 +786,7 @@ const CustomizedForm = Form.create({
                   {getFieldDecorator('group_start_time', {
                     rules: [
                       {
-                        required: goodsDetail.sale_channel === 1,
+                        required: goodsDetail.is_group === 1,
                         message: '请填写团购开始时间',
                       },
                     ],
@@ -769,7 +808,7 @@ const CustomizedForm = Form.create({
                   {getFieldDecorator('group_end_time', {
                     rules: [
                       {
-                        required: goodsDetail.sale_channel === 1,
+                        required: goodsDetail.is_group === 1,
                         message: '请填写团购结束时间',
                       },
                     ],
@@ -975,6 +1014,7 @@ const CustomizedForm = Form.create({
         </div>
         {attrItemSon}
         <EditTable
+          isGroup={goodsDetail.is_group}
           attrTable={attrTable}
           uploadUrl={uploadUrl}
           totalPrice={goodsDetail.sell_goods_price}
@@ -1243,6 +1283,9 @@ class EditGoodStep2 extends React.PureComponent {
           },
         ],
       });
+      if (values.is_group === 1) {
+        goodsSkuArr[0].group_price = values.group_price;
+      }
       values.goods_sku = goodsSkuArr;
     }
     values.class_id = goodsDetail.class_id;
@@ -1303,7 +1346,8 @@ class EditGoodStep2 extends React.PureComponent {
     values.group_pick_up_duration = values.group_pick_up_duration || '';
     values.group_duration = values.group_duration || 0;
     values.group_num = values.group_num || 0;
-    // console.log(values);
+    values.limit_buy = values.limit_buy || 0;
+    values.group_price = values.group_price || 0;
     // attrTable.forEach(res => {
     //   res.goods_sku_attr = res.goods_sku_attr.map(ele => {
     //     ele.attr_name = res[`sku_attr_name_${ele.attr_class_id}`];
