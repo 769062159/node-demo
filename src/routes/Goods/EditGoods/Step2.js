@@ -721,9 +721,9 @@ const CustomizedForm = Form.create({
           </Col>
           <Col span={24}>
             <Form.Item {...formItemLayouts} label="商品类型">
-              {getFieldDecorator('sale_channel', {
+              {getFieldDecorator('is_group', {
                 rules: [{ required: true, message: '请选择商品类型' }],
-              })(<Select>{saleChannelsItem}</Select>)}
+              })(<Select disabled>{saleChannelsItem}</Select>)}
             </Form.Item>
           </Col>
           <Col span={24}>
@@ -750,7 +750,7 @@ const CustomizedForm = Form.create({
                 <Form.Item {...spcialLayouts} label="团购人数">
                   {getFieldDecorator('group_num', {
                     rules: [{ required: goodsDetail.is_group === 1, message: '请选择团购人数' }],
-                  })(<InputNumber min={1} />)}
+                  })(<InputNumber min={1} max={10} />)}
                 </Form.Item>
               </Col>
               <Col span={12}  className={styles.inlineExtra}>
@@ -1330,6 +1330,7 @@ class EditGoodStep2 extends React.PureComponent {
       values.goods_shelves_time = 0;
     }
     // 团购新加的字段
+    values.sale_channel = values.is_group;
     const { group_start_time, group_end_time } = values;
     if (group_start_time && typeof group_start_time === 'object') {
       values.group_start_time = new Date(values.group_start_time._i).getTime() / 1000;

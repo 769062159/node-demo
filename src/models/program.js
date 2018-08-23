@@ -55,7 +55,7 @@ export default {
         type: 'setProgramDetail',
         payload: response,
       });
-      if (response && response.code === 200 && !response.data.appid) {
+      if (response && response.code === 200) {
         const authorizationUrl = yield call(getAuthorizationUrl, { ...payload });
         yield put({
           type: 'setAuthorizationUrl',
