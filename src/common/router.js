@@ -238,6 +238,9 @@ export const getRouterConfig = app => {
     '/order/list': {
       component: dynamicWrapper(app, ['order', 'address'], () => import('../routes/Order/list')),
     },
+    '/order/group-list': {
+      component: dynamicWrapper(app, ['order', 'address'], () => import('../routes/Order/groupList')),
+    },
     // 物流
     '/logistics/freight': {
       component: dynamicWrapper(app, ['goods'], () => import('../routes/Logistics/Freight')),

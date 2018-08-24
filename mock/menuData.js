@@ -152,6 +152,10 @@ export const menuData = [
         name: '订单列表',
         path: 'list',
       },
+      {
+        name: '团购列表',
+        path: 'group-list',
+      },
     ],
   },
   {

@@ -1,16 +1,25 @@
 import { message } from 'antd';
-import { getOrderList, getExpressList, shipshop, editShip, editAdress } from '../services/order';
+import { getOrderList, getExpressList, shipshop, editShip, editAdress, getGroupList } from '../services/order';
 
 export default {
   namespace: 'order',
 
   state: {
     orderList: [], // table列表
+    groupList: [], // table列表
     orderListPage: {}, // table 页脚
+    groupListPage: {}, // table 页脚
     expressList: [], // 快递公司
   },
 
   effects: {
+    *getGroupList({ payload }, { call, put }) {
+      const response = yield call(getGroupList, { ...payload });
+      yield put({
+        type: 'getGroup',
+        payload: response,
+      });
+    },
     *editAddress({ payload }, { call, put }) {
       yield call(editAdress, { ...payload });
       message.success('修改成功');
@@ -60,6 +69,28 @@ export default {
       return {
         ...state,
         expressList: data,
+      };
+    },
+    getGroup(state, { payload }) {
+      const { data } = payload;
+      console.log(data);
+      const { list } = data;
+      list.forEach(res => {
+        res.has_order_pack.forEach(ele => {
+          let price = 0;
+          ele.has_order_goods.forEach(gg => {
+            price = (price * 100 + gg.has_order_goods_sku.price * 100) / 100;
+          });
+          ele.total_price = price;
+        });
+      });
+      return {
+        ...state,
+        groupList: list,
+        groupListPage: {
+          pageSize: data.page,
+          total: data.total,
+        },
       };
     },
     getOrder(state, { payload }) {

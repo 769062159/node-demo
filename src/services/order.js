@@ -38,3 +38,11 @@ export async function editAdress(params) {
     body: params,
   });
 }
+
+// 团购列表
+export async function getGroupList(params) {
+  return request('/merchant/order/group/list', {
+    method: 'POST',
+    body: params,
+  });
+}
