@@ -145,6 +145,7 @@ export default class AddShop extends Component {
       if (!addressBig.length) {
         message.error('请选择地址！');
       }
+      values.store_id = this.props.match.params.id;
       values.province_id = values.addressBig[0];
       values.city_id = values.addressBig[1];
       values.region_id = values.addressBig[2];
@@ -152,10 +153,10 @@ export default class AddShop extends Component {
       values.longitude = Jingwei.lng;
       const { dispatch } = this.props;
       dispatch({
-        type: 'shop/addShop',
+        type: 'shop/updateShop',
         payload: values,
         callback: () => {
-          message.success('添加成功！')
+          message.success('修改成功！')
         }
       });
       // if (!err) {

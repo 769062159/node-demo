@@ -39,3 +39,27 @@ export async function getShopDetail(params) {
     body: params,
   });
 }
+
+// 核销员列表
+export async function getMemberLit(params) {
+  return request('/merchant/member/verification', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+// 取消用户为核销员
+export async function cancelMember(params) {
+  return request('/merchant/member/cancel/verification', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+// 设置用户为核销员
+export async function setMember(params) {
+  return request('/merchant/member/set/verification', {
+    method: 'POST',
+    body: params,
+  });
+}

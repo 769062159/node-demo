@@ -1,4 +1,4 @@
-import { addShop, getShopList, delShop, updateShop, getShopDetail } from '../services/shop';
+import { addShop, getShopList, delShop, updateShop, getShopDetail, getMemberLit, cancelMember, setMember } from '../services/shop';
 
 export default {
   namespace: 'shop',
@@ -7,6 +7,7 @@ export default {
     shopList: [],
     shopListPage: {},
     shopDetail: {},
+    WriteOffList: []
   },
 
   effects: {
@@ -18,6 +19,35 @@ export default {
       });
       if (response) {
         callback();
+      }
+    },
+    *fetchMenber({ payload }, { call, put }) {
+      const response = yield call(getMemberLit, payload);
+      yield put({
+        type: 'getMenber',
+        payload: response.data,
+      });
+    },
+    *setMember({ payload, callback }, { call, put }) {
+      const res =yield call(setMember, payload);
+      if (res) {
+        callback();
+        const response = yield call(getMemberLit, payload);
+        yield put({
+          type: 'getMenber',
+          payload: response.data,
+        });
+      }
+    },
+    *cancelMenber({ payload, callback }, { call, put }) {
+      const res = yield call(cancelMember, payload);
+      if (res) {
+        callback();
+        const response = yield call(getMemberLit, payload);
+        yield put({
+          type: 'getMenber',
+          payload: response.data,
+        });
       }
     },
     *fetchShop({ payload }, { call, put }) {
@@ -73,6 +103,12 @@ export default {
         ...state,
         shopDetail: payload || {},
       }
+    },
+    getMenber(state, { payload }) {
+      return {
+        ...state,
+        WriteOffList: payload,
+      };
     },
     getShop(state, { payload }) {
       const { list, page, total } = payload;

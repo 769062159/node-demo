@@ -144,6 +144,10 @@ export const getRouterConfig = app => {
       identity: 'common',
       component: dynamicWrapper(app, ['shop'], () => import('../routes/Shop/AddStore')),
     },
+    '/shop/write-off': {
+      identity: 'common',
+      component: dynamicWrapper(app, ['shop'], () => import('../routes/Shop/WriteOff')),
+    },
     '/shop/edit-store/:id': {
       identity: 'common',
       component: dynamicWrapper(app, ['shop'], () => import('../routes/Shop/EditStore')),

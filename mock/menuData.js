@@ -182,6 +182,10 @@ export const menuData = [
         name: '门店列表',
         path: 'store',
       },
+      {
+        name: '核销员',
+        path: 'write-off',
+      },
     ],
   },
   {
