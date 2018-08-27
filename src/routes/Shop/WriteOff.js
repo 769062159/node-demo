@@ -283,6 +283,10 @@ export default class WriteOff extends PureComponent {
         render: val => (val ? <img src={val} style={{ width: 80 }} alt="图片" /> : null),
       },
       {
+        title: '所属店铺',
+        dataIndex: 'shop_name',
+      },
+      {
         title: '操作',
         render: (text, record) => (
           <Fragment>

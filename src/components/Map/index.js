@@ -62,8 +62,6 @@ export default class MyMap extends React.Component {
   componentWillReceiveProps(prevProps) {
     const { propsAddress } = prevProps;
     const { propsAddress: oldpropsAddress, handleMapAddress } = this.props;
-    console.log(propsAddress);
-    console.log(oldpropsAddress);
     if (propsAddress && propsAddress !== oldpropsAddress) {
       this.geocoder.getLocation(propsAddress, (status, result) => {
         if (status === 'complete' && result.info === 'OK') {

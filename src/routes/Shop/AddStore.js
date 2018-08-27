@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { message, Form, Input, Button, Cascader, InputNumber } from 'antd';
+import { message, Form, Input, Button, Cascader, InputNumber, TimePicker } from 'antd';
 import { connect } from 'dva';
-// import moment from 'moment';
+import moment from 'moment';
 // import { routerRedux } from 'dva/router';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import Maps from '../../components/Map/index';
@@ -119,10 +119,16 @@ export default class AddShop extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
+      if (err) {
+        return false;
+      }
+      values.close_time = values.close_time._d.getTime() / 1000;
+      values.open_time = values.open_time._d.getTime() / 1000;
       const { addressBig } = values;
       const { Jingwei, addressArr } = this.state;
       if (!addressBig.length) {
         message.error('请选择地址！');
+        return false;
       }
       values.province_id = values.addressBig[0];
       values.city_id = values.addressBig[1];
@@ -258,18 +264,38 @@ export default class AddShop extends Component {
           </FormItem>
           <FormItem {...formItemLayout} label="店铺电话">
             {getFieldDecorator('mobile', {
+              rules: [
+                {
+                  required: true,
+                  message: '请输入店铺电话',
+                },
+              ],
             })(<InputNumber style={{ width: 200}} />)}
           </FormItem>
           <FormItem {...formItemLayout} label="开业时间">
             {getFieldDecorator('open_time', {
+              rules: [
+                {
+                  required: true,
+                  message: '请输入开业时间',
+                },
+              ],
             })(
-              <Input />
+              <TimePicker
+              />
             )}
           </FormItem>
           <FormItem {...formItemLayout} label="关门时间">
             {getFieldDecorator('close_time', {
+              rules: [
+                {
+                  required: true,
+                  message: '请输入关门时间',
+                },
+              ],
             })(
-              <Input />
+              <TimePicker
+              />
             )}
           </FormItem>
           <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>

@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { message, Form, Input, Button, Cascader, InputNumber } from 'antd';
+import { message, Form, Input, Button, Cascader, InputNumber, TimePicker } from 'antd';
 import { connect } from 'dva';
-// import moment from 'moment';
+import moment from 'moment';
+// import { timeFormat } from '../../utils/utils';
 // import { routerRedux } from 'dva/router';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import Maps from '../../components/Map/index';
@@ -140,10 +141,16 @@ export default class AddShop extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
+      if (err) {
+        return false;
+      }
+      values.close_time = values.close_time.needTime;
+      values.open_time = values.open_time.needTime;
       const { addressBig } = values;
       const { Jingwei, addressArr } = this.state;
       if (!addressBig.length) {
         message.error('请选择地址！');
+        return false;
       }
       values.store_id = this.props.match.params.id;
       values.province_id = values.addressBig[0];
@@ -222,7 +229,6 @@ export default class AddShop extends Component {
       addressArr.push(shopDetail.city_id);
       addressArr.push(shopDetail.region_id);
     }
-    console.log(propsAddress);
     return (
       <PageHeaderLayout>
         <Form autoComplete="OFF" >
@@ -295,21 +301,47 @@ export default class AddShop extends Component {
           </FormItem>
           <FormItem {...formItemLayout} label="店铺电话">
             {getFieldDecorator('mobile', {
+              rules: [
+                {
+                  required: true,
+                  message: '请输入店铺电话',
+                },
+              ],
               initialValue: shopDetail.mobile,
             })(<InputNumber style={{ width: 200}} />)}
           </FormItem>
           <FormItem {...formItemLayout} label="开业时间">
             {getFieldDecorator('open_time', {
-              initialValue: shopDetail.open_time,
+              rules: [
+                {
+                  required: true,
+                  message: '请输入开业时间',
+                }
+              ],
+              getValueFromEvent: (date, dateString) => {
+                date.needTime = dateString;
+                return date;
+              },
+              initialValue:  moment(shopDetail.open_time, 'HH:mm:ss'),
             })(
-              <Input />
+              <TimePicker />
             )}
           </FormItem>
           <FormItem {...formItemLayout} label="关门时间">
             {getFieldDecorator('close_time', {
-              initialValue: shopDetail.close_time,
+              rules: [
+                {
+                  required: true,
+                  message: '请输入关门时间',
+                }
+              ],
+              getValueFromEvent: (date, dateString) => {
+                date.needTime = dateString;
+                return date;
+              },
+              initialValue:  moment(shopDetail.close_time, 'HH:mm:ss'),
             })(
-              <Input />
+              <TimePicker />
             )}
           </FormItem>
           <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
