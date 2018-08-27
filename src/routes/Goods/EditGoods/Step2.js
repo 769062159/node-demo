@@ -79,6 +79,15 @@ const CustomizedForm = Form.create({
   mapPropsToFields(props) {
     const { goods: { goodsDetail, systemType } } = props;
     const arr = {
+      group_share_title: Form.createFormField({
+        value: goodsDetail.group_share_title,
+      }),
+      is_return_profit: Form.createFormField({
+        value: goodsDetail.is_return_profit,
+      }),
+      is_grouper_free: Form.createFormField({
+        value: goodsDetail.is_grouper_free,
+      }),
       is_group: Form.createFormField({
         value: goodsDetail.is_group,
       }),
@@ -747,6 +756,45 @@ const CustomizedForm = Form.create({
           goodsDetail.is_group === 1 ? (
             <Row gutter={24}>
               <Col span={12}>
+                <Form.Item {...spcialLayouts} label="分享标题">
+                  {getFieldDecorator('group_share_title', {
+                    rules: [{ required: goodsDetail.is_group === 1, message: '请输入分享标题' }],
+                  })(<Input />)}
+                </Form.Item>
+              </Col>
+              {/* <Col span={12}>
+                <Form.Item {...spcialLayouts} label="是否返佣">
+                  {getFieldDecorator('is_return_profit', {
+                    rules: [{ required: goodsDetail.is_group === 1, message: '请选择是否返佣' }],
+                  })(
+                    <Select>
+                      <Option value={1} key={1}>
+                        是
+                      </Option>
+                      <Option value={0} key={0}>
+                        否
+                      </Option>
+                    </Select>
+                  )}
+                </Form.Item>
+              </Col> */}
+              <Col span={12}>
+                <Form.Item {...spcialLayouts} label="团长是否免费">
+                  {getFieldDecorator('is_grouper_free', {
+                    rules: [{ required: goodsDetail.is_group === 1, message: '请选择团长是否免费' }],
+                  })(
+                    <Select>
+                      <Option value={1} key={1}>
+                        是
+                      </Option>
+                      <Option value={0} key={0}>
+                        否
+                      </Option>
+                    </Select>
+                  )}
+                </Form.Item>
+              </Col>
+              <Col span={12}>
                 <Form.Item {...spcialLayouts} label="团购人数">
                   {getFieldDecorator('group_num', {
                     rules: [{ required: goodsDetail.is_group === 1, message: '请选择团购人数' }],
@@ -1349,6 +1397,9 @@ class EditGoodStep2 extends React.PureComponent {
     values.group_num = values.group_num || 0;
     values.limit_buy = values.limit_buy || 0;
     values.group_price = values.group_price || 0;
+    values.is_grouper_free = values.is_grouper_free || 0;
+    values.is_return_profit = values.is_return_profit || 0;
+    values.group_share_title = values.group_share_title || 0;
     // attrTable.forEach(res => {
     //   res.goods_sku_attr = res.goods_sku_attr.map(ele => {
     //     ele.attr_name = res[`sku_attr_name_${ele.attr_class_id}`];
