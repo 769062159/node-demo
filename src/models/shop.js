@@ -6,6 +6,7 @@ export default {
   state: {
     shopList: [],
     shopListPage: {},
+    selectedShop: [], // 选中的shop
     shopDetail: {},
     WriteOffList: []
   },
@@ -80,6 +81,18 @@ export default {
   },
 
   reducers: {
+    clearTable(state) {
+      return {
+        ...state,
+        selectedShop: [],
+      }
+    },
+    selectShop(state, { payload }) {
+      return {
+        ...state,
+        selectedShop: payload.data,
+      }
+    },
     clearAddress(state) {
       return {
         ...state,

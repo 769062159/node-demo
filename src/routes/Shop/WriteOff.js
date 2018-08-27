@@ -45,6 +45,7 @@ export default class WriteOff extends PureComponent {
     expandForm: false,
     dataIndex: {},
     formVisible: false,
+    page: 1, // 店铺的页脚
     // selectedRows: [],
     formValues: {},
     previewVisible: false,
@@ -59,6 +60,15 @@ export default class WriteOff extends PureComponent {
     const { dispatch } = this.props;
     dispatch({
       type: 'shop/fetchMenber',
+    });
+    dispatch({
+      type: 'shop/fetchShop',
+    });
+  }
+  componentWillUnmount() {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'shop/clearTable',
     });
   }
 
@@ -129,7 +139,12 @@ export default class WriteOff extends PureComponent {
         const data = {
           ...values,
         };
-        const { dispatch } = this.props;
+        const { dispatch, shop: { selectedShop } } = this.props;
+        if (!selectedShop.length) {
+          message.error('请选择店铺');
+          return false;
+        }
+        data.shop_store_id = selectedShop[0];
         dispatch({
           type: 'shop/setMember',
           payload: data,
@@ -179,103 +194,31 @@ export default class WriteOff extends PureComponent {
     });
     this.setState({ fileList });
   };
-  renderAdvancedForm() {
-    const { loading } = this.props;
-    const { header, fileList, previewImage, previewVisible } = this.state;
-    // 上传icon
-    const uploadButton = (
-      <div>
-        <Icon type="plus" />
-        <div className="ant-upload-text">Upload</div>
-      </div>
-    );
-    // 上传图片参数
-    const payload = {
-      type: 2,
-    };
-    const { getFieldDecorator } = this.props.form;
-    // const selectItem = [];
-    // selectItem.push(
-    //   <Option key={9999} value={0}>
-    //     顶级分类
-    //   </Option>
-    // );
-    // datas.forEach(res => {
-    //   selectItem.push(
-    //     <Option key={res.class_id} value={res.class_id}>
-    //       {res.class_name}
-    //     </Option>
-    //   );
-    // });
-    // 上传图片dom
-    const uploadItem = (
-      <div className="clearfix">
-        <Upload
-          action={this.props.uploadUrl}
-          headers={header}
-          listType="picture-card"
-          fileList={fileList}
-          onPreview={this.handlePreview}
-          onChange={this.handleChange}
-          data={payload}
-        >
-          {fileList.length >= 1 ? null : uploadButton}
-        </Upload>
-        <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
-          <img alt="example" style={{ width: '100%' }} src={previewImage} />
-        </Modal>
-      </div>
-    );
-    return (
-      <Form
-        onSubmit={this.handleSubmit.bind(this, 0)}
-        hideRequiredMark
-        style={{ marginTop: 8 }}
-        autoComplete="OFF"
-      >
-        <FormItem label="分类名称" {...formItemLayout}>
-          {getFieldDecorator('name', {
-            rules: [
-              {
-                required: true,
-                message: '请输入分类名称',
-              },
-            ],
-          })(<Input placeholder="给分类起个名字" />)}
-        </FormItem>
-        <FormItem
-          label="排序"
-          {...formItemLayout}
-          extra={<Tag color="blue">排序数值越大，类别排得越前面</Tag>}
-        >
-          {getFieldDecorator('sort', {
-            rules: [
-              {
-                required: true,
-                message: '请输入排序',
-              },
-            ],
-          })(<InputNumber placeholder="排序" min={0} />)}
-        </FormItem>
-        <FormItem
-          {...formItemLayout}
-          label="图片"
-          extra={<Tag color="blue">建议尺寸80px*80px，大小不得大于1M</Tag>}
-        >
-          {uploadItem}
-        </FormItem>
-        <FormItem style={{ marginTop: 32 }} {...formSubmitLayout}>
-          <Button type="primary" htmlType="submit" loading={loading}>
-            提交
-          </Button>
-        </FormItem>
-      </Form>
-    );
-  }
+  selectShop = selectList => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'shop/selectShop',
+      payload: {
+        data: selectList,
+      },
+    });
+  };
   renderSimpleForm() {
-    const { loading } = this.props;
+    const { loading, shop: { shopList, shopListPage, selectedShop } } = this.props;
     const { previewVisible } = this.state;
     const { getFieldDecorator } = this.props.form;
+    const shopColumns = [
+      {
+        title: '店铺名',
+        dataIndex: 'shop_name',
+        key: 'shop_name',
+      },
+    ];
+    const rowSelection = {
+      type: 'radio',
+      selectedRowKeys: selectedShop,
+      onChange: this.selectShop,
+    };
     return (
       <Form
         onSubmit={this.handleSubmit.bind(this)}
@@ -292,6 +235,19 @@ export default class WriteOff extends PureComponent {
               },
             ],
           })(<Input placeholder="请输入用户id" />)}
+        </FormItem>
+        <FormItem label="配置店铺" {...formItemLayout} >
+          {getFieldDecorator('shop_id', {
+          })(
+            <Table
+              rowSelection={rowSelection}
+              dataSource={shopList}
+              rowKey={record => record.id}
+              loading={loading}
+              columns={shopColumns}
+              pagination={shopListPage}
+            />
+          )}
         </FormItem>
         <FormItem style={{ marginTop: 32 }} {...formSubmitLayout}>
           <Button type="primary" htmlType="submit" loading={loading}>
@@ -315,7 +271,7 @@ export default class WriteOff extends PureComponent {
       {
         title: '昵称',
         dataIndex: 'nickname',
-        key: 'nickname',
+        // render: val => (val ? val.nickname : null),
       },
       // {
       //   title: '排序',
@@ -347,7 +303,7 @@ export default class WriteOff extends PureComponent {
             </div>
             <Table
               dataSource={datas}
-              rowKey={record => record.class_id}
+              rowKey={record => record.id}
               loading={loading}
               columns={progressColumns}
               pagination={false}
@@ -355,7 +311,7 @@ export default class WriteOff extends PureComponent {
           </div>
         </Card>
         <Modal
-          title="分类"
+          title="核销员"
           visible={formVisible}
           destroyOnClose="true"
           onCancel={this.handAddleCancel.bind(this)}
