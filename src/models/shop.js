@@ -1,4 +1,4 @@
-import { addShop, getShopList, delShop, updateShop, getShopDetail, getMemberLit, cancelMember, setMember } from '../services/shop';
+import { addShop, getShopList, delShop, updateShop, getShopDetail, getMemberLit, cancelMember, setMember, writeOff } from '../services/shop';
 
 export default {
   namespace: 'shop',
@@ -7,11 +7,18 @@ export default {
     shopList: [],
     shopListPage: {},
     selectedShop: [], // 选中的shop
+    selectedMember: [], // 选中的核销员
     shopDetail: {},
-    WriteOffList: []
+    WriteOffList: [],
   },
 
   effects: {
+    *setwriteOff({ payload, callback }, { call }){
+      const res = yield call(writeOff, payload);
+      if (res) {
+        callback();
+      }
+    },
     *fetchShopDetail({ payload, callback }, { call, put }) {
       const response = yield call(getShopDetail, payload);
       yield put({
@@ -85,6 +92,12 @@ export default {
       return {
         ...state,
         selectedShop: [],
+      }
+    },
+    selectMember(state, { payload }) {
+      return {
+        ...state,
+        selectedMember: payload.data,
       }
     },
     selectShop(state, { payload }) {

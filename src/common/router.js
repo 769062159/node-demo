@@ -245,6 +245,9 @@ export const getRouterConfig = app => {
     '/order/group-list': {
       component: dynamicWrapper(app, ['order', 'address'], () => import('../routes/Order/groupList')),
     },
+    '/order/group-detail/:id': {
+      component: dynamicWrapper(app, ['order', 'address'], () => import('../routes/Order/GroupDetail')),
+    },
     // 物流
     '/logistics/freight': {
       component: dynamicWrapper(app, ['goods'], () => import('../routes/Logistics/Freight')),

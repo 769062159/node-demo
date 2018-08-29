@@ -362,7 +362,7 @@ const CustomizedForm = Form.create({
                   min={0}
                   max={100}
                   formatter={value =>
-                    `${goodsDetail.sell_goods_price && goodsDetail.cost_price ? value : 0}%`
+                    `${goodsDetail.sell_goods_price ? value : 0}%`
                   }
                   parser={value => value.replace('%', '')}
                   onChange={e => chgLevelHas(res, e)}
@@ -374,7 +374,7 @@ const CustomizedForm = Form.create({
                   min={0}
                   max={goodsDetail.sell_goods_price}
                   formatter={value =>
-                    `${goodsDetail.sell_goods_price && goodsDetail.cost_price ? value : 0}`
+                    `${goodsDetail.sell_goods_price ? value : 0}`
                   }
                   parser={value => value}
                   onChange={e => chgLevelHas(res, e)}
@@ -732,14 +732,14 @@ const CustomizedForm = Form.create({
               {getFieldDecorator('is_group', {
                 rules: [{ required: true, message: '请选择是否拼团' }],
               })(
-              <Select>
-                <Option value={1} key={1}>
-                  参加
-                </Option>
-                <Option value={0} key={0}>
-                  不参加
-                </Option>
-              </Select>
+                <Select>
+                  <Option value={1} key={1}>
+                    参加
+                  </Option>
+                  <Option value={0} key={0}>
+                    不参加
+                  </Option>
+                </Select>
             )}
             </Form.Item>
           </Col>
@@ -832,7 +832,7 @@ const CustomizedForm = Form.create({
                     ],
                     getValueFromEvent: (date, dateString) => {
                       return dateString;
-                    }
+                    },
                   })(
                     <DatePicker
                       style={{width: 200}}
@@ -854,7 +854,7 @@ const CustomizedForm = Form.create({
                     ],
                     getValueFromEvent: (date, dateString) => {
                       return dateString;
-                    }
+                    },
                   })(
                     <DatePicker
                       style={{width: 200}}
@@ -1196,7 +1196,7 @@ class AddGoodStep2 extends React.PureComponent {
     } = goodsDetail;
     if (typeof profitType === 'undefined') {
       message.error('请选择分佣类型');
-    } else if (profitType === 0 && !costPrice) {
+    } else if (profitType === 0 && typeof costPrice === 'undefined') {
       message.error('请填写成本价格！');
     } else if (profitType === 0 && !sellGoodsPrice) {
       message.error('请填写销售价格！');
@@ -1373,18 +1373,18 @@ class AddGoodStep2 extends React.PureComponent {
     }
     // 团购新加的字段
     values.sale_channel = values.is_group;
-    const { group_start_time, group_end_time } = values;
-    if (group_start_time && typeof group_start_time === 'object') {
+    const { group_start_time: groupStartTime, group_end_time: groupEndTime } = values;
+    if (groupStartTime && typeof groupStartTime === 'object') {
       values.group_start_time = new Date(values.group_start_time._i).getTime() / 1000;
       // values.group_start_time = Number.parseInt(date.getTime() / 1000, 10);
     }else {
-      values.group_start_time = group_start_time || 0;
+      values.group_start_time = groupStartTime || 0;
     }
-    if (group_end_time && typeof group_end_time === 'object') {
+    if (groupEndTime && typeof groupEndTime === 'object') {
       values.group_end_time = new Date(values.group_end_time._i).getTime() / 1000;
       // values.group_end_time = Number.parseInt(date.getTime() / 1000, 10);
     } else {
-      values.group_end_time = group_end_time || 0;
+      values.group_end_time = groupEndTime || 0;
     }
     values.group_pick_up_duration = values.group_pick_up_duration || '';
     values.group_duration = values.group_duration || 0;

@@ -3,16 +3,11 @@ import { connect } from 'dva';
 import {
   Table,
   message,
-  Upload,
   Modal,
   Card,
   Form,
   Input,
-  Tag,
-  Icon,
   Button,
-  InputNumber,
-  Divider,
 } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
@@ -45,16 +40,6 @@ export default class WriteOff extends PureComponent {
     expandForm: false,
     dataIndex: {},
     formVisible: false,
-    page: 1, // 店铺的页脚
-    // selectedRows: [],
-    formValues: {},
-    previewVisible: false,
-    previewImage: '',
-    fileList: [],
-    header: {
-      Authorization: `Bearer ${localStorage.getItem('token')}`,
-    },
-    // selectOption: 0,
   };
   componentDidMount() {
     const { dispatch } = this.props;
@@ -97,7 +82,7 @@ export default class WriteOff extends PureComponent {
           },
           callback: () => {
             message.success('取消成功');
-          }
+          },
         });
         // that.setState({
         //   dataSource: DelDataSource,
@@ -128,7 +113,6 @@ export default class WriteOff extends PureComponent {
     this.setState({
       formVisible: false,
       dataIndex: {},
-      fileList: [],
     });
   };
   // 新增修改提交
@@ -150,7 +134,7 @@ export default class WriteOff extends PureComponent {
           payload: data,
           callback: () => {
             message.success('添加成功');
-          }
+          },
         });
         this.handAddleCancel();
       }
@@ -164,36 +148,36 @@ export default class WriteOff extends PureComponent {
   //     });
   //   };
   // 上传图片
-  handleCancel = () => this.setState({ previewVisible: false });
+  // handleCancel = () => this.setState({ previewVisible: false });
   removeImg = () => {
     const { dataIndex } = this.state;
     dataIndex.class_img_url = '';
     this.setState({ dataIndex });
   };
 
-  handlePreview = file => {
-    this.setState({
-      previewImage: file.url || file.thumbUrl,
-      previewVisible: true,
-    });
-  };
+  // handlePreview = file => {
+  //   this.setState({
+  //     previewImage: file.url || file.thumbUrl,
+  //     previewVisible: true,
+  //   });
+  // };
 
-  handleChange = ({ fileList }) => {
-    // const { response } = fileList;
-    fileList = fileList.map(item => {
-      if (item.status === 'done') {
-        const img = {};
-        img.status = 'done';
-        img.response = { status: 'success' };
-        img.name = item.name;
-        img.uid = item.uid;
-        img.url = item.response.data;
-        return img;
-      }
-      return item;
-    });
-    this.setState({ fileList });
-  };
+  // handleChange = ({ fileList }) => {
+  //   // const { response } = fileList;
+  //   fileList = fileList.map(item => {
+  //     if (item.status === 'done') {
+  //       const img = {};
+  //       img.status = 'done';
+  //       img.response = { status: 'success' };
+  //       img.name = item.name;
+  //       img.uid = item.uid;
+  //       img.url = item.response.data;
+  //       return img;
+  //     }
+  //     return item;
+  //   });
+  //   this.setState({ fileList });
+  // };
   selectShop = selectList => {
     const { dispatch } = this.props;
     dispatch({
@@ -205,7 +189,7 @@ export default class WriteOff extends PureComponent {
   };
   renderSimpleForm() {
     const { loading, shop: { shopList, shopListPage, selectedShop } } = this.props;
-    const { previewVisible } = this.state;
+    // const { previewVisible } = this.state;
     const { getFieldDecorator } = this.props.form;
     const shopColumns = [
       {

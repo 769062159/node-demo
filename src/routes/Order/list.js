@@ -410,7 +410,7 @@ export default class Order extends PureComponent {
                   <Option value="2">待发货</Option>
                   <Option value="3">已发货</Option>
                   <Option value="4">待评价</Option>
-                  <Option value="4">已评价</Option>
+                  <Option value="5">已评价</Option>
                 </Select>
               )}
             </FormItem>

@@ -46,3 +46,11 @@ export async function getGroupList(params) {
     body: params,
   });
 }
+
+// 拼团详情
+export async function getGroupDetail(params) {
+  return request('/merchant/order/group/detail', {
+    method: 'POST',
+    body: params,
+  });
+}

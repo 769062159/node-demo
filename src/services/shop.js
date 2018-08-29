@@ -64,3 +64,11 @@ export async function setMember(params) {
   });
 }
 
+// 核销
+export async function writeOff(params) {
+  return request('/merchant/order/group/check', {
+    method: 'POST',
+    body: params,
+  });
+}
+

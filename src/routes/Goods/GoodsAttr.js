@@ -346,7 +346,7 @@ export default class GoodsAttr extends PureComponent {
         initValue.push(res.value);
       });
     }
-
+    
     getFieldDecorator('keys', { initialValue: initValue });
     const keys = getFieldValue('keys');
     const formItems = keys.map((k, index) => {

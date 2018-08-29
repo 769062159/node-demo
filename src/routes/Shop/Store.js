@@ -5,22 +5,15 @@ import {
   Modal,
   Card,
   Form,
-  Input,
-  Icon,
   Button,
   Divider,
-  Select,
-  InputNumber,
-  message,
 } from 'antd';
 import { routerRedux } from 'dva/router';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
 import styles from './TableList.less';
 
-const FormItem = Form.Item;
 const { confirm } = Modal;
-const { Option } = Select;
 
 @connect(({ shop, loading }) => ({
   shop,
@@ -29,12 +22,12 @@ const { Option } = Select;
 @Form.create()
 export default class ShopList extends PureComponent {
   state = {
-    expandForm: false,
-    formVisible: false,
-    editData: {},
-    isFromEdit: false, // 从修改打开modal
-    // selectedRows: [],
-    formValues: {},
+    // expandForm: false,
+    // formVisible: false,
+    // editData: {},
+    // isFromEdit: false, // 从修改打开modal
+    // // selectedRows: [],
+    // formValues: {},
     page: 1, // 页脚
   };
 
@@ -46,7 +39,7 @@ export default class ShopList extends PureComponent {
       payload: {
         page,
         // page_number: 1,
-      }
+      },
     });
   }
 
@@ -63,11 +56,11 @@ export default class ShopList extends PureComponent {
       onOk() {
         const { dispatch } = that.props;
         const { page } = that.state;
-        const store_id = data.id.toString();
+        const storeId = data.id.toString();
         dispatch({
           type: 'shop/delShop',
           payload: {
-            store_id,
+            store_id: storeId,
             page,
           },
         });
@@ -125,6 +118,19 @@ export default class ShopList extends PureComponent {
           return record.province_name + record.city_name + record.region_name + text;
         },
       },
+      {
+        title: '联系电话',
+        dataIndex: 'mobile',
+        key: 'mobile',
+      },
+      {
+        title: '门店营业时间',
+        dataIndex: 'open_time',
+        key: 'open_time',
+        render(text, record) {
+          return `${text} - ${record.close_time}`;
+        },
+      },
       // {
       //   title: '更新时间',
       //   dataIndex: 'update_time',
@@ -140,28 +146,28 @@ export default class ShopList extends PureComponent {
         ),
       },
     ];
-    const formItemLayout = {
-      labelCol: {
-        xs: { span: 24 },
-        sm: { span: 4 },
-      },
-      wrapperCol: {
-        xs: { span: 24 },
-        sm: { span: 20 },
-      },
-    };
-    const formSubmitLayout = {
-      wrapperCol: {
-        xs: { span: 24, offset: 24 },
-        sm: { span: 20, offset: 4 },
-      },
-    };
-    const formItemLayoutWithOutLabel = {
-      wrapperCol: {
-        xs: { span: 24, offset: 0 },
-        sm: { span: 20, offset: 4 },
-      },
-    };
+    // const formItemLayout = {
+    //   labelCol: {
+    //     xs: { span: 24 },
+    //     sm: { span: 4 },
+    //   },
+    //   wrapperCol: {
+    //     xs: { span: 24 },
+    //     sm: { span: 20 },
+    //   },
+    // };
+    // const formSubmitLayout = {
+    //   wrapperCol: {
+    //     xs: { span: 24, offset: 24 },
+    //     sm: { span: 20, offset: 4 },
+    //   },
+    // };
+    // const formItemLayoutWithOutLabel = {
+    //   wrapperCol: {
+    //     xs: { span: 24, offset: 0 },
+    //     sm: { span: 20, offset: 4 },
+    //   },
+    // };
 
 
     return (
