@@ -456,7 +456,26 @@ export default class Order extends PureComponent {
     const detailColumns = [
       {
         title: '直播标题',
-        width: '41%',
+        width: '20%',
+        dataIndex: 'hasUser',
+        key: 'hasUser',
+        render: val =>{
+            return (
+              <Row>
+                <Col span={8} style={{overflow: 'hidden'}}>
+                  <img src={val.avatar} alt="图片" style={{ width: 60, maxHeight: 60 }} />
+                </Col>
+                <Col span={16}>
+                  <div>{val.nickname}</div>
+                  <div>id:{val.fake_id}</div>
+                </Col>
+              </Row>
+            );
+        },
+      },
+      {
+        title: '直播标题',
+        width: '29%',
         dataIndex: 'has_order_goods',
         key: 'has_order_goods',
         render: val =>
@@ -501,11 +520,23 @@ export default class Order extends PureComponent {
         title: '直播简介',
         width: '8%',
         dataIndex: 'order_status',
-        render: val => oredrStatus[val],
+        render: (val, record) => (
+          record.groupStatus === 1 ? (
+            <div>
+              {oredrStatus[val]}
+              <div style={{color: 'red'}}>(拼团成功)</div>
+            </div>
+          ) : (oredrStatus[val])
+        ),
+          // <div>
+          //   {oredrStatus[val]}
+          //   <div></div>
+          // </div>
+        // ),
       },
       {
         title: '直播简介',
-        width: '16%',
+        width: '8%',
         render: (text, record) =>
           (record.groupStatus === 1 && record.order_status < 3 ) ? (
             <Row>
@@ -539,7 +570,10 @@ export default class Order extends PureComponent {
             align="middle"
             type="flex"
           >
-            <Col span={10} style={{ paddingLeft: 20 }}>
+            <Col span={5} style={{ paddingLeft: 20 }}>
+              会员信息
+            </Col>
+            <Col span={7} style={{ paddingLeft: 20 }}>
               订单详情
             </Col>
             <Col span={2} style={{ paddingLeft: 10 }}>
@@ -554,7 +588,7 @@ export default class Order extends PureComponent {
             <Col span={2} style={{ paddingLeft: 10 }}>
               状态
             </Col>
-            <Col span={4} style={{ paddingLeft: 10 }}>
+            <Col span={2} style={{ paddingLeft: 10 }}>
               操作
             </Col>
           </Row>

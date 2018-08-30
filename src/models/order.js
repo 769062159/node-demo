@@ -109,13 +109,13 @@ export default {
           ele.has_check_user = res.has_check_user;
           ele.store_name = res.store_name;
           ele.groupStatus = res.has_group.status;
+          ele.hasUser = res.has_user;
           // let price = 0;
           // ele.has_order_goods.forEach(gg => {
           //   price = (price * 100 + gg.has_order_goods_sku.price * 100) / 100;
           // });
           // ele.total_price = price;
         });
-        console.log(res.has_order_pack);
       });
       return {
         ...state,

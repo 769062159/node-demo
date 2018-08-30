@@ -147,7 +147,7 @@ export default class GroupDetail extends PureComponent {
                 </div>
               ) : null
             }
-            <div className={styles.orderMsg}>会员信息:{groupDetail.user_nickname} (id:{groupDetail.wechat_account_id})</div>
+            <div className={styles.orderMsg}>会员信息:{groupDetail.user_nickname}</div>
           </Row>
         </div>
         <div className={styles.CardBlock}>
@@ -173,9 +173,9 @@ export default class GroupDetail extends PureComponent {
           商品信息table
         </div> */}
         <div className={styles.goodPrice}>
-          <div>商品小计:¥1.00</div>
-          <div>运费:¥1.00</div>
-          <div className={styles.payment}>实际支付:<span>¥1.00</span></div>
+          <div>商品小计:¥{groupDetail.order_amount}</div>
+          {/* <div>运费:¥1.00</div> */}
+          <div className={styles.payment}>实际支付:<span>¥{groupDetail.order_amount}</span></div>
         </div>
       </PageHeaderLayout>
     );
