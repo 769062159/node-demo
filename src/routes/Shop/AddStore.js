@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { message, Form, Input, Button, Cascader, InputNumber, TimePicker } from 'antd';
 import { connect } from 'dva';
-import moment from 'moment';
+// import moment from 'moment';
 // import { routerRedux } from 'dva/router';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import Maps from '../../components/Map/index';
@@ -122,10 +122,10 @@ export default class AddShop extends Component {
       if (err) {
         return false;
       }
-      values.close_time = values.close_time._d.getTime() / 1000;
-      values.open_time = values.open_time._d.getTime() / 1000;
+      values.close_time = values.close_time.needTime;
+      values.open_time = values.open_time.needTime;
       const { addressBig } = values;
-      const { Jingwei, addressArr } = this.state;
+      const { Jingwei } = this.state;
       if (!addressBig.length) {
         message.error('请选择地址！');
         return false;
@@ -141,7 +141,7 @@ export default class AddShop extends Component {
         payload: values,
         callback: () => {
           message.success('添加成功！')
-        }
+        },
       });
       // if (!err) {
       // }
@@ -280,9 +280,12 @@ export default class AddShop extends Component {
                   message: '请输入开业时间',
                 },
               ],
+              getValueFromEvent: (date, dateString) => {
+                date.needTime = dateString;
+                return date;
+              },
             })(
-              <TimePicker
-              />
+              <TimePicker />
             )}
           </FormItem>
           <FormItem {...formItemLayout} label="关门时间">
@@ -293,9 +296,12 @@ export default class AddShop extends Component {
                   message: '请输入关门时间',
                 },
               ],
+              getValueFromEvent: (date, dateString) => {
+                date.needTime = dateString;
+                return date;
+              },
             })(
-              <TimePicker
-              />
+              <TimePicker />
             )}
           </FormItem>
           <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>

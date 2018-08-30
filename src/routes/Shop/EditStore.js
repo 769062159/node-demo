@@ -64,7 +64,7 @@ export default class AddShop extends Component {
             addressArr,
           },
         });
-      }
+      },
     });
     // dispatch({
     //   type: 'address/fetch',
@@ -147,7 +147,7 @@ export default class AddShop extends Component {
       values.close_time = values.close_time.needTime;
       values.open_time = values.open_time.needTime;
       const { addressBig } = values;
-      const { Jingwei, addressArr } = this.state;
+      const { Jingwei } = this.state;
       if (!addressBig.length) {
         message.error('请选择地址！');
         return false;
@@ -164,7 +164,7 @@ export default class AddShop extends Component {
         payload: values,
         callback: () => {
           message.success('修改成功！')
-        }
+        },
       });
       // if (!err) {
       // }
@@ -184,7 +184,7 @@ export default class AddShop extends Component {
     dispatch({
       type: 'shop/setPropsAddress',
       payload: {
-        propsAddress
+        propsAddress,
       },
     });
   }
@@ -222,6 +222,7 @@ export default class AddShop extends Component {
         loading,
     } = this.props;
     const { getFieldDecorator } = this.props.form;
+    console.log(this.props);
     const { propsAddress } = shopDetail;
     const addressArr = [];
     if (shopDetail.province_id) {
@@ -316,7 +317,7 @@ export default class AddShop extends Component {
                 {
                   required: true,
                   message: '请输入开业时间',
-                }
+                },
               ],
               getValueFromEvent: (date, dateString) => {
                 date.needTime = dateString;
@@ -333,7 +334,7 @@ export default class AddShop extends Component {
                 {
                   required: true,
                   message: '请输入关门时间',
-                }
+                },
               ],
               getValueFromEvent: (date, dateString) => {
                 date.needTime = dateString;
