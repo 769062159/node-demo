@@ -68,6 +68,8 @@ const formItemLayoutUploadImg = {
   },
 };
 const CheckboxGroup = Checkbox.Group;
+const now = new Date();
+const weekNow = new Date(now.getTime() + 7 * 60 * 1000 * 60 * 24);
 
 const CustomizedForm = Form.create({
   onFieldsChange(props, changedFields) {
@@ -75,6 +77,17 @@ const CustomizedForm = Form.create({
   },
   mapPropsToFields(props) {
     const { goods: { goodsDetail, systemType } } = props;
+    const { group_start_time: groupStartTime, group_end_time: groupEndTime } = goodsDetail;
+    if (typeof groupStartTime === 'number') {
+      goodsDetail.group_start_time = new Date(groupStartTime * 1000);
+    } else if (typeof groupStartTime === 'object' || typeof groupEndTime === 'undefined') {
+      goodsDetail.group_start_time = now;
+    }
+    if (typeof groupEndTime === 'number') {
+      goodsDetail.group_end_time = new Date(groupEndTime * 1000);
+    } else if (typeof groupEndTime === 'object' || typeof groupEndTime === 'undefined') {
+      goodsDetail.group_end_time = weekNow;
+    }
     const arr = {
       group_share_title: Form.createFormField({
         value: goodsDetail.group_share_title,
@@ -192,16 +205,22 @@ const CustomizedForm = Form.create({
       //     // ? moment(goodsDetail.goods_shelves_time, 'YYYY-MM-DD HH:mm:ss')
       //     // : null,
       // }),
+      // group_start_time: Form.createFormField({
+      //   value: goodsDetail.group_start_time
+      //     ? moment(goodsDetail.group_start_time, 'YYYY-MM-DD HH:mm:ss')
+      //     : null,
+      // }),
       group_start_time: Form.createFormField({
-        value: goodsDetail.group_start_time
-          ? moment(goodsDetail.group_start_time, 'YYYY-MM-DD HH:mm:ss')
-          : null,
+        value: moment(goodsDetail.group_start_time, 'YYYY-MM-DD HH:mm:ss'),
       }),
       group_end_time: Form.createFormField({
-        value: goodsDetail.group_end_time
-          ? moment(goodsDetail.group_end_time, 'YYYY-MM-DD HH:mm:ss')
-          : null,
+        value: moment(goodsDetail.group_end_time, 'YYYY-MM-DD HH:mm:ss'),
       }),
+      // group_end_time: Form.createFormField({
+      //   value: goodsDetail.group_end_time
+      //     ? moment(goodsDetail.group_end_time, 'YYYY-MM-DD HH:mm:ss')
+      //     : null,
+      // }),
       goods_description: Form.createFormField({
         value: goodsDetail.goods_description,
       }),
@@ -1375,13 +1394,13 @@ class AddGoodStep2 extends React.PureComponent {
     values.sale_channel = values.is_group;
     const { group_start_time: groupStartTime, group_end_time: groupEndTime } = values;
     if (groupStartTime && typeof groupStartTime === 'object') {
-      values.group_start_time = new Date(values.group_start_time._i).getTime() / 1000;
+      values.group_start_time = parseInt(new Date(values.group_start_time._i).getTime() / 1000, 10);
       // values.group_start_time = Number.parseInt(date.getTime() / 1000, 10);
     }else {
       values.group_start_time = groupStartTime || 0;
     }
     if (groupEndTime && typeof groupEndTime === 'object') {
-      values.group_end_time = new Date(values.group_end_time._i).getTime() / 1000;
+      values.group_end_time = parseInt(new Date(values.group_end_time._i).getTime() / 1000, 10);
       // values.group_end_time = Number.parseInt(date.getTime() / 1000, 10);
     } else {
       values.group_end_time = groupEndTime || 0;

@@ -201,7 +201,7 @@ export default class Withdraw extends PureComponent {
         <FormItem {...formItemLayout} style={{ marginBottom: 5 }} label="申请日期">
           {moment(editData.create_time).format('YYYY-MM-DD HH:mm:ss')}
         </FormItem>
-        <FormItem {...formItemLayout} style={{ marginBottom: 5 }} label="提现金额">
+        <FormItem {...formItemLayout} style={{ marginBottom: 5 }} label="退款金额">
           {editData.refund_money}
         </FormItem>
         <FormItem {...formItemLayout} label="备注">
@@ -285,8 +285,8 @@ export default class Withdraw extends PureComponent {
       },
       {
         title: '申请时间',
-        dataIndex: 'create_time',
-        render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
+        dataIndex: 'refund_at',
+        render: val => <span>{moment(val * 1000).format('YYYY-MM-DD HH:mm:ss')}</span>,
       },
       {
         title: '申请退款金额',
@@ -354,7 +354,7 @@ export default class Withdraw extends PureComponent {
           </div>
         </Card>
         <Modal
-          title="提现"
+          title="退款"
           visible={formVisible}
           onCancel={this.handAddleCancel.bind(this)}
           footer=""

@@ -128,12 +128,12 @@ const CustomizedForm = Form.create({
   ];
   const goodLiveColumns = [
     {
-      title: '标题',
+      title: '直播间标题',
       dataIndex: 'title',
       key: 'title',
     },
     {
-      title: '封面',
+      title: '直播封面',
       dataIndex: 'cover',
       render: val => (val ? <img src={val} style={{ width: '120px' }} alt="图片" /> : null),
     },
