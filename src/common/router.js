@@ -218,6 +218,12 @@ export const getRouterConfig = app => {
       identity: 'common',
       component: dynamicWrapper(app, ['live'], () => import('../routes/Live/EditVod/Step3')),
     },
+    // 统计
+    '/statistics/analysis': {
+      component: dynamicWrapper(app, ['chart'], () =>
+        import('../routes/Statistics/Analysis')
+      ),
+    },
     // 首页配置
     '/configuration/background': {
       component: dynamicWrapper(app, ['config'], () =>
@@ -245,8 +251,11 @@ export const getRouterConfig = app => {
     '/order/group-list': {
       component: dynamicWrapper(app, ['order', 'address'], () => import('../routes/Order/groupList')),
     },
+    '/order/order-detail/:id': {
+      component: dynamicWrapper(app, ['order'], () => import('../routes/Order/OrderDetail')),
+    },
     '/order/group-detail/:id': {
-      component: dynamicWrapper(app, ['order', 'address'], () => import('../routes/Order/GroupDetail')),
+      component: dynamicWrapper(app, ['order'], () => import('../routes/Order/GroupDetail')),
     },
     // 物流
     '/logistics/freight': {
@@ -306,19 +315,19 @@ export const getRouterConfig = app => {
       component: dynamicWrapper(app, ['goods'], () => import('../routes/Goods/EditGoods/Step3')),
     },
     // 用户相关信息
-    // '/users/group': {
-    //   component: dynamicWrapper(app, ['user'], () => import('../routes/Demo/Group')),
-    // },
-    // '/users/role/:id': {
-    //   component: dynamicWrapper(app, ['user', 'menu'], () => import('../routes/Demo/Roles')),
-    // },
-    // '/users/user-list': {
-    //   component: dynamicWrapper(app, [], () => import('../routes/Demo/UserList')),
-    // },
+    '/users/group': {
+      component: dynamicWrapper(app, ['user'], () => import('../routes/Demo/Group')),
+    },
+    '/users/role/:id': {
+      component: dynamicWrapper(app, ['user', 'menu'], () => import('../routes/Demo/Roles')),
+    },
+    '/users/user-list': {
+      component: dynamicWrapper(app, [], () => import('../routes/Demo/UserList')),
+    },
     // 路由配置
-    // '/router/menu-list': {
-    //   component: dynamicWrapper(app, ['menu'], () => import('../routes/Demo/MenuList')),
-    // },
+    '/router/menu-list': {
+      component: dynamicWrapper(app, ['menu'], () => import('../routes/Demo/MenuList')),
+    },
     // 我的小程序
     '/my-program/my': {
       component: dynamicWrapper(app, ['program'], () => import('../routes/Myprogram/My')),

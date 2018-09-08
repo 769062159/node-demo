@@ -182,6 +182,17 @@ export default class Order extends PureComponent {
       formVisible: true,
     });
   }
+  ship = (id) => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'order/shipGood',
+      payload: {
+        order_pack_id: id,
+        express_id: 8,
+        no: '296133847036',
+      },
+    });
+  }
   handleFormReset = () => {
     const { form, dispatch } = this.props;
     const { page } = this.state;
@@ -542,6 +553,9 @@ export default class Order extends PureComponent {
             <Row>
               <Button style={grayBtn} onClick={this.writeOff.bind(this, record.order_id)}>
                 核销
+              </Button>
+              <Button style={grayBtn} onClick={this.ship.bind(this, record.pack_id)}>
+                发货
               </Button>
               <a href={`#/order/group-detail/${record.order_id}`} style={grayBtn} >
                 详情

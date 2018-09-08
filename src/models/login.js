@@ -57,8 +57,9 @@ export default {
 
   reducers: {
     changeLoginStatus(state, { payload }) {
-      if (payload.data) {
-        setToken(payload.data.token);
+      const { data } = payload;
+      if (data) {
+        setToken(data.token);
       } else {
         setTokenExpired();
       }

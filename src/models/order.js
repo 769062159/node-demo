@@ -135,6 +135,7 @@ export default {
           ele.has_order_goods.forEach(gg => {
             price = (price * 100 + gg.has_order_goods_sku.price * 100) / 100;
           });
+          ele.hasUser = res.has_user;
           ele.total_price = price;
         });
       });

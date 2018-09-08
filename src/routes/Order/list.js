@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
 import moment from 'moment';
 import {
@@ -48,6 +48,7 @@ const smallStyle = {
   fontSize: 12,
 };
 const grayBtn = {
+  display: 'inline-block',
   backgroundColor: '#E3E3E3',
   width: 80,
   height: 28,
@@ -55,6 +56,8 @@ const grayBtn = {
   borderRadius: 0,
   textAlign: 'center',
   fontSize: 11,
+  margin: '5px 0',
+  lineHeight: '28px',
 };
 // const bigStyles = {
 //     width: '90%',
@@ -510,7 +513,26 @@ export default class Order extends PureComponent {
     const detailColumns = [
       {
         title: '直播标题',
-        width: '50%',
+        width: '20%',
+        dataIndex: 'hasUser',
+        key: 'hasUser',
+        render: val =>{
+            return (
+              <Row>
+                <Col span={8} style={{overflow: 'hidden'}}>
+                  <img src={val.avatar} alt="图片" style={{ width: 60, maxHeight: 60 }} />
+                </Col>
+                <Col span={16}>
+                  <div>{val.nickname}</div>
+                  <div>id:{val.fake_id}</div>
+                </Col>
+              </Row>
+            );
+        },
+      },
+      {
+        title: '直播标题',
+        width: '29%',
         dataIndex: 'has_order_goods',
         key: 'has_order_goods',
         render: val =>
@@ -536,8 +558,8 @@ export default class Order extends PureComponent {
       },
       {
         title: '21',
-        width: '8%',
-        dataIndex: 'warehouse_addr',
+        width: '12%',
+        dataIndex: 'warehouse_name',
       },
       {
         title: '直播简介',
@@ -546,18 +568,24 @@ export default class Order extends PureComponent {
         render: val => oredrStatus[val],
       },
       {
-        title: '直播简介',
-        width: '16%',
-        render: (text, record) =>
-          record.order_status === 2 ? (
-            <Button style={grayBtn} onClick={this.ship.bind(this, record.pack_id)}>
-              发货
-            </Button>
-          ) : record.order_status === 3 ? (
-            <Button style={grayBtn} onClick={this.editShip.bind(this, record)}>
-              修改发货
-            </Button>
-          ) : record.order_status === 1 ? null : null,
+        title: '直简介',
+        width: '12%',
+        render: (text, record) => (
+          <Fragment>
+            {record.order_status === 2 ? (
+              <Button style={grayBtn} onClick={this.ship.bind(this, record.pack_id)}>
+                发货
+              </Button>
+            ) : record.order_status === 3 ? (
+              <Button style={grayBtn} onClick={this.editShip.bind(this, record)}>
+                修改发货
+              </Button>
+            ) : record.order_status === 1 ? null : null}
+            <a href={`#/order/order-detail/${record.pack_id}`} style={grayBtn} >
+              查看详情
+            </a>
+          </Fragment>
+        ),
       },
     ];
 
@@ -575,19 +603,22 @@ export default class Order extends PureComponent {
             align="middle"
             type="flex"
           >
-            <Col span={13} style={{ paddingLeft: 20 }}>
+            <Col span={5} style={{ paddingLeft: 20 }}>
+              会员信息
+            </Col>
+            <Col span={8} style={{ paddingLeft: 20 }}>
               订单详情
             </Col>
             <Col span={3} style={{ paddingLeft: 10 }}>
               金额
             </Col>
-            <Col span={2} style={{ paddingLeft: 10 }}>
+            <Col span={3} style={{ paddingLeft: 10 }}>
               仓库
             </Col>
             <Col span={2} style={{ paddingLeft: 10 }}>
               状态
             </Col>
-            <Col span={4} style={{ paddingLeft: 10 }}>
+            <Col span={3} style={{ paddingLeft: 10 }}>
               操作
             </Col>
           </Row>

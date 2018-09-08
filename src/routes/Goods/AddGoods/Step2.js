@@ -740,10 +740,10 @@ const CustomizedForm = Form.create({
             </Form.Item>
           </Col>
           <Col span={24}>
-            <Form.Item {...formItemLayouts} label="商品类型">
-              {getFieldDecorator('is_group', {
-                rules: [{ required: true, message: '请选择商品类型' }],
-              })(<Select disabled>{saleChannelsItem}</Select>)}
+            <Form.Item {...formItemLayouts} label="提货方式">
+              {getFieldDecorator('sale_channel', {
+                rules: [{ required: true, message: '请选择提货方式' }],
+              })(<Select>{saleChannelsItem}</Select>)}
             </Form.Item>
           </Col>
           <Col span={24}>
@@ -1391,7 +1391,7 @@ class AddGoodStep2 extends React.PureComponent {
       values.goods_shelves_time = 0;
     }
     // 团购新加的字段
-    values.sale_channel = values.is_group;
+    // values.sale_channel = values.is_group;
     const { group_start_time: groupStartTime, group_end_time: groupEndTime } = values;
     if (groupStartTime && typeof groupStartTime === 'object') {
       values.group_start_time = parseInt(new Date(values.group_start_time._i).getTime() / 1000, 10);
