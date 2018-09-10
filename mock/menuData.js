@@ -4,7 +4,7 @@ export const menuData = [
    * 		使用identity来控制权限，如果为common就是公用权限，不写则是没有权限=>403页面
    * */
   {
-    name: '统计',
+    name: '数据分析',
     icon: 'line-chart',
     path: 'statistics',
     children: [
@@ -164,8 +164,12 @@ export const menuData = [
         path: 'list',
       },
       {
-        name: '团购列表',
+        name: '线下团购列表',
         path: 'group-list',
+      },
+      {
+        name: '线上团购列表',
+        path: 'group-list-online',
       },
     ],
   },

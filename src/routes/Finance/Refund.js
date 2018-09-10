@@ -278,6 +278,12 @@ export default class Withdraw extends PureComponent {
         ),
       },
       {
+        title: '订单',
+        dataIndex: 'has_order_pack',
+        width: 120,
+        render: val => val.order_sn,
+      },
+      {
         title: '用户昵称',
         dataIndex: 'has_user',
         width: 120,

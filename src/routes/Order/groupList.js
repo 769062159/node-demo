@@ -100,6 +100,7 @@ export default class Order extends PureComponent {
       type: 'order/getGroupList',
       payload: {
         page,
+        sale_channel: 1,
       },
     });
     dispatch({
@@ -155,6 +156,7 @@ export default class Order extends PureComponent {
     const { orderId, values } = this.state;
     const { shop: { selectedMember } } = this.props;
     const { dispatch } = this.props;
+    values.sale_channel = 1;
     dispatch({
       type: 'shop/setwriteOff',
       payload: {
@@ -209,6 +211,7 @@ export default class Order extends PureComponent {
       type: 'order/getGroupList',
       payload: {
         page,
+        sale_channel: 1,
       },
     });
   };
@@ -234,6 +237,7 @@ export default class Order extends PureComponent {
 
       const { minPrice, maxPrice } = this.state;
       values.page = page;
+      values.sale_channel = 1;
       if (minPrice && maxPrice) {
         values.start_order_amount = minPrice;
         values.end_order_amount = maxPrice;
@@ -438,7 +442,7 @@ export default class Order extends PureComponent {
       order: { groupList: orderList,groupListPage: orderListPage, expressList },
       shop: { WriteOffList, selectedMember },
       shopLoadig,
-      // loading,
+      loading,
     } = this.props;
     const { formVisible, orderId } = this.state;
     console.log(orderId);
@@ -554,9 +558,6 @@ export default class Order extends PureComponent {
               <Button style={grayBtn} onClick={this.writeOff.bind(this, record.order_id)}>
                 核销
               </Button>
-              <Button style={grayBtn} onClick={this.ship.bind(this, record.pack_id)}>
-                发货
-              </Button>
               <a href={`#/order/group-detail/${record.order_id}`} style={grayBtn} >
                 详情
               </a>
@@ -572,7 +573,7 @@ export default class Order extends PureComponent {
 
     return (
       <PageHeaderLayout>
-        <Card bordered={false} hoverable={false}>
+        <Card bordered={false} hoverable={false} loading={loading}>
           <div className={styles.tableListForm}>{this.renderForm()}</div>
           <Row
             style={{
@@ -616,6 +617,7 @@ export default class Order extends PureComponent {
                 });
                 const { values } = this.state;
                 values.page = page;
+                values.sale_channel = 1;
                 const { dispatch } = this.props;
                 dispatch({
                   type: 'order/getGroupList',

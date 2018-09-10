@@ -114,7 +114,7 @@ class BasicLayout extends React.PureComponent {
     } else if (!token) {
       return '/user/login';
     } else {
-      return '/front-users/front-user-list';
+      return '/statistics/analysis';
     }
     return redirect;
   };

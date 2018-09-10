@@ -1,4 +1,4 @@
-import React, { PureComponent, Fragment } from 'react';
+import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 import moment from 'moment';
 import {
@@ -7,12 +7,11 @@ import {
   Row,
   Col,
   List,
-  Button,
-  Icon,
   Input,
+  Icon,
+  Button,
   Select,
   Modal,
-  Cascader,
   Table,
   message,
 } from 'antd';
@@ -29,35 +28,36 @@ const bigStyles = {
   display: 'inline-block',
   verticalAlign: 'bottom',
   borderTop: '1px solid #D2D2D2',
-  width: '90%',
+  width: '100%',
   //   textAlign: 'center',
   paddingLeft: 0,
   height: '50px',
   backgroundColor: '#F5F5F5',
   fontSize: 12,
 };
-const smallStyle = {
-  display: 'inline-block',
-  borderTop: '1px solid #D2D2D2',
-  borderLeft: '1px solid #D2D2D2',
-  verticalAlign: 'bottom',
-  width: '10%',
-  //   textAlign: 'center',
-  height: '50px',
-  backgroundColor: '#F5F5F5',
-  fontSize: 12,
-};
+// const smallStyle = {
+//   display: 'inline-block',
+//   borderTop: '1px solid #D2D2D2',
+//   borderLeft: '1px solid #D2D2D2',
+//   verticalAlign: 'bottom',
+//   width: '10%',
+//   //   textAlign: 'center',
+//   height: '50px',
+//   backgroundColor: '#F5F5F5',
+//   fontSize: 12,
+// };
 const grayBtn = {
   display: 'inline-block',
   backgroundColor: '#E3E3E3',
   width: 80,
   height: 28,
+  marginBottom: 5,
   color: '#000000',
   borderRadius: 0,
   textAlign: 'center',
   fontSize: 11,
-  margin: '5px 0',
   lineHeight: '28px',
+  // verticalAlign: 'middle',
 };
 // const bigStyles = {
 //     width: '90%',
@@ -75,30 +75,26 @@ const grayBtn = {
 //   height: '100%',
 // };
 
-@connect(({ order, address, loading }) => ({
+@connect(({ order, shop, loading }) => ({
   order,
-  address,
+  shop,
   loading: loading.models.order,
-  addLoadig: loading.models.address,
+  shopLoadig: loading.models.shop,
 }))
 @Form.create()
 export default class Order extends PureComponent {
   state = {
     expandForm: false,
-    isAddressModal: false,
-    maxPrice: '',
-    minPrice: '',
-    sn: '', // 需要修改的包裹的sn
+    formVisible: false,
     isSnModal: false,
     shipNumber: '',
     expressId: '',
+    sn: '',
     isEditType: 0, // 修改发
-    page: 1, // 页脚
-    mobile: '',
-    addressInfo: '',
-    receiptName: '',
-    addressArr: [],
     orderId: '',
+    maxPrice: '',
+    minPrice: '',
+    page: 1, // 页脚
     values: {}, // form表单的查询条件
   };
 
@@ -106,14 +102,14 @@ export default class Order extends PureComponent {
     const { dispatch } = this.props;
     const { page } = this.state;
     dispatch({
-      type: 'order/fetchOrder',
+      type: 'order/getGroupList',
       payload: {
         page,
+        sale_channel: 0,
       },
     });
     dispatch({
-      type: 'address/fetch',
-      payload: {},
+      type: 'shop/fetchMenber',
     });
     dispatch({
       type: 'order/fetchExpressList',
@@ -129,6 +125,63 @@ export default class Order extends PureComponent {
     const { value } = e.target;
     this.setState({ maxPrice: value });
   };
+  
+  
+  // loadData = value => {
+  //   const { dispatch, address: { addressList } } = this.props;
+  //   value = value[value.length - 1];
+  //   const id = value.id;
+  //   for (const val of addressList) {
+  //     if (val.id === id) {
+  //       if (!val.children) {
+  //         dispatch({
+  //           type: 'address/fetch',
+  //           payload: {
+  //             parent_id: id,
+  //           },
+  //         });
+  //       }
+  //       break;
+  //     }
+  //     if (val.children) {
+  //       for (const vals of val.children) {
+  //         if (vals.id === id) {
+  //           if (!vals.children) {
+  //             dispatch({
+  //               type: 'address/fetch',
+  //               payload: {
+  //                 parent_id: id,
+  //                 type: 1,
+  //               },
+  //             });
+  //           }
+  //           break;
+  //         }
+  //       }
+  //     }
+  //   }
+  // };
+  setMenber = () => {
+    const { orderId, values } = this.state;
+    const { shop: { selectedMember } } = this.props;
+    const { dispatch } = this.props;
+    values.sale_channel = 0;
+    dispatch({
+      type: 'shop/setwriteOff',
+      payload: {
+        order_id: orderId,
+        user_id: selectedMember[0],
+      },
+      callback: () => {
+        message.success('核销成功');
+        dispatch({
+          type: 'order/getGroupList',
+          payload: values,
+        });
+      },
+    });
+    this.handAddleCancel();
+  }
   setShip = () => {
     const { shipNumber, sn, expressId, isEditType } = this.state;
     if (!sn) {
@@ -161,60 +214,22 @@ export default class Order extends PureComponent {
     }
     this.handShipCancel();
   };
-  editAddressBtn = () => {
-    const { mobile, addressInfo, receiptName, addressArr, orderId } = this.state;
-    console.log(addressArr);
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'order/editAddress',
-      payload: {
-        mobile,
-        name: receiptName,
-        address: addressInfo,
-        province: addressArr[0].id,
-        city: addressArr[1].id,
-        region: addressArr[2].id,
-        order_id: orderId,
-      },
+  // toggleForm = () => {
+  //   this.setState({
+  //     expandForm: !this.state.expandForm,
+  //   });
+  // };
+  writeOff = (id) => {
+    this.setState({
+      orderId: id,
+      formVisible: true,
     });
-    this.handAddressCancel();
-  };
+  }
   ship = sn => {
     this.setState({
       sn,
       isSnModal: true,
       isEditType: 0,
-    });
-  };
-  editShip = pack => {
-    this.setState({
-      sn: pack.pack_id,
-      isSnModal: true,
-      shipNumber: pack.pack_express_code,
-      expressId: pack.pack_express_id,
-      isEditType: 1,
-    });
-  };
-  // 修改发货
-  editAddress = pack => {
-    const addressArr = [];
-    addressArr.push(pack.province);
-    addressArr.push(pack.city);
-    addressArr.push(pack.district);
-    this.setState({
-      isAddressModal: true,
-      addressArr,
-      receiptName: pack.consignee,
-      addressInfo: pack.address,
-      mobile: pack.mobile,
-      orderId: pack.order_id,
-    });
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'address/fetchAll',
-      payload: {
-        addressArr,
-      },
     });
   };
   //  取消发货
@@ -226,85 +241,22 @@ export default class Order extends PureComponent {
       sn: '',
     });
   };
-  // 取消修改地址
-  handAddressCancel = () => {
-    this.setState({
-      isAddressModal: false,
-      receiptName: '',
-      addressInfo: '',
-      mobile: '',
-      orderId: '',
-    });
-  };
-  changeAddress = (value, selectedOptions) => {
-    this.setState({
-      addressArr: selectedOptions,
-    });
-  };
-  loadData = value => {
-    const { dispatch, address: { addressList } } = this.props;
-    value = value[value.length - 1];
-    const id = value.id;
-    for (const val of addressList) {
-      if (val.id === id) {
-        if (!val.children) {
-          dispatch({
-            type: 'address/fetch',
-            payload: {
-              parent_id: id,
-            },
-          });
-        }
-        break;
-      }
-      if (val.children) {
-        for (const vals of val.children) {
-          if (vals.id === id) {
-            if (!vals.children) {
-              dispatch({
-                type: 'address/fetch',
-                payload: {
-                  parent_id: id,
-                  type: 1,
-                },
-              });
-            }
-            break;
-          }
-        }
-      }
-    }
-  };
-  changeAddressInfo = e => {
-    this.setState({
-      addressInfo: e.target.value,
-    });
-  };
-  changeShipNumber = e => {
-    this.setState({
-      shipNumber: e.target.value,
-    });
-  };
-  changeMobile = e => {
-    this.setState({
-      mobile: e.target.value,
-    });
-  };
-  changeReceiptName = e => {
-    this.setState({
-      receiptName: e.target.value,
-    });
-  };
   handleChangeExp = value => {
     this.setState({
       expressId: value,
     });
   };
-  toggleForm = () => {
-    this.setState({
-      expandForm: !this.state.expandForm,
-    });
-  };
+  // ship = (id) => {
+  //   const { dispatch } = this.props;
+  //   dispatch({
+  //     type: 'order/shipGood',
+  //     payload: {
+  //       order_pack_id: id,
+  //       express_id: 8,
+  //       no: '296133847036',
+  //     },
+  //   });
+  // }
   handleFormReset = () => {
     const { form, dispatch } = this.props;
     const { page } = this.state;
@@ -318,10 +270,18 @@ export default class Order extends PureComponent {
       maxPrice: '',
     });
     dispatch({
-      type: 'order/fetchOrder',
+      type: 'order/getGroupList',
       payload: {
         page,
+        sale_channel: 0,
       },
+    });
+  };
+  // 新增取消
+  handAddleCancel = () => {
+    this.setState({
+      formVisible: false,
+      orderId: '',
     });
   };
   handleSearch = e => {
@@ -339,6 +299,7 @@ export default class Order extends PureComponent {
 
       const { minPrice, maxPrice } = this.state;
       values.page = page;
+      values.sale_channel = 0;
       if (minPrice && maxPrice) {
         values.start_order_amount = minPrice;
         values.end_order_amount = maxPrice;
@@ -347,11 +308,21 @@ export default class Order extends PureComponent {
         values,
       });
       dispatch({
-        type: 'order/fetchOrder',
+        type: 'order/getGroupList',
         payload: values,
       });
     });
   };
+  selectMember = selectList => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'shop/selectMember',
+      payload: {
+        data: selectList,
+      },
+    });
+  };
+
   renderSimpleForm() {
     const { getFieldDecorator } = this.props.form;
     return (
@@ -393,6 +364,7 @@ export default class Order extends PureComponent {
       </Form>
     );
   }
+  
 
   renderAdvancedForm() {
     const { getFieldDecorator } = this.props.form;
@@ -413,7 +385,7 @@ export default class Order extends PureComponent {
                   <Option value="2">待发货</Option>
                   <Option value="3">已发货</Option>
                   <Option value="4">待评价</Option>
-                  <Option value="5">已评价</Option>
+                  <Option value="4">已评价</Option>
                 </Select>
               )}
             </FormItem>
@@ -478,28 +450,75 @@ export default class Order extends PureComponent {
       </Form>
     );
   }
-
   renderForm() {
     return this.state.expandForm ? this.renderAdvancedForm() : this.renderSimpleForm();
   }
+  // renderSimpleForms() {
+  //   const { loading, shop: { WriteOffList, selectedMember } } = this.props;
+  //   // const { previewVisible } = this.state;
+  //   const { getFieldDecorator } = this.props.form;
+  //   const shopColumns = [
+  //     {
+  //       title: '店铺名',
+  //       dataIndex: 'shop_name',
+  //       key: 'shop_name',
+  //     },
+  //   ];
+  //   const rowSelection = {
+  //     type: 'radio',
+  //     selectedRowKeys: selectedMember,
+  //     onChange: this.selectShop,
+  //   };
+  //   return (
+  //     <Form
+  //       onSubmit={this.handleSubmit.bind(this)}
+  //       hideRequiredMark
+  //       style={{ marginTop: 8 }}
+  //       autoComplete="OFF"
+  //     >
+  //       <FormItem label="核销员" {...formItemLayout} >
+  //         {getFieldDecorator('user_id', {
+  //         })(
+  //           <Table
+  //             rowSelection={rowSelection}
+  //             dataSource={WriteOffList}
+  //             rowKey={record => record.id}
+  //             loading={loading}
+  //             columns={shopColumns}
+  //             pagination={false}
+  //           />
+  //         )}
+  //       </FormItem>
+  //       <FormItem style={{ marginTop: 32 }} {...formSubmitLayout}>
+  //         <Button type="primary" htmlType="submit" loading={loading}>
+  //           配置
+  //         </Button>
+  //       </FormItem>
+  //     </Form>
+  //   );
+  // }
+
 
   render() {
     const {
-      order: { orderList, orderListPage, expressList },
-      address: { addressList },
+      order: { groupList: orderList,groupListPage: orderListPage, expressList },
+      shop: { WriteOffList, selectedMember },
+      shopLoadig,
       loading,
     } = this.props;
-    const {
-      isSnModal,
-      isEditType,
-      shipNumber,
-      expressId,
-      isAddressModal,
-      addressInfo,
-      receiptName,
-      mobile,
-      addressArr,
-    } = this.state;
+    const { formVisible, isSnModal, isEditType, shipNumber, expressId } = this.state;
+    const shopColumns = [
+      {
+        title: '昵称',
+        dataIndex: 'nickname',
+        key: 'nickname',
+      },
+    ];
+    const rowSelection = {
+      type: 'radio',
+      selectedRowKeys: selectedMember,
+      onChange: this.selectMember,
+    };
     const expressListItem = [];
     if (expressList.length) {
       expressList.forEach(res => {
@@ -539,13 +558,12 @@ export default class Order extends PureComponent {
           val.map(res => {
             return (
               <Row>
-                <Col span={6}>
-                  <img src={res.has_order_goods_sku.http_url} alt="图片" style={{ width: 60 }} />
+                <Col span={8}>
+                  <img src={res.has_order_goods_sku.http_url} alt="图片" style={{ width: 60, maxHeight: 60 }} />
                 </Col>
-                <Col span={13}>{res.goods_name}</Col>
-                <Col span={5}>
-                  <div>¥{res.has_order_goods_sku.unit_price}</div>
-                  <div>*{res.has_order_goods_sku.total_goods_number}</div>
+                <Col span={16}>
+                  <div>{res.goods_name}</div>
+                  <div>¥{res.group_price} 数量:{res.has_order_goods_sku.total_goods_number}</div>
                 </Col>
               </Row>
             );
@@ -553,41 +571,67 @@ export default class Order extends PureComponent {
       },
       {
         title: '213',
+        width: '8%',
+        dataIndex: 'goods_amount',
+      },
+      {
+        title: '213',
         width: '12%',
-        dataIndex: 'total_price',
+        dataIndex: 'store_name',
       },
       {
         title: '21',
         width: '12%',
-        dataIndex: 'warehouse_name',
+        dataIndex: 'has_check_user',
+        render: (val, record) => (
+          record.order_status === 4 ? (
+            <Row>
+              <div>核销门店:{record.store_name}</div>
+              <div>核销员:{val.nickname}</div>
+            </Row>
+          ) : null
+        ), 
       },
       {
         title: '直播简介',
         width: '8%',
         dataIndex: 'order_status',
-        render: val => oredrStatus[val],
+        render: (val, record) => (
+          record.groupStatus === 1 ? (
+            <div>
+              {oredrStatus[val]}
+              <div style={{color: 'red'}}>(拼团成功)</div>
+            </div>
+          ) : (oredrStatus[val])
+        ),
+          // <div>
+          //   {oredrStatus[val]}
+          //   <div></div>
+          // </div>
+        // ),
       },
       {
-        title: '直简介',
-        width: '12%',
-        render: (text, record) => (
-          <Fragment>
-            {record.order_status === 2 ? (
+        title: '直播简介',
+        width: '8%',
+        render: (text, record) =>
+          (record.groupStatus === 1 && record.order_status === 2 ) ? (
+            <Row>
               <Button style={grayBtn} onClick={this.ship.bind(this, record.pack_id)}>
                 发货
               </Button>
-            ) : record.order_status === 3 ? (
-              <Button style={grayBtn} onClick={this.editShip.bind(this, record)}>
-                修改发货
-              </Button>
-            ) : record.order_status === 1 ? null : null}
-            {/* <a href={`#/order/order-detail/${record.pack_id}`} style={grayBtn} >
-              查看详情
-            </a> */}
-          </Fragment>
-        ),
+              {/* <a href={`#/order/group-detail/${record.order_id}`} style={grayBtn} >
+                详情
+              </a> */}
+            </Row>
+          ) : (
+            null
+            // <a href={`#/order/group-detail/${record.order_id}`} style={grayBtn} >
+            //   详情
+            // </a>
+          ),
       },
     ];
+    
 
     return (
       <PageHeaderLayout>
@@ -606,19 +650,22 @@ export default class Order extends PureComponent {
             <Col span={5} style={{ paddingLeft: 20 }}>
               会员信息
             </Col>
-            <Col span={8} style={{ paddingLeft: 20 }}>
+            <Col span={7} style={{ paddingLeft: 20 }}>
               订单详情
             </Col>
-            <Col span={3} style={{ paddingLeft: 10 }}>
-              金额
+            <Col span={2} style={{ paddingLeft: 10 }}>
+              实付金额
             </Col>
             <Col span={3} style={{ paddingLeft: 10 }}>
-              仓库
+              门店信息
+            </Col>
+            <Col span={3} style={{ paddingLeft: 10 }}>
+              核销信息
             </Col>
             <Col span={2} style={{ paddingLeft: 10 }}>
               状态
             </Col>
-            <Col span={3} style={{ paddingLeft: 10 }}>
+            <Col span={2} style={{ paddingLeft: 10 }}>
               操作
             </Col>
           </Row>
@@ -632,9 +679,10 @@ export default class Order extends PureComponent {
                 });
                 const { values } = this.state;
                 values.page = page;
+                values.sale_channel = 0;
                 const { dispatch } = this.props;
                 dispatch({
-                  type: 'order/fetchOrder',
+                  type: 'order/getGroupList',
                   payload: values,
                 });
               },
@@ -643,21 +691,21 @@ export default class Order extends PureComponent {
             dataSource={orderList}
             renderItem={item => (
               <List.Item key={item.order_sn} className={styles.listItem}>
-                <Card className={styles.RowItem} hoverable={false}>
+                <Card className={styles.RowItem} hoverable={false} loading={loading}>
                   <Row
                     style={{ backgroundColor: '#F5F5F5', height: 48, fontSize: 12 }}
                     align="middle"
                     type="flex"
                   >
-                    <Col span={4} style={{ paddingLeft: 20 }}>
-                      {moment(item.create_time * 1000).format('YYYY-MM-DD HH:mm:ss')}
-                    </Col>
                     <Col span={6} style={{ paddingLeft: 10 }}>
                       订单号：{item.order_sn}
                     </Col>
-                    <Col span={6} style={{ paddingLeft: 10 }}>
-                      总金额：{item.total_amount}
+                    <Col span={4} style={{ paddingLeft: 20 }}>
+                      {moment(item.create_time * 1000).format('YYYY-MM-DD HH:mm:ss')}
                     </Col>
+                    {/* <Col span={6} style={{ paddingLeft: 10 }}>
+                      总金额：{item.total_amount}
+                    </Col> */}
                   </Row>
                   <div style={bigStyles}>
                     <Row align="middle" type="flex" style={{ height: '100%' }}>
@@ -675,21 +723,12 @@ export default class Order extends PureComponent {
                       </Col>
                     </Row>
                   </div>
-                  {item.order_status === 2 ? (
-                    <Row style={smallStyle}>
-                      <Button style={grayBtn} onClick={this.editAddress.bind(this, item)}>
-                        修改地址
-                      </Button>
-                    </Row>
-                  ) : (
-                    <Row style={smallStyle} />
-                  )}
                   {item.has_order_pack &&
-                    item.has_order_pack.map((res, index) => {
+                    item.has_order_pack.map((res) => {
                       return (
                         <div key={res.pack_id}>
                           {/* <Card.Grid style={{ padding: 0, width: '100%' }}> */}
-                          <Row
+                          {/* <Row
                             style={{
                               padding: 0,
                               height: 48,
@@ -704,13 +743,12 @@ export default class Order extends PureComponent {
                             <Col span={2}>包裹{index + 1}</Col>
                             <Col span={5}>包裹订单号：{res.order_sn}</Col>
                             <Col span={3}>运费：{res.pack_shipping_fee}</Col>
-                          </Row>
+                          </Row> */}
                           <Table
                             bordered
                             showHeader={false}
-                            // dataSource={item.has_order_pack}
                             dataSource={[res]}
-                            rowKey={record => record.order_id + record.pack_id}
+                            rowKey={record => record.order_id}
                             columns={detailColumns}
                             pagination={false}
                           />
@@ -722,6 +760,27 @@ export default class Order extends PureComponent {
             )}
           />
         </Card>
+        <Modal
+          title="核销员"
+          visible={formVisible}
+          destroyOnClose="true"
+          onCancel={this.handAddleCancel.bind(this)}
+          onOk={this.setMenber.bind(this)}
+        >
+          <Row>
+            <Col span={4}>核销员</Col>
+            <Col span={20}>
+              <Table
+                rowSelection={rowSelection}
+                dataSource={WriteOffList}
+                rowKey={record => record.id}
+                loading={shopLoadig}
+                columns={shopColumns}
+                pagination={false}
+              />
+            </Col>
+          </Row>
+        </Modal>
         <Modal
           title="发货"
           visible={isSnModal}
@@ -759,61 +818,6 @@ export default class Order extends PureComponent {
           </Row>
           <Button loading={loading} onClick={this.setShip}>
             {isEditType ? '修改发货' : '确认发货'}
-          </Button>
-        </Modal>
-        <Modal
-          title="地址"
-          visible={isAddressModal}
-          onCancel={this.handAddressCancel.bind(this)}
-          footer=""
-          destroyOnClose="true"
-        >
-          <Row>
-            <Col span={4}>手机号码</Col>
-            <Col span={20}>
-              <Input
-                defaultValue={mobile}
-                placeholder="请输入手机号码"
-                onChange={this.changeMobile}
-              />
-            </Col>
-          </Row>
-          <Row style={{ margin: '20px 0' }}>
-            <Col span={4}>收货人</Col>
-            <Col span={20}>
-              <Input
-                defaultValue={receiptName}
-                placeholder="请输入收货人姓名"
-                onChange={this.changeReceiptName}
-              />
-            </Col>
-          </Row>
-          <Row>
-            <Col span={4}>省市区</Col>
-            <Col span={20}>
-              <Cascader
-                defaultValue={addressArr}
-                style={{ width: 300 }}
-                options={addressList}
-                onChange={this.changeAddress}
-                loadData={this.loadData}
-                fieldNames={{ label: 'region_name', value: 'id' }}
-                changeOnSelect
-              />
-            </Col>
-          </Row>
-          <Row style={{ margin: '20px 0' }}>
-            <Col span={4}>详细地址</Col>
-            <Col span={20}>
-              <Input
-                defaultValue={addressInfo}
-                placeholder="请输入详情地址"
-                onChange={this.changeAddressInfo}
-              />
-            </Col>
-          </Row>
-          <Button type="primary" loading={loading} onClick={this.editAddressBtn}>
-            修改地址
           </Button>
         </Modal>
       </PageHeaderLayout>

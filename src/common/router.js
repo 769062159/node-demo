@@ -21,6 +21,12 @@ export const getRouterConfig = app => {
       identity: 'root',
       component: dynamicWrapper(app, ['user', 'login'], () => import('../layouts/BasicLayout')),
     },
+    // 统计
+    '/statistics/analysis': {
+      component: dynamicWrapper(app, ['statistics'], () =>
+        import('../routes/Statistics/Analysis')
+      ),
+    },
     '/front-users/front-user-list': {
       identity: 'common',
       component: dynamicWrapper(app, ['frontUser'], () =>
@@ -218,12 +224,6 @@ export const getRouterConfig = app => {
       identity: 'common',
       component: dynamicWrapper(app, ['live'], () => import('../routes/Live/EditVod/Step3')),
     },
-    // 统计
-    '/statistics/analysis': {
-      component: dynamicWrapper(app, ['chart'], () =>
-        import('../routes/Statistics/Analysis')
-      ),
-    },
     // 首页配置
     '/configuration/background': {
       component: dynamicWrapper(app, ['config'], () =>
@@ -250,6 +250,9 @@ export const getRouterConfig = app => {
     },
     '/order/group-list': {
       component: dynamicWrapper(app, ['order', 'address'], () => import('../routes/Order/groupList')),
+    },
+    '/order/group-list-online': {
+      component: dynamicWrapper(app, ['order', 'address'], () => import('../routes/Order/groupListOnline')),
     },
     '/order/order-detail/:id': {
       component: dynamicWrapper(app, ['order'], () => import('../routes/Order/OrderDetail')),
@@ -380,8 +383,8 @@ function dynamicWrapper(app, models, component) {
       return createElement(component().default, {
         ...props,
         routerConfig: routerConfigCache,
-        // uploadUrl: 'http://api.store.314live.cn/merchant/upload', // 正式全局上传图片路径
-        uploadUrl: 'http://dev-api.store.314live.cn/merchant/upload', // 测试全局上传图片路径
+        uploadUrl: 'http://api.store.314live.cn/merchant/upload', // 正式全局上传图片路径
+        // uploadUrl: 'http://dev-api.store.314live.cn/merchant/upload', // 测试全局上传图片路径
         uploadFile: 'http://wechat.store.314live.cn/wx/wechataccount/upload', // 证书上传
       });
     };

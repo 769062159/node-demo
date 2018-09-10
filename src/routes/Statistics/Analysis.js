@@ -42,9 +42,9 @@ for (let i = 0; i < 7; i += 1) {
   });
 }
 
-@connect(({ chart, loading }) => ({
-  chart,
-  loading: loading.effects['chart/fetch'],
+@connect(({ statistics, loading }) => ({
+  statistics,
+  loading: loading.effects.statistics,
 }))
 export default class Analysis extends Component {
   state = {
@@ -53,18 +53,18 @@ export default class Analysis extends Component {
     rangePickerValue: getTimeDistance('year'),
   };
 
-//   componentDidMount() {
-//     this.props.dispatch({
-//       type: 'chart/fetch',
-//     });
-//   }
-
-  componentWillUnmount() {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'chart/clear',
+  componentDidMount() {
+    this.props.dispatch({
+      type: 'statistics/fetch',
     });
   }
+
+  // componentWillUnmount() {
+  //   const { dispatch } = this.props;
+  //   dispatch({
+  //     type: 'chart/clear',
+  //   });
+  // }
 
 //   handleChangeSalesType = e => {
 //     this.setState({
@@ -115,7 +115,7 @@ export default class Analysis extends Component {
   render() {
     // const { rangePickerValue, currentTabKey } = this.state;
     // salesType
-    // const { chart } = this.props;
+    const { statistics: { statistics } } = this.props;
     // const {
     //   visitData,
     //   visitData2,
@@ -243,34 +243,83 @@ export default class Analysis extends Component {
 
     return (
       <Fragment>
-        <Row style={{ background: '#ffff'}}>
+        <Row style={{ minHeight: 400}}>
           <Col md={24} xl={18}>
-            <Row gutter={16}>
+            <Row gutter={16}  className={styles.boxAll}>
               <Col span={6}>
-                <div  className={styles.boxOne}>1</div>
+                <div className={styles.boxOne}>
+                  <img src="/img/totalsales.png" alt="" />
+                  <div className={styles.word}>
+                    <div className={styles.title}>总销售额</div>
+                    <div className={styles.price}>¥{statistics.sale_amount || 0}</div>
+                    <div className={`${styles.tip} ${styles.none}`}>1</div>
+                  </div>
+                </div>
               </Col>
               <Col span={6}>
-                <div className={styles.boxTwo}>2</div>
+                <div className={styles.boxTwo}>
+                  <img src="/img/salesvolume.png" alt="" />
+                  <div className={styles.word}>
+                    <div className={styles.title}>今日销售额</div>
+                    <div className={styles.price}>¥{statistics.today_normal_order_num || 0}</div>
+                    <div className={`${styles.tip} ${styles.none}`} >1</div>
+                  </div>
+                </div>
               </Col>
               <Col span={6}>
-                <div className={styles.boxThree}>3</div>
+                <div className={styles.boxThree}>
+                  <img src="/img/order.png" alt="" />
+                  <div className={styles.word}>
+                    <div className={styles.title}>今日订单数</div>
+                    <div className={styles.price}>{statistics.today_order || 0}</div>
+                    <div className={styles.tip}>拼团：{statistics.today_normal_order_num || 0} 普通：{statistics.today_group_order_num || 0}</div>
+                  </div>
+                </div>
               </Col>
               <Col span={6}>
-                <div className={styles.boxFour}>4</div>
+                <div className={styles.boxFour}>
+                  <img src="/img/pending.png" alt="" />
+                  <div className={styles.word}>
+                    <div className={styles.title}>待自提</div>
+                    <div className={styles.price}>{statistics.claim_group_order_num || 0}</div>
+                    <div className={styles.tip}>拼团：{statistics.claim_group_order_num || 0} 普通：0</div>
+                  </div>
+                </div>
               </Col>
               <Col span={6}>
-                <div className={styles.boxFive}>5</div>
+                <div className={styles.boxFive}>
+                  <img src="/img/tobedelivered.png" alt="" />
+                  <div className={styles.word}>
+                    <div className={styles.title}>待发货</div>
+                    <div className={styles.price}>{statistics.deliverys || 0}</div>
+                    <div className={styles.tip}>拼团：{statistics.delivery_group_order_num || 0} 普通：{statistics.delivery_normal_order_num || 0}</div>
+                  </div>
+                </div>
               </Col>
               <Col span={6}>
-                <div className={styles.boxSix}>6</div>
+                <div className={styles.boxSix}>
+                  <img src="/img/refund.png" alt="" />
+                  <div className={styles.word}>
+                    <div className={styles.title}>退款审核</div>
+                    <div className={styles.price}>{statistics.refund_order_num || 0}</div>
+                    <div className={`${styles.tip} ${styles.none}`} >1</div>
+                  </div>
+                </div>
               </Col>
               <Col span={6}>
-                <div className={styles.boxSeven}>7</div>
+                <div className={styles.boxSeven}>
+                  <img src="/img/review.png" alt="" />
+                  <div className={styles.word}>
+                    <div className={styles.title}>提现审核</div>
+                    <div className={styles.price}>{statistics.withdraw_order_num || 0}</div>
+                    <div className={`${styles.tip} ${styles.none}`} >1</div>
+                  </div>
+                </div>
               </Col>
             </Row>
           </Col>
           <Col xl={6} md={24}>
-            <div>折线表</div>
+            {/* <div>折线表</div> */}
           </Col>
         </Row>
       </Fragment>
