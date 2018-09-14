@@ -276,9 +276,9 @@ export const getRouterConfig = app => {
     '/good/good-type': {
       component: dynamicWrapper(app, ['goods'], () => import('../routes/Goods/GoodsType')),
     },
-    '/good/good-attr': {
-      component: dynamicWrapper(app, ['goods'], () => import('../routes/Goods/GoodsAttr')),
-    },
+    // '/good/good-attr': {
+    //   component: dynamicWrapper(app, ['goods'], () => import('../routes/Goods/GoodsAttr')),
+    // },
     '/good/good-brand': {
       component: dynamicWrapper(app, ['goods'], () => import('../routes/Goods/GoodBrand')),
     },

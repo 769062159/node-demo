@@ -64,10 +64,10 @@ export const menuData = [
         name: '商品分类',
         path: 'good-type',
       },
-      {
-        name: '商品属性',
-        path: 'good-attr',
-      },
+      // {
+      //   name: '商品属性',
+      //   path: 'good-attr',
+      // },
       {
         name: '商品店铺',
         path: 'good-brand',
