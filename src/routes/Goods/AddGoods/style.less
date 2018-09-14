@@ -87,6 +87,62 @@
   padding: 10px 20px;
   border: 1px solid #999;
   margin: 10px 0;
+  .specification {
+    display: flex;
+    align-items: center;
+    .title {
+      width: 60px;
+    }
+    .specInput {
+      position: relative;
+      .close {
+        visibility: hidden;
+        position: absolute;
+        top: -10px;
+        right: -10px;
+        width: 20px;
+        height: 20px;
+      }
+    }
+    .specInput:hover {
+      .close {
+        visibility: visible;
+      }
+    }
+    // input {
+    //   width: 200px;
+    // }
+  }
+  .specificationSon {
+    margin-top: 15px;
+    display: flex;
+    align-items: center;
+    padding-left: 60px;
+    .specSonInput {
+      position: relative;
+      .close {
+        visibility: hidden;
+        position: absolute;
+        top: -10px;
+        right: 0px;
+        width: 20px;
+        height: 20px;
+      }
+    }
+    .specSonInput:hover {
+      .close {
+        visibility: visible;
+      }
+    }
+    input {
+      // width: 200px;
+      margin-right: 10px;
+    }
+    div {
+      color: blue;
+      cursor: pointer;
+    }
+  }
 }
 
 .borderHidden {

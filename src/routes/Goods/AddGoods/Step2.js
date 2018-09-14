@@ -248,6 +248,9 @@ const CustomizedForm = Form.create({
       profit_type: Form.createFormField({
         value: goodsDetail.profit_type,
       }),
+      category_id: Form.createFormField({
+        value: goodsDetail.category_id,
+      }),
     };
     if (systemType.user_levels && systemType.user_levels.length) {
       systemType.user_levels.forEach(res => {
@@ -258,9 +261,9 @@ const CustomizedForm = Form.create({
     }
     return arr;
   },
-  onValuesChange(_, values) {
-    console.log(values);
-  },
+  // onValuesChange(_, values) {
+  //   console.log(values);
+  // },
 })(props => {
   const { getFieldDecorator, validateFields } = props.form;
   const onValidateForm = e => {
@@ -277,7 +280,6 @@ const CustomizedForm = Form.create({
       systemType,
       brandList,
       warehouseList,
-      typeName,
       uploadGoodsImg,
       goodsPlace,
       goodsDetail,
@@ -285,6 +287,8 @@ const CustomizedForm = Form.create({
       attrTable,
       levelPartialSon,
       typePartial,
+      skuInputArr,
+      goodsClass,
     },
     payload,
     header,
@@ -300,6 +304,10 @@ const CustomizedForm = Form.create({
     modifiedValue,
     uploadUrl,
     changeTypePartial,
+    addSpec,
+    addSpecSon,
+    setSkuArrVal,
+    deleteSku,
   } = props;
   const brandListItem = [];
   const warehouseItem = []; // 仓库
@@ -355,6 +363,7 @@ const CustomizedForm = Form.create({
       </Option>
     );
   });
+  const nowReactEditor = new Date().getTime(); // 现在时间用于富文本
   const saleChannelsItem = []; // 线上商品线下商品
   const goodsShelvesItem = []; // 上架方式
   const levelNumberItem = []; // 分佣等级
@@ -368,6 +377,16 @@ const CustomizedForm = Form.create({
   const profitTypeItem = []; // 分拥类型
   const reducedInventpryItem = []; // 减库存方式
   const shippingTypeItem = []; // 运送模板
+  const goodsTypeListItem = []; // 商品分类
+  if (goodsClass.length) {
+    goodsClass.forEach(res => {
+      goodsTypeListItem.push(
+        <Option value={res.class_id} key={res.class_id}>
+          {res.class_name}
+        </Option>
+      );
+    });
+  }
   if (Object.keys(systemType).length) {
     systemType.user_levels.forEach(res => {
       levelNumberItem.push(
@@ -495,8 +514,10 @@ const CustomizedForm = Form.create({
       <Card title="商品信息" style={{ marginBottom: '20px' }}>
         <Row gutter={24}>
           <Col span={24}>
-            <Form.Item {...formItemLayouts} label="商品类别">
-              <span>{typeName}</span>
+            <Form.Item {...formItemLayouts} label="商品分类">
+              {getFieldDecorator('category_id', {
+                rules: [{ required: true, message: '请填写商品分类' }],
+              })(<Select style={{ width: 200 }}>{goodsTypeListItem}</Select>)}
             </Form.Item>
           </Col>
         </Row>
@@ -822,7 +843,7 @@ const CustomizedForm = Form.create({
               <Col span={12} className={styles.inlineExtra}>
                 <Form.Item {...spcialLayouts} label="取货时间" extra="天">
                   {getFieldDecorator('group_pick_up_duration', {
-                    rules: [{ required: goodsDetail.is_group === 1, message: '请选择取货时间' }],
+                    rules: [{ required: goodsDetail.sale_channel === 1, message: '请选择取货时间' }],
                   })(<InputNumber min={0} />)}
                 </Form.Item>
               </Col>
@@ -941,7 +962,7 @@ const CustomizedForm = Form.create({
             ) : null}
           </Col>
         </Row> */}
-        <Form.Item label="商品参数">
+        {/* <Form.Item label="商品参数">
           {getFieldDecorator('goods_des', {
             rules: [{ required: true, message: '请填写商品参数' }],
           })(
@@ -952,7 +973,7 @@ const CustomizedForm = Form.create({
               setDescription={setDescription.bind(this, 1)}
             />
           )}
-        </Form.Item>
+        </Form.Item> */}
         <Form.Item label="描述">
           {getFieldDecorator('goods_description', {
             rules: [{ required: true, message: '请填写描述' }],
@@ -960,7 +981,7 @@ const CustomizedForm = Form.create({
             <ReactEditor
               uploadUrl={uploadUrl}
               valueSon={goodsDetail.goods_description || ''}
-              goodsId={goodsDetail.goods_id}
+              goodsId={nowReactEditor}
               setDescription={setDescription.bind(this, 2)}
             />
           )}
@@ -1060,11 +1081,45 @@ const CustomizedForm = Form.create({
           </Col>
         </Row>
         <Row>{levelNumberItem}</Row>
-        <div className={styles.borderList}>
-          <span>属性名：</span>
-          {attrItem}
-        </div>
-        {attrItemSon}
+        {/* 批量 */}
+        {
+          skuInputArr.length < 3 ? (
+            <Button onClick={addSpec} style={{ marginBottom: 10 }} >添加规格项目</Button>
+          ) : null
+        }
+        {
+          skuInputArr.map((res, inx) => {
+            return (
+              <div className={styles.borderList} key={inx}>
+                <div className={styles.specification}>
+                  <span className={styles.title}>属性名：</span>
+                  <div className={styles.specInput}>
+                    <Input value={res.key} style={{ width: 200 }} onChange={setSkuArrVal.bind(this, inx, {})}  />
+                    <img className={styles.close} src='/img/close.png' onClick={deleteSku.bind(this, inx, {})} alt="关闭" />
+                  </div>
+                </div>
+                <div className={styles.specificationSon}>
+                  {
+                    res.val && res.val.map((ele, index) => {
+                      return (
+                        <div key={index} className={styles.specSonInput}>
+                          <Input style={{ width: 200 }}  onChange={setSkuArrVal.bind(this, inx, index)} value={ele} />
+                          <img className={styles.close} src='/img/close.png' alt="关闭" onClick={deleteSku.bind(this, inx, index)} />
+                        </div>
+                      )
+                    })
+                  }
+                  {
+                    res.key ? (
+                      <div onClick={addSpecSon.bind(this, inx)}>添加规格值</div>
+                    ) : null
+                  }
+                </div>
+              </div>
+            )
+          })
+        }
+        {/* {attrItemSon} */}
         <EditTable
           isGroup={goodsDetail.is_group}
           attrTable={attrTable}
@@ -1074,7 +1129,7 @@ const CustomizedForm = Form.create({
           totalStock={goodsDetail.goods_total_inventory}
           levelPartialSon={levelPartialSon}
           uploadUrl={uploadUrl}
-          rowKey={index => JSON.stringify(index)}
+          // rowKey={index => JSON.stringify(index)}
           modifiedValue={modifiedValue.bind(this)}
         />
       </Card>
@@ -1126,12 +1181,12 @@ class AddGoodStep2 extends React.PureComponent {
       type: 'goods/clearAttrTabe',
     });
   }
-  // componentWillUnmount() {
-  //   const { dispatch } = this.props;
-  //   dispatch({
-  //     type: 'goods/initGoodAttr',
-  //   });
-  // }
+  componentWillUnmount() {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'goods/initSku',
+    });
+  }
   onCheckAllAttr = index => {
     const { dispatch } = this.props;
     dispatch({
@@ -1165,6 +1220,18 @@ class AddGoodStep2 extends React.PureComponent {
     }
     this.changeFormVal(obj);
   };
+  // 修改sku的值
+  setSkuArrVal = (inx, index, e) => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'goods/setSkuArrVal',
+      payload: {
+        inx,
+        index,
+        val: e.target.value,
+      },
+    });
+  }
   modifiedValue = event => {
     const { dispatch } = this.props;
     dispatch({
@@ -1229,6 +1296,32 @@ class AddGoodStep2 extends React.PureComponent {
       });
     }
   };
+  // 添加规格项目
+  addSpec = () => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'goods/addSpec',
+    });
+  }
+  // 添加子规格
+  addSpecSon = (index) => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'goods/addSpecSon',
+      payload: index,
+    });
+  }
+  // 删除sku
+  deleteSku = (inx, index) => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'goods/deleteSku',
+      payload: {
+        inx,
+        index,
+      },
+    });
+  }
   // 修改分佣等级
   changeTypePartial = e => {
     console.log(e);
@@ -1257,7 +1350,8 @@ class AddGoodStep2 extends React.PureComponent {
   // 提交表单
   submitForm = values => {
     const { goods: { uploadGoodsImg }, dispatch } = this.props;
-    const { goods: { attrTable, levelPartial, goodsDetail } } = this.props;
+    const { goods: { levelPartial, goodsDetail, skuInputArr } } = this.props;
+    let { goods: { attrTable } } = this.props;
     if (!uploadGoodsImg.length) {
       message.error('请上传图片主体！');
       return;
@@ -1266,96 +1360,102 @@ class AddGoodStep2 extends React.PureComponent {
     values.goods_sn = ' ';
     values.profit_type = goodsDetail.profit_type;
     if (attrTable.length) {
-      attrTable.forEach(ele => {
-        ele.goods_sku_sn = ' ';
-        if (!ele.fileList.length) {
-          ele.img = '';
+      // attrTable.forEach(ele => {
+      //   ele.goods_sku_sn = ' ';
+      //   if (!ele.fileList.length) {
+      //     ele.img = '';
+      //   } else {
+      //     ele.img = ele.fileList[0].url;
+      //   }
+      //   const arr = [];
+      //   const obj = {};
+      //   levelPartial.forEach(res => {
+      //     obj[res.id] = res.value;
+      //   });
+      //   ele.profit = deepCopy(levelPartial);
+      //   ele.profit.forEach(res => {
+      //     arr.push({
+      //       price: obj[res.id],
+      //       id: res.id,
+      //       level: res.id,
+      //       profit_value: ele.values[res.id],
+      //     });
+      //   });
+      //   ele.profit = arr;
+      // });
+      // attrTable.map(res => {
+      //   const arr = deepCopy(res.goods_sku_attr);
+      //   res.goods_sku_attr = arr.map(ele => {
+      //     ele.attr_name = res[`sku_attr_name_${ele.attr_class_id}`];
+      //     return ele;
+      //   });
+      //   return res;
+      // });
+      const skuCacheObj = {};
+      const skuCacheArr = [];
+      const isExistInObj = {};
+      for(const ele of skuInputArr){
+        if (!ele.key) {
+          message.error('请输入属性名！');
+          return false;
+        }
+        if (isExistInObj[ele.key]) {
+          message.error('请勿输入属性名！');
+          return false;
         } else {
-          ele.img = ele.fileList[0].url;
+          isExistInObj[ele.key] = 1;
         }
         const arr = [];
-        const obj = {};
-        levelPartial.forEach(res => {
-          obj[res.id] = res.value;
-        });
-        ele.profit = deepCopy(levelPartial);
-        ele.profit.forEach(res => {
+        for(const val of ele.val) {
+          if (!val) {
+            message.error('请输入规格！');
+            return false;
+          }
+          if (skuCacheObj[val]) {
+            message.error('请勿输入重复规格！');
+            return false;
+          }
+          const obj = {
+            attr_class_name: ele.key,
+            attr_name: val,
+          }
           arr.push({
-            price: obj[res.id],
-            id: res.id,
-            level: res.id,
-            profit_value: ele.values[res.id],
-          });
+            attr_name: val,
+          })
+          skuCacheObj[val] = obj;
+        }
+        skuCacheArr.push({
+          attr_class_name: ele.key,
+          attrs: arr,
         });
-        ele.profit = arr;
-      });
-      attrTable.map(res => {
-        const arr = deepCopy(res.goods_sku_attr);
-        res.goods_sku_attr = arr.map(ele => {
-          ele.attr_name = res[`sku_attr_name_${ele.attr_class_id}`];
-          return ele;
-        });
+      }
+      values.attr = skuCacheArr;
+      attrTable = attrTable.map(res => {
+        const skuArr = res.skuName.split('|,|');
+        if (res.fileList.length) {
+          res.img = res.fileList[0].url;
+        } else {
+          res.img = '';
+        }
+        const arr = [] ;
+        skuArr.forEach(ele => {
+          arr.push(skuCacheObj[ele]);
+        })
+        res.goods_sku_attr = arr;
         return res;
-      });
+      })
       values.goods_sku = deepCopy(attrTable);
     } else {
-      const arr = [];
-      if (values.profit_type === 1) {
-        levelPartial.forEach(res => {
-          arr.push({
-            price: res.value,
-            profit_value: res.value,
-            id: res.id,
-            level: res.id,
-          });
-        });
-      } else {
-        levelPartial.forEach(res => {
-          const nowPrice = (
-            res.value *
-            (values.sell_goods_price - values.cost_price) /
-            100
-          ).toFixed(2);
-          arr.push({
-            profit_value: nowPrice,
-            price: res.value,
-            id: res.id,
-            level: res.id,
-          });
-        });
-      }
-      const goodsSkuArr = [];
-      goodsSkuArr.push({
-        sku_goods_name: '默认',
-        store_nums: values.goods_total_inventory,
-        goods_sku_sn: values.goods_sn,
-        price: values.sell_goods_price,
-        cost_price: values.cost_price,
-        img: uploadGoodsImg[0].url,
-        profit: arr,
-        weight: values.weight,
-        goods_sku_attr: [
-          {
-            attr_class_id: 1,
-            attr_id: 1,
-            attr_class_name: '默认',
-            attr_name: '默认',
-          },
-        ],
-      });
-      if (values.is_group === 1) {
-        goodsSkuArr[0].group_price = values.group_price;
-      }
-      values.goods_sku = goodsSkuArr;
+      values.attr = [];
+      values.goods_sku = [];
     }
     values.goods_img = [];
     uploadGoodsImg.forEach(res => {
       values.goods_img.push(res.url);
     });
-    const { type } = this.props.match.params;
+    // const { type } = this.props.match.params;
     // 无一级分类了
     values.class_id = 0;
-    values.category_id = type;
     // 新增需要加的
     values.goods_nums_warning = values.goods_nums_warning || 0;
     // values.warehouse_id = values.warehouse_id || 0;
@@ -1384,6 +1484,7 @@ class AddGoodStep2 extends React.PureComponent {
     values.goods_is_return_server = 1;
     values.goods_is_fast_delivery = 1;
     values.goods_is_recommend_show = 0;
+    values.goods_des = values.goods_des || '';
     if (values.goods_shelves_time) {
       const date = correctionTime(values.goods_shelves_time._d);
       values.goods_shelves_time = Number.parseInt(date.getTime() / 1000, 10);
@@ -1448,6 +1549,10 @@ class AddGoodStep2 extends React.PureComponent {
         chgLevelHas={this.chgLevelHas}
         modifiedValue={this.modifiedValue}
         changeTypePartial={this.changeTypePartial}
+        addSpec={this.addSpec}
+        addSpecSon={this.addSpecSon}
+        setSkuArrVal={this.setSkuArrVal}
+        deleteSku={this.deleteSku}
       />
     );
   }

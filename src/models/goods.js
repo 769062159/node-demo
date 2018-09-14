@@ -35,7 +35,7 @@ const arrayCombination = (dyadicArray, type) => {
     arr1.forEach(item => {
       arr2.forEach(_item => {
         if (type) {
-          tempArr.push(`${item}|${_item}`);
+          tempArr.push(`${item}|,|${_item}`);
         } else {
           tempArr.push(`${item}${_item}`);
         }
@@ -48,16 +48,16 @@ const arrayCombination = (dyadicArray, type) => {
   }
 };
 // 判断一个数组是否包裹另一个数组 (number string一样的)
-const isContained = (arr1, arr2) => {
-  if (!(arr1 instanceof Array) || !(arr2 instanceof Array) || arr1.length < arr2.length) {
-    return false;
-  }
-  const aaStr = arr1.toString();
-  for (let i = 0; i < arr2.length; i++) {
-    if (aaStr.indexOf(arr2[i]) < 0) return false;
-  }
-  return true;
-};
+// const isContained = (arr1, arr2) => {
+//   if (!(arr1 instanceof Array) || !(arr2 instanceof Array) || arr1.length < arr2.length) {
+//     return false;
+//   }
+//   const aaStr = arr1.toString();
+//   for (let i = 0; i < arr2.length; i++) {
+//     if (aaStr.indexOf(arr2[i]) < 0) return false;
+//   }
+//   return true;
+// };
 // 将数据组合成列表，利用递归的特性
 const toGet = (arr, attrArr, AttrArrMap, totalPrice, goodSN, weight, costPrice, groupPrice) => {
   const dyadicArray = [];
@@ -120,6 +120,7 @@ export default {
   namespace: 'goods',
 
   state: {
+    skuInputArr: [], // 可填写sku 例子 [{key: '颜色'， val: ['红', '黄']}]
     goodsList: [],
     goodsListPage: {},
     goodsClass: [], // 商品分类
@@ -130,6 +131,7 @@ export default {
     initGoodsAttr: [], // 初始化的商品分类数组
     typeName: '', // 选中的商品分类
     attrTable: [], // 属性table
+    attrTableCacheArr: [], // 属性table缓存
     attrTableCache: {}, // 属性table缓存
     AttrArrMap: new Map(), // 用来对比的map
     typePartial: 0, // 分佣类型
@@ -273,43 +275,43 @@ export default {
         // const goodsDetail = response.data.goods; // 商品详情
         // const systemType = response.data.system_type; // 默认值
         // const goodType = response.data.goods_class; // 商品类别
-        let type = '';
-        if (payload.type) {
-          type = Number(payload.type);
-        } else if (payload.goods_id) {
-          type = Number(goodsDetail.category_id);
-        }
-        const selectType = goodsClass.filter(res => {
-          return res.class_id === type;
-        });
-        const typeName = `${selectType[0].class_name}`;
-        const AttrArrMap = new Map();
-        const initGoodsAttr = selectType[0].has_many_attr_class;
-        initGoodsAttr.forEach(ele => {
-          const AttrArr = [];
-          ele.has_many_attr.forEach(res => {
-            if (res.status === 0) {
-              // 筛选调禁用掉的子属性
-              AttrArr.push(res.value);
-              AttrArrMap.set(res.id, {
-                attr_class_id: res.attr_class_id,
-                attr_id: res.id,
-                attr_class_name: ele.name,
-                attr_name: res.value,
-              });
-            }
-          });
-          ele.AttrArr = AttrArr;
-          ele.checked = false;
-          ele.checkArr = [];
-        });
+        // let type = '';
+        // if (payload.type) {
+        //   type = Number(payload.type);
+        // } else if (payload.goods_id) {
+        //   type = Number(goodsDetail.category_id);
+        // }
+        // const selectType = goodsClass.filter(res => {
+        //   return res.class_id === type;
+        // });
+        // const typeName = `${selectType[0].class_name}`;
+        // const AttrArrMap = new Map();
+        // const initGoodsAttr = selectType[0].has_many_attr_class;
+        // initGoodsAttr.forEach(ele => {
+        //   const AttrArr = [];
+        //   ele.has_many_attr.forEach(res => {
+        //     if (res.status === 0) {
+        //       // 筛选调禁用掉的子属性
+        //       AttrArr.push(res.value);
+        //       AttrArrMap.set(res.id, {
+        //         attr_class_id: res.attr_class_id,
+        //         attr_id: res.id,
+        //         attr_class_name: ele.name,
+        //         attr_name: res.value,
+        //       });
+        //     }
+        //   });
+        //   ele.AttrArr = AttrArr;
+        //   ele.checked = false;
+        //   ele.checkArr = [];
+        // });
         yield put({
           type: 'init',
           payload: {
             goodsClass,
-            typeName, // 分类名
-            initGoodsAttr,
-            AttrArrMap,
+            // typeName, // 分类名
+            // initGoodsAttr,
+            // AttrArrMap,
             brandList: goodsBrand,
             warehouseList,
             goodsPlace, // 品牌地址
@@ -407,6 +409,131 @@ export default {
   },
 
   reducers: {
+    initSku(state) {
+      return {
+        ...state,
+        skuInputArr: [],
+      }
+    },
+    deleteSku(state, { payload }) {
+      const { inx, index } = payload;
+      const { skuInputArr, goodsDetail } = state;
+      let { attrTable, attrTableCacheArr } = state;
+      if (typeof index === 'number') {
+        const { val } = skuInputArr[inx];
+        val.splice(index, 1);
+        skuInputArr[inx].val = val;
+      } else {
+        skuInputArr.splice(inx, 1);
+      }
+      const arr = [];
+      skuInputArr.forEach(res => {
+        if (res.val && res.val.length) {
+          arr.push(res.val);
+        }
+      });
+      // const skuArr = arr.length ? arrayCombination(arr) : [];
+      const skuArrs = arr.length ? arrayCombination(arr, 1) : [];
+      attrTableCacheArr = deepCopy(attrTable);
+      attrTable = skuArrs.map((res, index) => {
+        const cache = attrTableCacheArr[index];
+        const resSku = res.split('|,|').join('');
+        if (cache) {
+          return {
+            ...cache,
+            sku_goods_name: resSku,
+            skuName: res,
+          }
+        }
+        return {
+          id: index,
+          sku_goods_name: resSku,
+          goods_sku_sn: '',
+          skuName: res,
+          price: goodsDetail.sell_goods_price || 0,
+          group_price: goodsDetail.group_price || 0,
+          cost_price: goodsDetail.cost_price || 0,
+          fileList: [],
+          store_nums: 0,
+          weight: goodsDetail.weight || 0,
+        }
+      })
+      // console.log(attrTable);
+      // console.log(skuInputArr);
+      return {
+        ...state,
+        skuInputArr,
+        attrTable,
+        attrTableCacheArr,
+      };
+    },
+    addSpec(state) {
+      const { skuInputArr } = state;
+      skuInputArr.push({key: '', val: []});
+      return {
+        ...state,
+        skuInputArr,
+      };
+    },
+    addSpecSon(state, { payload }) {
+      const { skuInputArr } = state;
+      skuInputArr[payload].val.push('');
+      return {
+        ...state,
+        skuInputArr,
+      };
+    },
+    setSkuArrVal(state, { payload }) {
+      const { skuInputArr, goodsDetail } = state;
+      const { inx, index, val } = payload;
+      let { attrTable, attrTableCacheArr } = state;
+      if (typeof index === 'number') {
+        skuInputArr[inx].val[index] = val;
+      } else {
+        skuInputArr[inx].key = val;
+      }
+      const arr = [];
+      skuInputArr.forEach(res => {
+        if (res.val && res.val.length) {
+          arr.push(res.val);
+        }
+      });
+      // const skuArr = arr.length ? arrayCombination(arr) : [];
+      const skuArrs = arr.length ? arrayCombination(arr, 1) : [];
+      attrTableCacheArr = deepCopy(attrTable);
+      attrTable = skuArrs.map((res, index) => {
+        const cache = attrTableCacheArr[index];
+        const resSku = res.split('|,|').join('');
+        if (cache) {
+          return {
+            ...cache,
+            sku_goods_name: resSku,
+            skuName: res,
+          }
+        }
+        // console.log(goodsDetail.store_nums);
+        // console.log(goodsDetail.goods_total_inventory);
+        return {
+          id: index,
+          // sku: res,
+          sku_goods_name: resSku,
+          goods_sku_sn: '',
+          skuName: skuArrs[index],
+          price: goodsDetail.sell_goods_price || 0,
+          group_price: goodsDetail.group_price || 0,
+          cost_price: goodsDetail.cost_price || 0,
+          fileList: [],
+          store_nums: 0,
+          weight: goodsDetail.weight || 0,
+        }
+      })
+      return {
+        ...state,
+        skuInputArr,
+        attrTable,
+        attrTableCacheArr,
+      };
+    },
     fetchFreights(state, { payload }) {
       const { data } = payload;
       return {
@@ -601,34 +728,107 @@ export default {
           value: '',
         });
       });
-      const uploadGoodsImg = [];
       let attrTable = [];
+      const uploadGoodsImg = [];
+      const skuInputArr = [];
       let typePartial = 0; // 分佣类型
       if (goodsDetail.goods_id) {
+        goodsDetail.xxx = '1';
         goodsDetail.shipping_template_id = goodsDetail.goods_shipping_template_id;
-        const arrId = new Set();
-        const arrSonId = new Set();
-        const goodSku = new Map(); // 用于做对比
-        payload.goodsDetail.has_shop_goods_sku.forEach(res => {
-          const AttrIdSet = new Set();
-          res.has_shop_goods_sku_attr.forEach(ele => {
-            arrId.add(ele.attr_class_id);
-            arrSonId.add(ele.attr_id);
-            AttrIdSet.add(ele.attr_id);
-          });
-          const arrAttrId = [...AttrIdSet];
-          goodSku.set(arrAttrId, res);
+        goodsDetail.has_shop_goods_attr_class.forEach(res => {
+          const arr = [];
+          const arrId = [];
+          res.has_shop_goods_attr.forEach(ele => {
+            arr.push(ele.value);
+            arrId.push(ele.id);
+          })
+          skuInputArr.push({
+            key: res.name,
+            val: arr,
+            id: arrId,
+          })
         });
-        payload.initGoodsAttr.forEach(res => {
-          if (arrId.has(res.id)) {
-            res.checked = true;
+        const arrSkus = [];
+        const arrSkuId = [];
+        skuInputArr.forEach(res => {
+          if (res.val && res.val.length) {
+            arrSkus.push(res.val);
+            arrSkuId.push(res.id);
           }
-          res.has_many_attr.forEach(ele => {
-            if (arrSonId.has(ele.id)) {
-              res.checkArr.push(ele.value);
+        });
+        const skuArrs = arrSkus.length ? arrayCombination(arrSkus, 1) : [];
+        const skuArrId = arrSkuId.length ? arrayCombination(arrSkuId, 1) : [];
+        console.log(skuArrId);
+        attrTable = skuArrs.map((res, index) => {
+          const resSku = res.split('|,|').join('');
+          return {
+            id: index,
+            sku_goods_name: resSku,
+            goods_sku_sn: '',
+            skuName: res,
+            price: goodsDetail.sell_goods_price || 0,
+            group_price: goodsDetail.group_price || 0,
+            cost_price: goodsDetail.cost_price || 0,
+            fileList: [],
+            store_nums: 0,
+            weight: goodsDetail.weight || 0,
+          }
+        })
+        const skuComparedObj = {}; // 做对比
+        goodsDetail.has_shop_goods_sku.forEach(res => {
+          let str = '';
+          res.has_shop_goods_sku_attr.forEach((ele, index) => {
+            if (index) {
+              str += `|,|${ele.attr_id}`;
+            } else {
+              str +=ele.attr_id;
             }
           });
+          skuComparedObj[str] = res;
         });
+        skuArrId.forEach((res, index) => {
+          const skuCompared = skuComparedObj[res];
+          attrTable[index].price = skuCompared.price;
+          attrTable[index].group_price = skuCompared.group_price;
+          attrTable[index].cost_price = skuCompared.cost_price;
+          attrTable[index].store_nums = skuCompared.store_nums;
+          attrTable[index].weight = skuCompared.weight;
+          const img = skuCompared.has_shop_goods_img;
+          if (img.length) {
+            attrTable[index].fileList = [{
+              img: img[0].http_url,
+              url: img[0].http_url,
+              status: 'done',
+              uploaded: 'done',
+              response: { status: 'success' },
+              name: img[0].create_time,
+              uid: img[0].create_time,
+            }]
+          }
+        });
+        // const arrId = new Set();
+        // const arrSonId = new Set();
+        // const goodSku = new Map(); // 用于做对比
+        // payload.goodsDetail.has_shop_goods_sku.forEach(res => {
+        //   const AttrIdSet = new Set();
+        //   res.has_shop_goods_sku_attr.forEach(ele => {
+        //     arrId.add(ele.attr_class_id);
+        //     arrSonId.add(ele.attr_id);
+        //     AttrIdSet.add(ele.attr_id);
+        //   });
+        //   const arrAttrId = [...AttrIdSet];
+        //   goodSku.set(arrAttrId, res);
+        // });
+        // payload.initGoodsAttr.forEach(res => {
+        //   if (arrId.has(res.id)) {
+        //     res.checked = true;
+        //   }
+        //   res.has_many_attr.forEach(ele => {
+        //     if (arrSonId.has(ele.id)) {
+        //       res.checkArr.push(ele.value);
+        //     }
+        //   });
+        // });
         // 分佣代码
         totalPrice = goodsDetail.sell_goods_price - goodsDetail.cost_price;
         // let cache = {};
@@ -644,12 +844,6 @@ export default {
             });
           }
         });
-        // levelPartial.forEach(ele => {
-        //   if (cache[ele.id]) {
-        //     ele.value = cache[ele.id];
-        //   }
-        // });
-        // cache = null;
         goodsDetail.profit_type = typePartial;
         levelPartialSon = deepCopy(levelPartial);
         if (typePartial === 0) {
@@ -658,76 +852,76 @@ export default {
             return res;
           });
         }
-        const attrData = payload.initGoodsAttr.filter(res => {
-          return res.checked;
-        });
-        toGet(
-          attrTable,
-          attrData,
-          payload.AttrArrMap,
-          goodsDetail.sell_goods_price,
-          goodsDetail.goods_sn,
-          goodsDetail.weight,
-          goodsDetail.cost_price,
-          goodsDetail.group_price
-        );
-        if (attrTable.length) {
-          attrTable.forEach(res => {
-            for (const [key, value] of goodSku) {
-              if (isContained(key, res.attrIdArr)) {
-                res.goods_sku_sn = value.goods_sku_sn;
-                res.price = value.price;
-                res.cost_price = value.cost_price;
-                res.group_price = value.group_price;
-                res.weight = value.weight;
-                res.store_nums = value.store_nums;
-                let cacheArr = {};
-                res.profit = deepCopy(levelPartialSon);
-                // 两个数组匹配
-                res.profit.forEach(v => {
-                  cacheArr[v.id] = v;
-                });
-                value.has_shop_goods_sku_profit.forEach(v => {
-                  if (cacheArr[v.level]) {
-                    cacheArr[v.level].value = v.profit_value;
-                  }
-                });
-                res.values = {};
-                res.profit.forEach(ele => {
-                  res.values[ele.id] = ele.value;
-                });
-                cacheArr = null;
-                const img = value.has_shop_goods_img[0];
-                res.img = value.has_shop_goods_img.length ? img.http_url : '';
-                res.sku_goods_name = value.sku_goods_name;
-                res.flag = 1;
-                // res.goods_sku_attr = deepCopy(value.has_shop_goods_sku_attr);
-                // console.log(11)
-                // console.log(res)
-                // console.log(value)
-                value.has_shop_goods_sku_attr.forEach(ele => {
-                  res[`sku_attr_name_${ele.attr_class_id}`] = ele.attr_value;
-                });
-                if (res.img) {
-                  res.fileList = [
-                    {
-                      img: img.http_url,
-                      url: img.http_url,
-                      status: 'done',
-                      uploaded: 'done',
-                      response: { status: 'success' },
-                      name: img.create_time,
-                      uid: img.create_time,
-                    },
-                  ];
-                }
-              }
-            }
-          });
-          attrTable = attrTable.filter(res => {
-            return res.flag;
-          });
-        }
+        // const attrData = payload.initGoodsAttr.filter(res => {
+        //   return res.checked;
+        // });
+        // toGet(
+        //   attrTable,
+        //   attrData,
+        //   payload.AttrArrMap,
+        //   goodsDetail.sell_goods_price,
+        //   goodsDetail.goods_sn,
+        //   goodsDetail.weight,
+        //   goodsDetail.cost_price,
+        //   goodsDetail.group_price
+        // );
+        // if (attrTable.length) {
+        //   attrTable.forEach(res => {
+        //     for (const [key, value] of goodSku) {
+        //       if (isContained(key, res.attrIdArr)) {
+        //         res.goods_sku_sn = value.goods_sku_sn;
+        //         res.price = value.price;
+        //         res.cost_price = value.cost_price;
+        //         res.group_price = value.group_price;
+        //         res.weight = value.weight;
+        //         res.store_nums = value.store_nums;
+        //         let cacheArr = {};
+        //         res.profit = deepCopy(levelPartialSon);
+        //         // 两个数组匹配
+        //         res.profit.forEach(v => {
+        //           cacheArr[v.id] = v;
+        //         });
+        //         value.has_shop_goods_sku_profit.forEach(v => {
+        //           if (cacheArr[v.level]) {
+        //             cacheArr[v.level].value = v.profit_value;
+        //           }
+        //         });
+        //         res.values = {};
+        //         res.profit.forEach(ele => {
+        //           res.values[ele.id] = ele.value;
+        //         });
+        //         cacheArr = null;
+        //         const img = value.has_shop_goods_img[0];
+        //         res.img = value.has_shop_goods_img.length ? img.http_url : '';
+        //         res.sku_goods_name = value.sku_goods_name;
+        //         res.flag = 1;
+        //         // res.goods_sku_attr = deepCopy(value.has_shop_goods_sku_attr);
+        //         // console.log(11)
+        //         // console.log(res)
+        //         // console.log(value)
+        //         value.has_shop_goods_sku_attr.forEach(ele => {
+        //           res[`sku_attr_name_${ele.attr_class_id}`] = ele.attr_value;
+        //         });
+        //         if (res.img) {
+        //           res.fileList = [
+        //             {
+        //               img: img.http_url,
+        //               url: img.http_url,
+        //               status: 'done',
+        //               uploaded: 'done',
+        //               response: { status: 'success' },
+        //               name: img.create_time,
+        //               uid: img.create_time,
+        //             },
+        //           ];
+        //         }
+        //       }
+        //     }
+        //   });
+        //   attrTable = attrTable.filter(res => {
+        //     return res.flag;
+        //   });
+        // }
         goodsDetail.has_shop_goods_img.forEach(res => {
           const img = {};
           img.status = 'done';
@@ -744,19 +938,15 @@ export default {
       }
       goodsDetail.profit_type = goodsDetail.profit_type || 0;
       payload.goodsDetail = goodsDetail;
-      const attrTableCache = {};
-      attrTable.forEach(res => {
-        attrTableCache[res.id] = res;
-      });
       return {
         ...state,
         ...payload,
         levelPartial,
         levelPartialSon,
         totalPrice,
+        skuInputArr,
         uploadGoodsImg,
         attrTable,
-        attrTableCache,
         typePartial,
       };
     },

@@ -282,7 +282,7 @@ export default class Analysis extends Component {
                   <div className={styles.word}>
                     <div className={styles.title}>待自提</div>
                     <div className={styles.price}>{statistics.claim_group_order_num || 0}</div>
-                    <div className={styles.tip}>拼团：{statistics.claim_group_order_num || 0} 普通：0</div>
+                    <a href="#/order/group-list"><div className={styles.tip}>拼团：{statistics.claim_group_order_num || 0} 普通：0</div></a>
                   </div>
                 </div>
               </Col>
@@ -297,24 +297,28 @@ export default class Analysis extends Component {
                 </div>
               </Col>
               <Col span={6}>
-                <div className={styles.boxSix}>
-                  <img src="/img/refund.png" alt="" />
-                  <div className={styles.word}>
-                    <div className={styles.title}>退款审核</div>
-                    <div className={styles.price}>{statistics.refund_order_num || 0}</div>
-                    <div className={`${styles.tip} ${styles.none}`} >1</div>
+                <a href="#/saled/refund">
+                  <div className={styles.boxSix}>
+                    <img src="/img/refund.png" alt="" />
+                    <div className={styles.word}>
+                      <div className={styles.title}>退款审核</div>
+                      <div className={styles.price}>{statistics.refund_order_num || 0}</div>
+                      <div className={`${styles.tip} ${styles.none}`} >1</div>
+                    </div>
                   </div>
-                </div>
+                </a>
               </Col>
               <Col span={6}>
-                <div className={styles.boxSeven}>
-                  <img src="/img/review.png" alt="" />
-                  <div className={styles.word}>
-                    <div className={styles.title}>提现审核</div>
-                    <div className={styles.price}>{statistics.withdraw_order_num || 0}</div>
-                    <div className={`${styles.tip} ${styles.none}`} >1</div>
+                <a href="#/finance/withdraw">
+                  <div className={styles.boxSeven}>
+                    <img src="/img/review.png" alt="" />
+                    <div className={styles.word}>
+                      <div className={styles.title}>提现审核</div>
+                      <div className={styles.price}>{statistics.withdraw_order_num || 0}</div>
+                      <div className={`${styles.tip} ${styles.none}`} >1</div>
+                    </div>
                   </div>
-                </div>
+                </a>
               </Col>
             </Row>
           </Col>

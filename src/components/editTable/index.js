@@ -4,7 +4,7 @@ import {
   Table,
   Input,
   Icon,
-  Popconfirm,
+  // Popconfirm,
   Upload,
   Modal,
   Row,
@@ -14,45 +14,45 @@ import {
   message,
 } from 'antd';
 
-class EditableCell extends PureComponent {
-  state = {
-    value: this.props.value,
-    editable: false,
-  };
-  handleChange = e => {
-    const value = e.target.value;
-    this.setState({ value });
-  };
-  check = () => {
-    this.setState({ editable: false });
-    if (this.props.onChange) {
-      this.props.onChange(this.state.value);
-    }
-  };
-  edit = () => {
-    this.setState({ editable: true });
-  };
-  render() {
-    const { value, editable } = this.state;
-    return (
-      <div className="editable-cell">
-        {editable ? (
-          <Input
-            value={value}
-            onChange={this.handleChange}
-            onPressEnter={this.check}
-            suffix={<Icon type="check" className="editable-cell-icon-check" onClick={this.check} />}
-          />
-        ) : (
-          <div style={{ paddingRight: 24 }}>
-            {value || ' '}
-            <Icon type="edit" className="editable-cell-icon" onClick={this.edit} />
-          </div>
-        )}
-      </div>
-    );
-  }
-}
+// class EditableCell extends PureComponent {
+//   state = {
+//     value: this.props.value,
+//     editable: false,
+//   };
+//   handleChange = e => {
+//     const value = e.target.value;
+//     this.setState({ value });
+//   };
+//   check = () => {
+//     this.setState({ editable: false });
+//     if (this.props.onChange) {
+//       this.props.onChange(this.state.value);
+//     }
+//   };
+//   edit = () => {
+//     this.setState({ editable: true });
+//   };
+//   render() {
+//     const { value, editable } = this.state;
+//     return (
+//       <div className="editable-cell">
+//         {editable ? (
+//           <Input
+//             value={value}
+//             onChange={this.handleChange}
+//             onPressEnter={this.check}
+//             suffix={<Icon type="check" className="editable-cell-icon-check" onClick={this.check} />}
+//           />
+//         ) : (
+//           <div style={{ paddingRight: 24 }}>
+//             {value || ' '}
+//             <Icon type="edit" className="editable-cell-icon" onClick={this.edit} />
+//           </div>
+//         )}
+//       </div>
+//     );
+//   }
+// }
 class EditInputNumber extends PureComponent {
   state = {
     value: this.props.value,
@@ -376,7 +376,8 @@ export default class EditableTable extends PureComponent {
   //     });
   //   };
   render() {
-    const { rowKey, form, totalStock, levelPartialSon, isGroup } = this.props;
+    const { form, totalStock, levelPartialSon } = this.props;
+    // isGroup
     const { attrTable, levelVisible, showData } = this.state;
     const { getFieldDecorator } = form;
     const profitItem = [];
@@ -412,17 +413,17 @@ export default class EditableTable extends PureComponent {
     // }
 
     const columns = [
-      // {
-      //   title: '分佣',
-      //   dataIndex: 'level',
-      //   render: (text, record, index) => {
-      //     return (
-      //       <a className="ant-dropdown-link" onClick={this.levelSetting.bind(this, index)}>
-      //         设置值
-      //       </a>
-      //     );
-      //   },
-      // },
+      {
+        title: 'sku属性',
+        dataIndex: 'sku_goods_name',
+        // render: (text, record, index) => {
+        //   return (
+        //     <a className="ant-dropdown-link" onClick={this.levelSetting.bind(this, index)}>
+        //       设置值
+        //     </a>
+        //   );
+        // },
+      },
       {
         title: '图片',
         dataIndex: 'fileList',
@@ -486,48 +487,48 @@ export default class EditableTable extends PureComponent {
       //       <EditInput value={text} onChange={this.onCellChange(index, 'goods_sku_sn')} />
       //     ),
       //   },
-      {
-        title: '操作',
-        dataIndex: 'operation',
-        fixed: 'right',
-        width: 100,
-        render: (text, record, index) => {
-          return (
-            <Popconfirm title="确定删除?" onConfirm={() => this.onDelete(index)}>
-              <a href="">删除</a>
-            </Popconfirm>
-          );
-        },
-      },
+      // {
+      //   title: '操作',
+      //   dataIndex: 'operation',
+      //   fixed: 'right',
+      //   width: 100,
+      //   render: (text, record, index) => {
+      //     return (
+      //       <Popconfirm title="确定删除?" onConfirm={() => this.onDelete(index)}>
+      //         <a href="">删除</a>
+      //       </Popconfirm>
+      //     );
+      //   },
+      // },
     ];
-    if (attrTable.length && attrTable[0].sku_goods_name !== '默认') {
-      attrTable[0].classIdArr.forEach(res => {
-        const str = attrTable[0][`sku_class_name_${res}`];
-        const strs = `sku_attr_name_${res}`;
-        columns.unshift({
-          title: str,
-          dataIndex: strs,
-          render: (text, record, index) => (
-            <EditableCell value={text} onChange={this.onCellChange(index, strs)} />
-          ),
-        });
-      });
-    }
-    if (isGroup === 1) {
-      columns.unshift({
-        title: '团购价格',
-        dataIndex: 'group_price',
-        render: (text, record, index) => (
-          <EditInputNumber value={text} step={2} onChange={this.onCellChange(index, 'group_price')} />
-        ),
-      });
-    }
+    // if (attrTable.length && attrTable[0].sku_goods_name !== '默认') {
+    //   attrTable[0].classIdArr.forEach(res => {
+    //     const str = attrTable[0][`sku_class_name_${res}`];
+    //     const strs = `sku_attr_name_${res}`;
+    //     columns.unshift({
+    //       title: str,
+    //       dataIndex: strs,
+    //       render: (text, record, index) => (
+    //         <EditableCell value={text} onChange={this.onCellChange(index, strs)} />
+    //       ),
+    //     });
+    //   });
+    // }
+    // if (isGroup === 1) {
+    //   columns.unshift({
+    //     title: '团购价格',
+    //     dataIndex: 'group_price',
+    //     render: (text, record, index) => (
+    //       <EditInputNumber value={text} step={2} onChange={this.onCellChange(index, 'group_price')} />
+    //     ),
+    //   });
+    // }
     return (
       <div>
         <Table
           bordered
           dataSource={attrTable}
-          rowKey={rowKey}
+          rowKey={record => record.id}
           columns={columns}
           scroll={{ x: 1300 }}
           locale={{

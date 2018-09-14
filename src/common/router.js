@@ -286,11 +286,11 @@ export const getRouterConfig = app => {
       identity: 'common',
       component: dynamicWrapper(app, ['form'], () => import('../routes/Goods/AddGoods')),
     },
-    '/good/add-goods/info': {
-      identity: 'common',
-      component: dynamicWrapper(app, ['goods'], () => import('../routes/Goods/AddGoods/Step1')),
-    },
-    '/good/add-goods/confirm/:type': {
+    // '/good/add-goods/info': {
+    //   identity: 'common',
+    //   component: dynamicWrapper(app, ['goods'], () => import('../routes/Goods/AddGoods/Step1')),
+    // },
+    '/good/add-goods/confirm': {
       identity: 'common',
       component: dynamicWrapper(app, ['goods'], () => import('../routes/Goods/AddGoods/Step2')),
     },
@@ -383,8 +383,8 @@ function dynamicWrapper(app, models, component) {
       return createElement(component().default, {
         ...props,
         routerConfig: routerConfigCache,
-        uploadUrl: 'http://api.store.314live.cn/merchant/upload', // 正式全局上传图片路径
-        // uploadUrl: 'http://dev-api.store.314live.cn/merchant/upload', // 测试全局上传图片路径
+        // uploadUrl: 'http://api.store.314live.cn/merchant/upload', // 正式全局上传图片路径
+        uploadUrl: 'http://dev-api.store.314live.cn/merchant/upload', // 测试全局上传图片路径
         uploadFile: 'http://wechat.store.314live.cn/wx/wechataccount/upload', // 证书上传
       });
     };

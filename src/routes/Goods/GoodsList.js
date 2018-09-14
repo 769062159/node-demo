@@ -189,7 +189,7 @@ export default class GoodsList extends PureComponent {
   // 新建商品
   goNew = () => {
     const { dispatch } = this.props;
-    const url = `/good/add-goods/info`;
+    const url = `/good/add-goods/confirm`;
     dispatch(routerRedux.push(url));
   };
 

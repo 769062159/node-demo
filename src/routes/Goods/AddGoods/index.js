@@ -16,12 +16,12 @@ class AddGood extends PureComponent {
     const { pathname } = location;
     const pathList = pathname.split('/');
     switch (pathList[3]) {
-      case 'info':
-        return 0;
+      // case 'info':
+      //   return 0;
       case 'confirm':
-        return 1;
+        return 0;
       case 'result':
-        return 2;
+        return 1;
       default:
         return 0;
     }
@@ -33,7 +33,7 @@ class AddGood extends PureComponent {
         <Card bordered={false}>
           <Fragment>
             <Steps current={this.getCurrentStep()} className={styles.steps}>
-              <Step title="选择商品分类" />
+              {/* <Step title="选择商品分类" /> */}
               <Step title="填写商品详细信息" />
               <Step title="完成" />
             </Steps>
@@ -46,7 +46,7 @@ class AddGood extends PureComponent {
                   exact={item.exact}
                 />
               ))}
-              <Redirect exact from="/good/add-goods" to="/good/add-goods/info" />
+              <Redirect exact from="/good/add-goods" to="/good/add-goods/confirm" />
               <Route render={NotFound} />
             </Switch>
           </Fragment>

@@ -84,11 +84,11 @@ const CustomizedForm = Form.create({
     });
   };
   const {
-    uploadLiveImg,
+    // uploadLiveImg,
     handleShareImg,
     shareImg,
     handlePreviewImg,
-    handleChangeImg,
+    // handleChangeImg,
     header,
     previewVisible,
     previewImage,
@@ -135,7 +135,7 @@ const CustomizedForm = Form.create({
           ],
         })(<TextArea placeholder="请输入简介" autosize />)}
       </FormItem>
-      <Form.Item
+      {/* <Form.Item
         {...formItemLayout}
         label="直播封面"
         extra={<Tag color="blue">建议尺寸750px*370px，大小不得大于1M</Tag>}
@@ -160,7 +160,7 @@ const CustomizedForm = Form.create({
             </Modal>
           </div>
         )}
-      </Form.Item>
+      </Form.Item> */}
       <Form.Item
         {...formItemLayout}
         label="分享图片"
@@ -355,11 +355,11 @@ class AddLiveStep2 extends React.PureComponent {
   };
   // 新增修改提交
   submitForm = () => {
-    const { dispatch, live: { liveForm, uploadLiveImg, shareImg, liveGoods } } = this.props;
-    if (!uploadLiveImg.length) {
-      message.error('请上传封面');
-      return;
-    }
+    const { dispatch, live: { liveForm, shareImg, liveGoods } } = this.props;
+    // if (!uploadLiveImg.length) {
+    //   message.error('请上传封面');
+    //   return;
+    // }
     if (!liveGoods.length) {
       message.error('请选择商品');
       return;
@@ -378,8 +378,9 @@ class AddLiveStep2 extends React.PureComponent {
     liveForm.goods_ids = arrId;
     liveForm.goods_names = arrName;
     liveForm.pagination = pagination;
-    liveForm.cover = uploadLiveImg[0].url;
+    // liveForm.cover = uploadLiveImg[0].url;
     liveForm.share_cover = shareImg[0].url;
+    liveForm.cover = liveForm.share_cover;
     liveForm.live_id = liveForm.id;
     dispatch({
       type: 'live/addLive',

@@ -9,7 +9,7 @@ class AddGoodStep3 extends React.PureComponent {
   render() {
     const { dispatch } = this.props;
     const onFinish = () => {
-      dispatch(routerRedux.push('/good/add-goods/info'));
+      dispatch(routerRedux.push('/good/add-goods/confirm'));
     };
     // const information = (
     //   <div className={styles.information}>
