@@ -26,7 +26,7 @@ import { deepCopy, correctionTime } from '../../../utils/utils';
 
 // const { TextArea } = Input;
 // const RadioGroup = Radio.Group;
-const nowReactEditor = new Date().getTime(); // 现在时间用于富文本
+// const nowReactEditor = new Date().getTime(); // 现在时间用于富文本
 const Option = Select.Option;
 const formItemLayout = {
   labelCol: {
@@ -934,8 +934,8 @@ const CustomizedForm = Form.create({
           })(
             <ReactEditor
               uploadUrl={uploadUrl}
-              valueSon={goodsDetail.goods_description || ''}
-              goodsId={nowReactEditor}
+              // valueSon={goodsDetail.goods_description || ''}
+              // goodsId={nowReactEditor}
               setDescription={setDescription.bind(this, 2)}
             />
           )}
