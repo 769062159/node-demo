@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'dva';
 import debounce from 'lodash/debounce';
-import { Form, Button, Input, Select, Upload, Icon, Modal, Tag, message, Spin, Switch, Pagination } from 'antd';
+import { Form, Button, Input, Select, Upload, Icon, Modal, Tag, message, Spin, Switch, Pagination, InputNumber } from 'antd';
 // import { Form, Button, Input, Upload, Icon, Modal, Tag, message } from 'antd';
 import request from '../../../utils/request';
 import LiveGoodTable from '../../../components/LiveGoodTable';
@@ -63,6 +63,9 @@ const CustomizedForm = Form.create({
       }),
       vod_play_url: Form.createFormField({
         value: props.liveForm.vod_play_url,
+      }),
+      user_id: Form.createFormField({
+        value: props.liveForm.user_id,
       }),
     };
     return arr;
@@ -259,7 +262,7 @@ const CustomizedForm = Form.create({
             },
           ],
         })(
-          <Input />
+          <InputNumber />
         )}
       </FormItem>
       {liveForm.play_type === 1 ? (

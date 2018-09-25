@@ -26,6 +26,7 @@ import { deepCopy, correctionTime } from '../../../utils/utils';
 
 // const { TextArea } = Input;
 // const RadioGroup = Radio.Group;
+const nowReactEditor = new Date().getTime(); // 现在时间用于富文本
 const Option = Select.Option;
 const formItemLayout = {
   labelCol: {
@@ -339,7 +340,6 @@ const CustomizedForm = Form.create({
       </Option>
     );
   });
-  const nowReactEditor = new Date().getTime(); // 现在时间用于富文本
   const saleChannelsItem = []; // 线上商品线下商品
   const goodsShelvesItem = []; // 上架方式
   const levelNumberItem = []; // 分佣等级
