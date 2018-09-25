@@ -220,14 +220,14 @@ export default class AddShop extends Component {
             })(<InputNumber onChange={this.editPhone} style={{ width: 200}} />)}
           </FormItem>
           <FormItem className={styles.extraTag} {...formItemLayout} label="账号" extra={`@${phone}`}>
-            {getFieldDecorator('user', {
+            {getFieldDecorator('user_id', {
               rules: [
                 {
                   required: true,
-                  message: '请输入账号',
+                  message: '请输入账号id',
                 },
               ],
-            })(<Input style={{ width: 200}} />)}
+            })(<InputNumber style={{ width: 200}} />)}
           </FormItem>
           <FormItem {...formItemLayout} label="密码">
             {getFieldDecorator('password', {

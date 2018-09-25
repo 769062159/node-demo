@@ -263,8 +263,10 @@ export default class Withdraw extends PureComponent {
               <div
                 className={styles.shopName}
                 style={{
-                  '-webkit-box-orient': 'vertical',
-                  '-webkit-line-clamp': 2,
+                  // '-webkit-box-orient': 'vertical',
+                  'WebkitBoxOrient': 'vertical',
+                  // '-webkit-line-clamp': 2,
+                  'WebkitLineClamp': 2,
                   overflow: 'hidden',
                 }}
               >

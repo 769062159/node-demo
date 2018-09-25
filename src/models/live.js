@@ -243,6 +243,15 @@ export default {
   },
 
   reducers: {
+    clearVod(state) {
+      const liveForm = {};
+      return {
+        ...state,
+        liveForm,
+        shareImg: [],
+        uploadLiveImg: [],
+      }
+    },
     setVodurl(state, { payload }) {
       const { url } = payload;
       const { liveForm } = state;

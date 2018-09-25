@@ -242,6 +242,12 @@ class EditVodStep2 extends React.PureComponent {
       type: 'live/fetchToken',
     });
   }
+  componentWillUnmount() {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'live/clearVod',
+    });
+  }
 
   // 模糊查询
   fetchUser = value => {

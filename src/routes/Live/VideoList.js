@@ -1,7 +1,7 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
 import debounce from 'lodash/debounce';
-import moment from 'moment';
+// import moment from 'moment';
 // import copy from 'copy-to-clipboard';
 import { routerRedux } from 'dva/router';
 import {
@@ -54,6 +54,8 @@ const submitFormLayout = {
     sm: { span: 10, offset: 7 },
   },
 };
+const vodType = ['录播地址', '上传视频'];
+
 const CustomizedForm = Form.create({
   onFieldsChange(props, changedFields) {
     props.onChange(changedFields);
@@ -450,16 +452,20 @@ export default class Vod extends PureComponent {
         render: val => (val ? <img src={val} style={{ width: '200px' }} alt="图片" /> : null),
       },
       {
-        title: '录播地址',
-        dataIndex: 'play_url',
-        width: 280,
-        // render: val => (val ? <img src={val} style={{ width: '200px' }} alt="图片" /> : null),
+        title: '录播类型',
+        dataIndex: 'type',
+        render: val => vodType[val],
       },
       {
-        title: '更新时间',
-        dataIndex: 'updated_at',
-        render: val => <span>{moment(val * 1000).format('YYYY-MM-DD HH:mm:ss')}</span>,
+        title: '录播地址',
+        dataIndex: 'vod_url',
+        width: 280,
       },
+      // {
+      //   title: '更新时间',
+      //   dataIndex: 'updated_at',
+      //   render: val => <span>{moment(val * 1000).format('YYYY-MM-DD HH:mm:ss')}</span>,
+      // },
       {
         title: '操作',
         width: 100,
