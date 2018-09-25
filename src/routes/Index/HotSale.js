@@ -2,148 +2,135 @@ import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
 import moment from 'moment';
 import { routerRedux } from 'dva/router';
-import { Table, message, Modal, Card, Form, Input, Button, Divider, Tag, InputNumber } from 'antd';
+import { Table, message, Modal, Card, Button, Divider } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
 import styles from './TableList.less';
 
-const FormItem = Form.Item;
+// const FormItem = Form.Item;
 // const Option = Select.Option;
 // const { TextArea } = Input;
 const { confirm } = Modal;
 // const homeType = ['', '热销商品', '直播商品', '轮播图'];
 // const jumpType = ['', '跳转商品', '跳转外部链接', '无跳转', '跳转直播间', '跳转录播'];
-const formItemLayout = {
-  labelCol: {
-    xs: { span: 24 },
-    sm: { span: 7 },
-  },
-  wrapperCol: {
-    xs: { span: 24 },
-    sm: { span: 12 },
-    md: { span: 10 },
-  },
-};
-const submitFormLayout = {
-  wrapperCol: {
-    xs: { span: 24, offset: 0 },
-    sm: { span: 10, offset: 7 },
-  },
-};
-const CustomizedForm = Form.create({
-  onFieldsChange(props, changedFields) {
-    props.onChange(changedFields);
-  },
-  mapPropsToFields(props) {
-    console.log(props);
-    return {
-      type: Form.createFormField({
-        value: props.homeForm.type,
-      }),
-      title: Form.createFormField({
-        value: props.homeForm.title,
-      }),
-      jump_type: Form.createFormField({
-        value: props.homeForm.jump_type,
-      }),
-      target_id: Form.createFormField({
-        value: props.homeForm.target_id,
-      }),
-      url: Form.createFormField({
-        value: props.homeForm.url,
-      }),
-      sort: Form.createFormField({
-        value: props.homeForm.sort,
-      }),
-      xxx: Form.createFormField({
-        value: props.homeForm.xxx,
-      }),
-    };
-  },
-  onValuesChange(_, values) {
-    console.log(values);
-  },
-})(props => {
-  const { getFieldDecorator, validateFields } = props.form;
-  const onValidateForm = e => {
-    e.preventDefault();
-    const { handleSubmit } = props;
-    validateFields(err => {
-      if (!err) {
-        handleSubmit();
-      }
-    });
-  };
-  //   const uploadButton = (
-  //     <div>
-  //       <Icon type="plus" />
-  //       <div className="ant-upload-text">上传</div>
-  //     </div>
-  //   );
-  // 上传图片参数
-  //   const payload = {
-  //     type: 2,
-  //   };
-  //   const header = {
-  //     Authorization: `Bearer ${localStorage.getItem('token')}`,
-  //   };
-  const { loading, GoodList, GoodListPage, goodListChange } = props;
-  const goodListColumns = [
-    {
-      title: '标题',
-      dataIndex: 'goods_name',
-      key: 'goods_name',
-    },
-    {
-      title: '封面',
-      dataIndex: 'cover',
-      render: val => (val ? <img src={val} style={{ width: '120px' }} alt="图片" /> : null),
-    },
-  ];
-  return (
-    <Form>
-      <FormItem {...formItemLayout} label="标题">
-        {getFieldDecorator('title', {
-          rules: [
-            {
-              required: true,
-              message: '请输入标题',
-            },
-          ],
-        })(<Input />)}
-      </FormItem>
+// const formItemLayout = {
+//   labelCol: {
+//     xs: { span: 24 },
+//     sm: { span: 7 },
+//   },
+//   wrapperCol: {
+//     xs: { span: 24 },
+//     sm: { span: 12 },
+//     md: { span: 10 },
+//   },
+// };
+// const submitFormLayout = {
+//   wrapperCol: {
+//     xs: { span: 24, offset: 0 },
+//     sm: { span: 10, offset: 7 },
+//   },
+// };
+// const CustomizedForm = Form.create({
+//   onFieldsChange(props, changedFields) {
+//     props.onChange(changedFields);
+//   },
+//   mapPropsToFields(props) {
+//     console.log(props);
+//     return {
+//       type: Form.createFormField({
+//         value: props.homeForm.type,
+//       }),
+//       title: Form.createFormField({
+//         value: props.homeForm.title,
+//       }),
+//       jump_type: Form.createFormField({
+//         value: props.homeForm.jump_type,
+//       }),
+//       target_id: Form.createFormField({
+//         value: props.homeForm.target_id,
+//       }),
+//       url: Form.createFormField({
+//         value: props.homeForm.url,
+//       }),
+//       sort: Form.createFormField({
+//         value: props.homeForm.sort,
+//       }),
+//       xxx: Form.createFormField({
+//         value: props.homeForm.xxx,
+//       }),
+//     };
+//   },
+//   onValuesChange(_, values) {
+//     console.log(values);
+//   },
+// })(props => {
+//   const { getFieldDecorator, validateFields } = props.form;
+//   const onValidateForm = e => {
+//     e.preventDefault();
+//     const { handleSubmit } = props;
+//     validateFields(err => {
+//       if (!err) {
+//         handleSubmit();
+//       }
+//     });
+//   };
+//   const { loading, GoodList, GoodListPage, goodListChange } = props;
+//   const goodListColumns = [
+//     {
+//       title: '标题',
+//       dataIndex: 'goods_name',
+//       key: 'goods_name',
+//     },
+//     {
+//       title: '封面',
+//       dataIndex: 'cover',
+//       render: val => (val ? <img src={val} style={{ width: '120px' }} alt="图片" /> : null),
+//     },
+//   ];
+//   return (
+//     <Form>
+//       <FormItem {...formItemLayout} label="标题">
+//         {getFieldDecorator('title', {
+//           rules: [
+//             {
+//               required: true,
+//               message: '请输入标题',
+//             },
+//           ],
+//         })(<Input />)}
+//       </FormItem>
 
-      <Table
-        onChange={goodListChange}
-        dataSource={GoodList}
-        rowSelection={{ type: 'radio' }}
-        rowKey={record => record.goods_id}
-        loading={loading}
-        columns={goodListColumns}
-        pagination={GoodListPage}
-      />
-      <FormItem
-        {...formItemLayout}
-        label="排序"
-        extra={<Tag color="blue">建议尺寸220px*240px，大小不得大于1M</Tag>}
-      >
-        {getFieldDecorator('sort', {
-          rules: [
-            {
-              required: true,
-              message: '请输入排序',
-            },
-          ],
-        })(<InputNumber step={1} min={0} />)}
-      </FormItem>
-      <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
-        <Button type="primary" htmlType="submit" onClick={onValidateForm}>
-          提交
-        </Button>
-      </FormItem>
-    </Form>
-  );
-});
+//       <Table
+//         onChange={goodListChange}
+//         dataSource={GoodList}
+//         rowSelection={{ type: 'radio' }}
+//         rowKey={record => record.goods_id}
+//         loading={loading}
+//         columns={goodListColumns}
+//         pagination={GoodListPage}
+//       />
+//       <FormItem
+//         {...formItemLayout}
+//         label="排序"
+//         extra={<Tag color="blue">建议尺寸220px*240px，大小不得大于1M</Tag>}
+//       >
+//         {getFieldDecorator('sort', {
+//           rules: [
+//             {
+//               required: true,
+//               message: '请输入排序',
+//             },
+//           ],
+//         })(<InputNumber step={1} min={0} />)}
+//       </FormItem>
+//       <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
+//         <Button type="primary" htmlType="submit" onClick={onValidateForm}>
+//           提交
+//         </Button>
+//       </FormItem>
+//     </Form>
+//   );
+// });
 
 @connect(({ indexs, loading }) => ({
   indexs,
@@ -152,7 +139,7 @@ const CustomizedForm = Form.create({
 export default class Home extends PureComponent {
   state = {
     expandForm: false,
-    homeVisible: false,
+    // homeVisible: false,
     pagination: 1, // 页脚
     // page: 1, // 商品页脚
   };
@@ -259,21 +246,21 @@ export default class Home extends PureComponent {
     });
   };
   // 新增modal显示
-  showModal = () => {
-    this.setState({
-      homeVisible: true,
-    });
-  };
+  // showModal = () => {
+  //   this.setState({
+  //     homeVisible: true,
+  //   });
+  // };
   // 新增取消
-  handAddleCancel = () => {
-    this.setState({
-      homeVisible: false,
-    });
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'indexs/clearHomeMsgs',
-    });
-  };
+  // handAddleCancel = () => {
+  //   this.setState({
+  //     homeVisible: false,
+  //   });
+  //   const { dispatch } = this.props;
+  //   dispatch({
+  //     type: 'indexs/clearHomeMsgs',
+  //   });
+  // };
   // 修改表单值
   changeFormVal = val => {
     const { dispatch } = this.props;
@@ -324,11 +311,11 @@ export default class Home extends PureComponent {
 
   render() {
     const {
-      indexs: { homeList: datas, homeListPage, GoodList, GoodListPage, homeForm },
+      indexs: { homeList: datas, homeListPage },
       loading,
     } = this.props;
     // const { getFieldDecorator } = this.props.form;
-    const { homeVisible } = this.state;
+    // const { homeVisible } = this.state;
     const progressColumns = [
       //   {
       //     title: '类型',
@@ -392,7 +379,7 @@ export default class Home extends PureComponent {
             />
           </div>
         </Card>
-        <Modal
+        {/* <Modal
           title="热卖商品"
           visible={homeVisible}
           onCancel={this.handAddleCancel.bind(this)}
@@ -406,7 +393,7 @@ export default class Home extends PureComponent {
             loading={loading}
             homeForm={homeForm}
           />
-        </Modal>
+        </Modal> */}
       </PageHeaderLayout>
     );
   }

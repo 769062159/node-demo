@@ -8,6 +8,10 @@ import {
   getVod,
   getVodDetail,
   updateVodDetail,
+  getWanTuToken,
+  getVideoList,
+  addVideo,
+  checkSwitch,
 } from '../services/live';
 import { getAllGoods } from '../services/goods';
 import { dedupe } from '../utils/utils';
@@ -16,6 +20,8 @@ export default {
   namespace: 'live',
 
   state: {
+    videoList: [], // 视频列表
+    videoListPage: {}, // 视频列表
     liveList: [], // table列表
     liveListPage: {}, // table 页脚
     liveForm: {}, // 直播间创建表单
@@ -33,9 +39,38 @@ export default {
     goodsListPage: {}, // 页脚
     vodList: [],
     vodListPage: {},
+    token: '',
   },
 
   effects: {
+    *fetchCheckVideo({ payload }, { call, put }) {
+      const response = yield call(getVideoList, { page: payload.pagination, page_number: 18, liveid: payload.liveid });
+      if (response.code === 200) {
+        response.data.list = response.data.list.map(res => {
+          res.is_bind = res.is_bind ? true : false;
+          return res;
+        })
+      }
+      yield put({
+        type: 'getVideo',
+        payload: response,
+        current: payload.pagination,
+      });
+    },
+    *fetchVideo({ payload }, { call, put }) {
+      const response = yield call(getVideoList, { page: payload.pagination });
+      yield put({
+        type: 'getVideo',
+        payload: response,
+      });
+    },
+    *fetchToken(_, { call, put }) {
+      const response = yield call(getWanTuToken);
+      yield put({
+        type: 'fetchTokens',
+        payload: response,
+      });
+    },
     *fetchAddGoods({ payload }, { call, put }) {
       // 添加时请求第一页
       const good = yield call(getAllGoods, payload);
@@ -125,6 +160,26 @@ export default {
         payload,
       });
     },
+    *fetchCheckVod({ payload }, { call, put }) {
+      const response = yield call(getVod, { page: payload.pagination, 'per-page': 18, liveid: payload.liveid });
+      if (response.code === 200) {
+        response.data.models = response.data.models.map(res => {
+          res.is_bind = res.is_bind ? true : false;
+          return res;
+        })
+      }
+      yield put({
+        type: 'getVod',
+        payload: response,
+        current: payload.pagination,
+      });
+    },
+    *checkSwitch({ payload, callback }, { call }) {
+      const response = yield call(checkSwitch, { ...payload });
+      if (response.code === 200) {
+        callback();
+      }
+    },
     *fetchVod({ payload }, { call, put }) {
       const response = yield call(getVod, { page: payload.pagination });
       yield put({
@@ -166,14 +221,16 @@ export default {
     *editVod({ payload }, { call, put }) {
       const data = yield call(updateVodDetail, payload);
       if (data && data.code === 200) {
-        localStorage.setItem('liveUrl', data.data.rtmp_push);
+        // localStorage.setItem('liveUrl', data.data.rtmp_push);
         yield put(routerRedux.push('/live/edit-vod/result'));
       }
-      //   const response = yield call(getLive, { page: payload.pagination });
-      //   yield put({
-      //     type: 'getLive',
-      //     payload: response,
-      //   });
+    },
+    *addVod({ payload }, { call, put }) {
+      const data = yield call(addVideo, payload);
+      if (data && data.code === 200) {
+        // localStorage.setItem('liveUrl', data.data.rtmp_push);
+        yield put(routerRedux.push('/live/add-video/result'));
+      }
     },
     *deleteLive({ payload }, { call, put }) {
       yield call(deleteLive, payload);
@@ -186,6 +243,23 @@ export default {
   },
 
   reducers: {
+    setVodurl(state, { payload }) {
+      const { url } = payload;
+      const { liveForm } = state;
+      liveForm.vod_url = url;
+      liveForm.zz = url;
+      return {
+        ...state,
+        liveForm,
+      };
+    },
+    fetchTokens(state, { payload }) {
+      const { data: { token } } = payload;
+      return {
+        ...state,
+        token,
+      };
+    },
     setHomeVod(state, { payload }) {
       return {
         ...state,
@@ -415,9 +489,9 @@ export default {
       };
     },
     editVodMsgs(state, { payload }) {
-      console.log(payload);
       const { data } = payload;
       data.xxx = data.cover;
+      data.zz = data.vod_url;
       data.yyy = data.share_cover;
       const imgArr = [];
       const ShareArr = [];
@@ -439,10 +513,10 @@ export default {
           url: data.share_cover,
         });
       }
-      data.goods.forEach(res => {
-        res.disabled = 1;
-      });
-      const liveGoods = data.goods;
+      // data.goods.forEach(res => {
+      //   res.disabled = 1;
+      // });
+      // const liveGoods = data.goods;
       //   if (data.goods_ids) {
       //     const arrId = data.goods_ids.split(',');
       //     const arrName = data.goods_names.split(',');
@@ -458,7 +532,7 @@ export default {
         liveForm: data,
         uploadLiveImg: imgArr,
         shareImg: ShareArr,
-        liveGoods,
+        // liveGoods,
       };
     },
     editLiveMsgs(state, { payload }) {
@@ -533,9 +607,11 @@ export default {
     },
     changeFormVals(state, { payload }) {
       let { liveForm } = state;
+      const { obj } = payload;
+      obj.zz = obj.zz || liveForm.vod_url;
       liveForm = {
         ...liveForm,
-        ...payload.obj,
+        ...obj,
       };
       return {
         ...state,
@@ -553,7 +629,19 @@ export default {
         },
       };
     },
-    getVod(state, { payload }) {
+    getVideo(state, { payload, current }) {
+      const { data } = payload;
+      return {
+        ...state,
+        videoList: data.list,
+        videoListPage: {
+          pageSize: data.page,
+          total: data.total,
+          current,
+        },
+      };
+    },
+    getVod(state, { payload, current }) {
       const { data } = payload;
       return {
         ...state,
@@ -561,6 +649,7 @@ export default {
         vodListPage: {
           pageSize: data.page,
           total: data.total,
+          current,
         },
       };
     },

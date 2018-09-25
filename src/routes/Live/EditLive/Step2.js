@@ -1,11 +1,11 @@
 import React from 'react';
 import { connect } from 'dva';
 import debounce from 'lodash/debounce';
-import { Form, Button, Input, Select, Upload, Icon, Modal, Tag, message, Spin } from 'antd';
+import { Form, Button, Input, Select, Upload, Icon, Modal, Tag, message, Spin, Switch, Pagination } from 'antd';
 // import { Form, Button, Input, Upload, Icon, Modal, Tag, message } from 'antd';
 import request from '../../../utils/request';
 import LiveGoodTable from '../../../components/LiveGoodTable';
-// import styles from './style.less';
+import styles from './style.less';
 
 const { TextArea } = Input;
 const FormItem = Form.Item;
@@ -99,6 +99,8 @@ const CustomizedForm = Form.create({
     vod,
     handleChangesVod,
     uploadUrl,
+    openVod,
+    openVideo,
   } = props;
   console.log(homeVod);
 
@@ -228,13 +230,36 @@ const CustomizedForm = Form.create({
           })(<InputNumber step={0.01} precision={2} min={0.01} style={{ width: '200px' }} />)}
         </Form.Item>
       ) : null} */}
+      <Form.Item
+        {...formItemLayout}
+        label="录播列表"
+      >
+        {getFieldDecorator('xa', {})(<Button type="primary" onClick={openVod}>录播视频</Button>)}
+      </Form.Item>
+      <Form.Item
+        {...formItemLayout}
+        label="上传视频列表"
+      >
+        {getFieldDecorator('xy', {})(<Button type="primary" onClick={openVideo}>上传视频</Button>)}
+      </Form.Item>
       <FormItem {...formItemLayout} label="播放类别">
         {getFieldDecorator('play_type', {})(
           <Select style={{ width: 200 }}>
-            {/* <Option value={1}>拉流地址</Option> */}
             <Option value={2}>直播点播</Option>
             <Option value={3}>腾讯视频</Option>
           </Select>
+        )}
+      </FormItem>
+      <FormItem {...formItemLayout} label="用户id">
+        {getFieldDecorator('user_id', {
+          rules: [
+            {
+              required: true,
+              message: '请输入用户id',
+            },
+          ],
+        })(
+          <Input />
         )}
       </FormItem>
       {liveForm.play_type === 1 ? (
@@ -294,6 +319,8 @@ class EditLiveStep2 extends React.PureComponent {
     this.fetchVod = debounce(this.fetchVod, 800);
   }
   state = {
+    isVideoModal: false,
+    isVodModal: false,
     previewVisible: false,
     previewImage: '',
     vod: [],
@@ -416,6 +443,72 @@ class EditLiveStep2 extends React.PureComponent {
       previewVisible: true,
     });
   };
+  // 跳页vod
+  changeVodPage = (pagination) => {
+    const { id } = this.props.match.params;
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'live/fetchCheckVod',
+      payload: {
+        liveid: id,
+        pagination,
+      },
+    });
+  }
+  // 跳页 video
+  changeVideoPage = (pagination) => {
+    const { id } = this.props.match.params;
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'live/fetchCheckVideo',
+      payload: {
+        liveid: id,
+        pagination,
+      },
+    });
+  }
+  // 打开Vod
+  openVod = () => {
+    const { id } = this.props.match.params;
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'live/fetchCheckVod',
+      payload: {
+        liveid: id,
+      },
+    });
+    this.openOrCloseVod();
+  }
+  // 打开Video
+  openVideo = () => {
+    const { id } = this.props.match.params;
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'live/fetchCheckVideo',
+      payload: {
+        liveid: id,
+      },
+    });
+    this.openOrCloseVideo();
+  }
+  // 录播modal
+  openOrCloseVod = () => {
+    const { isVodModal } = this.state;
+    this.setState({
+      isVodModal: !isVodModal,
+    })
+  }
+  // video
+  openOrCloseVideo = () => {
+    const { isVideoModal } = this.state;
+    this.setState({
+      isVideoModal: !isVideoModal,
+    })
+  }
+  // 关闭Vod
+  // handleCancelVod = () => {
+  //   console.log('取消')
+  // }
   // 关闭放大图片
   handleCancelImg = () => this.setState({ previewVisible: false });
   // 上传图片
@@ -442,6 +535,23 @@ class EditLiveStep2 extends React.PureComponent {
       },
     });
   };
+  changeSwitch = (id, type,checked) => {
+    const { id: liveId } = this.props.match.params;
+    const operation = checked ? 1 : 0;
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'live/checkSwitch',
+      payload: {
+        type,
+        operation,
+        id,
+        live_id: liveId,
+      },
+      callback: () => {
+        message.success('设置成功!');
+      },
+    });
+  }
   handleShareImg = data => {
     let { fileList } = data;
     fileList = fileList.map(item => {
@@ -467,32 +577,88 @@ class EditLiveStep2 extends React.PureComponent {
   };
   render() {
     const {
-      live: { liveForm, uploadLiveImg, shareImg, liveGoods, homeVod },
+      live: { liveForm, uploadLiveImg, shareImg, liveGoods, homeVod, vodList, vodListPage, videoList, videoListPage },
       uploadUrl,
     } = this.props;
-    const { header, previewVisible, previewImage, fetching, vod } = this.state;
+    const vodListItem = [];
+    const videoListItem = [];
+    vodList.forEach(res => {
+      vodListItem.push(
+        <div className={styles.listItem} key={res.id}>
+          <img src={res.cover} alt="图片" />
+          <div className={styles.word}>
+            {res.title}
+          </div>
+          <div className={styles.switch}>
+            <Switch checkedChildren={<Icon type="check" />} unCheckedChildren={<Icon type="close" />} onChange={this.changeSwitch.bind(this, res.id, 0)} defaultChecked={res.is_bind} />
+          </div>
+        </div>
+      )
+    });
+    videoList.forEach(res => {
+      videoListItem.push(
+        <div className={styles.listItem} key={res.id}>
+          <img src={res.cover} alt="图片" />
+          <div className={styles.word}>
+            {res.title}
+          </div>
+          <div className={styles.switch}>
+            <Switch checkedChildren={<Icon type="check" />} unCheckedChildren={<Icon type="close" />} onChange={this.changeSwitch.bind(this, res.id, 1)} defaultChecked={res.is_bind} />
+          </div>
+        </div>
+      )
+    });
+    const { header, previewVisible, previewImage, fetching, vod, isVodModal, isVideoModal } = this.state;
     return (
-      <CustomizedForm
-        liveForm={liveForm}
-        shareImg={shareImg}
-        onChange={this.changeFormVal}
-        handlePreviewImg={this.handlePreviewImg}
-        handleChangeImg={this.handleChangeImg}
-        header={header}
-        previewVisible={previewVisible}
-        previewImage={previewImage}
-        uploadLiveImg={uploadLiveImg}
-        handleCancelImg={this.handleCancelImg}
-        fetching={fetching}
-        vod={vod}
-        homeVod={homeVod}
-        handleChangesVod={this.handleChangesVod}
-        fetchVod={this.fetchVod}
-        handleShareImg={this.handleShareImg}
-        liveGoods={liveGoods}
-        submitForm={this.submitForm}
-        uploadUrl={uploadUrl}
-      />
+      <div>
+        <CustomizedForm
+          liveForm={liveForm}
+          shareImg={shareImg}
+          onChange={this.changeFormVal}
+          handlePreviewImg={this.handlePreviewImg}
+          handleChangeImg={this.handleChangeImg}
+          header={header}
+          previewVisible={previewVisible}
+          previewImage={previewImage}
+          uploadLiveImg={uploadLiveImg}
+          handleCancelImg={this.handleCancelImg}
+          fetching={fetching}
+          vod={vod}
+          homeVod={homeVod}
+          handleChangesVod={this.handleChangesVod}
+          fetchVod={this.fetchVod}
+          handleShareImg={this.handleShareImg}
+          liveGoods={liveGoods}
+          submitForm={this.submitForm}
+          openVod={this.openVod}
+          openVideo={this.openVideo}
+          uploadUrl={uploadUrl}
+        />
+        <Modal
+          title="录播视频"
+          width={760}
+          visible={isVodModal}
+          footer=""
+          onCancel={this.openOrCloseVod}
+        >
+          <div className={styles.modalBox}>
+            {vodListItem}
+          </div>
+          <Pagination pageSize={18} current={vodListPage.current || 1} total={vodListPage.total} onChange={this.changeVodPage} />
+        </Modal>
+        <Modal
+          title="上传视频"
+          width={760}
+          visible={isVideoModal}
+          footer=""
+          onCancel={this.openOrCloseVideo}
+        >
+          <div className={styles.modalBox}>
+            {videoListItem}
+          </div>
+          <Pagination pageSize={18} current={videoListPage.current || 1} total={videoListPage.total} onChange={this.changeVideoPage} />
+        </Modal>
+      </div>
     );
   }
 }

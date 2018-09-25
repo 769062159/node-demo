@@ -131,9 +131,6 @@ const CustomizedForm = Form.create({
       goods_des: Form.createFormField({
         value: goodsDetail.goods_des,
       }),
-      brand_id: Form.createFormField({
-        value: goodsDetail.brand_id,
-      }),
       goods_title: Form.createFormField({
         value: goodsDetail.goods_title,
       }),
@@ -172,9 +169,6 @@ const CustomizedForm = Form.create({
       }),
       goods_country_id: Form.createFormField({
         value: goodsDetail.goods_country_id,
-      }),
-      goods_warehouse_type: Form.createFormField({
-        value: goodsDetail.goods_warehouse_type,
       }),
       supplier_id: Form.createFormField({
         value: goodsDetail.supplier_id,
@@ -278,8 +272,6 @@ const CustomizedForm = Form.create({
   const {
     goods: {
       systemType,
-      brandList,
-      warehouseList,
       uploadGoodsImg,
       goodsPlace,
       goodsDetail,
@@ -309,8 +301,6 @@ const CustomizedForm = Form.create({
     setSkuArrVal,
     deleteSku,
   } = props;
-  const brandListItem = [];
-  const warehouseItem = []; // 仓库
   const attrItem = [];
   const attrItemSon = [];
   initGoodsAttr.forEach((res, index) => {
@@ -331,20 +321,6 @@ const CustomizedForm = Form.create({
           onChange={onChangeSon.bind(this, index)}
         />
       </div>
-    );
-  });
-  brandList.forEach(res => {
-    brandListItem.push(
-      <Option key={res.brand_id} value={res.brand_id}>
-        {res.brand_name}
-      </Option>
-    );
-  });
-  warehouseList.forEach(res => {
-    warehouseItem.push(
-      <Option key={res.id} value={res.id}>
-        {res.name}
-      </Option>
     );
   });
   // 上传按钮
@@ -371,7 +347,6 @@ const CustomizedForm = Form.create({
   const goodsShippingItem = []; // 快递
   const goodsStatusItem = []; // 商品状态
   const goodsTypeItem = []; // 商品类型
-  const goodsWarehouseItem = []; // 商品发货方式
   const isItem = []; // 是否
   const isHotItem = []; // 是否首页推荐
   const profitTypeItem = []; // 分拥类型
@@ -458,13 +433,6 @@ const CustomizedForm = Form.create({
         </Option>
       );
     });
-    systemType.goods_warehouse_type.forEach((res, index) => {
-      goodsWarehouseItem.push(
-        <Option value={index} key={index}>
-          {res}
-        </Option>
-      );
-    });
     systemType.shipping_templates.forEach(res => {
       shippingTemplatesItem.push(
         <Option value={res.id} key={res.id}>
@@ -542,13 +510,6 @@ const CustomizedForm = Form.create({
           })(<TextArea placeholder="请填写商品描述" autosize />)}
         </Form.Item> */}
         <Row gutter={24}>
-          <Col span={24}>
-            <Form.Item {...formItemLayouts} label="商品店铺">
-              {getFieldDecorator('brand_id', {
-                rules: [{ required: true, message: '请填写商品店铺' }],
-              })(<Select style={{ width: 200 }}>{brandListItem}</Select>)}
-            </Form.Item>
-          </Col>
           <Col span={24}>
             <Form.Item {...formItemLayouts} label="销售价格">
               {getFieldDecorator('sell_goods_price', {
@@ -753,13 +714,6 @@ const CustomizedForm = Form.create({
           </Col>
         </Row>
         <Row>
-          <Col span={24}>
-            <Form.Item {...formItemLayouts} label="发货仓库">
-              {getFieldDecorator('warehouse_id', {
-                rules: [{ required: true, message: '请填写发货仓库' }],
-              })(<Select style={{ width: 200 }}>{warehouseItem}</Select>)}
-            </Form.Item>
-          </Col>
           <Col span={24}>
             <Form.Item {...formItemLayouts} label="提货方式">
               {getFieldDecorator('sale_channel', {
@@ -1475,7 +1429,6 @@ class AddGoodStep2 extends React.PureComponent {
     values.goods_type = 0;
     values.goods_warning_status = 0;
     values.goods_country_id = 1;
-    values.goods_warehouse_type = 0;
     values.shop_shipping_calculation_type = 0;
     values.shop_goods_reduced_inventory = 0;
     values.goods_is_worry_free_sale = 1;

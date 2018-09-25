@@ -188,6 +188,21 @@ export const getRouterConfig = app => {
     '/live/vod': {
       component: dynamicWrapper(app, ['live'], () => import('../routes/Live/Vod')),
     },
+    '/live/video': {
+      component: dynamicWrapper(app, ['live'], () => import('../routes/Live/VideoList')),
+    },
+    '/live/add-video': {
+      identity: 'common',
+      component: dynamicWrapper(app, ['form'], () => import('../routes/Live/AddVod')),
+    },
+    '/live/add-video/confirm': {
+      identity: 'common',
+      component: dynamicWrapper(app, ['live'], () => import('../routes/Live/AddVod/Step2')),
+    },
+    '/live/add-video/result': {
+      identity: 'common',
+      component: dynamicWrapper(app, ['live'], () => import('../routes/Live/AddVod/Step3')),
+    },
     '/live/add-live': {
       identity: 'common',
       component: dynamicWrapper(app, ['form'], () => import('../routes/Live/AddLive')),
@@ -264,14 +279,17 @@ export const getRouterConfig = app => {
     '/logistics/freight': {
       component: dynamicWrapper(app, ['goods'], () => import('../routes/Logistics/Freight')),
     },
-    '/logistics/warehouse': {
-      component: dynamicWrapper(app, ['logistics', 'address'], () =>
-        import('../routes/Logistics/Warehouse')
-      ),
-    },
+    // '/logistics/warehouse': {
+    //   component: dynamicWrapper(app, ['logistics', 'address'], () =>
+    //     import('../routes/Logistics/Warehouse')
+    //   ),
+    // },
     // 商品
     '/good/good-list': {
       component: dynamicWrapper(app, ['goods'], () => import('../routes/Goods/GoodsList')),
+    },
+    '/good/good-list-review': {
+      component: dynamicWrapper(app, ['goods'], () => import('../routes/Goods/GoodsListReview')),
     },
     '/good/good-type': {
       component: dynamicWrapper(app, ['goods'], () => import('../routes/Goods/GoodsType')),
@@ -279,9 +297,9 @@ export const getRouterConfig = app => {
     // '/good/good-attr': {
     //   component: dynamicWrapper(app, ['goods'], () => import('../routes/Goods/GoodsAttr')),
     // },
-    '/good/good-brand': {
-      component: dynamicWrapper(app, ['goods'], () => import('../routes/Goods/GoodBrand')),
-    },
+    // '/good/good-brand': {
+    //   component: dynamicWrapper(app, ['goods'], () => import('../routes/Goods/GoodBrand')),
+    // },
     '/good/add-goods': {
       identity: 'common',
       component: dynamicWrapper(app, ['form'], () => import('../routes/Goods/AddGoods')),
@@ -298,10 +316,10 @@ export const getRouterConfig = app => {
       identity: 'common',
       component: dynamicWrapper(app, ['goods'], () => import('../routes/Goods/AddGoods/Step3')),
     },
-    '/good/edit-goods': {
-      identity: 'common',
-      component: dynamicWrapper(app, ['form'], () => import('../routes/Goods/EditGoods')),
-    },
+    // '/good/edit-goods': {
+    //   identity: 'common',
+    //   component: dynamicWrapper(app, ['form'], () => import('../routes/Goods/EditGoods')),
+    // },
     // '/good/edit-goods/info': {
     //   identity: 'common',
     //   // name: '分步表单（填写转账信息）',
@@ -309,12 +327,10 @@ export const getRouterConfig = app => {
     // },
     '/good/edit-goods/confirm/:id': {
       identity: 'common',
-      // name: '分步表单（确认转账信息）',
       component: dynamicWrapper(app, ['goods'], () => import('../routes/Goods/EditGoods/Step2')),
     },
     '/good/edit-goods/result': {
       identity: 'common',
-      // name: '分步表单（完成）',
       component: dynamicWrapper(app, ['goods'], () => import('../routes/Goods/EditGoods/Step3')),
     },
     // 用户相关信息

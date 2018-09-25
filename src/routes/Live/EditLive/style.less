@@ -93,3 +93,30 @@
   display: none;
   // visibility: hidden;
 }
+
+.modalBox {
+  display: flex;
+  flex-wrap: wrap;
+  .listItem {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    margin: 8px;
+    border: 1px solid #eee;
+    .switch {
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+    img {
+      width: 100px;
+      height: 100px;
+    }
+    .word {
+      width: 100px;
+      line-height: 30px;
+      height: 30px;
+      overflow: hidden;
+    }
+  }
+}

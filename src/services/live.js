@@ -50,7 +50,7 @@ export async function getVod(params) {
 
 // 录播详情
 export async function getVodDetail(params) {
-  return request('/merchant/vod/detail', {
+  return request('/merchant/vod/video/detail', {
     method: 'POST',
     body: params,
   });
@@ -58,7 +58,47 @@ export async function getVodDetail(params) {
 
 // 录播详情修改
 export async function updateVodDetail(params) {
-  return request('/merchant/vod/update', {
+  return request('/merchant/vod/video/update', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+// 玩图token
+export async function getWanTuToken(params) {
+  return request('/merchant/wantu/token', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+// 视频列表
+export async function getVideoList(params) {
+  return request('/merchant/vod/videos', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+// 加视频
+export async function addVideo(params) {
+  return request('/merchant/vod/create', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+// 绑定解绑视频
+export async function checkSwitch(params) {
+  return request('/merchant/live/bind/vods', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+// 解绑录播视频
+export async function unBindVod(params) {
+  return request('/merchant/live/bind/vods', {
     method: 'POST',
     body: params,
   });

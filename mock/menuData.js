@@ -68,10 +68,10 @@ export const menuData = [
       //   name: '商品属性',
       //   path: 'good-attr',
       // },
-      {
-        name: '商品店铺',
-        path: 'good-brand',
-      },
+      // {
+      //   name: '商品店铺',
+      //   path: 'good-brand',
+      // },
       {
         name: '商品添加',
         path: 'add-goods',
@@ -79,6 +79,10 @@ export const menuData = [
       {
         name: '商品列表',
         path: 'good-list',
+      },
+      {
+        name: '审核商品列表',
+        path: 'good-list-review',
       },
       // {
       //   name: '商品修改',
@@ -95,10 +99,10 @@ export const menuData = [
         name: '运费模版',
         path: 'freight',
       },
-      {
-        name: '仓库',
-        path: 'warehouse',
-      },
+      // {
+      //   name: '仓库',
+      //   path: 'warehouse',
+      // },
     ],
   },
   {
@@ -181,6 +185,14 @@ export const menuData = [
       {
         name: '直播列表',
         path: 'list',
+      },
+      {
+        name: '录播列表',
+        path: 'vod',
+      },
+      {
+        name: '视频列表',
+        path: 'video',
       },
     ],
   },

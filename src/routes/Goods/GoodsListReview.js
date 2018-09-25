@@ -59,6 +59,7 @@ export default class GoodsList extends PureComponent {
       type: 'goods/fetchGoods',
       payload: {
         page_number: 3,
+        goods_status: 2,
       },
     });
   }
@@ -103,6 +104,7 @@ export default class GoodsList extends PureComponent {
       params.sorter = `${sorter.field}_${sorter.order}`;
     }
     params.page_number = 3;
+    params.goods_status = 2;
     dispatch({
       type: 'goods/fetchGoods',
       payload: params,
@@ -121,6 +123,7 @@ export default class GoodsList extends PureComponent {
       type: 'goods/fetchGoods',
       payload: {
         page_number: 3,
+        goods_status: 2,
       },
     });
   };
@@ -168,6 +171,7 @@ export default class GoodsList extends PureComponent {
     }
     formValues.page = page;
     formValues.page_number = 3;
+    formValues.goods_status = 2;
     const arr = selectedRows.map(row => row.goods_id);
     dispatch({
       type: 'goods/obtainedGood',
@@ -213,6 +217,7 @@ export default class GoodsList extends PureComponent {
         values.sell_goods_price_end = maxPrice;
       }
       values.page_number = 3;
+      values.goods_status = 2;
       dispatch({
         type: 'goods/fetchGoods',
         payload: values,
@@ -526,17 +531,17 @@ export default class GoodsList extends PureComponent {
               <Button icon="plus" type="primary" onClick={this.goNew.bind(this)}>
                 新建
               </Button>
-              {selectedRows.length > 0 && (
+              {/* {selectedRows.length > 0 && (
                 <span>
                   <Button onClick={this.obtained.bind(this, 1)}>批量下架</Button>
-                  {/* <Button onClick={this.obtained.bind(this, 0)}>批量上架</Button> */}
-                  {/* <Dropdown overlay={menu}>
+                  <Button onClick={this.obtained.bind(this, 0)}>批量上架</Button>
+                  <Dropdown overlay={menu}>
                     <Button>
                       更多操作 <Icon type="down" />
                     </Button>
-                  </Dropdown> */}
+                  </Dropdown>
                 </span>
-              )}
+              )} */}
             </div>
             <StandardTable
               rowKey={record => record.goods_id}

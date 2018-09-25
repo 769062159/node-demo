@@ -20,6 +20,7 @@ import {
   delFreight,
   getFreightList,
   updateFreight,
+  obtainedGood,
 } from '../services/goods';
 import { uploadImg } from '../services/api';
 
@@ -149,6 +150,17 @@ export default {
   },
 
   effects: {
+    *obtainedGood({ payload, refresh, callback }, { call, put }) {
+      const response = yield call(obtainedGood, { ...payload });
+      if (response && response.code === 200) {
+        callback();
+        const responses = yield call(getAllGoods, {...refresh});
+        yield put({
+          type: 'show',
+          payload: responses,
+        });
+      }
+    },
     *fetchFreight({ payload }, { call, put }) {
       const response = yield call(getFreightList, { ...payload });
       yield put({
@@ -261,9 +273,9 @@ export default {
       if (response) {
         const {
           data: {
-            goods_brand: goodsBrand,
+            // goods_brand: goodsBrand,
             goods_place: goodsPlace,
-            warehouse: warehouseList,
+            // warehouse: warehouseList,
             goods: goodsDetail,
             system_type: systemType,
             goods_class: goodsClass,
@@ -312,8 +324,8 @@ export default {
             // typeName, // 分类名
             // initGoodsAttr,
             // AttrArrMap,
-            brandList: goodsBrand,
-            warehouseList,
+            // brandList: goodsBrand,
+            // warehouseList,
             goodsPlace, // 品牌地址
             goodsDetail, // 商品详情
             systemType,
@@ -758,7 +770,6 @@ export default {
         });
         const skuArrs = arrSkus.length ? arrayCombination(arrSkus, 1) : [];
         const skuArrId = arrSkuId.length ? arrayCombination(arrSkuId, 1) : [];
-        console.log(skuArrId);
         attrTable = skuArrs.map((res, index) => {
           const resSku = res.split('|,|').join('');
           return {

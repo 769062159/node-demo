@@ -103,7 +103,7 @@ export default class Order extends PureComponent {
   };
 
   componentDidMount() {
-    const { dispatch } = this.props;
+    const { dispatch, address: { addressList }, order: { expressList } } = this.props;
     const { page } = this.state;
     dispatch({
       type: 'order/fetchOrder',
@@ -111,13 +111,17 @@ export default class Order extends PureComponent {
         page,
       },
     });
-    dispatch({
-      type: 'address/fetch',
-      payload: {},
-    });
-    dispatch({
-      type: 'order/fetchExpressList',
-    });
+    if (!addressList.length) {
+      dispatch({
+        type: 'address/fetch',
+        payload: {},
+      });
+    }
+    if (!expressList.length) {
+      dispatch({
+        type: 'order/fetchExpressList',
+      });
+    }
   }
   // 设置最小值
   setMin = e => {

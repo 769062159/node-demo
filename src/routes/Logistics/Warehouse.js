@@ -49,7 +49,7 @@ export default class Warehouse extends PureComponent {
     addressArr: [],
   };
   componentDidMount() {
-    const { dispatch } = this.props;
+    const { dispatch, address: { addressList } } = this.props;
     const { page } = this.state;
     dispatch({
       type: 'logistics/fetchWarehouseList',
@@ -57,10 +57,12 @@ export default class Warehouse extends PureComponent {
         page,
       },
     });
-    dispatch({
-      type: 'address/fetch',
-      payload: {},
-    });
+    if (!addressList.length) {
+      dispatch({
+        type: 'address/fetch',
+        payload: {},
+      });
+    }
   }
 
   toggleForm = () => {

@@ -151,3 +151,11 @@ export async function updateFreight(params) {
     body: params,
   });
 }
+
+// 上架或者下架
+export async function obtainedGood(params) {
+  return request('/merchant/goods/batch/update', {
+    method: 'POST',
+    body: params,
+  });
+}

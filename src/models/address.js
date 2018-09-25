@@ -9,7 +9,6 @@ export default {
 
   effects: {
     *fetch({ payload }, { call, put }) {
-      console.log(payload);
       const { data } = yield call(getAddressList, payload);
       if (data.length && !payload.type) {
         data.forEach(element => {

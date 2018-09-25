@@ -6,7 +6,8 @@ import { connect } from 'dva';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import Maps from '../../components/Map/index';
 
-// import styles from './TableList.less';
+import styles from './Style.less';
+
 const { TextArea } = Input;
 const FormItem = Form.Item;
 // const Option = Select.Option;
@@ -37,17 +38,20 @@ const submitFormLayout = {
 @Form.create()
 export default class AddShop extends Component {
   state = {
+    phone: '',
     // expandForm: false,
     addressArr: [],
     Jingwei: {},
     propsAddress: '',
   };
   componentDidMount() {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'address/fetch',
-      payload: {},
-    });
+    const { dispatch, address: { addressList } } = this.props;
+    if (!addressList.length) {
+      dispatch({
+        type: 'address/fetch',
+        payload: {},
+      });
+    }
   }
   componentWillUnmount() {
     const { dispatch } = this.props;
@@ -174,6 +178,12 @@ export default class AddShop extends Component {
       },
     });
   };
+  // 修改手机
+  editPhone = (phone) => {
+    this.setState({
+      phone,
+    })
+  }
   // 修改表单值
   changeFormVal = val => {
     const { dispatch } = this.props;
@@ -195,10 +205,40 @@ export default class AddShop extends Component {
         loading,
     } = this.props;
     const { getFieldDecorator } = this.props.form;
-    const { propsAddress } = this.state;
+    const { propsAddress, phone } = this.state;
     return (
       <PageHeaderLayout>
         <Form autoComplete="OFF" >
+          <FormItem {...formItemLayout} label="店铺电话">
+            {getFieldDecorator('mobile', {
+              rules: [
+                {
+                  required: true,
+                  message: '请输入店铺电话',
+                },
+              ],
+            })(<InputNumber onChange={this.editPhone} style={{ width: 200}} />)}
+          </FormItem>
+          <FormItem className={styles.extraTag} {...formItemLayout} label="账号" extra={`@${phone}`}>
+            {getFieldDecorator('user', {
+              rules: [
+                {
+                  required: true,
+                  message: '请输入账号',
+                },
+              ],
+            })(<Input style={{ width: 200}} />)}
+          </FormItem>
+          <FormItem {...formItemLayout} label="密码">
+            {getFieldDecorator('password', {
+              rules: [
+                {
+                  required: true,
+                  message: '请输入密码',
+                },
+              ],
+            })(<Input minLength={6} maxLength={20} />)}
+          </FormItem>
           <FormItem {...formItemLayout} label="门店名称">
             {getFieldDecorator('shop_name', {
               rules: [
@@ -261,16 +301,6 @@ export default class AddShop extends Component {
                 },
               ],
             })(<TextArea placeholder="请输入店铺简介" autosize />)}
-          </FormItem>
-          <FormItem {...formItemLayout} label="店铺电话">
-            {getFieldDecorator('mobile', {
-              rules: [
-                {
-                  required: true,
-                  message: '请输入店铺电话',
-                },
-              ],
-            })(<InputNumber style={{ width: 200}} />)}
           </FormItem>
           <FormItem {...formItemLayout} label="开业时间">
             {getFieldDecorator('open_time', {

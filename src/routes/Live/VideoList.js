@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
 import debounce from 'lodash/debounce';
 import moment from 'moment';
@@ -227,7 +227,7 @@ export default class Vod extends PureComponent {
     const { dispatch } = this.props;
     const { pagination } = this.state;
     dispatch({
-      type: 'live/fetchVod',
+      type: 'live/fetchVideo',
       payload: {
         pagination,
       },
@@ -367,7 +367,7 @@ export default class Vod extends PureComponent {
     });
     const { dispatch } = this.props;
     dispatch({
-      type: 'live/fetchVod',
+      type: 'live/fetchVideo',
       payload: {
         pagination: current,
       },
@@ -390,7 +390,7 @@ export default class Vod extends PureComponent {
   };
   goPath = () => {
     const { dispatch } = this.props;
-    const url = `/live/add-live`;
+    const url = `/live/add-Video/confirm`;
     dispatch(routerRedux.push(url));
   };
   // 放大图片
@@ -428,7 +428,7 @@ export default class Vod extends PureComponent {
   };
   render() {
     const {
-      live: { vodList: datas, vodListPage, liveForm, uploadLiveImg, liveGoods },
+      live: { videoList: datas, videoListPage, liveForm, uploadLiveImg, liveGoods },
       loading,
     } = this.props;
     // const { getFieldDecorator } = this.props.form;
@@ -460,20 +460,25 @@ export default class Vod extends PureComponent {
         dataIndex: 'updated_at',
         render: val => <span>{moment(val * 1000).format('YYYY-MM-DD HH:mm:ss')}</span>,
       },
-      // {
-      //   title: '操作',
-      //   width: 100,
-      //   render: (text, record) => (
-      //     <Fragment>
-      //       <a href={`#/live/edit-vod/confirm/${record.id}`}>修改</a>
-      //     </Fragment>
-      //   ),
-      // },
+      {
+        title: '操作',
+        width: 100,
+        render: (text, record) => (
+          <Fragment>
+            <a href={`#/live/edit-vod/confirm/${record.id}`}>修改</a>
+          </Fragment>
+        ),
+      },
     ];
 
     return (
       <PageHeaderLayout>
         <Card bordered={false}>
+          <div className={styles.tableListOperator}>
+            <Button icon="plus" type="primary" onClick={this.goPath.bind(this)}>
+              新建
+            </Button>
+          </div>
           <div className={styles.tableList}>
             {/* <div className={styles.tableListOperator}>
               <Button icon="plus" type="primary" onClick={this.goPath.bind(this)}>
@@ -485,7 +490,7 @@ export default class Vod extends PureComponent {
               rowKey={record => record.id}
               loading={loading}
               columns={progressColumns}
-              pagination={vodListPage}
+              pagination={videoListPage}
             />
           </div>
         </Card>

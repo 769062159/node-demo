@@ -42,11 +42,13 @@ export default class AddShop extends Component {
   };
   componentDidMount() {
     const { id } = this.props.match.params;
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'address/fetch',
-      payload: {},
-    });
+    const { dispatch, address: { addressList } } = this.props;
+    if (!addressList.length) {
+      dispatch({
+        type: 'address/fetch',
+        payload: {},
+      });
+    }
     dispatch({
       type: 'shop/fetchShopDetail',
       payload: {
