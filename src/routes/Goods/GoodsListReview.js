@@ -33,7 +33,7 @@ const getValue = obj =>
     .join(',');
 // const statusMap = ['default', 'processing', 'success', 'error'];
 const statusMap = ['processing', 'processing', 'error'];
-const goodsStatus = ['上架', '下架', '仓库中'];
+const goodsStatus = ['上架', '下架', '审核中'];
 // const goodsTypeStatus = ['普通商品', '一元购', '秒杀', '众筹'];
 // const payType = ['拍下减库存', '付款减库存'];
 const isTrue = ['否', '是'];
@@ -323,7 +323,7 @@ export default class GoodsList extends PureComponent {
                 <Select placeholder="请选择" style={{ width: '100%' }}>
                   <Option value="0">上架中</Option>
                   <Option value="1">下架中</Option>
-                  <Option value="2">仓库中</Option>
+                  <Option value="2">审核中</Option>
                 </Select>
               )}
             </FormItem>
