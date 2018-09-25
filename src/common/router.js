@@ -316,10 +316,10 @@ export const getRouterConfig = app => {
       identity: 'common',
       component: dynamicWrapper(app, ['goods'], () => import('../routes/Goods/AddGoods/Step3')),
     },
-    // '/good/edit-goods': {
-    //   identity: 'common',
-    //   component: dynamicWrapper(app, ['form'], () => import('../routes/Goods/EditGoods')),
-    // },
+    '/good/edit-goods': {
+      identity: 'common',
+      component: dynamicWrapper(app, ['form'], () => import('../routes/Goods/EditGoods')),
+    },
     // '/good/edit-goods/info': {
     //   identity: 'common',
     //   // name: '分步表单（填写转账信息）',
