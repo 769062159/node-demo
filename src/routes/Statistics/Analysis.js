@@ -261,7 +261,7 @@ export default class Analysis extends Component {
                   <img src="/img/salesvolume.png" alt="" />
                   <div className={styles.word}>
                     <div className={styles.title}>今日销售额</div>
-                    <div className={styles.price}>¥{statistics.today_normal_order_num || 0}</div>
+                    <div className={styles.price}>¥{statistics.today_sale_amount || 0}</div>
                     <div className={`${styles.tip} ${styles.none}`} >1</div>
                   </div>
                 </div>
