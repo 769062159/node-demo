@@ -70,9 +70,9 @@ const CustomizedForm = Form.create({
     };
     return arr;
   },
-  onValuesChange(_, values) {
-    console.log(values);
-  },
+  // onValuesChange(_, values) {
+  //   console.log(values);
+  // },
 })(props => {
   //  111
   const { getFieldDecorator, validateFields } = props.form;
@@ -105,7 +105,7 @@ const CustomizedForm = Form.create({
     openVod,
     openVideo,
   } = props;
-  console.log(homeVod);
+  // console.log(homeVod);
 
   // 上传按钮
   const uploadButton = (
@@ -364,7 +364,6 @@ class EditLiveStep2 extends React.PureComponent {
         // for fetch callback order
         return;
       }
-      console.log(body);
       const vod = body.data.models.map(user => ({
         text: `${user.id}`,
         value: user.title,
@@ -583,6 +582,8 @@ class EditLiveStep2 extends React.PureComponent {
       live: { liveForm, uploadLiveImg, shareImg, liveGoods, homeVod, vodList, vodListPage, videoList, videoListPage },
       uploadUrl,
     } = this.props;
+    console.log(11);
+    console.log(videoList);
     const vodListItem = [];
     const videoListItem = [];
     vodList.forEach(res => {

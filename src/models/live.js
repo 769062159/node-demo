@@ -102,7 +102,7 @@ export default {
     *fetchLiveDetail({ payload }, { call, put }) {
       const response = yield call(getLiveDetail, payload);
       yield put({
-        type: 'editLiveMsgs',
+        type: 'editLiveMsgss',
         payload: response,
       });
       // 子table请求
@@ -542,6 +542,62 @@ export default {
         uploadLiveImg: imgArr,
         shareImg: ShareArr,
         // liveGoods,
+      };
+    },
+    editLiveMsgss(state, { payload }) {
+      const { data } = payload;
+      data.xxx = data.cover;
+      data.yyy = data.share_cover;
+      const imgArr = [];
+      const ShareArr = [];
+      if (data.cover) {
+        imgArr.push({
+          status: 'done',
+          response: { status: 'success' },
+          name: data.title,
+          uid: data.id,
+          url: data.cover,
+        });
+      }
+      if (data.share_cover) {
+        ShareArr.push({
+          status: 'done',
+          response: { status: 'success' },
+          name: data.title,
+          uid: data.id,
+          url: data.share_cover,
+        });
+      }
+      const homeVod = {};
+      if (data.play_type === 1) {
+        homeVod.label = data.remark;
+        homeVod.key = data.vod_id;
+      }
+      data.goods.forEach(res => {
+        res.disabled = 1;
+      });
+      const liveGoods = data.goods;
+      //   if (data.goods_ids) {
+      //     const arrId = data.goods_ids.split(',');
+      //     const arrName = data.goods_names.split(',');
+      //     arrId.forEach((res, index) => {
+      //       liveGoods.push({
+      //         key: res,
+      //         label: arrName[index],
+      //       });
+      //     });
+      //   }
+      return {
+        ...state,
+        liveForm: data,
+        uploadLiveImg: imgArr,
+        shareImg: ShareArr,
+        liveGoods,
+        homeVod,
+        videoList: [], // 视频列表
+        videoListPage: {}, // 视频列表
+        liveList: [], // table列表
+        liveListPage: {}, // table 页脚
       };
     },
     editLiveMsgs(state, { payload }) {
