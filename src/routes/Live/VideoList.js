@@ -17,6 +17,7 @@ import {
   Select,
   Spin,
   Tag,
+  Divider,
 } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './TableList.less';
@@ -54,7 +55,7 @@ const submitFormLayout = {
     sm: { span: 10, offset: 7 },
   },
 };
-const vodType = ['录播地址', '上传视频'];
+const vodType = ['' ,'录播地址', '上传视频', '腾讯视频'];
 
 const CustomizedForm = Form.create({
   onFieldsChange(props, changedFields) {
@@ -287,10 +288,13 @@ export default class Vod extends PureComponent {
         const { dispatch } = that.props;
         const { pagination } = that.state;
         dispatch({
-          type: 'live/deleteLive',
+          type: 'live/deleteVideo',
           payload: {
-            ad_id: id,
+            id,
             pagination,
+          },
+          callback: () => {
+            message.success('删除成功！');
           },
         });
       },
@@ -449,7 +453,7 @@ export default class Vod extends PureComponent {
       {
         title: '录播封面',
         dataIndex: 'cover',
-        render: val => (val ? <img src={val} style={{ width: '200px' }} alt="图片" /> : null),
+        render: val => (val ? <img src={val} style={{ width: '80px' }} alt="图片" /> : null),
       },
       {
         title: '录播类型',
@@ -458,7 +462,7 @@ export default class Vod extends PureComponent {
       },
       {
         title: '录播地址',
-        dataIndex: 'vod_url',
+        dataIndex: 'url',
         width: 280,
       },
       // {
@@ -472,6 +476,8 @@ export default class Vod extends PureComponent {
         render: (text, record) => (
           <Fragment>
             <a href={`#/live/edit-vod/confirm/${record.id}`}>修改</a>
+            <Divider type="vertical" />
+            <a onClick={this.deleteDataMsg.bind(this, record.id)}>删除</a>
           </Fragment>
         ),
       },

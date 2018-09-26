@@ -12,6 +12,7 @@ import {
   getVideoList,
   addVideo,
   checkSwitch,
+  deleteVideo,
 } from '../services/live';
 import { getAllGoods } from '../services/goods';
 import { dedupe } from '../utils/utils';
@@ -43,6 +44,30 @@ export default {
   },
 
   effects: {
+    *deleteVideo({ payload, callback }, { call, put }) {
+      const res = yield call(deleteVideo, { vod_id: payload.id });
+      if (res.code !== 200) {
+        return false;
+      }
+      callback();
+      const response = yield call(getVideoList, { page: payload.pagination });
+      if (response.code === 200) {
+        response.data.list = response.data.list.map(res => {
+          if (res.type === 1) {
+            res.url = res.vod_url
+          } else if (res.type === 2) {
+            res.url = res.play_url;
+          } else {
+            res.url = res.tencent_url;
+          }
+          return res;
+        })
+      }
+      yield put({
+        type: 'getVideo',
+        payload: response,
+      });
+    },
     *fetchCheckVideo({ payload }, { call, put }) {
       const response = yield call(getVideoList, { page: payload.pagination, page_number: 18, liveid: payload.liveid });
       if (response.code === 200) {
@@ -59,6 +84,18 @@ export default {
     },
     *fetchVideo({ payload }, { call, put }) {
       const response = yield call(getVideoList, { page: payload.pagination });
+      if (response.code === 200) {
+        response.data.list = response.data.list.map(res => {
+          if (res.type === 1) {
+            res.url = res.vod_url
+          } else if (res.type === 2) {
+            res.url = res.play_url;
+          } else {
+            res.url = res.tencent_url;
+          }
+          return res;
+        })
+      }
       yield put({
         type: 'getVideo',
         payload: response,

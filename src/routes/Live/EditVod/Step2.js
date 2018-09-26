@@ -63,6 +63,9 @@ const CustomizedForm = Form.create({
       yyy: Form.createFormField({
         value: props.liveForm.yyy,
       }),
+      tencent_url: Form.createFormField({
+        value: props.liveForm.tencent_url,
+      }),
     };
     return arr;
   },
@@ -170,10 +173,47 @@ const CustomizedForm = Form.create({
           <Select>
             <Option value={1}>上传视频</Option>
             <Option value={2}>录播地址</Option>
+            <Option value={3}>腾讯地址</Option>
           </Select>
         )}
       </FormItem>
       {
+        (() => {
+          switch (liveForm.type) {
+            case 2:
+              return (
+                <Form.Item {...formItemLayout} label="播放地址">
+                  {getFieldDecorator('play_url', {rules: [{ required: true, message: '请填写播放地址' }]})(<Input style={{ width: '400px' }} />)}
+                </Form.Item>
+              );
+            case 1:
+              return (
+                <Form.Item {...formItemLayout} label="播放地址">
+                  {getFieldDecorator('zz', {rules: [{ required: true, message: '请上传视频' }]})(
+                    <div className={styles.fileBox}>
+                      <input type="file" className={styles.fileBtn} onChange={uploadVideo} />
+                      <div className={styles.add}>+</div>
+                      {
+                        liveForm.zz ? (
+                          <video className={styles.videoItem} src={liveForm.zz} controls><track kind="captions" /></video>
+                        ) : null
+                      }
+                    </div>
+                  )}
+                </Form.Item>
+              );
+            case 3:
+              return (
+                <Form.Item {...formItemLayout} label="播放地址">
+                  {getFieldDecorator('tencent_url', {rules: [{ required: true, message: '请填写腾讯地址' }]})(<Input style={{ width: '400px' }} />)}
+                </Form.Item>
+              );
+            default:
+              break;
+          }
+        })()
+      }
+      {/* {
         liveForm.type === 2 ? (
           <Form.Item {...formItemLayout} label="播放地址">
             {getFieldDecorator('play_url', {})(<Input style={{ width: '400px' }} />)}
@@ -193,7 +233,7 @@ const CustomizedForm = Form.create({
             )}
           </Form.Item>
         )
-      }
+      } */}
       <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
         <Button type="primary" htmlType="submit" onClick={onValidateForm}>
           提交
