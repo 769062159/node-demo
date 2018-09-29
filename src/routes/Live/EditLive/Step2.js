@@ -253,12 +253,12 @@ const CustomizedForm = Form.create({
           </Select>
         )}
       </FormItem>
-      <FormItem {...formItemLayout} label="用户id">
+      <FormItem {...formItemLayout} label="主播id">
         {getFieldDecorator('user_id', {
           rules: [
             {
               required: true,
-              message: '请输入用户id',
+              message: '请输入主播id',
             },
           ],
         })(
