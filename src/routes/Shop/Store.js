@@ -119,6 +119,11 @@ export default class ShopList extends PureComponent {
         },
       },
       {
+        title: '账号',
+        dataIndex: 'username',
+        key: 'username',
+      },
+      {
         title: '联系电话',
         dataIndex: 'mobile',
         key: 'mobile',

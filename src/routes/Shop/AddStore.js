@@ -219,7 +219,7 @@ export default class AddShop extends Component {
               ],
             })(<InputNumber onChange={this.editPhone} style={{ width: 200}} />)}
           </FormItem>
-          <FormItem className={styles.extraTag} {...formItemLayout} label="账号" extra={`@${phone}`}>
+          <FormItem className={styles.extraTag} {...formItemLayout} label="账号id" extra={`@${phone}`}>
             {getFieldDecorator('user_id', {
               rules: [
                 {

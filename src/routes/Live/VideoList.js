@@ -438,7 +438,8 @@ export default class Vod extends PureComponent {
       loading,
     } = this.props;
     // const { getFieldDecorator } = this.props.form;
-    const { liveVisible, header, previewVisible, previewImage, fetching, value, data } = this.state;
+    const { liveVisible, header, previewVisible, previewImage, fetching, value, data, pagination } = this.state;
+    videoListPage.current = pagination;
     const progressColumns = [
       {
         title: '录播标题',
@@ -503,6 +504,7 @@ export default class Vod extends PureComponent {
               loading={loading}
               columns={progressColumns}
               pagination={videoListPage}
+              onChange={this.handleTableChange}
             />
           </div>
         </Card>

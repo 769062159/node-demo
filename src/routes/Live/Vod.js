@@ -432,7 +432,8 @@ export default class Vod extends PureComponent {
       loading,
     } = this.props;
     // const { getFieldDecorator } = this.props.form;
-    const { liveVisible, header, previewVisible, previewImage, fetching, value, data } = this.state;
+    const { liveVisible, header, previewVisible, previewImage, fetching, value, data, pagination } = this.state;
+    vodListPage.current = pagination;
     const progressColumns = [
       {
         title: '录播标题',
@@ -447,7 +448,7 @@ export default class Vod extends PureComponent {
       {
         title: '录播封面',
         dataIndex: 'cover',
-        render: val => (val ? <img src={val} style={{ width: '200px' }} alt="图片" /> : null),
+        render: val => (val ? <img src={val} style={{ width: '80px' }} alt="图片" /> : null),
       },
       {
         title: '录播地址',
@@ -486,6 +487,7 @@ export default class Vod extends PureComponent {
               loading={loading}
               columns={progressColumns}
               pagination={vodListPage}
+              onChange={this.handleTableChange}
             />
           </div>
         </Card>

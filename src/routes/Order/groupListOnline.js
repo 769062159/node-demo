@@ -501,12 +501,12 @@ export default class Order extends PureComponent {
 
   render() {
     const {
-      order: { groupList: orderList,groupListPage: orderListPage, expressList },
+      order: { groupList: orderList, expressList },
       shop: { WriteOffList, selectedMember },
       shopLoadig,
       loading,
     } = this.props;
-    const { formVisible, isSnModal, isEditType, shipNumber, expressId } = this.state;
+    const { formVisible, isSnModal, isEditType, shipNumber, expressId, page } = this.state;
     const shopColumns = [
       {
         title: '昵称',
@@ -686,7 +686,7 @@ export default class Order extends PureComponent {
                   payload: values,
                 });
               },
-              ...orderListPage,
+              current: page,
             }}
             dataSource={orderList}
             renderItem={item => (
