@@ -715,13 +715,6 @@ const CustomizedForm = Form.create({
         </Row>
         <Row>
           <Col span={24}>
-            <Form.Item {...formItemLayouts} label="提货方式">
-              {getFieldDecorator('sale_channel', {
-                rules: [{ required: true, message: '请选择提货方式' }],
-              })(<Select>{saleChannelsItem}</Select>)}
-            </Form.Item>
-          </Col>
-          <Col span={24}>
             <Form.Item {...formItemLayouts} label="是否拼团">
               {getFieldDecorator('is_group', {
                 rules: [{ required: true, message: '请选择是否拼团' }],
@@ -741,6 +734,13 @@ const CustomizedForm = Form.create({
         {
           goodsDetail.is_group === 1 ? (
             <Row gutter={24}>
+              <Col span={24}>
+                <Form.Item {...formItemLayouts} label="提货方式">
+                  {getFieldDecorator('sale_channel', {
+                    rules: [{ required: true, message: '请选择提货方式' }],
+                  })(<Select>{saleChannelsItem}</Select>)}
+                </Form.Item>
+              </Col>
               <Col span={12}>
                 <Form.Item {...spcialLayouts} label="分享标题">
                   {getFieldDecorator('group_share_title', {
@@ -1101,7 +1101,7 @@ const CustomizedForm = Form.create({
         <Button type="primary" onClick={onValidateForm}>
           提交
         </Button>
-        <Button style={{ marginLeft: 8 }}>上一步</Button>
+        {/* <Button style={{ marginLeft: 8 }}>上一步</Button> */}
       </Form.Item>
     </Form>
   );

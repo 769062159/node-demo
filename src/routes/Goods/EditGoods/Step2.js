@@ -1116,7 +1116,7 @@ const CustomizedForm = Form.create({
         <Button type="primary" onClick={onValidateForm}>
           提交
         </Button>
-        <Button style={{ marginLeft: 8 }}>上一步</Button>
+        {/* <Button style={{ marginLeft: 8 }}>上一步</Button> */}
       </Form.Item>
     </Form>
   );
