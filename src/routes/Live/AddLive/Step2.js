@@ -467,6 +467,9 @@ class AddLiveStep2 extends React.PureComponent {
     });
   };
   handleShareImg = data => {
+    if (!data.file.status) {
+      return;
+    }
     let { fileList } = data;
     fileList = fileList.map(item => {
       if (item.status === 'done' && item.uploaded !== 'done') {
