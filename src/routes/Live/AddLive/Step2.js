@@ -441,6 +441,9 @@ class AddLiveStep2 extends React.PureComponent {
   handleCancelImg = () => this.setState({ previewVisible: false });
   // 上传图片
   handleChangeImg = data => {
+    if (!data.file.status) {
+      return;
+    }
     let { fileList } = data;
     fileList = fileList.map(item => {
       if (item.status === 'done' && item.uploaded !== 'done') {

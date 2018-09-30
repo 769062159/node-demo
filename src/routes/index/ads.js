@@ -217,7 +217,11 @@ export default class Ads extends PureComponent {
     return isLt1M;
   }
 
-  handleChange = ({ fileList }) => {
+  handleChange = (data) => {
+    if (!data.file.status) {
+      return;
+    }
+    let { fileList } = data;
     // const { response } = fileList;
     fileList = fileList.map(item => {
       if (item.status === 'done') {
