@@ -103,6 +103,7 @@ const CustomizedForm = Form.create({
     GoodKey,
     LiveKey,
     uploadUrl,
+    beforeUpload,
   } = props;
   const goodListColumns = [
     {
@@ -204,6 +205,7 @@ const CustomizedForm = Form.create({
             <Upload
               action={uploadUrl}
               listType="picture-card"
+              beforeUpload={beforeUpload}
               fileList={uploadHomeImg}
               onPreview={handlePreviewImg}
               onChange={handleChangeImg}
@@ -413,6 +415,14 @@ export default class Home extends PureComponent {
   };
   // 关闭放大图片
   handleCancelImg = () => this.setState({ previewVisible: false });
+  //  限制大小
+  beforeUpload = (file) => {
+    const isLt1M = file.size / 1024 / 1024 < 1;
+    if (!isLt1M) {
+      message.error('图片不能超过1M!');
+    }
+    return isLt1M;
+  }
   // 上传图片
   handleChangeImg = data => {
     let { fileList } = data;
@@ -528,6 +538,7 @@ export default class Home extends PureComponent {
           handleCancelImg={this.handleCancelImg}
           previewImage={previewImage}
           goodLiveChange={this.goodLiveChange}
+          beforeUpload={this.beforeUpload}
           goodSelect={this.goodSelect}
           liveSelect={this.liveSelect}
           GoodKey={GoodKey}

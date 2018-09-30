@@ -99,6 +99,14 @@ const CustomizedForm = Form.create({
   const payload = {
     type: 2,
   };
+  //  限制大小
+  const beforeUpload = (file) => {
+    const isLt1M = file.size / 1024 / 1024 < 1;
+    if (!isLt1M) {
+      message.error('图片不能超过1M!');
+    }
+    return isLt1M;
+  }
   const {
     uploadLiveImg,
     handlePreviewImg,
@@ -157,6 +165,7 @@ const CustomizedForm = Form.create({
             <Upload
               action={this.props.uploadUrl}
               listType="picture-card"
+              beforeUpload={beforeUpload}
               fileList={uploadLiveImg}
               onPreview={handlePreviewImg}
               onChange={handleChangeImg}

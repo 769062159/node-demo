@@ -116,6 +116,14 @@ const CustomizedForm = Form.create({
     handleChangesShop,
     liveGoods,
   } = props;
+  //  限制大小
+  const beforeUpload = (file) => {
+    const isLt1M = file.size / 1024 / 1024 < 1;
+    if (!isLt1M) {
+      message.error('图片不能超过1M!');
+    }
+    return isLt1M;
+  }
   return (
     <Form autoComplete="OFF">
       <FormItem {...formItemLayout} label="直播标题">
@@ -159,6 +167,7 @@ const CustomizedForm = Form.create({
           <div className="clearfix">
             <Upload
               action={this.props.uploadUrl}
+              beforeUpload={beforeUpload}
               listType="picture-card"
               fileList={uploadLiveImg}
               onPreview={handlePreviewImg}

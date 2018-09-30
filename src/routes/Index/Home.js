@@ -118,10 +118,10 @@ const CustomizedForm = Form.create({
     live,
     fetchUser,
     fetchLive,
+    beforeUpload,
     data,
     handleChangesShop,
   } = props;
-  console.log(homeLive);
   return (
     <Form>
       <FormItem {...formItemLayout} label="标题">
@@ -274,6 +274,7 @@ const CustomizedForm = Form.create({
             <Upload
               action={this.props.uploadUrl}
               listType="picture-card"
+              beforeUpload={beforeUpload}
               fileList={uploadHomeImg}
               onPreview={handlePreviewImg}
               onChange={handleChangeImg}
@@ -483,6 +484,14 @@ export default class Home extends PureComponent {
     }
     this.handAddleCancel();
   };
+  //  限制大小
+  beforeUpload = (file) => {
+    const isLt1M = file.size / 1024 / 1024 < 1;
+    if (!isLt1M) {
+      message.error('图片不能超过1M!');
+    }
+    return isLt1M;
+  }
   // 修改信息
   editDataMsg = (data, e) => {
     e.preventDefault();
@@ -672,6 +681,7 @@ export default class Home extends PureComponent {
             handleChangeImg={this.handleChangeImg}
             handlePreviewImg={this.handlePreviewImg}
             homeGoods={homeGoods}
+            beforeUpload={this.beforeUpload}
             fetching={fetching}
             data={data}
             live={live}

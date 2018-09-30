@@ -161,6 +161,14 @@ export default class GoodBrand extends PureComponent {
       previewVisible: true,
     });
   };
+  //  限制大小
+  beforeUpload = (file) => {
+    const isLt1M = file.size / 1024 / 1024 < 1;
+    if (!isLt1M) {
+      message.error('图片不能超过1M!');
+    }
+    return isLt1M;
+  }
   // 换页
   handleTableChange = pagination => {
     const { current } = pagination;
@@ -214,6 +222,7 @@ export default class GoodBrand extends PureComponent {
           action={this.props.uploadUrl}
           headers={header}
           listType="picture-card"
+          beforeUpload={this.beforeUpload}
           fileList={fileList}
           onPreview={this.handlePreview}
           onChange={this.handleChange}
@@ -302,6 +311,7 @@ export default class GoodBrand extends PureComponent {
           action={this.props.uploadUrl}
           headers={header}
           listType="picture-card"
+          beforeUpload={this.beforeUpload}
           fileList={fileList}
           onPreview={this.handlePreview}
           onChange={this.handleChange}

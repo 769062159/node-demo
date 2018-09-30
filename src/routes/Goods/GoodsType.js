@@ -274,6 +274,14 @@ export default class GoodsType extends PureComponent {
   //   };
   // 上传图片
   handleCancel = () => this.setState({ previewVisible: false });
+  //  限制大小
+  beforeUpload = (file) => {
+    const isLt1M = file.size / 1024 / 1024 < 1;
+    if (!isLt1M) {
+      message.error('图片不能超过1M!');
+    }
+    return isLt1M;
+  }
   removeImg = () => {
     const { dataIndex } = this.state;
     dataIndex.class_img_url = '';
@@ -340,6 +348,7 @@ export default class GoodsType extends PureComponent {
           listType="picture-card"
           fileList={fileList}
           onPreview={this.handlePreview}
+          beforeUpload={this.beforeUpload}
           onChange={this.handleChange}
           data={payload}
         >
@@ -458,6 +467,7 @@ export default class GoodsType extends PureComponent {
           fileList={fileList}
           onPreview={this.handlePreview}
           onChange={this.handleChange}
+          beforeUpload={this.beforeUpload}
           data={payload}
           onRemove={this.removeImg}
         >

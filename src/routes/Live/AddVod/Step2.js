@@ -109,6 +109,14 @@ const CustomizedForm = Form.create({
       <div className="ant-upload-text">主体图片</div>
     </div>
   );
+  //  限制大小
+  const beforeUpload = (file) => {
+    const isLt1M = file.size / 1024 / 1024 < 1;
+    if (!isLt1M) {
+      message.error('图片不能超过1M!');
+    }
+    return isLt1M;
+  }
   // 上传图片参数
   const payload = {
     type: 2,
@@ -147,6 +155,7 @@ const CustomizedForm = Form.create({
             <Upload
               action={uploadUrl}
               listType="picture-card"
+              beforeUpload={beforeUpload}
               fileList={shareImg}
               onPreview={handlePreviewImg}
               onChange={handleShareImg}

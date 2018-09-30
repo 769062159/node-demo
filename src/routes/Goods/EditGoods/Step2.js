@@ -319,6 +319,7 @@ const CustomizedForm = Form.create({
     addSpecSon,
     setSkuArrVal,
     deleteSku,
+    beforeUpload,
   } = props;
   const attrItem = [];
   const attrItemSon = [];
@@ -631,6 +632,7 @@ const CustomizedForm = Form.create({
                     fileList={uploadGoodsImg}
                     onPreview={handlePreviewImg}
                     onChange={handleChangeImg}
+                    beforeUpload={beforeUpload}
                     data={payload}
                     headers={header}
                   >
@@ -1312,6 +1314,14 @@ class EditGoodStep2 extends React.PureComponent {
       },
     });
   };
+  //  限制大小
+  beforeUpload = (file) => {
+    const isLt1M = file.size / 1024 / 1024 < 1;
+    if (!isLt1M) {
+      message.error('图片不能超过1M!');
+    }
+    return isLt1M;
+  }
   // 提交表单
   submitForm = values => {
     const { goods: { uploadGoodsImg, goodsDetail,skuInputArr, levelPartial }, dispatch } = this.props;
@@ -1524,6 +1534,7 @@ class EditGoodStep2 extends React.PureComponent {
         onChangeSon={this.onChangeSon}
         chgLevelHas={this.chgLevelHas}
         modifiedValue={this.modifiedValue}
+        beforeUpload={this.beforeUpload}
         addSpec={this.addSpec}
         addSpecSon={this.addSpecSon}
         setSkuArrVal={this.setSkuArrVal}

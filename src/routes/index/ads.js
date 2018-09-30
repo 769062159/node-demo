@@ -208,6 +208,14 @@ export default class Ads extends PureComponent {
       previewVisible: true,
     });
   };
+  //  限制大小
+  beforeUpload = (file) => {
+    const isLt1M = file.size / 1024 / 1024 < 1;
+    if (!isLt1M) {
+      message.error('图片不能超过1M!');
+    }
+    return isLt1M;
+  }
 
   handleChange = ({ fileList }) => {
     // const { response } = fileList;
@@ -262,6 +270,7 @@ export default class Ads extends PureComponent {
           headers={header}
           listType="picture-card"
           fileList={fileList}
+          beforeUpload={this.beforeUpload}
           onPreview={this.handlePreview}
           onChange={this.handleChange}
           data={payload}
@@ -350,6 +359,7 @@ export default class Ads extends PureComponent {
           headers={header}
           listType="picture-card"
           fileList={fileList}
+          beforeUpload={this.beforeUpload}
           onPreview={this.handlePreview}
           onChange={this.handleChange}
           data={payload}
