@@ -97,7 +97,6 @@ export default {
 
   reducers: {
     getDefaultLists(state, { payload }) {
-      console.log(payload);
       let { data } = payload;
       if (data) {
         data = [data];

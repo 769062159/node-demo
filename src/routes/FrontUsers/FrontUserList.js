@@ -15,6 +15,7 @@ import {
   Modal,
   message,
 } from 'antd';
+import { routerRedux } from 'dva/router';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import EditForm from './EditForm';
 
@@ -79,10 +80,19 @@ export default class FrontUserList extends PureComponent {
       defaultId: e.target.value,
     });
   };
+  // 设置商户
+  setMerchant = (record, e) => {
+    e.preventDefault();
+    const data = {
+      id: record.record,
+    };
+    localStorage.setItem('merchantMsg', data);
+    const { dispatch } = this.props;
+    dispatch(routerRedux.push('/shop/add-store'));
+  }
   setDefault = () => {
     const { defaultId } = this.state;
     if (defaultId) {
-      console.log(defaultId);
       const { dispatch } = this.props;
       dispatch({
         type: 'frontUser/setDefault',
@@ -208,7 +218,6 @@ export default class FrontUserList extends PureComponent {
         updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
         page: current,
       };
-      console.log(values);
       dispatch({
         type: 'frontUser/fetchFrontUserList',
         payload: values,
@@ -449,6 +458,8 @@ export default class FrontUserList extends PureComponent {
             <a onClick={this.editDataMsg.bind(this, record.id, 1)}>设上级</a>
             <Divider type="vertical" />
             <a onClick={this.editDataMsg.bind(this, record.id, 2)}>设置等级</a>
+            <Divider type="vertical" />
+            <a onClick={this.setMerchant.bind(this, record)}>设置商户</a>
           </Fragment>
         ),
       },
