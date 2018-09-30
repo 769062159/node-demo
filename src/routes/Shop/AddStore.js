@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { message, Form, Input, Button, Cascader, InputNumber, TimePicker } from 'antd';
 import { connect } from 'dva';
 // import moment from 'moment';
-// import { routerRedux } from 'dva/router';
+import { routerRedux } from 'dva/router';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import Maps from '../../components/Map/index';
 
@@ -144,7 +144,8 @@ export default class AddShop extends Component {
         type: 'shop/addShop',
         payload: values,
         callback: () => {
-          message.success('添加成功！')
+          message.success('添加成功！');
+          dispatch(routerRedux.push('/shop/store'));
         },
       });
       // if (!err) {
