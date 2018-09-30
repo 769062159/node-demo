@@ -614,7 +614,7 @@ export default class Order extends PureComponent {
         title: '直播简介',
         width: '8%',
         render: (text, record) =>
-          (record.groupStatus === 1 && record.order_status === 2 ) ? (
+          (record.groupStatus === 1 && record.order_status === 2 && record.isBtn ) ? (
             <Row>
               <Button style={grayBtn} onClick={this.ship.bind(this, record.pack_id)}>
                 发货

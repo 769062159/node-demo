@@ -17,11 +17,13 @@ export default {
   },
 
   effects: {
-    *getGroupList({ payload }, { call, put }) {
+    *getGroupList({ payload }, { call, put, select }) {
       const response = yield call(getGroupList, { ...payload });
+      const id = yield select(state => state.user.currentUser.shop_store_id);
       yield put({
         type: 'getGroup',
         payload: response,
+        id,
       });
     },
     *editAddress({ payload }, { call, put }) {
@@ -104,11 +106,16 @@ export default {
         expressList: data,
       };
     },
-    getGroup(state, { payload }) {
+    getGroup(state, { payload, id }) {
       const { data } = payload;
       const { list } = data;
       list.forEach(res => {
         res.has_order_pack.forEach(ele => {
+          if (ele.shop_store_id === id) {
+            ele.isBtn = true;
+          } else {
+            ele.isBtn = false;
+          }
           ele.get_store_name = res.get_store_name;
           ele.has_check_user = res.has_check_user;
           ele.store_name = res.store_name;
