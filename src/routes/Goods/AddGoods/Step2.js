@@ -79,16 +79,28 @@ const CustomizedForm = Form.create({
   mapPropsToFields(props) {
     const { goods: { goodsDetail, systemType } } = props;
     const { group_start_time: groupStartTime, group_end_time: groupEndTime } = goodsDetail;
+    console.log(typeof groupStartTime);
+    console.log(groupStartTime);
     if (typeof groupStartTime === 'number') {
       goodsDetail.group_start_time = new Date(groupStartTime * 1000);
-    } else if (typeof groupStartTime === 'object' || typeof groupEndTime === 'undefined') {
+    } else if (typeof groupEndTime === 'undefined') {
       goodsDetail.group_start_time = now;
     }
     if (typeof groupEndTime === 'number') {
       goodsDetail.group_end_time = new Date(groupEndTime * 1000);
-    } else if (typeof groupEndTime === 'object' || typeof groupEndTime === 'undefined') {
+    } else if (typeof groupEndTime === 'undefined') {
       goodsDetail.group_end_time = weekNow;
     }
+    // if (groupEndTime === 0) {
+    //   goodsDetail.group_start_time = now;
+    // } else if (typeof groupEndTime === 'number') {
+    //   goodsDetail.group_start_time = new Date(groupStartTime * 1000);
+    // }
+    // if (groupEndTime === 0) {
+    //   goodsDetail.group_end_time = weekNow;
+    // } else if (typeof groupEndTime === 'number') {
+    //   goodsDetail.group_end_time = new Date(groupEndTime * 1000);
+    // }
     const arr = {
       group_share_title: Form.createFormField({
         value: goodsDetail.group_share_title,
@@ -206,10 +218,10 @@ const CustomizedForm = Form.create({
       //     : null,
       // }),
       group_start_time: Form.createFormField({
-        value: moment(goodsDetail.group_start_time, 'YYYY-MM-DD HH:mm:ss'),
+        value: goodsDetail.group_start_time ? moment(goodsDetail.group_start_time, 'YYYY-MM-DD HH:mm:ss') : null,
       }),
       group_end_time: Form.createFormField({
-        value: moment(goodsDetail.group_end_time, 'YYYY-MM-DD HH:mm:ss'),
+        value: goodsDetail.group_end_time ? moment(goodsDetail.group_end_time, 'YYYY-MM-DD HH:mm:ss') : null,
       }),
       // group_end_time: Form.createFormField({
       //   value: goodsDetail.group_end_time
@@ -267,6 +279,8 @@ const CustomizedForm = Form.create({
     validateFields((err, values) => {
       if (!err) {
         submitForm(values);
+      } else {
+        message.error('请填写必填项！');
       }
     });
   };

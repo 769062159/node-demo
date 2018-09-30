@@ -13,6 +13,7 @@ export default {
     groupDetail: {
       has_check_user: {},
     },
+    shop_store_id: '',
   },
 
   effects: {
@@ -57,11 +58,14 @@ export default {
         payload: response,
       });
     },
-    *fetchOrder({ payload }, { call, put }) {
+    *fetchOrder({ payload }, { call, put, select }) {
       const response = yield call(getOrderList, { ...payload });
+      let id = '';
+      id = yield select(state => state.user.currentUser.shop_store_id);
       yield put({
         type: 'getOrder',
         payload: response,
+        id,
       });
     },
     *getGroupDetail({ payload }, { call, put }) {
@@ -126,11 +130,16 @@ export default {
         },
       };
     },
-    getOrder(state, { payload }) {
+    getOrder(state, { payload, id }) {
       const { data } = payload;
       const { list } = data;
       list.forEach(res => {
         res.has_order_pack.forEach(ele => {
+          if (ele.shop_store_id === id) {
+            ele.isBtn = true;
+          } else {
+            ele.isBtn = false;
+          }
           let price = 0;
           ele.has_order_goods.forEach(gg => {
             price = (price * 100 + gg.has_order_goods_sku.price * 100) / 100;

@@ -78,9 +78,9 @@ const CustomizedForm = Form.create({
   const onValidateForm = e => {
     e.preventDefault();
     const { submitForm } = props;
-    validateFields((err, values) => {
+    validateFields((err) => {
       if (!err) {
-        submitForm(values);
+        submitForm();
       }
     });
   };
@@ -189,7 +189,7 @@ const CustomizedForm = Form.create({
             case 1:
               return (
                 <Form.Item {...formItemLayout} label="播放地址">
-                  {getFieldDecorator('zz', {rules: [{ required: true, message: '请上传视频' }]})(
+                  {getFieldDecorator('zz', {rules: [{ required: false, message: '请上传视频' }]})(
                     <div className={styles.fileBox}>
                       <input type="file" className={styles.fileBtn} onChange={uploadVideo} />
                       <div className={styles.add}>+</div>

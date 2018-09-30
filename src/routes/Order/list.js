@@ -576,11 +576,11 @@ export default class Order extends PureComponent {
         width: '12%',
         render: (text, record) => (
           <Fragment>
-            {record.order_status === 2 ? (
+            {record.order_status === 2 && record.isBtn ? (
               <Button style={grayBtn} onClick={this.ship.bind(this, record.pack_id)}>
                 发货
               </Button>
-            ) : record.order_status === 3 ? (
+            ) : record.order_status === 3 && record.isBtn ? (
               <Button style={grayBtn} onClick={this.editShip.bind(this, record)}>
                 修改发货
               </Button>
@@ -679,7 +679,8 @@ export default class Order extends PureComponent {
                       </Col>
                     </Row>
                   </div>
-                  {item.order_status === 2 ? (
+                  <Row style={smallStyle} />
+                  {/* {item.order_status === 2 ? (
                     <Row style={smallStyle}>
                       <Button style={grayBtn} onClick={this.editAddress.bind(this, item)}>
                         修改地址
@@ -687,7 +688,7 @@ export default class Order extends PureComponent {
                     </Row>
                   ) : (
                     <Row style={smallStyle} />
-                  )}
+                  )} */}
                   {item.has_order_pack &&
                     item.has_order_pack.map((res, index) => {
                       return (
