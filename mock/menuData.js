@@ -178,10 +178,25 @@ export const menuData = [
     ],
   },
   {
+    name: '课程',
+    icon: 'video-camera',
+    path: 'class',
+    children: [
+      {
+        name: '课程添加',
+        path: 'class-add',
+      },
+    ],
+  },
+  {
     name: '直播',
     icon: 'video-camera',
     path: 'live',
     children: [
+      {
+        name: '课程添加',
+        path: 'class-add',
+      },
       {
         name: '直播列表',
         path: 'list',

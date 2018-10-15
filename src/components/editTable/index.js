@@ -202,6 +202,7 @@ class UploadImg extends PureComponent {
     // this.props.onChange(fileList);
   };
   removeImg = () => {
+    this.setState({ fileList: [] });
     this.props.onChange([]);
   };
   render() {

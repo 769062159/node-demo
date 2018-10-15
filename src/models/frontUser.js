@@ -8,6 +8,7 @@ import {
   updateMemberLevel,
   setDefaultId,
   getDefault,
+  merchantSetting,
 } from '../services/frontUser.js';
 
 export default {
@@ -21,6 +22,18 @@ export default {
   },
 
   effects: {
+    *merchantSetting({ payload, callback }, { call }) {
+      const data = yield call(merchantSetting, { ...payload });
+      if (data && data.code === 200) {
+        callback();
+      }
+    },
+    *getMerchantmobile({ callback }, { select }) {
+      const mobile = yield select(state => state.user.currentUser.mobile);
+      if (mobile) {
+        callback(mobile);
+      }
+    },
     *setDefault({ payload, callback }, { call, put }) {
       const data = yield call(setDefaultId, { ...payload });
       if (data && data.code === 200) {

@@ -15,7 +15,7 @@ import {
   Modal,
   message,
 } from 'antd';
-import { routerRedux } from 'dva/router';
+// import { routerRedux } from 'dva/router';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import EditForm from './EditForm';
 
@@ -50,6 +50,10 @@ export default class FrontUserList extends PureComponent {
     editDataId: 0,
     type: 0,
     defaultId: '',
+    merchantVisible: false,
+    account: '',
+    editId: '',
+    password: '',
     // formValues: {},
     expandForm: false,
     // header: {
@@ -83,12 +87,18 @@ export default class FrontUserList extends PureComponent {
   // 设置商户
   setMerchant = (record, e) => {
     e.preventDefault();
-    const data = {
-      id: record.record,
-    };
-    localStorage.setItem('merchantMsg', data);
     const { dispatch } = this.props;
-    dispatch(routerRedux.push('/shop/add-store'));
+    dispatch({
+      type: 'frontUser/getMerchantmobile',
+      callback: (e) => {
+        this.setState({
+          account: `${record.id}@${e}`,
+          password: '',
+          editId: record.id,
+        })
+        this.merchantModal();
+      },
+    });
   }
   setDefault = () => {
     const { defaultId } = this.state;
@@ -224,6 +234,34 @@ export default class FrontUserList extends PureComponent {
       });
     });
   };
+  // 设置商户
+  merchantModal = () => {
+    const { merchantVisible } = this.state;
+    this.setState({
+      merchantVisible: !merchantVisible,
+    })
+  }
+  changePassword = (e) => {
+    this.setState({
+      password: e.target.value,
+    });
+  }
+  merchantOK = () => {
+    const { password, account, editId } = this.state;
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'frontUser/merchantSetting',
+      payload: {
+        username: account,
+        password: password || '123456',
+        member_id: editId,
+      },
+      callback: () => {
+        message.success('设置成功');
+        this.merchantModal();
+      },
+    });
+  }
   renderAddForm() {
     const { loading } = this.props;
     const { getFieldDecorator } = this.props.form;
@@ -411,7 +449,7 @@ export default class FrontUserList extends PureComponent {
     datas.forEach(item => {
       item.has_account = item.has_account || hasAccountDefault;
     });
-    const { formVisible, type, pagination, editDataId } = this.state;
+    const { formVisible, type, pagination, editDataId, merchantVisible, account } = this.state;
     const progressColumns = [
       {
         title: '会员',
@@ -517,6 +555,7 @@ export default class FrontUserList extends PureComponent {
               loading={loading}
               columns={progressColumns}
               pagination={frontUserListPage}
+              scroll={{ x: 500 }}
             />
           </div>
         </Card>
@@ -536,6 +575,22 @@ export default class FrontUserList extends PureComponent {
             pagination={pagination}
             handAddleCancel={this.handAddleCancel}
           />
+        </Modal>
+        <Modal
+          title="设置商户"
+          visible={merchantVisible}
+          onCancel={this.merchantModal}
+          onOk={this.merchantOK}
+          destroyOnClose="true"
+        >
+          <Row style={{ marginBottom: 20 }}>
+            <Col span={6}>账户</Col>
+            <Col span={18}><Input value={account} disabled /></Col>
+          </Row>
+          <Row>
+            <Col span={6}>密码</Col>
+            <Col span={18}><Input defaultValue={123456} onChange={this.changePassword} /></Col>
+          </Row>
         </Modal>
       </PageHeaderLayout>
     );

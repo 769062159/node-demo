@@ -123,7 +123,7 @@ const CustomizedForm = Form.create({
   }
   return (
     <Form autoComplete="OFF">
-      <FormItem {...formItemLayout} label="直播标题">
+      <FormItem {...formItemLayout} label="录播标题">
         {getFieldDecorator('title', {
           rules: [
             {
@@ -133,7 +133,7 @@ const CustomizedForm = Form.create({
           ],
         })(<Input />)}
       </FormItem>
-      <FormItem {...formItemLayout} label="直播简介">
+      <FormItem {...formItemLayout} label="录播简介">
         {getFieldDecorator('desc', {
           rules: [
             {
@@ -145,7 +145,7 @@ const CustomizedForm = Form.create({
       </FormItem>
       <Form.Item
         {...formItemLayout}
-        label="分享图片"
+        label="录播封面"
         extra={<Tag color="blue">建议尺寸300px*240px，大小不得大于1M</Tag>}
       >
         {getFieldDecorator('yyy', {

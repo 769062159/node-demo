@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'dva';
 import debounce from 'lodash/debounce';
-import { Form, Button, Input, Select, Upload, Icon, Modal, Tag, message, Spin, Switch, Pagination, InputNumber } from 'antd';
+import { Form, Button, Input, Select, Upload, Icon, Modal, Tag, message, Spin, Pagination, InputNumber, Checkbox } from 'antd';
 // import { Form, Button, Input, Upload, Icon, Modal, Tag, message } from 'antd';
 import request from '../../../utils/request';
 import LiveGoodTable from '../../../components/LiveGoodTable';
@@ -524,6 +524,9 @@ class EditLiveStep2 extends React.PureComponent {
   handleCancelImg = () => this.setState({ previewVisible: false });
   // 上传图片
   handleChangeImg = data => {
+    if (!data.file.status) {
+      return;
+    }
     let { fileList } = data;
     fileList = fileList.map(item => {
       if (item.status === 'done' && item.uploaded !== 'done') {
@@ -594,8 +597,6 @@ class EditLiveStep2 extends React.PureComponent {
       live: { liveForm, uploadLiveImg, shareImg, liveGoods, homeVod, vodList, vodListPage, videoList, videoListPage },
       uploadUrl,
     } = this.props;
-    console.log(11);
-    console.log(videoList);
     const vodListItem = [];
     const videoListItem = [];
     vodList.forEach(res => {
@@ -606,7 +607,8 @@ class EditLiveStep2 extends React.PureComponent {
             {res.title}
           </div>
           <div className={styles.switch}>
-            <Switch checkedChildren={<Icon type="check" />} unCheckedChildren={<Icon type="close" />} onChange={this.changeSwitch.bind(this, res.id, 0)} defaultChecked={res.is_bind} />
+            {/* <Switch checkedChildren={<Icon type="check" />} unCheckedChildren={<Icon type="close" />} onChange={this.changeSwitch.bind(this, res.id, 0)} defaultChecked={res.is_bind} /> */}
+            <Checkbox onChange={this.changeSwitch.bind(this, res.id, 0)} defaultChecked={res.is_bind} />
           </div>
         </div>
       )
@@ -619,7 +621,8 @@ class EditLiveStep2 extends React.PureComponent {
             {res.title}
           </div>
           <div className={styles.switch}>
-            <Switch checkedChildren={<Icon type="check" />} unCheckedChildren={<Icon type="close" />} onChange={this.changeSwitch.bind(this, res.id, 1)} defaultChecked={res.is_bind} />
+            {/* <Switch checkedChildren={<Icon type="check" />} unCheckedChildren={<Icon type="close" />} onChange={this.changeSwitch.bind(this, res.id, 1)} defaultChecked={res.is_bind} /> */}
+            <Checkbox onChange={this.changeSwitch.bind(this, res.id, 1)} defaultChecked={res.is_bind} />
           </div>
         </div>
       )

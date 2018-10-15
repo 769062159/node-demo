@@ -71,3 +71,11 @@ export async function getDefault(params) {
     body: params,
   });
 }
+
+// 商户设置
+export async function merchantSetting(params) {
+  return request('/merchant/member/set/shop', {
+    method: 'POST',
+    body: params,
+  });
+}
