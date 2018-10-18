@@ -181,7 +181,7 @@ const CustomizedForm = Form.create({
         })(
           <Select>
             <Option value={1}>上传视频</Option>
-            <Option value={2}>录播地址</Option>
+            <Option value={2}>外部链接</Option>
             <Option value={3}>腾讯视频</Option>
           </Select>
         )}

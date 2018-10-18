@@ -181,10 +181,6 @@ export const getRouterConfig = app => {
     '/market/hot-sale': {
       component: dynamicWrapper(app, ['indexs'], () => import('../routes/Index/HotSale')),
     },
-    // 课程
-    '/class/class-add': {
-      component: dynamicWrapper(app, ['live'], () => import('../routes/Class/ClassAdd')),
-    },
     // 直播
     '/live/list': {
       component: dynamicWrapper(app, ['live'], () => import('../routes/Live/list')),
