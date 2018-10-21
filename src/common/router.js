@@ -181,16 +181,62 @@ export const getRouterConfig = app => {
     '/market/hot-sale': {
       component: dynamicWrapper(app, ['indexs'], () => import('../routes/Index/HotSale')),
     },
+    // 社群
+    '/community/small-video': {
+      component: dynamicWrapper(app, ['live'], () => import('../routes/Community/SmallVideo')),
+    },
+    '/community/small-video-add': {
+      component: dynamicWrapper(app, ['live'], () => import('../routes/Community/SmallVideoAdd')),
+    },
+    '/community/class-add': {
+      component: dynamicWrapper(app, ['classModel'], () => import('../routes/Community/ClassAdd')),
+    },
+    '/community/class-edit/:id': {
+      component: dynamicWrapper(app, ['classModel'], () => import('../routes/Community/ClassEdit')),
+    },
+    '/community/class-list': {
+      component: dynamicWrapper(app, ['classModel'], () => import('../routes/Community/List')),
+    },
+    '/community/community-list': {
+      component: dynamicWrapper(app, ['live'], () => import('../routes/Community/CommunityList')),
+    },
+    '/community/edit-live': {
+      identity: 'common',
+      component: dynamicWrapper(app, ['form'], () => import('../routes/Community/EditLive')),
+    },
+    '/community/edit-live/confirm/:id': {
+      identity: 'common',
+      component: dynamicWrapper(app, ['live'], () => import('../routes/Community/EditLive/Step2')),
+    },
+    '/community/edit-live/result': {
+      identity: 'common',
+      component: dynamicWrapper(app, ['live'], () => import('../routes/Community/EditLive/Step3')),
+    },
     // 直播
+    '/live/small-video': {
+      component: dynamicWrapper(app, ['live'], () => import('../routes/Live/SmallVideo')),
+    },
+    '/live/small-video-add': {
+      component: dynamicWrapper(app, ['live'], () => import('../routes/Live/SmallVideoAdd')),
+    },
+    '/live/class-add': {
+      component: dynamicWrapper(app, ['classModel'], () => import('../routes/Class/ClassAdd')),
+    },
+    '/live/class-edit/:id': {
+      component: dynamicWrapper(app, ['classModel'], () => import('../routes/Class/ClassEdit')),
+    },
+    '/live/class-list': {
+      component: dynamicWrapper(app, ['classModel'], () => import('../routes/Class/List')),
+    },
     '/live/list': {
       component: dynamicWrapper(app, ['live'], () => import('../routes/Live/list')),
     },
-    '/live/vod': {
-      component: dynamicWrapper(app, ['live'], () => import('../routes/Live/Vod')),
-    },
-    '/live/video': {
-      component: dynamicWrapper(app, ['live'], () => import('../routes/Live/VideoList')),
-    },
+    // '/live/vod': {
+    //   component: dynamicWrapper(app, ['live'], () => import('../routes/Live/Vod')),
+    // },
+    // '/live/video': {
+    //   component: dynamicWrapper(app, ['live'], () => import('../routes/Live/VideoList')),
+    // },
     '/live/add-video': {
       identity: 'common',
       component: dynamicWrapper(app, ['form'], () => import('../routes/Live/AddVod')),

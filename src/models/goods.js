@@ -351,8 +351,17 @@ export default {
         payload,
       });
     },
-    *fetchGoods({ payload }, { call, put }) {
+    *fetchGoods({ payload, callback }, { call, put }) {
       const response = yield call(getAllGoods, payload);
+      if (callback && response && response.code === 200) {
+        const arr = [];
+        response.data.list.forEach(res => {
+          if (res.is_check_live) {
+            arr.push(res.goods_id);
+          }
+        });
+        callback(arr);
+      }
       yield put({
         type: 'show',
         payload: response,

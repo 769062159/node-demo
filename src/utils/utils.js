@@ -4,6 +4,12 @@ export function fixedZero(val) {
   return val * 1 < 10 ? `0${val}` : val;
 }
 
+// 数组换位置
+export function swapArray(arr, index1, index2) {
+  arr[index1] = arr.splice(index2, 1, arr[index1])[0];
+   return arr;
+}
+
 // 深拷贝
 export function deepCopy (source) {
     const result = source.constructor === Array ? [] : {}; // 用三目运算判断他是数组还是对象

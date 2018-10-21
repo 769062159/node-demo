@@ -178,22 +178,49 @@ export const menuData = [
     ],
   },
   {
+    name: '社群',
+    icon: 'video-camera',
+    path: 'community',
+    children: [
+      {
+        name: '短视频',
+        path: 'small-video',
+      },
+      {
+        name: '课程',
+        path: 'class-list',
+      },
+      {
+        name: '社群列表',
+        path: 'community-list',
+      },
+    ],
+  },
+  {
     name: '直播',
     icon: 'video-camera',
     path: 'live',
     children: [
       {
+        name: '短视频',
+        path: 'small-video',
+      },
+      {
+        name: '课程列表',
+        path: 'class-list',
+      },
+      {
         name: '直播列表',
         path: 'list',
       },
-      {
-        name: '录播列表',
-        path: 'vod',
-      },
-      {
-        name: '视频列表',
-        path: 'video',
-      },
+      // {
+      //   name: '录播列表',
+      //   path: 'vod',
+      // },
+      // {
+      //   name: '视频列表',
+      //   path: 'video',
+      // },
     ],
   },
   {

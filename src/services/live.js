@@ -111,3 +111,51 @@ export async function deleteVideo(params) {
     body: params,
   });
 }
+
+//  短视频列表
+export async function smallVideoList(params) {
+  return request('/merchant/video/list', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+//  短视频上下架
+export async function modifyVideoStatus(params) {
+  return request('/merchant/video/update/status', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+//  短视频上下架
+export async function addSmallVideo(params) {
+  return request('/merchant/video/create', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+//  直播间绑定商品
+export async function bindLiveGood(params) {
+  return request('/merchant/live/bind/goods', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+//  直播间绑定课程
+export async function bindLiveCourse(params) {
+  return request('/merchant/live/bind/course', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+//  直播间绑定短视频
+export async function bindLiveVideo(params) {
+  return request('/merchant/live/bind/video', {
+    method: 'POST',
+    body: params,
+  });
+}
