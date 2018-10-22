@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
 // import { routerRedux } from 'dva/router';
-import { Table, Button, Modal, Card, Form, Input, Select, Icon } from 'antd';
+import { Table, Button, Modal, Card, Form, Input, Select, Icon, message } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 // import './style.less';
 
@@ -61,6 +61,8 @@ const CustomizedForm = Form.create({
     validateFields((err, values) => {
       if (!err) {
         handleSubmit(values);
+      } else {
+        message.error('请填写信息');
       }
     });
   };

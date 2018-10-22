@@ -88,6 +88,8 @@ const CustomizedForm = Form.create({
     validateFields(err => {
       if (!err) {
         handleSubmit();
+      } else {
+        message.error('请填写信息');
       }
     });
   };
