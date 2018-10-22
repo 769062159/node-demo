@@ -174,7 +174,7 @@ export default class Live extends PureComponent {
   }
   goPath = () => {
     const { dispatch } = this.props;
-    const url = `/community/small-video-add`;
+    const url = `/live/small-video-add`;
     dispatch(routerRedux.push(url));
   };
   handleCancelVideo = () => {
@@ -307,7 +307,7 @@ export default class Live extends PureComponent {
         key: 'title',
       },
       {
-        title: '直播id',
+        title: '用户id',
         dataIndex: 'user_id',
         key: 'user_id',
       },

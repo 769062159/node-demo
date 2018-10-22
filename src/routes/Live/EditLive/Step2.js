@@ -400,9 +400,10 @@ class EditLiveStep2 extends React.PureComponent {
    // 添加描述
    setDescription = (e) => {
     const obj = {};
-    obj.live_detail = {
+    obj.live_details = {
       value: e,
     };
+    console.log(e);
     this.changeFormVal(obj);
   }
 
@@ -470,6 +471,7 @@ class EditLiveStep2 extends React.PureComponent {
     // liveForm.cover = uploadLiveImg[0].url;
     liveForm.share_cover = liveForm.yyy[0].response.data;
     liveForm.cover = liveForm.share_cover;
+    liveForm.live_detail = liveForm.live_details;
     liveForm.live_id = liveForm.id;
     dispatch({
       type: 'live/editLive',
@@ -568,6 +570,7 @@ class EditLiveStep2 extends React.PureComponent {
       payload: {
         page_number: 3,
         check_live_id: id,
+        goods_status: 1,
       },
       callback: (selectedRowKeys) => {
         this.setState({
@@ -605,6 +608,7 @@ class EditLiveStep2 extends React.PureComponent {
       payload: {
         check_live_id: id,
         page_number: 3,
+        status: 1,
       },
       callback: (selectedSmallVideoKeys) => {
         this.setState({
@@ -626,6 +630,7 @@ class EditLiveStep2 extends React.PureComponent {
         page_number: 3,
         page: current,
         check_live_id: id,
+        goods_status: 1,
       },
       callback: (selectedRowKeys) => {
         this.setState({
@@ -661,6 +666,7 @@ class EditLiveStep2 extends React.PureComponent {
         page: current,
         check_live_id: id,
         page_number: 3,
+        status: 1,
       },
       callback: (selectedSmallVideoKeys) => {
         this.setState({

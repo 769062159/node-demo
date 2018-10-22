@@ -202,7 +202,7 @@ export const menuData = [
     path: 'live',
     children: [
       {
-        name: '短视频',
+        name: '视频列表',
         path: 'small-video',
       },
       {

@@ -307,7 +307,7 @@ export default class Live extends PureComponent {
         key: 'title',
       },
       {
-        title: '直播id',
+        title: '用户id',
         dataIndex: 'user_id',
         key: 'user_id',
       },

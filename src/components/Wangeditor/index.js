@@ -27,16 +27,13 @@ export default class Wangeditor extends PureComponent {
     this.editor.customConfig.onchange = html => {
       const { setDescription } = this.props;
       setDescription(html);
-      // this.setState({
-      //   editorContent: html,
-      // })
     }
     this.editor.customConfig.customUploadImg = (files, insert) => {
         const { header } = this.props;
         const body = new FormData();
-        body.append("type", 2);
+        body.append("type", 4);
         body.append("file", files[0]);
-        request('/shop/upload', {
+        request('/merchant/upload', {
         method: 'POST',
         headers: {
           Authorization: header,
@@ -56,17 +53,20 @@ export default class Wangeditor extends PureComponent {
     this.editor.customConfig.zIndex = 10;
     this.editor.create();
   }
-  componentWillReceiveProps(nextProps, ) {
-    const { detail } = nextProps;
-    const { detail: oldDetail } = this.props;
-    if (detail !== oldDetail) {
-      this.editor.txt.html(detail);
-    }
-  }
+  // componentWillReceiveProps(nextProps, ) {
+  //   const { detail } = nextProps;
+  //   const { detail: oldDetail } = this.props;
+  //   if (detail !== oldDetail) {
+  //     this.editor.txt.html(detail);
+  //   }
+  // }
   render() {
+    const { detail } = this.props;
 
     return (
-      <div ref={this.editorElem} style={{textAlign: 'left'}} />
+      <div ref={this.editorElem} style={{textAlign: 'left'}} >
+        <div dangerouslySetInnerHTML={{ __html: detail }} />
+      </div>
     );
   }
 }

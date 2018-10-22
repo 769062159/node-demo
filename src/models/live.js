@@ -54,10 +54,13 @@ export default {
   },
 
   effects: {
-    *addSmallVideo({ payload, callback }, { call }) {
+    *addSmallVideo({ payload, callback }, { call, put }) {
       const res = yield call(addSmallVideo, payload.smallVideoForm);
       if (res && res.code === 200) {
         callback();
+        yield put({
+          type: 'clearSmallVieoForm',
+        });
       }
     },
     *deleteVideo({ payload, callback }, { call, put }) {
@@ -183,14 +186,15 @@ export default {
         payload: response,
       });
       // 子table请求
-      const good = yield call(getAllGoods, payload);
-      yield put({
-        type: 'getLiveGoods',
-        payload: {
-          good,
-          defaultCurrent: payload.page,
-        },
-      });
+      // console.log(99999);
+      // const good = yield call(getAllGoods, payload);
+      // yield put({
+      //   type: 'getLiveGoods',
+      //   payload: {
+      //     good,
+      //     defaultCurrent: payload.page,
+      //   },
+      // });
     },
     *fetchVodDetail({ payload }, { call, put }) {
       const response = yield call(getVodDetail, payload);
@@ -374,6 +378,13 @@ export default {
           total: data.total,
         },
       };
+    },
+    clearSmallVieoForm(state) {
+      const smallVideoForm = {};
+      return {
+        ...state,
+        smallVideoForm,
+      }
     },
     clearVod(state) {
       const liveForm = {

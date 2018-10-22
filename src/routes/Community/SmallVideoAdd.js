@@ -251,7 +251,7 @@ export default class ClassAdd extends PureComponent {
                   zz: url,
                   width: videoDom.videoWidth,
                   height: videoDom.videoHeight,
-                  dir: `videos/${currentUser.id}/`,
+                  dir: `videos/${currentUser.id}`,
                   file_name: `${randomNum}.mp4`,
                   extension: 'mp4',
                 };

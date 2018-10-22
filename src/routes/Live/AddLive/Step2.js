@@ -387,7 +387,7 @@ class AddLiveStep2 extends React.PureComponent {
   // 添加描述
   setDescription = (e) => {
     const obj = {};
-    obj.live_detail = {
+    obj.live_details = {
       value: e,
     };
     this.changeFormVal(obj);
@@ -459,6 +459,7 @@ class AddLiveStep2 extends React.PureComponent {
     // liveForm.cover = uploadLiveImg[0].url;
     liveForm.share_cover = liveForm.yyy[0].response.data;
     liveForm.cover = liveForm.share_cover;
+    liveForm.live_detail = liveForm.live_details;
     // liveForm.live_id = liveForm.id;
     dispatch({
       type: 'live/addLive',
@@ -508,6 +509,9 @@ class AddLiveStep2 extends React.PureComponent {
     const { dispatch } = this.props;
     dispatch({
       type: 'live/fetchSmallVideo',
+      payload: {
+        status: 1,
+      },
     });
     this.setState({
       isSmallVideoModal: true,
@@ -603,6 +607,7 @@ class AddLiveStep2 extends React.PureComponent {
       type: 'live/fetchSmallVideo',
       payload: {
         page: current,
+        status: 1,
       },
     });
   };

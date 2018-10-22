@@ -403,16 +403,16 @@ export default class ClassAdd extends PureComponent {
   // 添加描述
   setDescription = (e) => {
     const obj = {};
-    obj.detail = {
+    obj.details = {
       value: e,
     };
     this.changeFormVal(obj);
   }
   handleSubmit = () => {
-    const { classModel: { classForm: { title, xxx, list, yyy, desc, detail }, editClass } } = this.props;
+    const { classModel: { classForm: { title, xxx, list, yyy, desc, details }, editClass } } = this.props;
     const { has_lessons: lessons } = editClass;
     const { dispatch } = this.props;
-    if (!detail) {
+    if (!details) {
       message.error('请输入描述');
       return false;
     }
@@ -422,7 +422,7 @@ export default class ClassAdd extends PureComponent {
     }
     const data = {
       desc,
-      detail,
+      detail: details,
       title,
       cover: xxx[0].response.data,
       share_cover: yyy[0].response.data,

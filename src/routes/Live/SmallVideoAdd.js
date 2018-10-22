@@ -159,7 +159,7 @@ export default class ClassAdd extends PureComponent {
       callback: () => {
         message.success('添加成功！');
         const { dispatch } = this.props;
-        const url = `/community/small-video`;
+        const url = `/live/small-video`;
         dispatch(routerRedux.push(url));
       },
     });
@@ -251,7 +251,7 @@ export default class ClassAdd extends PureComponent {
                   zz: url,
                   width: videoDom.videoWidth,
                   height: videoDom.videoHeight,
-                  dir: `videos/${currentUser.id}/`,
+                  dir: `videos/${currentUser.id}`,
                   file_name: `${randomNum}.mp4`,
                   extension: 'mp4',
                 };
