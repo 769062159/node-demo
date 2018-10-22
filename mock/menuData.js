@@ -183,11 +183,11 @@ export const menuData = [
     path: 'community',
     children: [
       {
-        name: '短视频',
+        name: '视频列表',
         path: 'small-video',
       },
       {
-        name: '课程',
+        name: '课程列表',
         path: 'class-list',
       },
       {

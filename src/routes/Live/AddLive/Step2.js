@@ -124,6 +124,18 @@ const CustomizedForm = Form.create({
   }
   return (
     <Form autoComplete="OFF">
+      <FormItem {...formItemLayout} label="主播id">
+        {getFieldDecorator('user_id', {
+          rules: [
+            {
+              required: true,
+              message: '请输入主播id',
+            },
+          ],
+        })(
+          <InputNumber />
+        )}
+      </FormItem>
       <FormItem {...formItemLayout} label="直播标题">
         {getFieldDecorator('title', {
           rules: [
@@ -272,18 +284,6 @@ const CustomizedForm = Form.create({
           </Select>
         )}
       </FormItem>
-      <FormItem {...formItemLayout} label="主播id">
-        {getFieldDecorator('user_id', {
-          rules: [
-            {
-              required: true,
-              message: '请输入主播id',
-            },
-          ],
-        })(
-          <InputNumber />
-        )}
-      </FormItem>
       {liveForm.play_type === 1 ? (
         null
         // <FormItem {...formItemLayout} label="录播">
@@ -332,10 +332,10 @@ const CustomizedForm = Form.create({
           </Button>
         )}
       </Form.Item>
-      <Form.Item {...formItemLayout} label="短视频">
+      <Form.Item {...formItemLayout} label="视频列表">
         {getFieldDecorator('good_list', {})(
           <Button type="primary" onClick={openSmallVideoList}>
-            添加短视频
+            添加视频
           </Button>
         )}
       </Form.Item>
