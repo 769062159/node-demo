@@ -179,7 +179,7 @@ export const menuData = [
   },
   {
     name: '社群',
-    icon: 'video-camera',
+    icon: 'community',
     path: 'community',
     children: [
       {

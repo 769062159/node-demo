@@ -54,14 +54,13 @@ export default class Wangeditor extends PureComponent {
         // insert(imgUrl)
     }
     this.editor.customConfig.uploadImgServer = '/upload';
+    this.editor.customConfig.zIndex = 10;
     this.editor.create();
   }
   componentWillReceiveProps(nextProps, ) {
     const { detail } = nextProps;
     const { detail: oldDetail } = this.props;
     if (detail !== oldDetail) {
-      console.log(10);
-      console.log(detail);
       this.editor.txt.html(detail);
     }
   }
