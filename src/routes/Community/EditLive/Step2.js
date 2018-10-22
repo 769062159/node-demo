@@ -59,6 +59,12 @@ const CustomizedForm = Form.create({
       xxx: Form.createFormField({
         value: props.liveForm.xxx,
       }),
+      all_prohibit: Form.createFormField({
+        value: props.liveForm.all_prohibit,
+      }),
+      default_page: Form.createFormField({
+        value: props.liveForm.default_page,
+      }),
       yyy: Form.createFormField({
         value: props.liveForm.yyy,
       }),
@@ -250,6 +256,40 @@ const CustomizedForm = Form.create({
           ))}
         </Select>
       </FormItem> */}
+      <FormItem {...formItemLayout} label="全场禁言">
+        {getFieldDecorator('all_prohibit', {
+          rules: [
+            {
+              required: true,
+              message: '请输入全场禁言',
+            },
+          ],
+        })(
+          <Select style={{ width: 200 }}>
+            <Option value={1}>禁言</Option>
+            <Option value={0}>不禁言</Option>
+          </Select>
+        )}
+      </FormItem>
+      <FormItem {...formItemLayout} label="默认首开">
+        {getFieldDecorator('default_page', {
+          rules: [
+            {
+              required: true,
+              message: '请输入默认首开',
+            },
+          ],
+        })(
+          <Select style={{ width: 200 }}>
+            <Option value={5}>视频</Option>
+            <Option value={4}>课程</Option>
+            <Option value={3}>详情</Option>
+            <Option value={2}>爆款</Option>
+            <Option value={1}>直播</Option>
+            <Option value={0}>社群</Option>
+          </Select>
+        )}
+      </FormItem>
       <FormItem {...formItemLayout} label="是否收费">
         {getFieldDecorator('is_free', {
           rules: [
