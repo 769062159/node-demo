@@ -79,8 +79,6 @@ const CustomizedForm = Form.create({
   mapPropsToFields(props) {
     const { goods: { goodsDetail, systemType } } = props;
     const { group_start_time: groupStartTime, group_end_time: groupEndTime } = goodsDetail;
-    console.log(typeof groupStartTime);
-    console.log(groupStartTime);
     if (typeof groupStartTime === 'number') {
       goodsDetail.group_start_time = new Date(groupStartTime * 1000);
     } else if (typeof groupEndTime === 'undefined') {
@@ -1297,7 +1295,6 @@ class AddGoodStep2 extends React.PureComponent {
   }
   // 修改分佣等级
   changeTypePartial = e => {
-    console.log(e);
     const { dispatch } = this.props;
     dispatch({
       type: 'goods/changeTypePartials',

@@ -135,7 +135,6 @@ export default class Ads extends PureComponent {
         });
       },
       onCancel() {
-        console.log('Cancel');
       },
     });
   };

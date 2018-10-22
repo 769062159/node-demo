@@ -100,8 +100,6 @@ export default class GoodsType extends PureComponent {
     if (sorter.field) {
       params.sorter = `${sorter.field}_${sorter.order}`;
     }
-    console.log(99);
-    console.log(params);
     dispatch({
       type: 'goods/getAllType',
       payload: params,

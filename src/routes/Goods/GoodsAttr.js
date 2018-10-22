@@ -138,7 +138,6 @@ export default class GoodsAttr extends PureComponent {
         // });
       },
       onCancel() {
-        console.log('Cancel');
       },
     });
   };

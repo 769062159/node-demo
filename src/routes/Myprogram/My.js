@@ -77,7 +77,6 @@ export default class My extends PureComponent {
     dispatch(routerRedux.push(`/my-program/setting/${id}`));
   };
   deleteProgram = id => {
-    console.log(id);
     const that = this;
     confirm({
       content: '你确定删除这个吗？',
@@ -94,7 +93,6 @@ export default class My extends PureComponent {
         });
       },
       onCancel() {
-        console.log('Cancel');
       },
     });
   };

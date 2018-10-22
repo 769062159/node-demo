@@ -80,7 +80,6 @@ export default class Freight extends PureComponent {
         });
       },
       onCancel() {
-        console.log('Cancel');
       },
     });
   };

@@ -86,7 +86,6 @@ const CustomizedForm = Form.create({
   const onValidateForm = e => {
     e.preventDefault();
     const { handleSubmit } = props;
-    console.log(validateFields);
     validateFields(err => {
       if (!err) {
         handleSubmit();

@@ -71,7 +71,6 @@ export default {
       } else {
         addressList = payload.data;
       }
-      console.log(addressList);
       return {
         ...state,
         addressList,

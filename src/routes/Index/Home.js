@@ -51,7 +51,6 @@ const CustomizedForm = Form.create({
     props.onChange(changedFields);
   },
   mapPropsToFields(props) {
-    console.log(props);
     return {
       type: Form.createFormField({
         value: props.homeForm.type,
@@ -76,9 +75,8 @@ const CustomizedForm = Form.create({
       }),
     };
   },
-  onValuesChange(_, values) {
-    console.log(values);
-  },
+  // onValuesChange(_, values) {
+  // },
 })(props => {
   const { getFieldDecorator, validateFields } = props.form;
   const onValidateForm = e => {
@@ -344,7 +342,6 @@ export default class Home extends PureComponent {
   }
   // 模糊查询
   fetchUser = value => {
-    console.log('fetching user', value);
     this.lastFetchId += 1;
     const fetchId = this.lastFetchId;
     this.setState({ data: [], fetching: true });
@@ -359,7 +356,6 @@ export default class Home extends PureComponent {
         // for fetch callback order
         return;
       }
-      console.log(body);
       const data = body.data.list.map(user => ({
         text: `${user.goods_id}`,
         value: user.goods_name,
@@ -368,7 +364,6 @@ export default class Home extends PureComponent {
     });
   };
   fetchLive = value => {
-    console.log('fetching user', value);
     this.lastFetchId += 1;
     const fetchId = this.lastFetchId;
     this.setState({ live: [], fetching: true });
@@ -382,7 +377,6 @@ export default class Home extends PureComponent {
         // for fetch callback order
         return;
       }
-      console.log(body);
       const live = body.data.list.map(user => ({
         text: `${user.stv_live_id}`,
         value: user.title,
@@ -444,7 +438,6 @@ export default class Home extends PureComponent {
         });
       },
       onCancel() {
-        console.log('Cancel');
       },
     });
   };
@@ -456,7 +449,6 @@ export default class Home extends PureComponent {
       return;
     }
     const { pagination } = this.state;
-    console.log(homeGoods);
     if (homeForm.jump_type === 1) {
       homeForm.remark = homeGoods.label;
       homeForm.target_id = homeGoods.key;

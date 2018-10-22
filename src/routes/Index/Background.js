@@ -70,8 +70,6 @@ export default class Config extends PureComponent {
   };
   handleChange = ({ fileList }) => {
     if (fileList.length) {
-      console.log(999);
-      console.log(fileList);
       const arr = [];
       fileList.forEach(item => {
         if (item.status === 'done' && item.uploaded !== 'done') {
@@ -115,7 +113,6 @@ export default class Config extends PureComponent {
 
   render() {
     const { config: { list }, loading } = this.props;
-    console.log(list);
     const { header, previewImage, previewVisible } = this.state;
     // 上传icon
     const uploadButton = (

@@ -31,7 +31,6 @@ const CustomizedForm = Form.create({
     props.onChange(changedFields);
   },
   mapPropsToFields(props) {
-    console.log(props);
     return {
       type: Form.createFormField({
         value: props.homeForm.type,
@@ -56,9 +55,8 @@ const CustomizedForm = Form.create({
       }),
     };
   },
-  onValuesChange(_, values) {
-    console.log(values);
-  },
+  // onValuesChange(_, values) {
+  // },
 })(props => {
   const { getFieldDecorator, validateFields } = props.form;
   const onValidateForm = e => {
@@ -356,7 +354,6 @@ export default class Home extends PureComponent {
         });
       },
       onCancel() {
-        console.log('Cancel');
       },
     });
   };

@@ -28,13 +28,11 @@ class EditGoodStep1 extends React.PureComponent {
     });
   }
   render() {
-    console.log(this.props);
     const { form, dispatch, goods: { goodType: datas } } = this.props;
     const { getFieldDecorator, validateFields } = form;
     const onValidateForm = () => {
       validateFields((err, values) => {
         if (!err) {
-          console.log(values);
           if (values.type.length === 2) {
             dispatch(routerRedux.push(`/good/step-form/confirm/${values.type}`));
           } else {

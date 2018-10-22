@@ -98,8 +98,6 @@ export default class Config extends PureComponent {
     if (sorter.field) {
       params.sorter = `${sorter.field}_${sorter.order}`;
     }
-    console.log(99);
-    console.log(params);
     dispatch({
       type: 'config/getAllType',
       payload: params,
@@ -201,7 +199,6 @@ export default class Config extends PureComponent {
         // });
       },
       onCancel() {
-        console.log('Cancel');
       },
     });
   };
@@ -244,7 +241,6 @@ export default class Config extends PureComponent {
         }
         const { dispatch } = this.props;
         const { dataIndex } = this.state;
-        console.log(type);
         if (type) {
           data.class_id = dataIndex.class_id;
           dispatch({

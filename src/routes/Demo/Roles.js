@@ -54,7 +54,6 @@ export default class Role extends Component {
         RoleMenu,
       });
     }
-    console.log(this.state.RoleMenu);
   };
   // onCheckAllChange = (e) => {
   //   this.setState({
@@ -98,7 +97,6 @@ export default class Role extends Component {
   // 新增提交
   handleSubmits = e => {
     e.preventDefault();
-    console.log(this.props.form);
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (values.role_name) {
         const { id } = this.props.match.params;
@@ -166,7 +164,6 @@ export default class Role extends Component {
         });
       },
       onCancel() {
-        console.log('Cancel');
       },
     });
   };
@@ -186,14 +183,12 @@ export default class Role extends Component {
   };
   // 新增取消
   handleCancel = () => {
-    console.log('Clicked cancel button');
     this.setState({
       addUserVisible: false,
     });
   };
   // 权限取消
   powerCancel = () => {
-    console.log('Clicked cancel button');
     this.setState({
       powerVisible: false,
     });

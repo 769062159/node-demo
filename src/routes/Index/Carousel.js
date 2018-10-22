@@ -189,7 +189,6 @@ export default class Home extends PureComponent {
         });
       },
       onCancel() {
-        console.log('Cancel');
       },
     });
   };
@@ -201,7 +200,6 @@ export default class Home extends PureComponent {
       return;
     }
     const { pagination } = this.state;
-    console.log(homeGoods);
     if (homeForm.jump_type === 1) {
       homeForm.remark = homeGoods.label;
       homeForm.target_id = homeGoods.key;

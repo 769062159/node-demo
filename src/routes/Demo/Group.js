@@ -116,7 +116,6 @@ export default class Group extends Component {
         // });
       },
       onCancel() {
-        console.log('Cancel');
       },
     });
   };

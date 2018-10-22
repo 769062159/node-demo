@@ -166,7 +166,6 @@ export default class ClassList extends PureComponent {
         });
       },
       onCancel() {
-        console.log('Cancel');
       },
     });
   };

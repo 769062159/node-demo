@@ -224,7 +224,6 @@ export default class AddShop extends Component {
         loading,
     } = this.props;
     const { getFieldDecorator } = this.props.form;
-    console.log(this.props);
     const { propsAddress } = shopDetail;
     const addressArr = [];
     if (shopDetail.province_id) {

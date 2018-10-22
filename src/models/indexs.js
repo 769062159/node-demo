@@ -256,21 +256,18 @@ export default {
       };
     },
     setHomeShops(state, { payload }) {
-      console.log(payload);
       return {
         ...state,
         homeGoods: payload.value,
       };
     },
     setHomeLive(state, { payload }) {
-      console.log(payload);
       return {
         ...state,
         homeLive: payload.value,
       };
     },
     setHomeVod(state, { payload }) {
-      console.log(payload);
       return {
         ...state,
         homeVod: payload.value,

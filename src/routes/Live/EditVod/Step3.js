@@ -17,7 +17,6 @@ class EditVodStep3 extends React.PureComponent {
   render() {
     const { dispatch } = this.props;
     // const { url } = this.state;
-    console.log(this.props);
     const onFinish = () => {
       dispatch(routerRedux.push('/live/video'));
     };

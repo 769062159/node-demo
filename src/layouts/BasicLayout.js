@@ -105,7 +105,6 @@ class BasicLayout extends React.PureComponent {
     const urlParams = new URL(window.location.href);
 
     const redirect = urlParams.searchParams.get('redirect');
-    console.log(redirect);
     const token = localStorage.getItem('token');
     // Remove the parameters in the url
     if (redirect) {

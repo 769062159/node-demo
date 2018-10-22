@@ -88,7 +88,6 @@ export default class GoodBrand extends PureComponent {
         });
       },
       onCancel() {
-        console.log('Cancel');
       },
     });
   };

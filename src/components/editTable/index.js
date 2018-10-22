@@ -331,8 +331,7 @@ export default class EditableTable extends PureComponent {
     });
   };
   handleCancelLevel = () => {
-    const { attrTable } = this.state;
-    console.log(attrTable);
+    // const { attrTable } = this.state;
     this.setState({
       levelVisible: false,
     });

@@ -248,7 +248,6 @@ export default class Withdraw extends PureComponent {
   }
   render() {
     const { finance: { refundList: datas, refundListPage }, loading } = this.props;
-    console.log(datas);
     // const { getFieldDecorator } = this.props.form;
     const { formVisible } = this.state;
     const progressColumns = [

@@ -89,7 +89,6 @@ export default class WriteOff extends PureComponent {
         // });
       },
       onCancel() {
-        console.log('Cancel');
       },
     });
   };

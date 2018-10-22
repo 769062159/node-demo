@@ -729,7 +729,6 @@ class EditLiveStep2 extends React.PureComponent {
     });
   }
   classSelect = (record, selected) => {
-    console.log(22);
     const { id } = this.props.match.params;
     const payload = {};
     if (selected) {

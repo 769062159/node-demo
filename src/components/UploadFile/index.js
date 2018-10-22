@@ -38,7 +38,6 @@ export default class UploadFile extends PureComponent {
     }
     let { name } = file;
     name = name.split('.')[1];
-    console.log(name);
     const isTrue = name === 'pem';
     if (!isTrue) {
       message.error('请上传正确格式的证书！');

@@ -142,7 +142,6 @@ export default class GoodsList extends PureComponent {
 
     switch (e.key) {
       case 'remove':
-        console.log(selectedRows);
         // dispatch({
         //   type: 'rule/remove',
         //   payload: {
@@ -226,10 +225,10 @@ export default class GoodsList extends PureComponent {
   };
 
   // 删除商品
-  deleteGoods = id => {
-    event.preventDefault();
-    console.log(id);
-  };
+  // deleteGoods = id => {
+  //   event.preventDefault();
+  //   console.log(id);
+  // };
   // 新建商品
   goNew = () => {
     const { dispatch } = this.props;
@@ -418,7 +417,6 @@ export default class GoodsList extends PureComponent {
   render() {
     // console.log(this.props);
     const { goods: { goodsList: datas, goodsListPage }, loading } = this.props;
-    console.log(datas);
     const data = {
       list: datas,
       pagination: {

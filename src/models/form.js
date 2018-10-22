@@ -46,7 +46,6 @@ export default {
 
   reducers: {
     addEditors(state, { payload }) {
-      console.log(payload);
       return {
         ...state,
         editor: payload,

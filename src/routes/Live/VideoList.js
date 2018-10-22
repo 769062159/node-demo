@@ -62,7 +62,6 @@ const CustomizedForm = Form.create({
     props.onChange(changedFields);
   },
   mapPropsToFields(props) {
-    console.log(props);
     return {
       desc: Form.createFormField({
         value: props.liveForm.desc,
@@ -78,9 +77,8 @@ const CustomizedForm = Form.create({
       }),
     };
   },
-  onValuesChange(_, values) {
-    console.log(values);
-  },
+  // onValuesChange(_, values) {
+  // },
 })(props => {
   const { getFieldDecorator, validateFields } = props.form;
   const onValidateForm = e => {
@@ -249,7 +247,6 @@ export default class Vod extends PureComponent {
   }
   // 模糊查询
   fetchUser = value => {
-    console.log('fetching user', value);
     this.lastFetchId += 1;
     const fetchId = this.lastFetchId;
     this.setState({ data: [], fetching: true });
@@ -264,7 +261,6 @@ export default class Vod extends PureComponent {
         // for fetch callback order
         return;
       }
-      console.log(body);
       const data = body.data.list.map(user => ({
         text: `${user.goods_id}`,
         value: user.goods_name,
@@ -310,7 +306,6 @@ export default class Vod extends PureComponent {
         });
       },
       onCancel() {
-        console.log('Cancel');
       },
     });
   };

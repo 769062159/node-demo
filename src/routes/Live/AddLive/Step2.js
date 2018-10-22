@@ -75,9 +75,8 @@ const CustomizedForm = Form.create({
     };
     return arr;
   },
-  onValuesChange(_, values) {
-    console.log(values);
-  },
+  // onValuesChange(_, values) {
+  // },
 })(props => {
   //  111
   const { getFieldDecorator, validateFields } = props.form;

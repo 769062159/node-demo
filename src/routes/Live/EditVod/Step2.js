@@ -69,9 +69,8 @@ const CustomizedForm = Form.create({
     };
     return arr;
   },
-  onValuesChange(_, values) {
-    console.log(values);
-  },
+  // onValuesChange(_, values) {
+  // },
 })(props => {
   //  111
   const { getFieldDecorator, validateFields } = props.form;
@@ -302,7 +301,6 @@ class EditVodStep2 extends React.PureComponent {
 
   // 模糊查询
   fetchUser = value => {
-    console.log('fetching user', value);
     this.lastFetchId += 1;
     const fetchId = this.lastFetchId;
     this.setState({ data: [], fetching: true });
@@ -317,7 +315,6 @@ class EditVodStep2 extends React.PureComponent {
         // for fetch callback order
         return;
       }
-      console.log(body);
       const data = body.data.list.map(user => ({
         text: `${user.goods_id}`,
         value: user.goods_name,

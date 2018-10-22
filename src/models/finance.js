@@ -81,7 +81,6 @@ export default {
   reducers: {
     getRefundList(state, { payload }) {
       const { data } = payload;
-      console.log(data);
       return {
         ...state,
         refundList: data.list,

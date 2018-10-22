@@ -69,7 +69,6 @@ export default class ShopList extends PureComponent {
         // });
       },
       onCancel() {
-        console.log('Cancel');
       },
     });
   };

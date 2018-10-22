@@ -82,7 +82,6 @@ export default class Setting extends PureComponent {
     });
   };
   editDataMsg = () => {
-    console.log(11);
   };
   // 新增取消
   handAddleCancel = () => {
@@ -185,7 +184,6 @@ export default class Setting extends PureComponent {
       //   id: 4,
       // },
     ];
-    console.log(programDetail.id);
     return (
       <PageHeaderLayout>
         <Tag color="blue">

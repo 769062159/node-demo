@@ -109,7 +109,6 @@ export default class Config extends PureComponent {
 
   render() {
     const { config: { list }, loading } = this.props;
-    console.log(list);
     const { header, previewImage, previewVisible } = this.state;
     // 上传icon
     const uploadButton = (

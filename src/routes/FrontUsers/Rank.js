@@ -102,7 +102,6 @@ export default class Rank extends PureComponent {
   // 新增修改提交
   handleSubmit = (type, e) => {
     e.preventDefault();
-    console.log(this.props.form.validateFields);
     this.props.form.validateFields((err, values) => {
       if (!err) {
         const { dispatch } = this.props;

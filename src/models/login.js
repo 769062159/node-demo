@@ -31,7 +31,6 @@ export default {
     *logout(_, { call, put }) {
       try {
         const response = yield call(fakeAccountLogout, 'out');
-        console.log(response);
         if (response) {
           localStorage.removeItem('token');
           // get location pathname

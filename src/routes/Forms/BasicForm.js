@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
-import moment from 'moment';
+// import moment from 'moment';
 import {
   Form,
   Input,
@@ -30,9 +30,6 @@ export default class BasicForms extends PureComponent {
   handleSubmit = e => {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
-      console.log(values);
-      console.log(moment(values._d).format('YYYY-MM-DD HH:mm:ss'));
-      console.log(new Date(moment(values._d)).getTime());
       if (!err) {
         this.props.dispatch({
           type: 'form/submitRegularForm',

@@ -92,7 +92,6 @@ export default class Warehouse extends PureComponent {
         });
       },
       onCancel() {
-        console.log('Cancel');
       },
     });
   };

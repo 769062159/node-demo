@@ -167,7 +167,6 @@ export default class Order extends PureComponent {
   };
   editAddressBtn = () => {
     const { mobile, addressInfo, receiptName, addressArr, orderId } = this.state;
-    console.log(addressArr);
     const { dispatch } = this.props;
     dispatch({
       type: 'order/editAddress',

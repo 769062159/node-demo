@@ -74,7 +74,6 @@ export default class Live extends PureComponent {
   };
   // 换页
   handleTableChange = pagination => {
-    console.log(pagination);
     const { current } = pagination;
     // this.setState({
     //   selectList: [],
@@ -90,7 +89,6 @@ export default class Live extends PureComponent {
     });
   };
   selectGoods = selectList => {
-    console.log(selectList);
     const { dispatch } = this.props;
     dispatch({
       type: 'live/leftSelectAction',
@@ -116,8 +114,6 @@ export default class Live extends PureComponent {
     } = this.props;
     // const { current } = this.state;
     // const { selectArr, selectList } = this.state;
-    console.log(leftBatchArr);
-    console.log(leftKeyArr);
     const rowSelection = {
       selectedRowKeys: leftKeyArr,
       onChange: this.selectGoods,
@@ -200,7 +196,6 @@ export default class Live extends PureComponent {
         ),
       },
     ];
-    console.log(goodsListPage);
     return (
       <Row>
         <Col span={12}>选择商品：</Col>

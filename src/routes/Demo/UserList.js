@@ -58,7 +58,6 @@ export default class UserList extends Component {
     // }, 1000);
   };
   loadData = value => {
-    console.log(value);
     const { dispatch } = this.props;
     dispatch({
       type: 'user/getJoinRole',
@@ -150,7 +149,6 @@ export default class UserList extends Component {
         // });
       },
       onCancel() {
-        console.log('Cancel');
       },
     });
   };
@@ -168,7 +166,6 @@ export default class UserList extends Component {
   render() {
     const { addUserVisible, depRole } = this.state;
     const { loading, submitting, user: { UserList, UserListPage, GroupRoleList } } = this.props;
-    console.log(GroupRoleList);
     const { getFieldDecorator } = this.props.form;
     const progressColumns = [
       {

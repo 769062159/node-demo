@@ -15,16 +15,13 @@ export default class Demo extends React.Component {
   // }
   render() {
     const uploadFn = param => {
-      console.log(12);
-      console.log(this.props.uploadUrl);
       const serverURL = this.props.uploadUrl;
       const xhr = new XMLHttpRequest();
       const fd = new FormData();
 
       // libraryId可用于通过mediaLibrary示例来操作对应的媒体内容
 
-      const successFn = response => {
-        console.log(response);
+      const successFn = () => {
         // 假设服务端直接返回文件上传后的地址
         // 上传成功后调用param.success并传入上传后的文件地址
         const data = JSON.parse(xhr.responseText);
@@ -47,8 +44,7 @@ export default class Demo extends React.Component {
         param.progress(event.loaded / event.total * 100);
       };
 
-      const errorFn = response => {
-        console.log(response);
+      const errorFn = () => {
         // 上传发生错误时调用param.error
         param.error({
           msg: 'unable to upload.',

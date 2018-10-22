@@ -79,7 +79,6 @@ export default class Live extends PureComponent {
         });
       },
       onCancel() {
-        console.log('Cancel');
       },
     });
   };
@@ -105,7 +104,6 @@ export default class Live extends PureComponent {
         message.success('删除成功！');
       },
       onCancel() {
-        console.log('Cancel');
       },
     });
   };
@@ -170,7 +168,6 @@ export default class Live extends PureComponent {
     });
   };
   openVideo = (videoUrl) => {
-    console.log(videoUrl);
     this.setState({
       videoUrl,
     })
@@ -181,7 +178,6 @@ export default class Live extends PureComponent {
     dispatch(routerRedux.push(url));
   };
   handleCancelVideo = () => {
-    console.log(22);
     this.setState({
       videoUrl: '',
     })

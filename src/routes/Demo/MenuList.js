@@ -31,7 +31,6 @@ const CustomizedForm = Form.create({
     props.onChange(changedFields);
   },
   mapPropsToFields(props) {
-    console.log(props);
     return {
       name: Form.createFormField({
         value: props.routerForm.name,
@@ -50,9 +49,8 @@ const CustomizedForm = Form.create({
       }),
     };
   },
-  onValuesChange(_, values) {
-    console.log(values);
-  },
+  // onValuesChange(_, values) {
+  // },
 })(props => {
   const { getFieldDecorator, validateFields } = props.form;
   const onValidateForm = e => {
@@ -235,7 +233,6 @@ export default class MenuList extends Component {
         });
       },
       onCancel() {
-        console.log('Cancel');
       },
     });
   };
