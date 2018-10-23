@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { message, Form, Input, Button, Cascader, InputNumber, TimePicker } from 'antd';
+import { message, Form, Input, Button, Cascader, InputNumber, TimePicker, Select } from 'antd';
 import { connect } from 'dva';
 // import moment from 'moment';
 import { routerRedux } from 'dva/router';
@@ -10,7 +10,7 @@ import styles from './Style.less';
 
 const { TextArea } = Input;
 const FormItem = Form.Item;
-// const Option = Select.Option;
+const Option = Select.Option;
 // const { TextArea } = Input;
 const formItemLayout = {
   labelCol: {
@@ -239,6 +239,21 @@ export default class AddShop extends Component {
                 },
               ],
             })(<Input minLength={6} maxLength={20} />)}
+          </FormItem>
+          <FormItem {...formItemLayout} label="门店类别">
+            {getFieldDecorator('type', {
+              rules: [
+                {
+                  required: true,
+                  message: '请输入门店类别',
+                },
+              ],
+            })(
+              <Select>
+                <Option value={0}>普通版本</Option>
+                <Option value={1}>社群版本</Option>
+              </Select>
+            )}
           </FormItem>
           <FormItem {...formItemLayout} label="门店名称">
             {getFieldDecorator('shop_name', {

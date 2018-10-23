@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { message, Form, Input, Button, Cascader, InputNumber, TimePicker } from 'antd';
+import { message, Form, Input, Button, Cascader, InputNumber, TimePicker, Select } from 'antd';
 import { connect } from 'dva';
 import moment from 'moment';
 // import { timeFormat } from '../../utils/utils';
@@ -8,6 +8,7 @@ import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import Maps from '../../components/Map/index';
 
 const { TextArea } = Input;
+const { Option } = Select;
 const FormItem = Form.Item;
 const formItemLayout = {
   labelCol: {
@@ -234,6 +235,22 @@ export default class AddShop extends Component {
     return (
       <PageHeaderLayout>
         <Form autoComplete="OFF" >
+          <FormItem {...formItemLayout} label="门店类别">
+            {getFieldDecorator('type', {
+              initialValue: shopDetail.type,
+              rules: [
+                {
+                  required: true,
+                  message: '请输入门店类别',
+                },
+              ],
+            })(
+              <Select>
+                <Option value={0}>普通版本</Option>
+                <Option value={1}>社群版本</Option>
+              </Select>
+            )}
+          </FormItem>
           <FormItem {...formItemLayout} label="门店名称">
             {getFieldDecorator('shop_name', {
               initialValue: shopDetail.shop_name,
