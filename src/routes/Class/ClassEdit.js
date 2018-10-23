@@ -412,7 +412,7 @@ export default class ClassAdd extends PureComponent {
     const { classModel: { classForm: { title, xxx, list, yyy, desc, details, detail }, editClass } } = this.props;
     const { has_lessons: lessons } = editClass;
     const { dispatch } = this.props;
-    if (!details && detail) {
+    if (!details && !detail) {
       message.error('请输入描述');
       return false;
     }

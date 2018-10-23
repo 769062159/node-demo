@@ -398,7 +398,7 @@ export default class ClassAdd extends PureComponent {
   handleSubmit = () => {
     const { classModel: { classForm: { title, xxx, list, yyy, desc, details, detail } } } = this.props;
     const { dispatch } = this.props;
-    if (!details && detail) {
+    if (!details && !detail) {
       message.error('请输入描述');
       return false;
     }
