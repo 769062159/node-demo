@@ -376,7 +376,7 @@ export default class EditableTable extends PureComponent {
   //     });
   //   };
   render() {
-    const { form, totalStock, levelPartialSon } = this.props;
+    const { form, totalStock, levelPartialSon, isGroup } = this.props;
     // isGroup
     const { attrTable, levelVisible, showData } = this.state;
     const { getFieldDecorator } = form;
@@ -514,15 +514,15 @@ export default class EditableTable extends PureComponent {
     //     });
     //   });
     // }
-    // if (isGroup === 1) {
-    //   columns.unshift({
-    //     title: '团购价格',
-    //     dataIndex: 'group_price',
-    //     render: (text, record, index) => (
-    //       <EditInputNumber value={text} step={2} onChange={this.onCellChange(index, 'group_price')} />
-    //     ),
-    //   });
-    // }
+    if (isGroup === 1) {
+      columns.unshift({
+        title: '团购价格',
+        dataIndex: 'group_price',
+        render: (text, record, index) => (
+          <EditInputNumber value={text} step={2} onChange={this.onCellChange(index, 'group_price')} />
+        ),
+      });
+    }
     return (
       <div>
         <Table
