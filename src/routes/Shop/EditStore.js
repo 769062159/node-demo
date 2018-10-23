@@ -246,7 +246,7 @@ export default class AddShop extends Component {
               ],
             })(
               <Select>
-                <Option value={0}>普通版本</Option>
+                <Option value={1}>普通版本</Option>
                 <Option value={2}>社群版本</Option>
               </Select>
             )}
