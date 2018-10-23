@@ -490,6 +490,7 @@ class AddLiveStep2 extends React.PureComponent {
       type: 'goods/fetchGoods',
       payload: {
         page_number: 3,
+        goods_status: 0,
       },
     });
     this.setState({
@@ -585,6 +586,7 @@ class AddLiveStep2 extends React.PureComponent {
     dispatch({
       type: 'goods/fetchGoods',
       payload: {
+        goods_status: 0,
         page_number: 3,
         page: current,
       },

@@ -271,6 +271,13 @@ const CustomizedForm = Form.create({
           </Select>
         )}
       </FormItem>
+      {liveForm.is_free === 0 ? (
+        <Form.Item {...formItemLayout} label="费用">
+          {getFieldDecorator('fee', {
+            rules: [{ required: true, message: '请填写费用' }],
+          })(<InputNumber step={0.01} precision={2} min={0.01} style={{ width: '200px' }} />)}
+        </Form.Item>
+      ) : null}
       <FormItem {...formItemLayout} label="全场禁言">
         {getFieldDecorator('all_prohibit', {
           rules: [
@@ -305,13 +312,6 @@ const CustomizedForm = Form.create({
           </Select>
         )}
       </FormItem>
-      {liveForm.is_free === 0 ? (
-        <Form.Item {...formItemLayout} label="费用">
-          {getFieldDecorator('fee', {
-            rules: [{ required: true, message: '请填写费用' }],
-          })(<InputNumber step={0.01} precision={2} min={0.01} style={{ width: '200px' }} />)}
-        </Form.Item>
-      ) : null}
       <FormItem {...formItemLayout} label="播放类别">
         {getFieldDecorator('play_type', {})(
           <Select style={{ width: 200 }}>
@@ -328,11 +328,17 @@ const CustomizedForm = Form.create({
           label="播放地址"
           extra={<Tag color="blue">目前只支持腾讯视频，一定要填写带有vid的视频地址</Tag>}
         >
-          {getFieldDecorator('play_url', {})(<Input style={{ width: '400px' }} />)}
+          {getFieldDecorator('play_url', {
+            required: true,
+            message: '请输入地址',
+          })(<Input style={{ width: '400px' }} />)}
         </Form.Item>
       ) : liveForm.play_type === 2 ? (
         <Form.Item {...formItemLayout} label="播放地址">
-          {getFieldDecorator('vod_play_url', {})(<Input style={{ width: '400px' }} />)}
+          {getFieldDecorator('vod_play_url', {
+            required: true,
+            message: '请输入地址',
+          })(<Input style={{ width: '400px' }} />)}
         </Form.Item>
       ) : null}
       <Form.Item {...formItemLayout} label="商品列表">
@@ -570,7 +576,7 @@ class EditLiveStep2 extends React.PureComponent {
       payload: {
         page_number: 3,
         check_live_id: id,
-        goods_status: 1,
+        goods_status: 0,
       },
       callback: (selectedRowKeys) => {
         this.setState({
@@ -630,7 +636,7 @@ class EditLiveStep2 extends React.PureComponent {
         page_number: 3,
         page: current,
         check_live_id: id,
-        goods_status: 1,
+        goods_status: 0,
       },
       callback: (selectedRowKeys) => {
         this.setState({

@@ -569,7 +569,7 @@ class EditLiveStep2 extends React.PureComponent {
       payload: {
         page_number: 3,
         check_live_id: id,
-        goods_status: 1,
+        goods_status: 0,
       },
       callback: (selectedRowKeys) => {
         this.setState({
@@ -629,7 +629,7 @@ class EditLiveStep2 extends React.PureComponent {
         page_number: 3,
         page: current,
         check_live_id: id,
-        goods_status: 1,
+        goods_status: 0,
       },
       callback: (selectedRowKeys) => {
         this.setState({
