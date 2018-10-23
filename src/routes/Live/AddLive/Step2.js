@@ -459,7 +459,7 @@ class AddLiveStep2 extends React.PureComponent {
     // liveForm.cover = uploadLiveImg[0].url;
     liveForm.share_cover = liveForm.yyy[0].response.data;
     liveForm.cover = liveForm.share_cover;
-    liveForm.live_detail = liveForm.live_details;
+    liveForm.live_detail = liveForm.live_details || liveForm.live_detail;
     // liveForm.live_id = liveForm.id;
     dispatch({
       type: 'live/addLive',

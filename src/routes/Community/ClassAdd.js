@@ -396,9 +396,9 @@ export default class ClassAdd extends PureComponent {
     this.changeFormVal(obj);
   }
   handleSubmit = () => {
-    const { classModel: { classForm: { title, xxx, list, yyy, desc, details } } } = this.props;
+    const { classModel: { classForm: { title, xxx, list, yyy, desc, details, detail } } } = this.props;
     const { dispatch } = this.props;
-    if (!details) {
+    if (!details&&detail) {
       message.error('请输入描述');
       return false;
     }
@@ -408,7 +408,7 @@ export default class ClassAdd extends PureComponent {
     }
     const data = {
       desc,
-      detail: details,
+      detail: details || detail,
       title,
       cover: xxx[0].response.data,
       share_cover: yyy[0].response.data,
