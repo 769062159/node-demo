@@ -75,12 +75,12 @@ const CustomizedForm = Form.create({
   } = props;
   return (
     <Form autoComplete="OFF">
-      <FormItem {...formItemLayout} label="短视频标题">
+      <FormItem {...formItemLayout} label="视频标题">
         {getFieldDecorator('title', {
           rules: [
             {
               required: true,
-              message: '请输入短视频标题',
+              message: '请输入视频标题',
             },
           ],
         })(<Input />)}

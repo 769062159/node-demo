@@ -481,7 +481,7 @@ export default class Live extends PureComponent {
           <Fragment>
             <a onClick={this.copyBtn.bind(this, record.rtmp_push)}>推流地址</a>
             <Divider type="vertical" />
-            <a href={`#/live/edit-live/confirm/${record.id}`}>修改</a>
+            <a href={`#/community/edit-live/confirm/${record.id}`}>修改</a>
             <Divider type="vertical" />
             <a onClick={this.deleteDataMsg.bind(this, record.id)}>删除</a>
           </Fragment>

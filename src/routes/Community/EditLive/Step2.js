@@ -41,11 +41,17 @@ const CustomizedForm = Form.create({
       share_cover: Form.createFormField({
         value: props.liveForm.share_cover,
       }),
-      fee: Form.createFormField({
-        value: props.liveForm.fee,
+      access_type: Form.createFormField({
+        value: props.liveForm.access_type,
       }),
-      is_free: Form.createFormField({
-        value: props.liveForm.is_free,
+      user_level: Form.createFormField({
+        value: props.liveForm.user_level,
+      }),
+      money: Form.createFormField({
+        value: props.liveForm.money,
+      }),
+      password: Form.createFormField({
+        value: props.liveForm.password,
       }),
       play_type: Form.createFormField({
         value: props.liveForm.play_type || '',
@@ -95,6 +101,7 @@ const CustomizedForm = Form.create({
     });
   };
   const {
+    userRankList,
     openClassList,
     openGoodList,
     openSmallVideoList,
@@ -103,6 +110,14 @@ const CustomizedForm = Form.create({
     liveForm,
     uploadUrl,
   } = props;
+  const rankItem = [];
+  userRankList.forEach(res => {
+    rankItem.push(
+      <Option key={res.id} value={res.id}>
+        {res.name}
+      </Option>
+    );
+  });
   // console.log(homeVod);
 
   // 上传按钮
@@ -135,10 +150,10 @@ const CustomizedForm = Form.create({
             },
           ],
         })(
-          <InputNumber />
+          <InputNumber style={{ width: 200 }} />
         )}
       </FormItem>
-      <FormItem {...formItemLayout} label="直播标题">
+      <FormItem {...formItemLayout} label="社群标题">
         {getFieldDecorator('title', {
           rules: [
             {
@@ -148,7 +163,7 @@ const CustomizedForm = Form.create({
           ],
         })(<Input />)}
       </FormItem>
-      <FormItem {...formItemLayout} label="直播简介">
+      <FormItem {...formItemLayout} label="社群简介">
         {getFieldDecorator('desc', {
           rules: [
             {
@@ -215,7 +230,7 @@ const CustomizedForm = Form.create({
           </Upload>
         )}
       </Form.Item>
-      <FormItem {...formItemLayout} label="直播公告">
+      <FormItem {...formItemLayout} label="社群公告">
         {getFieldDecorator('announcement', {
           rules: [
             {
@@ -256,6 +271,59 @@ const CustomizedForm = Form.create({
           ))}
         </Select>
       </FormItem> */}
+      <FormItem {...formItemLayout} label="进群权限">
+        {getFieldDecorator('access_type', {
+          rules: [
+            {
+              required: true,
+              message: '请输入进群权限',
+            },
+          ],
+        })(
+          <Select style={{ width: 200 }}>
+            <Option value={3}>密码</Option>
+            <Option value={2}>会员</Option>
+            <Option value={1}>付费</Option>
+            <Option value={0}>免费</Option>
+          </Select>
+        )}
+      </FormItem>
+      {
+        (() => {
+          switch (liveForm.access_type) {
+            case 1:
+              return (
+                <Form.Item {...formItemLayout} label="价格">
+                  {getFieldDecorator('money', {
+                    rules: [{ required: true, message: '请填写价格' }],
+                  })(<InputNumber step={0.01} precision={2} min={0.01} style={{ width: '200px' }} />)}
+                </Form.Item>
+              )
+            case 2:
+              return (
+                <Form.Item {...formItemLayout} label="用户等级">
+                  {getFieldDecorator('user_level', {
+                    rules: [{ required: true, message: '请填写用户等级' }],
+                  })(
+                    <Select style={{ width: '200px' }}>
+                      {rankItem}
+                    </Select>
+                  )}
+                </Form.Item>
+              )
+            case 3:
+              return (
+                <Form.Item {...formItemLayout} label="密码">
+                  {getFieldDecorator('password', {
+                    rules: [{ required: true, message: '请填写密码' }],
+                  })(<Input style={{ width: '200px' }} />)}
+                </Form.Item>
+              )
+            default:
+              break;
+          }
+        })()
+      }
       <FormItem {...formItemLayout} label="全场禁言">
         {getFieldDecorator('all_prohibit', {
           rules: [
@@ -290,28 +358,6 @@ const CustomizedForm = Form.create({
           </Select>
         )}
       </FormItem>
-      <FormItem {...formItemLayout} label="是否收费">
-        {getFieldDecorator('is_free', {
-          rules: [
-            {
-              required: true,
-              message: '请输入是否收费',
-            },
-          ],
-        })(
-          <Select style={{ width: 200 }}>
-            <Option value={1}>否</Option>
-            <Option value={0}>是</Option>
-          </Select>
-        )}
-      </FormItem>
-      {liveForm.is_free === 0 ? (
-        <Form.Item {...formItemLayout} label="费用">
-          {getFieldDecorator('fee', {
-            rules: [{ required: true, message: '请填写费用' }],
-          })(<InputNumber step={0.01} precision={2} min={0.01} style={{ width: '200px' }} />)}
-        </Form.Item>
-      ) : null}
       <FormItem {...formItemLayout} label="播放类别">
         {getFieldDecorator('play_type', {})(
           <Select style={{ width: 200 }}>
@@ -328,28 +374,34 @@ const CustomizedForm = Form.create({
           label="播放地址"
           extra={<Tag color="blue">目前只支持腾讯视频，一定要填写带有vid的视频地址</Tag>}
         >
-          {getFieldDecorator('play_url', {})(<Input style={{ width: '400px' }} />)}
+          {getFieldDecorator('play_url', {
+            required: true,
+            message: '请输入地址',
+          })(<Input style={{ width: '400px' }} />)}
         </Form.Item>
       ) : liveForm.play_type === 2 ? (
         <Form.Item {...formItemLayout} label="播放地址">
-          {getFieldDecorator('vod_play_url', {})(<Input style={{ width: '400px' }} />)}
+          {getFieldDecorator('vod_play_url', {
+            required: true,
+            message: '请输入地址',
+          })(<Input style={{ width: '400px' }} />)}
         </Form.Item>
       ) : null}
-      <Form.Item {...formItemLayout} label="商品列表">
+      <Form.Item {...formItemLayout} label="关联商品">
         {getFieldDecorator('good_list', {})(
           <Button type="primary" onClick={openGoodList}>
             添加商品
           </Button>
         )}
       </Form.Item>
-      <Form.Item {...formItemLayout} label="课程列表">
+      <Form.Item {...formItemLayout} label="关联课程">
         {getFieldDecorator('good_list', {})(
           <Button type="primary" onClick={openClassList}>
             添加课程
           </Button>
         )}
       </Form.Item>
-      <Form.Item {...formItemLayout} label="视频列表">
+      <Form.Item {...formItemLayout} label="关联视频">
         {getFieldDecorator('good_list', {})(
           <Button type="primary" onClick={openSmallVideoList}>
             添加视频
@@ -365,10 +417,11 @@ const CustomizedForm = Form.create({
   );
 });
 
-@connect(({ live, goods, classModel, loading }) => ({
+@connect(({ live, goods, classModel, frontUser, loading }) => ({
   live,
   goods,
   classModel,
+  frontUser,
   loading: loading.models.live,
 }))
 // @Form.create()
@@ -396,13 +449,17 @@ class EditLiveStep2 extends React.PureComponent {
         page_number: 10,
       },
     });
+    dispatch({
+      type: 'frontUser/fetchUserRankList',
+    });
   }
    // 添加描述
    setDescription = (e) => {
     const obj = {};
-    obj.live_detail = {
+    obj.live_details = {
       value: e,
     };
+    console.log(e);
     this.changeFormVal(obj);
   }
 
@@ -774,6 +831,7 @@ class EditLiveStep2 extends React.PureComponent {
     });
   }
   classSelect = (record, selected) => {
+    console.log(22);
     const { id } = this.props.match.params;
     const payload = {};
     if (selected) {
@@ -903,6 +961,7 @@ class EditLiveStep2 extends React.PureComponent {
     const {
       live: { liveForm, uploadLiveImg, liveGoods, smallVideoList, smallVideoListPage  },
       classModel: { classList, classListPage },
+      frontUser: { userRankList },
       goods: { goodsList, goodsListPage },
       uploadUrl,
     } = this.props;
@@ -987,6 +1046,7 @@ class EditLiveStep2 extends React.PureComponent {
     return (
       <div>
         <CustomizedForm
+          userRankList={userRankList}
           setDescription={this.setDescription}
           openSmallVideoList={this.openSmallVideoList}
           openClassList={this.openClassList}
