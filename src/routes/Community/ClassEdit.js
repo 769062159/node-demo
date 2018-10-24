@@ -148,7 +148,7 @@ const CustomizedForm = Form.create({
       </FormItem>
       <Row>
         <Col span={7} style={{ textAlign: "right", paddingRight: 8 }}>
-          描述 :
+          详情 :
         </Col>
         <Col span={15}>
           <Wangeditor
@@ -308,12 +308,12 @@ const CustomizedForm = Form.create({
               } */}
               {
                 classForm[`vtype${index}`] === 0 ? (
-                  <FormItem {...formItemLayout} label="视频路径" extra={<Tag color="blue">亲，您可以填写视频地址，或选择录播视频，或上传视频</Tag>}>
+                  <FormItem {...formItemLayout} label="视频地址" extra={<Tag color="blue">亲，您可以填写视频地址，或选择录播视频，或上传视频</Tag>}>
                     {getFieldDecorator(`vodTitle${index}`, {
                       rules: [
                         {
                           required: true,
-                          message: '请输入视频路径',
+                          message: '请输入视频地址',
                         },
                       ],
                     })(<Input />)}
@@ -322,16 +322,16 @@ const CustomizedForm = Form.create({
                     </div>
                     <div className={styles.fileBoxs}>
                       <input type="file" className={styles.fileBtns} onChange={uploadVideo.bind(this, index)} />
-                      上传视频
+                      上传列表
                     </div>
                   </FormItem>
                 ) : (
-                  <FormItem {...formItemLayout} label="视频路径" extra={<Tag color="blue">目前只支持腾讯视频，一定要填写带有vid的视频地址</Tag>}>
+                  <FormItem {...formItemLayout} label="视频地址" extra={<Tag color="blue">目前只支持腾讯视频，一定要填写带有vid的视频地址</Tag>}>
                     {getFieldDecorator(`url${index}`, {
                       rules: [
                         {
                           required: true,
-                          message: '请输入视频路径',
+                          message: '请输入视频地址',
                         },
                       ],
                     })(<Input />)}

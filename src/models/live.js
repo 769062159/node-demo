@@ -307,7 +307,7 @@ export default {
       if (data && data.code === 200) {
         callback();
         localStorage.setItem('liveUrl', data.data.rtmp_push);
-        yield put(routerRedux.push('/live/add-live/result'));
+        yield put(routerRedux.push('/community/add-live/result'));
       }
       //   const response = yield call(getLive, { page: payload.pagination });
       //   yield put({

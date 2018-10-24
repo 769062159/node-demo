@@ -28,10 +28,10 @@ class EditGood extends PureComponent {
   }
   render() {
     const { match, routerData } = this.props;
-    const url = `/live/add-live/confirm`;
+    const url = `/community/add-live/confirm`;
     return (
       <PageHeaderLayout
-        title="直播"
+        title="社群"
         // content="将一个冗长或用户不熟悉的表单任务分成多个步骤，指导用户完成。"
       >
         <Card bordered={false}>
@@ -49,7 +49,7 @@ class EditGood extends PureComponent {
                   exact={item.exact}
                 />
               ))}
-              <Redirect exact from="/live/add-live" to={url} />
+              <Redirect exact from="/community/add-live" to={url} />
               <Route render={NotFound} />
             </Switch>
           </Fragment>

@@ -38,7 +38,7 @@ class EditGood extends PureComponent {
         <Card bordered={false}>
           <Fragment>
             <Steps current={this.getCurrentStep()} className={styles.steps}>
-              <Step title="修改直播详细信息" />
+              <Step title="修改社群详细信息" />
               <Step title="完成" />
             </Steps>
             <Switch>

@@ -9,6 +9,7 @@ import {
   setDefaultId,
   getDefault,
   merchantSetting,
+  updatePower,
 } from '../services/frontUser.js';
 
 export default {
@@ -22,6 +23,12 @@ export default {
   },
 
   effects: {
+    *chgPower({ payload, callback }, { call }) {
+      const data = yield call(updatePower, { ...payload });
+      if (data && data.code === 200) {
+        callback();
+      }
+    },
     *merchantSetting({ payload, callback }, { call }) {
       const data = yield call(merchantSetting, { ...payload });
       if (data && data.code === 200) {

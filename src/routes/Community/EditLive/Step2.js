@@ -227,7 +227,7 @@ const CustomizedForm = Form.create({
       </FormItem>
       <Row>
         <Col span={7} style={{ textAlign: "right", paddingRight: 8 }}>
-          描述 :
+          详情 :
         </Col>
         <Col span={15}>
           <Wangeditor
@@ -266,8 +266,8 @@ const CustomizedForm = Form.create({
           ],
         })(
           <Select style={{ width: 200 }}>
-            <Option value={1}>禁言</Option>
-            <Option value={0}>不禁言</Option>
+            <Option value={1}>是</Option>
+            <Option value={0}>否</Option>
           </Select>
         )}
       </FormItem>
@@ -284,7 +284,7 @@ const CustomizedForm = Form.create({
             <Option value={5}>视频</Option>
             <Option value={4}>课程</Option>
             <Option value={3}>详情</Option>
-            <Option value={2}>爆款</Option>
+            <Option value={2}>综合</Option>
             <Option value={1}>直播</Option>
             <Option value={0}>社群</Option>
           </Select>

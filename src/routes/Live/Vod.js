@@ -396,7 +396,7 @@ export default class Vod extends PureComponent {
   };
   goPath = () => {
     const { dispatch } = this.props;
-    const url = `/live/add-live`;
+    const url = `/community/add-live`;
     dispatch(routerRedux.push(url));
   };
   // 放大图片

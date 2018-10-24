@@ -79,3 +79,11 @@ export async function merchantSetting(params) {
     body: params,
   });
 }
+
+// 商户权限设置
+export async function updatePower(params) {
+  return request('/merchant/member/update/shop', {
+    method: 'POST',
+    body: params,
+  });
+}

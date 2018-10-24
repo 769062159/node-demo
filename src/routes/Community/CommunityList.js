@@ -14,7 +14,7 @@ import {
   Input,
   Icon,
   Button,
-  // Divider,
+  Divider,
   Select,
   Spin,
   Tag,
@@ -449,17 +449,17 @@ export default class Live extends PureComponent {
     const { liveVisible, header, previewVisible, previewImage, fetching, value, data } = this.state;
     const progressColumns = [
       {
-        title: '直播标题',
+        title: '社群标题',
         dataIndex: 'title',
         key: 'title',
       },
       {
-        title: '直播简介',
+        title: '社群简介',
         dataIndex: 'desc',
         key: 'desc',
       },
       {
-        title: '直播封面',
+        title: '社群封面',
         dataIndex: 'cover',
         render: val => (val ? <img src={val} style={{ width: '80px' }} alt="图片" /> : null),
       },
@@ -479,11 +479,11 @@ export default class Live extends PureComponent {
         // width: 150,
         render: (text, record) => (
           <Fragment>
-            {/* <a onClick={this.copyBtn.bind(this, record.rtmp_push)}>推流地址</a>
-            <Divider type="vertical" /> */}
-            <a href={`#/community/edit-live/confirm/${record.id}`}>修改</a>
-            {/* <Divider type="vertical" />
-            <a onClick={this.deleteDataMsg.bind(this, record.id)}>删除</a> */}
+            <a onClick={this.copyBtn.bind(this, record.rtmp_push)}>推流地址</a>
+            <Divider type="vertical" />
+            <a href={`#/live/edit-live/confirm/${record.id}`}>修改</a>
+            <Divider type="vertical" />
+            <a onClick={this.deleteDataMsg.bind(this, record.id)}>删除</a>
           </Fragment>
         ),
       },
@@ -493,11 +493,11 @@ export default class Live extends PureComponent {
       <PageHeaderLayout>
         <Card bordered={false}>
           <div className={styles.tableList}>
-            {/* <div className={styles.tableListOperator}>
+            <div className={styles.tableListOperator}>
               <Button icon="plus" type="primary" onClick={this.goPath.bind(this)}>
                 新建
               </Button>
-            </div> */}
+            </div>
             <Table
               dataSource={datas}
               rowKey={record => record.id}

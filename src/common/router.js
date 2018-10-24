@@ -212,6 +212,18 @@ export const getRouterConfig = app => {
       identity: 'common',
       component: dynamicWrapper(app, ['live'], () => import('../routes/Community/EditLive/Step3')),
     },
+    '/community/add-live': {
+      identity: 'common',
+      component: dynamicWrapper(app, ['form'], () => import('../routes/Live/AddLive')),
+    },
+    '/community/add-live/confirm': {
+      identity: 'common',
+      component: dynamicWrapper(app, ['live'], () => import('../routes/Live/AddLive/Step2')),
+    },
+    '/community/add-live/result': {
+      identity: 'common',
+      component: dynamicWrapper(app, ['live'], () => import('../routes/Live/AddLive/Step3')),
+    },
     // 直播
     '/live/small-video': {
       component: dynamicWrapper(app, ['live'], () => import('../routes/Live/SmallVideo')),
@@ -228,9 +240,9 @@ export const getRouterConfig = app => {
     '/live/class-list': {
       component: dynamicWrapper(app, ['classModel'], () => import('../routes/Class/List')),
     },
-    '/live/list': {
-      component: dynamicWrapper(app, ['live'], () => import('../routes/Live/list')),
-    },
+    // '/live/list': {
+    //   component: dynamicWrapper(app, ['live'], () => import('../routes/Live/list')),
+    // },
     // '/live/vod': {
     //   component: dynamicWrapper(app, ['live'], () => import('../routes/Live/Vod')),
     // },
@@ -249,18 +261,18 @@ export const getRouterConfig = app => {
       identity: 'common',
       component: dynamicWrapper(app, ['live'], () => import('../routes/Live/AddVod/Step3')),
     },
-    '/live/add-live': {
-      identity: 'common',
-      component: dynamicWrapper(app, ['form'], () => import('../routes/Live/AddLive')),
-    },
-    '/live/add-live/confirm': {
-      identity: 'common',
-      component: dynamicWrapper(app, ['live'], () => import('../routes/Live/AddLive/Step2')),
-    },
-    '/live/add-live/result': {
-      identity: 'common',
-      component: dynamicWrapper(app, ['live'], () => import('../routes/Live/AddLive/Step3')),
-    },
+    // '/live/add-live': {
+    //   identity: 'common',
+    //   component: dynamicWrapper(app, ['form'], () => import('../routes/Live/AddLive')),
+    // },
+    // '/live/add-live/confirm': {
+    //   identity: 'common',
+    //   component: dynamicWrapper(app, ['live'], () => import('../routes/Live/AddLive/Step2')),
+    // },
+    // '/live/add-live/result': {
+    //   identity: 'common',
+    //   component: dynamicWrapper(app, ['live'], () => import('../routes/Live/AddLive/Step3')),
+    // },
     '/live/edit-live': {
       identity: 'common',
       component: dynamicWrapper(app, ['form'], () => import('../routes/Live/EditLive')),

@@ -197,22 +197,22 @@ export const menuData = [
     ],
   },
   {
-    name: '直播',
+    name: '我的',
     icon: 'video-camera',
     path: 'live',
     children: [
       {
-        name: '视频列表',
+        name: '视频编辑',
         path: 'small-video',
       },
       {
-        name: '课程列表',
+        name: '课程编辑',
         path: 'class-list',
       },
-      {
-        name: '直播列表',
-        path: 'list',
-      },
+      // {
+      //   name: '社群编辑',
+      //   path: 'list',
+      // },
       // {
       //   name: '录播列表',
       //   path: 'vod',

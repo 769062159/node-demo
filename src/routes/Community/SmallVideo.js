@@ -304,6 +304,7 @@ export default class Live extends PureComponent {
       {
         title: '视频名称',
         dataIndex: 'title',
+        width: 300,
         key: 'title',
       },
       {

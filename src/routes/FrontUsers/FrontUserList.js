@@ -45,6 +45,9 @@ const formSubmitLayout = {
 @Form.create()
 export default class FrontUserList extends PureComponent {
   state = {
+    typePower: '',
+    isPower: false,
+    menberId: '',
     pagination: 1, // 页脚
     formVisible: false,
     editDataId: 0,
@@ -117,6 +120,25 @@ export default class FrontUserList extends PureComponent {
       message.error('请输入站长id');
     }
   };
+  // 修改商户权限
+  chgPower = (record, e) => {
+    e.preventDefault();
+    this.setState({
+      menberId: record.id,
+      isPower: true,
+    })
+  }
+  powerCancel = () => {
+    this.setState({
+      isPower: false,
+      typePower: '',
+    })
+  }
+  handlePower = (val) => {
+    this.setState({
+      typePower: val,
+    })
+  }
   handleSearch = e => {
     e.preventDefault();
     const { pagination } = this.state;
@@ -259,6 +281,37 @@ export default class FrontUserList extends PureComponent {
       callback: () => {
         message.success('设置成功');
         this.merchantModal();
+      },
+    });
+  }
+  powerOK = () => {
+    const { menberId, typePower } = this.state;
+    if (!typePower) {
+      message.error('请选择权限');
+      return false;
+    }
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'frontUser/chgPower',
+      payload: {
+        member_id: menberId,
+        type: typePower,
+      },
+      callback: () => {
+        message.success('设置成功');
+        this.setState({
+          isPower: false,
+          menberId: '',
+          typePower: '',
+        })
+      },
+      error: () => {
+        message.error('设置失败');
+        this.setState({
+          isPower: false,
+          menberId: '',
+          typePower: '',
+        })
       },
     });
   }
@@ -449,7 +502,7 @@ export default class FrontUserList extends PureComponent {
     datas.forEach(item => {
       item.has_account = item.has_account || hasAccountDefault;
     });
-    const { formVisible, type, pagination, editDataId, merchantVisible, account } = this.state;
+    const { formVisible, type, pagination, editDataId, merchantVisible, account, isPower } = this.state;
     const progressColumns = [
       {
         title: '会员',
@@ -498,6 +551,8 @@ export default class FrontUserList extends PureComponent {
             <a onClick={this.editDataMsg.bind(this, record.id, 2)}>设置等级</a>
             <Divider type="vertical" />
             <a onClick={this.setMerchant.bind(this, record)}>设置商户</a>
+            <Divider type="vertical" />
+            <a onClick={this.chgPower.bind(this, record)}>修改门店权限</a>
           </Fragment>
         ),
       },
@@ -590,6 +645,27 @@ export default class FrontUserList extends PureComponent {
           <Row>
             <Col span={6}>密码</Col>
             <Col span={18}><Input defaultValue={123456} onChange={this.changePassword} /></Col>
+          </Row>
+        </Modal>
+        <Modal
+          title="修改商户权限"
+          visible={isPower}
+          onCancel={this.powerCancel}
+          onOk={this.powerOK}
+          destroyOnClose="true"
+        >
+          <Row>
+            <Col span={6}>商户权限</Col>
+            <Col span={18}>
+              <Select onChange={this.handlePower} style={{ width: 200 }}>
+                <Option key={1} value={1}>
+                  普通版本
+                </Option>
+                <Option key={2} value={2}>
+                  社群版本
+                </Option>
+              </Select>
+            </Col>
           </Row>
         </Modal>
       </PageHeaderLayout>
