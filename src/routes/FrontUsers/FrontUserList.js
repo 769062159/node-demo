@@ -500,9 +500,9 @@ export default class FrontUserList extends PureComponent {
             <Divider type="vertical" />
             <a onClick={this.editDataMsg.bind(this, record.id, 2)}>设置等级</a>
             <Divider type="vertical" />
-            <a onClick={this.setMerchant.bind(this, record, 0)}>设置商户版</a>
+            <a onClick={this.setMerchant.bind(this, record, 1)}>设置商户版</a>
             <Divider type="vertical" />
-            <a onClick={this.setMerchant.bind(this, record, 1)}>设置社群版</a>
+            <a onClick={this.setMerchant.bind(this, record, 2)}>设置社群版</a>
           </Fragment>
         ),
       },
