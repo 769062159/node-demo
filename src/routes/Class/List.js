@@ -60,6 +60,7 @@ export default class ClassList extends PureComponent {
       type: 'classModel/getclassList',
       payload: {
         page_number: 3,
+        type: 1,
       },
     });
   }
@@ -85,6 +86,7 @@ export default class ClassList extends PureComponent {
       page_number: pagination.pageSize,
       ...formValues,
       ...filters,
+      type: 1,
     };
     if (sorter.field) {
       params.sorter = `${sorter.field}_${sorter.order}`;
@@ -105,7 +107,10 @@ export default class ClassList extends PureComponent {
     });
     dispatch({
       type: 'classModel/getclassList',
-      payload: {},
+      payload: {
+        page_number: 3,
+        type: 1,
+      },
     });
   };
 
@@ -129,6 +134,7 @@ export default class ClassList extends PureComponent {
         ...fieldsValue,
         updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
         page,
+        type: 1,
       };
 
       this.setState({
@@ -358,7 +364,7 @@ export default class ClassList extends PureComponent {
         render: (val) => <img style={{ height: 80, width: 80 }} src={val} alt="商品" />,
       },
       {
-        title: '课程封面',
+        title: '分享图片',
         dataIndex: 'share_cover',
         key: 'share_cover',
         render: (val) => <img style={{ height: 80, width: 80 }} src={val} alt="商品" />,

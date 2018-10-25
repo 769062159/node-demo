@@ -219,6 +219,11 @@ export default class Withdraw extends PureComponent {
         ),
       },
       {
+        title: '申请类别',
+        dataIndex: 'type',
+        render: val => (val ? '微信提现' : '银行卡提现'),
+      },
+      {
         title: '申请时间',
         dataIndex: 'create_time',
         render: val => <span>{moment(val * 1000).format('YYYY-MM-DD HH:mm:ss')}</span>,

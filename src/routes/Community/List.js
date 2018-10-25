@@ -359,7 +359,7 @@ export default class ClassList extends PureComponent {
         render: (val) => <img style={{ height: 80, width: 80 }} src={val} alt="商品" />,
       },
       {
-        title: '课程封面',
+        title: '分享图片',
         dataIndex: 'share_cover',
         key: 'share_cover',
         render: (val) => <img style={{ height: 80, width: 80 }} src={val} alt="商品" />,

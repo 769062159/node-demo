@@ -170,7 +170,7 @@ const CustomizedForm = Form.create({
       <Form.Item
         {...formItemLayout}
         label="课程封面"
-        extra={<Tag color="blue">建议尺寸370px*370px，大小不得大于1M</Tag>}
+        extra={<Tag color="blue">建议尺寸640px*360px，大小不得大于1M</Tag>}
       >
         {getFieldDecorator('xxx', {
           valuePropName: 'fileList',
@@ -201,7 +201,7 @@ const CustomizedForm = Form.create({
       <Form.Item
         {...formItemLayout}
         label="分享图片"
-        extra={<Tag color="blue">建议尺寸370px*370px，大小不得大于1M</Tag>}
+        extra={<Tag color="blue">建议尺寸300px*240px，大小不得大于1M</Tag>}
       >
         {getFieldDecorator('yyy', {
           valuePropName: 'fileList',
@@ -253,12 +253,12 @@ const CustomizedForm = Form.create({
                   />
                 ) : null}
               </FormItem>
-              <FormItem {...formItemLayout} label="课程类别">
+              <FormItem {...formItemLayout} label="播放类别">
                 {getFieldDecorator(`vtype${index}`, {
                   rules: [
                     {
                       required: true,
-                      message: '请输入课程类别',
+                      message: '请输入播放类别',
                     },
                   ],
                 })(
@@ -307,12 +307,12 @@ const CustomizedForm = Form.create({
               } */}
               {
                 classForm[`vtype${index}`] === 0 ? (
-                  <FormItem {...formItemLayout} label="视频地址" extra={<Tag color="blue">亲，您可以填写视频地址，或选择录播视频，或上传视频</Tag>}>
+                  <FormItem {...formItemLayout} label="播放地址" extra={<Tag color="blue">亲，您可以填写视频地址，或选择录播视频，或上传视频</Tag>}>
                     {getFieldDecorator(`vodTitle${index}`, {
                       rules: [
                         {
                           required: true,
-                          message: '请输入视频地址',
+                          message: '请输入播放地址',
                         },
                       ],
                     })(<Input />)}
@@ -325,12 +325,12 @@ const CustomizedForm = Form.create({
                     </div>
                   </FormItem>
                 ) : (
-                  <FormItem {...formItemLayout} label="视频地址" extra={<Tag color="blue">目前只支持腾讯视频，一定要填写带有vid的视频地址</Tag>}>
+                  <FormItem {...formItemLayout} label="播放地址" extra={<Tag color="blue">目前只支持腾讯视频，一定要填写带有vid的视频地址</Tag>}>
                     {getFieldDecorator(`url${index}`, {
                       rules: [
                         {
                           required: true,
-                          message: '请输入视频地址',
+                          message: '请输入播放地址',
                         },
                       ],
                     })(<Input />)}

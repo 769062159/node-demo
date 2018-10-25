@@ -44,6 +44,7 @@ export default class Live extends PureComponent {
       type: 'live/fetchSmallVideo',
       payload: {
         page,
+        type: 1,
       },
     });
   }
@@ -146,6 +147,7 @@ export default class Live extends PureComponent {
     const data = {
       ...formValues,
       page: current,
+      type: 1,
     }
     dispatch({
       type: 'live/fetchSmallVideo',
@@ -191,7 +193,9 @@ export default class Live extends PureComponent {
     });
     dispatch({
       type: 'live/fetchSmallVideo',
-      payload: {},
+      payload: {
+        type: 1,
+      },
     });
   };
   handleSearch = e => {
@@ -205,6 +209,7 @@ export default class Live extends PureComponent {
       const values = {
         ...fieldsValue,
         page,
+        type: 1,
       };
 
       this.setState({
