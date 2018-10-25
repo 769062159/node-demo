@@ -237,7 +237,7 @@ export default class AddShop extends Component {
         <Form autoComplete="OFF" >
           <FormItem {...formItemLayout} label="门店类别">
             {getFieldDecorator('type', {
-              initialValue: shopDetail.type,
+              initialValue: shopDetail.type || '',
               rules: [
                 {
                   required: true,
@@ -246,7 +246,7 @@ export default class AddShop extends Component {
               ],
             })(
               <Select>
-                <Option value={1}>普通版本</Option>
+                <Option value={1}>商户版本</Option>
                 <Option value={2}>社群版本</Option>
               </Select>
             )}
