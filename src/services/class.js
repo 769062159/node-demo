@@ -39,3 +39,19 @@ export async function deleteClass(params) {
     body: params,
   });
 }
+
+// 获取上传视频列表
+export async function getUpload(params) {
+  return request('/merchant/video/alimage-list', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+// 设置上传视频封面
+export async function setUploadImg(params) {
+  return request('/merchant/video/snap-shot', {
+    method: 'POST',
+    body: params,
+  });
+}

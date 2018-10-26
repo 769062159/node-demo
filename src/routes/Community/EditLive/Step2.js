@@ -1,9 +1,12 @@
 import React from 'react';
 import { connect } from 'dva';
-import { Form, Button, Input, Select, Upload, Icon, Modal, Tag, message, Table, InputNumber, Row, Col } from 'antd';
+import { Form, Button, Input, Select, Upload, Icon, Modal, Tag, message, Table, InputNumber, Row, Col, Pagination, Checkbox } from 'antd';
 // import { Form, Button, Input, Upload, Icon, Modal, Tag, message } from 'antd';
 // import LiveGoodTable from '../../../components/LiveGoodTable';
 import Wangeditor from '../../../components/Wangeditor';
+import { uploadJSSDK } from '../../../utils/utils';
+// import LiveGoodTable from '../../../components/LiveGoodTable';
+import styles from './style.less';
 
 const { TextArea } = Input;
 const FormItem = Form.Item;
@@ -102,6 +105,8 @@ const CustomizedForm = Form.create({
   };
   const {
     userRankList,
+    openVod,
+    openUpload,
     openClassList,
     openGoodList,
     openSmallVideoList,
@@ -377,14 +382,20 @@ const CustomizedForm = Form.create({
           {getFieldDecorator('play_url', {
             required: true,
             message: '请输入地址',
-          })(<Input style={{ width: '400px' }} />)}
+          })(<Input  />)}
         </Form.Item>
       ) : liveForm.play_type === 2 ? (
         <Form.Item {...formItemLayout} label="播放地址">
           {getFieldDecorator('vod_play_url', {
             required: true,
             message: '请输入地址',
-          })(<Input style={{ width: '400px' }} />)}
+          })(<Input  />)}
+          <div className={styles.fileBoxs} onClick={openVod}>
+            录播视频
+          </div>
+          <div className={styles.fileBoxs} onClick={openUpload}>
+            上传列表
+          </div>
         </Form.Item>
       ) : null}
       <Form.Item {...formItemLayout} label="关联商品">
@@ -417,9 +428,10 @@ const CustomizedForm = Form.create({
   );
 });
 
-@connect(({ live, goods, classModel, frontUser, loading }) => ({
+@connect(({ live, goods, user, classModel, frontUser, loading }) => ({
   live,
   goods,
+  user,
   classModel,
   frontUser,
   loading: loading.models.live,
@@ -427,6 +439,9 @@ const CustomizedForm = Form.create({
 // @Form.create()
 class EditLiveStep2 extends React.PureComponent {
   state = {
+    uploadPage: 1,
+    isVideoModal: false,
+    isVodModal:false,
     selectedSmallVideoKeys: [],
     selectedClassKeys: [],
     selectedRowKeys: [],
@@ -448,6 +463,9 @@ class EditLiveStep2 extends React.PureComponent {
         goods_status: 0,
         page_number: 10,
       },
+    });
+    dispatch({
+      type: 'live/fetchToken',
     });
     dispatch({
       type: 'frontUser/fetchUserRankList',
@@ -675,6 +693,110 @@ class EditLiveStep2 extends React.PureComponent {
     this.setState({
       isSmallVideoModal: true,
     })
+  }
+  // 跳页 vod
+  changeVodPage = (pagination) => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'live/fetchVod',
+      payload: {
+        pagination,
+        'per-page': 18,
+      },
+    });
+  }
+  openUpload = () => {
+    const { dispatch, user: { currentUser } } = this.props;
+    const { uploadPage } = this.state;
+    dispatch({
+      type: 'classModel/getUpload',
+      payload: {
+        dir: `dev_audio/${currentUser.id}/${currentUser.shop_store_id}`,
+        page: uploadPage,
+        pageSize: 10,
+      },
+    });
+    this.openOrCloseVideo();
+  }
+  // 录播modal
+  openOrCloseVod = () => {
+    const { isVodModal } = this.state;
+    this.setState({
+      isVodModal: !isVodModal,
+    })
+  }
+  changeSwitch = (url) => {
+    const obj = {};
+    obj.vod_play_url = {
+      value: url,
+    };
+    this.changeFormVal(obj);
+    this.openOrCloseVod();
+  }
+  // video
+  openOrCloseVideo = () => {
+    const { isVideoModal } = this.state;
+    this.setState({
+      isVideoModal: !isVideoModal,
+    })
+  }
+  openVod = () => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'live/fetchVod',
+      payload: {
+        pagination: 1,
+        'per-page': 18,
+      },
+    });
+    this.openOrCloseVod();
+  }
+  selectUpload = (selectList) => {
+    const obj = {};
+    obj.vod_play_url = {
+      value: selectList[0],
+    };
+    this.changeFormVal(obj);
+    this.openOrCloseVideo();
+  }
+  uploadVideo = (e) => {
+    const { live: { token }, user: { currentUser } } = this.props;
+    const files = e.target.files;
+    const randomNum = `${new Date().getTime()}_${parseInt(Math.random() * 100, 10)}`;
+    const name = `${randomNum}.mp4`;
+    // 上传
+    for(let i=0;i<files.length;i++){
+      uploadJSSDK({
+          file: files[i],   // 文件，必填,html5 file类型，不需要读数据流，
+          name, // 文件名称，选填，默认为文件名称
+          token,  // token，必填
+          dir: `dev_audio/${currentUser.id}/${currentUser.shop_store_id}`,  // 测试目录，选填，默认根目录''
+          // dir: `audio/${currentUser.id}/${currentUser.shop_store_id}`,  // 正式目录，选填，默认根目录''
+          maxSize: 1024 * 1024 * 1024,  // 上传大小限制，选填，默认0没有限制
+          callback: (percent, result) => {
+            if (result) {
+              message.success(`上传成功！`);
+              // const { url } = result;
+              const { dispatch } = this.props;
+              dispatch({
+                type: 'classModel/setUploadImg',
+                payload: {
+                  dir: `dev_audio/${currentUser.id}/${currentUser.shop_store_id}`,
+                  filename: randomNum,
+                  ext: 'mp4',
+                  pic_dir: `dev_pic/${currentUser.id}/${currentUser.shop_store_id}`,  // 测试目录，选填，默认根目录''
+                  // pic_dir: `pic/${currentUser.id}/${currentUser.shop_store_id}`,  // 测试目录，选填，默认根目录''
+                },
+              });
+              this.setState({
+                uploadPage: 1,
+              })
+            } else {
+              message.success(`已上传${percent}%`);
+            }
+          },
+        });
+    }
   }
   handleTableChange = (pagination) => {
     const { id } = this.props.match.params;
@@ -959,12 +1081,48 @@ class EditLiveStep2 extends React.PureComponent {
   // };
   render() {
     const {
-      live: { liveForm, uploadLiveImg, liveGoods, smallVideoList, smallVideoListPage  },
-      classModel: { classList, classListPage },
+      live: { liveForm, uploadLiveImg, liveGoods, smallVideoList, smallVideoListPage, vodListPage, vodList },
+      classModel: { classList, classListPage, uploadList, uploadListPage },
       frontUser: { userRankList },
       goods: { goodsList, goodsListPage },
+      imgUrl,
       uploadUrl,
     } = this.props;
+    const { header, isGoodModal, selectedRowKeys, isClassModal, selectedClassKeys, isSmallVideoModal, selectedSmallVideoKeys, isVideoModal, isVodModal } = this.state;
+    const vodListItem = [];
+    vodList.forEach(res => {
+      vodListItem.push(
+        <div className={styles.listItem} key={res.id}>
+          <img src={res.cover} alt="图片" />
+          <div className={styles.word}>
+            {res.title}
+          </div>
+          <div className={styles.switch}>
+            {/* <Switch checkedChildren={<Icon type="check" />} unCheckedChildren={<Icon type="close" />} onChange={this.changeSwitch.bind(this, res.id, 0)} defaultChecked={res.is_bind} /> */}
+            <Checkbox onChange={this.changeSwitch.bind(this, res.play_url)} />
+          </div>
+        </div>
+      )
+    });
+    const uploadListColumns = [
+      {
+        title: '视频封面',
+        dataIndex: 'pic',
+        key: 'pic',
+        width: 100,
+        render: val => (val ? <img src={`${imgUrl}${val}`} style={{ width: '60px', height: 60 }} alt="图片" /> : null),
+      },
+      {
+        title: '视频路径',
+        dataIndex: 'url',
+        width: 150,
+      },
+    ]
+    const rowSelections = {
+      type: 'radio',
+      // selectedRowKeys: selectedMember,
+      onChange: this.selectUpload,
+    };
     const goodsColumns = [
       {
         title: '商品图片',
@@ -1023,7 +1181,6 @@ class EditLiveStep2 extends React.PureComponent {
         width: 150,
       },
     ];
-    const { header, isGoodModal, isSmallVideoModal, isClassModal, selectedRowKeys, selectedClassKeys, selectedSmallVideoKeys } = this.state;
     const rowSelection = {
       selectedRowKeys,
       onChange: this.handleRowSelectChange,
@@ -1046,6 +1203,8 @@ class EditLiveStep2 extends React.PureComponent {
     return (
       <div>
         <CustomizedForm
+          openVod={this.openVod}
+          openUpload={this.openUpload}
           userRankList={userRankList}
           setDescription={this.setDescription}
           openSmallVideoList={this.openSmallVideoList}
@@ -1059,6 +1218,40 @@ class EditLiveStep2 extends React.PureComponent {
           submitForm={this.submitForm}
           uploadUrl={uploadUrl}
         />
+        <Modal
+          title="录播视频"
+          width={760}
+          visible={isVodModal}
+          footer=""
+          onCancel={this.openOrCloseVod}
+          destroyOnClose="true"
+        >
+          <div className={styles.modalBox}>
+            {vodListItem}
+          </div>
+          <Pagination pageSize={18} current={vodListPage.current || 1} total={vodListPage.total} onChange={this.changeVodPage} />
+        </Modal>
+        <Modal
+          title="上传视频"
+          width={760}
+          visible={isVideoModal}
+          footer=""
+          onCancel={this.openOrCloseVideo}
+          destroyOnClose="true"
+        >
+          <div className={styles.fileBoxs}>
+            <input type="file" className={styles.fileBtns} onChange={this.uploadVideo} />
+            上传视频
+          </div>
+          <Table
+            dataSource={uploadList}
+            rowKey={record => record.url}
+            rowSelection={rowSelections}
+            columns={uploadListColumns}
+            pagination={uploadListPage}
+            onChange={this.handleUploadSelectChange}
+          />
+        </Modal>
         <Modal
           title="选择商品列表"
           width={760}

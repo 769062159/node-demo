@@ -1,11 +1,13 @@
 // import { routerRedux } from 'dva/router';
-import { addClass, classList, deleteClass, searchClass, updateClass } from '../services/class';
+import { addClass, classList, deleteClass, searchClass, updateClass, getUpload, setUploadImg } from '../services/class';
 import { swapArray } from '../utils/utils';
 
 export default {
   namespace: 'classModel',
 
   state: {
+    uploadList: [],
+    uploadListPage: {},
     classList: [],
     classListPage: {},
     editClass: {},
@@ -18,6 +20,34 @@ export default {
   },
 
   effects: {
+    *setUploadImg({ payload }, { call, put }) {
+      yield call(setUploadImg, payload);
+      const data = {
+        dir: payload.dir,
+        page: 1,
+        pageSize: 10,
+      }
+      const response = yield call(getUpload, data);
+      if (response.code === 200) {
+        yield put({
+          type: 'getUploads',
+          payload: response,
+          pageSize: data.pageSize,
+          page: data.page,
+        });
+      }
+    },
+    *getUpload({ payload }, { call, put }) {
+      const response = yield call(getUpload, payload);
+      if (response.code === 200) {
+        yield put({
+          type: 'getUploads',
+          payload: response,
+          pageSize: payload.pageSize,
+          page: payload.page,
+        });
+      }
+    },
     *searchClass({ payload }, { call, put }) {
       const response = yield call(searchClass, payload);
       yield put({
@@ -70,6 +100,18 @@ export default {
   },
 
   reducers: {
+    getUploads(state, { payload, pageSize, page }) {
+      const { data: { result, totalCount } } = payload;
+      return {
+        ...state,
+        uploadList: result,
+        uploadListPage: {
+          pageSize,
+          total: totalCount,
+          current: page,
+        },
+      };
+    },
     setClass(state, { payload }) {
       // const { data: { detail, cover, share_cover: shareCover, has_lessons: lessons, title, desc } } = payload;
       const { data } = payload;
