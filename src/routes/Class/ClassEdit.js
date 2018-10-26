@@ -623,8 +623,17 @@ export default class ClassAdd extends PureComponent {
     });
     this.openOrCloseVod();
   }
-  handleUploadSelectChange = (selectList) => {
-    console.log(selectList);
+  handleUploadSelectChange = pagination => {
+    const { current } = pagination;
+    const { dispatch, user: { currentUser } } = this.props;
+    dispatch({
+      type: 'classModel/getUpload',
+      payload: {
+        dir: `dev_audio/${currentUser.id}/${currentUser.shop_store_id}`,
+        page: current,
+        pageSize: 10,
+      },
+    });
   }
   selectUpload = (selectList) => {
     const { index } = this.state;

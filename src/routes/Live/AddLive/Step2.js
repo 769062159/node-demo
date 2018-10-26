@@ -874,6 +874,18 @@ class AddLiveStep2 extends React.PureComponent {
       smallVideoKey: selectedSmallVideoKeys,
     })
   }
+  handleUploadSelectChange = pagination => {
+    const { current } = pagination;
+    const { dispatch, user: { currentUser } } = this.props;
+    dispatch({
+      type: 'classModel/getUpload',
+      payload: {
+        dir: `dev_audio/${currentUser.id}/${currentUser.shop_store_id}`,
+        page: current,
+        pageSize: 10,
+      },
+    });
+  }
   handleRowSelectChange = (selectedRowKeys) => {
     this.setState({ selectedRowKeys });
   };
