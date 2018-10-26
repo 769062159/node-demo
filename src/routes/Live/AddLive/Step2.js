@@ -187,13 +187,7 @@ const CustomizedForm = Form.create({
       </FormItem>
       <FormItem {...formItemLayout} label="社群公告">
         {getFieldDecorator('announcement', {
-          rules: [
-            {
-              required: true,
-              message: '请输入公告',
-            },
-          ],
-        })(<TextArea placeholder="请输入简介" autosize />)}
+        })(<TextArea placeholder="请输入社群公告" autosize />)}
       </FormItem>
       <Row>
         <Col span={7} style={{ textAlign: "right", paddingRight: 8 }}>
@@ -335,7 +329,7 @@ const CustomizedForm = Form.create({
           }
         })()
       }
-      <FormItem {...formItemLayout} label="播放类别">
+      <FormItem {...formItemLayout} label="播放类型">
         {getFieldDecorator('play_type', {})(
           <Select style={{ width: 200 }}>
             {/* <Option value={1}>播放指定录播</Option> */}

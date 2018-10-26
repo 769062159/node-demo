@@ -15,6 +15,7 @@ import {
   Checkbox,
   Row,
   Col,
+  Table,
 } from 'antd';
 import { routerRedux } from 'dva/router';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
@@ -122,7 +123,7 @@ const CustomizedForm = Form.create({
     downItem,
     setDescription,
     openVod,
-    uploadVideo,
+    openUpload,
   } = props;
   return (
     <Form autoComplete="OFF">
@@ -254,12 +255,12 @@ const CustomizedForm = Form.create({
                   />
                 ) : null}
               </FormItem>
-              <FormItem {...formItemLayout} label="播放类别">
+              <FormItem {...formItemLayout} label="播放类型">
                 {getFieldDecorator(`vtype${index}`, {
                   rules: [
                     {
                       required: true,
-                      message: '请输入播放类别',
+                      message: '请输入播放类型',
                     },
                   ],
                 })(
@@ -320,8 +321,7 @@ const CustomizedForm = Form.create({
                     <div className={styles.fileBoxs} onClick={openVod.bind(this, index)}>
                       录播视频
                     </div>
-                    <div className={styles.fileBoxs}>
-                      <input type="file" className={styles.fileBtns} onChange={uploadVideo.bind(this, index)} />
+                    <div className={styles.fileBoxs} onClick={openUpload.bind(this, index)}>
                       上传列表
                     </div>
                   </FormItem>
@@ -375,6 +375,7 @@ export default class ClassAdd extends PureComponent {
   //   this.editorElem = React.createRef();
   // }
   state = {
+    uploadPage: 1,
     header: {
       Authorization: `Bearer ${localStorage.getItem('token')}`,
     },
@@ -412,7 +413,7 @@ export default class ClassAdd extends PureComponent {
     const { classModel: { classForm: { title, xxx, list, yyy, desc, details, detail }, editClass } } = this.props;
     const { has_lessons: lessons } = editClass;
     const { dispatch } = this.props;
-    if (!details&&!detail) {
+    if (!details && !detail) {
       message.error('请输入描述');
       return false;
     }
@@ -454,7 +455,7 @@ export default class ClassAdd extends PureComponent {
       callback: () => {
         message.success('修改成功！');
         const { dispatch } = this.props;
-        const url = `/community/class-list`;
+        const url = `/live/class-list`;
         dispatch(routerRedux.push(url));
       },
     });
@@ -473,6 +474,28 @@ export default class ClassAdd extends PureComponent {
       },
     });
   };
+  openUpload = (index) => {
+    const { dispatch, user: { currentUser } } = this.props;
+    const { uploadPage } = this.state;
+    dispatch({
+      type: 'classModel/getUpload',
+      payload: {
+        dir: `dev_audio/${currentUser.id}/${currentUser.shop_store_id}`,
+        page: uploadPage,
+        pageSize: 10,
+      },
+    });
+    this.setState({
+      index,
+    })
+    this.openOrCloseVideo();
+  }
+  openOrCloseVideo = () => {
+    const { isVideoModal } = this.state;
+    this.setState({
+      isVideoModal: !isVideoModal,
+    })
+  }
   // 向上
   upItem = (index) => {
     if (index === 0) {
@@ -533,31 +556,46 @@ export default class ClassAdd extends PureComponent {
       },
     });
   }
-  uploadVideo = (index, e) => {
+  uploadVideo = (e) => {
     const { live: { token }, user: { currentUser } } = this.props;
     const files = e.target.files;
-    const name = `${new Date().getTime()}.mp4`;
+    const randomNum = `${new Date().getTime()}_${parseInt(Math.random() * 100, 10)}`;
+    const name = `${randomNum}.mp4`;
     // 上传
     for(let i=0;i<files.length;i++){
       uploadJSSDK({
           file: files[i],   // 文件，必填,html5 file类型，不需要读数据流，
           name, // 文件名称，选填，默认为文件名称
           token,  // token，必填
-          dir: `vods/${currentUser.id}`,  // 目录，选填，默认根目录''
+          dir: `dev_audio/${currentUser.id}/${currentUser.shop_store_id}`,  // 测试目录，选填，默认根目录''
+          // dir: `audio/${currentUser.id}/${currentUser.shop_store_id}`,  // 正式目录，选填，默认根目录''
           maxSize: 1024 * 1024 * 1024,  // 上传大小限制，选填，默认0没有限制
           callback: (percent, result) => {
             if (result) {
               message.success(`上传成功！`);
-              const { url } = result;
+              // const { url } = result;
               const { dispatch } = this.props;
+              // dispatch({
+              //   type: 'classModel/setVodurl',
+              //   payload: {
+              //     index,
+              //     url,
+              //     type: 1,
+              //   },
+              // });
               dispatch({
-                type: 'classModel/setVodurl',
+                type: 'classModel/setUploadImg',
                 payload: {
-                  index,
-                  url,
-                  type: 1,
+                  dir: `dev_audio/${currentUser.id}/${currentUser.shop_store_id}`,
+                  filename: randomNum,
+                  ext: 'mp4',
+                  pic_dir: `dev_pic/${currentUser.id}/${currentUser.shop_store_id}`,  // 测试目录，选填，默认根目录''
+                  // pic_dir: `pic/${currentUser.id}/${currentUser.shop_store_id}`,  // 测试目录，选填，默认根目录''
                 },
               });
+              this.setState({
+                uploadPage: 1,
+              })
             } else {
               message.success(`已上传${percent}%`);
             }
@@ -581,9 +619,35 @@ export default class ClassAdd extends PureComponent {
         index,
         id,
         title,
+        type: 0,
       },
     });
     this.openOrCloseVod();
+  }
+  handleUploadSelectChange = pagination => {
+    const { current } = pagination;
+    const { dispatch, user: { currentUser } } = this.props;
+    dispatch({
+      type: 'classModel/getUpload',
+      payload: {
+        dir: `dev_audio/${currentUser.id}/${currentUser.shop_store_id}`,
+        page: current,
+        pageSize: 10,
+      },
+    });
+  }
+  selectUpload = (selectList) => {
+    const { index } = this.state;
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'classModel/setVodurl',
+      payload: {
+        index,
+        url: selectList[0],
+        type: 1,
+      },
+    });
+    this.openOrCloseVideo();
   }
   // changeSwitchs = (res) => {
   //   const { index } = this.state;
@@ -643,8 +707,8 @@ export default class ClassAdd extends PureComponent {
   //   });
   // };
   render() {
-    const {  classModel: { classForm }, uploadUrl, live: { vodListPage, vodList } } = this.props;
-    const { header, isVodModal } = this.state;
+    const {  classModel: { classForm, uploadList, uploadListPage }, uploadUrl, live: { vodListPage, vodList }, imgUrl } = this.props;
+    const { header, isVodModal, isVideoModal } = this.state;
     const vodListItem = [];
     vodList.forEach(res => {
       vodListItem.push(
@@ -660,6 +724,25 @@ export default class ClassAdd extends PureComponent {
         </div>
       )
     });
+    const uploadListColumns = [
+      {
+        title: '视频封面',
+        dataIndex: 'pic',
+        key: 'pic',
+        width: 100,
+        render: val => (val ? <img src={`${imgUrl}${val}`} style={{ width: '60px', height: 60 }} alt="图片" /> : null),
+      },
+      {
+        title: '视频路径',
+        dataIndex: 'url',
+        width: 150,
+      },
+    ]
+    const rowSelection = {
+      type: 'radio',
+      // selectedRowKeys: selectedMember,
+      onChange: this.selectUpload,
+    };
 
     return (
       <PageHeaderLayout>
@@ -676,7 +759,28 @@ export default class ClassAdd extends PureComponent {
           </div>
           <Pagination pageSize={18} current={vodListPage.current || 1} total={vodListPage.total} onChange={this.changeVodPage} />
         </Modal>
-        <CustomizedForm uploadVideo={this.uploadVideo} openVod={this.openVod} setDescription={this.setDescription} downItem={this.downItem} upItem={this.upItem} minusItem={this.minusItem} handleSubmit={this.handleSubmit} addClassList={this.addClassList} header={header} classForm={classForm} uploadUrl={uploadUrl} onChange={this.changeFormVal} />
+        <Modal
+          title="上传视频"
+          width={760}
+          visible={isVideoModal}
+          footer=""
+          onCancel={this.openOrCloseVideo}
+          destroyOnClose="true"
+        >
+          <div className={styles.fileBoxs}>
+            <input type="file" className={styles.fileBtns} onChange={this.uploadVideo} />
+            上传列表
+          </div>
+          <Table
+            dataSource={uploadList}
+            rowKey={record => record.url}
+            rowSelection={rowSelection}
+            columns={uploadListColumns}
+            pagination={uploadListPage}
+            onChange={this.handleUploadSelectChange}
+          />
+        </Modal>
+        <CustomizedForm openUpload={this.openUpload} openVod={this.openVod} setDescription={this.setDescription} downItem={this.downItem} upItem={this.upItem} minusItem={this.minusItem} handleSubmit={this.handleSubmit} addClassList={this.addClassList} header={header} classForm={classForm} uploadUrl={uploadUrl} onChange={this.changeFormVal} />
       </PageHeaderLayout>
     );
   }

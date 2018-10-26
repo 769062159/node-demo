@@ -483,7 +483,13 @@ export default class Live extends PureComponent {
             <Divider type="vertical" />
             <a href={`#/community/edit-live/confirm/${record.id}`}>修改</a>
             <Divider type="vertical" />
-            <a onClick={this.deleteDataMsg.bind(this, record.id)}>删除</a>
+            {
+              record.status ? (
+                <a onClick={this.deleteDataMsg.bind(this, record.id)}>开启</a>
+              ) : (
+                <a onClick={this.deleteDataMsg.bind(this, record.id)}>关闭</a>
+              )
+            }
           </Fragment>
         ),
       },
@@ -504,6 +510,7 @@ export default class Live extends PureComponent {
               loading={loading}
               columns={progressColumns}
               pagination={liveListPage}
+              onChange={this.handleTableChange}
             />
           </div>
         </Card>

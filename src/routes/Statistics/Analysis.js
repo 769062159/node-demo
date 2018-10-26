@@ -272,7 +272,7 @@ export default class Analysis extends Component {
                   <div className={styles.word}>
                     <div className={styles.title}>今日订单数</div>
                     <div className={styles.price}>{statistics.today_order || 0}</div>
-                    <div className={styles.tip}>拼团：{statistics.today_normal_order_num || 0} 普通：{statistics.today_group_order_num || 0}</div>
+                    <div className={styles.tip}>拼团：{statistics.today_group_order_num || 0} 普通：{statistics.today_normal_order_num || 0}</div>
                   </div>
                 </div>
               </Col>

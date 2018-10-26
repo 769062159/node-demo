@@ -255,12 +255,12 @@ const CustomizedForm = Form.create({
                   />
                 ) : null}
               </FormItem>
-              <FormItem {...formItemLayout} label="播放类别">
+              <FormItem {...formItemLayout} label="播放类型">
                 {getFieldDecorator(`vtype${index}`, {
                   rules: [
                     {
                       required: true,
-                      message: '请输入播放类别',
+                      message: '请输入播放类型',
                     },
                   ],
                 })(
@@ -619,6 +619,7 @@ export default class ClassAdd extends PureComponent {
         index,
         id,
         title,
+        type: 0,
       },
     });
     this.openOrCloseVod();
