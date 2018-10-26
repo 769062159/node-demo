@@ -452,6 +452,7 @@ const CustomizedForm = Form.create({
 }))
 class AddLiveStep2 extends React.PureComponent {
   state = {
+    searchVal: '',
     uploadPage: 1,
     isVideoModal: false,
     isVodModal:false,
@@ -635,6 +636,7 @@ class AddLiveStep2 extends React.PureComponent {
     this.setState({
       isClassModal: false,
       selectedClassKeys: classKey,
+      searchVal: '',
     })
   }
   CloseSmallVideoModal = () => {
@@ -642,6 +644,7 @@ class AddLiveStep2 extends React.PureComponent {
     this.setState({
       isSmallVideoModal: false,
       selectedSmallVideoKeys: smallVideoKey,
+      searchVal: '',
     })
   }
   copyBtn = val => {
@@ -686,6 +689,7 @@ class AddLiveStep2 extends React.PureComponent {
   // };
   handleTableChange = (pagination) => {
     const { current } = pagination;
+    const { searchVal } = this.state;
     const { dispatch } = this.props;
     dispatch({
       type: 'goods/fetchGoods',
@@ -693,27 +697,32 @@ class AddLiveStep2 extends React.PureComponent {
         goods_status: 0,
         page_number: 3,
         page: current,
+        goods_name: searchVal,
       },
     });
   };
   handleClassChange = (pagination) => {
     const { current } = pagination;
     const { dispatch } = this.props;
+    const { searchVal } = this.state;
     dispatch({
       type: 'classModel/getclassList',
       payload: {
         page: current,
+        title: searchVal,
       },
     });
   };
   handleSmallVideoChange = (pagination) => {
     const { current } = pagination;
     const { dispatch } = this.props;
+    const { searchVal } = this.state;
     dispatch({
       type: 'live/fetchSmallVideo',
       payload: {
         page: current,
         status: 1,
+        title: searchVal,
       },
     });
   };
@@ -773,6 +782,50 @@ class AddLiveStep2 extends React.PureComponent {
       },
     });
     this.openOrCloseVod();
+  }
+  searchVal = (val) => {
+    console.log(val.target.value);
+    this.setState({
+      searchVal: val.target.value,
+    })
+  }
+  searchList = (type) => {
+    const { searchVal } = this.state;
+    const { dispatch } = this.props;
+    switch (type) {
+      case 0:
+        dispatch({
+          type: 'goods/fetchGoods',
+          payload: {
+            goods_status: 0,
+            page_number: 3,
+            page: 1,
+            goods_name: searchVal,
+          },
+        });
+        break;
+      case 1:
+        dispatch({
+          type: 'classModel/getclassList',
+          payload: {
+            page: 1,
+            title: searchVal,
+          },
+        });
+        break;
+      case 2:
+        dispatch({
+          type: 'live/fetchSmallVideo',
+          payload: {
+            page: 1,
+            status: 1,
+            title: searchVal,
+          },
+        });
+        break;
+      default:
+        break;
+    }
   }
   selectUpload = (selectList) => {
     const obj = {};
@@ -1063,6 +1116,13 @@ class AddLiveStep2 extends React.PureComponent {
           onCancel={this.CloseGoodModal}
           destroyOnClose="true"
         >
+          <Row style={{ marginBottom: 10 }}>
+            <Col span={3}>商品名称</Col>
+            <Col span={21}>
+              <Input style={{ width: 200, marginRight: 10 }} onChange={this.searchVal} />
+              <Button type="primary" onClick={this.searchList.bind(this, 0)}>搜索</Button>
+            </Col>
+          </Row>
           <Table
             dataSource={goodsList}
             rowSelection={rowSelection}
@@ -1080,6 +1140,13 @@ class AddLiveStep2 extends React.PureComponent {
           onCancel={this.CloseClassModal}
           destroyOnClose="true"
         >
+          <Row style={{ marginBottom: 10 }}>
+            <Col span={3}>课程名称</Col>
+            <Col span={21}>
+              <Input style={{ width: 200, marginRight: 10 }} onChange={this.searchVal} />
+              <Button type="primary" onClick={this.searchList.bind(this, 1)}>搜索</Button>
+            </Col>
+          </Row>
           <Table
             dataSource={classList}
             rowSelection={classSelection}
@@ -1090,13 +1157,20 @@ class AddLiveStep2 extends React.PureComponent {
           />
         </Modal>
         <Modal
-          title="选择小视频列表"
+          title="选择视频列表"
           width={760}
           onOk={this.selcetSmallVideo}
           visible={isSmallVideoModal}
           onCancel={this.CloseSmallVideoModal}
           destroyOnClose="true"
         >
+          <Row style={{ marginBottom: 10 }}>
+            <Col span={3}>视频名称</Col>
+            <Col span={21}>
+              <Input style={{ width: 200, marginRight: 10 }} onChange={this.searchVal} />
+              <Button type="primary" onClick={this.searchList.bind(this, 2)}>搜索</Button>
+            </Col>
+          </Row>
           <Table
             dataSource={smallVideoList}
             rowSelection={smallVideoSelection}

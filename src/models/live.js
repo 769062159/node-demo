@@ -300,6 +300,7 @@ export default {
       yield put({
         type: 'getSmallVideo',
         payload: response,
+        page: payload.page,
       });
     },
     *addLive({ payload, callback }, { call, put }) {
@@ -368,7 +369,7 @@ export default {
         smallVideoForm,
       };
     },
-    getSmallVideo(state, { payload }) {
+    getSmallVideo(state, { payload, page }) {
       const { data } = payload;
       return {
         ...state,
@@ -376,6 +377,7 @@ export default {
         smallVideoListPage: {
           pageSize: data.page,
           total: data.total,
+          current: page,
         },
       };
     },

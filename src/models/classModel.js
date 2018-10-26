@@ -95,6 +95,7 @@ export default {
       yield put({
         type: 'getclassLists',
         payload: response,
+        page: payload.page,
       })
     },
   },
@@ -223,7 +224,7 @@ export default {
         classForm,
       };
     },
-    getclassLists(state, { payload }) {
+    getclassLists(state, { payload, page: current }) {
       const { data } = payload;
       const { list, total, page } = data;
       return {
@@ -232,6 +233,7 @@ export default {
         classListPage: {
           pageSize: page,
           total,
+          current,
         },
       };
     },

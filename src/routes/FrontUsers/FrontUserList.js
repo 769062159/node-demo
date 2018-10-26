@@ -45,7 +45,7 @@ const formSubmitLayout = {
 @Form.create()
 export default class FrontUserList extends PureComponent {
   state = {
-    typePower: 0,
+    powerValue: null,
     pagination: 1, // 页脚
     formVisible: false,
     editDataId: 0,
@@ -86,7 +86,7 @@ export default class FrontUserList extends PureComponent {
     });
   };
   // 设置商户
-  setMerchant = (record, type, e) => {
+  setMerchant = (record, e) => {
     e.preventDefault();
     const { dispatch } = this.props;
     dispatch({
@@ -96,7 +96,6 @@ export default class FrontUserList extends PureComponent {
           account: `${record.id}@${e}`,
           password: '',
           editId: record.id,
-          typePower: type,
         })
         this.merchantModal();
       },
@@ -213,6 +212,12 @@ export default class FrontUserList extends PureComponent {
       }
     });
   };
+  // 修改权限等级
+  handleLevel = (powerValue) => {
+    this.setState({
+      powerValue,
+    })
+  }
 
   // 换页
   handleTableChange = pagination => {
@@ -241,6 +246,7 @@ export default class FrontUserList extends PureComponent {
     const { merchantVisible } = this.state;
     this.setState({
       merchantVisible: !merchantVisible,
+      powerValue: null,
     })
   }
   changePassword = (e) => {
@@ -249,7 +255,11 @@ export default class FrontUserList extends PureComponent {
     });
   }
   merchantOK = () => {
-    const { password, account, editId, typePower } = this.state;
+    const { password, account, editId, powerValue } = this.state;
+    if (powerValue === null) {
+      message.error('请选择权限');
+      return false;
+    }
     const { dispatch } = this.props;
     dispatch({
       type: 'frontUser/merchantSetting',
@@ -257,7 +267,7 @@ export default class FrontUserList extends PureComponent {
         username: account,
         password: password || '123456',
         member_id: editId,
-        type: typePower,
+        type: powerValue,
       },
       callback: () => {
         message.success('设置成功');
@@ -500,9 +510,7 @@ export default class FrontUserList extends PureComponent {
             <Divider type="vertical" />
             <a onClick={this.editDataMsg.bind(this, record.id, 2)}>设置等级</a>
             <Divider type="vertical" />
-            <a onClick={this.setMerchant.bind(this, record, 1)}>设置商户版</a>
-            <Divider type="vertical" />
-            <a onClick={this.setMerchant.bind(this, record, 2)}>设置社群版</a>
+            <a onClick={this.setMerchant.bind(this, record)}>设置用户版本</a>
           </Fragment>
         ),
       },
@@ -592,9 +600,20 @@ export default class FrontUserList extends PureComponent {
             <Col span={6}>账户</Col>
             <Col span={18}><Input value={account} disabled /></Col>
           </Row>
-          <Row>
+          <Row style={{ marginBottom: 20 }}>
             <Col span={6}>密码</Col>
             <Col span={18}><Input defaultValue={123456} onChange={this.changePassword} /></Col>
+          </Row>
+          <Row>
+            <Col span={6}>权限</Col>
+            <Col span={18}>
+              <Select onChange={this.handleLevel} style={{ width: 200 }}>
+                <Option key={1} val={1}>商户版</Option>
+                <Option key={2} val={2}>社群版</Option>
+                <Option key={3} val={3}>视频版</Option>
+                <Option key={4} val={4}>普通版</Option>
+              </Select>
+            </Col>
           </Row>
         </Modal>
         {/* <Modal

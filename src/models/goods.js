@@ -365,6 +365,7 @@ export default {
       yield put({
         type: 'show',
         payload: response,
+        page: payload.page,
       });
     },
     *editGoodType({ payload }, { call, put }) {
@@ -970,7 +971,7 @@ export default {
         typePartial,
       };
     },
-    show(state, { payload }) {
+    show(state, { payload, page }) {
       // state.menuList = payload;
       const { data } = payload;
       return {
@@ -978,6 +979,7 @@ export default {
         goodsList: data.list,
         goodsListPage: {
           pageSize: data.page,
+          current: page,
           total: data.total,
         },
       };

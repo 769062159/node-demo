@@ -159,6 +159,7 @@ export default class GoodsList extends PureComponent {
     }
   };
 
+
   obtained = (type) => {
     const { dispatch } = this.props;
     const { selectedRows, formValues, minPrice, maxPrice, page } = this.state;
@@ -529,17 +530,11 @@ export default class GoodsList extends PureComponent {
               <Button icon="plus" type="primary" onClick={this.goNew.bind(this)}>
                 新建
               </Button>
-              {/* {selectedRows.length > 0 && (
+              {selectedRows.length > 0 && (
                 <span>
-                  <Button onClick={this.obtained.bind(this, 1)}>批量下架</Button>
-                  <Button onClick={this.obtained.bind(this, 0)}>批量上架</Button>
-                  <Dropdown overlay={menu}>
-                    <Button>
-                      更多操作 <Icon type="down" />
-                    </Button>
-                  </Dropdown>
+                  <Button onClick={this.obtained.bind(this, 0)}>批量审核</Button>
                 </span>
-              )} */}
+              )}
             </div>
             <StandardTable
               rowKey={record => record.goods_id}

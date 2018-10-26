@@ -433,6 +433,7 @@ const CustomizedForm = Form.create({
 // @Form.create()
 class EditLiveStep2 extends React.PureComponent {
   state = {
+    searchVal: '',
     uploadPage: 1,
     isVideoModal: false,
     isVodModal:false,
@@ -795,6 +796,7 @@ class EditLiveStep2 extends React.PureComponent {
   handleTableChange = (pagination) => {
     const { id } = this.props.match.params;
     const { current } = pagination;
+    const { searchVal } = this.state;
     const { dispatch } = this.props;
     dispatch({
       type: 'goods/fetchGoods',
@@ -803,6 +805,7 @@ class EditLiveStep2 extends React.PureComponent {
         page: current,
         check_live_id: id,
         goods_status: 0,
+        goods_name: searchVal,
       },
       callback: (selectedRowKeys) => {
         this.setState({
@@ -815,11 +818,13 @@ class EditLiveStep2 extends React.PureComponent {
     const { current } = pagination;
     const { dispatch } = this.props;
     const { id } = this.props.match.params;
+    const { searchVal } = this.state;
     dispatch({
       type: 'classModel/getclassList',
       payload: {
         page: current,
         check_live_id: id,
+        title: searchVal,
       },
       callback: (selectedClassKeys) => {
         this.setState({
@@ -832,12 +837,14 @@ class EditLiveStep2 extends React.PureComponent {
     const { current } = pagination;
     const { dispatch } = this.props;
     const { id } = this.props.match.params;
+    const { searchVal } = this.state;
     dispatch({
       type: 'live/fetchSmallVideo',
       payload: {
         page: current,
         check_live_id: id,
         page_number: 3,
+        title: searchVal,
         status: 1,
       },
       callback: (selectedSmallVideoKeys) => {
@@ -851,16 +858,19 @@ class EditLiveStep2 extends React.PureComponent {
   CloseGoodModal = () => {
     this.setState({
       isGoodModal: false,
+      searchVal: '',
     })
   };
   CloseClassModal = () => {
     this.setState({
       isClassModal: false,
+      searchVal: '',
     })
   }
   CloseSmallVideoModal = () => {
     this.setState({
       isSmallVideoModal: false,
+      searchVal: '',
     })
   }
   // 关闭Vod
@@ -896,6 +906,49 @@ class EditLiveStep2 extends React.PureComponent {
   //     },
   //   });
   // };
+  searchVal = (val) => {
+    this.setState({
+      searchVal: val.target.value,
+    })
+  }
+  searchList = (type) => {
+    const { searchVal } = this.state;
+    const { dispatch } = this.props;
+    switch (type) {
+      case 0:
+        dispatch({
+          type: 'goods/fetchGoods',
+          payload: {
+            goods_status: 0,
+            page_number: 3,
+            page: 1,
+            goods_name: searchVal,
+          },
+        });
+        break;
+      case 1:
+        dispatch({
+          type: 'classModel/getclassList',
+          payload: {
+            page: 1,
+            title: searchVal,
+          },
+        });
+        break;
+      case 2:
+        dispatch({
+          type: 'live/fetchSmallVideo',
+          payload: {
+            page: 1,
+            status: 1,
+            title: searchVal,
+          },
+        });
+        break;
+      default:
+        break;
+    }
+  }
   handleRowSelectChange = (selectedRowKeys) => {
     this.setState({ selectedRowKeys });
   };
@@ -1266,6 +1319,13 @@ class EditLiveStep2 extends React.PureComponent {
           onCancel={this.CloseGoodModal}
           destroyOnClose="true"
         >
+          <Row style={{ marginBottom: 10 }}>
+            <Col span={3}>商品名称</Col>
+            <Col span={21}>
+              <Input style={{ width: 200, marginRight: 10 }} onChange={this.searchVal} />
+              <Button type="primary" onClick={this.searchList.bind(this, 0)}>搜索</Button>
+            </Col>
+          </Row>
           <Table
             dataSource={goodsList}
             rowSelection={rowSelection}
@@ -1283,6 +1343,13 @@ class EditLiveStep2 extends React.PureComponent {
           onCancel={this.CloseClassModal}
           destroyOnClose="true"
         >
+          <Row style={{ marginBottom: 10 }}>
+            <Col span={3}>课程名称</Col>
+            <Col span={21}>
+              <Input style={{ width: 200, marginRight: 10 }} onChange={this.searchVal} />
+              <Button type="primary" onClick={this.searchList.bind(this, 1)}>搜索</Button>
+            </Col>
+          </Row>
           <Table
             dataSource={classList}
             rowSelection={classSelection}
@@ -1293,13 +1360,20 @@ class EditLiveStep2 extends React.PureComponent {
           />
         </Modal>
         <Modal
-          title="选择小视频列表"
+          title="选择视频列表"
           width={760}
           footer=""
           visible={isSmallVideoModal}
           onCancel={this.CloseSmallVideoModal}
           destroyOnClose="true"
         >
+          <Row style={{ marginBottom: 10 }}>
+            <Col span={3}>视频名称</Col>
+            <Col span={21}>
+              <Input style={{ width: 200, marginRight: 10 }} onChange={this.searchVal} />
+              <Button type="primary" onClick={this.searchList.bind(this, 2)}>搜索</Button>
+            </Col>
+          </Row>
           <Table
             dataSource={smallVideoList}
             rowSelection={smallVideoSelection}
