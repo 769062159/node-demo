@@ -82,11 +82,11 @@ export default class ClassList extends PureComponent {
     //   ...filters,
     // };
     const params = {
-      page: pagination.current,
       page_number: pagination.pageSize,
       ...formValues,
       ...filters,
       type: 1,
+      page: pagination.current,
     };
     if (sorter.field) {
       params.sorter = `${sorter.field}_${sorter.order}`;

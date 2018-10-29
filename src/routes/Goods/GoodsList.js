@@ -91,10 +91,10 @@ export default class GoodsList extends PureComponent {
     //   ...filters,
     // };
     const params = {
-      page: pagination.current,
       page_number: pagination.pageSize,
       ...formValues,
       ...filters,
+      page: pagination.current,
     };
     this.setState({
       page: pagination.current,
@@ -191,7 +191,7 @@ export default class GoodsList extends PureComponent {
 
   handleSearch = e => {
     e.preventDefault();
-    const { page } = this.state;
+    // const { page } = this.state;
     const { dispatch, form } = this.props;
 
     form.validateFields((err, fieldsValue) => {
@@ -200,11 +200,12 @@ export default class GoodsList extends PureComponent {
       const values = {
         ...fieldsValue,
         updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
-        page,
+        page: 1,
       };
 
       this.setState({
         formValues: values,
+        page: 1,
       });
       const { minPrice, maxPrice } = this.state;
       if (minPrice && maxPrice) {

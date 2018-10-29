@@ -92,10 +92,10 @@ export default class GoodsList extends PureComponent {
     //   ...filters,
     // };
     const params = {
-      page: pagination.current,
       page_number: pagination.pageSize,
       ...formValues,
       ...filters,
+      page: pagination.current,
     };
     this.setState({
       page: pagination.current,

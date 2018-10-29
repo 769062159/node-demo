@@ -33,6 +33,7 @@ export default {
       yield put({
         type: 'getOrder',
         payload: response,
+        page: payload.page,
       });
     },
     *editShipGood({ payload }, { call, put }) {
@@ -42,6 +43,7 @@ export default {
       yield put({
         type: 'getOrder',
         payload: response,
+        page: payload.page,
       });
     },
     *shipGood({ payload }, { call, put }) {
@@ -51,6 +53,7 @@ export default {
       yield put({
         type: 'getOrder',
         payload: response,
+        page: payload.page,
       });
     },
     *fetchExpressList(_, { call, put }) {
@@ -68,6 +71,7 @@ export default {
         type: 'getOrder',
         payload: response,
         id,
+        page: payload.page,
       });
     },
     *getGroupDetail({ payload }, { call, put }) {
@@ -137,7 +141,7 @@ export default {
         },
       };
     },
-    getOrder(state, { payload, id }) {
+    getOrder(state, { payload, id, page }) {
       const { data } = payload;
       const { list } = data;
       list.forEach(res => {
@@ -161,6 +165,7 @@ export default {
         orderListPage: {
           pageSize: data.page,
           total: data.total,
+          current: page,
         },
       };
     },

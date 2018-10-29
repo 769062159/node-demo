@@ -214,11 +214,11 @@ export default class Order extends PureComponent {
     }
     this.handShipCancel();
   };
-  // toggleForm = () => {
-  //   this.setState({
-  //     expandForm: !this.state.expandForm,
-  //   });
-  // };
+  toggleForm = () => {
+    this.setState({
+      expandForm: !this.state.expandForm,
+    });
+  };
   writeOff = (id) => {
     this.setState({
       orderId: id,
@@ -287,7 +287,7 @@ export default class Order extends PureComponent {
   handleSearch = e => {
     e.preventDefault();
     const { dispatch, form } = this.props;
-    const { page } = this.state;
+    // const { page } = this.state;
 
     form.validateFields((err, fieldsValue) => {
       if (err) return;
@@ -298,7 +298,7 @@ export default class Order extends PureComponent {
       };
 
       const { minPrice, maxPrice } = this.state;
-      values.page = page;
+      values.page = 1;
       values.sale_channel = 0;
       if (minPrice && maxPrice) {
         values.start_order_amount = minPrice;

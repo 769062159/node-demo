@@ -92,10 +92,10 @@ export default class GoodsType extends PureComponent {
     }, {});
 
     const params = {
-      currentPage: pagination.current,
       pageSize: pagination.pageSize,
       ...formValues,
       ...filters,
+      currentPage: pagination.current,
     };
     if (sorter.field) {
       params.sorter = `${sorter.field}_${sorter.order}`;
