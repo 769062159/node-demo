@@ -707,7 +707,7 @@ export default class Order extends PureComponent {
                           >
                             <Col span={2}>包裹{index + 1}</Col>
                             <Col span={5}>包裹订单号：{res.order_sn}</Col>
-                            <Col span={3}>运费：{res.pack_shipping_fee}</Col>
+                            <Col span={3}>运费：{res.shipping_fee}</Col>
                           </Row>
                           <Table
                             bordered

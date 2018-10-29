@@ -1433,7 +1433,7 @@ class EditGoodStep2 extends React.PureComponent {
         goods_sku_attr: [],
         group_price: values.group_price,
         img: '',
-        price: values.goods_price,
+        price: values.sell_goods_price,
         store_nums: values.goods_total_inventory,
         cost_price: values.cost_price,
         sku_goods_name: '',
@@ -1450,6 +1450,7 @@ class EditGoodStep2 extends React.PureComponent {
     });
     // 新增需要加的
     values.goods_nums_warning = values.goods_nums_warning || 0;
+    values.sale_channel = values.sale_channel || 0;
     values.supplier_id = values.supplier_id || 0;
     values.shipping_template_id = values.shipping_template_id || 0;
     values.shop_shipping_price = values.shop_shipping_price || 0;

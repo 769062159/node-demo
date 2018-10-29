@@ -1425,7 +1425,17 @@ class AddGoodStep2 extends React.PureComponent {
       values.goods_sku = deepCopy(attrTable);
     } else {
       values.attr = [];
-      values.goods_sku = [];
+      values.goods_sku = [{
+        goods_sku_attr: [],
+        group_price: values.group_price,
+        img: '',
+        price: values.sell_goods_price,
+        store_nums: values.goods_total_inventory,
+        cost_price: values.cost_price,
+        sku_goods_name: '',
+        goods_sku_sn: '',
+        weight: values.weight,
+      }];
     }
     values.goods_img = [];
     uploadGoodsImg.forEach(res => {
@@ -1485,6 +1495,7 @@ class AddGoodStep2 extends React.PureComponent {
     }
     values.group_pick_up_duration = values.group_pick_up_duration || '';
     values.group_duration = values.group_duration || 0;
+    values.sale_channel = values.sale_channel || 0;
     values.group_num = values.group_num || 0;
     values.limit_buy = values.limit_buy || 0;
     values.group_price = values.group_price || 0;
