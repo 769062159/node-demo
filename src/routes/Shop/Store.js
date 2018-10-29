@@ -6,7 +6,7 @@ import {
   Card,
   Form,
   Button,
-  Divider,
+  // Divider,
 } from 'antd';
 import { routerRedux } from 'dva/router';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
@@ -144,8 +144,8 @@ export default class ShopList extends PureComponent {
         render: record => (
           <Fragment>
             <a onClick={this.goEditPath.bind(this, record)}>修改</a>
-            <Divider type="vertical" />
-            <a onClick={this.deleteDataMsg.bind(this, record)}>删除</a>
+            {/* <Divider type="vertical" />
+            <a onClick={this.deleteDataMsg.bind(this, record)}>删除</a> */}
           </Fragment>
         ),
       },

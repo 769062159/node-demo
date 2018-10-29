@@ -21,6 +21,7 @@ import { routerRedux } from 'dva/router';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './style.less'
 import { uploadJSSDK } from '../../utils/utils';
+import { env } from '../../utils/config';
 // import styles from './TableList.less';
 // import request from '../../utils/request';
 import Wangeditor from '../../components/Wangeditor';
@@ -578,8 +579,7 @@ export default class ClassAdd extends PureComponent {
           file: files[i],   // 文件，必填,html5 file类型，不需要读数据流，
           name, // 文件名称，选填，默认为文件名称
           token,  // token，必填
-          dir: `dev_audio/${currentUser.id}/${currentUser.shop_store_id}`,  // 测试目录，选填，默认根目录''
-          // dir: `audio/${currentUser.id}/${currentUser.shop_store_id}`,  // 正式目录，选填，默认根目录''
+          dir: `${env.videoUrl}/${currentUser.id}/${currentUser.shop_store_id}`,
           maxSize: 1024 * 1024 * 1024,  // 上传大小限制，选填，默认0没有限制
           callback: (percent, result) => {
             if (result) {
@@ -597,11 +597,10 @@ export default class ClassAdd extends PureComponent {
               dispatch({
                 type: 'classModel/setUploadImg',
                 payload: {
-                  dir: `dev_audio/${currentUser.id}/${currentUser.shop_store_id}`,
+                  dir: `${env.videoUrl}/${currentUser.id}/${currentUser.shop_store_id}`,
                   filename: randomNum,
                   ext: 'mp4',
-                  pic_dir: `dev_pic/${currentUser.id}/${currentUser.shop_store_id}`,  // 测试目录，选填，默认根目录''
-                  // pic_dir: `pic/${currentUser.id}/${currentUser.shop_store_id}`,  // 测试目录，选填，默认根目录''
+                  pic_dir: `${env.pic}/${currentUser.id}/${currentUser.shop_store_id}`,
                 },
               });
               this.setState({

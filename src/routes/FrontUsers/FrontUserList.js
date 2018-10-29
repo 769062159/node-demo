@@ -463,6 +463,8 @@ export default class FrontUserList extends PureComponent {
       item.has_account = item.has_account || hasAccountDefault;
     });
     const { formVisible, type, pagination, editDataId, merchantVisible, account, powerValue } = this.state;
+    console.log('权限');
+    console.log(powerValue);
     const progressColumns = [
       {
         title: '会员',

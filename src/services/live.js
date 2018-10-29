@@ -159,3 +159,11 @@ export async function bindLiveVideo(params) {
     body: params,
   });
 }
+
+//  直播间的开启关闭
+export async function updateLiveStatus(params) {
+  return request('/merchant/live/update/status', {
+    method: 'POST',
+    body: params,
+  });
+}

@@ -280,6 +280,12 @@ export default class Live extends PureComponent {
     });
   };
 
+  // 开启关闭
+  updateLiveStatus = (id, type) => {
+    console.log(id);
+    console.log(type);
+  }
+
   // 删除商品
   deleteDataMsg = id => {
     event.preventDefault();
@@ -485,9 +491,9 @@ export default class Live extends PureComponent {
             <Divider type="vertical" />
             {
               record.status ? (
-                <a onClick={this.deleteDataMsg.bind(this, record.id)}>开启</a>
+                <a onClick={this.updateLiveStatus.bind(this, record.id, 0)}>开启</a>
               ) : (
-                <a onClick={this.deleteDataMsg.bind(this, record.id)}>关闭</a>
+                <a onClick={this.updateLiveStatus.bind(this, record.id, 1)}>关闭</a>
               )
             }
           </Fragment>

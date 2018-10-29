@@ -19,6 +19,7 @@ import {
   bindLiveGood,
   bindLiveCourse,
   bindLiveVideo,
+  updateLiveStatus,
 } from '../services/live';
 import { getAllGoods } from '../services/goods';
 import { dedupe } from '../utils/utils';
@@ -54,6 +55,15 @@ export default {
   },
 
   effects: {
+    *updateLiveStatus({ payload, callback }, { call, put }) {
+      const res = yield call(updateLiveStatus, payload);
+      if (res && res.code === 200) {
+        callback();
+        yield put({
+          type: 'clearSmallVieoForm',
+        });
+      }
+    },
     *addSmallVideo({ payload, callback }, { call, put }) {
       const res = yield call(addSmallVideo, payload.smallVideoForm);
       if (res && res.code === 200) {
