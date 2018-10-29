@@ -558,7 +558,7 @@ export default class ClassAdd extends PureComponent {
     dispatch({
       type: 'classModel/getUpload',
       payload: {
-        dir: `dev_audio/${currentUser.id}/${currentUser.shop_store_id}`,
+        dir: `${env.videoUrl}/${currentUser.id}/${currentUser.shop_store_id}`,
         page: uploadPage,
         pageSize: 10,
       },
@@ -683,7 +683,7 @@ export default class ClassAdd extends PureComponent {
     dispatch({
       type: 'classModel/getUpload',
       payload: {
-        dir: `dev_audio/${currentUser.id}/${currentUser.shop_store_id}`,
+        dir: `${env.videoUrl}/${currentUser.id}/${currentUser.shop_store_id}`,
         page: current,
         pageSize: 10,
       },
