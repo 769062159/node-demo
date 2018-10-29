@@ -169,15 +169,15 @@ export const getRouterConfig = app => {
     '/market/EditForm/:id': {
       component: dynamicWrapper(app, ['indexs'], () => import('../routes/Index/EditForm')),
     },
-    '/market/background': {
-      component: dynamicWrapper(app, ['config'], () => import('../routes/Index/Background')),
-    },
+    // '/market/background': {
+    //   component: dynamicWrapper(app, ['config'], () => import('../routes/Index/Background')),
+    // },
     '/market/carousel': {
       component: dynamicWrapper(app, ['indexs'], () => import('../routes/Index/Carousel')),
     },
-    '/market/live-sale': {
-      component: dynamicWrapper(app, ['indexs'], () => import('../routes/Index/LiveSale')),
-    },
+    // '/market/live-sale': {
+    //   component: dynamicWrapper(app, ['indexs'], () => import('../routes/Index/LiveSale')),
+    // },
     '/market/hot-sale': {
       component: dynamicWrapper(app, ['indexs'], () => import('../routes/Index/HotSale')),
     },

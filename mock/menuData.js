@@ -114,14 +114,14 @@ export const menuData = [
         name: '轮播图',
         path: 'carousel',
       },
-      {
-        name: '直播特卖背景',
-        path: 'background',
-      },
-      {
-        name: '直播特卖',
-        path: 'live-sale',
-      },
+      // {
+      //   name: '直播特卖背景',
+      //   path: 'background',
+      // },
+      // {
+      //   name: '直播特卖',
+      //   path: 'live-sale',
+      // },
       {
         name: '热卖商品',
         path: 'hot-sale',

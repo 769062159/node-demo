@@ -96,8 +96,9 @@ export default class FrontUserList extends PureComponent {
           account: `${record.id}@${e}`,
           password: '',
           editId: record.id,
+          powerValue: Number(record.has_user_oauth.permission),
+          merchantVisible: true,
         })
-        this.merchantModal();
       },
     });
   }
@@ -135,7 +136,6 @@ export default class FrontUserList extends PureComponent {
       //   this.setState({
       //     formValues: values,
       //   });
-      console.log(values);
       dispatch({
         type: 'frontUser/fetchFrontUserList',
         payload: values,
@@ -462,7 +462,7 @@ export default class FrontUserList extends PureComponent {
     datas.forEach(item => {
       item.has_account = item.has_account || hasAccountDefault;
     });
-    const { formVisible, type, pagination, editDataId, merchantVisible, account } = this.state;
+    const { formVisible, type, pagination, editDataId, merchantVisible, account, powerValue } = this.state;
     const progressColumns = [
       {
         title: '会员',
@@ -510,7 +510,7 @@ export default class FrontUserList extends PureComponent {
             <Divider type="vertical" />
             <a onClick={this.editDataMsg.bind(this, record.id, 2)}>设置等级</a>
             <Divider type="vertical" />
-            <a onClick={this.setMerchant.bind(this, record)}>设置用户版本</a>
+            <a onClick={this.setMerchant.bind(this, record)}>设置版本</a>
           </Fragment>
         ),
       },
@@ -590,7 +590,7 @@ export default class FrontUserList extends PureComponent {
           />
         </Modal>
         <Modal
-          title="设置商户"
+          title="设置版本"
           visible={merchantVisible}
           onCancel={this.merchantModal}
           onOk={this.merchantOK}
@@ -605,13 +605,13 @@ export default class FrontUserList extends PureComponent {
             <Col span={18}><Input defaultValue={123456} onChange={this.changePassword} /></Col>
           </Row>
           <Row>
-            <Col span={6}>权限</Col>
+            <Col span={6}>版本</Col>
             <Col span={18}>
-              <Select onChange={this.handleLevel} style={{ width: 200 }}>
-                <Option key={1} val={1}>商户版</Option>
-                <Option key={2} val={2}>社群版</Option>
-                <Option key={3} val={3}>视频版</Option>
-                <Option key={4} val={4}>普通版</Option>
+              <Select onChange={this.handleLevel} style={{ width: 200 }} value={powerValue} >
+                <Option key={1} value={1}>商户版</Option>
+                <Option key={2} value={2}>社群版</Option>
+                <Option key={3} value={3}>视频版</Option>
+                <Option key={0} value={0}>普通版</Option>
               </Select>
             </Col>
           </Row>
