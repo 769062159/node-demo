@@ -19,7 +19,8 @@ class AddLiveStep3 extends React.PureComponent {
     // const { url } = this.state;
     // console.log(this.props);
     const onFinish = () => {
-      dispatch(routerRedux.push('/live/list'));
+      // dispatch(routerRedux.push('/live/list'));
+      dispatch(routerRedux.push('/community/community-list'));
     };
     const actions = (
       <Fragment>

@@ -55,12 +55,14 @@ export default {
   },
 
   effects: {
-    *updateLiveStatus({ payload, callback }, { call, put }) {
+    *updateLiveStatus({ payload, callback, index }, { call, put }) {
       const res = yield call(updateLiveStatus, payload);
       if (res && res.code === 200) {
         callback();
         yield put({
-          type: 'clearSmallVieoForm',
+          type: 'updateLiveStatuss',
+          index,
+          types: payload.status,
         });
       }
     },
@@ -367,6 +369,14 @@ export default {
   },
 
   reducers: {
+    updateLiveStatuss(state, { index, types }) {
+      const { liveList } = state;
+      liveList[index].status = types;
+      return {
+        ...state,
+        liveList,
+      };
+    },
     setSmallVideo(state, { payload }) {
       let { smallVideoForm } = state;
       const { data } = payload;

@@ -58,7 +58,7 @@ export default class GoodsList extends PureComponent {
     dispatch({
       type: 'goods/fetchGoods',
       payload: {
-        page_number: 3,
+        page_number: 10,
       },
     });
   }
@@ -102,7 +102,7 @@ export default class GoodsList extends PureComponent {
     if (sorter.field) {
       params.sorter = `${sorter.field}_${sorter.order}`;
     }
-    params.page_number = 3;
+    params.page_number = 10;
     dispatch({
       type: 'goods/fetchGoods',
       payload: params,
@@ -120,7 +120,7 @@ export default class GoodsList extends PureComponent {
     dispatch({
       type: 'goods/fetchGoods',
       payload: {
-        page_number: 3,
+        page_number: 10,
       },
     });
   };
@@ -166,7 +166,7 @@ export default class GoodsList extends PureComponent {
       formValues.sell_goods_price_end = maxPrice;
     }
     formValues.page = page;
-    formValues.page_number = 3;
+    formValues.page_number = 10;
     const arr = selectedRows.map(row => row.goods_id);
     dispatch({
       type: 'goods/obtainedGood',
@@ -212,7 +212,7 @@ export default class GoodsList extends PureComponent {
         values.sell_goods_price_start = minPrice;
         values.sell_goods_price_end = maxPrice;
       }
-      values.page_number = 3;
+      values.page_number = 10;
       dispatch({
         type: 'goods/fetchGoods',
         payload: values,

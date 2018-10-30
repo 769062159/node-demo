@@ -281,9 +281,36 @@ export default class Live extends PureComponent {
   };
 
   // 开启关闭
-  updateLiveStatus = (id, type) => {
-    console.log(id);
-    console.log(type);
+  updateLiveStatus = (id, type, index) => {
+    let typeName = '';
+    if (type) {
+      typeName = '关闭';
+    } else {
+      typeName = '开启';
+    }
+    const that= this;
+    confirm({
+      content: `你确定${typeName}这个吗？`,
+      okText: '确定',
+      okType: 'danger',
+      cancelText: '取消',
+      onOk() {
+        const { dispatch } = that.props;
+        dispatch({
+          type: 'live/updateLiveStatus',
+          payload: {
+            live_id: id,
+            status: type,
+          },
+          index,
+          callback: () => {
+            message.success('设置成功');
+          },
+        });
+      },
+      onCancel() {
+      },
+    });
   }
 
   // 删除商品
@@ -483,7 +510,7 @@ export default class Live extends PureComponent {
         title: '操作',
         // fixed: 'right',
         // width: 150,
-        render: (text, record) => (
+        render: (text, record, index) => (
           <Fragment>
             <a onClick={this.copyBtn.bind(this, record.rtmp_push)}>推流地址</a>
             <Divider type="vertical" />
@@ -491,9 +518,9 @@ export default class Live extends PureComponent {
             <Divider type="vertical" />
             {
               record.status ? (
-                <a onClick={this.updateLiveStatus.bind(this, record.id, 0)}>开启</a>
+                <a onClick={this.updateLiveStatus.bind(this, record.id, 0, index)}>开启</a>
               ) : (
-                <a onClick={this.updateLiveStatus.bind(this, record.id, 1)}>关闭</a>
+                <a onClick={this.updateLiveStatus.bind(this, record.id, 1, index)}>关闭</a>
               )
             }
           </Fragment>

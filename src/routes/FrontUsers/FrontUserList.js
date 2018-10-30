@@ -363,6 +363,18 @@ export default class FrontUserList extends PureComponent {
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
+            <FormItem label="店铺">
+              {getFieldDecorator('user_oauth_type')(
+                <Select>
+                  <Option value={0}>普通版本</Option>
+                  <Option value={2}>社群版本</Option>
+                  <Option value={3}>视频版本</Option>
+                  <Option value={1}>商户版本</Option>
+                </Select>
+              )}
+            </FormItem>
+          </Col>
+          <Col md={8} sm={24}>
             <span className={styles.submitButtons}>
               <Button type="primary" htmlType="submit">
                 查询
@@ -463,24 +475,32 @@ export default class FrontUserList extends PureComponent {
       item.has_account = item.has_account || hasAccountDefault;
     });
     const { formVisible, type, pagination, editDataId, merchantVisible, account, powerValue } = this.state;
-    console.log('权限');
-    console.log(powerValue);
     const progressColumns = [
       {
         title: '会员',
         dataIndex: 'avatar',
         render: (val, text) => (
-          <Row style={{ width: 500 }}>
-            <Col span={4}>
-              <img style={{ height: 80, width: 80 }} src={val} alt="头像" />
-            </Col>
-            <Col span={14} style={{ fontSize: 14 }}>
+          // <Row style={{ width: 500 }}>
+          //   <Col span={4}>
+          //     <img style={{ height: 80, width: 80 }} src={val} alt="头像" />
+          //   </Col>
+          //   <Col span={14} style={{ fontSize: 14 }}>
+          //     <div>{text.nickname}</div>
+          //     <div>Id:{text.id}</div>
+          //     <div>等级:{text.account_level}</div>
+          //     <div>上级:{text.referee && text.referee.nickname}</div>
+          //   </Col>
+          // </Row>
+          <div className={styles.userBox}>
+            <img style={{ height: 80, width: 80 }} src={val} alt="头像" />
+            <div className={styles.userInfo}>
               <div>{text.nickname}</div>
               <div>Id:{text.id}</div>
               <div>等级:{text.account_level}</div>
               <div>上级:{text.referee && text.referee.nickname}</div>
-            </Col>
-          </Row>
+              <div>手机号码:{text.mobile}</div>
+            </div>
+          </div>
         ),
         key: 'avatar',
       },
@@ -559,6 +579,14 @@ export default class FrontUserList extends PureComponent {
               emptyText: '暂无站长id',
             }}
           />
+        </Card>
+        <Card bordered={false} style={{ marginBottom: 10 }}>
+          <div className={styles.tableList}>
+            商户版和社群版后台地址：
+            <a href='http://shop.store.314live.cn' target="view_window">
+              http://shop.store.314live.cn
+            </a>
+          </div>
         </Card>
         <Card bordered={false}>
           <div className={styles.tableListForm}>{this.renderInquire()}</div>

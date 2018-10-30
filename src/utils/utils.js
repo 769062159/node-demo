@@ -12,6 +12,9 @@ export function swapArray(arr, index1, index2) {
 
 // 深拷贝
 export function deepCopy (source) {
+  if (typeof source !== 'object') {
+    return source;
+  }
     const result = source.constructor === Array ? [] : {}; // 用三目运算判断他是数组还是对象
     for (const key in source) {
       if (typeof source[key] === 'object') {
