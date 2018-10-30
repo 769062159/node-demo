@@ -501,7 +501,7 @@ export default class Order extends PureComponent {
 
   render() {
     const {
-      order: { groupList: orderList, expressList },
+      order: { groupList: orderList, groupListPage, expressList },
       shop: { WriteOffList, selectedMember },
       shopLoadig,
       loading,
@@ -686,6 +686,8 @@ export default class Order extends PureComponent {
                   payload: values,
                 });
               },
+              total: groupListPage.total,
+              pageSize: groupListPage.pageSize,
               current: page,
             }}
             dataSource={orderList}
