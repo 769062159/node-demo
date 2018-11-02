@@ -444,7 +444,7 @@ export default class ClassAdd extends PureComponent {
       } else {
         res.http_url = res.url;
       }
-      res.lesson_id = lessons[index].id || 0;
+      res.lesson_id = lessons[index] ? lessons[index].id : 0;
       data.episodes.push(res);
     })
     data.course_id = this.props.match.params.id;

@@ -542,6 +542,7 @@ class EditLiveStep2 extends React.PureComponent {
     liveForm.share_cover = liveForm.yyy[0].response.data;
     liveForm.cover = liveForm.share_cover;
     liveForm.live_detail = liveForm.live_details || liveForm.live_detail;
+    liveForm.live_detail = liveForm.live_detail || '';
     liveForm.live_id = liveForm.id;
     dispatch({
       type: 'live/editLive',
