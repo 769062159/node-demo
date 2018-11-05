@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */ 
 import React from 'react';
 import { message } from 'antd';
 import { Map, Marker } from 'react-amap';
@@ -30,7 +31,7 @@ export default class MyMap extends React.Component {
           currentLocation: 'loading...',
         });
         const { handleMapAddress } = _this.props;
-        _this.geocoder &&
+        if (_this.geocoder) {
           _this.geocoder.getAddress(lnglat, (status, result) => {
             const { regeocode: { addressComponent: { district }, formattedAddress } } = result;
             const address = formattedAddress.split(district)[1];
@@ -51,6 +52,7 @@ export default class MyMap extends React.Component {
               });
             }
           });
+        }
       },
     };
     this.markerEvents = {};
