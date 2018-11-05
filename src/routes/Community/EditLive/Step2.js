@@ -48,6 +48,9 @@ const CustomizedForm = Form.create({
       access_type: Form.createFormField({
         value: props.liveForm.access_type,
       }),
+      mobile: Form.createFormField({
+        value: props.liveForm.mobile,
+      }),
       user_level: Form.createFormField({
         value: props.liveForm.user_level,
       }),
@@ -324,6 +327,18 @@ const CustomizedForm = Form.create({
           }
         })()
       }
+      <FormItem {...formItemLayout} label="客服电话">
+        {getFieldDecorator('mobile', {
+          rules: [
+            {
+              required: true,
+              message: '请输入客服电话',
+            },
+          ],
+        })(
+          <InputNumber />
+        )}
+      </FormItem>
       <FormItem {...formItemLayout} label="全场禁言">
         {getFieldDecorator('all_prohibit', {
           rules: [
