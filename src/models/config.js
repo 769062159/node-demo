@@ -5,6 +5,7 @@ export default {
 
   state: {
     list: [],
+    mobile: '',
   },
 
   effects: {
@@ -41,20 +42,9 @@ export default {
     },
     getConfig(state, { payload }) {
       const { data } = payload;
-      const list = [];
-      if (data.index_ad) {
-        list.push({
-          status: 'done',
-          uploaded: 'done',
-          response: { status: 'success' },
-          name: data.index_ad,
-          uid: data.index_ad,
-          url: data.index_ad,
-        });
-      }
       return {
         ...state,
-        list,
+        mobile: data.mobile || '',
       };
     },
   },

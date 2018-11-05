@@ -5,6 +5,16 @@ export function fixedZero(val) {
   return val * 1 < 10 ? `0${val}` : val;
 }
 
+/**
+ * 判断是否是手机
+ * @param {string} string
+ * @return {boolean} 是否是手机
+ */
+export function isPhoneNumber(str) {
+  let phoneReg = /^1(3|4|5|7|8)\d{9}$/;
+  return phoneReg.test(str);
+};
+
 // 数组换位置
 export function swapArray(arr, index1, index2) {
   arr[index1] = arr.splice(index2, 1, arr[index1])[0];

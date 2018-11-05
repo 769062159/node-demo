@@ -169,9 +169,9 @@ export const getRouterConfig = app => {
     '/market/EditForm/:id': {
       component: dynamicWrapper(app, ['indexs'], () => import('../routes/Index/EditForm')),
     },
-    // '/market/background': {
-    //   component: dynamicWrapper(app, ['config'], () => import('../routes/Index/Background')),
-    // },
+    '/market/phone': {
+      component: dynamicWrapper(app, ['config'], () => import('../routes/Index/Background')),
+    },
     '/market/carousel': {
       component: dynamicWrapper(app, ['indexs'], () => import('../routes/Index/Carousel')),
     },

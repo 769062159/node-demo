@@ -2,39 +2,44 @@ import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 // import moment from 'moment';
 import {
-  // Row,
-  // Col,
-  message,
-  Upload,
-  Modal,
-  Row,
   Form,
-  //   Select,
-  Icon,
   Button,
   // Dropdown,
   // Menu,
-  // InputNumber,
+  message,
+  InputNumber,
   // DatePicker,
 } from 'antd';
 // import StandardTable from 'components/StandardTable';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
-import styles from './Style.less';
+import { isPhoneNumber } from '../../utils/utils';
+
+const FormItem = Form.Item;
+const formItemLayout = {
+  labelCol: {
+    xs: { span: 24 },
+    sm: { span: 7 },
+  },
+  wrapperCol: {
+    xs: { span: 24 },
+    sm: { span: 12 },
+    md: { span: 10 },
+  },
+};
+const submitFormLayout = {
+  wrapperCol: {
+    xs: { span: 24, offset: 0 },
+    sm: { span: 10, offset: 7 },
+  },
+};
 
 @connect(({ config, loading }) => ({
   config,
   loading: loading.models.config,
 }))
 @Form.create()
-export default class Config extends PureComponent {
+export default class Phone extends PureComponent {
   state = {
-    // selectedRows: [],
-    previewVisible: false,
-    previewImage: '',
-    header: {
-      Authorization: `Bearer ${localStorage.getItem('token')}`,
-    },
-    // selectOption: 0,
   };
   componentDidMount() {
     const { dispatch } = this.props;
@@ -42,117 +47,50 @@ export default class Config extends PureComponent {
       type: 'config/fetchConfig',
     });
   }
-  handleCancel = () => this.setState({ previewVisible: false });
-
-  // 新增修改提交
-  handleSubmit = e => {
+  handleSubmit =  e => {
     e.preventDefault();
-    const data = {};
-    const { config: { list } } = this.props;
-    if (list.length) {
-      data.index_ad = list[0].url;
-    } else {
-      message.error('请上传图片');
-      return false;
-    }
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'config/addConfig',
-      payload: data,
-    });
-    message.success('添加成功');
-  };
-  handlePreview = file => {
-    this.setState({
-      previewImage: file.url || file.thumbUrl,
-      previewVisible: true,
-    });
-  };
-  handleChange = ({ fileList }) => {
-    if (fileList.length) {
-      const arr = [];
-      fileList.forEach(item => {
-        if (item.status === 'done' && item.uploaded !== 'done') {
-          const img = {};
-          img.status = 'done';
-          img.uploaded = 'done';
-          img.response = { status: 'success' };
-          img.name = item.name;
-          img.uid = item.uid;
-          img.url = item.response.data;
-          arr.push(img);
-          // return img;
-          // this.props.onChange([img]);
-          // const { dispatch } = this.props;
-          // dispatch({
-          //   type: 'config/setAdsBackground',
-          //   payload: {
-          //     fileList: [img],
-          //   },
-          // });
+    const { validateFields } = this.props.form;
+    validateFields((err, value) => {
+      if (!err) {
+        const { dispatch } = this.props;
+        if (isPhoneNumber(value.mobile)) {
+          value.mobile = value.mobile.toString();
+          dispatch({
+            type: 'config/addConfig',
+            payload: value,
+          });
         } else {
-          arr.push(item);
+          message.error('手机号码不正确');
         }
-        // return item;
-      });
-      const { dispatch } = this.props;
-      dispatch({
-        type: 'config/setAdsBackground',
-        payload: {
-          fileList: arr,
-        },
-      });
-    }
-  };
-  removeImg = () => {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'config/clearBackground',
+      }
     });
   };
-
   render() {
-    const { config: { list }, loading } = this.props;
-    const { header, previewImage, previewVisible } = this.state;
-    // 上传icon
-    const uploadButton = (
-      <div>
-        <Icon type="plus" />
-        <div className="ant-upload-text">Upload</div>
-      </div>
-    );
-    // 上传图片参数
-    const payload = {
-      type: 2,
-    };
+    const { loading, form, config: { mobile } } = this.props;
+    const { getFieldDecorator } = form;
+
+    // const { header, previewImage, previewVisible } = this.state;
 
     return (
       <PageHeaderLayout>
-        <Row style={{ margin: '10px 0' }} className={styles.uploadBtn}>
-          <Upload
-            action={this.props.uploadUrl}
-            headers={header}
-            listType="picture-card"
-            fileList={list}
-            onPreview={this.handlePreview}
-            onChange={this.handleChange}
-            data={payload}
-            onRemove={this.removeImg}
-          >
-            {list.length >= 1 ? null : uploadButton}
-          </Upload>
-          <div style={{ color: '#3E91F7', marginTop: 80 }}>
-            首页直播商品背景图，尺寸为750px*460px
-          </div>
-        </Row>
-        <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
-          <img alt="example" style={{ width: '100%' }} src={previewImage} />
-        </Modal>
-        <Row type="flex" align="center">
-          <Button type="primary" htmlType="submit" loading={loading} onClick={this.handleSubmit}>
-            提交
-          </Button>
-        </Row>
+        <Form>
+          <FormItem {...formItemLayout} label="联系方式">
+            {getFieldDecorator('mobile', {
+              initialValue: mobile,
+              rules: [
+                {
+                  required: true,
+                  message: '请输入联系方式',
+                },
+              ],
+            })(<InputNumber style={{width: 200}} />)}
+          </FormItem>
+          <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
+            <Button type="primary" loading={loading}  onClick={this.handleSubmit}>
+              提交
+            </Button>
+          </FormItem>
+        </Form>
       </PageHeaderLayout>
     );
   }
