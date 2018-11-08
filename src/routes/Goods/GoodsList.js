@@ -432,7 +432,7 @@ export default class GoodsList extends PureComponent {
               <img style={{ height: 80, width: 80 }} src={text.img} alt="商品" />
             </Col>
             <Col span={18} style={{ fontSize: 14 }}>
-              <div>{text.goods_name}</div>
+              <div className={styles.twoLine}>{text.goods_name}</div>
               <div>销售价:{text.sell_goods_price}</div>
               <div>库存:{text.goods_total_inventory}</div>
               <div>分类:{text.category_name}</div>

@@ -557,15 +557,27 @@ export default class Order extends PureComponent {
         render: val =>
           val.map(res => {
             return (
-              <Row>
-                <Col span={8}>
-                  <img src={res.has_order_goods_sku.http_url} alt="图片" style={{ width: 60, maxHeight: 60 }} />
-                </Col>
-                <Col span={16}>
+              <div className={styles.shopMsg}>
+                <img src={res.has_order_goods_sku.http_url} alt="图片" style={{ width: 60, maxHeight: 60 }} />
+                <div className={styles.shopbox}>
                   <div>{res.goods_name}</div>
-                  <div>¥{res.group_price} 数量:{res.has_order_goods_sku.total_goods_number}</div>
-                </Col>
-              </Row>
+                  <div>规格：{res.has_order_goods_sku.sku_goods_name}</div>
+                </div>
+                <div className={styles.shopPrice}>
+                  <div>¥{res.group_price}</div>
+                  <div>数量:{res.has_order_goods_sku.total_goods_number}</div>
+                </div>
+              </div>
+              // <Row></div>
+              //   <Col span={8}>
+              //     <img src={res.has_order_goods_sku.http_url} alt="图片" style={{ width: 60, maxHeight: 60 }} />
+              //   </Col>
+              //   <Col span={16}>
+              //     <div>{res.goods_name}</div>
+              //     <div>{res.has_order_goods_sku.sku_goods_name}</div>
+              //     <div>¥{res.group_price} 数量:{res.has_order_goods_sku.total_goods_number}</div>
+              //   </Col>
+              // </Row>
             );
           }),
       },

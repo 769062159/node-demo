@@ -336,7 +336,7 @@ const CustomizedForm = Form.create({
             },
           ],
         })(
-          <InputNumber />
+          <Input style={{width: 200}} />
         )}
       </FormItem>
       <FormItem {...formItemLayout} label="全场禁言">

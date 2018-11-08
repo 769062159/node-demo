@@ -545,7 +545,10 @@ export default class Order extends PureComponent {
                 <Col span={6}>
                   <img src={res.has_order_goods_sku.http_url} alt="图片" style={{ width: 60 }} />
                 </Col>
-                <Col span={13}>{res.goods_name}</Col>
+                <Col span={13}>
+                  <div>{res.goods_name}</div>
+                  <div>规格：{res.has_order_goods_sku.sku_goods_name}</div>
+                </Col>
                 <Col span={5}>
                   <div>¥{res.has_order_goods_sku.unit_price}</div>
                   <div>*{res.has_order_goods_sku.total_goods_number}</div>
