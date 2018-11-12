@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
-import { message, Form, Input, Button, Cascader, InputNumber, TimePicker } from 'antd';
+import { message, Form, Input, Button, Cascader, InputNumber, TimePicker, Tag, Upload, Icon } from 'antd';
 import { connect } from 'dva';
+import { routerRedux } from 'dva/router';
 import moment from 'moment';
 // import { timeFormat } from '../../utils/utils';
 // import { routerRedux } from 'dva/router';
@@ -36,6 +37,9 @@ const submitFormLayout = {
 @Form.create()
 export default class AddShop extends Component {
   state = {
+    header: {
+      Authorization: `Bearer ${localStorage.getItem('token')}`,
+    },
     // expandForm: false,
     addressArr: [],
     Jingwei: {},
@@ -58,15 +62,17 @@ export default class AddShop extends Component {
       callback: () => {
         const { shop: { shopDetail } } = this.props;
         const addressArr = [];
-        addressArr.push(shopDetail.province_id);
-        addressArr.push(shopDetail.city_id);
-        addressArr.push(shopDetail.region_id);
-        dispatch({
-          type: 'address/fetchAll',
-          payload: {
-            addressArr,
-          },
-        });
+        if (shopDetail.region_id !== 0) {
+          addressArr.push(shopDetail.province_id);
+          addressArr.push(shopDetail.city_id);
+          addressArr.push(shopDetail.region_id);
+          dispatch({
+            type: 'address/fetchAll',
+            payload: {
+              addressArr,
+            },
+          });
+        }
       },
     });
     // dispatch({
@@ -147,6 +153,11 @@ export default class AddShop extends Component {
       if (err) {
         return false;
       }
+      const { shop: { shopLogo } } = this.props;
+      if (!shopLogo.length) {
+        message.error('上传logo');
+      }
+      values.http_url = shopLogo[0].url;
       values.close_time = values.close_time.needTime;
       values.open_time = values.open_time.needTime;
       const { addressBig } = values;
@@ -166,7 +177,10 @@ export default class AddShop extends Component {
         type: 'shop/updateShop',
         payload: values,
         callback: () => {
-          message.success('修改成功！')
+          message.success('修改成功！');
+          const { dispatch } = this.props;
+          const url = `/shop/store`;
+          dispatch(routerRedux.push(url));
         },
       });
       // if (!err) {
@@ -203,30 +217,58 @@ export default class AddShop extends Component {
       },
     });
   };
-  // 修改表单值
-  changeFormVal = val => {
-    const { dispatch } = this.props;
-    const obj = {};
-    for (const key of Object.keys(val)) {
-      obj[key] = val[key].value;
+  beforeUpload = (file) => {
+    const isLt1M = file.size / 1024 / 1024 < 1;
+    if (!isLt1M) {
+      message.error('图片不能超过1M!');
     }
+    return isLt1M;
+  }
+  changeImg = (data) => {
+    if (!data.file.status) {
+      return;
+    }
+    let { fileList } = data;
+    fileList = fileList.map(item => {
+      if (item.status === 'done') {
+        const img = {};
+        img.status = 'done';
+        img.response = { status: 'success' };
+        img.name = item.name;
+        img.uid = item.uid;
+        img.url = item.response.data;
+        return img;
+      }
+      return item;
+    });
+    const { dispatch } = this.props;
     dispatch({
-      type: 'indexs/changeFormVal',
-      payload: {
-        obj,
-      },
+      type: 'shop/setShopLogo',
+      payload: fileList,
     });
   };
 
   render() {
     const {
         address: { addressList },
-        shop: { shopDetail },
+        shop: { shopDetail, shopLogo },
         loading,
+        uploadUrl,
     } = this.props;
     const { getFieldDecorator } = this.props.form;
     const { propsAddress } = shopDetail;
     const addressArr = [];
+    // 上传图片参数
+    const payload = {
+      type: 2,
+    };
+    const uploadButton = (
+      <div>
+        <Icon type="plus" />
+        <div className="ant-upload-text">上传</div>
+      </div>
+    );
+    const { header } = this.state;
     if (shopDetail.province_id) {
       addressArr.push(shopDetail.province_id);
       addressArr.push(shopDetail.city_id);
@@ -251,6 +293,28 @@ export default class AddShop extends Component {
               </Select>
             )}
           </FormItem> */}
+          <Form.Item
+            {...formItemLayout}
+            label="门店logo"
+            extra={<Tag color="blue">建议尺寸100px*100px，大小不得大于1M</Tag>}
+          >
+            {getFieldDecorator('yyy', {
+              rules: [{ required: false, message: '请填写门店logo' }],
+            })(
+              <Upload
+                fileList={shopLogo}
+                action={uploadUrl}
+                beforeUpload={this.beforeUpload}
+                listType="picture-card"
+                onChange={this.changeImg}
+                // onPreview={handlePreviewImg}
+                data={payload}
+                headers={header}
+              >
+                {shopLogo.length ? null : uploadButton}
+              </Upload>
+            )}
+          </Form.Item>
           <FormItem {...formItemLayout} label="门店名称">
             {getFieldDecorator('shop_name', {
               initialValue: shopDetail.shop_name,
@@ -341,7 +405,7 @@ export default class AddShop extends Component {
                 date.needTime = dateString;
                 return date;
               },
-              initialValue:  moment(shopDetail.open_time, 'HH:mm:ss'),
+              initialValue: shopDetail.open_time ? moment(shopDetail.open_time, 'HH:mm:ss') : null,
             })(
               <TimePicker />
             )}
@@ -358,13 +422,13 @@ export default class AddShop extends Component {
                 date.needTime = dateString;
                 return date;
               },
-              initialValue:  moment(shopDetail.close_time, 'HH:mm:ss'),
+              initialValue: shopDetail.close_time ? moment(shopDetail.close_time, 'HH:mm:ss') : null,
             })(
               <TimePicker />
             )}
           </FormItem>
           <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
-            <Button type="primary" htmlType="submit" loading={loading} onClick={this.handleSubmit}>
+            <Button type="primary" loading={loading} onClick={this.handleSubmit}>
               提交
             </Button>
           </FormItem>

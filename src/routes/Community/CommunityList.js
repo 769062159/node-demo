@@ -19,6 +19,7 @@ import {
   Spin,
   Tag,
 } from 'antd';
+import Ellipsis from '../../components/Ellipsis';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './TableList.less';
 import request from '../../utils/request';
@@ -485,11 +486,15 @@ export default class Live extends PureComponent {
         title: '社群标题',
         dataIndex: 'title',
         key: 'title',
+        width: 200,
+        render: val => (<Ellipsis lines={2}>{val}</Ellipsis>),
       },
       {
         title: '社群简介',
         dataIndex: 'desc',
         key: 'desc',
+        width: 300,
+        render: val => (<Ellipsis lines={2}>{val}</Ellipsis>),
       },
       {
         title: '社群封面',
@@ -532,11 +537,11 @@ export default class Live extends PureComponent {
       <PageHeaderLayout>
         <Card bordered={false}>
           <div className={styles.tableList}>
-            <div className={styles.tableListOperator}>
+            {/* <div className={styles.tableListOperator}>
               <Button icon="plus" type="primary" onClick={this.goPath.bind(this)}>
                 新建
               </Button>
-            </div>
+            </div> */}
             <Table
               dataSource={datas}
               rowKey={record => record.id}

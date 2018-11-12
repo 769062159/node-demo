@@ -6,13 +6,11 @@ import {
   Button,
   // Dropdown,
   // Menu,
-  message,
-  InputNumber,
+  Input,
   // DatePicker,
 } from 'antd';
 // import StandardTable from 'components/StandardTable';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
-import { isPhoneNumber } from '../../utils/utils';
 
 const FormItem = Form.Item;
 const formItemLayout = {
@@ -53,15 +51,11 @@ export default class Phone extends PureComponent {
     validateFields((err, value) => {
       if (!err) {
         const { dispatch } = this.props;
-        if (isPhoneNumber(value.mobile)) {
-          value.mobile = value.mobile.toString();
-          dispatch({
-            type: 'config/addConfig',
-            payload: value,
-          });
-        } else {
-          message.error('手机号码不正确');
-        }
+        value.mobile = value.mobile.toString();
+        dispatch({
+          type: 'config/addConfig',
+          payload: value,
+        });
       }
     });
   };
@@ -83,7 +77,7 @@ export default class Phone extends PureComponent {
                   message: '请输入联系方式',
                 },
               ],
-            })(<InputNumber style={{width: 200}} />)}
+            })(<Input style={{width: 200}} />)}
           </FormItem>
           <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
             <Button type="primary" loading={loading}  onClick={this.handleSubmit}>

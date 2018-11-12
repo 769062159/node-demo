@@ -111,6 +111,22 @@ export default class ShopList extends PureComponent {
         key: 'shop_name',
       },
       {
+        title: '门店Logo',
+        dataIndex: 'http_url',
+        key: 'http_url',
+        render(text) {
+          return text ? <img alt="图片" src={text} width={60} /> : null
+        },
+      },
+      {
+        title: '门店类别',
+        dataIndex: 'type',
+        key: 'type',
+        render(text) {
+          return text ? '分店' : '总店'
+        },
+      },
+      {
         title: '门店地址',
         dataIndex: 'address',
         render(text, record) {

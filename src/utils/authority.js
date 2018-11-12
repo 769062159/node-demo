@@ -29,9 +29,12 @@ export function getToken() {
   if (!tokenStr) {
     return null;
   }
-
-  const token = JSON.parse(tokenStr);
-  return token;
+  try {
+    const token = JSON.parse(tokenStr); 
+    return token;
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 export function setTokenExpired() {

@@ -584,7 +584,7 @@ export default class Order extends PureComponent {
       {
         title: '213',
         width: '8%',
-        dataIndex: 'goods_amount',
+        dataIndex: 'order_amount',
       },
       {
         title: '213',

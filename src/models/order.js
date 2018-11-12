@@ -120,6 +120,7 @@ export default {
           } else {
             ele.isBtn = false;
           }
+          ele.order_amount = res.order_amount;
           ele.get_store_name = res.get_store_name;
           ele.has_check_user = res.has_check_user;
           ele.store_name = res.store_name;

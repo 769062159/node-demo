@@ -4,6 +4,7 @@ export default {
   namespace: 'shop',
 
   state: {
+    shopLogo: [],
     shopList: [],
     shopListPage: {},
     selectedShop: [], // 选中的shop
@@ -88,6 +89,12 @@ export default {
   },
 
   reducers: {
+    setShopLogo(state, { payload }) {
+      return {
+        ...state,
+        shopLogo: payload,
+      }
+    },
     clearTable(state) {
       return {
         ...state,
@@ -110,6 +117,7 @@ export default {
       return {
         ...state,
         shopDetail: {},
+        shopLogo: [],
       }
     },
     setPropsAddress(state, { payload }) {
@@ -122,12 +130,23 @@ export default {
     },
     getShopDetail(state, { payload }) {
       // const { list, page, total } = payload;
+      const shopLogo = []
       if (payload) {
         payload.propsAddress = payload.province_name + payload.city_name + payload.region_name + payload.address;
+        if (payload.http_url) {
+          const img = {};
+          img.status = 'done';
+          img.response = { status: 'success' };
+          img.name = payload.id;
+          img.uid = payload.id;
+          img.url = payload.http_url;
+          shopLogo.push(img);
+        }
       }
       return {
         ...state,
         shopDetail: payload || {},
+        shopLogo,
       }
     },
     getMenber(state, { payload }) {
