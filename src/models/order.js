@@ -1,5 +1,5 @@
 import { message } from 'antd';
-import { getOrderList, getExpressList, shipshop, editShip, editAdress, getGroupList, getGroupDetail } from '../services/order';
+import { getOrderList, getExpressList, shipshop, editShip, editAdress, getGroupList, getGroupDetail, collectGoods } from '../services/order';
 
 export default {
   namespace: 'order',
@@ -17,6 +17,20 @@ export default {
   },
 
   effects: {
+    *collectGoods({ payload, values }, { call, put, select }) {
+      const response = yield call(collectGoods, { order_pack_id: payload });
+      if (response.code === 200) {
+        const res = yield call(getOrderList, { ...payload });
+        let id = '';
+        id = yield select(state => state.user.currentUser.shop_store_id);
+        yield put({
+          type: 'getOrder',
+          payload: res,
+          id,
+          page: values.page || 1,
+        });
+      }
+    },
     *getGroupList({ payload }, { call, put, select }) {
       const response = yield call(getGroupList, { ...payload });
       const id = yield select(state => state.user.currentUser.shop_store_id);

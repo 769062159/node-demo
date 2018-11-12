@@ -15,6 +15,7 @@ import {
   Table,
   message,
 } from 'antd';
+import Ellipsis from '../../components/Ellipsis';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
 import styles from './List.less';
@@ -560,7 +561,7 @@ export default class Order extends PureComponent {
               <div className={styles.shopMsg}>
                 <img src={res.has_order_goods_sku.http_url} alt="图片" style={{ width: 60, maxHeight: 60 }} />
                 <div className={styles.shopbox}>
-                  <div>{res.goods_name}</div>
+                  <div><Ellipsis lines={2}>{res.goods_name}</Ellipsis></div>
                   <div>规格：{res.has_order_goods_sku.sku_goods_name}</div>
                 </div>
                 <div className={styles.shopPrice}>

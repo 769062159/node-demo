@@ -54,3 +54,11 @@ export async function getGroupDetail(params) {
     body: params,
   });
 }
+
+// 确认收货
+export async function collectGoods(params) {
+  return request('/merchant/order/finish', {
+    method: 'POST',
+    body: params,
+  });
+}

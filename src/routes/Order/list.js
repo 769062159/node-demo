@@ -21,6 +21,7 @@ import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './List.less';
 
 const FormItem = Form.Item;
+const { confirm } = Modal;
 const InputGroup = Input.Group;
 const { Option } = Select;
 const oredrStatus = ['未支付', '已取消', '待发货', '已发货', '待评价', '已评价', '退款成功'];
@@ -198,6 +199,29 @@ export default class Order extends PureComponent {
       isEditType: 1,
     });
   };
+  collectGoods = (pack) => {
+    const that = this;
+    confirm({
+      content: '你确定收货这个吗？',
+      okText: '确定',
+      okType: 'danger',
+      cancelText: '取消',
+      onOk() {
+        const { values } = that.state;
+        const { dispatch } = that.props;
+        dispatch({
+          type: 'order/collectGoods',
+          payload: pack.pack_id,
+          values,
+          callback: () => {
+            message.success('收货成功！');
+          },
+        });
+      },
+      onCancel() {
+      },
+    });
+  }
   // 修改发货
   editAddress = pack => {
     const addressArr = [];
@@ -583,9 +607,14 @@ export default class Order extends PureComponent {
                 发货
               </Button>
             ) : record.order_status === 3 && record.isBtn ? (
-              <Button style={grayBtn} onClick={this.editShip.bind(this, record)}>
-                修改发货
-              </Button>
+              <Fragment>
+                <Button style={grayBtn} onClick={this.editShip.bind(this, record)}>
+                  修改发货
+                </Button>
+                <Button style={grayBtn} onClick={this.collectGoods.bind(this, record)}>
+                  确认收货
+                </Button>
+              </Fragment>
             ) : record.order_status === 1 ? null : null}
             {/* <a href={`#/order/order-detail/${record.pack_id}`} style={grayBtn} >
               查看详情
