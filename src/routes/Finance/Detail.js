@@ -59,7 +59,7 @@ export default class BasicProfile extends Component {
       mobile = detailMsg.has_user.mobile;
       referee = detailMsg.has_user.has_referee ? detailMsg.has_user.has_referee.nickname : '';
       total = detailMsg.account_total_income;
-      balance = detailMsg.account_balance;
+      balance = detailMsg.account_commission;
       createTime = moment(detailMsg.has_user.create_time * 1000).format('YYYY-MM-DD HH:mm:ss');
     }
     const goodsColumns = [
@@ -75,7 +75,7 @@ export default class BasicProfile extends Component {
       {
         title: '到账时间',
         dataIndex: 'profit_time',
-        render: val => <span>{moment(val * 1000).format('YYYY-MM-DD HH:mm:ss')}</span>,
+        render: (val, record) => record.status ? <span>{moment(val * 1000).format('YYYY-MM-DD HH:mm:ss')}</span> : '未到账',
         key: 'profit_time',
       },
     ];

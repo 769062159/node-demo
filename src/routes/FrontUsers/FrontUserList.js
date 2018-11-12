@@ -38,8 +38,9 @@ const formSubmitLayout = {
   },
 };
 
-@connect(({ frontUser, loading }) => ({
+@connect(({ frontUser, loading, user }) => ({
   frontUser,
+  user,
   loading: loading.models.frontUser,
 }))
 @Form.create()
@@ -450,6 +451,7 @@ export default class FrontUserList extends PureComponent {
   render() {
     const {
       frontUser: { frontUserList: datas, frontUserListPage, userRankList, getDefaultList },
+      user: { currentUser },
       loading,
     } = this.props;
     const hasAccountDefault = {
@@ -528,9 +530,15 @@ export default class FrontUserList extends PureComponent {
         title: '操作',
         render: record => (
           <Fragment>
-            <a onClick={this.editDataMsg.bind(this, record.id, 1)}>设置上级</a>
-            <Divider type="vertical" />
             <a onClick={this.editDataMsg.bind(this, record.id, 2)}>设置等级</a>
+            {
+              currentUser.show_update_referee_button ? (
+                <Fragment>
+                  <Divider type="vertical" />
+                  <a onClick={this.editDataMsg.bind(this, record.id, 1)}>设置上级</a>
+                </Fragment>
+              ) : null
+            }
             <Divider type="vertical" />
             <a onClick={this.setMerchant.bind(this, record)}>设置版本</a>
           </Fragment>

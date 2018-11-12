@@ -89,10 +89,10 @@ export default class Rank extends PureComponent {
         title: '未到账收入',
         dataIndex: 'projected_income',
       },
-      {
-        title: '账户余额',
-        dataIndex: 'account_balance',
-      },
+      // {
+      //   title: '账户余额',
+      //   dataIndex: 'account_commission',
+      // },
       {
         title: '账户佣金',
         dataIndex: 'account_commission',
