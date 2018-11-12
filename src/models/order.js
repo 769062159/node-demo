@@ -40,32 +40,41 @@ export default {
         id,
       });
     },
-    *editAddress({ payload }, { call, put }) {
+    *editAddress({ payload }, { call, put, select }) {
       yield call(editAdress, { ...payload });
       message.success('修改成功');
       const response = yield call(getOrderList, { page: payload.page });
+      let id = '';
+      id = yield select(state => state.user.currentUser.shop_store_id);
       yield put({
         type: 'getOrder',
+        id,
         payload: response,
         page: payload.page,
       });
     },
-    *editShipGood({ payload }, { call, put }) {
+    *editShipGood({ payload }, { call, put, select }) {
       yield call(editShip, { ...payload });
       message.success('修改成功');
       const response = yield call(getOrderList, { page: payload.page });
+      let id = '';
+      id = yield select(state => state.user.currentUser.shop_store_id);
       yield put({
         type: 'getOrder',
+        id,
         payload: response,
         page: payload.page,
       });
     },
-    *shipGood({ payload }, { call, put }) {
+    *shipGood({ payload }, { call, put, select }) {
       yield call(shipshop, { ...payload });
       message.success('发货成功');
       const response = yield call(getOrderList, { page: payload.page });
+      let id = '';
+      id = yield select(state => state.user.currentUser.shop_store_id);
       yield put({
         type: 'getOrder',
+        id,
         payload: response,
         page: payload.page,
       });
