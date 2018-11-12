@@ -141,7 +141,18 @@ export default class GroupDetail extends PureComponent {
             <div className={styles.orderMsg}>订单状态:{orderStatus[groupDetail.order_status]}</div>
             <div className={styles.orderMsg}>配送方式:自提</div>
             <div className={styles.orderMsg}>收货人:{groupDetail.consignee}<span>联系电话:{groupDetail.mobile}</span></div>
-            <div className={styles.orderMsg}>门店信息:{groupDetail.store_name}({groupDetail.province_name + groupDetail.city_name + groupDetail.district_name + groupDetail.address})<span>联系电话:{groupDetail.shopMobile}</span></div>
+            <div className={styles.orderMsg}>
+              {
+                groupDetail.sale_channel ? (
+                  '门店信息'
+                ) : '收货地址'
+              }:{groupDetail.store_name}({groupDetail.province_name + groupDetail.city_name + groupDetail.district_name + groupDetail.address})
+              {
+                groupDetail.sale_channel ? (
+                  <span>联系电话:{groupDetail.shopMobile}</span>
+                ) : null
+              }
+            </div>
             {
               (groupDetail.order_status === 4 || groupDetail.order_status === 5) ? (
                 <div>

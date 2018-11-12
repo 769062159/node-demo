@@ -631,15 +631,14 @@ export default class Order extends PureComponent {
               <Button style={grayBtn} onClick={this.ship.bind(this, record.pack_id)}>
                 发货
               </Button>
-              {/* <a href={`#/order/group-detail/${record.order_id}`} style={grayBtn} >
+              <a href={`#/order/group-detail/${record.order_id}`} style={grayBtn} >
                 详情
-              </a> */}
+              </a>
             </Row>
           ) : (
-            null
-            // <a href={`#/order/group-detail/${record.order_id}`} style={grayBtn} >
-            //   详情
-            // </a>
+            <a href={`#/order/group-detail/${record.order_id}`} style={grayBtn} >
+              详情
+            </a>
           ),
       },
     ];

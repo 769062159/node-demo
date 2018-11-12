@@ -96,7 +96,9 @@ export default {
       } else {
         payload.stepStatus = 3;
       }
-      payload.shopMobile = payload.has_group.has_group_user[0].has_store.mobile;
+      if (payload.sale_channel) {
+        payload.shopMobile = payload.has_group.has_group_user[0].has_store.mobile;
+      }
       delete payload.has_group.has_group_user;
       return {
         ...state,
