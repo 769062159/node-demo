@@ -95,7 +95,7 @@ export default class FrontUserList extends PureComponent {
       callback: (e) => {
         this.setState({
           account: `${record.id}@${e}`,
-          password: '',
+          password: record.mobile || '123456',
           editId: record.id,
           powerValue: Number(record.has_user_oauth.permission),
           merchantVisible: true,
@@ -121,7 +121,9 @@ export default class FrontUserList extends PureComponent {
     }
   };
   handleSearch = e => {
-    e.preventDefault();
+    if (e) {
+      e.preventDefault()
+    }
     const { pagination } = this.state;
     const { dispatch, form } = this.props;
 
@@ -218,6 +220,15 @@ export default class FrontUserList extends PureComponent {
     this.setState({
       powerValue,
     })
+  }
+  searchMsg = (text) => {
+    console.log(text);
+    if (text.nickname) {
+      this.props.form.setFieldsValue({
+        nickname: text.nickname,
+      });
+      this.handleSearch();
+    }
   }
 
   // 换页
@@ -476,7 +487,7 @@ export default class FrontUserList extends PureComponent {
     datas.forEach(item => {
       item.has_account = item.has_account || hasAccountDefault;
     });
-    const { formVisible, type, pagination, editDataId, merchantVisible, account, powerValue } = this.state;
+    const { formVisible, type, pagination, editDataId, merchantVisible, account, powerValue, password } = this.state;
     const progressColumns = [
       {
         title: '会员',
@@ -499,7 +510,7 @@ export default class FrontUserList extends PureComponent {
               <div>{text.nickname}</div>
               <div>Id:{text.id}</div>
               <div>等级:{text.account_level}</div>
-              <div>上级:{text.referee && text.referee.nickname}</div>
+              <div className={styles.superior} onClick={this.searchMsg.bind(this, text.referee)} >上级:{text.referee && text.referee.nickname}</div>
               <div>手机号码:{text.mobile}</div>
             </div>
           </div>
@@ -640,7 +651,7 @@ export default class FrontUserList extends PureComponent {
           </Row>
           <Row style={{ marginBottom: 20 }}>
             <Col span={6}>密码</Col>
-            <Col span={18}><Input defaultValue={123456} onChange={this.changePassword} /></Col>
+            <Col span={18}><Input value={password} onChange={this.changePassword}  /></Col>
           </Row>
           <Row>
             <Col span={6}>版本</Col>
