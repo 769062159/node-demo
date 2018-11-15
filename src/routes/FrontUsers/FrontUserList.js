@@ -97,7 +97,7 @@ export default class FrontUserList extends PureComponent {
           account: `${record.id}@${e}`,
           password: record.mobile || '123456',
           editId: record.id,
-          powerValue: Number(record.has_user_oauth.permission),
+          powerValue: Number(record.has_user_oauth ? record.has_user_oauth.permission : 0),
           merchantVisible: true,
         })
       },
@@ -222,12 +222,17 @@ export default class FrontUserList extends PureComponent {
     })
   }
   searchMsg = (text) => {
-    console.log(text);
-    if (text.nickname) {
+    if (text.fakeid) {
       this.props.form.setFieldsValue({
-        nickname: text.nickname,
+        user_id: text.fakeid,
+        nickname: '',
+        user_oauth_type: '',
       });
-      this.handleSearch();
+      this.setState({
+        pagination: 1,
+      }, () => {
+        this.handleSearch();
+      })
     }
   }
 
