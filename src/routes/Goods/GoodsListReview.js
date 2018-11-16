@@ -449,6 +449,12 @@ export default class GoodsList extends PureComponent {
         title: '商品店铺',
         dataIndex: 'shop_name',
         key: 'shop_name',
+        render: (val, text) => (
+          <div>
+            {val}
+            <div>视群号：{text.shop_store_user_id}</div>
+          </div>
+        ),
       },
       {
         title: '状态',
