@@ -209,6 +209,19 @@ export default class Withdraw extends PureComponent {
     const { formVisible } = this.state;
     const progressColumns = [
       {
+        title: '用户信息',
+        dataIndex: 'has_user',
+        render: (val) => (
+          <div className={styles.userMsg}>
+            <img src={val.avatar} alt="图片" />
+            <div>
+              <span>{val.nickname}</span>
+              <span>Id:{val.fake_id}</span>
+            </div>
+          </div>
+        ),
+      },
+      {
         title: '昵称/手机号',
         dataIndex: 'real_name',
         render: (val, record) => (

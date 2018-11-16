@@ -75,7 +75,7 @@ export default class BasicProfile extends Component {
       {
         title: '到账时间',
         dataIndex: 'profit_time',
-        render: (val, record) => record.status ? <span>{moment(val * 1000).format('YYYY-MM-DD HH:mm:ss')}</span> : '未到账',
+        render: (val, record) => record.status === 1 ? <span>{moment(val * 1000).format('YYYY-MM-DD HH:mm:ss')}</span> : record.status === 2 ? '已失效' : '未到账',
         key: 'profit_time',
       },
     ];
@@ -94,6 +94,7 @@ export default class BasicProfile extends Component {
           <div className={styles.title}>佣金列表</div>
           <Table
             style={{ marginBottom: 24 }}
+            onChange={this.handleTableChange}
             pagination={detailListPage}
             loading={loading}
             dataSource={detailList}

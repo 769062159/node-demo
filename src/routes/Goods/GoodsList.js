@@ -447,7 +447,7 @@ export default class GoodsList extends PureComponent {
         render: (val, text) => (
           <div>
             {val}
-            <div>视群号：{text.shop_store_user_id}</div>
+            <div>ID：{text.shop_store_user_id}</div>
           </div>
         ),
       },
