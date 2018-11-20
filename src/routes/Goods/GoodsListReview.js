@@ -512,7 +512,7 @@ export default class GoodsList extends PureComponent {
         width: 150,
         render: record => (
           <Fragment>
-            <a href={`#/good/edit-goods/confirm/${record.goods_id}`}>修改</a>
+            <a href={`#/good/edit-goods/confirm/${record.goods_id}`}>审核</a>
             {/* <Divider type="vertical" />
             <a onClick={this.deleteGoods.bind(this, record.goods_id)}>删除</a> */}
           </Fragment>
@@ -536,11 +536,11 @@ export default class GoodsList extends PureComponent {
               <Button icon="plus" type="primary" onClick={this.goNew.bind(this)}>
                 新建
               </Button>
-              {selectedRows.length > 0 && (
+              {/* {selectedRows.length > 0 && (
                 <span>
                   <Button onClick={this.obtained.bind(this, 0)}>批量审核</Button>
                 </span>
-              )}
+              )} */}
             </div>
             <StandardTable
               rowKey={record => record.goods_id}
