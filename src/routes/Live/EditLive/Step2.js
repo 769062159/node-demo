@@ -784,7 +784,7 @@ class EditLiveStep2 extends React.PureComponent {
           dir: `${env.videoUrl}/${currentUser.id}/${currentUser.shop_store_id}`,
           maxSize: 1024 * 1024 * 1024,  // 上传大小限制，选填，默认0没有限制
           callback: (percent, result) => {
-            if (result) {
+            if (percent === 100 && result) {
               message.success(`上传成功！`);
               // const { url } = result;
               const { dispatch } = this.props;
@@ -800,8 +800,10 @@ class EditLiveStep2 extends React.PureComponent {
               this.setState({
                 uploadPage: 1,
               })
-            } else {
+            } else if (percent > 0) {
               message.success(`已上传${percent}%`);
+            } else {
+              message.error(`${result}`);
             }
           },
         });

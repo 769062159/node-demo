@@ -590,12 +590,12 @@ export default class Order extends PureComponent {
         title: '21',
         width: '12%',
         dataIndex: 'has_store',
-        render: (val) => (
+        render: (val) => val ? (
           <div>
             <div>{val.shop_name}</div>
             <div>Id:{val.shop_store_user_id}</div>
           </div>
-        ),
+        ) : null,
       },
       {
         title: '直播简介',
