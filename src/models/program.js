@@ -12,6 +12,8 @@ export default {
   namespace: 'program',
 
   state: {
+    hasPublic: true,
+    hasApplets: true,
     programList: [],
     authorizationUrl: '',
     programDetail: {},
@@ -91,9 +93,22 @@ export default {
     },
     getProgramList(state, { payload }) {
       const { data } = payload;
+      let hasApplets = false;
+      let hasPublic = false;
+      if (data) {
+        data.forEach(res => {
+          if (res.type) {
+            hasPublic = true;
+          } else {
+            hasApplets = true;
+          }
+        });
+      }
       return {
         ...state,
         programList: data,
+        hasApplets,
+        hasPublic,
       };
     },
     setAuthorizationUrl(state, { authorizationUrl }) {

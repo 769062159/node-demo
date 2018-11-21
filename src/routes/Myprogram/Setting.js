@@ -125,6 +125,12 @@ export default class Setting extends PureComponent {
       program: { programDetail, authorizationUrl },
       uploadFile,
     } = this.props;
+    let programName = '';
+    if (programDetail.type) {
+      programName = '公众号'
+    } else {
+      programName = '小程序'
+    }
     const { formVisible, type } = this.state;
     const { getFieldDecorator } = form;
     const modalTitle = type === 2 ? '微信商户号' : '微信商户号密钥';
@@ -149,7 +155,7 @@ export default class Setting extends PureComponent {
           record.id === 1 ? (
             <Fragment>
               <a target="_blank" href={authorizationUrl}>
-                <Button type="primary">已有小程序，立即设置</Button>
+                <Button type="primary">已有{programName}，立即设置</Button>
               </a>
               <br />
               <Tag style={{ marginTop: 10 }}>若已过期,请刷新页面</Tag>
@@ -161,9 +167,9 @@ export default class Setting extends PureComponent {
     ];
     const datas = [
       {
-        name: '小程序appId',
+        name: `${programName}appId`,
         setting: programDetail.appid,
-        remark: '小程序的唯一标识。不可更改。',
+        remark: `${programName}的唯一标识。不可更改。`,
         id: 1,
       },
       {
@@ -186,9 +192,13 @@ export default class Setting extends PureComponent {
     ];
     return (
       <PageHeaderLayout>
-        <Tag color="blue">
-          如需开通直播，请您在小程序管理后台，“设置”-“接口设置”中自助开通该直播权限
-        </Tag>
+        {
+          programDetail.type === 0 ? (
+            <Tag color="blue">
+              如需开通直播，请您在小程序管理后台，“设置”-“接口设置”中自助开通该直播权限
+            </Tag>
+          ) : null
+        }
         <Table
           //   onChange={this.handleTableChange}  // 换页
           className="components-table-demo-nested"
