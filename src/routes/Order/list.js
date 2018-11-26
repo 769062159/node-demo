@@ -593,7 +593,11 @@ export default class Order extends PureComponent {
         render: (val) => val ? (
           <div>
             <div>{val.shop_name}</div>
-            <div>Id:{val.shop_store_user_id}</div>
+            {
+              val.type ? (
+                <div>Id:{val.shop_store_user_id}</div>
+              ) : null
+            }
           </div>
         ) : null,
       },
