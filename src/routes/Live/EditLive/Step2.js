@@ -577,14 +577,14 @@ class EditLiveStep2 extends React.PureComponent {
           }).then(res => {
             if (res.code === 200) {
               richTextData[0] = res.data;
-              let str = 'src="';
-              richTextData.forEach((ele, index) => {
-                if (index === 0) {
-                  str += `${ele}"`;
-                } else {
-                  str += `${ele}`;
-                }
-              });
+              let str = `src="${richTextData.join('"')}`;
+              // richTextData.forEach((ele, index) => {
+              //   if (index === 0) {
+              //     str += `${ele}"`;
+              //   } else {
+              //     str += `${ele}`;
+              //   }
+              // });
               richText[i] = str;
               str = richText.join('');
               if (str.indexOf(';base64') === -1) {
@@ -598,6 +598,12 @@ class EditLiveStep2 extends React.PureComponent {
             }
           });
         }
+      } else {
+        liveForm.live_detail = '';
+        dispatch({
+          type: 'live/editLive',
+          payload: liveForm,
+        });
       }
     } else {
       liveForm.live_detail = '';
