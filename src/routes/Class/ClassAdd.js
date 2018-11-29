@@ -322,7 +322,7 @@ const CustomizedForm = Form.create({
                       录播视频
                     </div>
                     <div className={styles.fileBoxs} onClick={openUpload.bind(this, index)}>
-                      上传列表
+                      上传视频
                     </div>
                   </FormItem>
                 ) : (
@@ -803,7 +803,7 @@ export default class ClassAdd extends PureComponent {
         >
           <div className={styles.fileBoxs}>
             <input type="file" className={styles.fileBtns} onChange={this.uploadVideo} />
-            上传列表
+            上传视频
           </div>
           <Table
             dataSource={uploadList}

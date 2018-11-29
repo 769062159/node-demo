@@ -321,7 +321,7 @@ const CustomizedForm = Form.create({
                     </div>
                     <div className={styles.fileBoxs}>
                       <input type="file" className={styles.fileBtns} onChange={uploadVideo.bind(this, index)} />
-                      上传列表
+                      上传视频
                     </div>
                   </FormItem>
                 ) : (

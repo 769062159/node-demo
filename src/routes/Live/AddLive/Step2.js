@@ -378,7 +378,7 @@ const CustomizedForm = Form.create({
             录播视频
           </div>
           <div className={styles.fileBoxs} onClick={openUpload}>
-            上传列表
+            上传视频
           </div>
         </Form.Item>
       ) : null}
@@ -582,14 +582,62 @@ class AddLiveStep2 extends React.PureComponent {
     liveForm.cover = liveForm.share_cover;
     liveForm.live_detail = liveForm.live_details || liveForm.live_detail;
     liveForm.live_detail = liveForm.live_detail || '';
-    // liveForm.live_id = liveForm.id;
-    dispatch({
-      type: 'live/addLive',
-      payload: liveForm,
-      callback: () => {
-        message.success('添加成功');
-      },
-    });
+    liveForm.live_id = liveForm.id;
+    if (liveForm.live_detail) {
+      let richText = liveForm.live_detail;
+      richText = richText.split('src="data');
+      if (richText.length > 1) {
+        for(let i = 1; i < richText.length; i++) {
+          let richTextData = richText[i];
+          richTextData = richTextData.split('"');
+          const file = base64ToFile(richTextData[0]);
+          const body = new FormData();
+          body.append("type", 4);
+          body.append("file", file);
+          request('/merchant/upload', {
+            method: 'POST',
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+            body,
+          }).then(res => {
+            if (res.code === 200) {
+              richTextData[0] = res.data;
+              let str = 'src="';
+              richTextData.forEach((ele, index) => {
+                if (index === 0) {
+                  str += `${ele}"`;
+                } else {
+                  str += `${ele}`;
+                }
+              });
+              richText[i] = str;
+              str = richText.join('');
+              if (str.indexOf(';base64') === -1) {
+                liveForm.live_detail = str;
+                delete liveForm.live_details
+                dispatch({
+                  type: 'live/addLive',
+                  payload: liveForm,
+                  callback: () => {
+                    message.success('添加成功');
+                  },
+                });
+              }
+            }
+          });
+        }
+      }
+    } else {
+      liveForm.live_detail = '';
+      dispatch({
+        type: 'live/addLive',
+        payload: liveForm,
+        callback: () => {
+          message.success('添加成功');
+        },
+      });
+    }
   };
   // 修改表单值
   changeFormVal = val => {
