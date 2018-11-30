@@ -126,6 +126,43 @@ class EditInputNumber extends PureComponent {
     );
   }
 }
+class EditInputNumbers extends PureComponent {
+  state = {
+    value: this.props.value,
+  };
+  handleChange = e => {
+    if (typeof e === 'number') {
+      const { attrTable, totalStock, value: oldValue } = this.props;
+      if (attrTable && attrTable.length) {
+        if (typeof totalStock !== 'undefined') {
+          let num = Number(totalStock) + parseInt(oldValue, 10);
+          attrTable.forEach(ele => {
+            num -= ele.store_nums;
+          });
+          if (num < e) {
+            e = num < 0 ? 0 : num;
+          }
+        }
+      }
+      this.setState({
+        value: e,
+      })
+      this.props.onChange(e);
+    }
+  };
+  render() {
+    const { value } = this.state;
+    return (
+      <div className="editable-cell">
+        <InputNumber
+          step={1}
+          value={value}
+          onChange={this.handleChange}
+        />
+      </div>
+    );
+  }
+}
 // class EditInput extends PureComponent {
 //   state = {
 //     value: this.props.value,
@@ -464,11 +501,10 @@ export default class EditableTable extends PureComponent {
         title: '库存',
         dataIndex: 'store_nums',
         render: (text, record, index) => (
-          <EditInputNumber
+          <EditInputNumbers
             value={text}
             totalStock={totalStock}
             attrTable={attrTable}
-            step={0}
             onChange={this.onCellChange(index, 'store_nums')}
           />
         ),

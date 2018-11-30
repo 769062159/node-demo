@@ -321,11 +321,11 @@ const CustomizedForm = Form.create({
                     </div>
                     <div className={styles.fileBoxs}>
                       <input type="file" className={styles.fileBtns} onChange={uploadVideo.bind(this, index)} />
-                      上传列表
+                      上传视频
                     </div>
                   </FormItem>
                 ) : (
-                  <FormItem {...formItemLayout} label="播放地址" extra={<Tag color="blue">目前只支持腾讯视频，一定要填写带有vid的视频地址</Tag>}>
+                  <FormItem {...formItemLayout} label="播放地址" extra={<Tag color="blue">目前只支持腾讯视频，一定要填写带有vid的视频地址，示例：https://v.qq.com/txp/iframe/player.html?vid=c0526za9zcn</Tag>}>
                     {getFieldDecorator(`url${index}`, {
                       rules: [
                         {
