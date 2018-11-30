@@ -90,11 +90,15 @@ export default class FrontUserList extends PureComponent {
   setMerchant = (record, e) => {
     e.preventDefault();
     const { dispatch } = this.props;
+    let account = null;
+    if (record.shop_store) {
+      account = record.shop_store.username;
+    }
     dispatch({
       type: 'frontUser/getMerchantmobile',
       callback: (e) => {
         this.setState({
-          account: `${record.id}@${e}`,
+          account: account ? account : `${record.id}@${e}`,
           password: record.mobile || '123456',
           editId: record.id,
           powerValue: Number(record.has_user_oauth ? record.has_user_oauth.permission : 0),
