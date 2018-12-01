@@ -21,12 +21,12 @@ import { routerRedux } from 'dva/router';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './style.less'
 import { uploadJSSDK } from '../../utils/utils';
-import { env } from '../../utils/config';
+// import { env } from '../../utils/config';
 // import styles from './TableList.less';
 // import request from '../../utils/request';
 import Wangeditor from '../../components/Wangeditor';
 
-
+const env = process.env[process.env.API_ENV];
 const FormItem = Form.Item;
 const Option = Select.Option;
 

@@ -4,9 +4,11 @@
   "description": "An out-of-box UI solution for enterprise applications",
   "private": true,
   "scripts": {
-    "start": "set port=8080 && cross-env ESLINT=none roadhog dev",
+    "start:test": "set port=8080 && cross-env API_ENV=test ESLINT=none roadhog dev",
+    "start:env": "set port=8080 && cross-env API_ENV=env ESLINT=none roadhog dev",
     "start:no-proxy": "cross-env NO_PROXY=true ESLINT=none roadhog dev",
-    "build": "cross-env ESLINT=none roadhog build",
+    "build:test": "cross-env API_ENV=test ESLINT=none roadhog build",
+    "build:env": "cross-env API_ENV=env ESLINT=none roadhog build",
     "site": "roadhog-api-doc static && gh-pages -d dist",
     "analyze": "cross-env ANALYZE=true roadhog build",
     "lint:style": "stylelint \"src/**/*.less\" --syntax less",

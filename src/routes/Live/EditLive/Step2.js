@@ -5,10 +5,11 @@ import { Form, Button, Input, Select, Upload, Icon, Modal, Tag, message, Table, 
 // import LiveGoodTable from '../../../components/LiveGoodTable';
 import Wangeditor from '../../../components/Wangeditor';
 import { uploadJSSDK } from '../../../utils/utils';
-import { env } from '../../../utils/config';
+// import { env } from '../../../utils/config';
 // import LiveGoodTable from '../../../components/LiveGoodTable';
 import styles from './style.less';
 
+const env = process.env[process.env.API_ENV];
 const { TextArea } = Input;
 const FormItem = Form.Item;
 const Option = Select.Option;
