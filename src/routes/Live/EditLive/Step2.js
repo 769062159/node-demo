@@ -4,7 +4,8 @@ import { Form, Button, Input, Select, Upload, Icon, Modal, Tag, message, Table, 
 // import { Form, Button, Input, Upload, Icon, Modal, Tag, message } from 'antd';
 // import LiveGoodTable from '../../../components/LiveGoodTable';
 import Wangeditor from '../../../components/Wangeditor';
-import { uploadJSSDK } from '../../../utils/utils';
+import { uploadJSSDK, base64ToFile } from '../../../utils/utils';
+import request from '../../../utils/request';
 // import { env } from '../../../utils/config';
 // import LiveGoodTable from '../../../components/LiveGoodTable';
 import styles from './style.less';
