@@ -6,6 +6,8 @@ import {
   getRefundList,
   editRefundStatus,
   editRefundMoney,
+  setWithdrawConfig,
+  getWithdrawConfig,
 } from '../services/finance';
 
 export default {
@@ -21,9 +23,23 @@ export default {
     detailListPage: [], // 详情列表页脚
     withdrawList: [], // table列表
     withdrawListPage: {}, // table 页脚
+    withdrawConfig: {}
   },
 
   effects: {
+    *setWithdrawConfig({ payload, callback }, { call }) {
+      const res = yield call(setWithdrawConfig, {...payload});
+      if (res && res.code === 200) {
+        callback();
+      }
+    },
+    *getWithdrawConfig(_, { call, put }) {
+      const res = yield call(getWithdrawConfig);
+      yield put({
+        type: 'getWithdrawConfigs',
+        payload: res,
+      });
+    },
     *updateRefundStatus({ payload }, { call, put }) {
       yield call(editRefundStatus, payload);
       const response = yield call(getRefundList, payload);
@@ -79,6 +95,13 @@ export default {
   },
 
   reducers: {
+    getWithdrawConfigs(state, { payload }) {
+      const { data } = payload;
+      return {
+        ...state,
+        withdrawConfig: data,
+      };
+    },
     getRefundList(state, { payload }) {
       const { data } = payload;
       return {

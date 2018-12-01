@@ -40,8 +40,8 @@ function checkStatus(response) {
   error.response = response;
   throw error;
 }
-// const apiurl = 'http://dev-api.store.314live.cn'; // 测试接口
-const apiurl = 'http://api.store.314live.cn'; // 正式接口
+const apiurl = 'http://dev-api.store.314live.cn'; // 测试接口
+// const apiurl = 'http://api.store.314live.cn'; // 正式接口
 const wxapiurl = 'http://wechat.store.314live.cn';
 // const apiurl = "";
 
@@ -81,7 +81,7 @@ export default async function request(url, options) {
         token = nowTokens;
         localStorage.setItem('token', token);
         localStorage.setItem('failTime', res.data.expired_time * 1000);
-      } else if (res.code === 400 || res.code === 404 || res.code === 405) {
+      } else if (res.code === 400) {
         localStorage.setItem('token', '');
         const { dispatch } = store;
         dispatch(routerRedux.push('/user/login'));

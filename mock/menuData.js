@@ -145,6 +145,10 @@ export const menuData = [
         name: '提现',
         path: 'withdraw',
       },
+      {
+        name: '提现设置',
+        path: 'withdraw-setting',
+      },
     ],
   },
   {

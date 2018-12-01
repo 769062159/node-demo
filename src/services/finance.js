@@ -55,3 +55,19 @@ export async function editRefundMoney(params) {
     body: params,
   });
 }
+
+// 设置提现配置
+export async function setWithdrawConfig(params) {
+  return request('/merchant/withdraw/config/set', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+// 获取提现配置
+export async function getWithdrawConfig(params) {
+  return request('/merchant/withdraw/config/get', {
+    method: 'POST',
+    body: params,
+  });
+}
