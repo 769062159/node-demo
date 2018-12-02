@@ -601,7 +601,6 @@ class EditLiveStep2 extends React.PureComponent {
           });
         }
       } else {
-        liveForm.live_detail = '';
         dispatch({
           type: 'live/editLive',
           payload: liveForm,

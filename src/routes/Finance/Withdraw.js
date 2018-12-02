@@ -243,6 +243,10 @@ export default class Withdraw extends PureComponent {
       },
       {
         title: '申请金额（元）',
+        dataIndex: 'apply_money',
+      },
+      {
+        title: '到账金额（元）',
         dataIndex: 'money',
       },
       {
@@ -262,8 +266,8 @@ export default class Withdraw extends PureComponent {
       {
         title: '操作',
         dataIndex: 'status',
-        // fixed: 'right',
-        // width: 150,
+        fixed: 'right',
+        width: 150,
         render: (text, record) =>
           text === 0 ? (
             <Fragment>
@@ -292,6 +296,7 @@ export default class Withdraw extends PureComponent {
               </Button>
             </div> */}
             <Table
+              scroll={{ x: 1200 }}
               onChange={this.handleTableChange}
               dataSource={datas}
               rowKey={record => record.id}

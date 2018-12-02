@@ -639,7 +639,6 @@ class AddLiveStep2 extends React.PureComponent {
         });
       }
     } else {
-      liveForm.live_detail = '';
       dispatch({
         type: 'live/addLive',
         payload: liveForm,
