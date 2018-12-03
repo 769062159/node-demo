@@ -5,6 +5,7 @@ import {
   Form,
   Input,
   Button,
+  Progress,
   // Modal,
   // Table,
 } from 'antd';
@@ -136,6 +137,8 @@ export default class ClassAdd extends PureComponent {
   //   this.editorElem = React.createRef();
   // }
   state = {
+    isLoading: false,
+    loadingPercent: 0,
     // header: {
     //   Authorization: `Bearer ${localStorage.getItem('token')}`,
     // },
@@ -231,6 +234,9 @@ export default class ClassAdd extends PureComponent {
     const size = files[0].size;
     const randomNum = new Date().getTime() + parseInt(Math.random() * 100, 10);
     const name = `${randomNum}.mp4`;
+    this.setState({
+      isLoading: true,
+    });
     // 上传
     for(let i=0;i<files.length;i++){
       uploadJSSDK({
@@ -240,7 +246,23 @@ export default class ClassAdd extends PureComponent {
           dir: `videos/${currentUser.id}`,  // 目录，选填，默认根目录''
           maxSize: 1024 * 1024 * 1024,  // 上传大小限制，选填，默认0没有限制
           callback: (percent, result) => {
+            if (percent > 0) {
+              this.setState({
+                loadingPercent: percent,
+              });
+            }
+            if (percent === -1) {
+              this.setState({
+                isLoading: false,
+                loadingPercent: 0,
+              });
+              message.error(`${result}`);
+            }
             if (percent === 100 && result) {
+              this.setState({
+                isLoading: false,
+                loadingPercent: 0,
+              });
               message.success(`上传成功！`);
               const { url } = result;
               const videoDom = document.getElementById('video');
@@ -272,10 +294,6 @@ export default class ClassAdd extends PureComponent {
               //     type: 1,
               //   },
               // });
-            } else if (percent > 0) {
-              message.success(`已上传${percent}%`);
-            } else {
-              message.error(`${result}`);
             }
           },
         });
@@ -348,12 +366,20 @@ export default class ClassAdd extends PureComponent {
   
   render() {
     const {  live: { smallVideoForm } } = this.props;
+    const { isLoading, loadingPercent } = this.state;
     return (
       <PageHeaderLayout>
         <video id="video" controls style={{ display: 'none' }} >
           <track kind="captions" />
         </video>
         <CustomizedForm uploadVideo={this.uploadVideo} handleSubmit={this.handleSubmit} smallVideoForm={smallVideoForm} onChange={this.changeFormVal} />
+        {
+          isLoading ? (
+            <div className={styles.loadingModal}>
+              <Progress percent={loadingPercent} status="active" />
+            </div>
+          ) : null
+        }
       </PageHeaderLayout>
     );
   }

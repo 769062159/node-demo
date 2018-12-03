@@ -16,6 +16,7 @@ import {
   Row,
   Col,
   Table,
+  Progress,
 } from 'antd';
 import { routerRedux } from 'dva/router';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
@@ -376,6 +377,8 @@ export default class ClassAdd extends PureComponent {
   //   this.editorElem = React.createRef();
   // }
   state = {
+    isLoading: false,
+    loadingPercent: 0,
     uploadPage: 1,
     header: {
       Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -562,6 +565,9 @@ export default class ClassAdd extends PureComponent {
     const files = e.target.files;
     const randomNum = `${new Date().getTime()}_${parseInt(Math.random() * 100, 10)}`;
     const name = `${randomNum}.mp4`;
+    this.setState({
+      isLoading: true,
+    });
     // 上传
     for(let i=0;i<files.length;i++){
       uploadJSSDK({
@@ -570,8 +576,25 @@ export default class ClassAdd extends PureComponent {
           token,  // token，必填
           dir: `${env.videoUrl}/${currentUser.id}/${currentUser.shop_store_id}`,
           maxSize: 1024 * 1024 * 1024,  // 上传大小限制，选填，默认0没有限制
+          chunkSize: 2 * 1024 * 1024,
           callback: (percent, result) => {
+            if (percent > 0) {
+              this.setState({
+                loadingPercent: percent,
+              });
+            }
+            if (percent === -1) {
+              this.setState({
+                isLoading: false,
+                loadingPercent: 0,
+              });
+              message.error(`${result}`);
+            }
             if (percent === 100 && result) {
+              this.setState({
+                isLoading: false,
+                loadingPercent: 0,
+              });
               message.success(`上传成功！`);
               // const { url } = result;
               const { dispatch } = this.props;
@@ -595,10 +618,6 @@ export default class ClassAdd extends PureComponent {
               this.setState({
                 uploadPage: 1,
               })
-            }  else if (percent > 0) {
-              message.success(`已上传${percent}%`);
-            } else {
-              message.error(`${result}`);
             }
           },
         });
@@ -709,7 +728,7 @@ export default class ClassAdd extends PureComponent {
   // };
   render() {
     const {  classModel: { classForm, uploadList, uploadListPage }, uploadUrl, live: { vodListPage, vodList }, imgUrl } = this.props;
-    const { header, isVodModal, isVideoModal } = this.state;
+    const { header, isVodModal, isVideoModal, isLoading, loadingPercent } = this.state;
     const vodListItem = [];
     vodList.forEach(res => {
       vodListItem.push(
@@ -781,6 +800,13 @@ export default class ClassAdd extends PureComponent {
             onChange={this.handleUploadSelectChange}
           />
         </Modal>
+        {
+          isLoading ? (
+            <div className={styles.loadingModal}>
+              <Progress percent={loadingPercent} status="active" />
+            </div>
+          ) : null
+        }
         <CustomizedForm openUpload={this.openUpload} openVod={this.openVod} setDescription={this.setDescription} downItem={this.downItem} upItem={this.upItem} minusItem={this.minusItem} handleSubmit={this.handleSubmit} addClassList={this.addClassList} header={header} classForm={classForm} uploadUrl={uploadUrl} onChange={this.changeFormVal} />
       </PageHeaderLayout>
     );

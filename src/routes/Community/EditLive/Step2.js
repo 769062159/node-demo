@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'dva';
-import { Form, Button, Input, Select, Upload, Icon, Modal, Tag, message, Table, InputNumber, Row, Col, Pagination, Checkbox } from 'antd';
+import { Form, Button, Input, Select, Upload, Icon, Modal, Tag, message, Table, InputNumber, Row, Col, Pagination, Checkbox, Progress } from 'antd';
 // import { Form, Button, Input, Upload, Icon, Modal, Tag, message } from 'antd';
 // import LiveGoodTable from '../../../components/LiveGoodTable';
 import Wangeditor from '../../../components/Wangeditor';
@@ -451,6 +451,8 @@ const CustomizedForm = Form.create({
 // @Form.create()
 class EditLiveStep2 extends React.PureComponent {
   state = {
+    isLoading: false,
+    loadingPercent: 0,
     searchVal: '',
     uploadPage: 1,
     isVideoModal: false,
@@ -828,16 +830,38 @@ class EditLiveStep2 extends React.PureComponent {
     const files = e.target.files;
     const randomNum = `${new Date().getTime()}_${parseInt(Math.random() * 100, 10)}`;
     const name = `${randomNum}.mp4`;
+    this.setState({
+      isLoading: true,
+    });
     // 上传
     for(let i=0;i<files.length;i++){
       uploadJSSDK({
           file: files[i],   // 文件，必填,html5 file类型，不需要读数据流，
           name, // 文件名称，选填，默认为文件名称
           token,  // token，必填
+          chunkSize: 2 * 1024 * 1024,
+          // curChunkSize: [1],
+          // chunkBlob: [1],
           dir: `${env.videoUrl}/${currentUser.id}/${currentUser.shop_store_id}`,
           maxSize: 1024 * 1024 * 1024,  // 上传大小限制，选填，默认0没有限制
           callback: (percent, result) => {
+            if (percent > 0) {
+              this.setState({
+                loadingPercent: percent,
+              });
+            }
+            if (percent === -1) {
+              this.setState({
+                isLoading: false,
+                loadingPercent: 0,
+              });
+              message.error(`${result}`);
+            }
             if (percent === 100 && result) {
+              this.setState({
+                isLoading: false,
+                loadingPercent: 0,
+              });
               message.success(`上传成功！`);
               // const { url } = result;
               const { dispatch } = this.props;
@@ -853,10 +877,6 @@ class EditLiveStep2 extends React.PureComponent {
               this.setState({
                 uploadPage: 1,
               })
-            } else if (percent > 0) {
-              message.success(`已上传${percent}%`);
-            } else {
-              message.error(`${result}`);
             }
           },
         });
@@ -1216,7 +1236,7 @@ class EditLiveStep2 extends React.PureComponent {
       imgUrl,
       uploadUrl,
     } = this.props;
-    const { header, isGoodModal, selectedRowKeys, isClassModal, selectedClassKeys, isSmallVideoModal, selectedSmallVideoKeys, isVideoModal, isVodModal } = this.state;
+    const { header, isGoodModal, selectedRowKeys, isClassModal, selectedClassKeys, isSmallVideoModal, selectedSmallVideoKeys, isVideoModal, isVodModal, isLoading, loadingPercent } = this.state;
     const vodListItem = [];
     vodList.forEach(res => {
       vodListItem.push(
@@ -1452,6 +1472,13 @@ class EditLiveStep2 extends React.PureComponent {
             onChange={this.handleSmallVideoChange}
           />
         </Modal>
+        {
+          isLoading ? (
+            <div className={styles.loadingModal}>
+              <Progress percent={loadingPercent} status="active" />
+            </div>
+          ) : null
+        }
       </div>
     );
   }
