@@ -23,7 +23,9 @@ export default {
     detailListPage: [], // 详情列表页脚
     withdrawList: [], // table列表
     withdrawListPage: {}, // table 页脚
-    withdrawConfig: {}
+    withdrawConfig: {
+      withdraw_tax_proportion: 0,
+    },
   },
 
   effects: {

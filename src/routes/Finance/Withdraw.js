@@ -286,8 +286,9 @@ export default class Withdraw extends PureComponent {
             color="blue"
             style={{ marginBottom: 20, width: '100%', whiteSpace: 'pre-wrap', height: 'auto' }}
           >
-            由于发放佣金需要在微信商户平台开通企业付款到零钱这个功能才可以正常发放，所以请商户们需要提前开通此功能。此功能需要满足已入驻90日
-            ，有30天连续正常交易才可以去产品中心开通。详细请查看。微信支付企业付款。微信提现是直接到账的。
+            由于发放佣金需要在微信商户平台开通企业付款到零钱这个功能才可以正常发放，所以请商户们需要提前开通此功能。此功能需要满足已入驻90日 ，有30天连续正常交易才可以去产品中心开通。详细请查看。<a style={{ color: 'red' }} href="https://pay.weixin.qq.com/wiki/doc/api/tools/mch_pay.php?chapter=14_1" target="view_window">微信支付企业付款</a>
+            <br />
+            微信提现是直接到账的。
           </Tag>
           <div className={styles.tableList}>
             {/* <div className={styles.tableListOperator}>

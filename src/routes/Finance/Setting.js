@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
-import { Form, Card, InputNumber, Button, Radio, message } from 'antd';
+import { Form, Card, InputNumber, Button, Radio, message, Tag } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
 import styles from './TableList.less';
@@ -59,6 +59,14 @@ export default class Withdraw extends PureComponent {
     return (
       <PageHeaderLayout>
         <Card bordered={false}>
+          <Tag
+            color="blue"
+            style={{ marginBottom: 20, width: '100%', whiteSpace: 'pre-wrap', height: 'auto' }}
+          >
+            由于发放佣金需要在微信商户平台开通企业付款到零钱这个功能才可以正常发放，所以请商户们需要提前开通此功能。此功能需要满足已入驻90日 ，有30天连续正常交易才可以去产品中心开通。详细请查看。<a style={{ color: 'red' }} href="https://pay.weixin.qq.com/wiki/doc/api/tools/mch_pay.php?chapter=14_1" target="view_window">微信支付企业付款</a>
+            <br />
+            微信提现是直接到账的。
+          </Tag>
           <Form
             onSubmit={this.handleSubmit}
             hideRequiredMark
@@ -94,27 +102,30 @@ export default class Withdraw extends PureComponent {
                 ],
               })(<InputNumber placeholder="请输入每月提现金额不超过" style={{ width: 300 }} />)}
             </FormItem>
-            <FormItem {...formItemLayout} label="个税起征点" extra='元'>
+            <FormItem {...formItemLayout} label="起征点" extra='元'>
               {getFieldDecorator('withdraw_tax', {
                 initialValue: withdrawConfig.withdraw_tax,
                 rules: [
                     {
                         required: true,
-                        message: '请输入个税起征点',
+                        message: '请输入起征点',
                     },
                 ],
               })(<InputNumber placeholder="请输入个税起征点" style={{ width: 300 }} />)}
             </FormItem>
-            <FormItem {...formItemLayout} label="税率" extra='%'>
+            <FormItem {...formItemLayout} label="手续费率" extra='%'>
               {getFieldDecorator('withdraw_tax_proportion', {
                 initialValue: withdrawConfig.withdraw_tax_proportion || 0,
+                getValueFromEvent(val) {
+                    return val ? val : 0;
+                },
                 rules: [
                     {
                         required: true,
-                        message: '请输入税率',
+                        message: '请输入手续费率',
                     },
                 ],
-              })(<InputNumber max={100} min={0} formatter={value => `${parseInt(value, 10)}`} placeholder="请输入税率" style={{ width: 300 }} />)}
+              })(<InputNumber max={100} min={0} formatter={value => `${parseInt(value || 0, 10)}`} placeholder="请输入税率" style={{ width: 300 }} />)}
             </FormItem>
             <FormItem style={{ marginTop: 32 }} {...formSubmitLayout}>
               <Button type="primary" htmlType="submit" loading={loading}>
