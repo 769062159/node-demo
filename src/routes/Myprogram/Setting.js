@@ -192,12 +192,17 @@ export default class Setting extends PureComponent {
     ];
     return (
       <PageHeaderLayout>
+
         {
           programDetail.type === 0 ? (
             <Tag color="blue">
               如需开通直播，请您在小程序管理后台，“设置”-“接口设置”中自助开通该直播权限
             </Tag>
-          ) : null
+          ) : (
+            <Tag color="blue">
+              公众号地址：http://dev-www.store.314live.cn/index?wechat_account_id={programDetail.id}
+            </Tag>
+          )
         }
         <Table
           //   onChange={this.handleTableChange}  // 换页

@@ -103,7 +103,13 @@ export default class My extends PureComponent {
   };
   render() {
     const { loading, form, program: { programList, hasPublic, hasApplets }, user: { currentUser: { id: currentUserId } } } = this.props;
-    const { formVisible } = this.state;
+    const { formVisible, programType } = this.state;
+    let program = '';
+    if (programType === 1) {
+      program = '公众号'
+    } else {
+      program = '小程序'
+    }
     const { getFieldDecorator } = form;
     const CardItem = [];
     programList.forEach(res => {
@@ -154,7 +160,7 @@ export default class My extends PureComponent {
             </Button>
           </Row>
         ) : null}
-        {!hasPublic && currentUserId === 5 ? (
+        {!hasPublic && ( currentUserId === 5 || currentUserId === 25 ) ? (
           <Row className={styles.rightBox}>
             <span className={styles.word}>一键创建公众号</span>
             <Button type="primary" loading={loading} onClick={this.showModal.bind(this, 1)}>
@@ -164,7 +170,7 @@ export default class My extends PureComponent {
         ) : null}
         <div className={styles.CardProgramList}>{CardItem}</div>
         <Modal
-          title="小程序"
+          title={program}
           visible={formVisible}
           onCancel={this.handAddleCancel.bind(this)}
           destroyOnClose="true"
@@ -176,13 +182,13 @@ export default class My extends PureComponent {
             style={{ marginTop: 8 }}
             autoComplete="OFF"
           >
-            <FormItem label="小程序名字" {...formItemLayout}>
+            <FormItem label={`${program}名字`} {...formItemLayout}>
               {getFieldDecorator('name', {
                 // initialValue: editData.goods_class_id,
                 rules: [
                   {
                     required: true,
-                    message: '请输入小程序名字',
+                    message: `请输入${program}名字`,
                   },
                 ],
               })(<Input />)}
