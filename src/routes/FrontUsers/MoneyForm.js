@@ -45,16 +45,6 @@ class TypeForm extends Component {
         <FormItem {...formItemLayout} label="当前余额">
           {money}
         </FormItem>
-        <FormItem {...formItemLayout} label="增加或者减少余额">
-          {getFieldDecorator('money', {
-            rules: [
-              {
-                required: true,
-                message: '请输入增加或者减少余额',
-              },
-            ],
-          })(<InputNumber min={0} />)}
-        </FormItem>
         <FormItem {...formItemLayout} label="修改类型">
           {getFieldDecorator('type', {
             rules: [
@@ -69,6 +59,16 @@ class TypeForm extends Component {
               <Option value={1}>增加</Option>
             </Select>
           )}
+        </FormItem>
+        <FormItem {...formItemLayout} label="增加或者减少金额">
+          {getFieldDecorator('money', {
+            rules: [
+              {
+                required: true,
+                message: '请输入增加或者减少金额',
+              },
+            ],
+          })(<InputNumber min={0} />)}
         </FormItem>
         <FormItem {...formItemLayout} label="备注">
           {getFieldDecorator('remark', {
