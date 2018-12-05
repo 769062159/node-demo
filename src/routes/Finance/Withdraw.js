@@ -211,6 +211,7 @@ export default class Withdraw extends PureComponent {
       {
         title: '用户信息',
         dataIndex: 'has_user',
+        width: 230,
         render: (val) => (
           <div className={styles.userMsg}>
             <img src={val.avatar} alt="图片" />
@@ -265,17 +266,17 @@ export default class Withdraw extends PureComponent {
       },
       {
         title: '操作',
-        dataIndex: 'status',
+        dataIndex: 'account_id',
         fixed: 'right',
         width: 150,
         render: (text, record) =>
-          text === 0 ? (
-            <Fragment>
-              <a onClick={this.editDataMsg.bind(this, record, 2)}>驳回</a>
-              <Divider type="vertical" />
-              <a onClick={this.editDataMsg.bind(this, record, 1)}>同意</a>
-            </Fragment>
-          ) : text === 1 ? null : null,
+        record.status === 0 ? (
+          <Fragment>
+            <a onClick={this.editDataMsg.bind(this, record, 2)}>驳回</a>
+            <Divider type="vertical" />
+            <a onClick={this.editDataMsg.bind(this, record, 1)}>同意</a>
+          </Fragment>
+          ) : record.status === 1 ? null : null,
       },
     ];
 
@@ -290,22 +291,15 @@ export default class Withdraw extends PureComponent {
             <br />
             微信提现是直接到账的。
           </Tag>
-          <div className={styles.tableList}>
-            {/* <div className={styles.tableListOperator}>
-              <Button icon="plus" type="primary" onClick={this.showModal.bind(this)}>
-                新建
-              </Button>
-            </div> */}
-            <Table
-              scroll={{ x: 1200 }}
-              onChange={this.handleTableChange}
-              dataSource={datas}
-              rowKey={record => record.id}
-              loading={loading}
-              columns={progressColumns}
-              pagination={withdrawListPage}
-            />
-          </div>
+          <Table
+            scroll={{ x: 1100 }}
+            onChange={this.handleTableChange}
+            dataSource={datas}
+            rowKey={record => record.id}
+            loading={loading}
+            columns={progressColumns}
+            pagination={withdrawListPage}
+          />
         </Card>
         <Modal
           title="提现"
