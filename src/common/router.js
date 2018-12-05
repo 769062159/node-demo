@@ -316,9 +316,9 @@ export const getRouterConfig = app => {
     //   component: dynamicWrapper(app, [], () => import('../routes/Demo/UserList')),
     // },
     // 路由配置
-    '/router/menu-list': {
-      component: dynamicWrapper(app, ['menu'], () => import('../routes/Demo/MenuList')),
-    },
+    // '/router/menu-list': {
+    //   component: dynamicWrapper(app, ['menu'], () => import('../routes/Demo/MenuList')),
+    // },
     // 我的小程序
     '/my-program/my': {
       component: dynamicWrapper(app, ['program'], () => import('../routes/Myprogram/My')),
