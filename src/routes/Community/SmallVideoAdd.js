@@ -226,8 +226,12 @@ export default class ClassAdd extends PureComponent {
     });
   }
   uploadVideo = (e) => {
-    const { live: { token }, user: { currentUser } } = this.props;
     const files = e.target.files;
+    if (files[0].type !== 'video/mp4') {
+      message.error('请上传mp4格式文件');
+      return false;
+    }
+    const { live: { token }, user: { currentUser } } = this.props;
     const size = files[0].size;
     const randomNum = new Date().getTime() + parseInt(Math.random() * 100, 10);
     const name = `${randomNum}.mp4`;

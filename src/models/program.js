@@ -112,11 +112,19 @@ export default {
       };
     },
     setAuthorizationUrl(state, { authorizationUrl }) {
-      const { data: { authorization_url: url } } = authorizationUrl;
-      return {
-        ...state,
-        authorizationUrl: url,
-      };
+      if (process.env.API_ENV === 'test') {
+        const { data: { bin_component_url: url } } = authorizationUrl;
+        return {
+          ...state,
+          authorizationUrl: url,
+        };
+      } else {
+        const { data: { bin_component_url: url } } = authorizationUrl;
+        return {
+          ...state,
+          authorizationUrl: url,
+        };
+      }
     },
     setProgramDetail(state, { payload }) {
       const { data } = payload;

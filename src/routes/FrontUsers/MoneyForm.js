@@ -60,12 +60,12 @@ class TypeForm extends Component {
             </Select>
           )}
         </FormItem>
-        <FormItem {...formItemLayout} label="增加或者减少金额">
+        <FormItem {...formItemLayout} label="金额">
           {getFieldDecorator('money', {
             rules: [
               {
                 required: true,
-                message: '请输入增加或者减少金额',
+                message: '请输入金额',
               },
             ],
           })(<InputNumber min={0} />)}

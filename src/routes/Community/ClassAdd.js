@@ -551,8 +551,12 @@ export default class ClassAdd extends PureComponent {
     });
   }
   uploadVideo = (index, e) => {
-    const { live: { token }, user: { currentUser } } = this.props;
     const files = e.target.files;
+    if (files[0].type !== 'video/mp4') {
+      message.error('请上传mp4格式文件');
+      return false;
+    }
+    const { live: { token }, user: { currentUser } } = this.props;
     const name = `${new Date().getTime()}.mp4`;
     // 上传
     for(let i=0;i<files.length;i++){
