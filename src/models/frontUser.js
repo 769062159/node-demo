@@ -24,10 +24,14 @@ export default {
   },
 
   effects: {
-    *updateCommssion({ payload, callback }, { call }) {
+    *updateCommssion({ payload, callback }, { call, put }) {
       const data = yield call(updateCommssion, { ...payload });
       if (data && data.code === 200) {
         callback();
+        yield put({
+          type: 'updateCommssions',
+          payload,
+        });
       }
     },
     *chgPower({ payload, callback }, { call }) {
@@ -123,6 +127,21 @@ export default {
   },
 
   reducers: {
+    updateCommssions(state, { payload }) {
+      let { frontUserList } = state;
+      frontUserList = frontUserList.map(res => {
+        if (res.id === payload.member_id) {
+          res.has_account.account_total_income = payload.type ?  (Number(res.has_account.account_total_income) + Number(payload.money)) : (Number(res.has_account.account_total_income) - Number(payload.money));
+          res.has_account.account_commission = payload.type ?  (Number(res.has_account.account_commission) + Number(payload.money)) : (Number(res.has_account.account_commission) - Number(payload.money));
+        }
+        return res;
+      })
+      console.log(payload);
+      return {
+        ...state,
+        frontUserList,
+      };
+    },
     getDefaultLists(state, { payload }) {
       let { data } = payload;
       if (data) {
