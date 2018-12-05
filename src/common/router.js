@@ -38,96 +38,6 @@ export const getRouterConfig = app => {
       identity: 'common',
       component: dynamicWrapper(app, ['frontUser'], () => import('../routes/FrontUsers/Rank')),
     },
-    '/dashboard/analysis': {
-      identity: 'common',
-      component: dynamicWrapper(app, ['chart'], () => import('../routes/Dashboard/Analysis')),
-    },
-    '/dashboard/monitor': {
-      identity: 'common',
-      component: dynamicWrapper(app, ['monitor'], () => import('../routes/Dashboard/Monitor')),
-    },
-    '/dashboard/workplace': {
-      identity: 'common',
-      component: dynamicWrapper(app, ['project', 'activities', 'chart'], () =>
-        import('../routes/Dashboard/Workplace')
-      ),
-      // hideInBreadcrumb: true,
-      // name: '工作台',
-      // authority: 'admin',
-    },
-    '/form/basic-form': {
-      identity: 'common',
-      component: dynamicWrapper(app, ['form'], () => import('../routes/Forms/BasicForm')),
-    },
-    '/form/step-form': {
-      identity: 'common',
-      component: dynamicWrapper(app, ['form'], () => import('../routes/Forms/StepForm')),
-    },
-    '/form/step-form/info': {
-      identity: 'common',
-      // name: '分步表单（填写转账信息）',
-      component: dynamicWrapper(app, ['form'], () => import('../routes/Forms/StepForm/Step1')),
-    },
-    '/form/step-form/confirm': {
-      identity: 'common',
-      // name: '分步表单（确认转账信息）',
-      component: dynamicWrapper(app, ['form'], () => import('../routes/Forms/StepForm/Step2')),
-    },
-    '/form/step-form/result': {
-      identity: 'common',
-      // name: '分步表单（完成）',
-      component: dynamicWrapper(app, ['form'], () => import('../routes/Forms/StepForm/Step3')),
-    },
-    '/form/advanced-form': {
-      identity: 'common',
-      component: dynamicWrapper(app, ['form'], () => import('../routes/Forms/AdvancedForm')),
-    },
-    '/list/table-list': {
-      identity: 'common',
-      component: dynamicWrapper(app, ['rule'], () => import('../routes/List/TableList')),
-    },
-    '/list/basic-list': {
-      identity: 'common',
-      component: dynamicWrapper(app, ['list'], () => import('../routes/List/BasicList')),
-    },
-    '/list/card-list': {
-      identity: 'common',
-      component: dynamicWrapper(app, ['list'], () => import('../routes/List/CardList')),
-    },
-    '/list/search': {
-      identity: 'common',
-      component: dynamicWrapper(app, ['list'], () => import('../routes/List/List')),
-    },
-    '/list/search/projects': {
-      identity: 'common',
-      component: dynamicWrapper(app, ['list'], () => import('../routes/List/Projects')),
-    },
-    '/list/search/applications': {
-      identity: 'common',
-      component: dynamicWrapper(app, ['list'], () => import('../routes/List/Applications')),
-    },
-    '/list/search/articles': {
-      identity: 'common',
-      component: dynamicWrapper(app, ['list'], () => import('../routes/List/Articles')),
-    },
-    '/profile/basic': {
-      identity: 'common',
-      component: dynamicWrapper(app, ['profile'], () => import('../routes/Profile/BasicProfile')),
-    },
-    '/profile/advanced': {
-      identity: 'common',
-      component: dynamicWrapper(app, ['profile'], () =>
-        import('../routes/Profile/AdvancedProfile')
-      ),
-    },
-    '/result/success': {
-      identity: 'common',
-      component: dynamicWrapper(app, [], () => import('../routes/Result/Success')),
-    },
-    '/result/fail': {
-      identity: 'common',
-      component: dynamicWrapper(app, [], () => import('../routes/Result/Error')),
-    },
     '/exception/403': {
       identity: 'common',
       component: dynamicWrapper(app, [], () => import('../routes/Exception/403')),
@@ -396,15 +306,15 @@ export const getRouterConfig = app => {
       component: dynamicWrapper(app, ['goods'], () => import('../routes/Goods/EditGoods/Step3')),
     },
     // 用户相关信息
-    '/users/group': {
-      component: dynamicWrapper(app, ['user'], () => import('../routes/Demo/Group')),
-    },
-    '/users/role/:id': {
-      component: dynamicWrapper(app, ['user', 'menu'], () => import('../routes/Demo/Roles')),
-    },
-    '/users/user-list': {
-      component: dynamicWrapper(app, [], () => import('../routes/Demo/UserList')),
-    },
+    // '/users/group': {
+    //   component: dynamicWrapper(app, ['user'], () => import('../routes/Demo/Group')),
+    // },
+    // '/users/role/:id': {
+    //   component: dynamicWrapper(app, ['user', 'menu'], () => import('../routes/Demo/Roles')),
+    // },
+    // '/users/user-list': {
+    //   component: dynamicWrapper(app, [], () => import('../routes/Demo/UserList')),
+    // },
     // 路由配置
     '/router/menu-list': {
       component: dynamicWrapper(app, ['menu'], () => import('../routes/Demo/MenuList')),

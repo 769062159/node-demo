@@ -44,17 +44,17 @@ export const menuData = [
   //     },
   //   ],
   // },
-  // {
-  //   name: '路由配置',
-  //   icon: 'tool',
-  //   path: 'router',
-  //   children: [
-  //     {
-  //       name: '路由列表',
-  //       path: 'menu-list',
-  //     },
-  //   ],
-  // },
+  {
+    name: '路由配置',
+    icon: 'tool',
+    path: 'router',
+    children: [
+      {
+        name: '路由列表',
+        path: 'menu-list',
+      },
+    ],
+  },
   {
     name: '商品',
     icon: 'shopgood',
