@@ -18,6 +18,7 @@ import {
 // import { routerRedux } from 'dva/router';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import EditForm from './EditForm';
+import MoneyForm from './MoneyForm';
 
 import styles from './TableList.less';
 
@@ -46,6 +47,8 @@ const formSubmitLayout = {
 @Form.create()
 export default class FrontUserList extends PureComponent {
   state = {
+    moneyMsg: {},
+    isCommssion: false,
     powerValue: null,
     pagination: 1, // 页脚
     formVisible: false,
@@ -296,6 +299,39 @@ export default class FrontUserList extends PureComponent {
       },
     });
   }
+  updateCommssion = (e) => {
+    const moneyMsg = {
+      id: e.id,
+      name: e.nickname,
+      money: e.has_account.account_commission,
+    }
+    console.log(moneyMsg);
+    this.setState({
+      isCommssion: true,
+      moneyMsg,
+    })
+  }
+  moneyOK = (e) => {
+    const { moneyMsg } = this.state;
+    e.member_id = moneyMsg.id;
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'frontUser/updateCommssion',
+      payload: e,
+      callback: () => {
+        message.success('设置成功');
+        this.setState({
+          isCommssion: false,
+          moneyMsg: {},
+        })
+      },
+    });
+  }
+  moneyCancel = () => {
+    this.setState({
+      isCommssion: false,
+    })
+  }
   renderAddForm() {
     const { loading } = this.props;
     const { getFieldDecorator } = this.props.form;
@@ -496,7 +532,7 @@ export default class FrontUserList extends PureComponent {
     datas.forEach(item => {
       item.has_account = item.has_account || hasAccountDefault;
     });
-    const { formVisible, type, pagination, editDataId, merchantVisible, account, powerValue, password } = this.state;
+    const { formVisible, type, pagination, editDataId, merchantVisible, account, powerValue, password, isCommssion, moneyMsg } = this.state;
     const progressColumns = [
       {
         title: '会员',
@@ -533,8 +569,10 @@ export default class FrontUserList extends PureComponent {
           <Row>
             <Col span={24} style={{ fontSize: 14 }}>
               <div>消费:{val.account_consume}</div>
-              <div>佣金:{val.account_total_income}</div>
+              <div>总收入:{val.account_total_income}</div>
+              <div>佣金余额:{val.account_commission}</div>
               <div>注册渠道:{text.wechat_account_name}</div>
+              <div>粉丝数量:{text.fans_num}</div>
             </Col>
           </Row>
         ),
@@ -561,6 +599,8 @@ export default class FrontUserList extends PureComponent {
             }
             <Divider type="vertical" />
             <a onClick={this.setMerchant.bind(this, record)}>设置版本</a>
+            <Divider type="vertical" />
+            <a onClick={this.updateCommssion.bind(this, record)}>更改佣金</a>
           </Fragment>
         ),
       },
@@ -674,27 +714,15 @@ export default class FrontUserList extends PureComponent {
             </Col>
           </Row>
         </Modal>
-        {/* <Modal
-          title="修改商户权限"
-          visible={isPower}
-          onCancel={this.powerCancel}
-          onOk={this.powerOK}
+        <Modal
+          title="设置余额"
+          visible={isCommssion}
+          onCancel={this.moneyCancel}
           destroyOnClose="true"
+          footer=""
         >
-          <Row>
-            <Col span={6}>商户权限</Col>
-            <Col span={18}>
-              <Select onChange={this.handlePower} style={{ width: 200 }}>
-                <Option key={1} value={1}>
-                  普通版本
-                </Option>
-                <Option key={2} value={2}>
-                  社群版本
-                </Option>
-              </Select>
-            </Col>
-          </Row>
-        </Modal> */}
+          <MoneyForm moneyOK={this.moneyOK} name={moneyMsg.name} money={moneyMsg.money} />
+        </Modal>
       </PageHeaderLayout>
     );
   }

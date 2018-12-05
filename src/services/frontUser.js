@@ -87,3 +87,11 @@ export async function updatePower(params) {
     body: params,
   });
 }
+
+// 更改佣金
+export async function updateCommssion(params) {
+  return request('/merchant/member/commission/update', {
+    method: 'POST',
+    body: params,
+  });
+}

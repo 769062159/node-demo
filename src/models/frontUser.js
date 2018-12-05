@@ -10,6 +10,7 @@ import {
   getDefault,
   merchantSetting,
   updatePower,
+  updateCommssion,
 } from '../services/frontUser.js';
 
 export default {
@@ -23,6 +24,12 @@ export default {
   },
 
   effects: {
+    *updateCommssion({ payload, callback }, { call }) {
+      const data = yield call(updateCommssion, { ...payload });
+      if (data && data.code === 200) {
+        callback();
+      }
+    },
     *chgPower({ payload, callback }, { call }) {
       const data = yield call(updatePower, { ...payload });
       if (data && data.code === 200) {
