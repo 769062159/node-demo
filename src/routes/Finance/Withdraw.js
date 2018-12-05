@@ -92,8 +92,10 @@ export default class Withdraw extends PureComponent {
         dispatch({
           type: 'finance/updateWithdraw',
           payload: values,
+          callback: () => {
+            message.success('更新成功');
+          },
         });
-        message.success('更新成功');
         this.handAddleCancel();
       }
     });

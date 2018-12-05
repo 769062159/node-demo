@@ -86,8 +86,11 @@ export default {
         payload: response,
       });
     },
-    *updateWithdraw({ payload }, { call, put }) {
-      yield call(updateWithdraw, payload);
+    *updateWithdraw({ payload, callback }, { call, put }) {
+      const res =yield call(updateWithdraw, payload);
+      if (res && res.code === 200) {
+        callback();
+      }
       const response = yield call(getWithdrawList, { page: payload.page });
       yield put({
         type: 'getWithdraw',
