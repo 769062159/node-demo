@@ -93,6 +93,12 @@ export const getRouterConfig = app => {
       component: dynamicWrapper(app, ['indexs'], () => import('../routes/Index/HotSale')),
     },
     // 社群
+    '/community/certification': {
+      component: dynamicWrapper(app, ['live'], () => import('../routes/Community/Certification')),
+    },
+    '/community/contract': {
+      component: dynamicWrapper(app, ['live'], () => import('../routes/Community/Contract')),
+    },
     '/community/small-video': {
       component: dynamicWrapper(app, ['live'], () => import('../routes/Community/SmallVideo')),
     },
