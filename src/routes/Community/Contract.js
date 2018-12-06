@@ -52,7 +52,14 @@ const CustomizedForm = Form.create({
   // },
 })(props => {
   //  111
+  console.log(props, 1111);
   const { getFieldDecorator, validateFields } = props.form;
+  const {
+    uploadUrl,
+    protocolForm,
+    // handleChangeImg,
+    header,
+  } = props;
   const onValidateForm = e => {
     e.preventDefault();
     const { submitForm } = props;
@@ -64,12 +71,6 @@ const CustomizedForm = Form.create({
       }
     });
   };
-  const {
-    uploadUrl,
-    protocolForm,
-    // handleChangeImg,
-    header,
-  } = props;
   // const headers = {
   //   token,
   // }
@@ -99,7 +100,7 @@ const CustomizedForm = Form.create({
         className={styles.extraTag}
         {...formItemLayout}
         label="身份证正面"
-        extra={<Tag color="blue">大小不得大于1M, 示例<img className="img" src="https://314live.image.alimmdn.com/5/2/154409110713.jpeg" alt="图片" /></Tag>}
+        extra={<Tag color="blue">大小不得大于1M</Tag>}
       >
         {getFieldDecorator('front', {
           valuePropName: 'fileList',
@@ -232,6 +233,7 @@ class EditVodStep2 extends React.PureComponent {
     });
   };
   render() {
+    console.log(this.props);
     const { uploadUrl, protocol: { protocolForm } } = this.props;
     const { header } = this.state;
     return (
@@ -243,7 +245,6 @@ class EditVodStep2 extends React.PureComponent {
             uploadUrl={uploadUrl}
             onChange={this.changeFormVal}
             header={header}
-            handleShareImg={this.handleShareImg}
             submitForm={this.submitForm}
           />
         </Card>

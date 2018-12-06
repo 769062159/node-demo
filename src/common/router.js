@@ -97,7 +97,7 @@ export const getRouterConfig = app => {
       component: dynamicWrapper(app, ['live'], () => import('../routes/Community/Certification')),
     },
     '/community/contract': {
-      component: dynamicWrapper(app, ['live'], () => import('../routes/Community/Contract')),
+      component: dynamicWrapper(app, ['protocol'], () => import('../routes/Community/Contract')),
     },
     '/community/small-video': {
       component: dynamicWrapper(app, ['live'], () => import('../routes/Community/SmallVideo')),

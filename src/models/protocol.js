@@ -7,10 +7,12 @@ export default {
     data: {
       list: [],
       pagination: {},
-      protocolForm: {
-        yyy: [],
-        xxx: [],
-      },
+    },
+    protocolForm: {
+      front: [],
+      back: [],
+      people: [],
+      desc: [],
     },
   },
 
@@ -26,19 +28,21 @@ export default {
 
   reducers: {
     changeFormVals(state, { payload }) {
-        let { protocolForm } = state;
-        const { obj } = payload;
-        protocolForm = {
-          ...protocolForm,
-          ...obj,
-        };
-        protocolForm.xxx = protocolForm.xxx || [];
-        protocolForm.yyy = protocolForm.yyy || [];
-        return {
-          ...state,
-          protocolForm,
-        };
-      },
+      let { protocolForm } = state;
+      const { obj } = payload;
+      protocolForm = {
+        ...protocolForm,
+        ...obj,
+      };
+      protocolForm.front = protocolForm.front || [];
+      protocolForm.back = protocolForm.back || [];
+      protocolForm.people = protocolForm.people || [];
+      protocolForm.desc = protocolForm.desc || [];
+      return {
+        ...state,
+        protocolForm,
+      };
+    },
     save(state, action) {
       return {
         ...state,
