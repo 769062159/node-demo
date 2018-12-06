@@ -591,6 +591,12 @@ export default class Order extends PureComponent {
         title: '213',
         width: '12%',
         dataIndex: 'store_name',
+        render: (val, record) => (
+          <div>
+            <div>{val}</div>
+            <div>Id:{record.shop_store_id}</div>
+          </div>
+        ),
       },
       {
         title: '21',
