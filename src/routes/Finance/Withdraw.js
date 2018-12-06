@@ -227,6 +227,7 @@ export default class Withdraw extends PureComponent {
       {
         title: '昵称/手机号',
         dataIndex: 'real_name',
+        width: 150,
         render: (val, record) => (
           <div>
             <div>{val}</div>
@@ -263,6 +264,7 @@ export default class Withdraw extends PureComponent {
       },
       {
         title: '状态',
+        width: 120,
         dataIndex: 'status',
         render: val => withdrawStatus[val],
       },
@@ -294,7 +296,7 @@ export default class Withdraw extends PureComponent {
             微信提现是直接到账的。
           </Tag>
           <Table
-            scroll={{ x: 1100 }}
+            scroll={{ x: 1500 }}
             onChange={this.handleTableChange}
             dataSource={datas}
             rowKey={record => record.id}
