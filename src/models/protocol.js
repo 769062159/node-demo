@@ -1,5 +1,5 @@
 import { queryRule } from '../services/api';
-import { verifyList, updateVerify } from '../services/protocol';
+import { verifyList, updateVerify, setProtocol, getProtocol } from '../services/protocol';
 
 export default {
   namespace: 'protocol',
@@ -64,6 +64,19 @@ export default {
             payload: res,
           })
         }
+      }
+    },
+    *setDefaultProtocol({ payload, callback }, { call, put }) {
+      console.log(payload, 111);
+      const response = yield call(setProtocol, payload);
+      if (callback && response && response.code === 200) {
+        // const arr = [];
+        // response.data.list.forEach(res => {
+        //   if (res.is_check_live) {
+        //     arr.push(res.id);
+        //   }
+        // })
+        callback(response.data);
       }
     },
   },

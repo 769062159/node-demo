@@ -26,3 +26,28 @@ export async function updateVerify(params) {
     body: params,
   });
 }
+
+/**
+ * 设置用户协议
+ * user-verify
+ * string id_card_pic_front
+ * string id_card_pic_back
+ * string id_card_pic_hand
+ * string agreement 富文本
+ * */
+export async function setProtocol(params) {
+  return request('/merchant/verify/set/agreement', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+/**
+ * 获取用户协议
+ * */
+export async function getProtocol(params) {
+  return request('/merchant/verify/get/agreement', {
+    method: 'POST',
+    body: params,
+  });
+}

@@ -229,11 +229,25 @@ class EditVodStep2 extends React.PureComponent {
     },
   }
   componentDidMount() {
-    console.log(this.props);
   }
   // 新增修改提交
   submitForm = (vals) => {
     console.log(vals);
+    const { dispatch } = this.props;
+    const data = {
+      agreement: vals.desc,
+      id_card_pic_front: vals.front[0].response.data,
+      id_card_pic_back: vals.back[0].response.data,
+      id_card_pic_hand: vals.people[0].response.data,
+    };
+    console.log(data);
+    dispatch({
+      type: 'protocol/setDefaultProtocol',
+      payload: data,
+      callback: () => {
+        message.success('更新成功');
+      },
+    });
   };
 
   // 添加描述
