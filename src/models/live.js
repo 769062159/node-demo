@@ -292,10 +292,11 @@ export default {
       });
     },
     *fetchLive({ payload }, { call, put }) {
-      const response = yield call(getLive, { page: payload.pagination });
+      const response = yield call(getLive, { ...payload });
       yield put({
         type: 'getLive',
         payload: response,
+        page: payload.page,
       });
     },
     *fetchSmallVideo({ payload, callback }, { call, put }) {
@@ -360,10 +361,11 @@ export default {
     },
     *deleteLive({ payload }, { call, put }) {
       yield call(deleteLive, payload);
-      const response = yield call(getLive, { page: payload.pagination });
+      const response = yield call(getLive, { ...payload });
       yield put({
         type: 'getLive',
         payload: response,
+        page: payload.page,
       });
     },
   },
@@ -868,7 +870,7 @@ export default {
         smallVideoForm,
       };
     },
-    getLive(state, { payload }) {
+    getLive(state, { payload, page }) {
       const { data } = payload;
       return {
         ...state,
@@ -876,6 +878,7 @@ export default {
         liveListPage: {
           pageSize: data.page,
           total: data.total,
+          current: page,
         },
       };
     },

@@ -1,12 +1,13 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
 import moment from 'moment';
-import { Table, message, Modal, Card, Form, Input, Button, Divider, InputNumber } from 'antd';
+import { Table, message, Modal, Card, Form, Input, Button, Divider, InputNumber, Row, Col, Select } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
 import styles from './TableList.less';
 
 const FormItem = Form.Item;
+const { Option } = Select;
 const formItemLayout = {
   labelCol: {
     span: 5,
@@ -36,6 +37,7 @@ export default class Withdraw extends PureComponent {
     expandForm: false,
     editData: {},
     formVisible: false,
+    selectState: null,
     // formValues: {},
     page: 1, // 页脚
     type: 0, // 是否同意
@@ -94,7 +96,7 @@ export default class Withdraw extends PureComponent {
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         const { dispatch } = this.props;
-        const { editData, page, type } = this.state;
+        const { editData, page, type, selectState } = this.state;
         if (type === 3) {
           if (!values.money) {
             message.error('请输入金额');
@@ -103,19 +105,25 @@ export default class Withdraw extends PureComponent {
             message.error('输入金额请勿大于申请金额');
             return false;
           }
-          values.page = page;
           values.order_goods_sku_id = editData.order_goods_sku_id;
           dispatch({
             type: 'finance/updateRefundMoney',
             payload: values,
+            search: {
+              status: selectState,
+              page,
+            },
           });
         } else {
-          values.page = page;
           values.type = type;
           values.order_goods_sku_id = editData.order_goods_sku_id;
           dispatch({
             type: 'finance/updateRefundStatus',
             payload: values,
+            search: {
+              status: selectState,
+              page,
+            },
           });
         }
         message.success('更新成功');
@@ -123,17 +131,46 @@ export default class Withdraw extends PureComponent {
       }
     });
   };
+  changeState = (e) => {
+    this.setState({
+      selectState: e,
+    })
+    const { dispatch } = this.props;
+    const { page } = this.state;
+    dispatch({
+      type: 'finance/fetchRefundList',
+      payload: {
+        status: e,
+        page,
+      },
+    });
+  }
+  handleFormReset = () => {
+    this.setState({
+      page: 1,
+      selectState: null,
+    });
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'finance/fetchRefundList',
+      payload: {
+        page: 1,
+      },
+    });
+  }
   // 换页
   handleTableChange = pagination => {
     const { current } = pagination;
     this.setState({
       page: current,
     });
+    const { selectState } = this.state;
     const { dispatch } = this.props;
     dispatch({
       type: 'finance/fetchRefundList',
       payload: {
         page: current,
+        status: selectState,
       },
     });
   };
@@ -249,7 +286,7 @@ export default class Withdraw extends PureComponent {
   render() {
     const { finance: { refundList: datas, refundListPage }, loading } = this.props;
     // const { getFieldDecorator } = this.props.form;
-    const { formVisible } = this.state;
+    const { formVisible, selectState } = this.state;
     const progressColumns = [
       {
         title: '退款商品',
@@ -343,12 +380,27 @@ export default class Withdraw extends PureComponent {
     return (
       <PageHeaderLayout>
         <Card bordered={false}>
+          <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+            <Col md={8} sm={24}>
+              状态：
+              <Select value={selectState} onChange={this.changeState} placeholder="请选择" style={{ width: 200 }}>
+                <Option value={0}>上架中</Option>
+                <Option value={1}>未上架</Option>
+                <Option value={2}>下架</Option>
+              </Select>
+            </Col>
+            <Col md={8} sm={24}>
+              <span className={styles.submitButtons}>
+                <Button type="primary" htmlType="submit">
+                  查询
+                </Button>
+                <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>
+                  重置
+                </Button>
+              </span>
+            </Col>
+          </Row>
           <div className={styles.tableList}>
-            {/* <div className={styles.tableListOperator}>
-              <Button icon="plus" type="primary" onClick={this.showModal.bind(this)}>
-                新建
-              </Button>
-            </div> */}
             <Table
               onChange={this.handleTableChange}
               scroll={{ x: 1200 }}
