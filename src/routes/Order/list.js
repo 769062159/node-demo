@@ -361,7 +361,6 @@ export default class Order extends PureComponent {
 
       const values = {
         ...fieldsValue,
-        updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
       };
 
       const { minPrice, maxPrice } = this.state;
@@ -372,6 +371,7 @@ export default class Order extends PureComponent {
       }
       this.setState({
         values,
+        page: 1,
       });
       dispatch({
         type: 'order/fetchOrder',
@@ -382,7 +382,7 @@ export default class Order extends PureComponent {
   renderSimpleForm() {
     const { getFieldDecorator } = this.props.form;
     return (
-      <Form onSubmit={this.handleSearch} layout="inline" autoComplete="OFF">
+      <Form layout="inline" autoComplete="OFF">
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
             <FormItem label="包裹订单sn">
@@ -405,7 +405,7 @@ export default class Order extends PureComponent {
           </Col>
           <Col md={8} sm={24}>
             <span className={styles.submitButtons}>
-              <Button type="primary" htmlType="submit">
+              <Button type="primary"  onClick={this.handleSearch}>
                 查询
               </Button>
               <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>
@@ -424,7 +424,7 @@ export default class Order extends PureComponent {
   renderAdvancedForm() {
     const { getFieldDecorator } = this.props.form;
     return (
-      <Form onSubmit={this.handleSearch} layout="inline" autoComplete="OFF" >
+      <Form layout="inline" autoComplete="OFF" >
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
             <FormItem label="订单sn">
@@ -490,21 +490,21 @@ export default class Order extends PureComponent {
           </Col>
           <Col md={8} sm={24}>
             <FormItem label="昵称">
-              {getFieldDecorator('mobile')(<Input placeholder="请输入" />)}
+              {getFieldDecorator('nickname')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
         </Row>
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
             <FormItem label="用户id">
-              {getFieldDecorator('mobile')(<Input placeholder="请输入" />)}
+              {getFieldDecorator('user_id')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
           <Col md={8} sm={24} />
         </Row>
         <div style={{ overflow: 'hidden' }}>
           <span style={{ float: 'right', marginBottom: 24 }}>
-            <Button type="primary" htmlType="submit">
+            <Button type="primary" onClick={this.handleSearch}>
               查询
             </Button>
             <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>
@@ -649,8 +649,8 @@ export default class Order extends PureComponent {
 
     return (
       <PageHeaderLayout>
+        <div className={styles.tableListForm}>{this.renderForm()}</div>
         <Card bordered={false} hoverable={false} loading={loading}>
-          <div className={styles.tableListForm}>{this.renderForm()}</div>
           <Row
             style={{
               backgroundColor: '#F5F5F5',

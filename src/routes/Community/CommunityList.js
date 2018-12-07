@@ -259,17 +259,17 @@ export default class Live extends PureComponent {
             <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
               <Col md={8} sm={24}>
                 <FormItem label="昵称">
-                  {getFieldDecorator('goods_name')(<Input placeholder="请输入昵称" />)}
+                  {getFieldDecorator('nickname')(<Input placeholder="请输入昵称" />)}
                 </FormItem>
               </Col>
               <Col md={8} sm={24}>
                 <FormItem label="用户id">
-                  {getFieldDecorator('goods_name')(<Input placeholder="请输入用户id" />)}
+                  {getFieldDecorator('user_id')(<Input placeholder="请输入用户id" />)}
                 </FormItem>
               </Col>
               <Col md={8} sm={24}>
                 <FormItem label="社群标题">
-                  {getFieldDecorator('goods_name')(<Input placeholder="请输入社群标题" />)}
+                  {getFieldDecorator('title')(<Input placeholder="请输入社群标题" />)}
                 </FormItem>
               </Col>
             </Row>

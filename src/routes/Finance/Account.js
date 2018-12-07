@@ -118,7 +118,15 @@ export default class Rank extends PureComponent {
         title: '昵称',
         dataIndex: 'has_user',
         key: 'user_id',
-        render: val => val.nickname,
+        render: (val, record) => (
+          <div className={styles.userMsg}>
+            <img src={record.has_user.avatar} alt="图片" />
+            <div>
+              <span>昵称:{val.nickname}</span>
+              <span>id:{record.has_user.fake_id}</span>
+            </div>
+          </div>
+        ),
       },
       {
         title: '累计收益',
@@ -161,12 +169,12 @@ export default class Rank extends PureComponent {
             <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
               <Col md={8} sm={24}>
                 <FormItem label="昵称">
-                  {getFieldDecorator('goods_name')(<Input placeholder="请输入昵称" />)}
+                  {getFieldDecorator('nickname')(<Input placeholder="请输入昵称" />)}
                 </FormItem>
               </Col>
               <Col md={8} sm={24}>
                 <FormItem label="用户id">
-                  {getFieldDecorator('goods_name')(<Input placeholder="请输入用户id" />)}
+                  {getFieldDecorator('user_id')(<Input placeholder="请输入用户id" />)}
                 </FormItem>
               </Col>
               {/* <Col md={8} sm={24}>

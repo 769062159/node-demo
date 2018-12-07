@@ -28,21 +28,21 @@ class SearchForm extends Component {
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
             <FormItem label="昵称">
-              {getFieldDecorator('goods_name')(<Input placeholder="请输入昵称" />)}
+              {getFieldDecorator('nickname')(<Input placeholder="请输入昵称" />)}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
             <FormItem label="用户id">
-              {getFieldDecorator('goods_name')(<Input placeholder="请输入用户id" />)}
+              {getFieldDecorator('user_id')(<Input placeholder="请输入用户id" />)}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
-            <FormItem label="使用状态">
-              {getFieldDecorator('goods_status')(
+            <FormItem label="状态">
+              {getFieldDecorator('status')(
                 <Select placeholder="请选择" style={{ width: 200 }}>
-                  <Option value="0">上架中</Option>
-                  <Option value="1">未上架</Option>
-                  <Option value="2">下架</Option>
+                  <Option value={0}>待提现</Option>
+                  <Option value={1}>已提现</Option>
+                  <Option value={2}>已拒绝</Option>
                 </Select>
               )}
             </FormItem>

@@ -110,7 +110,7 @@ export default class Withdraw extends PureComponent {
             type: 'finance/updateRefundMoney',
             payload: values,
             search: {
-              status: selectState,
+              refund_status: selectState,
               page,
             },
           });
@@ -121,7 +121,7 @@ export default class Withdraw extends PureComponent {
             type: 'finance/updateRefundStatus',
             payload: values,
             search: {
-              status: selectState,
+              refund_status: selectState,
               page,
             },
           });
@@ -135,15 +135,17 @@ export default class Withdraw extends PureComponent {
     this.setState({
       selectState: e,
     })
+  }
+  search = () => {
     const { dispatch } = this.props;
-    const { page } = this.state;
+    const { page, selectState } = this.state;
     dispatch({
       type: 'finance/fetchRefundList',
       payload: {
-        status: e,
+        refund_status: selectState,
         page,
       },
-    });
+    }); 
   }
   handleFormReset = () => {
     this.setState({
@@ -170,7 +172,7 @@ export default class Withdraw extends PureComponent {
       type: 'finance/fetchRefundList',
       payload: {
         page: current,
-        status: selectState,
+        refund_status: selectState,
       },
     });
   };
@@ -384,14 +386,14 @@ export default class Withdraw extends PureComponent {
             <Col md={8} sm={24}>
               状态：
               <Select value={selectState} onChange={this.changeState} placeholder="请选择" style={{ width: 200 }}>
-                <Option value={0}>上架中</Option>
-                <Option value={1}>未上架</Option>
-                <Option value={2}>下架</Option>
+                <Option value={3}>退款同意</Option>
+                <Option value={1}>退款申请中</Option>
+                <Option value={2}>退款拒绝</Option>
               </Select>
             </Col>
             <Col md={8} sm={24}>
               <span className={styles.submitButtons}>
-                <Button type="primary" htmlType="submit">
+                <Button type="primary" onClick={this.search}>
                   查询
                 </Button>
                 <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>
