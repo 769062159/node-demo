@@ -28,6 +28,7 @@ const submitFormLayout = {
 
 const CustomizedForm = Form.create({
   onFieldsChange(props, changedFields) {
+    console.log('change', props, changedFields);
     props.onChange(changedFields);
   },
   mapPropsToFields(props) {
@@ -52,13 +53,13 @@ const CustomizedForm = Form.create({
   // },
 })(props => {
   //  111
-  console.log(props, 1111);
   const { getFieldDecorator, validateFields } = props.form;
   const {
     uploadUrl,
     protocolForm,
     // handleChangeImg,
     header,
+    setDescription,
   } = props;
   const onValidateForm = e => {
     e.preventDefault();
@@ -192,6 +193,21 @@ const CustomizedForm = Form.create({
           </Upload>
         )}
       </Form.Item>
+      <FormItem
+        className={styles.extraTag}
+        {...formItemLayout}
+        label="合同模版"
+        extra={<Tag color="blue">请填写合同模版</Tag>}
+      >
+        {getFieldDecorator('desc', {
+          rules: [{ required: true }],
+        })(
+          <Wangeditor
+            header={header}
+            setDescription={setDescription}
+          />
+        )}
+      </FormItem>
       <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
         <Button type="primary" htmlType="submit" onClick={onValidateForm}>
           提交
@@ -213,11 +229,23 @@ class EditVodStep2 extends React.PureComponent {
     },
   }
   componentDidMount() {
+    console.log(this.props);
   }
   // 新增修改提交
-  submitForm = () => {
-
+  submitForm = (vals) => {
+    console.log(vals);
   };
+
+  // 添加描述
+  setDescription = (e) => {
+    console.log(e, 'setDesc');
+    const obj = {};
+    obj.desc = {
+      value: e,
+    };
+    this.changeFormVal(obj);
+  }
+
   // 修改表单值
   changeFormVal = val => {
     const { dispatch } = this.props;
@@ -233,7 +261,6 @@ class EditVodStep2 extends React.PureComponent {
     });
   };
   render() {
-    console.log(this.props);
     const { uploadUrl, protocol: { protocolForm } } = this.props;
     const { header } = this.state;
     return (
@@ -246,6 +273,7 @@ class EditVodStep2 extends React.PureComponent {
             onChange={this.changeFormVal}
             header={header}
             submitForm={this.submitForm}
+            setDescription={this.setDescription}
           />
         </Card>
       </div>

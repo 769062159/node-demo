@@ -24,7 +24,23 @@ import StandardTable from 'components/StandardTable';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
 import styles from './TableList.less';
+import { timeFormat } from '../../utils/utils';
 
+const formItemLayout = {
+  labelCol: {
+    span: 5,
+  },
+  wrapperCol: {
+    span: 19,
+  },
+};
+const formSubmitLayout = {
+  wrapperCol: {
+    span: 19,
+    offset: 5,
+  },
+};
+const { TextArea } = Input;
 const { confirm } = Modal;
 const FormItem = Form.Item;
 const InputGroup = Input.Group;
@@ -40,27 +56,28 @@ const goodsStatus = ['未审核', '通过', '拒绝'];
 // const payType = ['拍下减库存', '付款减库存'];
 // const isTrue = ['否', '是'];
 
-@connect(({ classModel, loading }) => ({
-  classModel,
+@connect(({ protocol, loading }) => ({
+  protocol,
   loading: loading.models.classModel,
 }))
 @Form.create()
-export default class ClassList extends PureComponent {
+export default class Certification extends PureComponent {
   state = {
     expandForm: false,
+    editData: {},
+    formVisible: false,
     formValues: {},
     minPrice: '',
     maxPrice: '',
     page: 1, // 页脚
+    type: 0,
   };
 
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
-      type: 'classModel/getclassList',
-      payload: {
-        page_number: 3,
-      },
+      type: 'protocol/getVerifyList',
+      payload: {},
     });
   }
 
@@ -90,7 +107,7 @@ export default class ClassList extends PureComponent {
       params.sorter = `${sorter.field}_${sorter.order}`;
     }
     dispatch({
-      type: 'classModel/getclassList',
+      type: 'protocol/getVerifyList',
       payload: params,
     });
   };
@@ -104,7 +121,7 @@ export default class ClassList extends PureComponent {
       maxPrice: '',
     });
     dispatch({
-      type: 'classModel/getclassList',
+      type: 'protocol/getVerifyList',
       payload: {},
     });
   };
@@ -114,8 +131,6 @@ export default class ClassList extends PureComponent {
       expandForm: !this.state.expandForm,
     });
   };
-
-
 
   handleSearch = e => {
     e.preventDefault();
@@ -135,46 +150,149 @@ export default class ClassList extends PureComponent {
         formValues: values,
       });
       dispatch({
-        type: 'classModel/getclassList',
+        type: 'protocol/getVerifyList',
         payload: values,
       });
     });
   };
 
-  // 删除商品
-  deleteItem = id => {
-    event.preventDefault();
-    const that = this;
-    confirm({
-      content: '你确定删除这个吗？',
-      okText: '确定',
-      okType: 'danger',
-      cancelText: '取消',
-      onOk() {
-        const { page } = that.state;
-        const { dispatch } = that.props;
-        dispatch({
-          type: 'classModel/deleteClass',
-          payload: id,
-          page: {
-            page,
-            page_number: 3,
-          },
-          callback: () => {
-            message.success('删除成功！');
-          },
-        });
-      },
-      onCancel() {
-        console.log('Cancel');
-      },
+  // 新增取消
+  handAddleCancel = () => {
+    this.setState({
+      formVisible: false,
+      editData: {},
     });
   };
-  // 新建商品
-  goNew = () => {
-    const { dispatch } = this.props;
-    const url = `/community/class-add`;
-    dispatch(routerRedux.push(url));
+
+  // 修改信息
+  editDataMsg = (data, type, e) => {
+    e.preventDefault();
+    this.setState({
+      editData: data,
+      type,
+    });
+    this.showModal();
+  };
+  // 新增modal显示
+  showModal = () => {
+    this.setState({
+      formVisible: true,
+    });
+  };
+
+  // 渲染修改还是新增
+  renderModalForm() {
+    const { type } = this.state;
+    return type === 1 ? this.renderAgree() : this.renderRefuse();
+  }
+
+  renderAgree() {
+    const { loading } = this.props;
+    // const { editData } = this.state;
+    const { getFieldDecorator } = this.props.form;
+    return (
+      <Form
+        onSubmit={this.handleSubmit.bind(this)}
+        hideRequiredMark
+        style={{ marginTop: 8 }}
+        autoComplete="OFF"
+      >
+        {/* <Row>
+          <Col span={5}>
+           申请日期:
+          </Col>
+          <Col span={19}>
+            {moment(editData.create_time*1000).format('YYYY-MM-DD HH:mm:ss')}
+          </Col>
+          <Col span={5}>
+            申请金额:
+          </Col>
+          <Col span={19}>
+            {editData.money}
+          </Col>
+          <Col span={5}>
+            收款帐号:
+          </Col>
+          <Col span={19}>
+            {editData.account_no}
+          </Col>
+          <Col span={5}>
+            收款人:
+          </Col>
+          <Col span={19}>
+            {editData.real_name}
+          </Col>
+        </Row> */}
+        {/* <FormItem {...formItemLayout} style={{ marginBottom: 5 }} label="申请日期">
+          {moment(editData.create_time * 1000).format('YYYY-MM-DD HH:mm:ss')}
+        </FormItem>
+        <FormItem {...formItemLayout} style={{ marginBottom: 5 }} label="申请金额">
+          {editData.money}
+        </FormItem>
+        <FormItem {...formItemLayout} style={{ marginBottom: 5 }} label="收款帐号">
+          {editData.account_no}
+        </FormItem>
+        <FormItem {...formItemLayout} style={{ marginBottom: 5 }} label="收款人">
+          {editData.real_name}
+        </FormItem> */}
+        <FormItem {...formItemLayout} label="备注">
+          {getFieldDecorator('remark', {
+            rules: [],
+          })(<TextArea placeholder="请输入备注" autosize />)}
+        </FormItem>
+        <FormItem style={{ marginTop: 32 }} {...formSubmitLayout}>
+          <Button type="primary" htmlType="submit" loading={loading}>
+            同意
+          </Button>
+        </FormItem>
+      </Form>
+    );
+  }
+  renderRefuse() {
+    const { loading } = this.props;
+    // const { editData } = this.state;
+    const { getFieldDecorator } = this.props.form;
+    return (
+      <Form
+        onSubmit={this.handleSubmit.bind(this)}
+        hideRequiredMark
+        style={{ marginTop: 8 }}
+        autoComplete="OFF"
+      >
+        <FormItem {...formItemLayout} label="备注">
+          {getFieldDecorator('remark', {
+            rules: [],
+          })(<TextArea placeholder="请输入备注" autosize />)}
+        </FormItem>
+        <FormItem style={{ marginTop: 32 }} {...formSubmitLayout}>
+          <Button type="primary" htmlType="submit" loading={loading}>
+            驳回
+          </Button>
+        </FormItem>
+      </Form>
+    );
+  };
+
+  handleSubmit = e => {
+    e.preventDefault();
+    this.props.form.validateFieldsAndScroll((err, values) => {
+      if (!err) {
+        const { dispatch } = this.props;
+        const { editData, page, type } = this.state;
+        values.page = page;
+        values.status = type;
+        values.verify_id = editData.id;
+        console.log(values);
+        dispatch({
+          type: 'protocol/updateVerify',
+          payload: values,
+          callback: () => {
+            message.success('更新成功');
+          },
+        });
+        this.handAddleCancel();
+      }
+    });
   };
 
   renderSimpleForm() {
@@ -184,12 +302,12 @@ export default class ClassList extends PureComponent {
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
             <FormItem label="用户id">
-              {getFieldDecorator('title')(<Input placeholder="请输入" />)}
+              {getFieldDecorator('user_id')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
             <FormItem label="姓名">
-              {getFieldDecorator('title')(<Input placeholder="请输入" />)}
+              {getFieldDecorator('name')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
           {/* <Col md={8} sm={24}>
@@ -330,15 +448,15 @@ export default class ClassList extends PureComponent {
   }
 
   render() {
-    const { classModel: { classList: datas, classListPage }, loading } = this.props;
+    const { protocol: { verifyList, verifyListPage }, loading } = this.props;
     const data = {
-      list: datas,
+      list: verifyList,
       pagination: {
-        ...classListPage,
+        ...verifyListPage,
       },
     };
-
-    const columns = [
+    const { formVisible } = this.state;
+     const columns = [
       {
         title: '会员',
         dataIndex: 'member',
@@ -356,13 +474,11 @@ export default class ClassList extends PureComponent {
           //   </Col>
           // </Row>
           <div className={styles.userBox}>
-            <img style={{ height: 80, width: 80 }} src={val} alt="头像" />
+            <img style={{ height: 80, width: 80, marginRight: 10, float: 'left' }} src={text.has_user.avatar} alt="头像" />
             <div className={styles.userInfo}>
-              <div>{text.nickname}</div>
-              <div>Id:{text.id}</div>
-              <div>等级:{text.account_level}</div>
-              {/* <div className={styles.superior} onClick={this.searchMsg.bind(this, text.referee)} >上级:{text.referee && text.referee.nickname}</div> */}
-              <div>手机号码:{text.mobile}</div>
+              <div>{text.has_user.nickname}</div>
+              <div>Id:{text.has_user.fake_id}</div>
+              <div>手机号码:{text.has_user.mobile}</div>
             </div>
           </div>
         ),
@@ -382,32 +498,31 @@ export default class ClassList extends PureComponent {
       },
       {
         title: '身份证号',
-        dataIndex: 'id_num',
-        key: 'id_num',
-        // render: (val) => <img style={{ height: 80, width: 80 }} src={val} alt="" />,
+        dataIndex: 'id_no',
+        key: 'id_no',
       },
       {
         title: '身份证正面照',
-        dataIndex: 'id_front_img',
-        key: 'id_front_img',
+        dataIndex: 'id_card_pic_front',
+        key: 'id_card_pic_front',
         render: (val) => <img style={{ height: 80, width: 80 }} src={val} alt="身份证正面照" />,
       },
       {
         title: '身份证反面照',
-        dataIndex: 'id_back_img',
-        key: 'id_back_img',
+        dataIndex: 'id_card_pic_back',
+        key: 'id_card_pic_back',
         render: (val) => <img style={{ height: 80, width: 80 }} src={val} alt="身份证反面照" />,
       },
       {
         title: '手持身份证照',
-        dataIndex: 'id_people_img',
-        key: 'id_people_img',
+        dataIndex: 'id_card_pic_hand',
+        key: 'id_card_pic_hand',
         render: (val) => <img style={{ height: 80, width: 80 }} src={val} alt="手持身份证照" />,
       },
       {
         title: '状态',
-        dataIndex: 'goods_status',
-        key: 'goods_status',
+        dataIndex: 'status',
+        key: 'status',
         filters: [
           {
             text: goodsStatus[0],
@@ -423,15 +538,18 @@ export default class ClassList extends PureComponent {
           },
         ],
         filterMultiple: false,
-        onFilter: (value, record) => record.goods_status.toString() === value,
+        onFilter: (value, record) => record.status.toString() === value,
         render(val) {
           return <Badge status={statusMap[val]} text={goodsStatus[val]} />;
         },
       },
       {
         title: '更新时间',
-        dataIndex: 'update_time',
-        key: 'update_time',
+        dataIndex: 'create_time',
+        key: 'create_time',
+        render(val) {
+          return <span>{timeFormat(val)}</span>
+        }
       },
       // {
       //   title: '剩余库存',
@@ -448,13 +566,14 @@ export default class ClassList extends PureComponent {
         title: '操作',
         fixed: 'right',
         width: 150,
-        render: record => (
-          <Fragment>
-            <a href={`#/community/class-edit/${record.id}`}>同意</a>
-            <Divider type="vertical" />
-            <a onClick={this.deleteItem.bind(this, record.id)}>驳回</a>
-          </Fragment>
-        ),
+        render: record =>
+          record.status === 0 ? (
+            <Fragment>
+              <a onClick={this.editDataMsg.bind(this, record, 2)}>驳回</a>
+              <Divider type="vertical" />
+              <a onClick={this.editDataMsg.bind(this, record, 1)}>同意</a>
+            </Fragment>
+            ) : null,
       },
     ];
 
@@ -486,6 +605,15 @@ export default class ClassList extends PureComponent {
               onChange={this.handleStandardTableChange}
             />
           </div>
+          <Modal
+            title="认证"
+            visible={formVisible}
+            onCancel={this.handAddleCancel.bind(this)}
+            footer=""
+            destroyOnClose="true"
+          >
+          {this.renderModalForm()}
+        </Modal>
         </Card>
       </PageHeaderLayout>
     );
