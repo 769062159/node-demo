@@ -17,7 +17,7 @@ import {
   // Menu,
   // InputNumber,
   DatePicker,
-  // Badge,
+  Badge,
   Divider,
 } from 'antd';
 import StandardTable from 'components/StandardTable';
@@ -33,9 +33,9 @@ const getValue = obj =>
   Object.keys(obj)
     .map(key => obj[key])
     .join(',');
-// const statusMap = ['default', 'processing', 'success', 'error'];
+const statusMap = ['default', 'success', 'error'];
 // const statusMap = ['processing', 'processing', 'error'];
-// const goodsStatus = ['上架', '下架', '审核中'];
+const goodsStatus = ['未审核', '通过', '拒绝'];
 // const goodsTypeStatus = ['普通商品', '一元购', '秒杀', '众筹'];
 // const payType = ['拍下减库存', '付款减库存'];
 // const isTrue = ['否', '是'];
@@ -183,7 +183,12 @@ export default class ClassList extends PureComponent {
       <Form onSubmit={this.handleSearch} layout="inline" autoComplete="OFF">
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
-            <FormItem label="课程名称">
+            <FormItem label="用户id">
+              {getFieldDecorator('title')(<Input placeholder="请输入" />)}
+            </FormItem>
+          </Col>
+          <Col md={8} sm={24}>
+            <FormItem label="姓名">
               {getFieldDecorator('title')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
@@ -335,9 +340,32 @@ export default class ClassList extends PureComponent {
 
     const columns = [
       {
-        title: '课程名称',
-        dataIndex: 'title',
-        key: 'title',
+        title: '会员',
+        dataIndex: 'member',
+        key: 'member',
+        render: (val, text) => (
+          // <Row style={{ width: 500 }}>
+          //   <Col span={4}>
+          //     <img style={{ height: 80, width: 80 }} src={val} alt="头像" />
+          //   </Col>
+          //   <Col span={14} style={{ fontSize: 14 }}>
+          //     <div>{text.nickname}</div>
+          //     <div>Id:{text.id}</div>
+          //     <div>等级:{text.account_level}</div>
+          //     <div>上级:{text.referee && text.referee.nickname}</div>
+          //   </Col>
+          // </Row>
+          <div className={styles.userBox}>
+            <img style={{ height: 80, width: 80 }} src={val} alt="头像" />
+            <div className={styles.userInfo}>
+              <div>{text.nickname}</div>
+              <div>Id:{text.id}</div>
+              <div>等级:{text.account_level}</div>
+              {/* <div className={styles.superior} onClick={this.searchMsg.bind(this, text.referee)} >上级:{text.referee && text.referee.nickname}</div> */}
+              <div>手机号码:{text.mobile}</div>
+            </div>
+          </div>
+        ),
       },
       // {
       //   title: '课程价格',
@@ -345,24 +373,65 @@ export default class ClassList extends PureComponent {
       //   key: 'price',
       // },
       {
-        title: '课程数量',
-        dataIndex: 'lesson_num',
-        key: 'lesson_num',
-        render: (val) => {
-          return val === 1 ? '单课' :`${val}集`;
+        title: '姓名',
+        dataIndex: 'name',
+        key: 'name',
+        // render: (val) => {
+        //   return val === 1 ? '单课' :`${val}集`;
+        // },
+      },
+      {
+        title: '身份证号',
+        dataIndex: 'id_num',
+        key: 'id_num',
+        // render: (val) => <img style={{ height: 80, width: 80 }} src={val} alt="" />,
+      },
+      {
+        title: '身份证正面照',
+        dataIndex: 'id_front_img',
+        key: 'id_front_img',
+        render: (val) => <img style={{ height: 80, width: 80 }} src={val} alt="身份证正面照" />,
+      },
+      {
+        title: '身份证反面照',
+        dataIndex: 'id_back_img',
+        key: 'id_back_img',
+        render: (val) => <img style={{ height: 80, width: 80 }} src={val} alt="身份证反面照" />,
+      },
+      {
+        title: '手持身份证照',
+        dataIndex: 'id_people_img',
+        key: 'id_people_img',
+        render: (val) => <img style={{ height: 80, width: 80 }} src={val} alt="手持身份证照" />,
+      },
+      {
+        title: '状态',
+        dataIndex: 'goods_status',
+        key: 'goods_status',
+        filters: [
+          {
+            text: goodsStatus[0],
+            value: 0,
+          },
+          {
+            text: goodsStatus[1],
+            value: 1,
+          },
+          {
+            text: goodsStatus[2],
+            value: 2,
+          },
+        ],
+        filterMultiple: false,
+        onFilter: (value, record) => record.goods_status.toString() === value,
+        render(val) {
+          return <Badge status={statusMap[val]} text={goodsStatus[val]} />;
         },
       },
       {
-        title: '课程封面',
-        dataIndex: 'cover',
-        key: 'cover',
-        render: (val) => <img style={{ height: 80, width: 80 }} src={val} alt="商品" />,
-      },
-      {
-        title: '分享图片',
-        dataIndex: 'share_cover',
-        key: 'share_cover',
-        render: (val) => <img style={{ height: 80, width: 80 }} src={val} alt="商品" />,
+        title: '更新时间',
+        dataIndex: 'update_time',
+        key: 'update_time',
       },
       // {
       //   title: '剩余库存',
@@ -381,9 +450,9 @@ export default class ClassList extends PureComponent {
         width: 150,
         render: record => (
           <Fragment>
-            <a href={`#/community/class-edit/${record.id}`}>修改</a>
+            <a href={`#/community/class-edit/${record.id}`}>同意</a>
             <Divider type="vertical" />
-            <a onClick={this.deleteItem.bind(this, record.id)}>删除</a>
+            <a onClick={this.deleteItem.bind(this, record.id)}>驳回</a>
           </Fragment>
         ),
       },

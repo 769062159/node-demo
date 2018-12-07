@@ -3,7 +3,7 @@ import { connect } from 'dva';
 import moment from 'moment';
 import { Table, message, Modal, Card, Form, Input, Button, Tag, Divider } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
-
+import SearchForm from './SearchForm';
 import styles from './TableList.less';
 
 const FormItem = Form.Item;
@@ -35,7 +35,7 @@ export default class Withdraw extends PureComponent {
     expandForm: false,
     editData: {},
     formVisible: false,
-    // formValues: {},
+    formValues: {},
     page: 1, // 页脚
     type: 0, // 是否同意
   };
@@ -79,6 +79,20 @@ export default class Withdraw extends PureComponent {
       editData: {},
     });
   };
+  handleSearch = (val) => {
+    this.setState({
+      formValues: val,
+      page: 1,
+    });
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'finance/fetchWithdraw',
+      payload: {
+        ...val,
+        page: 1,
+      },
+    });
+  }
   // 新增修改提交
   handleSubmit = e => {
     e.preventDefault();
@@ -106,14 +120,31 @@ export default class Withdraw extends PureComponent {
     this.setState({
       page: current,
     });
+    const { formValues } = this.state;
     const { dispatch } = this.props;
     dispatch({
       type: 'finance/fetchWithdraw',
       payload: {
+        ...formValues,
         page: current,
       },
     });
   };
+
+  handleFormReset = () => {
+    this.setState({
+      page: 1,
+      formValues: {},
+    });
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'finance/fetchWithdraw',
+      payload: {
+        page: 1,
+      },
+    });
+  }
+  
   renderAgree() {
     const { loading } = this.props;
     const { editData } = this.state;
@@ -227,6 +258,7 @@ export default class Withdraw extends PureComponent {
       {
         title: '昵称/手机号',
         dataIndex: 'real_name',
+        width: 150,
         render: (val, record) => (
           <div>
             <div>{val}</div>
@@ -263,6 +295,7 @@ export default class Withdraw extends PureComponent {
       },
       {
         title: '状态',
+        width: 120,
         dataIndex: 'status',
         render: val => withdrawStatus[val],
       },
@@ -293,8 +326,9 @@ export default class Withdraw extends PureComponent {
             <br />
             微信提现是直接到账的。
           </Tag>
+          <SearchForm handleFormReset={this.handleFormReset} handleSearch={this.handleSearch} />
           <Table
-            scroll={{ x: 1100 }}
+            scroll={{ x: 1500 }}
             onChange={this.handleTableChange}
             dataSource={datas}
             rowKey={record => record.id}

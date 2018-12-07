@@ -198,6 +198,14 @@ export const menuData = [
         name: '社群列表',
         path: 'community-list',
       },
+      {
+        name: '群主认证',
+        path: 'certification',
+      },
+      {
+        name: '认证模版及合同',
+        path: 'contract',
+      },
     ],
   },
   {

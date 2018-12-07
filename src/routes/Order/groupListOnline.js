@@ -434,6 +434,19 @@ export default class Order extends PureComponent {
               {getFieldDecorator('mobile')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
+          <Col md={8} sm={24}>
+            <FormItem label="昵称">
+              {getFieldDecorator('mobile')(<Input placeholder="请输入" />)}
+            </FormItem>
+          </Col>
+        </Row>
+        <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+          <Col md={8} sm={24}>
+            <FormItem label="用户id">
+              {getFieldDecorator('mobile')(<Input placeholder="请输入" />)}
+            </FormItem>
+          </Col>
+          <Col md={8} sm={24} />
         </Row>
         <div style={{ overflow: 'hidden' }}>
           <span style={{ float: 'right', marginBottom: 24 }}>
@@ -591,6 +604,12 @@ export default class Order extends PureComponent {
         title: '213',
         width: '12%',
         dataIndex: 'store_name',
+        render: (val, record) => (
+          <div>
+            <div>{val}</div>
+            <div>Id:{record.shop_store_id}</div>
+          </div>
+        ),
       },
       {
         title: '21',

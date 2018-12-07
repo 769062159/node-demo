@@ -211,6 +211,14 @@ export default class Setting extends PureComponent {
             </Tag>
           )
         }
+        <br />
+        {
+          process.env.API_ENV === 'test' ? (
+            <Tag >公众号支付还需要登录https://pay.weixin.qq.com微信商户平台;选择产品中心-》开发配置-》公众号支付支付授权目录;添加http://dev-www.store.314live.cn/</Tag>
+          ) : (
+            <Tag >公众号支付还需要登录https://pay.weixin.qq.com微信商户平台;选择产品中心-》开发配置-》公众号支付支付授权目录;添加http://www.store.314live.cn/</Tag>
+          )
+        }
         <Table
           //   onChange={this.handleTableChange}  // 换页
           className="components-table-demo-nested"
