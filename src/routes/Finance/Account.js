@@ -1,11 +1,11 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
-import { Table, Card, Form } from 'antd';
+import { Table, Card, Form, Row, Col, Button, Input } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
 import styles from './TableList.less';
 
-// const FormItem = Form.Item;
+const FormItem = Form.Item;
 // const formItemLayout = {
 //   labelCol: {
 //     span: 5,
@@ -32,7 +32,7 @@ export default class Rank extends PureComponent {
     expandForm: false,
     // editData: {},
     // formVisible: false,
-    // formValues: {},
+    formValues: {},
     page: 1, // 页脚
   };
   componentDidMount() {
@@ -46,6 +46,47 @@ export default class Rank extends PureComponent {
     });
   }
 
+  handleSearch = e => {
+    e.preventDefault();
+    // const { page } = this.state;
+    const { dispatch, form } = this.props;
+
+    form.validateFields((err, fieldsValue) => {
+      if (err) return;
+
+      const values = {
+        ...fieldsValue,
+      };
+
+      this.setState({
+        formValues: values,
+        page: 1,
+      });
+      dispatch({
+        type: 'finance/fetchAccountList',
+        payload: {
+          ...values,
+          page: 1,
+        },
+      });
+    });
+  };
+
+  handleFormReset = () => {
+    const { form, dispatch } = this.props;
+    form.resetFields();
+    const { page } = this.state;
+    this.setState({
+      formValues: {},
+    });
+    dispatch({
+      type: 'finance/fetchAccountList',
+      payload: {
+        page,
+      },
+    });
+  };
+
   toggleForm = () => {
     this.setState({
       expandForm: !this.state.expandForm,
@@ -55,6 +96,7 @@ export default class Rank extends PureComponent {
   // 换页
   handleTableChange = pagination => {
     const { current } = pagination;
+    const { formValues } = this.state;
     this.setState({
       page: current,
     });
@@ -62,6 +104,7 @@ export default class Rank extends PureComponent {
     dispatch({
       type: 'finance/fetchAccountList',
       payload: {
+        ...formValues,
         page: current,
       },
     });
@@ -69,7 +112,7 @@ export default class Rank extends PureComponent {
 
   render() {
     const { finance: { accountList: datas, accountListPage }, loading } = this.props;
-    // const { getFieldDecorator } = this.props.form;
+    const { getFieldDecorator } = this.props.form;
     const progressColumns = [
       {
         title: '昵称',
@@ -114,6 +157,44 @@ export default class Rank extends PureComponent {
     return (
       <PageHeaderLayout>
         <Card bordered={false}>
+          <Form onSubmit={this.handleSearch} layout="inline" autoComplete="OFF">
+            <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
+              <Col md={8} sm={24}>
+                <FormItem label="昵称">
+                  {getFieldDecorator('goods_name')(<Input placeholder="请输入昵称" />)}
+                </FormItem>
+              </Col>
+              <Col md={8} sm={24}>
+                <FormItem label="用户id">
+                  {getFieldDecorator('goods_name')(<Input placeholder="请输入用户id" />)}
+                </FormItem>
+              </Col>
+              {/* <Col md={8} sm={24}>
+                <FormItem label="使用状态">
+                  {getFieldDecorator('goods_status')(
+                    <Select placeholder="请选择" style={{ width: '100%' }}>
+                      <Option value="0">上架中</Option>
+                      <Option value="1">未上架</Option>
+                      <Option value="2">下架</Option>
+                    </Select>
+                  )}
+                </FormItem>
+              </Col> */}
+              <Col md={8} sm={24}>
+                <span className={styles.submitButtons}>
+                  <Button type="primary" htmlType="submit">
+                    查询
+                  </Button>
+                  <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>
+                    重置
+                  </Button>
+                  {/* <a style={{ marginLeft: 8 }} onClick={this.toggleForm}>
+                    展开 <Icon type="down" />
+                  </a> */}
+                </span>
+              </Col>
+            </Row>
+          </Form>
           <div className={styles.tableList}>
             <Table
               onChange={this.handleTableChange}

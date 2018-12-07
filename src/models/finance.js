@@ -42,20 +42,22 @@ export default {
         payload: res,
       });
     },
-    *updateRefundStatus({ payload }, { call, put }) {
+    *updateRefundStatus({ payload, search }, { call, put }) {
       yield call(editRefundStatus, payload);
-      const response = yield call(getRefundList, payload);
+      const response = yield call(getRefundList, search);
       yield put({
         type: 'getRefundList',
         payload: response,
+        page: search.page,
       });
     },
-    *updateRefundMoney({ payload }, { call, put }) {
+    *updateRefundMoney({ payload, search }, { call, put }) {
       yield call(editRefundMoney, payload);
-      const response = yield call(getRefundList, payload);
+      const response = yield call(getRefundList, search);
       yield put({
         type: 'getRefundList',
         payload: response,
+        page: search.page,
       });
     },
     *fetchAccountList({ payload }, { call, put }) {
@@ -63,6 +65,7 @@ export default {
       yield put({
         type: 'getAccountList',
         payload: response,
+        page: payload.page,
       });
     },
     *fetchRefundList({ payload }, { call, put }) {
@@ -70,6 +73,7 @@ export default {
       yield put({
         type: 'getRefundList',
         payload: response,
+        page: payload.page,
       });
     },
     *fetchAccountDetail({ payload }, { call, put }) {
@@ -84,6 +88,7 @@ export default {
       yield put({
         type: 'getWithdraw',
         payload: response,
+        page: payload.page,
       });
     },
     *updateWithdraw({ payload, callback }, { call, put }) {
@@ -95,6 +100,7 @@ export default {
       yield put({
         type: 'getWithdraw',
         payload: response,
+        page: payload.page,
       });
     },
   },
@@ -107,7 +113,7 @@ export default {
         withdrawConfig: data,
       };
     },
-    getRefundList(state, { payload }) {
+    getRefundList(state, { payload, page }) {
       const { data } = payload;
       return {
         ...state,
@@ -115,10 +121,11 @@ export default {
         refundListPage: {
           pageSize: data.page,
           total: data.total,
+          current: page,
         },
       };
     },
-    getWithdraw(state, { payload }) {
+    getWithdraw(state, { payload, page }) {
       const { data } = payload;
       return {
         ...state,
@@ -126,10 +133,11 @@ export default {
         withdrawListPage: {
           pageSize: data.page,
           total: data.total,
+          current: page || 1,
         },
       };
     },
-    getAccountList(state, { payload }) {
+    getAccountList(state, { payload, page }) {
       const { data } = payload;
       return {
         ...state,
@@ -137,6 +145,7 @@ export default {
         accountListPage: {
           pageSize: data.page,
           total: data.total,
+          current: page || 1,
         },
       };
     },

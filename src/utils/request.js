@@ -94,6 +94,15 @@ export default async function request(url, options) {
   // const defaultOptions = {
   //   credentials: 'include',
   // };
+  if (options.body instanceof Object) {
+    const { body } = options;
+    for(const [key, value] of Object.entries(body)){
+      if (typeof value === 'string') {
+        body[key] = value.trim();
+      }
+    }
+    options.body = body;
+  }
   const newOptions = { ...options };
   newOptions.headers = {
     Accept: 'application/json',
