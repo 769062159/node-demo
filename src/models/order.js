@@ -67,17 +67,19 @@ export default {
       });
     },
     *shipGood({ payload }, { call, put, select }) {
-      yield call(shipshop, { ...payload });
-      message.success('发货成功');
-      const response = yield call(getOrderList, { page: payload.page });
-      let id = '';
-      id = yield select(state => state.user.currentUser.shop_store_id);
-      yield put({
-        type: 'getOrder',
-        id,
-        payload: response,
-        page: payload.page,
-      });
+      const res = yield call(shipshop, { ...payload });
+      if (res && res.code === 200) {
+        message.success('发货成功');
+        const response = yield call(getOrderList, { page: payload.page });
+        let id = '';
+        id = yield select(state => state.user.currentUser.shop_store_id);
+        yield put({
+          type: 'getOrder',
+          id,
+          payload: response,
+          page: payload.page,
+        });
+      }
     },
     *fetchExpressList(_, { call, put }) {
       const response = yield call(getExpressList);

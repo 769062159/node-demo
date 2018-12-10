@@ -215,6 +215,11 @@ export default class Order extends PureComponent {
     }
     this.handShipCancel();
   };
+  changeShipNumber = e => {
+    this.setState({
+      shipNumber: e.target.value,
+    });
+  };
   toggleForm = () => {
     this.setState({
       expandForm: !this.state.expandForm,
