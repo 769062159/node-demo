@@ -31,18 +31,26 @@ export default class UploadFile extends PureComponent {
     }
   };
   beforeUpload = file => {
-    const { appid } = this.props;
+    const { appid, type } = this.props;
     if (!appid) {
       message.error('请先激活小程序appid！');
       return false;
     }
     let { name } = file;
     name = name.split('.')[1];
-    const isTrue = name === 'pem';
-    if (!isTrue) {
-      message.error('请上传正确格式的证书！');
+    if (type === 'txt') {
+      const isTrue = name === type;
+      if (!isTrue) {
+        message.error('请上传正确格式的域名验证文件！');
+      }
+      return isTrue;
+    } else {
+      const isTrue = name === 'pem';
+      if (!isTrue) {
+        message.error('请上传正确格式的证书！');
+      }
+      return isTrue;
     }
-    return isTrue;
   };
   render() {
     const { uploadUrl, status, id } = this.props;

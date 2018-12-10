@@ -31,6 +31,7 @@ export default class Setting extends PureComponent {
   state = {
     formVisible: false,
     type: 0,
+    uploadTxt: process.env[process.env.API_ENV].wxTxt,
   };
   componentDidMount() {
     const { id } = this.props.match.params;
@@ -132,7 +133,7 @@ export default class Setting extends PureComponent {
     } else {
       programName = '小程序'
     }
-    const { formVisible, type } = this.state;
+    const { formVisible, type, uploadTxt } = this.state;
     const { getFieldDecorator } = form;
     const modalTitle = type === 2 ? '微信商户号' : '微信商户号密钥';
     const modalVal = type === 2 ? programDetail.mchid : programDetail.key;
@@ -242,8 +243,8 @@ export default class Setting extends PureComponent {
               type="cert"
             />
           </Col>
-          <Col span={4}>apiclient_key.pem:</Col>
-          <Col span={20}>
+          <Col span={4} style={{ margin: '10px 0' }}>apiclient_key.pem:</Col>
+          <Col span={20} style={{ margin: '10px 0' }}>
             <UploadFile
               uploadUrl={uploadFile}
               appid={programDetail.appid}
@@ -252,6 +253,22 @@ export default class Setting extends PureComponent {
               type="key"
             />
           </Col>
+          {
+            programDetail.type === 1 ? (
+              <Fragment>
+                <Col span={4}>域名验证文件</Col>
+                <Col span={20}>
+                  <UploadFile
+                    uploadUrl={uploadTxt}
+                    appid={programDetail.appid}
+                    id={programDetail.id}
+                    status={programDetail.domain_txt}
+                    type="txt"
+                  />
+                </Col>
+              </Fragment>
+            ) : null
+          }
         </Row>
         <Modal
           title={modalTitle}

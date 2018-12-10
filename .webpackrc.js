@@ -13,12 +13,14 @@ export default {
         videoUrl: 'dev_audio',
         pic: 'dev_pic',
         apiurl: 'http://dev-api.store.314live.cn',
+        wxTxt: 'http://wechat.store.314live.cn/wx/wechataccount/upload/txt',
       },
       'env': {
         uploadUrl: 'http://api.store.314live.cn/merchant/upload',
         videoUrl: 'audio',
         pic: 'pic',
         apiurl: 'http://api.store.314live.cn',
+        wxTxt: 'http://wechat.store.314live.cn/wx/wechataccount/upload/txt',
       }
     },
     /*cannot set NODE_ENV for userDefined*/
