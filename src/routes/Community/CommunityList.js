@@ -202,6 +202,20 @@ export default class Live extends PureComponent {
     const { getFieldDecorator } = this.props.form;
     const progressColumns = [
       {
+        title: '群主信息',
+        dataIndex: 'has_user',
+        width: 240,
+        render: val => (
+          <div className={styles.userMsg}>
+            <img src={val.avatar} alt="图片" />
+            <div>
+              <Ellipsis lines={1}>昵称:{val.nickname}</Ellipsis>
+              <span>id:{val.fake_id}</span>
+            </div>
+          </div>
+        ),
+      },
+      {
         title: '社群标题',
         dataIndex: 'title',
         key: 'title',
@@ -232,8 +246,8 @@ export default class Live extends PureComponent {
       },
       {
         title: '操作',
-        // fixed: 'right',
-        // width: 150,
+        fixed: 'right',
+        width: 200,
         render: (text, record, index) => (
           <Fragment>
             <a onClick={this.copyBtn.bind(this, record.rtmp_push)}>推流地址</a>
@@ -286,6 +300,7 @@ export default class Live extends PureComponent {
           </Form>
           <div className={styles.tableList}>
             <Table
+              scroll={{ x: 1400 }}
               dataSource={datas}
               rowKey={record => record.id}
               loading={loading}

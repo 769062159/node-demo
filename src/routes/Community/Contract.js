@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'dva';
 // import { Form, Button, Input, Select, Upload, Icon, Modal, Tag, message, InputNumber } from 'antd';
-import { Form, Button, Input, Upload, Icon, Tag, message, Card } from 'antd';
+import { Form, Button, Upload, Icon, Tag, message, Card } from 'antd';
 import styles from './style.less';
 import Wangeditor from '../../components/Wangeditor';
 // import { router } from 'sw-toolbox';
@@ -230,6 +230,16 @@ class EditVodStep2 extends React.PureComponent {
   }
   componentDidMount() {
   }
+
+  // 添加描述
+  setDescription = (e) => {
+    console.log(e, 'setDesc');
+    const obj = {};
+    obj.desc = {
+      value: e,
+    };
+    this.changeFormVal(obj);
+  }
   // 新增修改提交
   submitForm = (vals) => {
     console.log(vals);
@@ -249,16 +259,6 @@ class EditVodStep2 extends React.PureComponent {
       },
     });
   };
-
-  // 添加描述
-  setDescription = (e) => {
-    console.log(e, 'setDesc');
-    const obj = {};
-    obj.desc = {
-      value: e,
-    };
-    this.changeFormVal(obj);
-  }
 
   // 修改表单值
   changeFormVal = val => {
