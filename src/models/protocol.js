@@ -46,7 +46,8 @@ export default {
       })
     },
     *updateVerify({ payload, callback }, { call, put }) {
-      const response = yield call(updateVerify, payload);
+      const { remark, status, verify_id } = payload;
+      const response = yield call(updateVerify, { remark, status, verify_id });
       if (callback && response && response.code === 200) {
         // const arr = [];
         // response.data.list.forEach(res => {
@@ -56,7 +57,6 @@ export default {
         // })
         callback(response.data);
         // callback(arr);
-        console.log();
         const res = yield call(verifyList, { page: payload.page });
         if (res && res.code === 200) {
           yield put({
