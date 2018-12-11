@@ -240,7 +240,7 @@ class EditVodStep2 extends React.PureComponent {
   setDescription = (e) => {
     console.log(e, 'setDesc');
     const obj = {};
-    obj.desc = {
+    obj.agreement = {
       value: e,
     };
     this.changeFormVal(obj);
@@ -250,7 +250,7 @@ class EditVodStep2 extends React.PureComponent {
     console.log(vals);
     const { dispatch } = this.props;
     const data = {
-      agreement: vals.desc,
+      agreement: vals.agreement,
       id_card_pic_front: vals.front[0].response.data,
       id_card_pic_back: vals.back[0].response.data,
       id_card_pic_hand: vals.people[0].response.data,

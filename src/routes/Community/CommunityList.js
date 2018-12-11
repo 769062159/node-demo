@@ -300,7 +300,7 @@ export default class Live extends PureComponent {
           </Form>
           <div className={styles.tableList}>
             <Table
-              scroll={{ x: 1400 }}
+              scroll={{ x: 1800 }}
               dataSource={datas}
               rowKey={record => record.id}
               loading={loading}
