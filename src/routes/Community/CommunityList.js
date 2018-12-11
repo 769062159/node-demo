@@ -205,7 +205,7 @@ export default class Live extends PureComponent {
         title: '群主信息',
         dataIndex: 'has_user',
         width: 240,
-        render: val => (
+        render: val => val ? (
           <div className={styles.userMsg}>
             <img src={val.avatar} alt="图片" />
             <div>
@@ -213,7 +213,7 @@ export default class Live extends PureComponent {
               <span>id:{val.fake_id}</span>
             </div>
           </div>
-        ),
+        ) : null,
       },
       {
         title: '社群标题',

@@ -263,7 +263,7 @@ export default class Live extends PureComponent {
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
-            <FormItem label="主播id">
+            <FormItem label="用户id">
               {getFieldDecorator('user_id')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
@@ -320,9 +320,18 @@ export default class Live extends PureComponent {
         key: 'title',
       },
       {
-        title: '用户id',
+        title: '用户信息',
         dataIndex: 'user_id',
-        key: 'user_id',
+        width: 230,
+        render: (val, record) => (
+          <div className={styles.userMsg}>
+            <img src={record.has_user.avatar} alt="图片" />
+            <div>
+              <span>{record.has_user.nickname}</span>
+              <span>Id:{val}</span>
+            </div>
+          </div>
+        ),
       },
       {
         title: '上传时间',

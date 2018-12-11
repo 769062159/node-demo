@@ -1,6 +1,5 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
-import { routerRedux } from 'dva/router';
 // import moment from 'moment';
 import {
   Row,
@@ -41,7 +40,6 @@ const formSubmitLayout = {
   },
 };
 const { TextArea } = Input;
-const { confirm } = Modal;
 const FormItem = Form.Item;
 const InputGroup = Input.Group;
 const { Option } = Select;
@@ -63,6 +61,7 @@ const goodsStatus = ['未审核', '通过', '拒绝'];
 @Form.create()
 export default class Certification extends PureComponent {
   state = {
+    imgUrl: '',
     expandForm: false,
     editData: {},
     formVisible: false,
@@ -164,6 +163,12 @@ export default class Certification extends PureComponent {
     });
   };
 
+  showImg = (imgUrl) => {
+    this.setState({
+      imgUrl,
+    });
+  }
+
   // 修改信息
   editDataMsg = (data, type, e) => {
     e.preventDefault();
@@ -179,7 +184,32 @@ export default class Certification extends PureComponent {
       formVisible: true,
     });
   };
-
+  handleSubmit = e => {
+    e.preventDefault();
+    this.props.form.validateFieldsAndScroll((err, values) => {
+      if (!err) {
+        const { dispatch } = this.props;
+        const { editData, page, type } = this.state;
+        values.page = page;
+        values.status = type;
+        values.verify_id = editData.id;
+        console.log(values);
+        dispatch({
+          type: 'protocol/updateVerify',
+          payload: values,
+          callback: () => {
+            message.success('更新成功');
+          },
+        });
+        this.handAddleCancel();
+      }
+    });
+  };
+  handImgCancel = () => {
+    this.setState({
+      imgUrl: '',
+    })
+  }
   // 渲染修改还是新增
   renderModalForm() {
     const { type } = this.state;
@@ -273,27 +303,6 @@ export default class Certification extends PureComponent {
     );
   };
 
-  handleSubmit = e => {
-    e.preventDefault();
-    this.props.form.validateFieldsAndScroll((err, values) => {
-      if (!err) {
-        const { dispatch } = this.props;
-        const { editData, page, type } = this.state;
-        values.page = page;
-        values.status = type;
-        values.verify_id = editData.id;
-        console.log(values);
-        dispatch({
-          type: 'protocol/updateVerify',
-          payload: values,
-          callback: () => {
-            message.success('更新成功');
-          },
-        });
-        this.handAddleCancel();
-      }
-    });
-  };
 
   renderSimpleForm() {
     const { getFieldDecorator } = this.props.form;
@@ -455,7 +464,7 @@ export default class Certification extends PureComponent {
         ...verifyListPage,
       },
     };
-    const { formVisible } = this.state;
+    const { formVisible, imgUrl } = this.state;
      const columns = [
       {
         title: '会员',
@@ -505,19 +514,19 @@ export default class Certification extends PureComponent {
         title: '身份证正面照',
         dataIndex: 'id_card_pic_front',
         key: 'id_card_pic_front',
-        render: (val) => <img style={{ height: 80, width: 80 }} src={val} alt="身份证正面照" />,
+        render: (val) => <img style={{ height: 80, width: 80 }} onClick={this.showImg.bind(this, val)} src={val} alt="身份证正面照" />,
       },
       {
         title: '身份证反面照',
         dataIndex: 'id_card_pic_back',
         key: 'id_card_pic_back',
-        render: (val) => <img style={{ height: 80, width: 80 }} src={val} alt="身份证反面照" />,
+        render: (val) => <img style={{ height: 80, width: 80 }} onClick={this.showImg.bind(this, val)} src={val} alt="身份证反面照" />,
       },
       {
         title: '手持身份证照',
         dataIndex: 'id_card_pic_hand',
         key: 'id_card_pic_hand',
-        render: (val) => <img style={{ height: 80, width: 80 }} src={val} alt="手持身份证照" />,
+        render: (val) => <img style={{ height: 80, width: 80 }} onClick={this.showImg.bind(this, val)} src={val} alt="手持身份证照" />,
       },
       {
         title: '状态',
@@ -549,7 +558,7 @@ export default class Certification extends PureComponent {
         key: 'create_time',
         render(val) {
           return <span>{timeFormat(val)}</span>
-        }
+        },
       },
       // {
       //   title: '剩余库存',
@@ -612,8 +621,16 @@ export default class Certification extends PureComponent {
             footer=""
             destroyOnClose="true"
           >
-          {this.renderModalForm()}
-        </Modal>
+            {this.renderModalForm()}
+          </Modal>
+          <Modal
+            visible={imgUrl}
+            onCancel={this.handImgCancel}
+            footer=""
+            destroyOnClose="true"
+          >
+            <img className={styles.certImg} src={imgUrl} alt="图片" />
+          </Modal>
         </Card>
       </PageHeaderLayout>
     );

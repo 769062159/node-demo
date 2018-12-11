@@ -203,6 +203,7 @@ const CustomizedForm = Form.create({
           rules: [{ required: true }],
         })(
           <Wangeditor
+            detail={protocolForm.desc}
             header={header}
             setDescription={setDescription}
           />
@@ -229,6 +230,10 @@ class EditVodStep2 extends React.PureComponent {
     },
   }
   componentDidMount() {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'protocol/getProtocol',
+    });
   }
 
   // 添加描述
@@ -255,7 +260,7 @@ class EditVodStep2 extends React.PureComponent {
       type: 'protocol/setDefaultProtocol',
       payload: data,
       callback: () => {
-        message.success('更新成功');
+        message.success('设置成功');
       },
     });
   };

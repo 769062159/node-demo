@@ -118,15 +118,15 @@ export default class Rank extends PureComponent {
         title: '昵称',
         dataIndex: 'has_user',
         key: 'user_id',
-        render: (val, record) => (
+        render: (val) => val ? (
           <div className={styles.userMsg}>
-            <img src={record.has_user.avatar} alt="图片" />
+            <img src={val.avatar} alt="图片" />
             <div>
               <span>昵称:{val.nickname}</span>
-              <span>id:{record.has_user.fake_id}</span>
+              <span>id:{val.fake_id}</span>
             </div>
           </div>
-        ),
+        ) : null,
       },
       {
         title: '累计收益',

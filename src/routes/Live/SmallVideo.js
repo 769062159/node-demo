@@ -268,7 +268,7 @@ export default class Live extends PureComponent {
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
-            <FormItem label="主播id">
+            <FormItem label="用户id">
               {getFieldDecorator('user_id')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>

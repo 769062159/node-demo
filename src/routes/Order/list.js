@@ -382,7 +382,7 @@ export default class Order extends PureComponent {
   renderSimpleForm() {
     const { getFieldDecorator } = this.props.form;
     return (
-      <Form layout="inline" autoComplete="OFF">
+      <Form layout="inline" onSubmit={this.handleSearch} autoComplete="OFF">
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
             <FormItem label="包裹订单sn">
@@ -405,7 +405,7 @@ export default class Order extends PureComponent {
           </Col>
           <Col md={8} sm={24}>
             <span className={styles.submitButtons}>
-              <Button type="primary"  onClick={this.handleSearch}>
+              <Button type="primary"  htmlType="submit" >
                 查询
               </Button>
               <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>
@@ -424,7 +424,7 @@ export default class Order extends PureComponent {
   renderAdvancedForm() {
     const { getFieldDecorator } = this.props.form;
     return (
-      <Form layout="inline" autoComplete="OFF" >
+      <Form layout="inline" autoComplete="OFF" onSubmit={this.handleSearch} >
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
             <FormItem label="订单sn">
@@ -504,7 +504,7 @@ export default class Order extends PureComponent {
         </Row>
         <div style={{ overflow: 'hidden' }}>
           <span style={{ float: 'right', marginBottom: 24 }}>
-            <Button type="primary" onClick={this.handleSearch}>
+            <Button type="primary" htmlType="submit">
               查询
             </Button>
             <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>

@@ -574,8 +574,8 @@ export default class Order extends PureComponent {
 
     return (
       <PageHeaderLayout>
+        <div className={styles.tableListForm}>{this.renderForm()}</div>
         <Card bordered={false} hoverable={false} loading={loading}>
-          <div className={styles.tableListForm}>{this.renderForm()}</div>
           <Row
             style={{
               backgroundColor: '#F5F5F5',

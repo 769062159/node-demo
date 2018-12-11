@@ -159,12 +159,12 @@ const CustomizedForm = Form.create({
   // })
   return (
     <Form autoComplete="OFF">
-      <FormItem {...formItemLayout} label="主播id">
+      <FormItem {...formItemLayout} label="用户id">
         {getFieldDecorator('user_id', {
           rules: [
             {
               required: true,
-              message: '请输入主播id',
+              message: '请输入用户id',
             },
           ],
         })(

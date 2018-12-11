@@ -13,13 +13,20 @@ export default {
       front: [],
       back: [],
       people: [],
-      desc: [],
+      desc: '',
     },
     verifyList: [],
     verifyListPage: {},
   },
 
   effects: {
+    *getProtocol({ payload }, { call, put }) {
+      const response = yield call(getProtocol, payload);
+      yield put({
+        type: 'getProtocols',
+        payload: response,
+      });
+    },
     *fetch({ payload }, { call, put }) {
       const response = yield call(queryRule, payload);
       yield put({
@@ -46,8 +53,8 @@ export default {
       })
     },
     *updateVerify({ payload, callback }, { call, put }) {
-      const { remark, status, verify_id } = payload;
-      const response = yield call(updateVerify, { remark, status, verify_id });
+      const { remark, status, verify_id: id } = payload;
+      const response = yield call(updateVerify, { remark, status, verify_id: id });
       if (callback && response && response.code === 200) {
         // const arr = [];
         // response.data.list.forEach(res => {
@@ -66,7 +73,7 @@ export default {
         }
       }
     },
-    *setDefaultProtocol({ payload, callback }, { call, put }) {
+    *setDefaultProtocol({ payload, callback }, { call }) {
       console.log(payload, 111);
       const response = yield call(setProtocol, payload);
       if (callback && response && response.code === 200) {
@@ -82,6 +89,40 @@ export default {
   },
 
   reducers: {
+    getProtocols(state, { payload }) {
+      const { data } = payload;
+      const protocolForm = {
+        desc: data.agreement,
+        front: [{
+          status: 'done',
+          uploaded: 'done',
+          response: { status: 'success', data: data.id_card_pic_front },
+          name: data.id_card_pic_front,
+          uid: data.id_card_pic_front,
+          url: data.id_card_pic_front,
+        }],
+        back: [{
+          status: 'done',
+          uploaded: 'done',
+          response: { status: 'success', data: data.id_card_pic_back },
+          name: data.id_card_pic_back,
+          uid: data.id_card_pic_back,
+          url: data.id_card_pic_back,
+        }],
+        people: [{
+          status: 'done',
+          uploaded: 'done',
+          response: { status: 'success', data: data.id_card_pic_hand },
+          name: data.id_card_pic_hand,
+          uid: data.id_card_pic_hand,
+          url: data.id_card_pic_hand,
+        }],
+      };
+      return {
+        ...state,
+        protocolForm,
+      };
+    },
     getVerifyLists(state, { payload, page: current }) {
       const { data } = payload;
       const { list, total, page } = data;
@@ -105,7 +146,6 @@ export default {
       protocolForm.front = protocolForm.front || [];
       protocolForm.back = protocolForm.back || [];
       protocolForm.people = protocolForm.people || [];
-      protocolForm.desc = protocolForm.desc || [];
       return {
         ...state,
         protocolForm,
