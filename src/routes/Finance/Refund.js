@@ -37,7 +37,7 @@ export default class Withdraw extends PureComponent {
     expandForm: false,
     editData: {},
     formVisible: false,
-    selectState: null,
+    selectState: undefined,
     // formValues: {},
     page: 1, // 页脚
     type: 0, // 是否同意
@@ -113,6 +113,9 @@ export default class Withdraw extends PureComponent {
               refund_status: selectState,
               page,
             },
+            callback: () => {
+              message.success('更新成功');
+            },
           });
         } else {
           values.type = type;
@@ -124,9 +127,11 @@ export default class Withdraw extends PureComponent {
               refund_status: selectState,
               page,
             },
+            callback: () => {
+              message.success('更新成功');
+            },
           });
         }
-        message.success('更新成功');
         this.handAddleCancel();
       }
     });
@@ -405,7 +410,7 @@ export default class Withdraw extends PureComponent {
           <div className={styles.tableList}>
             <Table
               onChange={this.handleTableChange}
-              scroll={{ x: 1200 }}
+              scroll={{ x: 1400 }}
               dataSource={datas}
               rowKey={record => record.order_goods_sku_id}
               loading={loading}

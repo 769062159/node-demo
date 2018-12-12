@@ -42,23 +42,29 @@ export default {
         payload: res,
       });
     },
-    *updateRefundStatus({ payload, search }, { call, put }) {
-      yield call(editRefundStatus, payload);
-      const response = yield call(getRefundList, search);
-      yield put({
-        type: 'getRefundList',
-        payload: response,
-        page: search.page,
-      });
+    *updateRefundStatus({ payload, search, callback }, { call, put }) {
+      const res =  yield call(editRefundStatus, payload);
+      if (res && res.code === 200) {
+        callback();
+        const response = yield call(getRefundList, search);
+        yield put({
+          type: 'getRefundList',
+          payload: response,
+          page: search.page,
+        });
+      }
     },
-    *updateRefundMoney({ payload, search }, { call, put }) {
-      yield call(editRefundMoney, payload);
-      const response = yield call(getRefundList, search);
-      yield put({
-        type: 'getRefundList',
-        payload: response,
-        page: search.page,
-      });
+    *updateRefundMoney({ payload, search, callback }, { call, put }) {
+      const res = yield call(editRefundMoney, payload);
+      if (res && res.code === 200) {
+        callback();
+        const response = yield call(getRefundList, search);
+        yield put({
+          type: 'getRefundList',
+          payload: response,
+          page: search.page,
+        });
+      }
     },
     *fetchAccountList({ payload }, { call, put }) {
       const response = yield call(getAccountList, payload);
