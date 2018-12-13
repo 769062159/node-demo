@@ -91,32 +91,44 @@ export default {
   reducers: {
     getProtocols(state, { payload }) {
       const { data } = payload;
-      const protocolForm = {
-        desc: data.agreement,
-        front: [{
+      const front = [];
+      const back = [];
+      const people = [];
+      if (data.id_card_pic_front) {
+        front.push({
           status: 'done',
           uploaded: 'done',
           response: { status: 'success', data: data.id_card_pic_front },
           name: data.id_card_pic_front,
           uid: data.id_card_pic_front,
           url: data.id_card_pic_front,
-        }],
-        back: [{
+        });
+      }
+      if (data.id_card_pic_back) {
+        back.push({
           status: 'done',
           uploaded: 'done',
           response: { status: 'success', data: data.id_card_pic_back },
           name: data.id_card_pic_back,
           uid: data.id_card_pic_back,
           url: data.id_card_pic_back,
-        }],
-        people: [{
+        })
+      }
+      if (data.id_card_pic_hand) {
+        people.push({
           status: 'done',
           uploaded: 'done',
           response: { status: 'success', data: data.id_card_pic_hand },
           name: data.id_card_pic_hand,
           uid: data.id_card_pic_hand,
           url: data.id_card_pic_hand,
-        }],
+        })
+      }
+      const protocolForm = {
+        desc: data.agreement,
+        front,
+        back,
+        people,
       };
       return {
         ...state,
