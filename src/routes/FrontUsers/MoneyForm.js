@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Select, Form, Input, Button, InputNumber } from 'antd';
+import { Select, Form, Input, Button, InputNumber, Tag } from 'antd';
 
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -60,7 +60,8 @@ class TypeForm extends Component {
             </Select>
           )}
         </FormItem>
-        <FormItem {...formItemLayout} label="金额">
+        {/* white-space: pre-wrap; */}
+        <FormItem {...formItemLayout} label="金额" extra={<Tag style={{ 'white-space': 'pre-wrap', height: 'auto' }}  color="blue">若用户当前余额为1元，修改类型选择增加，金额填2元，即用户可提现余额变为1+2=3元</Tag>}>
           {getFieldDecorator('money', {
             rules: [
               {

@@ -28,7 +28,6 @@ const submitFormLayout = {
 
 const CustomizedForm = Form.create({
   onFieldsChange(props, changedFields) {
-    console.log('change', props, changedFields);
     props.onChange(changedFields);
   },
   mapPropsToFields(props) {
@@ -48,9 +47,6 @@ const CustomizedForm = Form.create({
     };
     return arr;
   },
-  // onValuesChange(_, values) {
-  //   console.log(values);
-  // },
 })(props => {
   //  111
   const { getFieldDecorator, validateFields } = props.form;
@@ -63,8 +59,12 @@ const CustomizedForm = Form.create({
   } = props;
   const onValidateForm = e => {
     e.preventDefault();
-    const { submitForm } = props;
+    const { submitForm, protocolForm } = props;
     validateFields((err, values) => {
+      if (!protocolForm.desc && !protocolForm.agreement) {
+        message.error('请填写合同模版');
+        return false;
+      }
       if (!err) {
         submitForm(values);
       } else {
@@ -200,7 +200,6 @@ const CustomizedForm = Form.create({
         extra={<Tag color="blue">请填写合同模版</Tag>}
       >
         {getFieldDecorator('desc', {
-          rules: [{ required: true }],
         })(
           <Wangeditor
             detail={protocolForm.desc}
@@ -238,7 +237,6 @@ class EditVodStep2 extends React.PureComponent {
 
   // 添加描述
   setDescription = (e) => {
-    console.log(e, 'setDesc');
     const obj = {};
     obj.agreement = {
       value: e,
@@ -247,15 +245,13 @@ class EditVodStep2 extends React.PureComponent {
   }
   // 新增修改提交
   submitForm = (vals) => {
-    console.log(vals);
-    const { dispatch } = this.props;
+    const { dispatch, protocol: { protocolForm } } = this.props;
     const data = {
-      agreement: vals.agreement,
+      agreement: protocolForm.agreement || protocolForm.desc,
       id_card_pic_front: vals.front[0].response.data,
       id_card_pic_back: vals.back[0].response.data,
       id_card_pic_hand: vals.people[0].response.data,
     };
-    console.log(data);
     dispatch({
       type: 'protocol/setDefaultProtocol',
       payload: data,
