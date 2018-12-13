@@ -470,6 +470,7 @@ export default class Certification extends PureComponent {
         title: '会员',
         dataIndex: 'member',
         key: 'member',
+        width: 300,
         render: (val, text) => (
           // <Row style={{ width: 500 }}>
           //   <Col span={4}>

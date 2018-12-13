@@ -247,13 +247,14 @@ class EditVodStep2 extends React.PureComponent {
   submitForm = (vals) => {
     const { dispatch, protocol: { protocolForm } } = this.props;
     let html = protocolForm.agreement || protocolForm.desc;
+    /* eslint no-useless-escape:0 */
     // let html = agreement;
     const re = new RegExp("(<P)([^>]*>.*?)(<\/P>)","gi") ;// Different because of a IE 5.0 error
-    html = html.replace(/<\/?SPAN[^>]*>/gi, "" );
+    // html = html.replace(/<\/?SPAN[^>]*>/gi, "" );
     // Class
     html = html.replace(/<(\w[^>]*) class=([^ |>]*)([^>]*)/gi, "<$1$3") ;
     // Style
-    html = html.replace(/<(\w[^>]*) style="([^"]*)"([^>]*)/gi, "<$1$3") ;
+    // html = html.replace(/<(\w[^>]*) style="([^"]*)"([^>]*)/gi, "<$1$3") ;
     // Lang
     html = html.replace(/<(\w[^>]*) lang=([^ |>]*)([^>]*)/gi, "<$1$3") ;
     // XML元素及声明
