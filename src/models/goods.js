@@ -145,7 +145,8 @@ export default {
     goodsPlace: [], // 商品地址
     systemType: {}, // 系统类型
     uploadGoodsImg: [], // 商品主体图片
-    goodsDetail: {},
+    goodsDetail: {
+    },
     freightList: [], // 运费模版列表
   },
 

@@ -246,29 +246,7 @@ class EditVodStep2 extends React.PureComponent {
   // 新增修改提交
   submitForm = (vals) => {
     const { dispatch, protocol: { protocolForm } } = this.props;
-    let html = protocolForm.agreement || protocolForm.desc;
-    /* eslint no-useless-escape:0 */
-    // let html = agreement;
-    const re = new RegExp("(<P)([^>]*>.*?)(<\/P>)","gi") ;// Different because of a IE 5.0 error
-    // html = html.replace(/<\/?SPAN[^>]*>/gi, "" );
-    // Class
-    html = html.replace(/<(\w[^>]*) class=([^ |>]*)([^>]*)/gi, "<$1$3") ;
-    // Style
-    // html = html.replace(/<(\w[^>]*) style="([^"]*)"([^>]*)/gi, "<$1$3") ;
-    // Lang
-    html = html.replace(/<(\w[^>]*) lang=([^ |>]*)([^>]*)/gi, "<$1$3") ;
-    // XML元素及声明
-    html = html.replace(/<\\?\?xml[^>]*>/gi, "") ;
-    // 带XML名称空间声明: <o:p></o:p>
-    html = html.replace(/<\/?\w+:[^>]*>/gi, "") ;
-    // 替换&nbsp;
-    html = html.replace(/&nbsp;/, " " );
-    // 将<P>换成<DIV>
-    html = html.replace( re, "<div$2</div>" ) ;
-    html = html.replace(/(<T[RD])(\s*)(HEIGHT=[\"\']?\d+[\"\']?)/gi, "$1");
-    html = html.replace(/(<table)([^>]*?)x:str>/gi, "$1$2align='center'>");
-    html = html.replace(/(<TD)\s*([^>]*?)(width=[\"\']?\d+[\"\']?)([^>]*?)(>)/gi, "$1$2$4$5");
-    html = html.replace(/(\s*x:num(=[\"\']\d+")?)(>)/gi, "$3");
+    const html = protocolForm.agreement || protocolForm.desc;
     const data = {
       agreement: html,
       id_card_pic_front: vals.front[0].response.data,

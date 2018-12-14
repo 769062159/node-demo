@@ -447,7 +447,11 @@ export default class GoodsList extends PureComponent {
         render: (val, text) => (
           <div>
             {val}
-            <div>ID：{text.shop_store_user_id}</div>
+            {
+              text.shop_store_user_id !== 0 ? (
+                <div>ID：{text.shop_store_user_id}</div>
+              ) : null
+            }
           </div>
         ),
       },

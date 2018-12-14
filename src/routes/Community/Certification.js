@@ -625,7 +625,7 @@ export default class Certification extends PureComponent {
             {this.renderModalForm()}
           </Modal>
           <Modal
-            visible={imgUrl}
+            visible={!!imgUrl}
             onCancel={this.handImgCancel}
             footer=""
             destroyOnClose="true"
