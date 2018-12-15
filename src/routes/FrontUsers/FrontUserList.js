@@ -89,6 +89,18 @@ export default class FrontUserList extends PureComponent {
       defaultId: e.target.value,
     });
   };
+  getFans = (id) => {
+    const { form } = this.props;
+    form.resetFields();
+    form.setFieldsValue({
+      referee_id: id,
+    });
+    this.setState({
+      pagination: 1,
+    }, () => {
+      this.handleSearch();
+    })
+  }
   // 设置商户
   setMerchant = (record, e) => {
     e.preventDefault();
@@ -230,7 +242,9 @@ export default class FrontUserList extends PureComponent {
   }
   searchMsg = (text) => {
     if (text.fakeid) {
-      this.props.form.setFieldsValue({
+      const { form } = this.props;
+      form.resetFields();
+      form.setFieldsValue({
         user_id: text.fakeid,
         nickname: '',
         user_oauth_type: '',
@@ -431,20 +445,26 @@ export default class FrontUserList extends PureComponent {
               )}
             </FormItem>
           </Col>
+        </Row>
+        <Row>
           <Col md={8} sm={24}>
-            <span className={styles.submitButtons}>
-              <Button type="primary" htmlType="submit">
-                查询
-              </Button>
-              <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>
-                重置
-              </Button>
-              {/* <a style={{ marginLeft: 8 }} onClick={this.toggleForm}>
-                展开 <Icon type="down" />
-              </a> */}
-            </span>
+            <FormItem label="上级id">
+              {getFieldDecorator('referee_id')(
+                <Input placeholder="请输入" />
+              )}
+            </FormItem>
           </Col>
         </Row>
+        <div style={{ overflow: 'hidden' }}>
+          <span style={{ float: 'right', marginBottom: 24 }}>
+            <Button type="primary" htmlType="submit">
+              查询
+            </Button>
+            <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>
+              重置
+            </Button>
+          </span>
+        </div>
       </Form>
     );
   }
@@ -572,7 +592,7 @@ export default class FrontUserList extends PureComponent {
               <div>总收入:{val.account_total_income}</div>
               <div>佣金余额:{val.account_commission}</div>
               <div>注册渠道:{text.wechat_account_name}</div>
-              <div>粉丝数量:{text.fans_num}</div>
+              <div onClick={this.getFans.bind(this, text.id)} style={{ cursor: 'pointer' }}>粉丝数量:{text.fans_num}</div>
             </Col>
           </Row>
         ),
