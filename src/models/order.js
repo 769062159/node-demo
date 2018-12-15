@@ -1,5 +1,5 @@
 import { message } from 'antd';
-import { getOrderList, getExpressList, shipshop, editShip, editAdress, getGroupList, getGroupDetail, collectGoods } from '../services/order';
+import { getOrderList, getExpressList, shipshop, editShip, editAdress, getGroupList, getGroupDetail, collectGoods, getDetail } from '../services/order';
 
 export default {
   namespace: 'order',
@@ -10,7 +10,11 @@ export default {
     orderListPage: {}, // table 页脚
     groupListPage: {}, // table 页脚
     expressList: [], // 快递公司
+    orderDetail: {
+      has_user: {},
+    },
     groupDetail: {
+      has_order_pack: [],
       has_check_user: {},
     },
     shop_store_id: '',
@@ -135,9 +139,36 @@ export default {
         payload: responses.data,
       });
     },
+    *getDetail({ payload }, { call, put }) {
+      const responses = yield call(getDetail, payload);
+      yield put({
+        type: 'setDetail',
+        payload: responses,
+      });
+    },
   },
 
   reducers: {
+    setDetail(state, { payload }) {
+      const { data } = payload;
+      if (data.order_status === 6) {
+        data.stepStatus = 2;
+      } else if (data.order_status === 1) {
+        data.stepStatus = 1;
+      } else if (data.order_status === 2) {
+        data.stepStatus = 1;
+      } else if (data.order_status === 3) {
+        data.stepStatus = 2;
+      } else if (data.order_status === 4 || data.order_status === 5) {
+        data.stepStatus = 3;
+      } else {
+        data.stepStatus = 0;
+      }
+      return {
+        ...state,
+        orderDetail: data,
+      }
+    },
     setGroupDetail(state, { payload }) {
       payload.userList = payload.has_group.has_group_user;
       payload.groupStatus = payload.has_group.status;

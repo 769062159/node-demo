@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
 import moment from 'moment';
 import {
@@ -244,6 +244,15 @@ export default class Order extends PureComponent {
       sn,
       isSnModal: true,
       isEditType: 0,
+    });
+  };
+  editShip = pack => {
+    this.setState({
+      sn: pack.pack_id,
+      isSnModal: true,
+      shipNumber: pack.pack_express_code,
+      expressId: pack.pack_express_id,
+      isEditType: 1,
     });
   };
   //  取消发货
@@ -668,6 +677,15 @@ export default class Order extends PureComponent {
                 详情
               </a>
             </Row>
+          ) : record.order_status === 3 && record.isBtn ? (
+            <Fragment>
+              <Button style={grayBtn} onClick={this.editShip.bind(this, record)}>
+                修改发货
+              </Button>
+              <a href={`#/order/group-detail/${record.order_id}`} style={grayBtn} >
+                详情
+              </a>
+            </Fragment>
           ) : (
             <a href={`#/order/group-detail/${record.order_id}`} style={grayBtn} >
               详情

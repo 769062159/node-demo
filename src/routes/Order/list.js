@@ -639,7 +639,7 @@ export default class Order extends PureComponent {
                 </Button>
               </Fragment>
             ) : record.order_status === 1 ? null : null}
-            {/* <a href={`#/order/order-detail/${record.pack_id}`} style={grayBtn} >
+            {/* <a href={`#/order/order-detail/${record.order_id}`} style={grayBtn} >
               查看详情
             </a> */}
           </Fragment>
@@ -733,7 +733,11 @@ export default class Order extends PureComponent {
                       </Col>
                     </Row>
                   </div>
-                  <Row style={smallStyle} />
+                  <Row style={smallStyle} >
+                    <a href={`#/order/order-detail/${item.order_id}`} style={grayBtn} >
+                      查看详情
+                    </a>
+                  </Row>
                   {/* {item.order_status === 2 ? (
                     <Row style={smallStyle}>
                       <Button style={grayBtn} onClick={this.editAddress.bind(this, item)}>
