@@ -437,10 +437,9 @@ export default class FrontUserList extends PureComponent {
             <FormItem label="店铺">
               {getFieldDecorator('user_oauth_type')(
                 <Select>
-                  <Option value={0}>普通版本</Option>
-                  <Option value={2}>社群版本</Option>
-                  <Option value={3}>视频版本</Option>
-                  <Option value={1}>商户版本</Option>
+                  <Option value={0}>普通版</Option>
+                  <Option value={2}>视群版</Option>
+                  <Option value={1}>商户版</Option>
                 </Select>
               )}
             </FormItem>
@@ -727,8 +726,7 @@ export default class FrontUserList extends PureComponent {
             <Col span={18}>
               <Select onChange={this.handleLevel} style={{ width: 200 }} value={powerValue} >
                 <Option key={1} value={1}>商户版</Option>
-                <Option key={2} value={2}>社群版</Option>
-                <Option key={3} value={3}>视频版</Option>
+                <Option key={2} value={2}>视群版</Option>
                 <Option key={0} value={0}>普通版</Option>
               </Select>
             </Col>
