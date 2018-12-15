@@ -256,12 +256,12 @@ const CustomizedForm = Form.create({
       category_id: Form.createFormField({
         value: goodsDetail.category_id,
       }),
-      // type: Form.createFormField({
-      //   value: goodsDetail.type,
-      // }),
-      // upgrade_type: Form.createFormField({
-      //   value: goodsDetail.upgrade_type || 1,
-      // }),
+      type: Form.createFormField({
+        value: goodsDetail.type,
+      }),
+      upgrade_type: Form.createFormField({
+        value: goodsDetail.upgrade_type || 1,
+      }),
     };
     if (systemType.user_levels && systemType.user_levels.length) {
       systemType.user_levels.forEach(res => {
@@ -507,7 +507,7 @@ const CustomizedForm = Form.create({
               })(<Select style={{ width: 200 }}>{goodsTypeListItem}</Select>)}
             </Form.Item>
           </Col>
-          {/* <Col span={24}>
+          <Col span={24}>
             <Form.Item {...formItemLayouts} label="商品类型">
               {getFieldDecorator('type', {
                 rules: [{ required: true, message: '请填写商商品类型' }],
@@ -535,7 +535,7 @@ const CustomizedForm = Form.create({
                 </Form.Item>
               </Col>
             ) : null
-          } */}
+          }
         </Row>
         <Form.Item {...formItemLayout} label="商品名称">
           {getFieldDecorator('goods_name', {
@@ -761,23 +761,7 @@ const CustomizedForm = Form.create({
               </Form.Item>
             ) : null}
           </Col>
-          <Col span={24}>
-            <Form.Item {...formItemLayouts} label="是否拼团">
-              {getFieldDecorator('is_group', {
-                rules: [{ required: true, message: '请选择是否拼团' }],
-              })(
-                <Select>
-                  <Option value={1} key={1}>
-                    参加
-                  </Option>
-                  <Option value={0} key={0}>
-                    不参加
-                  </Option>
-                </Select>
-            )}
-            </Form.Item>
-          </Col>
-          {/* {
+          {
             goodsDetail.type === 0 ? (
               <Col span={24}>
                 <Form.Item {...formItemLayouts} label="是否拼团">
@@ -796,7 +780,7 @@ const CustomizedForm = Form.create({
                 </Form.Item>
               </Col>
             ) : null
-          } */}
+          }
         </Row>
         {
           goodsDetail.is_group === 1 ? (
@@ -1546,9 +1530,9 @@ class AddGoodStep2 extends React.PureComponent {
     } else {
       values.group_end_time = groupEndTime || 0;
     }
-    // if (values.type === 1) {
-    //   values.is_group = 0;
-    // }
+    if (values.type === 1) {
+      values.is_group = 0;
+    }
     values.group_pick_up_duration = values.group_pick_up_duration || '';
     values.group_duration = values.group_duration || 0;
     values.sale_channel = values.sale_channel || 0;
