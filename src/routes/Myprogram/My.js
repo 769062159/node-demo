@@ -102,7 +102,7 @@ export default class My extends PureComponent {
     });
   };
   render() {
-    const { loading, form, program: { programList, hasPublic, hasApplets }, user: { currentUser: { id: currentUserId } } } = this.props;
+    const { loading, form, program: { programList, hasPublic, hasApplets } } = this.props;
     const { formVisible, programType } = this.state;
     let program = '';
     if (programType === 1) {
@@ -160,7 +160,7 @@ export default class My extends PureComponent {
             </Button>
           </Row>
         ) : null}
-        {!hasPublic && ( currentUserId === 5 || currentUserId === 25 ) ? (
+        {!hasPublic ? (
           <Row className={styles.rightBox}>
             <span className={styles.word}>一键创建公众号</span>
             <Button type="primary" loading={loading} onClick={this.showModal.bind(this, 1)}>

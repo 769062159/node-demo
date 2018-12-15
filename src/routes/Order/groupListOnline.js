@@ -184,7 +184,7 @@ export default class Order extends PureComponent {
     this.handAddleCancel();
   }
   setShip = () => {
-    const { shipNumber, sn, expressId, isEditType } = this.state;
+    const { shipNumber, sn, expressId, isEditType, page } = this.state;
     if (!sn) {
       message.error('请输入订单编号');
       return false;
@@ -196,20 +196,28 @@ export default class Order extends PureComponent {
     const { dispatch } = this.props;
     if (isEditType) {
       dispatch({
-        type: 'order/editShipGood',
+        type: 'order/editShipGoods',
         payload: {
           order_pack_id: sn,
           express_id: expressId,
           no: shipNumber,
         },
+        search: {
+          page,
+          sale_channel: 0,
+        },
       });
     } else {
       dispatch({
-        type: 'order/shipGood',
+        type: 'order/shipGoods',
         payload: {
           order_pack_id: sn,
           express_id: expressId,
           no: shipNumber,
+        },
+        search: {
+          page,
+          sale_channel: 0,
         },
       });
     }
@@ -621,7 +629,7 @@ export default class Order extends PureComponent {
         width: '12%',
         dataIndex: 'has_check_user',
         render: (val, record) => (
-          record.order_status === 4 ? (
+          record.order_status === 4 && val ? (
             <Row>
               <div>核销门店:{record.store_name}</div>
               <div>核销员:{val.nickname}</div>

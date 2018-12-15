@@ -66,6 +66,20 @@ export default {
         page: payload.page,
       });
     },
+    *editShipGoods({ payload, search }, { call, put, select }) {
+      yield call(editShip, { ...payload });
+      message.success('修改成功');
+      const response = yield call(getGroupList, { ...search });
+      // const response = yield call(getOrderList, { page: payload.page });
+      let id = '';
+      id = yield select(state => state.user.currentUser.shop_store_id);
+      yield put({
+        type: 'getGroup',
+        id,
+        payload: response,
+        page: search.page,
+      });
+    },
     *shipGood({ payload }, { call, put, select }) {
       const res = yield call(shipshop, { ...payload });
       if (res && res.code === 200) {
@@ -78,6 +92,21 @@ export default {
           id,
           payload: response,
           page: payload.page,
+        });
+      }
+    },
+    *shipGoods({ payload, search }, { call, put, select }) {
+      const res = yield call(shipshop, { ...payload });
+      if (res && res.code === 200) {
+        message.success('发货成功');
+        const response = yield call(getGroupList, { ...search });
+        let id = '';
+        id = yield select(state => state.user.currentUser.shop_store_id);
+        yield put({
+          type: 'getGroup',
+          id,
+          payload: response,
+          page: search.page,
         });
       }
     },
