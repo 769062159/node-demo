@@ -592,7 +592,7 @@ export default class FrontUserList extends PureComponent {
               <div>总收入:{val.account_total_income}</div>
               <div>佣金余额:{val.account_commission}</div>
               <div>注册渠道:{text.wechat_account_name}</div>
-              <div onClick={this.getFans.bind(this, text.id)} style={{ cursor: 'pointer' }}>粉丝数量:{text.fans_num}</div>
+              <div onClick={this.getFans.bind(this, text.id)} className={styles.superior}>粉丝数量:{text.fans_num}</div>
             </Col>
           </Row>
         ),
