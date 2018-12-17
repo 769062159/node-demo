@@ -1,6 +1,5 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
-// import moment from 'moment';
 import {
   // Row,
   // Col,
@@ -23,6 +22,7 @@ import {
   // Badge,
   Divider,
 } from 'antd';
+import { UPLOAD_TYPE } from '../../utils/config';
 // import StandardTable from 'components/StandardTable';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
@@ -325,7 +325,7 @@ export default class GoodsType extends PureComponent {
     );
     // 上传图片参数
     const payload = {
-      type: 2,
+      type: UPLOAD_TYPE.class,
     };
     const { getFieldDecorator } = this.props.form;
     // const selectItem = [];
@@ -440,7 +440,7 @@ export default class GoodsType extends PureComponent {
     );
     // 上传图片参数
     const payload = {
-      type: 2,
+      type: UPLOAD_TYPE.class,
     };
     const { getFieldDecorator } = this.props.form;
     // const selectItem = [];

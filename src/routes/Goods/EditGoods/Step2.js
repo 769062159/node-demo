@@ -533,8 +533,7 @@ const CustomizedForm = Form.create({
                   })(
                     <Select style={{ width: 200 }}>
                       <Option value={1} key={1}>商户版</Option>
-                      <Option value={2} key={2}>社群版</Option>
-                      <Option value={3} key={3}>视群版</Option>
+                      <Option value={2} key={2}>视群版</Option>
                     </Select>
                   )}
                 </Form.Item>

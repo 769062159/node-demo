@@ -116,7 +116,7 @@ export default class FrontUserList extends PureComponent {
           account: account ? account : `${record.id}@${e}`,
           password: record.mobile || '123456',
           editId: record.id,
-          powerValue: Number(record.has_user_oauth ? record.has_user_oauth.permission : 0),
+          powerValue: Number(record.has_account ? record.has_account.permission : 0),
           merchantVisible: true,
         })
       },
