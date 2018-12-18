@@ -4,21 +4,24 @@ import pathToRegexp from 'path-to-regexp';
 import { Link } from 'dva/router';
 import styles from './index.less';
 import { urlToList } from '../utils/pathTools';
-import '../../common.less';
+// import '../../common.less';
 
 const { Sider } = Layout;
 const { SubMenu } = Menu;
-
+const MyIcon = Icon.createFromIconfontCN({
+  scriptUrl: '//at.alicdn.com/t/font_971716_mgb2v32dzdg.js', // 在 iconfont.cn 上生成
+});
 // Allow menu.js config icon as string or ReactNode
 //   icon: 'setting',
 //   icon: 'http://demo.com/icon.png',
 //   icon: <Icon type="setting" />,
 const getIcon = icon => {
+  console.log(icon);
   if (typeof icon === 'string' && icon.indexOf('http') === 0) {
     return <img src={icon} alt="icon" className={styles.icon} />;
   }
   if (typeof icon === 'string') {
-    return <Icon type={icon} />;
+    return <MyIcon type={icon} />;
   }
   return icon;
 };

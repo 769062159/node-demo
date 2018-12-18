@@ -5,7 +5,7 @@ export const menuData = [
    * */
   {
     name: '数据分析',
-    icon: 'line-chart',
+    icon: 'icon-shuju',
     path: 'statistics',
     children: [
       {
@@ -16,7 +16,7 @@ export const menuData = [
   },
   {
     name: '用户管理',
-    icon: 'user',
+    icon: 'icon-iconset0203',
     path: 'front-users',
     children: [
       {
@@ -57,7 +57,7 @@ export const menuData = [
   // },
   {
     name: '商品',
-    icon: 'shopgood',
+    icon: 'icon-shangpin',
     path: 'good',
     children: [
       {
@@ -92,7 +92,7 @@ export const menuData = [
   },
   {
     name: '物流',
-    icon: 'logistics',
+    icon: 'icon-wuliu',
     path: 'logistics',
     children: [
       {
@@ -107,7 +107,7 @@ export const menuData = [
   },
   {
     name: '首页',
-    icon: 'home',
+    icon: 'icon-shouye',
     path: 'market',
     children: [
       {
@@ -134,7 +134,7 @@ export const menuData = [
   },
   {
     name: '财务',
-    icon: 'finance',
+    icon: 'icon-caiwu',
     path: 'finance',
     children: [
       {
@@ -153,7 +153,7 @@ export const menuData = [
   },
   {
     name: '售后服务',
-    icon: 'shouhou',
+    icon: 'icon-tubiaolunkuo-',
     path: 'saled',
     children: [
       {
@@ -164,7 +164,7 @@ export const menuData = [
   },
   {
     name: '订单',
-    icon: 'profile',
+    icon: 'icon-dingdan',
     path: 'order',
     children: [
       {
@@ -183,7 +183,7 @@ export const menuData = [
   },
   {
     name: '社群',
-    icon: 'community',
+    icon: 'icon-zhibo',
     path: 'community',
     children: [
       {
@@ -210,7 +210,7 @@ export const menuData = [
   },
   {
     name: '我的',
-    icon: 'video-camera',
+    icon: 'icon-my-live',
     path: 'live',
     children: [
       {
@@ -237,7 +237,7 @@ export const menuData = [
   },
   {
     name: '门店',
-    icon: 'shop',
+    icon: 'icon-mendian',
     path: 'shop',
     children: [
       {
@@ -256,7 +256,7 @@ export const menuData = [
   },
   {
     name: '小程序',
-    icon: 'program',
+    icon: 'icon-xiaochengxu',
     path: 'my-program',
     children: [
       {
