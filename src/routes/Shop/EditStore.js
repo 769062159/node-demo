@@ -6,6 +6,7 @@ import moment from 'moment';
 // import { timeFormat } from '../../utils/utils';
 // import { routerRedux } from 'dva/router';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
+import { UPLOAD_TYPE } from '../../utils/config';
 import Maps from '../../components/Map/index';
 
 const { TextArea } = Input;
@@ -260,7 +261,7 @@ export default class AddShop extends Component {
     const addressArr = [];
     // 上传图片参数
     const payload = {
-      type: 2,
+      type: UPLOAD_TYPE.store,
     };
     const uploadButton = (
       <div>

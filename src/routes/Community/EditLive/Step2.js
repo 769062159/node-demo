@@ -5,6 +5,7 @@ import { Form, Button, Input, Select, Upload, Icon, Modal, Tag, message, Table, 
 // import LiveGoodTable from '../../../components/LiveGoodTable';
 import Wangeditor from '../../../components/Wangeditor';
 import { uploadJSSDK, base64ToFile } from '../../../utils/utils';
+import { UPLOAD_TYPE } from '../../../utils/config';
 // import { env } from '../../../utils/config';
 import request from '../../../utils/request';
 // import LiveGoodTable from '../../../components/LiveGoodTable';
@@ -148,7 +149,7 @@ const CustomizedForm = Form.create({
   }
   // 上传图片参数
   const payload = {
-    type: 2,
+    type: UPLOAD_TYPE.share,
   };
   return (
     <Form autoComplete="OFF">
@@ -572,7 +573,7 @@ class EditLiveStep2 extends React.PureComponent {
           richTextData = richTextData.split('"');
           const file = base64ToFile(richTextData[0]);
           const body = new FormData();
-          body.append("type", 4);
+          body.append("type", UPLOAD_TYPE.rich);
           body.append("file", file);
           request('/merchant/upload', {
             method: 'POST',

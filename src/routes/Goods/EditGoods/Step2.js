@@ -25,6 +25,7 @@ import ReactEditor from 'components/ReactEditor';
 import EditTable from 'components/editTable';
 import styles from './style.less';
 import { deepCopy, timeFormat } from '../../../utils/utils';
+import { UPLOAD_TYPE } from '../../../utils/config';
 
 // const { TextArea } = Input;
 // const RadioGroup = Radio.Group;
@@ -1182,7 +1183,7 @@ class EditGoodStep2 extends React.PureComponent {
     previewVisible: false,
     previewImage: '',
     payload: {
-      type: 2,
+      type: UPLOAD_TYPE.goods,
     },
     header: {
       Authorization: `Bearer ${localStorage.getItem('token')}`,

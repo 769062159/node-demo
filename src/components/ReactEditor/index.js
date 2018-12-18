@@ -3,6 +3,7 @@ import React from 'react';
 // 引入编辑器以及编辑器样式
 import BraftEditor from 'braft-editor';
 import 'braft-editor/dist/braft.css';
+import { UPLOAD_TYPE } from '../../utils/config';
 
 export default class Demo extends React.Component {
   handleChange = content => {
@@ -57,7 +58,7 @@ export default class Demo extends React.Component {
       xhr.addEventListener('abort', errorFn, false);
 
       fd.append('file', param.file);
-      fd.append('type', 4);
+      fd.append('type', UPLOAD_TYPE.rich);
       xhr.open('POST', serverURL, true);
       const token = `Bearer ${localStorage.getItem('token')}`;
       xhr.setRequestHeader('Authorization', token);

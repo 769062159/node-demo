@@ -4,6 +4,7 @@ import { connect } from 'dva';
 // import moment from 'moment';
 import { routerRedux } from 'dva/router';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
+import { UPLOAD_TYPE } from '../../utils/config';
 import Maps from '../../components/Map/index';
 
 import styles from './Style.less';
@@ -247,7 +248,7 @@ export default class AddShop extends Component {
     } = this.props;
     // 上传图片参数
     const payload = {
-      type: 2,
+      type: UPLOAD_TYPE.store,
     };
     const uploadButton = (
       <div>

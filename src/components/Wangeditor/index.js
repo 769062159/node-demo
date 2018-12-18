@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import E from 'wangeditor';
 import request from '../../utils/request';
+import { UPLOAD_TYPE } from '../../utils/config';
 // import styles from './TableList.less';
 // import request from '../../utils/request';
 // import LiveGoodTable from '../../components/LiveGoodTable';
@@ -56,7 +57,7 @@ export default class Wangeditor extends PureComponent {
     this.editor.customConfig.customUploadImg = (files, insert) => {
         const { header } = this.props;
         const body = new FormData();
-        body.append("type", 4);
+        body.append("type", UPLOAD_TYPE.rich);
         body.append("file", files[0]);
         request('/merchant/upload', {
         method: 'POST',

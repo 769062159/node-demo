@@ -3,6 +3,7 @@ import { connect } from 'dva';
 // import moment from 'moment';
 import { Table, message, Modal, Form, Button, InputNumber, Upload, Select, Icon, Tag } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
+import { UPLOAD_TYPE } from '../../utils/config';
 import styles from './Style.less';
 
 const FormItem = Form.Item;
@@ -78,7 +79,7 @@ const CustomizedForm = Form.create({
   );
   // 上传图片参数
   const payload = {
-    type: 2,
+    type: UPLOAD_TYPE.class,
   };
   const header = {
     Authorization: `Bearer ${localStorage.getItem('token')}`,

@@ -22,7 +22,7 @@ import { routerRedux } from 'dva/router';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './style.less'
 import { uploadJSSDK } from '../../utils/utils';
-// import { env } from '../../utils/config';
+import { UPLOAD_TYPE } from '../../utils/config';
 // import styles from './TableList.less';
 // import request from '../../utils/request';
 import Wangeditor from '../../components/Wangeditor';
@@ -105,7 +105,7 @@ const CustomizedForm = Form.create({
   );
   // 上传图片参数
   const payload = {
-    type: 2,
+    type: UPLOAD_TYPE.course,
   };
   //  限制大小
   const beforeUpload = (file) => {

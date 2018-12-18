@@ -4,6 +4,7 @@ import { connect } from 'dva';
 import { Form, Button, Upload, Icon, Tag, message, Card } from 'antd';
 import styles from './style.less';
 import Wangeditor from '../../components/Wangeditor';
+import { UPLOAD_TYPE } from '../../utils/config';
 // import { router } from 'sw-toolbox';
 // import LiveGoodTable from '../../../components/LiveGoodTable';
 
@@ -85,7 +86,7 @@ const CustomizedForm = Form.create({
   );
   // 上传图片参数
   const payload = {
-    type: 2,
+    type: UPLOAD_TYPE.verify,
   };
   //  限制大小
   const beforeUpload = (file) => {

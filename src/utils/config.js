@@ -8,5 +8,8 @@ export const UPLOAD_TYPE = {
   refund: 7, // 退款图片
   qrCode: 9, // 二维码
   verify: 10, // 用户认证图片
+  share: 11, // 分享图片
+  course: 12, // 课程相关的
+  store: 13, // 门店相关的
 };
   
