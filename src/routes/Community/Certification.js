@@ -561,6 +561,11 @@ export default class Certification extends PureComponent {
           return <span>{timeFormat(val)}</span>
         },
       },
+      {
+        title: '驳回理由',
+        dataIndex: 'remark',
+        width: 300,
+      },
       // {
       //   title: '剩余库存',
       //   dataIndex: 'goods_total_inventory',
@@ -606,7 +611,7 @@ export default class Certification extends PureComponent {
             </div> */}
             <StandardTable
               rowKey={record => record.id}
-              scroll={{ x: 1400 }}
+              scroll={{ x: 1700 }}
               selectedRows={false}
               loading={loading}
               data={data}
