@@ -119,7 +119,10 @@ export default class ClassList extends PureComponent {
 
   handleSearch = e => {
     e.preventDefault();
-    const { page } = this.state;
+    // const { page } = this.state;
+    this.setState({
+      page: 1,
+    })
     const { dispatch, form } = this.props;
 
     form.validateFields((err, fieldsValue) => {
@@ -128,7 +131,7 @@ export default class ClassList extends PureComponent {
       const values = {
         ...fieldsValue,
         updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
-        page,
+        page: 1,
       };
 
       this.setState({
@@ -144,6 +147,7 @@ export default class ClassList extends PureComponent {
   // 删除商品
   deleteItem = id => {
     event.preventDefault();
+    const { page } = this.state;
     const that = this;
     confirm({
       content: '你确定删除这个吗？',
@@ -151,7 +155,6 @@ export default class ClassList extends PureComponent {
       okType: 'danger',
       cancelText: '取消',
       onOk() {
-        const { page } = that.state;
         const { dispatch } = that.props;
         dispatch({
           type: 'classModel/deleteClass',

@@ -196,7 +196,10 @@ export default class Live extends PureComponent {
   };
   handleSearch = e => {
     e.preventDefault();
-    const { page } = this.state;
+    // const { page } = this.state;
+    this.setState({
+      page: 1,
+    })
     const { dispatch, form } = this.props;
 
     form.validateFields((err, fieldsValue) => {
@@ -204,7 +207,7 @@ export default class Live extends PureComponent {
 
       const values = {
         ...fieldsValue,
-        page,
+        page: 1,
       };
 
       this.setState({

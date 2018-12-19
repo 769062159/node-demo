@@ -355,6 +355,9 @@ export default class Order extends PureComponent {
     e.preventDefault();
     const { dispatch, form } = this.props;
     // const { page } = this.state;
+    this.setState({
+      page: 1,
+    })
 
     form.validateFields((err, fieldsValue) => {
       if (err) return;

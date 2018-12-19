@@ -143,7 +143,10 @@ export default class FrontUserList extends PureComponent {
     if (e) {
       e.preventDefault()
     }
-    const { pagination } = this.state;
+    this.setState({
+      pagination: 1,
+    })
+    // const { pagination } = this.state;
     const { dispatch, form } = this.props;
 
     form.validateFields((err, fieldsValue) => {
@@ -152,7 +155,7 @@ export default class FrontUserList extends PureComponent {
       const values = {
         ...fieldsValue,
         updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
-        page: pagination,
+        page: 1,
       };
 
       //   this.setState({

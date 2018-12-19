@@ -49,6 +49,9 @@ export default class Rank extends PureComponent {
   handleSearch = e => {
     e.preventDefault();
     // const { page } = this.state;
+    this.setState({
+      page: 1,
+    })
     const { dispatch, form } = this.props;
 
     form.validateFields((err, fieldsValue) => {

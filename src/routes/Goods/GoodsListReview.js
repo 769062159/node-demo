@@ -196,7 +196,10 @@ export default class GoodsList extends PureComponent {
 
   handleSearch = e => {
     e.preventDefault();
-    const { page } = this.state;
+    // const { page } = this.state;
+    this.setState({
+      page: 1,
+    })
     const { dispatch, form } = this.props;
 
     form.validateFields((err, fieldsValue) => {
@@ -205,7 +208,7 @@ export default class GoodsList extends PureComponent {
       const values = {
         ...fieldsValue,
         updatedAt: fieldsValue.updatedAt && fieldsValue.updatedAt.valueOf(),
-        page,
+        page: 1,
       };
 
       this.setState({
