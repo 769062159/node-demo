@@ -319,6 +319,7 @@ const CustomizedForm = Form.create({
     });
   };
   const {
+    loading,
     goods: {
       systemType,
       uploadGoodsImg,
@@ -1162,7 +1163,7 @@ const CustomizedForm = Form.create({
         }}
         label=""
       >
-        <Button type="primary" onClick={onValidateForm}>
+        <Button type="primary" onClick={onValidateForm} loading={loading}>
           提交
         </Button>
         {/* <Button style={{ marginLeft: 8 }}>上一步</Button> */}

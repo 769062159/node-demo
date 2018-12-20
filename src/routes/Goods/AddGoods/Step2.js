@@ -1708,11 +1708,9 @@ class AddGoodStep2 extends React.PureComponent {
   };
 
   render() {
-    const { loading } = this.props;
     return (
       <CustomizedForm
         {...this.state}
-        loading={loading}
         submitForm={this.submitForm}
         handleChangeImg={this.handleChangeImg}
         handlePreviewImg={this.handlePreviewImg}
