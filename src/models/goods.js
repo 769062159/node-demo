@@ -738,7 +738,8 @@ export default {
       const levelPartial = [];
       let levelPartialSon = [];
       let totalPrice = 0;
-      const { goodsDetail, systemType } = payload;
+      const { systemType } = payload;
+      let { goodsDetail } = payload;
       systemType.user_levels.forEach(res => {
         levelPartial.push({
           id: res.id,
@@ -957,6 +958,13 @@ export default {
         goodsDetail.goods_shelves_time = moment(goodsDetail.goods_shelves_time * 1000).format(
           'YYYY-MM-DD HH:mm:ss'
         );
+      }
+      if (goodsDetail.upgrade_type) {
+        const { has_freeze_commission: freezeData } = goodsDetail;
+        goodsDetail = {
+          ...goodsDetail,
+          ...freezeData,
+        }
       }
       goodsDetail.profit_type = goodsDetail.profit_type || 0;
       payload.goodsDetail = goodsDetail;
