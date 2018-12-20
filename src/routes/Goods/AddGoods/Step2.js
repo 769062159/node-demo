@@ -1084,8 +1084,8 @@ const CustomizedForm = Form.create({
               </Col>
             </Row>
             <Row>
-              <Col span={24}>
-                <Form.Item {...formItemLayouts} label="视群版升级补差价">
+              <Col span={8}>
+                <Form.Item {...profitLayout} label="视群版补差价">
                   {getFieldDecorator('group_user_price', {
                     rules: [{ required: true, message: '请填写视群版升级补差价' }],
                   })(

@@ -265,7 +265,7 @@ const CustomizedForm = Form.create({
         </FormItem>
       ) : null}
       <FormItem {...submitFormLayout}>
-        <Button type="primary" htmlType="submit" onClick={onValidateForm}>
+        <Button type="primary" htmlType="submit" loading={loading} onClick={onValidateForm}>
           提交
         </Button>
       </FormItem>
