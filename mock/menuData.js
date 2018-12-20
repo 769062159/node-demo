@@ -84,10 +84,14 @@ export const menuData = [
         name: '审核商品列表',
         path: 'good-list-review',
       },
-      // {
-      //   name: '商品修改',
-      //   path: 'edit-goods',
-      // },
+      {
+        name: '商品协议',
+        path: 'protocol',
+      },
+      {
+        name: '个人中心协议',
+        path: 'protocols',
+      },
     ],
   },
   {
@@ -126,10 +130,6 @@ export const menuData = [
         name: '热卖商品',
         path: 'hot-sale',
       },
-      //   {
-      //     name: '广告',
-      //     path: 'ads',
-      //   },
     ],
   },
   {

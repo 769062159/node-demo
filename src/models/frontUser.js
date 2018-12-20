@@ -40,10 +40,18 @@ export default {
         callback();
       }
     },
-    *merchantSetting({ payload, callback }, { call }) {
+    *merchantSetting({ payload, callback }, { call, put }) {
+      console.log(payload);
       const data = yield call(merchantSetting, { ...payload });
       if (data && data.code === 200) {
         callback();
+        yield put({
+          type: 'merchantSettings',
+          payload: {
+            type: payload.type,
+            member_id: payload.member_id,
+          },
+        });
       }
     },
     *getMerchantmobile({ callback }, { select }) {
@@ -127,6 +135,19 @@ export default {
   },
 
   reducers: {
+    merchantSettings(state, { payload }) {
+      let { frontUserList } = state;
+      frontUserList = frontUserList.map(res => {
+        if (res.id === payload.member_id) {
+          res.has_account.permission = payload.type 
+        }
+        return res;
+      })
+      return {
+        ...state,
+        frontUserList,
+      };
+    },
     updateCommssions(state, { payload }) {
       let { frontUserList } = state;
       frontUserList = frontUserList.map(res => {
@@ -136,7 +157,6 @@ export default {
         }
         return res;
       })
-      console.log(payload);
       return {
         ...state,
         frontUserList,

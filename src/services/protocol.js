@@ -1,3 +1,4 @@
+import { stringify } from 'qs';
 import request from '../utils/request';
 
 /**
@@ -49,5 +50,23 @@ export async function getProtocol(params) {
   return request('/merchant/verify/get/agreement', {
     method: 'POST',
     body: params,
+  });
+}
+
+/**
+ * 协议设置
+ * */
+export async function setMerchantAgr(params) {
+  return request('/merchant/agreement/index', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+/**
+ * 协议获取
+ * */
+export async function getMerchantAgr(params) {
+  return request(`/merchant/agreement/get?${stringify(params)}`, {
   });
 }

@@ -266,6 +266,12 @@ export const getRouterConfig = app => {
     '/good/good-list': {
       component: dynamicWrapper(app, ['goods'], () => import('../routes/Goods/GoodsList')),
     },
+    '/good/protocol': {
+      component: dynamicWrapper(app, ['protocol'], () => import('../routes/Goods/Protocol')),
+    },
+    '/good/protocols': {
+      component: dynamicWrapper(app, ['protocol'], () => import('../routes/Goods/Protocols')),
+    },
     '/good/good-list-review': {
       component: dynamicWrapper(app, ['goods'], () => import('../routes/Goods/GoodsListReview')),
     },

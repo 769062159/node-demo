@@ -1,5 +1,5 @@
 import { queryRule } from '../services/api';
-import { verifyList, updateVerify, setProtocol, getProtocol } from '../services/protocol';
+import { verifyList, updateVerify, setProtocol, getProtocol, getMerchantAgr, setMerchantAgr } from '../services/protocol';
 
 export default {
   namespace: 'protocol',
@@ -15,11 +15,27 @@ export default {
       people: [],
       desc: '',
     },
+    userBuyProtocol: '',
+    userProtocol: '',
     verifyList: [],
     verifyListPage: {},
   },
 
   effects: {
+    *getMerchantAgr({ payload }, { call, put }) {
+      const response = yield call(getMerchantAgr, payload);
+      yield put({
+        type: 'getMerchantAgrs',
+        payload: response,
+        types: payload.type,
+      });
+    },
+    *setMerchantAgr({ payload, callback }, { call }) {
+      const response = yield call(setMerchantAgr, payload);
+      if (response && response.code === 200) {
+        callback();
+      }
+    },
     *getProtocol({ payload }, { call, put }) {
       const response = yield call(getProtocol, payload);
       yield put({
@@ -89,6 +105,21 @@ export default {
   },
 
   reducers: {
+    getMerchantAgrs(state, { payload, types }) {
+      const { data } = payload;
+      let userBuyProtocol = '';
+      let userProtocol = '';
+      if (types) {
+        userProtocol = data;
+      } else {
+        userBuyProtocol = data;
+      }
+      return {
+        ...state,
+        userBuyProtocol,
+        userProtocol,
+      }
+    },
     getProtocols(state, { payload }) {
       const { data } = payload;
       const front = [];
