@@ -7,6 +7,7 @@ import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './BasicProfile.less';
 
 const { Description } = DescriptionList;
+const upgrade = ['普通商品', '商户版专属', '视群版专属'];
 
 @connect(({ finance, loading }) => ({
   finance,
@@ -68,9 +69,23 @@ export default class BasicProfile extends Component {
         dataIndex: 'money',
       },
       {
+        title: '订单',
+        dataIndex: 'order_sn',
+        key: 'order_sn',
+      },
+      {
+        title: '类型',
+        dataIndex: 'upgrade_type',
+        key: 'upgrade_type',
+        render: val => upgrade[val],
+      },
+      {
         title: '备注',
         dataIndex: 'desc',
         key: 'desc',
+        render: (val, record) => {
+          return `${val}, ${record.upgrade_type ? `失效时间${moment(record.create_time * 1000).format('YYYY-MM-DD HH:mm:ss')}` : ''}`
+        },
       },
       {
         title: '到账时间',

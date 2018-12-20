@@ -94,7 +94,7 @@ export const getRouterConfig = app => {
     },
     // 社群
     '/community/certification': {
-      component: dynamicWrapper(app, ['live'], () => import('../routes/Community/Certification')),
+      component: dynamicWrapper(app, ['protocol'], () => import('../routes/Community/Certification')),
     },
     '/community/contract': {
       component: dynamicWrapper(app, ['protocol'], () => import('../routes/Community/Contract')),

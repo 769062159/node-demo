@@ -909,7 +909,7 @@ const CustomizedForm = Form.create({
           <Card title="版本返佣">
             <Row>
               <Col span={8}>
-                <h2>正常升级</h2>
+                <h2>类型：正常升级</h2>
               </Col>
             </Row>
             <Row>
@@ -962,7 +962,7 @@ const CustomizedForm = Form.create({
             </Row>
             <Row>
               <Col span={8}>
-                <h2>补差价升级</h2>
+                <h2>类型：补差价升级</h2>
               </Col>
             </Row>
             <Row>

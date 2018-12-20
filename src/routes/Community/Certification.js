@@ -56,7 +56,7 @@ const goodsStatus = ['未审核', '通过', '拒绝'];
 
 @connect(({ protocol, loading }) => ({
   protocol,
-  loading: loading.models.classModel,
+  loading: loading.models.protocol,
 }))
 @Form.create()
 export default class Certification extends PureComponent {
