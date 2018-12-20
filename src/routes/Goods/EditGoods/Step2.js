@@ -562,23 +562,6 @@ const CustomizedForm = Form.create({
               </Col>
             ) : null
           }
-          {
-            goodsDetail.upgrade_type === 1 ? (
-              <Col span={24}>
-                <Form.Item {...formItemLayouts} label="视群版升级补差价">
-                  {getFieldDecorator('group_user_price', {
-                    rules: [{ required: true, message: '请填写视群版升级补差价' }],
-                  })(
-                    <InputNumber
-                      step={0.01}
-                      style={{ width: 200 }}
-                      min={0}
-                    />
-                  )}
-                </Form.Item>
-              </Col>
-            ) : null
-          }
         </Row>
         <Form.Item {...formItemLayout} label="商品名称">
           {getFieldDecorator('goods_name', {
@@ -985,6 +968,21 @@ const CustomizedForm = Form.create({
               <Col span={8}>
                 <Form.Item {...profitLayout} label="分拥类型">
                   固定值
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row>
+              <Col span={24}>
+                <Form.Item {...formItemLayouts} label="视群版升级补差价">
+                  {getFieldDecorator('group_user_price', {
+                    rules: [{ required: true, message: '请填写视群版升级补差价' }],
+                  })(
+                    <InputNumber
+                      step={0.01}
+                      style={{ width: 200 }}
+                      min={0}
+                    />
+                  )}
                 </Form.Item>
               </Col>
             </Row>
