@@ -224,6 +224,9 @@ export const getRouterConfig = app => {
     '/finance/account': {
       component: dynamicWrapper(app, ['finance'], () => import('../routes/Finance/Account')),
     },
+    '/finance/protocols': {
+      component: dynamicWrapper(app, ['protocol'], () => import('../routes/Goods/Protocols')),
+    },
     '/finance/withdraw': {
       component: dynamicWrapper(app, ['finance'], () => import('../routes/Finance/Withdraw')),
     },
@@ -268,9 +271,6 @@ export const getRouterConfig = app => {
     },
     '/good/protocol': {
       component: dynamicWrapper(app, ['protocol'], () => import('../routes/Goods/Protocol')),
-    },
-    '/good/protocols': {
-      component: dynamicWrapper(app, ['protocol'], () => import('../routes/Goods/Protocols')),
     },
     '/good/good-list-review': {
       component: dynamicWrapper(app, ['goods'], () => import('../routes/Goods/GoodsListReview')),

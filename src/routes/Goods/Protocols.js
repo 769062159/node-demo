@@ -54,7 +54,7 @@ export default class Protocol extends PureComponent {
   }
   render() {
     const { header } = this.state;
-    const { loading, protocol: { userBuyProtocol } } = this.props;
+    const { loading, protocol: { userProtocol } } = this.props;
 
     return (
       <PageHeaderLayout>
@@ -65,7 +65,7 @@ export default class Protocol extends PureComponent {
             </Col>
             <Col span={20}>
               <Wangeditor
-                detail={userBuyProtocol}
+                detail={userProtocol}
                 header={header}
                 setDescription={this.setDescription}
               />
