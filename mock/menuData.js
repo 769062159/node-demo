@@ -130,6 +130,10 @@ export const menuData = [
         name: '热卖商品',
         path: 'hot-sale',
       },
+      {
+        name: '活动页',
+        path: 'active',
+      },
     ],
   },
   {

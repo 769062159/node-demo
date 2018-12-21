@@ -8,6 +8,9 @@ import {
   deleteHome,
   updateHome,
   homeDetail,
+  getActiveList,
+  delActive,
+  setActivePage,
 } from '../services/indexs';
 import { getAllGoods } from '../services/goods';
 import { getLive } from '../services/live';
@@ -16,6 +19,10 @@ export default {
   namespace: 'indexs',
 
   state: {
+    activeForm: {
+      pic: [],
+    }, // 活动表单
+    activeList: [], // 活动页列表
     adsList: [], // table列表
     homeList: [], // 首页列表
     adsListPage: {}, // table 页脚
@@ -35,6 +42,29 @@ export default {
   },
 
   effects: {
+    *getActiveList(_, { call, put }) {
+      const response = yield call(getActiveList);
+      yield put({
+        type: 'getActiveLists',
+        payload: response,
+      });
+    },
+    *delActive({ payload, callback }, { call, put }) {
+      const response = yield call(delActive, {id: payload});
+      if (response && response.code === 200) {
+        callback();
+        yield put({
+          type: 'delActives',
+          payload,
+        });
+      }
+    },
+    *setActivePage({ payload, callback }, { call }) {
+      const response = yield call(setActivePage, payload);
+      if (response && response.code === 200) {
+        callback();
+      }
+    },
     *fetchDetail({ payload }, { call, put }) {
       const response = yield call(homeDetail, payload);
       yield put({
@@ -133,6 +163,35 @@ export default {
   },
 
   reducers: {
+    delActives(state, { payload }) {
+      let { activeList } = state;
+      activeList = activeList.filter(res => {
+        return res.id !== payload;
+      });
+      return {
+        ...state,
+        activeList,
+      };
+    },
+    getActiveLists(state, { payload }) {
+      const { data } = payload;
+      return {
+        ...state,
+        activeList: data,
+      };
+    },
+    changeActiveFormVal(state, { payload }) {
+      let { activeForm } = state;
+      activeForm = {
+        ...activeForm,
+        ...payload.obj,
+      };
+      activeForm.pic = activeForm.pic || [];
+      return {
+        ...state,
+        activeForm,
+      };
+    },
     clearTable(state) {
       return {
         ...state,

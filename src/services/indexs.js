@@ -71,3 +71,27 @@ export async function homeDetail(params) {
     body: params,
   });
 }
+
+// 活动页列表
+export async function getActiveList(params) {
+  return request('/merchant/landpage/list', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+// 删除活动页
+export async function delActive(params) {
+  return request('/merchant/landpage/delete', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+// 设置活动页
+export async function setActivePage(params) {
+  return request('/merchant/landpage/set', {
+    method: 'POST',
+    body: params,
+  });
+}

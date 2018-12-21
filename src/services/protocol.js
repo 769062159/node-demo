@@ -1,4 +1,3 @@
-import { stringify } from 'qs';
 import request from '../utils/request';
 
 /**
@@ -67,6 +66,8 @@ export async function setMerchantAgr(params) {
  * 协议获取
  * */
 export async function getMerchantAgr(params) {
-  return request(`/merchant/agreement/get?${stringify(params)}`, {
+  return request(`/merchant/agreement/get`, {
+    method: 'POST',
+    body: params,
   });
 }

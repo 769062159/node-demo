@@ -11,5 +11,6 @@ export const UPLOAD_TYPE = {
   share: 11, // 分享图片
   course: 12, // 课程相关的
   store: 13, // 门店相关的
+  active: 14, // 活动页面
 };
   

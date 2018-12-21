@@ -86,9 +86,12 @@ export const getRouterConfig = app => {
     '/market/carousel': {
       component: dynamicWrapper(app, ['indexs'], () => import('../routes/Index/Carousel')),
     },
-    // '/market/live-sale': {
-    //   component: dynamicWrapper(app, ['indexs'], () => import('../routes/Index/LiveSale')),
-    // },
+    '/market/active': {
+      component: dynamicWrapper(app, ['indexs'], () => import('../routes/Index/Active')),
+    },
+    '/market/activ-add': {
+      component: dynamicWrapper(app, ['indexs'], () => import('../routes/Index/ActiveAdd')),
+    },
     '/market/hot-sale': {
       component: dynamicWrapper(app, ['indexs'], () => import('../routes/Index/HotSale')),
     },
