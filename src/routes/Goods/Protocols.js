@@ -45,7 +45,7 @@ export default class Protocol extends PureComponent {
         type: 'protocol/setMerchantAgr',
         payload: {
             type: 1,
-            Agreemt: newRichText,
+            agreement_personal: newRichText,
         },
         callback: () => {
             message.success('设置成功');
@@ -64,7 +64,7 @@ export default class Protocol extends PureComponent {
               协议
             </Col>
             <Col span={20}>
-              <Wangeditor 
+              <Wangeditor
                 detail={userBuyProtocol}
                 header={header}
                 setDescription={this.setDescription}

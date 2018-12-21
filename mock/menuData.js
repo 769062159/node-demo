@@ -85,12 +85,8 @@ export const menuData = [
         path: 'good-list-review',
       },
       {
-        name: '商品协议',
+        name: '版本商品协议',
         path: 'protocol',
-      },
-      {
-        name: '个人中心协议',
-        path: 'protocols',
       },
     ],
   },
@@ -148,6 +144,10 @@ export const menuData = [
       {
         name: '提现设置',
         path: 'withdraw-setting',
+      },
+      {
+        name: '佣金说明',
+        path: 'protocols',
       },
     ],
   },
