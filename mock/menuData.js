@@ -85,8 +85,12 @@ export const menuData = [
         path: 'good-list-review',
       },
       {
-        name: '版本商品协议',
+        name: '视群版商品协议',
         path: 'protocol',
+      },
+      {
+        name: '商户版商品协议',
+        path: 'protocols',
       },
     ],
   },

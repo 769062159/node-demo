@@ -905,7 +905,7 @@ const CustomizedForm = Form.create({
         </Form.Item>
       </Card>
       {
-        goodsDetail.upgrade_type === 1 ? (
+        goodsDetail.type && goodsDetail.upgrade_type === 1 ? (
           <Card title="版本返佣">
             <Row>
               <Col span={8}>
@@ -1029,7 +1029,7 @@ const CustomizedForm = Form.create({
               </Col>
             </Row>
           </Card>
-        ) : goodsDetail.upgrade_type == 2 ? (
+        ) : goodsDetail.type && goodsDetail.upgrade_type == 2 ? (
           <Card title="版本返佣">
             <Row>
               <Col span={8}>

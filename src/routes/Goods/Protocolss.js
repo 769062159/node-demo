@@ -28,7 +28,7 @@ export default class Protocol extends PureComponent {
     dispatch({
       type: 'protocol/getMerchantAgr',
       payload: {
-          type: 2,
+          type: 3,
       },
     });
   }
@@ -44,8 +44,8 @@ export default class Protocol extends PureComponent {
     dispatch({
         type: 'protocol/setMerchantAgr',
         payload: {
-            type: 2,
-            agreement_upgrade_group: newRichText,
+            type: 3,
+            agreement_upgrade_merchant: newRichText,
         },
         callback: () => {
             message.success('设置成功');

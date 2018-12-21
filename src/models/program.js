@@ -96,13 +96,13 @@ export default {
       let hasApplets = false;
       let hasPublic = false;
       if (data) {
-        data.forEach(res => {
-          if (res.type) {
-            hasPublic = true;
-          } else {
-            hasApplets = true;
-          }
-        });
+        const hasPublicArr = data.filter(element => element.type);
+        if (hasPublicArr.length > 5) {
+          hasPublic = true;
+        }
+        if (data.length - hasPublicArr.length > 5) {
+          hasApplets = true;
+        }
       }
       return {
         ...state,
