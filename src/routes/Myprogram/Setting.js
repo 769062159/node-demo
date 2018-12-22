@@ -1,6 +1,6 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
-import { Form, Button, Table, Modal, Input, Row, Col, Tag } from 'antd';
+import { Form, Button, Table, Modal, Input, Row, Col, Tag, Switch, message } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import UploadFile from '../../components/UploadFile';
 import styles from './Style.less';
@@ -91,6 +91,25 @@ export default class Setting extends PureComponent {
       formVisible: false,
     });
   };
+  changeShow = (e) => {
+    console.log(e);
+    console.log(Number(e));
+    const { dispatch, program: { programDetail } } = this.props;
+    console.log(programDetail)
+    const data = {
+      account_id: programDetail.id,
+      mcid: programDetail.merchant_id,
+      key: programDetail.key,
+      is_show_live: Number(e),
+    };
+    dispatch({
+      type: 'program/updateProgram',
+      payload: data,
+      callback: () => {
+        message.success('设置成功');
+      },
+    });
+  }
   // 新增提交&&修改
   handleSubmit = e => {
     e.preventDefault();
@@ -276,6 +295,10 @@ export default class Setting extends PureComponent {
               </Fragment>
             ) : null
           }
+          <Col span={4}>是否显示视群</Col>
+          <Col span={20}>
+            <Switch checkedChildren="开" onChange={this.changeShow} unCheckedChildren="关" checked={!!programDetail.is_show_live} />
+          </Col>
         </Row>
         <Modal
           title={modalTitle}

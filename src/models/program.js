@@ -6,6 +6,7 @@ import {
   getProgramDetail,
   editProgramDetail,
   getWxOpen,
+  updateProgram,
 } from '../services/program';
 
 export default {
@@ -21,6 +22,19 @@ export default {
   },
 
   effects: {
+    *updateProgram({ payload, callback }, { call, put }) {
+      const response = yield call(updateProgram, { ...payload });
+      if (response && response.code === 200) {
+        callback();
+        yield put({
+          type: 'updatePrograms',
+          payload: {
+            id: payload.account_id,
+            is_show_live: payload.is_show_live,
+          },
+        });
+      }
+    },
     *getWxOpen({ payload }, { call, put }) {
       const response = yield call(getWxOpen, { ...payload });
       yield put({
@@ -84,6 +98,14 @@ export default {
   },
 
   reducers: {
+    updatePrograms(state, { payload }) {
+      const { programDetail } = state;
+      programDetail.is_show_live = payload.is_show_live;
+      return {
+        ...state,
+        programDetail,
+      };
+    },
     getWxOpens(state, { payload }) {
       const { data } = payload;
       return {

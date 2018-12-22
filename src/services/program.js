@@ -70,3 +70,11 @@ export async function unbindWxOpen(params) {
     body: params,
   });
 }
+
+//  修改小程序
+export async function updateProgram(params) {
+  return request('/wx/wechataccount/update', {
+    method: 'POST',
+    body: params,
+  });
+}
