@@ -92,10 +92,7 @@ export default class Setting extends PureComponent {
     });
   };
   changeShow = (e) => {
-    console.log(e);
-    console.log(Number(e));
     const { dispatch, program: { programDetail } } = this.props;
-    console.log(programDetail)
     const data = {
       account_id: programDetail.id,
       mcid: programDetail.merchant_id,
@@ -295,8 +292,8 @@ export default class Setting extends PureComponent {
               </Fragment>
             ) : null
           }
-          <Col span={4}>是否显示视群</Col>
-          <Col span={20}>
+          <Col span={4} style={{ marginTop: 10 }}>是否显示视群</Col>
+          <Col span={20} style={{ marginTop: 10 }}>
             <Switch checkedChildren="开" onChange={this.changeShow} unCheckedChildren="关" checked={!!programDetail.is_show_live} />
           </Col>
         </Row>

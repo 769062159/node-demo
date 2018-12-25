@@ -543,6 +543,7 @@ export default class FrontUserList extends PureComponent {
       account_withdrawed_cash: '0.00',
       account_withdrawing_cash: '0.00',
       level: '0.00',
+      permission: 0,
       level_id: 0,
       merchant_id: 0,
       projected_income: '0.00',

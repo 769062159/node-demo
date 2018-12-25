@@ -84,7 +84,7 @@ export default class BasicProfile extends Component {
         dataIndex: 'desc',
         key: 'desc',
         render: (val, record) => {
-          return `${val}, ${record.upgrade_type ? `失效时间${moment(record.create_time * 1000).format('YYYY-MM-DD HH:mm:ss')}` : ''}`
+          return `${val}, ${record.upgrade_type ? `失效时间${moment(record.create_time * 1000 + 7 * 1000 * 3600 * 24).format('YYYY-MM-DD HH:mm:ss')}` : ''}`
         },
       },
       {

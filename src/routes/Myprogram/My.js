@@ -131,7 +131,7 @@ export default class My extends PureComponent {
               <span>创建时间 {moment(res.create_time * 1000).format('YYYY-MM-DD')}</span>
             </p>
           </div>
-          {
+          {/* {
             res.type === 0 ? (
               <div className={styles.rightBtn} onClick={this.deleteProgram.bind(this, res.id)}>
                 {!res.release_status ? (
@@ -146,7 +146,7 @@ export default class My extends PureComponent {
                 ) : null}
               </div>
             ) : null
-          }
+          } */}
         </div>
       );
     });
