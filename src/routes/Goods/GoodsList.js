@@ -17,13 +17,15 @@ import {
   // InputNumber,
   DatePicker,
   Badge,
-  // Divider,
+  Divider,
+  Modal,
 } from 'antd';
 import StandardTable from 'components/StandardTable';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
 import styles from './TableList.less';
 
+const { confirm } = Modal;
 const FormItem = Form.Item;
 const InputGroup = Input.Group;
 const { Option } = Select;
@@ -182,6 +184,39 @@ export default class GoodsList extends PureComponent {
       },
     });
   }
+  deleteSelectGood = () => {
+    const { dispatch } = this.props;
+    const { selectedRows, formValues, minPrice, maxPrice, page } = this.state;
+
+    if (!selectedRows) return;
+    if (minPrice && maxPrice) {
+      formValues.sell_goods_price_start = minPrice;
+      formValues.sell_goods_price_end = maxPrice;
+    }
+    formValues.page = page;
+    formValues.page_number = 10;
+    const arr = selectedRows.map(row => row.goods_id);
+    confirm({
+      content: '你确定删除这个吗？',
+      okText: '确定',
+      okType: 'danger',
+      cancelText: '取消',
+      onOk() {
+        dispatch({
+          type: 'goods/deleteGood',
+          payload: {
+            goods_ids: arr,
+          },
+          refresh: formValues,
+          callback: () => {
+            message.success('删除成功');
+          },
+        });
+      },
+      onCancel() {
+      },
+    });
+  }
 
   handleSelectRows = rows => {
     this.setState({
@@ -224,10 +259,37 @@ export default class GoodsList extends PureComponent {
   };
 
   // 删除商品
-  // deleteGoods = id => {
-  //   event.preventDefault();
-  //   console.log(id);
-  // };
+  deleteGoods = id => {
+    event.preventDefault();
+    const { formValues, minPrice, maxPrice, page } = this.state;
+    if (minPrice && maxPrice) {
+      formValues.sell_goods_price_start = minPrice;
+      formValues.sell_goods_price_end = maxPrice;
+    }
+    formValues.page = page;
+    formValues.page_number = 10;
+    const { dispatch } = this.props;
+    confirm({
+      content: '你确定删除这个吗？',
+      okText: '确定',
+      okType: 'danger',
+      cancelText: '取消',
+      onOk() {
+        dispatch({
+          type: 'goods/deleteGood',
+          payload: {
+            goods_ids: [id],
+          },
+          refresh: formValues,
+          callback: () => {
+            message.success('删除成功');
+          },
+        });
+      },
+      onCancel() {
+      },
+    });
+  };
   // 新建商品
   goNew = () => {
     const { dispatch } = this.props;
@@ -515,8 +577,8 @@ export default class GoodsList extends PureComponent {
         render: record => (
           <Fragment>
             <a href={`#/good/edit-goods/confirm/${record.goods_id}`}>修改</a>
-            {/* <Divider type="vertical" />
-            <a onClick={this.deleteGoods.bind(this, record.goods_id)}>删除</a> */}
+            <Divider type="vertical" />
+            <a onClick={this.deleteGoods.bind(this, record.goods_id)}>删除</a>
           </Fragment>
         ),
       },
@@ -541,7 +603,7 @@ export default class GoodsList extends PureComponent {
               {selectedRows.length > 0 && (
                 <span>
                   <Button onClick={this.obtained.bind(this, 1)}>批量下架</Button>
-                  {/* <Button onClick={this.obtained.bind(this, 0)}>批量上架</Button> */}
+                  <Button onClick={this.deleteSelectGood}>批量删除</Button>
                   {/* <Dropdown overlay={menu}>
                     <Button>
                       更多操作 <Icon type="down" />

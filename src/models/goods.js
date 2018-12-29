@@ -21,6 +21,7 @@ import {
   getFreightList,
   updateFreight,
   obtainedGood,
+  deleteGood,
 } from '../services/goods';
 import { uploadImg } from '../services/api';
 
@@ -151,6 +152,17 @@ export default {
   },
 
   effects: {
+    *deleteGood({ payload, refresh, callback }, { call, put }) {
+      const response = yield call(deleteGood, { ...payload });
+      if (response && response.code === 200) {
+        callback();
+        const responses = yield call(getAllGoods, {...refresh});
+        yield put({
+          type: 'show',
+          payload: responses,
+        });
+      }
+    },
     *obtainedGood({ payload, refresh, callback }, { call, put }) {
       const response = yield call(obtainedGood, { ...payload });
       if (response && response.code === 200) {

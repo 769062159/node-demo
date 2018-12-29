@@ -120,6 +120,15 @@ export async function getBrandDetail(params) {
   });
 }
 
+
+// 商户删除
+export async function deleteGood(params) {
+  return request('/merchant/goods/delete', {
+    method: 'POST',
+    body: params,
+  });
+}
+
 // 创建运费模版
 export async function addFreight(params) {
   return request('/merchant/goods/freight/create', {
