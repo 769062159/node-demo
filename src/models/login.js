@@ -23,6 +23,13 @@ export default {
         // console.log(response);
         const failTime = response.data.expired_time * 1000;
         localStorage.setItem('token', response.data.token);
+        if (payload.autoLogin) {
+          localStorage.setItem('username', payload.user_name);
+          localStorage.setItem('password', payload.password);
+        } else {
+          localStorage.removeItem('username');
+          localStorage.removeItem('password');
+        }
         localStorage.setItem('failTime', failTime);
         // reloadAuthorized();
         yield put(routerRedux.push('/'));

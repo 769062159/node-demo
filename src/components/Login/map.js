@@ -16,6 +16,7 @@ const map = {
         message: 'Please enter username!',
       },
     ],
+    initialValue: localStorage.getItem('username'),
   },
   Password: {
     component: Input,
@@ -31,6 +32,7 @@ const map = {
         message: 'Please enter password!',
       },
     ],
+    initialValue: localStorage.getItem('password'),
   },
   Mobile: {
     component: Input,

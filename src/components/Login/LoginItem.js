@@ -7,7 +7,7 @@ import map from './map';
 
 const FormItem = Form.Item;
 
-function generator({ defaultProps, defaultRules, type }) {
+function generator({ defaultProps, defaultRules, initialValue, type }) {
   return WrappedComponent => {
     return class BasicComponent extends Component {
       static contextTypes = {
@@ -49,6 +49,7 @@ function generator({ defaultProps, defaultRules, type }) {
         const { onChange, defaultValue, rules, name, ...restProps } = this.props;
         const { count } = this.state;
         options.rules = rules || defaultRules;
+        options.initialValue = initialValue;
         if (onChange) {
           options.onChange = onChange;
         }
@@ -83,7 +84,7 @@ function generator({ defaultProps, defaultRules, type }) {
         return (
           <FormItem>
             {getFieldDecorator(name, options)(
-              <WrappedComponent {...defaultProps} {...otherProps} />
+              <WrappedComponent  {...defaultProps} {...otherProps} />
             )}
           </FormItem>
         );
@@ -97,6 +98,7 @@ Object.keys(map).forEach(item => {
   LoginItem[item] = generator({
     defaultProps: map[item].props,
     defaultRules: map[item].rules,
+    initialValue: map[item].initialValue,
     type: item,
   })(map[item].component);
 });

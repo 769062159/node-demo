@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
 // import { Link } from 'dva/router';
-import { Alert } from 'antd';
+import { Alert, Checkbox } from 'antd';
 import Login from 'components/Login';
 import styles from './Login.less';
 
@@ -14,7 +14,7 @@ const { UserName, Password, Submit } = Login;
 export default class LoginPage extends Component {
   state = {
     type: 'account',
-    // autoLogin: true,
+    autoLogin: true,
   };
 
   onTabChange = type => {
@@ -22,23 +22,24 @@ export default class LoginPage extends Component {
   };
 
   handleSubmit = (err, values) => {
-    const { type } = this.state;
+    const { type, autoLogin } = this.state;
     if (!err) {
       this.props.dispatch({
         type: 'login/login',
         payload: {
           ...values,
           type,
+          autoLogin,
         },
       });
     }
   };
 
-  // changeAutoLogin = e => {
-  //   this.setState({
-  //     autoLogin: e.target.checked,
-  //   });
-  // };
+  changeAutoLogin = e => {
+    this.setState({
+      autoLogin: e.target.checked,
+    });
+  };
 
   renderMessage = content => {
     return <Alert style={{ marginBottom: 24 }} message={content} type="error" showIcon />;
@@ -46,7 +47,7 @@ export default class LoginPage extends Component {
 
   render() {
     const { login, submitting } = this.props;
-    const { type } = this.state;
+    const { type, autoLogin } = this.state;
     return (
       <div className={styles.main}>
         <Login defaultActiveKey={type} onTabChange={this.onTabChange} onSubmit={this.handleSubmit}>
@@ -58,6 +59,11 @@ export default class LoginPage extends Component {
           <div className={styles.inputBox}>
             <UserName name="user_name" placeholder="请输入账户" />
             <Password name="password" placeholder="请输入密码" />
+            <div>
+              <Checkbox checked={autoLogin} onChange={this.changeAutoLogin}>
+                记住账号密码
+              </Checkbox>
+            </div>
             <Submit loading={submitting}>登录</Submit>
           </div>
         </Login>
