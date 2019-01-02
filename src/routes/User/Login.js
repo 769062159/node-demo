@@ -59,7 +59,7 @@ export default class LoginPage extends Component {
           <div className={styles.inputBox}>
             <UserName name="user_name" placeholder="请输入账户" />
             <Password name="password" placeholder="请输入密码" />
-            <div>
+            <div style={{width: 270}}>
               <Checkbox checked={autoLogin} onChange={this.changeAutoLogin}>
                 记住账号密码
               </Checkbox>
