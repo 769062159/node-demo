@@ -18,6 +18,7 @@ export default {
       has_check_user: {},
     },
     shop_store_id: '',
+    searchOrderSn: '',
   },
 
   effects: {
@@ -149,6 +150,19 @@ export default {
   },
 
   reducers: {
+    clearOrder(state) {
+      return {
+        ...state,
+        searchOrderSn: '',
+      }
+    },
+    goOrder(state, { payload }) {
+      console.log(22, payload);
+      return {
+        ...state,
+        searchOrderSn: payload,
+      }
+    },
     setDetail(state, { payload }) {
       const { data } = payload;
       if (data.order_status === 6) {

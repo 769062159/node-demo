@@ -245,12 +245,12 @@ export default class Withdraw extends PureComponent {
         title: '用户信息',
         dataIndex: 'has_user',
         width: 230,
-        render: (val) => (
+        render: (val, record) => (
           <div className={styles.userMsg}>
             <img src={val.avatar} alt="图片" />
             <div>
               <span>{val.nickname}</span>
-              <span>Id:{val.fake_id}</span>
+              <span>Id:<a href={`#/finance/detail/${record.account_id}`}>{val.fake_id}</a></span>
             </div>
           </div>
         ),

@@ -100,20 +100,41 @@ export default class Order extends PureComponent {
   };
 
   componentDidMount() {
-    const { dispatch } = this.props;
-    const { page } = this.state;
-    dispatch({
-      type: 'order/getGroupList',
-      payload: {
-        page,
-        sale_channel: 0,
-      },
-    });
+    const { dispatch, order: { searchOrderSn }, form } = this.props;
+    if (searchOrderSn) {
+      const { page } = this.state;
+      dispatch({
+        type: 'order/getGroupList',
+        payload: {
+          page,
+          sale_channel: 0,
+          pack_order_sn: searchOrderSn,
+        },
+      });
+      form.setFieldsValue({
+        pack_order_sn: searchOrderSn,
+      });
+    } else {
+      const { page } = this.state;
+      dispatch({
+        type: 'order/getGroupList',
+        payload: {
+          page,
+          sale_channel: 0,
+        },
+      });
+    }
     dispatch({
       type: 'shop/fetchMenber',
     });
     dispatch({
       type: 'order/fetchExpressList',
+    });
+  }
+  componentWillUnmount() {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'order/clearOrder',
     });
   }
   // 设置最小值

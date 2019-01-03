@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
+import { routerRedux } from 'dva/router';
 import moment from 'moment';
 import { Card, Table, Divider } from 'antd';
 import DescriptionList from 'components/DescriptionList';
@@ -9,8 +10,9 @@ import styles from './BasicProfile.less';
 const { Description } = DescriptionList;
 const upgrade = ['普通商品', '商户版专属', '视群版专属'];
 
-@connect(({ finance, loading }) => ({
+@connect(({ finance, loading, order }) => ({
   finance,
+  order,
   loading: loading.effects.finance,
 }))
 export default class BasicProfile extends Component {
@@ -28,6 +30,21 @@ export default class BasicProfile extends Component {
         page,
       },
     });
+  }
+  goOrder = (record) => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'order/goOrder',
+      payload: record.order_sn,
+    });
+    let url = '';
+    if (record.is_group) {
+      url = `/order/group-list-online`;
+    } else {
+      console.log('不拼团');
+      url = `/order/list`;
+    }
+    dispatch(routerRedux.push(url));
   }
 
   // 换页
@@ -72,6 +89,9 @@ export default class BasicProfile extends Component {
         title: '订单',
         dataIndex: 'order_sn',
         key: 'order_sn',
+        render: (val, record) => (
+          <div style={{color: '#40a9ff', cursor: 'pointer'}} onClick={this.goOrder.bind(this, record)}>{val}</div>
+        ),
       },
       {
         title: '类型',
