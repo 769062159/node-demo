@@ -103,7 +103,7 @@ export default class orderDetail extends PureComponent {
         {
           orderDetail.has_order_pack.map((res) => {
             return (
-              <Card title={`包裹${res.index}`} key={res.pack_id} bordered={false} >
+              <Card title={`包裹${res.index}`} key={res.pack_id} style={{ marginTop: 10  }} bordered={false} >
                 <div className={styles.whiteBlock}>
                   <Row className={styles.grayBlock}>包裹编号:<span className={styles.sn}>{res.order_sn}</span></Row>
                   <Row className={styles.stepBlock}>
@@ -130,9 +130,13 @@ export default class orderDetail extends PureComponent {
                     }
                   </Row>
                 </div>
-                <div className={styles.whiteBlock}>
-                  <Row className={styles.grayBlock}>快递公司:<span className={styles.sn}>{res.pack_express_name}</span><span className={styles.exp}>快递单号:</span><span className={styles.expCode}>{res.pack_express_sn}</span></Row>
-                </div>
+                {
+                  res.order_status > 2 ? (
+                    <div className={styles.whiteBlock}>
+                      <Row className={styles.grayBlock}>快递公司:<span className={styles.sn}>{res.pack_express_name}</span><span className={styles.exp}>快递单号:</span><span className={styles.expCode}>{res.pack_express_sn}</span></Row>
+                    </div>
+                  ) : null
+                }
                 <Table
                   bordered
                   dataSource={res.has_order_goods}
