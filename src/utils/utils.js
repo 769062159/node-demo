@@ -479,3 +479,21 @@ export function base64ToFile (dataURI){
   }
   return new Blob([ia], {type: mimeString});
 }
+
+export function toNums(n) {
+  if(!/(^[1-9]\d*$)/){
+      return '非法数字';
+  }
+  var uppercase='千百亿千百十万千百十个';
+  var nLength=n.length;
+  var newStr='';
+  if(uppercase.length-nLength<0){
+      return '数字过长';
+  }
+  uppercase=uppercase.substr(uppercase.length-nLength);
+  for(var i=0;i<nLength;i++){
+      newStr +='零一二三四五六七八九'.charAt(n[i])+uppercase.charAt(i);
+  };
+  newStr=newStr.substr(0,newStr.length-1);
+  return newStr;
+}

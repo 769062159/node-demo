@@ -1,5 +1,6 @@
 import { message } from 'antd';
 import { getOrderList, getExpressList, shipshop, editShip, editAdress, getGroupList, getGroupDetail, collectGoods, getDetail } from '../services/order';
+import { toNums } from '../utils/utils'
 
 export default {
   namespace: 'order',
@@ -11,6 +12,7 @@ export default {
     groupListPage: {}, // table 页脚
     expressList: [], // 快递公司
     orderDetail: {
+      has_order_pack: [],
       has_user: {},
     },
     groupDetail: {
@@ -165,19 +167,24 @@ export default {
     },
     setDetail(state, { payload }) {
       const { data } = payload;
-      if (data.order_status === 6) {
-        data.stepStatus = 2;
-      } else if (data.order_status === 1) {
-        data.stepStatus = 1;
-      } else if (data.order_status === 2) {
-        data.stepStatus = 1;
-      } else if (data.order_status === 3) {
-        data.stepStatus = 2;
-      } else if (data.order_status === 4 || data.order_status === 5) {
-        data.stepStatus = 3;
-      } else {
-        data.stepStatus = 0;
-      }
+      data.has_order_pack = data.has_order_pack.map((res, index) => {
+        index = (index + 1).toString();
+        res.index = toNums(index);
+        if (res.order_status === 6) {
+          res.stepStatus = 2;
+        } else if (res.order_status === 1) {
+          res.stepStatus = 1;
+        } else if (res.order_status === 2) {
+          res.stepStatus = 1;
+        } else if (res.order_status === 3) {
+          res.stepStatus = 2;
+        } else if (res.order_status === 4 || res.order_status === 5) {
+          res.stepStatus = 3;
+        } else {
+          res.stepStatus = 0;
+        }
+        return res;
+      })
       return {
         ...state,
         orderDetail: data,
