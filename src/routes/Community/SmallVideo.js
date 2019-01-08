@@ -342,6 +342,11 @@ export default class Live extends PureComponent {
         render: val => <span>{moment(val * 1000).format('YYYY-MM-DD HH:mm:ss')}</span>,
       },
       {
+        title: '视频状态',
+        dataIndex: 'status',
+        render: val => val ? '上架' : '下架',
+      },
+      {
         title: '操作',
         // fixed: 'right',
         // width: 150,
