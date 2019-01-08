@@ -178,8 +178,9 @@ export default class Certification extends PureComponent {
     this.setState({
       editData: data,
       type,
+    }, () => {
+      this.showModal();
     });
-    this.showModal();
   };
   // 新增modal显示
   showModal = () => {
