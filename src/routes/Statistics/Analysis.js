@@ -320,6 +320,54 @@ export default class Analysis extends Component {
                   </div>
                 </a>
               </Col>
+              <Col span={6}>
+                <a href="#/finance/withdraw">
+                  <div className={styles.boxSeven}>
+                    <img src="/img/review.png" alt="" />
+                    <div className={styles.word}>
+                      <div className={styles.title}>佣金总额</div>
+                      <div className={styles.price}>{statistics.commission_amount || 0}</div>
+                      <div className={`${styles.tip} ${styles.none}`} >1</div>
+                    </div>
+                  </div>
+                </a>
+              </Col>
+              <Col span={6}>
+                <a href="#/finance/withdraw">
+                  <div className={styles.boxSeven}>
+                    <img src="/img/review.png" alt="" />
+                    <div className={styles.word}>
+                      <div className={styles.title}>已提现金额</div>
+                      <div className={styles.price}>{statistics.commission_withdrawed || 0}</div>
+                      <div className={`${styles.tip} ${styles.none}`} >1</div>
+                    </div>
+                  </div>
+                </a>
+              </Col>
+              <Col span={6}>
+                <a href="#/finance/withdraw">
+                  <div className={styles.boxSeven}>
+                    <img src="/img/review.png" alt="" />
+                    <div className={styles.word}>
+                      <div className={styles.title}>用户账户佣金</div>
+                      <div className={styles.price}>{statistics.account_commission || 0}</div>
+                      <div className={`${styles.tip} ${styles.none}`} >1</div>
+                    </div>
+                  </div>
+                </a>
+              </Col>
+              <Col span={6}>
+                <a href="#/finance/withdraw">
+                  <div className={styles.boxSeven}>
+                    <img src="/img/review.png" alt="" />
+                    <div className={styles.word}>
+                      <div className={styles.title}>申请提现总金额</div>
+                      <div className={styles.price}>{statistics.applying_withdrawed || 0}</div>
+                      <div className={`${styles.tip} ${styles.none}`} >1</div>
+                    </div>
+                  </div>
+                </a>
+              </Col>
             </Row>
           </Col>
           <Col xl={6} md={24}>

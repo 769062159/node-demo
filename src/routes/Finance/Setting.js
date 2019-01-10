@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
-import { Form, Card, InputNumber, Button, Radio, message, Tag } from 'antd';
+import { Form, Card, InputNumber, Button, Radio, message, Tag, Switch } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
 import styles from './TableList.less';
@@ -51,11 +51,36 @@ export default class Withdraw extends PureComponent {
         }
       });
   }
+  radioChange = (e) => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'finance/chgForm',
+      payload: {
+        name: 'withdraw_type',
+        value: e.target.value,
+      },
+    });
+    // this.setState({
+    //   radioValue: e.target.value,
+    // });
+  }
+  autoReturn = (e) => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'finance/chgForm',
+      payload: {
+        name: 'auto_withdraw',
+        value: e,
+      },
+    });
+    // this.setState({
+    //   isAuto: e,
+    // });
+  }
 
   render() {
     const { loading, finance: { withdrawConfig } } = this.props;
     const { getFieldDecorator } = this.props.form;
-
     return (
       <PageHeaderLayout>
         <Card bordered={false}>
@@ -67,6 +92,11 @@ export default class Withdraw extends PureComponent {
             <br />
             微信提现是直接到账的。
           </Tag>
+          {
+            process.env.API_ENV === 'test' ? (
+              <Tag className={styles.tip}>测试环境提现配置与正式环境共用</Tag>
+            ) : null
+          }
           <Form
             onSubmit={this.handleSubmit}
             hideRequiredMark
@@ -84,13 +114,40 @@ export default class Withdraw extends PureComponent {
                     },
                 ],
               })(
-                <RadioGroup>
+                <RadioGroup onChange={this.radioChange}>
                   <Radio value={1}>微信提现</Radio>
                   <Radio value={0}>银行卡提现</Radio>
                   <Radio value={2}>两者都可以</Radio>
                 </RadioGroup>
               )}
             </FormItem>
+            {
+              withdrawConfig.withdraw_type === 1 ? (
+                <FormItem {...formItemLayout} label="自动返现" >
+                  {getFieldDecorator('auto_withdraw', {
+                    valuePropName: 'checked',
+                    initialValue: !!withdrawConfig.auto_withdraw,
+                  })(<Switch onChange={this.autoReturn} />)}
+                </FormItem>
+              ) : null
+            }
+            {
+              withdrawConfig.auto_withdraw && withdrawConfig.withdraw_type === 1 ? (
+                <FormItem {...formItemLayout} label="自动提现上限">
+                  {getFieldDecorator('auto_withdraw_amount', {
+                    initialValue: withdrawConfig.auto_withdraw_amount,
+                    rules: [
+                        {
+                            required: true,
+                            message: '请输入自动提现上限',
+                        },
+                    ],
+                  })(
+                    <InputNumber  style={{ width: 300 }} max={20000} />
+                  )}
+                </FormItem>
+              ) : null
+            }
             <FormItem {...formItemLayout} label="每月提现金额不超过" extra="元">
               {getFieldDecorator('withdraw_limit', {
                 initialValue: withdrawConfig.withdraw_limit,

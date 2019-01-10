@@ -12,6 +12,7 @@ import {
   Input,
   Select,
   Modal,
+  DatePicker,
   Cascader,
   Table,
   message,
@@ -392,6 +393,18 @@ export default class Order extends PureComponent {
         values.start_order_amount = minPrice;
         values.end_order_amount = maxPrice;
       }
+      if (values.end_order_time) {
+        values.end_order_time = parseInt(new Date(values.end_order_time).getTime()/ 1000, 10);
+        // console.log(new Date(values.end_order_time).getTime());
+      } else {
+        delete values.end_order_time;
+      }
+      if (values.start_order_time) {
+        values.start_order_time = parseInt(new Date(values.start_order_time).getTime()/ 1000, 10);
+        // console.log(new Date(values.start_order_time).getTime());
+      } else {
+        delete values.start_order_time;
+      }
       this.setState({
         values,
         page: 1,
@@ -523,7 +536,16 @@ export default class Order extends PureComponent {
               {getFieldDecorator('user_id')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
-          <Col md={8} sm={24} />
+          <Col md={8} sm={24}>
+            <FormItem label="订单开始时间">
+              {getFieldDecorator('start_order_time')(<DatePicker />)}
+            </FormItem>
+          </Col>
+          <Col md={8} sm={24}>
+            <FormItem label="订单结束时间">
+              {getFieldDecorator('end_order_time')(<DatePicker  />)}
+            </FormItem>
+          </Col>
         </Row>
         <div style={{ overflow: 'hidden' }}>
           <span style={{ float: 'right', marginBottom: 24 }}>

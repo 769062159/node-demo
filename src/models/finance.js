@@ -112,6 +112,15 @@ export default {
   },
 
   reducers: {
+    chgForm(state, { payload }) {
+      const { name, value } = payload;
+      const { withdrawConfig } = state;
+      withdrawConfig[name] = value;
+      return {
+        ...state,
+        withdrawConfig,
+      };
+    },
     getWithdrawConfigs(state, { payload }) {
       const { data } = payload;
       return {
