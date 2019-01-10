@@ -1,5 +1,6 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
+import { Player } from 'video-react';
 // import debounce from 'lodash/debounce';
 import moment from 'moment';
 // import copy from 'copy-to-clipboard';
@@ -16,9 +17,9 @@ import {
   Button,
   Divider,
 } from 'antd';
+import "video-react/dist/video-react.css";
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './TableList.less';
-
 
 const { confirm } = Modal;
 const FormItem = Form.Item;
@@ -307,6 +308,7 @@ export default class Live extends PureComponent {
       live: { smallVideoList: datas, smallVideoListPage },
       loading,
     } = this.props;
+    const autoplay = true;
     const { videoUrl } = this.state;
     // const { getFieldDecorator } = this.props.form;
     // const { liveVisible, header, previewVisible, previewImage, fetching, value, data } = this.state;
@@ -387,7 +389,12 @@ export default class Live extends PureComponent {
           </div>
           <div className={styles.modalItem} style={{display:(videoUrl) ? "block":"none"}}>
             <img className={styles.closeItem} src='/img/close.png' onClick={this.handleCancelVideo} alt="关闭" />
-            <video className={styles.videoItems} src={videoUrl} controls><track kind="captions" /></video>
+            <Player
+              autoPlay={autoplay}
+              playsInline
+              src={videoUrl}
+            />
+            {/* <video className={styles.videoItems} src={videoUrl} controls><track kind="captions" /></video> */}
           </div>
           {/* <Modal visible={videoUrl} footer={null} width={300} bodyStyle={{ textAlign: 'center' }} onCancel={this.handleCancelVideo}>
             <video className={styles.videoItems} src={videoUrl} controls><track kind="captions" /></video>

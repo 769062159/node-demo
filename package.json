@@ -52,6 +52,7 @@
     "react-fittext": "^1.0.0",
     "rollbar": "^2.3.4",
     "url-polyfill": "^1.0.10",
+    "video-react": "^0.13.1",
     "wangeditor": "^3.1.1"
   },
   "devDependencies": {
@@ -65,13 +66,13 @@
     "enzyme": "^3.1.0",
     "eslint": "^4.14.0",
     "eslint-config-airbnb": "^16.0.0",
+    "eslint-config-prettier": "^2.9.0",
     "eslint-plugin-babel": "^4.0.0",
     "eslint-plugin-compat": "^2.1.0",
     "eslint-plugin-import": "^2.8.0",
     "eslint-plugin-jsx-a11y": "^6.0.3",
     "eslint-plugin-markdown": "^1.0.0-beta.6",
     "eslint-plugin-react": "^7.0.1",
-    "eslint-config-prettier": "^2.9.0",
     "gh-pages": "^1.0.0",
     "husky": "^0.14.3",
     "lint-staged": "^6.0.0",
