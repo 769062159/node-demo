@@ -394,13 +394,13 @@ export default class Order extends PureComponent {
         values.end_order_amount = maxPrice;
       }
       if (values.end_order_time) {
-        values.end_order_time = parseInt(new Date(values.end_order_time).getTime()/ 1000, 10);
+        values.end_order_time = parseInt(new Date(moment(values.end_order_time).format('YYYY-MM-DD 23:59:59')).getTime()/ 1000, 10);
         // console.log(new Date(values.end_order_time).getTime());
       } else {
         delete values.end_order_time;
       }
       if (values.start_order_time) {
-        values.start_order_time = parseInt(new Date(values.start_order_time).getTime()/ 1000, 10);
+        values.start_order_time = parseInt(new Date(moment(values.start_order_time).format('YYYY-MM-DD 00:00:00')).getTime()/ 1000, 10);
         // console.log(new Date(values.start_order_time).getTime());
       } else {
         delete values.start_order_time;
