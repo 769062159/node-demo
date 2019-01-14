@@ -3,8 +3,9 @@ import { connect } from 'dva';
 import {
   Row,
   Col,
-//   Icon,
-//   Card,
+  Icon,
+  Card,
+  Tooltip,
 //   Tabs,
 //   Table,
 //   Radio,
@@ -13,34 +14,15 @@ import {
 //   Menu,
 //   Dropdown,
 } from 'antd';
-// import numeral from 'numeral';
-import {
-//   ChartCard,
-//   yuan,
-//   MiniArea,
-//   MiniBar,
-//   MiniProgress,
-//   Field,
-//   Bar,
-//   Pie,
-//   TimelineChart,
-} from 'components/Charts';
-// import Trend from 'components/Trend';
-// import NumberInfo from 'components/NumberInfo';
-import { getTimeDistance } from '../../utils/utils';
 
 import styles from './Analysis.less';
 
-// const { TabPane } = Tabs;
-// const { RangePicker } = DatePicker;
+// 提示
+const processed = <Fragment><div>普通待发货：支付成功但还未发货的普通订单</div><div>拼团待发货：支付成功但还未发货的拼团订单</div><div>待退款：客户发起退款或退货退款，需商家在后台操作处理的订单</div><div>待提现：客户发起佣金提现，需商家在后台操作处理的佣金</div><div>待认证：客户发起身份认证，需商家在后台操作处理的身份认证</div></Fragment>; // 待处理
+const overview = <Fragment><div>今日销售额：今日零时至更新时间，客户购买商品的合计金额</div><div>今日订单数：今日零时至更新时间，成功支付的订单数</div><div>今日佣金：今日零时至更新时间，合计产生的佣金总额</div><div>今日会员数：今日零时至更新时间，新注册的用户数</div></Fragment>; // 今日概况
+const totalOverview = <Fragment><div>总销售额：上线至更新时间，客户购买商品的合计金额</div><div>总订单数：上线至更新时间，成功支付的订单数</div></Fragment>; // 总概况
+const commission = <Fragment><div>佣金总额：上线至更新时间，合计产生的佣金总额。佣金总额=已提现金额+申请中金额+佣金余额</div><div>已提现金额：上线至更新时间，客户已经申请提现的佣金总金额</div><div>申请中金额：上线至更新时间，客户发起佣金提现，需商家在后台操作处理的佣金总额</div><div>佣金余额：上线至更新时间，已经产生并且尚未被提现的佣金总额</div><div>已支付金额：上线至更新时间，客户发起佣金提现，商家实际支付的佣金金额</div><div>已支付金额小于等于已提现金额</div></Fragment>; // 总概况
 
-const rankingListData = [];
-for (let i = 0; i < 7; i += 1) {
-  rankingListData.push({
-    title: `工专路 ${i} 号店`,
-    total: 323234,
-  });
-}
 
 @connect(({ statistics, loading }) => ({
   statistics,
@@ -48,9 +30,6 @@ for (let i = 0; i < 7; i += 1) {
 }))
 export default class Analysis extends Component {
   state = {
-    // salesType: 'all',
-    // currentTabKey: '',
-    rangePickerValue: getTimeDistance('year'),
   };
 
   componentDidMount() {
@@ -59,321 +38,169 @@ export default class Analysis extends Component {
     });
   }
 
-  // componentWillUnmount() {
-  //   const { dispatch } = this.props;
-  //   dispatch({
-  //     type: 'chart/clear',
-  //   });
-  // }
-
-//   handleChangeSalesType = e => {
-//     this.setState({
-//       salesType: e.target.value,
-//     });
-//   };
-
-//   handleTabChange = key => {
-//     this.setState({
-//       currentTabKey: key,
-//     });
-//   };
-
-  handleRangePickerChange = rangePickerValue => {
-    this.setState({
-      rangePickerValue,
-    });
-
-    this.props.dispatch({
-      type: 'chart/fetchSalesData',
-    });
-  };
-
-  selectDate = type => {
-    this.setState({
-      rangePickerValue: getTimeDistance(type),
-    });
-
-    this.props.dispatch({
-      type: 'chart/fetchSalesData',
-    });
-  };
-
-  isActive(type) {
-    const { rangePickerValue } = this.state;
-    const value = getTimeDistance(type);
-    if (!rangePickerValue[0] || !rangePickerValue[1]) {
-      return;
-    }
-    if (
-      rangePickerValue[0].isSame(value[0], 'day') &&
-      rangePickerValue[1].isSame(value[1], 'day')
-    ) {
-      return styles.currentDate;
-    }
-  }
-
   render() {
-    // const { rangePickerValue, currentTabKey } = this.state;
-    // salesType
     const { statistics: { statistics } } = this.props;
-    // const {
-    //   visitData,
-    //   visitData2,
-    //   salesData,
-    //   searchData,
-    //   offlineData,
-    //   offlineChartData,
-    //   salesTypeData,
-    //   salesTypeDataOnline,
-    //   salesTypeDataOffline,
-    // } = chart;
-
-    // const salesPieData =
-    //   salesType === 'all'
-    //     ? salesTypeData
-    //     : salesType === 'online' ? salesTypeDataOnline : salesTypeDataOffline;
-
-    // const menu = (
-    //   <Menu>
-    //     <Menu.Item>操作一</Menu.Item>
-    //     <Menu.Item>操作二</Menu.Item>
-    //   </Menu>
-    // );
-
-    // const iconGroup = (
-    //   <span className={styles.iconGroup}>
-    //     <Dropdown overlay={menu} placement="bottomRight">
-    //       <Icon type="ellipsis" />
-    //     </Dropdown>
-    //   </span>
-    // );
-
-    // const salesExtra = (
-    //   <div className={styles.salesExtraWrap}>
-    //     <div className={styles.salesExtra}>
-    //       <a className={this.isActive('today')} onClick={() => this.selectDate('today')}>
-    //         今日
-    //       </a>
-    //       <a className={this.isActive('week')} onClick={() => this.selectDate('week')}>
-    //         本周
-    //       </a>
-    //       <a className={this.isActive('month')} onClick={() => this.selectDate('month')}>
-    //         本月
-    //       </a>
-    //       <a className={this.isActive('year')} onClick={() => this.selectDate('year')}>
-    //         全年
-    //       </a>
-    //     </div>
-    //     <RangePicker
-    //       value={rangePickerValue}
-    //       onChange={this.handleRangePickerChange}
-    //       style={{ width: 256 }}
-    //     />
-    //   </div>
-    // );
-
-    // const columns = [
-    //   {
-    //     title: '排名',
-    //     dataIndex: 'index',
-    //     key: 'index',
-    //   },
-    //   {
-    //     title: '搜索关键词',
-    //     dataIndex: 'keyword',
-    //     key: 'keyword',
-    //     render: text => <a href="/">{text}</a>,
-    //   },
-    //   {
-    //     title: '用户数',
-    //     dataIndex: 'count',
-    //     key: 'count',
-    //     sorter: (a, b) => a.count - b.count,
-    //     className: styles.alignRight,
-    //   },
-    //   {
-    //     title: '周涨幅',
-    //     dataIndex: 'range',
-    //     key: 'range',
-    //     sorter: (a, b) => a.range - b.range,
-    //     render: (text, record) => (
-    //       <Trend flag={record.status === 1 ? 'down' : 'up'}>
-    //         <span style={{ marginRight: 4 }}>{text}%</span>
-    //       </Trend>
-    //     ),
-    //     align: 'right',
-    //   },
-    // ];
-
-    // const activeKey = currentTabKey || (offlineData[0] && offlineData[0].name);
-
-    // const CustomTab = ({ data, currentTabKey: currentKey }) => (
-    //   <Row gutter={8} style={{ width: 138, margin: '8px 0' }}>
-    //     <Col span={12}>
-    //       <NumberInfo
-    //         title={data.name}
-    //         subTitle="转化率"
-    //         gap={2}
-    //         total={`${data.cvr * 100}%`}
-    //         theme={currentKey !== data.name && 'light'}
-    //       />
-    //     </Col>
-    //     <Col span={12} style={{ paddingTop: 36 }}>
-    //       <Pie
-    //         animate={false}
-    //         color={currentKey !== data.name && '#BDE4FF'}
-    //         inner={0.55}
-    //         tooltip={false}
-    //         margin={[0, 0, 0, 0]}
-    //         percent={data.cvr * 100}
-    //         height={64}
-    //       />
-    //     </Col>
-    //   </Row>
-    // );
-
-    // const topColResponsiveProps = {
-    //   xs: 24,
-    //   sm: 12,
-    //   md: 12,
-    //   lg: 12,
-    //   xl: 6,
-    //   style: { marginBottom: 24 },
-    // };
-
+  
     return (
       <Fragment>
-        <Row style={{ minHeight: 400}}>
-          <Col md={24} xl={18}>
-            <Row gutter={16}  className={styles.boxAll}>
-              <Col span={6}>
-                <div className={styles.boxOne}>
-                  <img src="/img/totalsales.png" alt="" />
-                  <div className={styles.word}>
-                    <div className={styles.title}>总销售额</div>
-                    <div className={styles.price}>¥{statistics.sale_amount || 0}</div>
-                    <div className={`${styles.tip} ${styles.none}`}>1</div>
-                  </div>
-                </div>
+        <Card title={<div>待处理（个）<Tooltip overlayClassName={styles.txtLine} placement="topLeft" title={processed}><Icon type='question-circle' /></Tooltip></div>} >
+          <Row type="flex" justify="space-between">
+            <Col span={4} className={styles.txtCenter}>
+              <a href="#/order/list">
+                <div>普通待发货</div>
+                <div>{statistics.delivery_normal_order_num || 0}</div>
+              </a>
+            </Col>
+            <Col span={4} className={styles.txtCenter}>
+              <a href="#/order/group-list-online">
+                <div>拼团待发货</div>
+                <div>{statistics.delivery_group_order_num || 0}</div>
+              </a>
+            </Col>
+            <Col span={4} className={styles.txtCenter}>
+              <a href="#/finance/withdraw">
+                <div>待提现</div>
+                <div>{statistics.withdraw_order_num || 0}</div>
+              </a>
+            </Col>
+            <Col span={4} className={styles.txtCenter}>
+              <a href="#/community/certification">
+                <div>待认证</div>
+                {/* todo */}
+                <div>-</div>
+              </a>
+            </Col>
+            <Col span={4} className={styles.txtCenter}>
+              <a href="#/saled/refund">
+                <div>待退款</div>
+                <div>{statistics.withdraw_order_num || 0}</div>
+              </a>
+            </Col>
+          </Row>
+        </Card>
+        <div className={styles.twoCard}>
+          <Card className={styles.leftCard} type="inner" title={<div>今日概况<Tooltip overlayClassName={styles.txtLine} placement="topLeft" title={overview}><Icon type='question-circle' /></Tooltip></div>} >
+            <Row type="flex" justify="space-between">
+              <Col span={4} className={styles.txtCenter}>
+                <Fragment>
+                  <div>销售额（元）</div>
+                  <div>{statistics.today_sale_amount || 0}</div>
+                </Fragment>
               </Col>
-              <Col span={6}>
-                <div className={styles.boxTwo}>
-                  <img src="/img/salesvolume.png" alt="" />
-                  <div className={styles.word}>
-                    <div className={styles.title}>今日销售额</div>
-                    <div className={styles.price}>¥{statistics.today_sale_amount || 0}</div>
-                    <div className={`${styles.tip} ${styles.none}`} >1</div>
-                  </div>
-                </div>
+              <Col span={4} className={styles.txtCenter}>
+                <Fragment>
+                  <div>订单数</div>
+                  <div>{statistics.today_order || 0}</div>
+                </Fragment>
               </Col>
-              <Col span={6}>
-                <div className={styles.boxThree}>
-                  <img src="/img/order.png" alt="" />
-                  <div className={styles.word}>
-                    <div className={styles.title}>今日订单数</div>
-                    <div className={styles.price}>{statistics.today_order || 0}</div>
-                    <div className={styles.tip}>拼团：{statistics.today_group_order_num || 0} 普通：{statistics.today_normal_order_num || 0}</div>
-                  </div>
-                </div>
+              <Col span={4} className={styles.txtCenter}>
+                <Fragment>
+                  <div>佣金（元）</div>
+                  {/* todo */}
+                  <div>-</div>
+                </Fragment>
               </Col>
-              <Col span={6}>
-                <div className={styles.boxFour}>
-                  <img src="/img/pending.png" alt="" />
-                  <div className={styles.word}>
-                    <div className={styles.title}>待自提</div>
-                    <div className={styles.price}>{statistics.claim_group_order_num || 0}</div>
-                    <a href="#/order/group-list"><div className={styles.tip}>拼团：{statistics.claim_group_order_num || 0} 普通：0</div></a>
-                  </div>
-                </div>
-              </Col>
-              <Col span={6}>
-                <div className={styles.boxFive}>
-                  <img src="/img/tobedelivered.png" alt="" />
-                  <div className={styles.word}>
-                    <div className={styles.title}>待发货</div>
-                    <div className={styles.price}>{statistics.deliverys || 0}</div>
-                    <div className={styles.tip}>拼团：{statistics.delivery_group_order_num || 0} 普通：{statistics.delivery_normal_order_num || 0}</div>
-                  </div>
-                </div>
-              </Col>
-              <Col span={6}>
-                <a href="#/saled/refund">
-                  <div className={styles.boxSix}>
-                    <img src="/img/refund.png" alt="" />
-                    <div className={styles.word}>
-                      <div className={styles.title}>退款审核</div>
-                      <div className={styles.price}>{statistics.refund_order_num || 0}</div>
-                      <div className={`${styles.tip} ${styles.none}`} >1</div>
-                    </div>
-                  </div>
-                </a>
-              </Col>
-              <Col span={6}>
-                <a href="#/finance/withdraw">
-                  <div className={styles.boxSeven}>
-                    <img src="/img/review.png" alt="" />
-                    <div className={styles.word}>
-                      <div className={styles.title}>提现审核</div>
-                      <div className={styles.price}>{statistics.withdraw_order_num || 0}</div>
-                      <div className={`${styles.tip} ${styles.none}`} >1</div>
-                    </div>
-                  </div>
-                </a>
-              </Col>
-              <Col span={6}>
-                <a href="#/finance/withdraw">
-                  <div className={styles.boxSeven}>
-                    <img src="/img/review.png" alt="" />
-                    <div className={styles.word}>
-                      <div className={styles.title}>佣金总额</div>
-                      <div className={styles.price}>{statistics.commission_amount || 0}</div>
-                      <div className={`${styles.tip} ${styles.none}`} >1</div>
-                    </div>
-                  </div>
-                </a>
-              </Col>
-              <Col span={6}>
-                <a href="#/finance/withdraw">
-                  <div className={styles.boxSeven}>
-                    <img src="/img/review.png" alt="" />
-                    <div className={styles.word}>
-                      <div className={styles.title}>已提现金额</div>
-                      <div className={styles.price}>{statistics.commission_withdrawed || 0}</div>
-                      <div className={`${styles.tip} ${styles.none}`} >1</div>
-                    </div>
-                  </div>
-                </a>
-              </Col>
-              <Col span={6}>
-                <a href="#/finance/withdraw">
-                  <div className={styles.boxSeven}>
-                    <img src="/img/review.png" alt="" />
-                    <div className={styles.word}>
-                      <div className={styles.title}>用户账户佣金</div>
-                      <div className={styles.price}>{statistics.account_commission || 0}</div>
-                      <div className={`${styles.tip} ${styles.none}`} >1</div>
-                    </div>
-                  </div>
-                </a>
-              </Col>
-              <Col span={6}>
-                <a href="#/finance/withdraw">
-                  <div className={styles.boxSeven}>
-                    <img src="/img/review.png" alt="" />
-                    <div className={styles.word}>
-                      <div className={styles.title}>申请提现总金额</div>
-                      <div className={styles.price}>{statistics.applying_withdrawed || 0}</div>
-                      <div className={`${styles.tip} ${styles.none}`} >1</div>
-                    </div>
-                  </div>
-                </a>
+              <Col span={4} className={styles.txtCenter}>
+                <Fragment>
+                  <div>会员数</div>
+                  {/* todo */}
+                  <div>-</div>
+                </Fragment>
               </Col>
             </Row>
-          </Col>
-          <Col xl={6} md={24}>
-            {/* <div>折线表</div> */}
-          </Col>
-        </Row>
+          </Card>
+          <Card className={styles.rightCard} type="inner" title={<div>总概况<Tooltip overlayClassName={styles.txtLine} placement="topLeft" title={totalOverview}><Icon type='question-circle' /></Tooltip></div>} >
+            <Row type="flex" justify="space-between">
+              <Col span={4} className={styles.txtCenter}>
+                <Fragment>
+                  <div>总销售额（元）</div>
+                  <div>{statistics.sale_amount || 0}</div>
+                </Fragment>
+              </Col>
+              <Col span={4} className={styles.txtCenter}>
+                <Fragment>
+                  <div>总订单数</div>
+                  {/* todo */}
+                  <div>-</div>
+                </Fragment>
+              </Col>
+            </Row>
+          </Card>
+        </div>
+        <Card title={<div>佣金概况<Tooltip overlayClassName={styles.txtLine} placement="topLeft" title={commission}><Icon type='question-circle' /></Tooltip></div>} >
+          <Row type="flex" justify="space-between">
+            <Col span={4} className={styles.txtCenter}>
+              <a href="#/finance/account">
+                <div>佣金总额（元）</div>
+                <div>{statistics.commission_amount || 0}</div>
+              </a>
+            </Col>
+            <Col span={4} className={styles.txtCenter}>
+              <Fragment>
+                <div>已提现总额（元）</div>
+                <div>{statistics.commission_withdrawed || 0}</div>
+              </Fragment>
+            </Col>
+            <Col span={4} className={styles.txtCenter}>
+              <Fragment>
+                <div>申请中总额（元）</div>
+                <div>{statistics.applying_withdrawed || 0}</div>
+              </Fragment>
+            </Col>
+            <Col span={4} className={styles.txtCenter}>
+              <Fragment>
+                <div>佣金余额（元）</div>
+                {/* todo */}
+                <div>-</div>
+              </Fragment>
+            </Col>
+            <Col span={4} className={styles.txtCenter}>
+              <Fragment>
+                <div>已支付金额（元）</div>
+                <div>{statistics.withdraw_order_num || 0}</div>
+              </Fragment>
+            </Col>
+          </Row>
+        </Card>
+        <Card title={<div>会员概况</div>} style={{ marginTop: 20 }}>
+          <Row type="flex" justify="space-between">
+            <Col span={4} className={styles.txtCenter}>
+              <a href="#/front-users/front-user-list">
+                <div>会员总数</div>
+                {/* todo */}
+                <div>-</div>
+              </a>
+            </Col>
+            <Col span={4} className={styles.txtCenter}>
+              <Fragment>
+                <div>付费商户版会员数</div>
+                {/* todo */}
+                <div>-</div>
+              </Fragment>
+            </Col>
+            <Col span={4} className={styles.txtCenter}>
+              <Fragment>
+                <div>免费商户版会员数</div>
+                {/* todo */}
+                <div>-</div>
+              </Fragment>
+            </Col>
+            <Col span={4} className={styles.txtCenter}>
+              <Fragment>
+                <div>付费视群版会员数</div>
+                {/* todo */}
+                <div>-</div>
+              </Fragment>
+            </Col>
+            <Col span={4} className={styles.txtCenter}>
+              <Fragment>
+                <div>免费视群版会员数</div>
+                {/* todo */}
+                <div>-</div>
+              </Fragment>
+            </Col>
+          </Row>
+        </Card>
       </Fragment>
     );
   }

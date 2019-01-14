@@ -254,3 +254,34 @@
   min-height: 40px;
   margin-top: 10px;
 }
+
+.twoCard {
+  margin: 20px 0;
+  display: flex;
+  .leftCard {
+    margin-right: 20px;
+    flex-grow: 3;
+  }
+  .rightCard {
+    flex-grow: 2;
+  }
+}
+
+.txtCenter {
+  div {
+    text-align: center;
+  }
+}
+
+.txtLine {
+  max-width: none;
+  :global(.ant-tooltip-content) {
+    min-width: 300px;
+  }
+  :global(.ant-tooltip-inner) {
+    min-width: 300px;
+  }
+  div {
+    white-space:nowrap;
+  }
+}

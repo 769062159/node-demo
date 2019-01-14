@@ -9,7 +9,7 @@ import { urlToList } from '../utils/pathTools';
 const { Sider } = Layout;
 const { SubMenu } = Menu;
 const MyIcon = Icon.createFromIconfontCN({
-  scriptUrl: '//at.alicdn.com/t/font_971716_mgb2v32dzdg.js', // 在 iconfont.cn 上生成
+  scriptUrl: '//at.alicdn.com/t/font_971716_xg3zev8f8c.js', // 在 iconfont.cn 上生成
 });
 // Allow menu.js config icon as string or ReactNode
 //   icon: 'setting',

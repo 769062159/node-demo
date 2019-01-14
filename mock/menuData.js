@@ -217,6 +217,29 @@ export const menuData = [
     ],
   },
   {
+    name: '小视频',
+    icon: 'icon-shipin',
+    path: 'video',
+    children: [
+      {
+        name: '审核员列表',
+        path: 'auditor',
+      },
+      {
+        name: '待审核视频列表',
+        path: 'review',
+      },
+      {
+        name: '通过视频列表',
+        path: 'pass',
+      },
+      {
+        name: '不合格视频列表',
+        path: 'failed',
+      },
+    ],
+  },
+  {
     name: '我的',
     icon: 'icon-my-live',
     path: 'live',
@@ -229,18 +252,6 @@ export const menuData = [
         name: '课程编辑',
         path: 'class-list',
       },
-      // {
-      //   name: '社群编辑',
-      //   path: 'list',
-      // },
-      // {
-      //   name: '录播列表',
-      //   path: 'vod',
-      // },
-      // {
-      //   name: '视频列表',
-      //   path: 'video',
-      // },
     ],
   },
   {

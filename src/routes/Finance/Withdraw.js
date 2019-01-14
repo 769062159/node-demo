@@ -300,6 +300,12 @@ export default class Withdraw extends PureComponent {
         render: val => withdrawStatus[val],
       },
       {
+        title: '自动提现失败说明',
+        width: 120,
+        dataIndex: 'remark',
+        render: (val, record) => record.status === 2 ? (`${moment(record.auto_withdraw_time).format('YYYY-MM-DD HH:mm:ss')} ${record.auto_withdraw_error}`) : null,
+      },
+      {
         title: '操作',
         dataIndex: 'account_id',
         fixed: 'right',
