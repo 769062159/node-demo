@@ -410,7 +410,7 @@ export default class Withdraw extends PureComponent {
           <div className={styles.tableList}>
             <Table
               onChange={this.handleTableChange}
-              scroll={{ x: 1400 }}
+              scroll={{ x: '120%' }}
               dataSource={datas}
               rowKey={record => record.order_goods_sku_id}
               loading={loading}

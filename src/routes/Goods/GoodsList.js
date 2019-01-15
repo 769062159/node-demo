@@ -614,7 +614,7 @@ export default class GoodsList extends PureComponent {
             </div>
             <StandardTable
               rowKey={record => record.goods_id}
-              scroll={{ x: 1200 }}
+              scroll={{ x: '120%' }}
               selectedRows={selectedRows}
               loading={loading}
               data={data}

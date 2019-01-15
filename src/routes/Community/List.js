@@ -411,7 +411,7 @@ export default class ClassList extends PureComponent {
             </div> */}
             <StandardTable
               rowKey={record => record.id}
-              scroll={{ x: 1400 }}
+              scroll={{ x: '120%' }}
               selectedRows={false}
               loading={loading}
               data={data}

@@ -334,7 +334,7 @@ export default class Withdraw extends PureComponent {
           </Tag>
           <SearchForm handleFormReset={this.handleFormReset} handleSearch={this.handleSearch} />
           <Table
-            scroll={{ x: 1500 }}
+            scroll={{ x: '120%' }}
             onChange={this.handleTableChange}
             dataSource={datas}
             rowKey={record => record.id}
