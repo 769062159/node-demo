@@ -12,6 +12,7 @@ import {
   updatePower,
   updateCommssion,
 } from '../services/frontUser.js';
+import { updateMember, addMember } from '../services/video';
 
 export default {
   namespace: 'frontUser',
@@ -24,6 +25,26 @@ export default {
   },
 
   effects: {
+    *createMember({ payload, callback }, { call, put }) {
+      const res = yield call(addMember, payload);
+      if (res && res.code === 200) {
+        callback();
+        yield put({
+          type: 'updateMember',
+          payload,
+        });
+      }
+    },
+    *cancelOrPosition({ payload, callback }, { call, put }) {
+      const res = yield call(updateMember, payload);
+      if (res && res.code === 200) {
+        callback();
+        yield put({
+          type: 'updateMember',
+          payload,
+        });
+      }
+    },
     *updateCommssion({ payload, callback }, { call, put }) {
       const data = yield call(updateCommssion, { ...payload });
       if (data && data.code === 200) {
@@ -41,7 +62,6 @@ export default {
       }
     },
     *merchantSetting({ payload, callback }, { call, put }) {
-      console.log(payload);
       const data = yield call(merchantSetting, { ...payload });
       if (data && data.code === 200) {
         callback();
@@ -135,6 +155,21 @@ export default {
   },
 
   reducers: {
+    updateMember(state, { payload }) {
+      const { user_id: id, status } = payload;
+      let { frontUserList } = state;
+      frontUserList = frontUserList.map(res => {
+        if (res.id === id) {
+          res.is_auditor = 1;
+          res.auditor_status = status ? 1 : 0;
+        }
+        return res;
+      })
+      return {
+        ...state,
+        frontUserList,
+      }
+    },
     merchantSettings(state, { payload }) {
       let { frontUserList } = state;
       frontUserList = frontUserList.map(res => {

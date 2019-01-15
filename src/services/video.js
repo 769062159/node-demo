@@ -34,3 +34,21 @@ export async function videoList(params) {
     body: params,
   });
 }
+
+// 获取拒绝理由
+export async function getReasons() {
+  return request('/merchant/auditor/reject/reasons', {
+    method: 'POST',
+  });
+}
+
+// 更新视频
+// video_id 视频id
+// status  1 审核通过 2 审核拒绝
+// reason 原因
+export async function updateVideo(params) {
+  return request('/merchant/auditor/video/update', {
+    method: 'POST',
+    body: params,
+  });
+}

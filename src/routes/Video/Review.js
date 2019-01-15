@@ -1,12 +1,15 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'dva';
-import { Table, message, Modal, Divider } from 'antd';
+import { Table, message, Modal, Divider, Row, Col, Select } from 'antd';
 import moment from 'moment';
+import { Player } from 'video-react';
+import "video-react/dist/video-react.css";
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
 import styles from './Style.less';
 
 const { confirm } = Modal;
+const { Option } = Select;
 
 @connect(({ video, loading }) => ({
     video,
@@ -14,7 +17,11 @@ const { confirm } = Modal;
 }))
 export default class Review extends Component {
     state = {
+        videoUrl: '',
         page: 1,
+        videoId: '',
+        reasonVisibility: false,
+        reason: '',
     }
     componentDidMount() {
         const { dispatch } = this.props;
@@ -25,6 +32,9 @@ export default class Review extends Component {
             status: 0,
             page,
           },
+        });
+        dispatch({
+            type: 'video/getReasons',
         });
     }
 
@@ -43,23 +53,64 @@ export default class Review extends Component {
         });
     }
 
-    cancelOrPosition = (fakeid, status) => {
+    openReason = (id) => {
+        this.setState({
+            videoId: id,
+            reasonVisibility: true,
+        })
+    }
+
+    openOrCloseReason = () => {
+        this.setState({
+            reasonVisibility: !this.state.reasonVisibility,
+        })
+    }
+
+    refund = () => {
+        const { videoId, page, reason } = this.state;
+        const { dispatch } = this.props;
+        dispatch({
+          type: 'video/passOrTurnVideo',
+          payload: {
+            status: 2,
+            video_id: videoId,
+            reason,
+          },
+          callback: () => {
+              this.setState({
+                reasonVisibility: false,
+              })
+              message.success('设置成功');
+          },
+          refresh: {
+              page,
+              status: 0,
+          },
+        });
+    }
+
+    passOrTurnVideo = (fakeid, status) => {
         event.preventDefault();
+        const { page } = this.state;
         const { dispatch } = this.props;
         confirm({
-            content: '你确定修改这个吗？',
+            content: `你确定通过这个视频吗？`,
             okText: '确定',
             okType: 'danger',
             cancelText: '取消',
             onOk() {
                 dispatch({
-                    type: 'video/cancelOrPosition',
+                    type: 'video/passOrTurnVideo',
                     payload: {
-                        user_id: fakeid,
+                        video_id: fakeid,
                         status,
                     },
                     callback: () => {
                         message.success('设置成功');
+                    },
+                    refresh: {
+                        page,
+                        status: 0,
                     },
                 });
             },
@@ -69,8 +120,37 @@ export default class Review extends Component {
         });
     }
 
+    hanleRefund = (e) => {
+        this.setState({
+            reason: e,
+        })
+    }
+
+    openVideo = (videoUrl) => {
+        this.setState({
+            videoUrl,
+        })
+    }
+
+    handleCancelVideo = () => {
+        this.setState({
+            videoUrl: '',
+        })
+    }
+
     render() {
-        const { video: { videoList, videoListPage }, loading } = this.props;
+        const { video: { videoList, videoListPage, reasonList }, loading } = this.props;
+        const reasonListArr = [];
+        if (reasonList.length) {
+            reasonList.forEach((res, index) => {
+                reasonListArr.push(
+                  <Option value={index} key={index}>
+                    {res}
+                  </Option>
+                );
+              });
+        }
+        const { reasonVisibility, videoUrl } = this.state;
         const progressColumns = [
             {
                 title: '视频封面',
@@ -111,16 +191,16 @@ export default class Review extends Component {
                 key: 'do',
                 render: (val, record) => (
                   <Fragment>
-                      11
-                    {/* <a onClick={this.passOrTurnVideo.bind(this, record)}>通过</a>
+                    <a onClick={this.passOrTurnVideo.bind(this, record.id, 1)}>通过</a>
                     <Divider type="vertical" />
-                    <a onClick={this.passOrTurnVideo.bind(this, record)}>驳回</a>
+                    <a onClick={this.openReason.bind(this, record.id)}>驳回</a>
                     <Divider type="vertical" />
-                    <a onClick={this.openVideo.bind(this, record.video_url)}>播放</a> */}
+                    <a onClick={this.openVideo.bind(this, record.video_url)}>播放</a>
                   </Fragment>
                 ),
             },
         ];
+        const autoplay = true;
         return (
           <PageHeaderLayout>
             <Table
@@ -133,6 +213,26 @@ export default class Review extends Component {
               columns={progressColumns}
               pagination={videoListPage}
             />
+            <Modal visible={reasonVisibility} onOk={this.refund} onCancel={this.openOrCloseReason} destroyOnClose="true">
+              <Row>
+                <Col span={4}>
+                  原因：
+                </Col>
+                <Col span={4}>
+                  <Select placeholder="请选择" style={{ width: 200 }} onChange={this.hanleRefund}>
+                    {reasonListArr}
+                  </Select>
+                </Col>
+              </Row>
+            </Modal>
+            <div className={styles.modalItem} style={{display:(videoUrl) ? "block":"none"}}>
+              <img className={styles.closeItem} src='/img/close.png' onClick={this.handleCancelVideo} alt="关闭" />
+              <Player
+                autoPlay={autoplay}
+                playsInline
+                src={videoUrl}
+              />
+            </div>
           </PageHeaderLayout>
         )
     }

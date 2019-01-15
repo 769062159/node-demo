@@ -150,7 +150,7 @@ export default class Auditor extends Component {
                 dataIndex: 'audit_pass_num',
                 key: 'audit_pass_num',
                 render: (val, record) => {
-                    const num = val ? `${((val - record.audit_backend_pass_num) / val).toFixed(4) * 100}%` : '0%';
+                    const num = (val && record.audit_backend_pass_num) ? `${((val - record.audit_backend_pass_num) / val).toFixed(4) * 100}%` : '0%';
                     return num;
                 },
             },

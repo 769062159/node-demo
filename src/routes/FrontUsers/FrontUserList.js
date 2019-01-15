@@ -22,6 +22,7 @@ import MoneyForm from './MoneyForm';
 
 import styles from './TableList.less';
 
+const { confirm } = Modal;
 const FormItem = Form.Item;
 const { Option } = Select;
 const formItemLayout = {
@@ -316,6 +317,51 @@ export default class FrontUserList extends PureComponent {
       },
     });
   }
+
+  handleSetting = (fakeid, status) => {
+    const { dispatch } = this.props;
+    let statusTxt = '';
+    if (status) {
+      statusTxt = '设置';
+    } else {
+      statusTxt = '取消';
+    }
+    confirm({
+      content: `你确定${statusTxt}这个审核员吗？`,
+      okText: '确定',
+      okType: 'danger',
+      cancelText: '取消',
+      onOk() {
+        if (status === 3) {
+          dispatch({
+            type: 'frontUser/createMember',
+            payload: {
+              user_id: fakeid,
+              status,
+            },
+            callback: () => {
+                message.success('设置成功');
+            },
+          });
+        } else {
+          dispatch({
+            type: 'frontUser/cancelOrPosition',
+            payload: {
+              user_id: fakeid,
+              status,
+            },
+            callback: () => {
+                message.success('设置成功');
+            },
+        });
+        }
+      },
+      onCancel() {
+          console.log('Cancel');
+      },
+    });
+  }
+
   updateCommssion = (e) => {
     const moneyMsg = {
       id: e.id,
@@ -344,6 +390,7 @@ export default class FrontUserList extends PureComponent {
       },
     });
   }
+
   moneyCancel = () => {
     this.setState({
       isCommssion: false,
@@ -377,6 +424,7 @@ export default class FrontUserList extends PureComponent {
       </Form>
     );
   }
+
   renderEditForm() {
     const { loading, frontUser: { userRankList: datas } } = this.props;
     const levelItem = [];
@@ -415,6 +463,7 @@ export default class FrontUserList extends PureComponent {
       </Form>
     );
   }
+
   // 渲染修改还是新增
   renderForm() {
     const { type } = this.state;
@@ -624,6 +673,23 @@ export default class FrontUserList extends PureComponent {
             <a onClick={this.setMerchant.bind(this, record)}>设置版本</a>
             <Divider type="vertical" />
             <a onClick={this.updateCommssion.bind(this, record)}>更改佣金</a>
+            <Divider type="vertical" />
+            {
+              !record.is_auditor ? (
+                <a onClick={this.handleSetting.bind(this, record.id, 3)}>设置审核员</a>
+              ) : (!record.auditor_status) ? (
+                <a onClick={this.handleSetting.bind(this, record.id, 1)}>设置审核员</a>
+              ) : (
+                <a onClick={this.handleSetting.bind(this, record.id, 0)}>取消审核员</a>
+              )
+            }
+            {/* {
+              !record.auditor_status ? (
+                <a onClick={this.handleSetting.bind(this, record.id, 1)}>设置审核员</a>
+              ) : (
+                <a onClick={this.handleSetting.bind(this, record.id, 0)}>取消审核员</a>
+              )
+            } */}
           </Fragment>
         ),
       },

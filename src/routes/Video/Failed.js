@@ -1,19 +1,27 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { connect } from 'dva';
-import { Table, message, Modal } from 'antd';
+import { Table, message, Modal, Divider, Row, Col, Select } from 'antd';
+import moment from 'moment';
+import { Player } from 'video-react';
+import "video-react/dist/video-react.css";
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
 import styles from './Style.less';
 
 const { confirm } = Modal;
+const { Option } = Select;
 
 @connect(({ video, loading }) => ({
     video,
     loading: loading.models.video,
 }))
-export default class Failed extends Component {
+export default class Review extends Component {
     state = {
+        videoUrl: '',
         page: 1,
+        videoId: '',
+        reasonVisibility: false,
+        reason: '',
     }
     componentDidMount() {
         const { dispatch } = this.props;
@@ -24,6 +32,9 @@ export default class Failed extends Component {
             status: 2,
             page,
           },
+        });
+        dispatch({
+            type: 'video/getReasons',
         });
     }
 
@@ -42,23 +53,61 @@ export default class Failed extends Component {
         });
     }
 
-    cancelOrPosition = (fakeid, status) => {
+    openReason = (id) => {
+        this.setState({
+            videoId: id,
+            reasonVisibility: true,
+        })
+    }
+
+    openOrCloseReason = () => {
+        this.setState({
+            reasonVisibility: !this.state.reasonVisibility,
+        })
+    }
+
+    refund = () => {
+        const { videoId, page, reason } = this.state;
+        const { dispatch } = this.props;
+        dispatch({
+          type: 'video/passOrTurnVideo',
+          payload: {
+            status: 2,
+            video_id: videoId,
+            reason,
+          },
+          callback: () => {
+              message.success('设置成功');
+          },
+          refresh: {
+              page,
+              status: 2,
+          },
+        });
+    }
+
+    passOrTurnVideo = (fakeid, status) => {
         event.preventDefault();
+        const { page } = this.state;
         const { dispatch } = this.props;
         confirm({
-            content: '你确定修改这个吗？',
+            content: `你确定通过这个视频吗？`,
             okText: '确定',
             okType: 'danger',
             cancelText: '取消',
             onOk() {
                 dispatch({
-                    type: 'video/cancelOrPosition',
+                    type: 'video/passOrTurnVideo',
                     payload: {
-                        user_id: fakeid,
+                        video_id: fakeid,
                         status,
                     },
                     callback: () => {
                         message.success('设置成功');
+                    },
+                    refresh: {
+                        page,
+                        status: 2,
                     },
                 });
             },
@@ -68,13 +117,53 @@ export default class Failed extends Component {
         });
     }
 
+    hanleRefund = (e) => {
+        this.setState({
+            reason: e,
+        })
+    }
+
+    openVideo = (videoUrl) => {
+        this.setState({
+            videoUrl,
+        })
+    }
+
+    handleCancelVideo = () => {
+        this.setState({
+            videoUrl: '',
+        })
+    }
+
     render() {
-        const { video: { videoList, videoListPage }, loading } = this.props;
+        const { video: { videoList, videoListPage, reasonList }, loading } = this.props;
+        const reasonListArr = [];
+        if (reasonList.length) {
+            reasonList.forEach((res, index) => {
+                reasonListArr.push(
+                  <Option value={index} key={index}>
+                    {res}
+                  </Option>
+                );
+              });
+        }
+        const { reasonVisibility, videoUrl } = this.state;
         const progressColumns = [
             {
+                title: '视频封面',
+                dataIndex: 'cover',
+                key: 'cover',
+                render: val => (<img src={val} width={80} alt="视频封面" />),
+            },
+            {
+                title: '视频名称',
+                dataIndex: 'title',
+                key: 'title',
+            },
+            {
                 title: '会员',
-                dataIndex: 'nickname',
-                key: 'nickname',
+                dataIndex: 'user_nickname',
+                key: 'user_nickname',
                 render: (val, record) => {
                     return (
                       <div className={styles.userInfo}>
@@ -82,57 +171,86 @@ export default class Failed extends Component {
                         <div className={styles.userMsg}>
                           <span>昵称：{val}</span>
                           <span>id：{record.fakeid}</span>
-                          <span>手机号码：{record.mobile}</span>
                         </div>
                       </div>
                     );
                 },
             },
             {
-                title: '是否任职',
-                dataIndex: 'status',
-                key: 'status',
-                render: val => val ? '是' : '否',
-            },
-            {
-                title: '统计',
-                dataIndex: 'audit_num',
-                key: 'audit_num',
-                render: (val, record) => (
-                  <div>
-                    <div>审核次数：{val}</div>
-                    <div>通过：{record.audit_pass_num}</div>
-                    <div>驳回：{record.audit_reject_num}</div>
-                  </div>
-                ),
-            },
-            {
-                title: '二审结果',
-                dataIndex: 'audit_backend_pass_num',
-                key: 'audit_backend_pass_num',
-            },
-            {
-                title: '出错率',
-                dataIndex: 'audit_pass_num',
-                key: 'audit_pass_num',
+                title: '更新时间',
+                dataIndex: 'create_time',
+                key: 'create_time',
                 render: (val, record) => {
-                    const num = val ? `${((val - record.audit_backend_pass_num) / val).toFixed(4) * 100}%` : '0%';
-                    return num;
+                    const time = Math.max( val, record.backend_audit_time, record.audit_time);
+                    return (
+                        moment(time * 1000).format('YYYY-MM-DD HH:mm:ss')
+                    );
                 },
+            },
+            {
+                title: '一审审核员',
+                dataIndex: 'pendding',
+                key: 'pendding',
+                render: (val, record) => {
+                    let dom = null;
+                    if (val === 3 || val === 1) {
+                        dom = (
+                          <div className={styles.userInfo}>
+                            <img src={record.has_auditor_user.avatar} alt="头像" />
+                            <div className={styles.userMsg}>
+                              <span>昵称：{record.has_auditor_user.nickname}</span>
+                              <span>id：{record.has_auditor_user.fakeid}</span>
+                            </div>
+                          </div>
+                        );
+                    } else if (val === 2) {
+                        dom = (
+                          <div>
+                            后台
+                          </div>
+                        );
+                    }
+                    return dom;
+                },
+            },
+            {
+                title: '二审审核员',
+                dataIndex: 'penddings',
+                key: 'penddings',
+                render: (val, record) => {
+                    let dom = null;
+                    val = record.pendding;
+                    if (val === 1) {
+                        dom = (
+                          <div>
+                            后台
+                          </div>
+                        );
+                    }
+                    return dom;
+                },
+            },
+            {
+                title: '驳回原因',
+                dataIndex: 'auditor_reject_reason',
+                key: 'auditor_reject_reason',
             },
             {
                 title: '操作',
                 dataIndex: 'do',
                 key: 'do',
                 render: (val, record) => (
-                    record.status === 1 ? (
-                      <a onClick={this.cancelOrPosition.bind(this, record.fakeid, 0)}>取消任职</a>
-                    ) : (
-                      <a onClick={this.cancelOrPosition.bind(this, record.fakeid, 1)}>任职</a>
-                    )
+                  <Fragment>
+                    <a onClick={this.passOrTurnVideo.bind(this, record.id, 1)}>通过</a>
+                    {/* <Divider type="vertical" />
+                    <a onClick={this.openReason.bind(this, record.id)}>驳回</a> */}
+                    <Divider type="vertical" />
+                    <a onClick={this.openVideo.bind(this, record.video_url)}>播放</a>
+                  </Fragment>
                 ),
             },
         ];
+        const autoplay = true;
         return (
           <PageHeaderLayout>
             <Table
@@ -145,6 +263,26 @@ export default class Failed extends Component {
               columns={progressColumns}
               pagination={videoListPage}
             />
+            <Modal visible={reasonVisibility} onOk={this.refund} onCancel={this.openOrCloseReason} destroyOnClose="true">
+              <Row>
+                <Col span={4}>
+                  原因：
+                </Col>
+                <Col span={4}>
+                  <Select placeholder="请选择" style={{ width: 200 }} onChange={this.hanleRefund}>
+                    {reasonListArr}
+                  </Select>
+                </Col>
+              </Row>
+            </Modal>
+            <div className={styles.modalItem} style={{display:(videoUrl) ? "block":"none"}}>
+              <img className={styles.closeItem} src='/img/close.png' onClick={this.handleCancelVideo} alt="关闭" />
+              <Player
+                autoPlay={autoplay}
+                playsInline
+                src={videoUrl}
+              />
+            </div>
           </PageHeaderLayout>
         )
     }
