@@ -456,6 +456,13 @@ export default class FrontUserList extends PureComponent {
               )}
             </FormItem>
           </Col>
+          <Col md={8} sm={24}>
+            <FormItem label="手机号码">
+              {getFieldDecorator('mobile')(
+                <Input placeholder="请输入" />
+              )}
+            </FormItem>
+          </Col>
         </Row>
         <div style={{ overflow: 'hidden' }}>
           <span style={{ float: 'right', marginBottom: 24 }}>
