@@ -82,46 +82,46 @@ export default class Analysis extends Component {
           <div className={styles.txtCenter}>
             <div className={styles.txtTitle}>销售额（元）</div>
             <div className={styles.txtNumber}>{statistics.today_sale_amount || 0}</div>
-            <div className={`${styles.txtYesterday} ${styles.txtBottom}`}>昨日：{statistics.today_sale_amount || '-'}</div>
+            <div className={`${styles.txtYesterday} ${styles.txtBottom}`}>昨日：{statistics.yesterday_sale_amount || '0'}</div>
           </div>
           <div className={styles.txtCenter}>
             <div className={styles.txtTitle}>订单数</div>
-            <div className={styles.txtNumber}>{statistics.today_order || 0}</div>
+            <div className={styles.txtNumber}>{statistics.today_orders || '-'}</div>
             <div className={`${styles.txtYesterday} ${styles.txtBottom}`}>昨日：{statistics.today_order || '-'}</div>
           </div>
           <div  className={styles.txtCenter}>
             <div className={styles.txtTitle}>商品订单</div>
             {/* todo */}
-            <div className={styles.txtNumber}>{statistics.today_order || '-'}</div>
+            <div className={styles.txtNumber}>{statistics.today_orders || '-'}</div>
             <div className={`${styles.txtYesterday} ${styles.txtBottom}`}>昨日：{statistics.today_order || '-'}</div>
           </div>
           <div  className={styles.txtCenter}>
             <div className={styles.txtTitle}>商户版</div>
             {/* todo */}
-            <div className={styles.txtNumber}>{statistics.today_order || '-'}</div>
+            <div className={styles.txtNumber}>{statistics.today_orders || '-'}</div>
             <div className={`${styles.txtYesterday} ${styles.txtBottom}`}>昨日：{statistics.today_order || '-'}</div>
           </div>
           <div  className={styles.txtCenter}>
             <div className={styles.txtTitle}>视群版</div>
             {/* todo */}
-            <div className={styles.txtNumber}>{statistics.today_order || '-'}</div>
-            <div className={`${styles.txtYesterday} ${styles.txtBottom}`}>昨日：{statistics.today_order || '-'}</div>
+            <div className={styles.txtNumber}>{statistics.today_orders || '-'}</div>
+            <div className={`${styles.txtYesterday} ${styles.txtBottom}`}>昨日：{statistics.today_orders || '-'}</div>
           </div>
           <div  className={styles.txtCenter}>
             <div className={styles.txtTitle}>补差价升级</div>
             {/* todo */}
-            <div className={`${styles.txtNumber}`}>{statistics.today_order || '-'}</div>
-            <div className={`${styles.txtYesterday} ${styles.txtBottom}`}>昨日：{statistics.today_order || '-'}</div>
+            <div className={`${styles.txtNumber}`}>{statistics.today_orders || '-'}</div>
+            <div className={`${styles.txtYesterday} ${styles.txtBottom}`}>昨日：{statistics.today_orders || '-'}</div>
           </div>
           <div  className={styles.txtCenter}>
             <div className={styles.txtTitle}>佣金（元）</div>
             <div className={styles.txtNumber}>{statistics.today_commission || 0}</div>
-            <div className={`${styles.txtYesterday} ${styles.txtBottom}`}>昨日：{statistics.today_commission || '-'}</div>
+            <div className={`${styles.txtYesterday} ${styles.txtBottom}`}>昨日：{statistics.yesterday_commission || '0'}</div>
           </div>
           <div  className={styles.txtCenter}>
             <div className={styles.txtTitle}>会员数</div>
             <div className={styles.txtNumber}>{statistics.today_user_num || 0}</div>
-            <div className={`${styles.txtYesterday} ${styles.txtBottom}`}>昨日：{statistics.today_user_num || '-'}</div>
+            <div className={`${styles.txtYesterday} ${styles.txtBottom}`}>昨日：{statistics.yesterday_user_num || '0'}</div>
           </div>
         </div>
         <div className={styles.cardTitle}>
@@ -139,24 +139,24 @@ export default class Analysis extends Component {
           <div  className={styles.txtCenter}>
             <a href="#/front-users/front-user-list">
               <div className={styles.txtTitle}>会员总数</div>
-              <div className={`${styles.txtNumber} ${styles.txtBottom}`}>-</div>
+              <div className={`${styles.txtNumber} ${styles.txtBottom}`}>{statistics.member_account_count || 0}</div>
             </a>
           </div>
           <div  className={styles.txtCenter}>
             <div className={styles.txtTitle}>付费商户版会员数</div>
-            <div className={`${styles.txtNumber} ${styles.txtBottom}`}>-</div>
+            <div className={`${styles.txtNumber} ${styles.txtBottom}`}>{statistics.charge_merchant_account_count || 0}</div>
           </div>
           <div  className={styles.txtCenter}>
             <div className={styles.txtTitle}>免费商户版会员数</div>
-            <div className={`${styles.txtNumber} ${styles.txtBottom}`}>-</div>
+            <div className={`${styles.txtNumber} ${styles.txtBottom}`}>{statistics.free_merchant_account_count || 0}</div>
           </div>
           <div  className={styles.txtCenter}>
             <div className={styles.txtTitle}>付费视群版会员数</div>
-            <div className={`${styles.txtNumber} ${styles.txtBottom}`}>-</div>
+            <div className={`${styles.txtNumber} ${styles.txtBottom}`}>{statistics.charge_group_account_count || 0}</div>
           </div>
           <div  className={styles.txtCenter}>
             <div className={styles.txtTitle}>免费视群版会员数</div>
-            <div className={`${styles.txtNumber} ${styles.txtBottom}`}>-</div>
+            <div className={`${styles.txtNumber} ${styles.txtBottom}`}>{statistics.free_group_account_count || 0}</div>
           </div>
         </div>
         <div className={styles.cardTitle}>
