@@ -1,5 +1,6 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
+import { Player } from 'video-react';
 // import debounce from 'lodash/debounce';
 import moment from 'moment';
 // import copy from 'copy-to-clipboard';
@@ -16,6 +17,7 @@ import {
   Button,
   Divider,
 } from 'antd';
+import "video-react/dist/video-react.css";
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './TableList.less';
 
@@ -365,6 +367,7 @@ export default class Live extends PureComponent {
         ),
       },
     ];
+    const autoplay = true;
 
     return (
       <PageHeaderLayout>
@@ -387,7 +390,12 @@ export default class Live extends PureComponent {
           </div>
           <div className={styles.modalItem} style={{display:(videoUrl) ? "block":"none"}}>
             <img className={styles.closeItem} src='/img/close.png' onClick={this.handleCancelVideo} alt="关闭" />
-            <video className={styles.videoItems} src={videoUrl} controls><track kind="captions" /></video>
+            {/* <video className={styles.videoItems} src={videoUrl} controls><track kind="captions" /></video> */}
+            <Player
+              autoPlay={autoplay}
+              playsInline
+              src={videoUrl}
+            />
           </div>
           {/* <Modal visible={videoUrl} footer={null} width={300} bodyStyle={{ textAlign: 'center' }} onCancel={this.handleCancelVideo}>
             <video className={styles.videoItems} src={videoUrl} controls><track kind="captions" /></video>
