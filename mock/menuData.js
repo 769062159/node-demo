@@ -194,10 +194,10 @@ export const menuData = [
     icon: 'icon-zhibo',
     path: 'community',
     children: [
-      {
-        name: '视频列表',
-        path: 'small-video',
-      },
+      // {
+      //   name: '视频列表',
+      //   path: 'small-video',
+      // },
       {
         name: '课程列表',
         path: 'class-list',

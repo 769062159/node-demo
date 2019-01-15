@@ -119,9 +119,9 @@ export const getRouterConfig = app => {
     '/community/contract': {
       component: dynamicWrapper(app, ['protocol'], () => import('../routes/Community/Contract')),
     },
-    '/community/small-video': {
-      component: dynamicWrapper(app, ['live'], () => import('../routes/Community/SmallVideo')),
-    },
+    // '/community/small-video': {
+    //   component: dynamicWrapper(app, ['live'], () => import('../routes/Community/SmallVideo')),
+    // },
     '/community/small-video-add': {
       component: dynamicWrapper(app, ['live'], () => import('../routes/Community/SmallVideoAdd')),
     },

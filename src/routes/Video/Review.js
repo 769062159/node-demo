@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'dva';
-import { Table, message, Modal, Divider, Row, Col, Select } from 'antd';
+import { Table, message, Modal, Divider, Row, Col, Select, Card } from 'antd';
 import moment from 'moment';
 import { Player } from 'video-react';
 import "video-react/dist/video-react.css";
@@ -209,16 +209,18 @@ export default class Review extends Component {
         const autoplay = true;
         return (
           <PageHeaderLayout>
-            <Table
-              onChange={this.handleTableChange}  // 换页
-            //   className="components-table-demo-nested"
-              // expandedRowRender={record => <p style={{ margin: 0 }}>{record.description}</p>}
-              dataSource={videoList}
-              rowKey={record => record.id}
-              loading={loading}
-              columns={progressColumns}
-              pagination={videoListPage}
-            />
+            <Card bordered={false}>
+              <Table
+                onChange={this.handleTableChange}  // 换页
+                //   className="components-table-demo-nested"
+                // expandedRowRender={record => <p style={{ margin: 0 }}>{record.description}</p>}
+                dataSource={videoList}
+                rowKey={record => record.id}
+                loading={loading}
+                columns={progressColumns}
+                pagination={videoListPage}
+              />
+            </Card>
             <Modal visible={reasonVisibility} onOk={this.refund} onCancel={this.openOrCloseReason} destroyOnClose="true">
               <Row>
                 <Col span={4}>

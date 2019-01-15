@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'dva';
-import { Table, message, Modal, Button, Row, Col, Input } from 'antd';
+import { Table, message, Modal, Button, Row, Col, Input, Card } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
 import styles from './Style.less';
@@ -170,17 +170,19 @@ export default class Auditor extends Component {
         ];
         return (
           <PageHeaderLayout>
-            <Button type="primary" style={{ marginBottom: 20 }} onClick={this.openOrCloseModal}>新增</Button>
-            <Table
-              onChange={this.handleTableChange}  // 换页
-            //   className="components-table-demo-nested"
-              // expandedRowRender={record => <p style={{ margin: 0 }}>{record.description}</p>}
-              dataSource={memberList}
-              rowKey={record => record.id}
-              loading={loading}
-              columns={progressColumns}
-              pagination={memberListPage}
-            />
+            <Card bordered={false}>
+              <Button type="primary" style={{ marginBottom: 20 }} onClick={this.openOrCloseModal}>新增</Button>
+              <Table
+                onChange={this.handleTableChange}  // 换页
+                //   className="components-table-demo-nested"
+                // expandedRowRender={record => <p style={{ margin: 0 }}>{record.description}</p>}
+                dataSource={memberList}
+                rowKey={record => record.id}
+                loading={loading}
+                columns={progressColumns}
+                pagination={memberListPage}
+              />
+            </Card>
             <Modal visible={addVisibility} onOk={this.addMember} onCancel={this.openOrCloseModal} destroyOnClose="true">
               <Row>
                 <Col span={4}>
