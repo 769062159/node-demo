@@ -63,11 +63,16 @@ export default class Review extends Component {
     openOrCloseReason = () => {
         this.setState({
             reasonVisibility: !this.state.reasonVisibility,
+            reason: '',
         })
     }
 
     refund = () => {
         const { videoId, page, reason } = this.state;
+        if (!reason) {
+            message.error('请输入理由');
+            return false;
+        }
         const { dispatch } = this.props;
         dispatch({
           type: 'video/passOrTurnVideo',
@@ -77,6 +82,10 @@ export default class Review extends Component {
             reason,
           },
           callback: () => {
+              this.setState({
+                reasonVisibility: false,
+                reason: '',
+              })
               message.success('设置成功');
           },
           refresh: {
@@ -199,7 +208,7 @@ export default class Review extends Component {
                             <img src={record.has_auditor_user.avatar} alt="头像" />
                             <div className={styles.userMsg}>
                               <span>昵称：{record.has_auditor_user.nickname}</span>
-                              <span>id：{record.has_auditor_user.fakeid}</span>
+                              <span>id：{record.has_auditor_user.fake_id}</span>
                             </div>
                           </div>
                         );

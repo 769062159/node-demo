@@ -144,13 +144,14 @@ export default class Auditor extends Component {
                 title: '二审结果',
                 dataIndex: 'audit_backend_pass_num',
                 key: 'audit_backend_pass_num',
+                render: val => (`通过：${val}`),
             },
             {
                 title: '出错率',
                 dataIndex: 'audit_pass_num',
                 key: 'audit_pass_num',
                 render: (val, record) => {
-                    const num = (val && record.audit_backend_pass_num) ? `${((val - record.audit_backend_pass_num) / val).toFixed(4) * 100}%` : '0%';
+                    const num = (val && record.audit_backend_reject_num) ? `${((record.audit_backend_reject_num) / val * 100).toFixed(2)}%` : '0%';
                     return num;
                 },
             },

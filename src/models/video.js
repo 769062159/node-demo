@@ -98,7 +98,7 @@ export default {
               res.pendding = 1; // 二审过了,且一审是小程序
               res.has_auditor_user = res.has_auditor_user || {};
             } else if (res.backend_audit_time > res.audit_time && !res.audit_time) {
-              res.pendding = 2; // 一审过了,且一审是后台
+              res.pendding = 2; // 一审过了,且一审是后台 暂无一审二审都是后台
             } else if (res.audit_time && !res.backend_audit_time) {
               res.pendding = 3; // 一审过了,且一审是小程序
               res.has_auditor_user = res.has_auditor_user || {};

@@ -63,11 +63,16 @@ export default class Review extends Component {
     openOrCloseReason = () => {
         this.setState({
             reasonVisibility: !this.state.reasonVisibility,
+            reason: '',
         })
     }
 
     refund = () => {
         const { videoId, page, reason } = this.state;
+        if (!reason) {
+            message.error('请输入理由');
+            return false;
+        }
         const { dispatch } = this.props;
         dispatch({
           type: 'video/passOrTurnVideo',
@@ -79,6 +84,7 @@ export default class Review extends Component {
           callback: () => {
               this.setState({
                 reasonVisibility: false,
+                reason: '',
               })
               message.success('设置成功');
           },
