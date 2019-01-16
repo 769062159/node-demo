@@ -381,8 +381,13 @@ export default class Live extends PureComponent {
     });
   };
   copyBtn = val => {
-    copy(val);
-    message.success('成功复制到剪贴板');
+    if (val) {
+      if (copy(val)) {
+        message.success('成功复制到剪贴板');
+      }
+    } else {
+      message.error('推流地址正在生成中');
+    }
   };
 
   // 修改表单值
