@@ -31,6 +31,7 @@ export default {
           payload: {
             id: payload.account_id,
             is_show_live: payload.is_show_live,
+            payType: payload.pay_type,
           },
         });
       }
@@ -100,7 +101,11 @@ export default {
   reducers: {
     updatePrograms(state, { payload }) {
       const { programDetail } = state;
-      programDetail.is_show_live = payload.is_show_live;
+      if (payload.payType) {
+        programDetail.pay_type = payload.payType;
+      } else {
+        programDetail.is_show_live = payload.is_show_live;
+      }
       return {
         ...state,
         programDetail,

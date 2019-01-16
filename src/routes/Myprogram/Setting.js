@@ -1,10 +1,11 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
-import { Form, Button, Table, Modal, Input, Row, Col, Tag, Switch, message } from 'antd';
+import { Form, Button, Table, Modal, Input, Row, Col, Tag, Switch, message, Select } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import UploadFile from '../../components/UploadFile';
 import styles from './Style.less';
 
+const { Option } = Select;
 const FormItem = Form.Item;
 const formItemLayout = {
   labelCol: {
@@ -98,6 +99,20 @@ export default class Setting extends PureComponent {
       mcid: programDetail.merchant_id,
       key: programDetail.key,
       is_show_live: Number(e),
+    };
+    dispatch({
+      type: 'program/updateProgram',
+      payload: data,
+      callback: () => {
+        message.success('设置成功');
+      },
+    });
+  }
+  handlePay = (e) => {
+    const { dispatch, program: { programDetail } } = this.props;
+    const data = {
+      account_id: programDetail.id,
+      pay_type: Number(e),
     };
     dispatch({
       type: 'program/updateProgram',
@@ -290,7 +305,17 @@ export default class Setting extends PureComponent {
                   />
                 </Col>
               </Fragment>
-            ) : null
+            ) : (
+              <Fragment>
+                <Col span={4} style={{ marginTop: 10 }}>支付方式</Col>
+                <Col span={20} style={{ marginTop: 10 }}>
+                  <Select onChange={this.handlePay} style={{ width: 200 }} value={programDetail.pay_type}>
+                    <Option value={1} key={1}>微信支付</Option>
+                    <Option value={3} key={3}>钱尔通支付</Option>
+                  </Select>
+                </Col>
+              </Fragment>
+            )
           }
           <Col span={4} style={{ marginTop: 10 }}>是否显示视群</Col>
           <Col span={20} style={{ marginTop: 10 }}>
