@@ -110,13 +110,35 @@ export default class Setting extends PureComponent {
   }
   handlePay = (e) => {
     const { dispatch, program: { programDetail } } = this.props;
-    const data = {
-      account_id: programDetail.id,
-      pay_type: Number(e),
-    };
     dispatch({
-      type: 'program/updateProgram',
-      payload: data,
+      type: 'program/updateProgramss',
+      id: programDetail.id,
+      key: 'pay_type',
+      value: Number(e),
+      callback: () => {
+        message.success('设置成功');
+      },
+    });
+  }
+  handleVersion = (e) => {
+    const { dispatch, program: { programDetail } } = this.props;
+    dispatch({
+      type: 'program/updateProgramss',
+      id: programDetail.id,
+      key: 'config_version',
+      value: Number(e),
+      callback: () => {
+        message.success('设置成功');
+      },
+    });
+  }
+  handleJump = (e) => {
+    const { dispatch, program: { programDetail } } = this.props;
+    dispatch({
+      type: 'program/updateProgramss',
+      id: programDetail.id,
+      key: 'config_jump_account',
+      value: Number(e),
       callback: () => {
         message.success('设置成功');
       },
@@ -317,10 +339,31 @@ export default class Setting extends PureComponent {
               </Fragment>
             )
           }
-          <Col span={4} style={{ marginTop: 10 }}>是否显示视群</Col>
+          <Col span={4} style={{ marginTop: 10 }}>跳转版本</Col>
+          <Col span={20} style={{ marginTop: 10 }}>
+            <Select onChange={this.handleVersion} style={{ width: 200 }} value={programDetail.config_version}>
+              <Option value={0} key={0}>通用版</Option>
+              <Option value={1} key={1}>跳转版</Option>
+              <Option value={2} key={2}>隐藏版</Option>
+            </Select>
+          </Col>
+          {
+            programDetail.config_version === 1 ? (
+              <Fragment>
+                <Col span={4} style={{ marginTop: 10 }}>跳转版本</Col>
+                <Col span={20} style={{ marginTop: 10 }}>
+                  <Select onChange={this.handleJump} style={{ width: 200 }} value={programDetail.config_jump_account}>
+                    <Option value={0} key={0}>全球视群</Option>
+                    <Option value={1} key={1}>百万视群</Option>
+                  </Select>
+                </Col>
+              </Fragment>
+            ) : null
+          }
+          {/* <Col span={4} style={{ marginTop: 10 }}>是否显示视群</Col>
           <Col span={20} style={{ marginTop: 10 }}>
             <Switch checkedChildren="开" onChange={this.changeShow} unCheckedChildren="关" checked={!!programDetail.is_show_live} />
-          </Col>
+          </Col> */}
         </Row>
         <Modal
           title={modalTitle}

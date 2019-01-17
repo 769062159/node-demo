@@ -22,6 +22,22 @@ export default {
   },
 
   effects: {
+    *updateProgramss({ value, callback, key, id }, { call, put }) {
+      const payload = {};
+      payload[key] = value;
+      payload.account_id = id;
+      const response = yield call(updateProgram, payload);
+      if (response && response.code === 200) {
+        callback();
+        yield put({
+          type: 'updateKeyProgram',
+          payload: {
+            key,
+            value,
+          },
+        });
+      }
+    },
     *updateProgram({ payload, callback }, { call, put }) {
       const response = yield call(updateProgram, { ...payload });
       if (response && response.code === 200) {
@@ -99,6 +115,14 @@ export default {
   },
 
   reducers: {
+    updateKeyProgram(state, { payload }) {
+      const { programDetail } = state;
+      programDetail[payload.key] = payload.value;
+      return {
+        ...state,
+        programDetail,
+      };
+    },
     updatePrograms(state, { payload }) {
       const { programDetail } = state;
       if (payload.payType) {
