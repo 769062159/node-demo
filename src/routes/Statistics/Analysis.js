@@ -86,32 +86,29 @@ export default class Analysis extends Component {
           </div>
           <div className={styles.txtCenter}>
             <div className={styles.txtTitle}>订单数</div>
-            <div className={styles.txtNumber}>{statistics.today_orders || '-'}</div>
-            <div className={`${styles.txtYesterday} ${styles.txtBottom}`}>昨日：{statistics.today_order || '-'}</div>
+            <div className={styles.txtNumber}>{statistics.today_order_num || '0'}</div>
+            <div className={`${styles.txtYesterday} ${styles.txtBottom}`}>昨日：{statistics.yesterday_order_num || '0'}</div>
           </div>
           <div  className={styles.txtCenter}>
             <div className={styles.txtTitle}>商品订单</div>
-            {/* todo */}
-            <div className={styles.txtNumber}>{statistics.today_orders || '-'}</div>
-            <div className={`${styles.txtYesterday} ${styles.txtBottom}`}>昨日：{statistics.today_order || '-'}</div>
+            <div className={styles.txtNumber}>{statistics.today_goods_order_num || '0'}</div>
+            <div className={`${styles.txtYesterday} ${styles.txtBottom}`}>昨日：{statistics.yesterday_goods_order_num || '0'}</div>
           </div>
           <div  className={styles.txtCenter}>
             <div className={styles.txtTitle}>商户版</div>
-            {/* todo */}
-            <div className={styles.txtNumber}>{statistics.today_orders || '-'}</div>
-            <div className={`${styles.txtYesterday} ${styles.txtBottom}`}>昨日：{statistics.today_order || '-'}</div>
+            <div className={styles.txtNumber}>{statistics.today_merchant_order_num || '0'}</div>
+            <div className={`${styles.txtYesterday} ${styles.txtBottom}`}>昨日：{statistics.yesterday_merchant_order_num || '0'}</div>
           </div>
           <div  className={styles.txtCenter}>
             <div className={styles.txtTitle}>视群版</div>
-            {/* todo */}
-            <div className={styles.txtNumber}>{statistics.today_orders || '-'}</div>
-            <div className={`${styles.txtYesterday} ${styles.txtBottom}`}>昨日：{statistics.today_orders || '-'}</div>
+            <div className={styles.txtNumber}>{statistics.today_group_order_num || '0'}</div>
+            <div className={`${styles.txtYesterday} ${styles.txtBottom}`}>昨日：{statistics.yesterday_group_order_num || '0'}</div>
           </div>
           <div  className={styles.txtCenter}>
             <div className={styles.txtTitle}>补差价升级</div>
             {/* todo */}
-            <div className={`${styles.txtNumber}`}>{statistics.today_orders || '-'}</div>
-            <div className={`${styles.txtYesterday} ${styles.txtBottom}`}>昨日：{statistics.today_orders || '-'}</div>
+            <div className={`${styles.txtNumber}`}>{statistics.today_supplement_order_num || '0'}</div>
+            <div className={`${styles.txtYesterday} ${styles.txtBottom}`}>昨日：{statistics.yesterday_supplement_order_num || '0'}</div>
           </div>
           <div  className={styles.txtCenter}>
             <div className={styles.txtTitle}>佣金（元）</div>

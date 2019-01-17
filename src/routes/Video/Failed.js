@@ -69,7 +69,7 @@ export default class Review extends Component {
 
     refund = () => {
         const { videoId, page, reason } = this.state;
-        if (!reason) {
+        if (reason === '') {
             message.error('请输入理由');
             return false;
         }

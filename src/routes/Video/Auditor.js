@@ -144,7 +144,12 @@ export default class Auditor extends Component {
                 title: '二审结果',
                 dataIndex: 'audit_backend_pass_num',
                 key: 'audit_backend_pass_num',
-                render: val => (`通过：${val}`),
+                render: (val, record) => (
+                  <div>
+                    <div>通过：{val}</div>
+                    <div>驳回：{record.audit_backend_reject_num}</div>
+                  </div>
+                ),
             },
             {
                 title: '出错率',
