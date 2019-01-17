@@ -17,7 +17,9 @@ export default {
     hasApplets: true,
     programList: [],
     authorizationUrl: '',
-    programDetail: {},
+    programDetail: {
+      config_jump_account: 0,
+    },
     wxOpen: '',
   },
 
