@@ -197,6 +197,10 @@ export default class Certification extends PureComponent {
         values.page = page;
         values.status = type;
         values.verify_id = editData.id;
+        if (!values.verify_id) {
+          message.success('请关闭后重新设置');
+          return false;
+        }
         console.log(values);
         dispatch({
           type: 'protocol/updateVerify',

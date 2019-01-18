@@ -367,6 +367,7 @@ export default class Live extends PureComponent {
         ),
       },
     ];
+    const autoplay = true;
 
     return (
       <PageHeaderLayout>
@@ -389,6 +390,7 @@ export default class Live extends PureComponent {
           </div>
           <div className={styles.modalItem} style={{display:(videoUrl) ? "block":"none"}}>
             <img className={styles.closeItem} src='/img/close.png' onClick={this.handleCancelVideo} alt="关闭" />
+            {/* <video className={styles.videoItems} src={videoUrl} controls><track kind="captions" /></video> */}
             <Player
               autoPlay={autoplay}
               playsInline

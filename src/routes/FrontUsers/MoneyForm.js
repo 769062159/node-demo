@@ -39,6 +39,13 @@ class TypeForm extends Component {
         style={{ marginTop: 8 }}
         autoComplete="OFF"
       >
+        <FormItem
+          {...formItemLayout}
+          label="避免表单自动填充"
+          style={{ position: 'absolute', top: '-999px' }}
+        >
+          {getFieldDecorator('xx', {})(<Input type="password" />)}
+        </FormItem>
         <FormItem {...formItemLayout} label="会员名字">
           {name}
         </FormItem>
@@ -80,6 +87,16 @@ class TypeForm extends Component {
               },
             ],
           })(<Input />)}
+        </FormItem>
+        <FormItem {...formItemLayout} label="操作密码">
+          {getFieldDecorator('password', {
+            rules: [
+              {
+                required: true,
+                message: '请输入操作密码',
+              },
+            ],
+          })(<Input type="password" autoComplete="off"  />)}
         </FormItem>
         <FormItem style={{ marginTop: 32 }} {...formSubmitLayout}>
           <Button type="primary" htmlType="submit" >
