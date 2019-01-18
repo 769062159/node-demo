@@ -1,6 +1,6 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
-import { Form, Button, Table, Modal, Input, Row, Col, Tag, Switch, message, Select } from 'antd';
+import { Form, Button, Table, Modal, Input, Row, Col, Tag, message, Select } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import UploadFile from '../../components/UploadFile';
 import styles from './Style.less';
@@ -109,36 +109,64 @@ export default class Setting extends PureComponent {
     });
   }
   handlePay = (e) => {
-    const { dispatch, program: { programDetail } } = this.props;
+    const { dispatch } = this.props;
     dispatch({
-      type: 'program/updateProgramss',
-      id: programDetail.id,
-      key: 'pay_type',
-      value: Number(e),
-      callback: () => {
-        message.success('设置成功');
+      type: 'program/updateKeyProgram',
+      // id: programDetail.id,
+      // key: 'pay_type',
+      // value: Number(e),
+      payload: {
+        key: 'pay_type',
+        value: Number(e),
       },
+      // callback: () => {
+      //   message.success('设置成功');
+      // },
     });
   }
   handleVersion = (e) => {
-    const { dispatch, program: { programDetail } } = this.props;
+    const { dispatch } = this.props;
     dispatch({
-      type: 'program/updateProgramss',
-      id: programDetail.id,
-      key: 'config_version',
-      value: Number(e),
-      callback: () => {
-        message.success('设置成功');
+      type: 'program/updateKeyProgram',
+      // id: programDetail.id,
+      // key: 'config_version',
+      // value: Number(e),
+      payload: {
+        key: 'config_version',
+        value: Number(e),
       },
+      // callback: () => {
+      //   message.success('设置成功');
+      // },
     });
   }
   handleJump = (e) => {
-    const { dispatch, program: { programDetail } } = this.props;
+    const { dispatch } = this.props;
     dispatch({
-      type: 'program/updateProgramss',
-      id: programDetail.id,
-      key: 'config_jump_account',
-      value: Number(e),
+      type: 'program/updateKeyProgram',
+      payload: {
+        key: 'config_jump_account',
+        value: Number(e),
+      },
+      // id: programDetail.id,
+      // key: 'config_jump_account',
+      // value: Number(e),
+      // callback: () => {
+      //   message.success('设置成功');
+      // },
+    });
+  }
+  saveProgram = () => {
+    const { dispatch, program: { programDetail } } = this.props;
+    const payload = {
+      account_id: programDetail.id,
+      config_jump_account: programDetail.config_jump_account,
+      config_version: programDetail.config_version,
+      pay_type: programDetail.pay_type,
+    }
+    dispatch({
+      type: 'program/saveProgram',
+      payload,
       callback: () => {
         message.success('设置成功');
       },
@@ -360,6 +388,9 @@ export default class Setting extends PureComponent {
               </Fragment>
             ) : null
           }
+          <Col span={20} offset={4} style={{ marginTop: 10 }}>
+            <Button type="primary" onClick={this.saveProgram}>保存</Button>
+          </Col>
           {/* <Col span={4} style={{ marginTop: 10 }}>是否显示视群</Col>
           <Col span={20} style={{ marginTop: 10 }}>
             <Switch checkedChildren="开" onChange={this.changeShow} unCheckedChildren="关" checked={!!programDetail.is_show_live} />

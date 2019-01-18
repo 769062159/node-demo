@@ -24,6 +24,12 @@ export default {
   },
 
   effects: {
+    *saveProgram({ payload, callback }, { call }) {
+      const response = yield call(updateProgram, payload);
+      if (response && response.code === 200) {
+        callback();
+      }
+    },
     *updateProgramss({ value, callback, key, id }, { call, put }) {
       const payload = {};
       payload[key] = value;
