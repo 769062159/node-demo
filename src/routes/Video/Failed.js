@@ -198,11 +198,11 @@ export default class Review extends Component {
             },
             {
                 title: '一审审核员',
-                dataIndex: 'pendding',
-                key: 'pendding',
+                dataIndex: 'pending',
+                key: 'pending',
                 render: (val, record) => {
                     let dom = null;
-                    if (val === 3 || val === 1) {
+                    if (val && record.has_auditor_user.fake_id) {
                         dom = (
                           <div className={styles.userInfo}>
                             <img src={record.has_auditor_user.avatar} alt="头像" />
@@ -212,24 +212,18 @@ export default class Review extends Component {
                             </div>
                           </div>
                         );
-                    } else if (val === 2) {
-                        dom = (
-                          <div>
-                            后台
-                          </div>
-                        );
                     }
                     return dom;
                 },
             },
             {
                 title: '二审审核员',
-                dataIndex: 'penddings',
-                key: 'penddings',
+                dataIndex: 'pendings',
+                key: 'pendings',
                 render: (val, record) => {
                     let dom = null;
-                    val = record.pendding;
-                    if (val === 1) {
+                    val = record.pending;
+                    if (val === 2) {
                         dom = (
                           <div>
                             后台

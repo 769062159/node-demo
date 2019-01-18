@@ -93,15 +93,13 @@ export default {
         list = list.map(res => {
           if (status === 1 || status === 2) {
             if (!res.audit_time && !res.backend_audit_time) {
-              res.pendding = 0; // 未审核
-            } else if (res.backend_audit_time > res.audit_time && res.audit_time) {
-              res.pendding = 1; // 二审过了,且一审是小程序
+              res.pending = 0; // 未审核
+            } else if (res.backend_audit_time) {
+              res.pending = 2; // 二审过了
               res.has_auditor_user = res.has_auditor_user || {};
-            } else if (res.backend_audit_time > res.audit_time && !res.audit_time) {
-              res.pendding = 2; // 一审过了,且一审是后台 暂无一审二审都是后台
-            } else if (res.audit_time && !res.backend_audit_time) {
-              res.pendding = 3; // 一审过了,且一审是小程序
+            } else if (res.audit_time) {
               res.has_auditor_user = res.has_auditor_user || {};
+              res.pending = 1; // 一审过了
             }
           }
           res.has_user = res.has_user || {};
