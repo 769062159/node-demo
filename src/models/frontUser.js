@@ -121,21 +121,27 @@ export default {
         payload: response,
       });
     },
-    *updateUpLevel({ payload }, { call, put }) {
-      yield call(updateUpLevel, { ...payload });
-      const response = yield call(getFrontUserList, { page: payload.page });
-      yield put({
-        type: 'getFrontUserList',
-        payload: response,
-      });
+    *updateUpLevel({ payload, callback }, { call, put }) {
+      const res = yield call(updateUpLevel, { ...payload });
+      if (res && res.code === 200) {
+        callback();
+        const response = yield call(getFrontUserList, { page: payload.page });
+        yield put({
+          type: 'getFrontUserList',
+          payload: response,
+        });
+      }
     },
-    *updateMemberLevel({ payload }, { call, put }) {
-      yield call(updateMemberLevel, { ...payload });
-      const response = yield call(getFrontUserList, { page: payload.page });
-      yield put({
-        type: 'getFrontUserList',
-        payload: response,
-      });
+    *updateMemberLevel({ payload, callback }, { call, put }) {
+      const res = yield call(updateMemberLevel, { ...payload });
+      if (res && res.code === 200) {
+        callback();
+        const response = yield call(getFrontUserList, { page: payload.page });
+        yield put({
+          type: 'getFrontUserList',
+          payload: response,
+        });
+      }
     },
     *delUserRank({ payload }, { call, put }) {
       yield call(delUserRank, { ...payload });

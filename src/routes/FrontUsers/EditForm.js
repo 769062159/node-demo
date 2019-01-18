@@ -39,16 +39,21 @@ class TypeForm extends Component {
           dispatch({
             type: 'frontUser/updateUpLevel',
             payload: values,
+            callback: () => {
+              message.success('修改成功');
+              handAddleCancel();
+            },
           });
         } else {
           dispatch({
             type: 'frontUser/updateMemberLevel',
             payload: values,
+            callback: () => {
+              message.success('修改成功');
+              handAddleCancel();
+            },
           });
         }
-        message.success('修改成功');
-        // this.handAddleCancel();
-        handAddleCancel();
       }
     });
   };
