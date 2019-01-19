@@ -354,7 +354,7 @@ export default class Withdraw extends PureComponent {
       {
         title: '返利时间',
         dataIndex: 'profit_time',
-        render: val => (val ? <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span> : '未返利'),
+        render: val => (val ? <span>{moment(val * 1000).format('YYYY-MM-DD HH:mm:ss')}</span> : '未返利'),
       },
       {
         title: '退款类型',
