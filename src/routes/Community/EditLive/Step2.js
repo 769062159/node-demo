@@ -1352,7 +1352,6 @@ class EditLiveStep2 extends React.PureComponent {
       onSelect: this.smallvideoSelect,
       onSelectAll: this.smallvideoSelectAll,
     };
-
     return (
       <div>
         <CustomizedForm

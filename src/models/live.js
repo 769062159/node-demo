@@ -285,10 +285,11 @@ export default {
       }
     },
     *fetchVod({ payload }, { call, put }) {
-      const response = yield call(getVod, { page: payload.pagination });
+      const response = yield call(getVod, { page: payload.pagination, 'per-page': 18 });
       yield put({
         type: 'getVod',
         payload: response,
+        current: payload.pagination,
       });
     },
     *fetchLive({ payload }, { call, put }) {
