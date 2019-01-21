@@ -489,7 +489,6 @@ class EditLiveStep2 extends React.PureComponent {
     obj.live_details = {
       value: e,
     };
-    console.log(e);
     this.changeFormVal(obj);
   }
 

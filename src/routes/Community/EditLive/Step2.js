@@ -490,10 +490,12 @@ class EditLiveStep2 extends React.PureComponent {
    // 添加描述
    setDescription = (e) => {
     const obj = {};
+    e = e.replace(/&nbsp;/, "" );
+    e = e.replace(/<br>/, "" );
+    console.log('2121', e);
     obj.live_details = {
       value: e,
     };
-    console.log(e);
     this.changeFormVal(obj);
   }
 

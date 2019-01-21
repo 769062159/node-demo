@@ -41,11 +41,12 @@ export default class Wangeditor extends PureComponent {
       // Lang
       html = html.replace(/<(\w[^>]*) lang=([^ |>]*)([^>]*)/gi, "<$1$3") ;
       // XML元素及声明
-      html = html.replace(/<\\?\?xml[^>]*>/gi, "") ;
+      html = html.replace(/<\\?\?xml[^>]*>/gi, "");
+      html = html.replace(/<\/?font[^>]*>/gi,""); 
       // 带XML名称空间声明: <o:p></o:p>
       html = html.replace(/<\/?\w+:[^>]*>/gi, "") ;
       // 替换&nbsp;
-      html = html.replace(/&nbsp;/, " " );
+      html = html.replace(/&nbsp;/, "" );
       // 将<P>换成<DIV>
       html = html.replace( re, "<div$2</div>" ) ;
       html = html.replace(/(<T[RD])(\s*)(HEIGHT=[\"\']?\d+[\"\']?)/gi, "$1");
