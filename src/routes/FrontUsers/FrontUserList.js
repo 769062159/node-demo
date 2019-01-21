@@ -666,7 +666,7 @@ export default class FrontUserList extends PureComponent {
       {
         title: '操作',
         fixed: 'right',
-        width: 150,
+        width: 190,
         render: record => (
           <Fragment>
             <a onClick={this.editDataMsg.bind(this, record.id, 2)}>设置等级</a>
