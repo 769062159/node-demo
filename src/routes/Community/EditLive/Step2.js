@@ -3,7 +3,7 @@ import { connect } from 'dva';
 import { Form, Button, Input, Select, Upload, Icon, Modal, Tag, message, Table, InputNumber, Row, Col, Pagination, Checkbox, Progress } from 'antd';
 // import { Form, Button, Input, Upload, Icon, Modal, Tag, message } from 'antd';
 // import LiveGoodTable from '../../../components/LiveGoodTable';
-import Wangeditor from '../../../components/Wangeditor';
+import ReactEditor from 'components/ReactEditor';
 import { uploadJSSDK, base64ToFile } from '../../../utils/utils';
 import { UPLOAD_TYPE } from '../../../utils/config';
 // import { env } from '../../../utils/config';
@@ -251,9 +251,9 @@ const CustomizedForm = Form.create({
           详情 :
         </Col>
         <Col span={15}>
-          <Wangeditor
-            detail={liveForm.live_detail}
-            header={header}
+          <ReactEditor
+            uploadUrl={uploadUrl}
+            valueSon={liveForm.live_detail}
             setDescription={setDescription}
           />
         </Col>
