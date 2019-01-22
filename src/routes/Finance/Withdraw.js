@@ -308,7 +308,6 @@ export default class Withdraw extends PureComponent {
       {
         title: '操作',
         dataIndex: 'account_id',
-        fixed: 'right',
         width: 150,
         render: (text, record) =>
         record.status === 0 ? (
