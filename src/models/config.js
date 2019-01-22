@@ -7,7 +7,7 @@ export default {
     list: [],
     config: {
       mobile: '',
-      video_audio: 0,
+      video_audio: false,
     },
   },
 
@@ -53,6 +53,7 @@ export default {
     },
     getConfig(state, { payload }) {
       const { data } = payload;
+      data.video_audio =  Boolean(data.video_audio);
       return {
         ...state,
         config: data,

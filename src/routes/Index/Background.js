@@ -53,7 +53,7 @@ export default class Phone extends PureComponent {
       if (!err) {
         const { dispatch } = this.props;
         value.mobile = value.mobile.toString();
-        value.video_audio = Number(value.video_audio);
+        value.video_audio = Number(value.video_audio) ;
         dispatch({
           type: 'config/addConfig',
           payload: value,
@@ -74,6 +74,7 @@ export default class Phone extends PureComponent {
   render() {
     const { loading, form, config: { config } } = this.props;
     const { getFieldDecorator } = form;
+    console.log(1, config);
 
     // const { header, previewImage, previewVisible } = this.state;
 
@@ -93,7 +94,8 @@ export default class Phone extends PureComponent {
           </FormItem>
           <FormItem {...formItemLayout} label="小视频是否审核">
             {getFieldDecorator('video_audio', {
-              value: config.video_audio,
+              valuePropName: 'checked',
+              initialValue: config.video_audio,
             })(<Switch onChange={this.videoSwitch} />)}
           </FormItem>
           <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
