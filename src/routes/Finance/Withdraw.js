@@ -23,6 +23,7 @@ const formSubmitLayout = {
 };
 const { TextArea } = Input;
 const withdrawStatus = ['提现申请', '提现成功', '提现失败'];
+// auto_withdraw_status 自动提现失败 状态码和上面一样
 // const { confirm } = Modal;
 
 @connect(({ finance, loading }) => ({
@@ -303,7 +304,7 @@ export default class Withdraw extends PureComponent {
         title: '自动提现失败说明',
         width: 120,
         dataIndex: 'remark',
-        render: (val, record) => record.status === 2 ? (`${moment(record.auto_withdraw_time * 1000).format('YYYY-MM-DD HH:mm:ss')} ${record.auto_withdraw_error}`) : null,
+        render: (val, record) => record.auto_withdraw_status === 2 ? (`${moment(record.auto_withdraw_time * 1000).format('YYYY-MM-DD HH:mm:ss')} ${record.auto_withdraw_error || ''}`) : null,
       },
       {
         title: '操作',
