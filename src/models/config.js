@@ -5,7 +5,10 @@ export default {
 
   state: {
     list: [],
-    mobile: '',
+    config: {
+      mobile: '',
+      video_audio: 0,
+    },
   },
 
   effects: {
@@ -27,6 +30,14 @@ export default {
   },
 
   reducers: {
+    setting(state, { payload }) {
+      const { config } = state;
+      config[payload.key] = payload.value;
+      return {
+        ...state,
+        config,
+      };
+    },
     setAdsBackground(state, { payload }) {
       const { fileList } = payload;
       return {
@@ -44,7 +55,7 @@ export default {
       const { data } = payload;
       return {
         ...state,
-        mobile: data.mobile || '',
+        config: data,
       };
     },
   },

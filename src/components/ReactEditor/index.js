@@ -6,6 +6,13 @@ import 'braft-editor/dist/braft.css';
 import { UPLOAD_TYPE } from '../../utils/config';
 
 export default class Demo extends React.Component {
+  componentWillReceiveProps(prevProps) {
+    const { valueSon: prevValue } = prevProps;
+    const { valueSon } = this.props;
+    if (valueSon !== prevValue) {
+      this.editorInstance.setContent(prevValue);
+    }
+  }
   handleChange = content => {
     const { setDescription } = this.props;
     setDescription(content);
@@ -66,7 +73,7 @@ export default class Demo extends React.Component {
     const editorProps = {
       height: 400,
       contentFormat: 'html',
-      initialContent: this.props.valueSon,
+      initialContent: '',
       contentId: this.props.goodsId,
       media: {
         uploadFn: this.uploadFn,
@@ -77,7 +84,7 @@ export default class Demo extends React.Component {
 
     return (
       <div className="demo" style={{ border: '1px solid #000' }}>
-        <BraftEditor  {...editorProps} />
+        <BraftEditor ref={(instance) => this.editorInstance = instance} {...editorProps} />
       </div>
     );
   }

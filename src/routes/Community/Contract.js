@@ -2,8 +2,8 @@ import React from 'react';
 import { connect } from 'dva';
 // import { Form, Button, Input, Select, Upload, Icon, Modal, Tag, message, InputNumber } from 'antd';
 import { Form, Button, Upload, Icon, Tag, message, Card } from 'antd';
+import ReactEditor from 'components/ReactEditor';
 import styles from './style.less';
-import Wangeditor from '../../components/Wangeditor';
 import { UPLOAD_TYPE } from '../../utils/config';
 // import { router } from 'sw-toolbox';
 // import LiveGoodTable from '../../../components/LiveGoodTable';
@@ -202,9 +202,9 @@ const CustomizedForm = Form.create({
       >
         {getFieldDecorator('desc', {
         })(
-          <Wangeditor
-            detail={protocolForm.desc}
-            header={header}
+          <ReactEditor
+            uploadUrl={uploadUrl}
+            valueSon={protocolForm.desc}
             setDescription={setDescription}
           />
         )}

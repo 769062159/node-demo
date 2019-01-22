@@ -18,13 +18,13 @@ import {
   Table,
 } from 'antd';
 import { routerRedux } from 'dva/router';
+import ReactEditor from 'components/ReactEditor';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './style.less'
 import { uploadJSSDK } from '../../utils/utils';
 import { UPLOAD_TYPE } from '../../utils/config';
 // import styles from './TableList.less';
 // import request from '../../utils/request';
-import Wangeditor from '../../components/Wangeditor';
 
 const env = process.env[process.env.API_ENV];
 const FormItem = Form.Item;
@@ -153,8 +153,8 @@ const CustomizedForm = Form.create({
           详情 :
         </Col>
         <Col span={15}>
-          <Wangeditor
-            header={header}
+          <ReactEditor
+            uploadUrl={uploadUrl}
             setDescription={setDescription}
           />
         </Col>

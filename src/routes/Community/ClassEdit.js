@@ -18,13 +18,10 @@ import {
   Table,
 } from 'antd';
 import { routerRedux } from 'dva/router';
+import ReactEditor from 'components/ReactEditor';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './style.less'
 import { uploadJSSDK } from '../../utils/utils';
-// import { env } from '../../utils/config';
-// import styles from './TableList.less';
-// import request from '../../utils/request';
-import Wangeditor from '../../components/Wangeditor';
 
 const env = process.env[process.env.API_ENV];
 const FormItem = Form.Item;
@@ -153,23 +150,13 @@ const CustomizedForm = Form.create({
           详情 :
         </Col>
         <Col span={15}>
-          <Wangeditor
-            detail={classForm.detail}
-            header={header}
+          <ReactEditor
+            uploadUrl={uploadUrl}
+            valueSon={classForm.detail}
             setDescription={setDescription}
           />
         </Col>
       </Row>
-      {/* <Form.Item label="描述" {...formItemLayout}>
-        {getFieldDecorator('goods_description', {
-          rules: [{ required: true, message: '请填写描述' }],
-        })(
-          <Wangeditor
-            header={header}
-            setDescription={setDescription}
-          />
-        )}
-      </Form.Item> */}
       <Form.Item
         {...formItemLayout}
         label="课程封面"

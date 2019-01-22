@@ -6,6 +6,7 @@ import {
   Button,
   // Dropdown,
   // Menu,
+  Switch,
   Input,
   // DatePicker,
 } from 'antd';
@@ -52,6 +53,7 @@ export default class Phone extends PureComponent {
       if (!err) {
         const { dispatch } = this.props;
         value.mobile = value.mobile.toString();
+        value.video_audio = Number(value.video_audio);
         dispatch({
           type: 'config/addConfig',
           payload: value,
@@ -59,8 +61,18 @@ export default class Phone extends PureComponent {
       }
     });
   };
+  videoSwitch = (e) => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'config/setting',
+      payload: {
+        key: 'video_audio',
+        value: Number(e),
+      },
+    });
+  }
   render() {
-    const { loading, form, config: { mobile } } = this.props;
+    const { loading, form, config: { config } } = this.props;
     const { getFieldDecorator } = form;
 
     // const { header, previewImage, previewVisible } = this.state;
@@ -70,7 +82,7 @@ export default class Phone extends PureComponent {
         <Form>
           <FormItem {...formItemLayout} label="联系方式">
             {getFieldDecorator('mobile', {
-              initialValue: mobile,
+              initialValue: config.mobile,
               rules: [
                 {
                   required: true,
@@ -78,6 +90,11 @@ export default class Phone extends PureComponent {
                 },
               ],
             })(<Input style={{width: 200}} />)}
+          </FormItem>
+          <FormItem {...formItemLayout} label="小视频是否审核">
+            {getFieldDecorator('video_audio', {
+              value: config.video_audio,
+            })(<Switch onChange={this.videoSwitch} />)}
           </FormItem>
           <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
             <Button type="primary" loading={loading}  onClick={this.handleSubmit}>

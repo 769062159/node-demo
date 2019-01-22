@@ -118,10 +118,6 @@ export const menuData = [
         name: '轮播图',
         path: 'carousel',
       },
-      {
-        name: '企业联系方式',
-        path: 'phone',
-      },
       // {
       //   name: '直播特卖',
       //   path: 'live-sale',
@@ -283,6 +279,11 @@ export const menuData = [
         path: 'my',
       },
     ],
+  },
+  {
+    name: '设置',
+    icon: 'icon-shezhi',
+    path: 'setting/config',
   },
   // {
   //   name: 'dashboard',

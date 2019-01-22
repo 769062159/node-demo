@@ -7,20 +7,17 @@ import {
   Button,
   message,
 } from 'antd';
+import ReactEditor from 'components/ReactEditor';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
-import Wangeditor from '../../components/Wangeditor';
 
 
 
 @connect(({ protocol, loading }) => ({
-    protocol,
+  protocol,
   loading: loading.models.protocol,
 }))
 export default class Protocol extends PureComponent {
   state = {
-      header: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
       newRichText: '',
   };
   componentDidMount() {
@@ -53,8 +50,7 @@ export default class Protocol extends PureComponent {
     });
   }
   render() {
-    const { header } = this.state;
-    const { loading, protocol: { userProtocol } } = this.props;
+    const { loading, protocol: { userProtocol }, uploadUrl } = this.props;
 
     return (
       <PageHeaderLayout>
@@ -64,9 +60,9 @@ export default class Protocol extends PureComponent {
               协议
             </Col>
             <Col span={20}>
-              <Wangeditor
-                detail={userProtocol}
-                header={header}
+              <ReactEditor
+                uploadUrl={uploadUrl}
+                valueSon={userProtocol}
                 setDescription={this.setDescription}
               />
             </Col>

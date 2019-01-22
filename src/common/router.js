@@ -90,15 +90,16 @@ export const getRouterConfig = app => {
       identity: 'common',
       component: dynamicWrapper(app, ['shop'], () => import('../routes/Shop/Store')),
     },
+    // 企业版的设置
+    '/setting/config': {
+      component: dynamicWrapper(app, ['config'], () => import('../routes/Index/Background')),
+    },
     // 首页 广告 营销
     '/market/AddForm/:type': {
       component: dynamicWrapper(app, ['indexs'], () => import('../routes/Index/AddForm')),
     },
     '/market/EditForm/:id': {
       component: dynamicWrapper(app, ['indexs'], () => import('../routes/Index/EditForm')),
-    },
-    '/market/phone': {
-      component: dynamicWrapper(app, ['config'], () => import('../routes/Index/Background')),
     },
     '/market/carousel': {
       component: dynamicWrapper(app, ['indexs'], () => import('../routes/Index/Carousel')),

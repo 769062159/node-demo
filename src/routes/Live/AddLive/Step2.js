@@ -3,9 +3,9 @@ import { connect } from 'dva';
 import copy from 'copy-to-clipboard';
 // import debounce from 'lodash/debounce';
 import { Form, Button, Input, Select, Upload, Icon, Modal, Tag, message, InputNumber, Table, Row, Col, Pagination, Checkbox } from 'antd';
+import ReactEditor from 'components/ReactEditor';
 // import { Form, Button, Input, Upload, Icon, Modal, Tag, message, Select } from 'antd';
 // import request from '../../../utils/request';
-import Wangeditor from '../../../components/Wangeditor';
 import { uploadJSSDK, base64ToFile } from '../../../utils/utils';
 import request from '../../../utils/request';
 // import { env } from '../../../utils/config';
@@ -200,8 +200,8 @@ const CustomizedForm = Form.create({
           详情 :
         </Col>
         <Col span={15}>
-          <Wangeditor
-            header={header}
+          <ReactEditor
+            uploadUrl={uploadUrl}
             setDescription={setDescription}
           />
         </Col>
