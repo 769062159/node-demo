@@ -8,6 +8,7 @@ import {
   // Menu,
   Switch,
   Input,
+  message,
   // DatePicker,
 } from 'antd';
 // import StandardTable from 'components/StandardTable';
@@ -57,6 +58,9 @@ export default class Phone extends PureComponent {
         dispatch({
           type: 'config/addConfig',
           payload: value,
+          callback: () => {
+            message.success(`设置成功`);
+          },
         });
       }
     });

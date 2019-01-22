@@ -19,13 +19,16 @@ export default {
         payload: response,
       });
     },
-    *addConfig({ payload }, { call, put }) {
-      yield call(addConfig, payload);
-      const response = yield call(getConfig, payload);
-      yield put({
-        type: 'getConfig',
-        payload: response,
-      });
+    *addConfig({ payload, callback }, { call, put }) {
+      const res = yield call(addConfig, payload);
+      if (res && res.code === 200) {
+        callback();
+        const response = yield call(getConfig, payload);
+        yield put({
+          type: 'getConfig',
+          payload: response,
+        });
+      }
     },
   },
 
