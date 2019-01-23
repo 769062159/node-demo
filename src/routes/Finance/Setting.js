@@ -40,7 +40,9 @@ export default class Withdraw extends PureComponent {
     e.preventDefault();
     this.props.form.validateFieldsAndScroll((err, values) => {
         if (!err) {
-          const { dispatch } = this.props;
+          const { dispatch, finance: { withdrawConfig }  } = this.props;
+          values.auto_withdraw_amount = values.auto_withdraw_amount || withdrawConfig.auto_withdraw_amount;
+          values.auto_withdraw = values.auto_withdraw || 0;
           dispatch({
             type: 'finance/setWithdrawConfig',
             payload: values,
@@ -106,7 +108,7 @@ export default class Withdraw extends PureComponent {
           >
             <FormItem {...formItemLayout} label="提现方式">
               {getFieldDecorator('withdraw_type', {
-                initialValue: withdrawConfig.withdraw_type || 1,
+                initialValue: withdrawConfig.withdraw_type,
                 rules: [
                     {
                         required: true,
