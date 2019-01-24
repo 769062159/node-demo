@@ -284,6 +284,27 @@ const CustomizedForm = Form.create({
       supplement_merchant_money: Form.createFormField({
         value: goodsDetail.supplement_merchant_money,
       }),
+      wealth_money: Form.createFormField({
+        value: goodsDetail.wealth_money,
+      }),
+      supplement_wealth_money: Form.createFormField({
+        value: goodsDetail.supplement_wealth_money,
+      }),
+      wealth_user_price: Form.createFormField({
+        value: goodsDetail.wealth_user_price,
+      }),
+      supplement_group_money_2: Form.createFormField({
+        value: goodsDetail.supplement_group_money_2,
+      }),
+      supplement_wealth_money_2: Form.createFormField({
+        value: goodsDetail.supplement_wealth_money_2,
+      }),
+      supplement_normal_money_2: Form.createFormField({
+        value: goodsDetail.supplement_normal_money_2,
+      }),
+      supplement_merchant_money_2: Form.createFormField({
+        value: goodsDetail.supplement_merchant_money_2,
+      }),
     };
     if (systemType.user_levels && systemType.user_levels.length) {
       systemType.user_levels.forEach(res => {
@@ -553,6 +574,7 @@ const CustomizedForm = Form.create({
                     <Select style={{ width: 200 }}>
                       <Option value={1} key={1}>商户版</Option>
                       <Option value={2} key={2}>视群版</Option>
+                      <Option value={3} key={3}>财道版</Option>
                     </Select>
                   )}
                 </Form.Item>
@@ -960,7 +982,6 @@ const CustomizedForm = Form.create({
             </Form.Item>
           </Col>
         </Row> */}
-
         {/* <Row gutter={24}>
           <Col span={12}>
             <Form.Item {...spcialLayouts} label="上架方式">
@@ -1016,11 +1037,11 @@ const CustomizedForm = Form.create({
         </Form.Item>
       </Card>
       {
-        goodsDetail.type && goodsDetail.upgrade_type === 1 ? (
+        goodsDetail.type && goodsDetail.upgrade_type === 3 ? (
           <Card title="版本返佣">
             <Row>
               <Col span={8}>
-                <h2>正常升级</h2>
+                <h2>类型：正常升级</h2>
               </Col>
             </Row>
             <Row>
@@ -1031,7 +1052,7 @@ const CustomizedForm = Form.create({
               </Col>
             </Row>
             <Row>
-              <Col span={8}>
+              <Col span={6}>
                 <Form.Item {...profitLayout} label="普通版">
                   {getFieldDecorator(`normal_money`, {
                     rules: [{ required: true, message: `请输入普通版` }],
@@ -1044,7 +1065,7 @@ const CustomizedForm = Form.create({
                   )}
                 </Form.Item>
               </Col>
-              <Col span={8}>
+              <Col span={6}>
                 <Form.Item {...profitLayout} label="视群版">
                   {getFieldDecorator(`group_money`, {
                     rules: [{ required: true, message: `请输入视群版` }],
@@ -1052,12 +1073,25 @@ const CustomizedForm = Form.create({
                     <InputNumber
                       step={0.01}
                       precision={2}
-                      min={0}
+                      min={goodsDetail.normal_money || 0}
                     />
                   )}
                 </Form.Item>
               </Col>
-              <Col span={8}>
+              <Col span={6}>
+                <Form.Item {...profitLayout} label="财道版">
+                  {getFieldDecorator(`wealth_money`, {
+                    rules: [{ required: true, message: `请输入财道版` }],
+                  })(
+                    <InputNumber
+                      step={0.01}
+                      precision={2}
+                      min={goodsDetail.group_money || 0}
+                    />
+                  )}
+                </Form.Item>
+              </Col>
+              <Col span={6}>
                 <Form.Item {...profitLayout} label="商户版">
                   {getFieldDecorator(`merchant_money`, {
                     rules: [{ required: true, message: `请输入商户版` }],
@@ -1065,7 +1099,7 @@ const CustomizedForm = Form.create({
                     <InputNumber
                       step={0.01}
                       precision={2}
-                      min={0}
+                      min={goodsDetail.wealth_money || 0}
                     />
                   )}
                 </Form.Item>
@@ -1073,7 +1107,7 @@ const CustomizedForm = Form.create({
             </Row>
             <Row>
               <Col span={8}>
-                <h2>补差价升级</h2>
+                <h2>类型：补差价升级</h2>
               </Col>
             </Row>
             <Row>
@@ -1099,7 +1133,7 @@ const CustomizedForm = Form.create({
               </Col>
             </Row>
             <Row>
-              <Col span={8}>
+              <Col span={6}>
                 <Form.Item {...profitLayout} label="普通版">
                   {getFieldDecorator(`supplement_normal_money`, {
                     rules: [{ required: true, message: `请输入普通版` }],
@@ -1112,7 +1146,7 @@ const CustomizedForm = Form.create({
                   )}
                 </Form.Item>
               </Col>
-              <Col span={8}>
+              <Col span={6}>
                 <Form.Item {...profitLayout} label="视群版">
                   {getFieldDecorator(`supplement_group_money`, {
                     rules: [{ required: true, message: `请输入视群版` }],
@@ -1120,12 +1154,25 @@ const CustomizedForm = Form.create({
                     <InputNumber
                       step={0.01}
                       precision={2}
-                      min={0}
+                      min={goodsDetail.supplement_normal_money || 0}
                     />
                   )}
                 </Form.Item>
               </Col>
-              <Col span={8}>
+              <Col span={6}>
+                <Form.Item {...profitLayout} label="财道版">
+                  {getFieldDecorator(`supplement_wealth_money`, {
+                    rules: [{ required: true, message: `请输入财道版` }],
+                  })(
+                    <InputNumber
+                      step={0.01}
+                      precision={2}
+                      min={goodsDetail.supplement_group_money || 0}
+                    />
+                  )}
+                </Form.Item>
+              </Col>
+              <Col span={6}>
                 <Form.Item {...profitLayout} label="商户版">
                   {getFieldDecorator(`supplement_merchant_money`, {
                     rules: [{ required: true, message: `请输入商户版` }],
@@ -1133,14 +1180,14 @@ const CustomizedForm = Form.create({
                     <InputNumber
                       step={0.01}
                       precision={2}
-                      min={0}
+                      min={goodsDetail.supplement_wealth_money || 0}
                     />
                   )}
                 </Form.Item>
               </Col>
             </Row>
           </Card>
-        ) :  goodsDetail.type && goodsDetail.upgrade_type == 2 ? (
+        ) : goodsDetail.type && goodsDetail.upgrade_type == 2 ? (
           <Card title="版本返佣">
             <Row>
               <Col span={8}>
@@ -1150,7 +1197,7 @@ const CustomizedForm = Form.create({
               </Col>
             </Row>
             <Row>
-              <Col span={8}>
+              <Col span={6}>
                 <Form.Item {...profitLayout} label="普通版">
                   {getFieldDecorator(`normal_money`, {
                     rules: [{ required: true, message: `请输入普通版` }],
@@ -1163,10 +1210,66 @@ const CustomizedForm = Form.create({
                   )}
                 </Form.Item>
               </Col>
-              <Col span={8}>
+              <Col span={6}>
                 <Form.Item {...profitLayout} label="视群版">
                   {getFieldDecorator(`group_money`, {
                     rules: [{ required: true, message: `请输入视群版` }],
+                  })(
+                    <InputNumber
+                      step={0.01}
+                      precision={2}
+                      min={goodsDetail.normal_money || 0}
+                    />
+                  )}
+                </Form.Item>
+              </Col>
+              <Col span={6}>
+                <Form.Item {...profitLayout} label="财道版">
+                  {getFieldDecorator(`wealth_money`, {
+                    rules: [{ required: true, message: `请输入财道版` }],
+                  })(
+                    <InputNumber
+                      step={0.01}
+                      precision={2}
+                      min={goodsDetail.group_money || 0}
+                    />
+                  )}
+                </Form.Item>
+              </Col>
+              <Col span={6}>
+                <Form.Item {...profitLayout} label="商户版">
+                  {getFieldDecorator(`merchant_money`, {
+                    rules: [{ required: true, message: `请输入商户版` }],
+                  })(
+                    <InputNumber
+                      step={0.01}
+                      precision={2}
+                      min={goodsDetail.wealth_money || 0}
+                    />
+                  )}
+                </Form.Item>
+              </Col>
+            </Row>
+          </Card>
+        ) : (goodsDetail.type && goodsDetail.upgrade_type == 1) ? (
+          <Card title="版本返佣">
+            <Row>
+              <Col span={8}>
+                <h2>正常升级</h2>
+              </Col>
+            </Row>
+            <Row>
+              <Col span={8}>
+                <Form.Item {...profitLayout} label="分拥类型">
+                  固定值
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row>
+              <Col span={6}>
+                <Form.Item {...profitLayout} label="普通版">
+                  {getFieldDecorator(`normal_money`, {
+                    rules: [{ required: true, message: `请输入普通版` }],
                   })(
                     <InputNumber
                       step={0.01}
@@ -1176,7 +1279,33 @@ const CustomizedForm = Form.create({
                   )}
                 </Form.Item>
               </Col>
-              <Col span={8}>
+              <Col span={6}>
+                <Form.Item {...profitLayout} label="视群版">
+                  {getFieldDecorator(`group_money`, {
+                    rules: [{ required: true, message: `请输入视群版` }],
+                  })(
+                    <InputNumber
+                      step={0.01}
+                      precision={2}
+                      min={goodsDetail.normal_money || 0}
+                    />
+                  )}
+                </Form.Item>
+              </Col>
+              <Col span={6}>
+                <Form.Item {...profitLayout} label="财道版">
+                  {getFieldDecorator(`wealth_money`, {
+                    rules: [{ required: true, message: `请输入财道版` }],
+                  })(
+                    <InputNumber
+                      step={0.01}
+                      precision={2}
+                      min={goodsDetail.group_money || 0}
+                    />
+                  )}
+                </Form.Item>
+              </Col>
+              <Col span={6}>
                 <Form.Item {...profitLayout} label="商户版">
                   {getFieldDecorator(`merchant_money`, {
                     rules: [{ required: true, message: `请输入商户版` }],
@@ -1184,7 +1313,169 @@ const CustomizedForm = Form.create({
                     <InputNumber
                       step={0.01}
                       precision={2}
+                      min={goodsDetail.wealth_money || 0}
+                    />
+                  )}
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row>
+              <Col span={8}>
+                <h2>视群版补差价升级</h2>
+              </Col>
+            </Row>
+            <Row>
+              <Col span={8}>
+                <Form.Item {...profitLayout} label="分拥类型">
+                  固定值
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row>
+              <Col span={8}>
+                <Form.Item {...profitLayout} label="视群版补差价">
+                  {getFieldDecorator('group_user_price', {
+                    rules: [{ required: true, message: '请填写视群版升级补差价' }],
+                  })(
+                    <InputNumber
+                      step={0.01}
+                      style={{ width: 200 }}
                       min={0}
+                    />
+                  )}
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row>
+              <Col span={6}>
+                <Form.Item {...profitLayout} label="普通版">
+                  {getFieldDecorator(`supplement_normal_money`, {
+                    rules: [{ required: true, message: `请输入普通版` }],
+                  })(
+                    <InputNumber
+                      step={0.01}
+                      precision={2}
+                      min={0}
+                    />
+                  )}
+                </Form.Item>
+              </Col>
+              <Col span={6}>
+                <Form.Item {...profitLayout} label="视群版">
+                  {getFieldDecorator(`supplement_group_money`, {
+                    rules: [{ required: true, message: `请输入视群版` }],
+                  })(
+                    <InputNumber
+                      step={0.01}
+                      precision={2}
+                      min={goodsDetail.supplement_normal_money || 0}
+                    />
+                  )}
+                </Form.Item>
+              </Col>
+              <Col span={6}>
+                <Form.Item {...profitLayout} label="财道版">
+                  {getFieldDecorator(`supplement_wealth_money`, {
+                    rules: [{ required: true, message: `请输入财道版` }],
+                  })(
+                    <InputNumber
+                      step={0.01}
+                      precision={2}
+                      min={goodsDetail.supplement_group_money || 0}
+                    />
+                  )}
+                </Form.Item>
+              </Col>
+              <Col span={6}>
+                <Form.Item {...profitLayout} label="商户版">
+                  {getFieldDecorator(`supplement_merchant_money`, {
+                    rules: [{ required: true, message: `请输入商户版` }],
+                  })(
+                    <InputNumber
+                      step={0.01}
+                      precision={2}
+                      min={goodsDetail.supplement_wealth_money || 0}
+                    />
+                  )}
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row>
+              <Col span={8}>
+                <h2>财道版补差价升级</h2>
+              </Col>
+            </Row>
+            <Row>
+              <Col span={8}>
+                <Form.Item {...profitLayout} label="分拥类型">
+                  固定值
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row>
+              <Col span={8}>
+                <Form.Item {...profitLayout} label="财道版补差价">
+                  {getFieldDecorator('wealth_user_price', {
+                    rules: [{ required: true, message: '请填写财道版升级补差价' }],
+                  })(
+                    <InputNumber
+                      step={0.01}
+                      style={{ width: 200 }}
+                      min={0}
+                    />
+                  )}
+                </Form.Item>
+              </Col>
+            </Row>
+            <Row>
+              <Col span={6}>
+                <Form.Item {...profitLayout} label="普通版">
+                  {getFieldDecorator(`supplement_normal_money_2`, {
+                    rules: [{ required: true, message: `请输入普通版` }],
+                  })(
+                    <InputNumber
+                      step={0.01}
+                      precision={2}
+                      min={0}
+                    />
+                  )}
+                </Form.Item>
+              </Col>
+              <Col span={6}>
+                <Form.Item {...profitLayout} label="视群版">
+                  {getFieldDecorator(`supplement_group_money_2`, {
+                    rules: [{ required: true, message: `请输入视群版` }],
+                  })(
+                    <InputNumber
+                      step={0.01}
+                      precision={2}
+                      min={goodsDetail.supplement_normal_money_2 || 0}
+                    />
+                  )}
+                </Form.Item>
+              </Col>
+              <Col span={6}>
+                <Form.Item {...profitLayout} label="财道版">
+                  {getFieldDecorator(`supplement_wealth_money_2`, {
+                    rules: [{ required: true, message: `请输入财道版` }],
+                  })(
+                    <InputNumber
+                      step={0.01}
+                      precision={2}
+                      min={goodsDetail.supplement_group_money_2 || 0}
+                    />
+                  )}
+                </Form.Item>
+              </Col>
+              <Col span={6}>
+                <Form.Item {...profitLayout} label="商户版">
+                  {getFieldDecorator(`supplement_merchant_money_2`, {
+                    rules: [{ required: true, message: `请输入商户版` }],
+                  })(
+                    <InputNumber
+                      step={0.01}
+                      precision={2}
+                      min={goodsDetail.supplement_wealth_money_2 || 0}
                     />
                   )}
                 </Form.Item>
@@ -1497,6 +1788,10 @@ class AddGoodStep2 extends React.PureComponent {
     values.profit_type = goodsDetail.profit_type;
     const freezeData = [];
     values.upgrade_type = goodsDetail.type ? goodsDetail.upgrade_type : 0;
+    // 带_2的就是财道升级补差价里的数据
+    // 视群版 财道版 商户版 版本越高值越多
+    // 1 是商户版 2 是视群版 3是财道版
+    // supplement_normal_money 是从视群升级的补差价 supplement_normal_money_2是从财道升级的补差价
     if (values.upgrade_type === 2) {
       attrTable = [];
       freezeData.push({
@@ -1504,18 +1799,32 @@ class AddGoodStep2 extends React.PureComponent {
         normal_proportion: 0,
         supplement_normal_money: 0,
         supplement_normal_proportion: 0,
+        supplement_normal_money_2: 0,
+        supplement_normal_proportion_2: 0,
       });
       freezeData.push({
         group_money: goodsDetail.group_money,
         group_proportion: 0,
         supplement_group_money: 0,
         supplement_group_proportion: 0,
+        supplement_group_money_2: 0,
+        supplement_group_proportion_2: 0,
       });
       freezeData.push({
         merchant_money: goodsDetail.merchant_money,
         merchant_proportion: 0,
         supplement_merchant_money: 0,
         supplement_merchant_proportion: 0,
+        supplement_merchant_money_2: 0,
+        supplement_merchant_proportion_2: 0,
+      });
+      freezeData.push({
+        wealth_money: goodsDetail.wealth_money,
+        wealth_proportion: 0,
+        supplement_wealth_money: 0,
+        supplement_wealth_proportion: 0,
+        supplement_wealth_money_2: 0,
+        supplement_wealth_proportion_2: 0,
       });
     } else if (values.upgrade_type === 1) {
       attrTable = [];
@@ -1524,40 +1833,104 @@ class AddGoodStep2 extends React.PureComponent {
         normal_proportion: 0,
         supplement_normal_money: goodsDetail.supplement_normal_money,
         supplement_normal_proportion: 0,
+        supplement_normal_money_2: goodsDetail.supplement_normal_money_2,
+        supplement_normal_proportion_2: 0,
       });
       freezeData.push({
         group_money: goodsDetail.group_money,
         group_proportion: 0,
         supplement_group_money: goodsDetail.supplement_group_money,
         supplement_group_proportion: 0,
+        supplement_group_money_2: goodsDetail.supplement_group_money_2,
+        supplement_group_proportion_2: 0,
       });
       freezeData.push({
         merchant_money: goodsDetail.merchant_money,
         merchant_proportion: 0,
         supplement_merchant_money: goodsDetail.supplement_merchant_money,
         supplement_merchant_proportion: 0,
+        supplement_merchant_money_2: goodsDetail.supplement_merchant_money_2,
+        supplement_merchant_proportion_2: 0,
+      });
+      freezeData.push({
+        wealth_money: goodsDetail.wealth_money,
+        wealth_proportion: 0,
+        supplement_wealth_money: goodsDetail.supplement_wealth_money,
+        supplement_wealth_proportion: 0,
+        supplement_wealth_money_2: goodsDetail.supplement_wealth_money_2,
+        supplement_wealth_proportion_2: 0,
+      });
+    } else if (values.upgrade_type === 3) {
+      attrTable = [];
+      freezeData.push({
+        normal_money: goodsDetail.normal_money,
+        normal_proportion: 0,
+        supplement_normal_money: goodsDetail.supplement_normal_money,
+        supplement_normal_proportion: 0,
+        supplement_normal_money_2: 0,
+        supplement_normal_proportion_2: 0,
+      });
+      freezeData.push({
+        group_money: goodsDetail.group_money,
+        group_proportion: 0,
+        supplement_group_money: goodsDetail.supplement_group_money,
+        supplement_group_proportion: 0,
+        supplement_group_money_2: 0,
+        supplement_group_proportion_2: 0,
+      });
+      freezeData.push({
+        merchant_money: goodsDetail.merchant_money,
+        merchant_proportion: 0,
+        supplement_merchant_money: goodsDetail.supplement_merchant_money,
+        supplement_merchant_proportion: 0,
+        supplement_merchant_money_2: 0,
+        supplement_merchant_proportion_2: 0,
+      });
+      freezeData.push({
+        wealth_money: goodsDetail.wealth_money,
+        wealth_proportion: 0,
+        supplement_wealth_money: goodsDetail.supplement_wealth_money,
+        supplement_wealth_proportion: 0,
+        supplement_wealth_money_2: 0,
+        supplement_wealth_proportion_2: 0,
       });
     } else {
       values.group_user_price = 0;
+      values.wealth_user_price = 0;
       freezeData.push({
         normal_money: 0,
         normal_proportion: 0,
         supplement_normal_money: 0,
         supplement_normal_proportion: 0,
+        supplement_normal_money_2: 0,
+        supplement_normal_proportion_2: 0,
       });
       freezeData.push({
         group_money: 0,
         group_proportion: 0,
         supplement_group_money: 0,
         supplement_group_proportion: 0,
+        supplement_group_money_2: 0,
+        supplement_group_proportion_2: 0,
       });
       freezeData.push({
         merchant_money: 0,
         merchant_proportion: 0,
         supplement_merchant_money: 0,
         supplement_merchant_proportion: 0,
+        supplement_merchant_money_2: 0,
+        supplement_merchant_proportion_2: 0,
+      });
+      freezeData.push({
+        wealth_money: 0,
+        wealth_proportion: 0,
+        supplement_wealth_money: 0,
+        supplement_wealth_proportion: 0,
+        supplement_wealth_money_2: 0,
+        supplement_wealth_proportion_2: 0,
       });
     }
+    console.log(freezeData);
     values.freeze_commission_type = 0;
     values.freeze_commission_value = freezeData;
     if (attrTable.length) {
