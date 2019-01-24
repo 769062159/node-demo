@@ -11,6 +11,8 @@ export default class Demo extends React.Component {
     const { valueSon } = this.props;
     if (valueSon !== prevValue) {
       this.editorInstance.setContent(prevValue);
+      // this.editorInstance.props.initialContent = prevValue;
+      // console.log(this.editorInstance);
     }
   }
   handleChange = content => {
@@ -73,7 +75,7 @@ export default class Demo extends React.Component {
     const editorProps = {
       height: 400,
       contentFormat: 'html',
-      initialContent: '',
+      initialContent: this.props.valueSon,
       contentId: this.props.goodsId,
       media: {
         uploadFn: this.uploadFn,

@@ -92,6 +92,7 @@ const CustomizedForm = Form.create({
     // } else if (typeof groupEndTime === 'undefined') {
     //   goodsDetail.group_end_time = weekNow;
     // }
+    console.log(1, goodsDetail.has_freeze_commission);
     if (groupEndTime === 0) {
       goodsDetail.group_start_time = now;
     } else if (typeof groupEndTime === 'number') {
@@ -1529,6 +1530,12 @@ class EditGoodStep2 extends React.PureComponent {
       type: 'goods/clearAttrTabe',
     });
   }
+  componentWillUnmount() {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'goods/clearGoods',
+    });
+  }
   onCheckAllAttr = index => {
     const { dispatch } = this.props;
     dispatch({
@@ -1847,7 +1854,6 @@ class EditGoodStep2 extends React.PureComponent {
         supplement_wealth_proportion_2: 0,
       });
     }
-    console.log(freezeData);
     values.freeze_commission_type = 0;
     values.freeze_commission_value = freezeData;
     if (attrTable.length) {

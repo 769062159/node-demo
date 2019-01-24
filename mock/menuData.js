@@ -89,6 +89,10 @@ export const menuData = [
         path: 'protocol',
       },
       {
+        name: '财道版商品协议',
+        path: 'protocolss',
+      },
+      {
         name: '商户版商品协议',
         path: 'protocols',
       },

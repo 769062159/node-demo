@@ -20,6 +20,7 @@ import {
   bindLiveCourse,
   bindLiveVideo,
   updateLiveStatus,
+  addPeople,
 } from '../services/live';
 import { getAllGoods } from '../services/goods';
 import { dedupe } from '../utils/utils';
@@ -55,6 +56,12 @@ export default {
   },
 
   effects: {
+    *addPeople({ payload, callback }, { call }) {
+      const res = yield call(addPeople, payload);
+      if (res && res.code === 200) {
+        callback();
+      }
+    },
     *updateLiveStatus({ payload, callback, index }, { call, put }) {
       const res = yield call(updateLiveStatus, payload);
       if (res && res.code === 200) {

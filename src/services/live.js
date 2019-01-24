@@ -167,3 +167,11 @@ export async function updateLiveStatus(params) {
     body: params,
   });
 }
+
+//  直播间的开启关闭
+export async function addPeople(params) {
+  return request('/merchant/live/updateBase', {
+    method: 'POST',
+    body: params,
+  });
+}

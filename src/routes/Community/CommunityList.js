@@ -14,6 +14,7 @@ import {
   Col,
   Input,
   Button,
+  InputNumber,
 } from 'antd';
 import Ellipsis from '../../components/Ellipsis';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
@@ -34,6 +35,9 @@ export default class Live extends PureComponent {
   state = {
     page: 1,
     formValues: {},
+    isPeople: false,
+    people: 0,
+    id: '',
   };
   componentDidMount() {
     const { dispatch } = this.props;
@@ -173,6 +177,44 @@ export default class Live extends PureComponent {
       },
     });
   };
+
+  addPeople = (e) => {
+    console.log(e);
+    this.setState({
+      isPeople: true,
+      id: e.id,
+    })
+  }
+  closePeople = () => {
+    this.setState({
+      isPeople: false,
+      people: 0,
+    })
+  }
+  chgPeople = (e) => {
+    this.setState({
+      people: e,
+    })
+  }
+  peopleOk = () => {
+    const { people, id } = this.state;
+    console.log(people, id);
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'live/addPeople',
+      payload: {
+        people_num_base: people,
+        live_id: id,
+      },
+      callback: () => {
+        message.success('设置成功');
+        this.setState({
+          isPeople: false,
+        })
+      },
+    });
+  }
+
   copyBtn = val => {
     if (val) {
       if (copy(val)) {
@@ -208,6 +250,7 @@ export default class Live extends PureComponent {
       loading,
     } = this.props;
     const { getFieldDecorator } = this.props.form;
+    const { isPeople } = this.state;
     const progressColumns = [
       {
         title: '群主信息',
@@ -255,9 +298,11 @@ export default class Live extends PureComponent {
       {
         title: '操作',
         fixed: 'right',
-        width: 200,
+        width: 180,
         render: (text, record, index) => (
           <Fragment>
+            <a onClick={this.addPeople.bind(this, record)}>增加人气</a>
+            <Divider type="vertical" />
             <a onClick={this.copyBtn.bind(this, record.rtmp_push)}>推流地址</a>
             <Divider type="vertical" />
             <a href={`#/community/edit-live/confirm/${record.id}`}>修改</a>
@@ -318,6 +363,20 @@ export default class Live extends PureComponent {
             />
           </div>
         </Card>
+        <Modal
+          title="设置人气"
+          visible={isPeople}
+          onCancel={this.closePeople}
+          onOk={this.peopleOk}
+          destroyOnClose="true"
+        >
+          <Row>
+            <Col span={6}>增加人气</Col>
+            <Col span={18}>
+              <InputNumber onChange={this.chgPeople} />
+            </Col>
+          </Row>
+        </Modal>
       </PageHeaderLayout>
     );
   }

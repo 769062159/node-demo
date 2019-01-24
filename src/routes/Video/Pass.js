@@ -273,13 +273,19 @@ export default class Review extends Component {
                 },
             },
             {
-                title: '更新时间',
-                dataIndex: 'create_time',
-                key: 'create_time',
+              title: '创建时间',
+              dataIndex: 'create_time',
+              key: 'create_time',
+              render: (val) => (moment(val * 1000).format('YYYY-MM-DD HH:mm:ss')),
+            },
+            {
+                title: '审核时间',
+                dataIndex: 'backend_audit_time',
+                key: 'backend_audit_time',
                 render: (val, record) => {
-                    const time = Math.max( val, record.backend_audit_time, record.audit_time);
+                    const time = Math.max(val, record.audit_time);
                     return (
-                        moment(time * 1000).format('YYYY-MM-DD HH:mm:ss')
+                      time ? moment(time * 1000).format('YYYY-MM-DD HH:mm:ss') : null
                     );
                 },
             },
@@ -323,6 +329,8 @@ export default class Review extends Component {
             {
                 title: '操作',
                 dataIndex: 'do',
+                fixed: 'right',
+                width: 190,
                 key: 'do',
                 render: (val, record) => (
                   <Fragment>
@@ -348,6 +356,7 @@ export default class Review extends Component {
               <div className={styles.tableListForm}>{this.renderAdvancedForm()}</div>
               <Table
                 onChange={this.handleTableChange}  // 换页
+                scroll={{ x: '150%' }}
               //   className="components-table-demo-nested"
                 // expandedRowRender={record => <p style={{ margin: 0 }}>{record.description}</p>}
                 dataSource={videoList}

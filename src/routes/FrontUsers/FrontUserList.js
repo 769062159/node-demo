@@ -491,6 +491,7 @@ export default class FrontUserList extends PureComponent {
                 <Select>
                   <Option value={0}>普通版</Option>
                   <Option value={2}>视群版</Option>
+                  <Option value={3}>财道版</Option>
                   <Option value={1}>商户版</Option>
                 </Select>
               )}
@@ -805,6 +806,7 @@ export default class FrontUserList extends PureComponent {
             <Col span={18}>
               <Select onChange={this.handleLevel} style={{ width: 200 }} value={powerValue} >
                 <Option key={1} value={1}>商户版</Option>
+                <Option key={3} value={3}>财道版</Option>
                 <Option key={2} value={2}>视群版</Option>
                 <Option key={0} value={0}>普通版</Option>
               </Select>

@@ -444,6 +444,12 @@ export default {
   },
 
   reducers: {
+    clearGoods(state) {
+      return {
+        ...state,
+        goodsDetail: {},
+      }
+    },
     initSku(state) {
       return {
         ...state,
