@@ -110,6 +110,9 @@ export const getRouterConfig = app => {
     '/market/activ-add': {
       component: dynamicWrapper(app, ['indexs'], () => import('../routes/Index/ActiveAdd')),
     },
+    '/market/activ-edit/:id': {
+      component: dynamicWrapper(app, ['indexs'], () => import('../routes/Index/ActiveAdd')),
+    },
     '/market/hot-sale': {
       component: dynamicWrapper(app, ['indexs'], () => import('../routes/Index/HotSale')),
     },

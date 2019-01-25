@@ -6,6 +6,7 @@ import {
     Table,
     message,
     Modal,
+    Divider,
 } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
@@ -77,6 +78,8 @@ export default class Active extends PureComponent {
             render: record => (
               <Fragment>
                 <a onClick={this.deleteItem.bind(this, record.id)}>删除</a>
+                <Divider type="vertical" />
+                <a href={`#/market/activ-edit/${record.id}`}>修改</a>
               </Fragment>
             ),
           },

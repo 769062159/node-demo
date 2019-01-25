@@ -205,6 +205,7 @@ export default class ActiveAdd extends React.PureComponent {
     },
   }
   componentDidMount() {
+    const { id } = this.props.match.params;
     const { dispatch } = this.props;
     dispatch({
         type: 'indexs/fetchGoodList',
@@ -213,6 +214,20 @@ export default class ActiveAdd extends React.PureComponent {
           page_number: 5,
         },
     });
+    if (id) {
+      dispatch({
+        type: 'indexs/activeDetail',
+        payload: {
+          landpage_id: id,
+        },
+      })
+    }
+  }
+  componentWillUnmount() {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'indexs/clearDeail',
+    })
   }
 
   // 新增修改提交
@@ -228,15 +243,30 @@ export default class ActiveAdd extends React.PureComponent {
         http_url: activeForm.pic[0].response.data,
         sort: activeForm.sort,
     }
-    dispatch({
-      type: 'indexs/setActivePage',
-      payload: data,
-      callback: () => {
-        message.success('设置成功');
-        const url = `/market/active`;
-        dispatch(routerRedux.push(url));
-      },
-    });
+    const { id } = this.props.match.params;
+    if (!id) {
+      dispatch({
+        type: 'indexs/setActivePage',
+        payload: data,
+        callback: () => {
+          message.success('设置成功');
+          const url = `/market/active`;
+          dispatch(routerRedux.push(url));
+        },
+      });
+    } else {
+      data.landpage_id = id;
+      dispatch({
+        type: 'indexs/editActiveDetail',
+        payload: data,
+        callback: () => {
+          message.success('设置成功');
+          const url = `/market/active`;
+          dispatch(routerRedux.push(url));
+        },
+      });
+      console.log('没有id');
+    }
   };
   // 商品
   goodListChange = pagination => {

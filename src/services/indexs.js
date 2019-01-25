@@ -95,3 +95,19 @@ export async function setActivePage(params) {
     body: params,
   });
 }
+
+// 活动页详情
+export async function activeDetail(params) {
+  return request('/merchant/landpage/get', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+// 修改活动页详情
+export async function editActiveDetail(params) {
+  return request('/merchant/landpage/update', {
+    method: 'POST',
+    body: params,
+  });
+}

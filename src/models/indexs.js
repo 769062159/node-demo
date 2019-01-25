@@ -11,6 +11,8 @@ import {
   getActiveList,
   delActive,
   setActivePage,
+  activeDetail,
+  editActiveDetail,
 } from '../services/indexs';
 import { getAllGoods } from '../services/goods';
 import { getLive } from '../services/live';
@@ -19,6 +21,7 @@ export default {
   namespace: 'indexs',
 
   state: {
+    activeDetail: {},
     activeForm: {
       pic: [],
     }, // 活动表单
@@ -160,9 +163,59 @@ export default {
         payload: response,
       });
     },
+    *activeDetail({ payload }, { call, put }) {
+      const res = yield call(activeDetail, payload);
+      if (res && res.code === 200) {
+        yield put({
+          type: 'activeDetails',
+          payload: res,
+        });
+      }
+    },
+    *editActiveDetail({ payload, callback }, { call }) {
+      const res = yield call(editActiveDetail, payload);
+      if (res && res.code === 200) {
+        callback();
+      }
+    },
   },
 
   reducers: {
+    clearDeail(state) {
+      return {
+        ...state,
+        activeForm: {
+          pic: [],
+        },
+        GoodKey: '',
+      };
+    },
+    activeDetails(state, { payload }) {
+      if (payload.data.http_url) {
+        payload.data.pic = [{
+          img: payload.data.http_url,
+          url: payload.data.http_url,
+          status: 'done',
+          uploaded: 'done',
+          response: { status: 'success',data: payload.data.http_url },
+          name: payload.data.http_url,
+          uid: payload.data.http_url,
+        }]
+      } else {
+        payload.data.pic = [];
+      }
+      let GoodKey;
+      if (payload.data.goods_id) {
+        GoodKey = [payload.data.goods_id];
+      } else {
+        GoodKey = '';
+      }
+      return {
+        ...state,
+        activeForm: payload.data,
+        GoodKey,
+      };
+    },
     delActives(state, { payload }) {
       let { activeList } = state;
       activeList = activeList.filter(res => {
