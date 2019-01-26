@@ -413,6 +413,18 @@ export default class ClassAdd extends PureComponent {
     };
     this.changeFormVal(obj);
   }
+  // 跳页vod
+  changeVodPage = (pagination) => {
+    console.log(1, pagination);
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'live/fetchVod',
+      payload: {
+        pagination,
+        'per-page': 18,
+      },
+    });
+  }
   handleSubmit = () => {
     const { classModel: { classForm: { title, xxx, list, yyy, desc, details, detail }, editClass } } = this.props;
     const { has_lessons: lessons } = editClass;

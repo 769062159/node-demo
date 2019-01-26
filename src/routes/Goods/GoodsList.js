@@ -560,6 +560,11 @@ export default class GoodsList extends PureComponent {
       //   render: val => <span>{moment(val).format('YYYY-MM-DD HH:mm:ss')}</span>,
       // },
       {
+        title: '分享路径',
+        dataIndex: 'goods_id',
+        render: val => `/pages/goods-detail/main?id=${val}&referee_id=`,
+      },
+      {
         title: '创建时间',
         dataIndex: 'create_time',
         // sorter: true,
@@ -614,7 +619,7 @@ export default class GoodsList extends PureComponent {
             </div>
             <StandardTable
               rowKey={record => record.goods_id}
-              scroll={{ x: '120%' }}
+              scroll={{ x: '140%' }}
               selectedRows={selectedRows}
               loading={loading}
               data={data}

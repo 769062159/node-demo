@@ -107,6 +107,7 @@ export default {
           res.fakeid = res.has_user.fake_id;
           res.avatar = res.has_user.avatar;
           res.mobile = res.has_user.mobile;
+          res.userId = res.has_user.id;
           delete res.has_user
           return res;
         })
@@ -147,6 +148,7 @@ export default {
           res.fakeid = res.has_user.fake_id;
           res.avatar = res.has_user.avatar;
           res.mobile = res.has_user.mobile;
+          res.userId = res.has_user.id;
           delete res.has_user
           return res;
         })

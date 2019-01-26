@@ -273,6 +273,11 @@ export default class Review extends Component {
                 },
             },
             {
+              title: '分享路径',
+              dataIndex: 'id',
+              render: (val, record) => `/pages/small-video/main?id=${val}&userId=${record.userId}&referee_id=`,
+            },
+            {
               title: '创建时间',
               dataIndex: 'create_time',
               key: 'create_time',
@@ -356,7 +361,7 @@ export default class Review extends Component {
               <div className={styles.tableListForm}>{this.renderAdvancedForm()}</div>
               <Table
                 onChange={this.handleTableChange}  // 换页
-                scroll={{ x: '150%' }}
+                scroll={{ x: '170%' }}
               //   className="components-table-demo-nested"
                 // expandedRowRender={record => <p style={{ margin: 0 }}>{record.description}</p>}
                 dataSource={videoList}

@@ -628,6 +628,18 @@ export default class ClassAdd extends PureComponent {
       },
     });
   }
+  // 跳页vod
+  changeVodPage = (pagination) => {
+    console.log(1, pagination);
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'live/fetchVod',
+      payload: {
+        pagination,
+        'per-page': 18,
+      },
+    });
+  }
   selectUpload = (selectList) => {
     const { index } = this.state;
     const { dispatch } = this.props;
