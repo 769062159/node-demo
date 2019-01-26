@@ -7,6 +7,7 @@ import {
     message,
     Modal,
     Divider,
+    Tag,
 } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
@@ -88,6 +89,7 @@ export default class Active extends PureComponent {
         return (
           <PageHeaderLayout>
             <Card bordered={false} >
+              <Tag color="blue">分享路径：/pages/active/main?referee_id=</Tag>
               <div className={styles.tableList}>
                 <div className={styles.tableListOperator}>
                   <a href="#/market/activ-add">
