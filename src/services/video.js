@@ -52,3 +52,13 @@ export async function updateVideo(params) {
     body: params,
   });
 }
+
+// 更新视频点赞数
+// video_id 视频id
+// parise_num  点赞数
+export async function addLike(params) {
+  return request('/merchant/video/update', {
+    method: 'POST',
+    body: params,
+  });
+}

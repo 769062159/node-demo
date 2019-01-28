@@ -1,4 +1,4 @@
-import { getMember, updateMember, addMember, videoList, getReasons, updateVideo } from '../services/video';
+import { getMember, updateMember, addMember, videoList, getReasons, updateVideo, addLike } from '../services/video';
 
 export default {
   namespace: 'video',
@@ -12,6 +12,16 @@ export default {
   },
 
   effects: {
+    *addLike({ payload, callback }, { call }) {
+      const res = yield call(addLike, payload);
+      if (res && res.code === 200) {
+        callback();
+        // yield put({
+        //   type: 'addLikes',
+        //   payload,
+        // });
+      }
+    },
     *passOrTurnVideo({ payload, callback, refresh }, { call, put }) {
       const res = yield call(updateVideo, payload);
       if (res && res.code === 200) {
@@ -78,6 +88,20 @@ export default {
   },
 
   reducers: {
+    addLikes(state, { payload }) {
+      const { video_id: id, parise_num: num } = payload;
+      let { videoList } = state;
+      videoList = videoList.map(res => {
+        if (res.id === id) {
+          res.num += num;
+        }
+        return res;
+      })
+      return {
+        ...state,
+        videoList,
+      };
+    },
     getReasonss(state, { payload }) {
       const { data } = payload;
       return {

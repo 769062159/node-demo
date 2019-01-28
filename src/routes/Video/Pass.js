@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'dva';
-import { Table, message, Modal, Divider, Row, Col, Select, Form, Button, Input, Card } from 'antd';
+import { Table, message, Modal, Divider, Row, Col, Select, Form, Button, Input, Card, InputNumber } from 'antd';
 import moment from 'moment';
 import { Player } from 'video-react';
 import "video-react/dist/video-react.css";
@@ -25,6 +25,8 @@ export default class Review extends Component {
         reasonVisibility: false,
         reason: '',
         formValues: {},
+        likeId: '',
+        likeNum: 0,
     }
     componentDidMount() {
         const { dispatch } = this.props;
@@ -139,6 +141,12 @@ export default class Review extends Component {
         })
     }
 
+    addLike = (id) => {
+      this.setState({
+        likeId: id,
+      })
+    }
+
     handleFormReset = () => {
         const { form, dispatch } = this.props;
         form.resetFields();
@@ -160,11 +168,35 @@ export default class Review extends Component {
             videoUrl,
         })
     }
+    chgLikenum = (e) => {
+      this.setState({
+        likeNum: e,
+      })
+    }
 
     handleCancelVideo = () => {
         this.setState({
             videoUrl: '',
         })
+    }
+
+    checkLike = () => {
+      const { likeId, likeNum } = this.state;
+      const { dispatch } = this.props;
+      dispatch({
+        type: 'video/addLike',
+        payload: {
+          video_id: likeId,
+          parise_num: likeNum,
+        },
+        callback: () => {
+          message.success('设置成功');
+          this.setState({
+            likeId: '',
+            likeNum: 0,
+          })
+        },
+      });
     }
     handleSearch = e => {
         if (e) {
@@ -194,6 +226,11 @@ export default class Review extends Component {
           });
         });
       };
+      CloseLike = () => {
+        this.setState({
+          likeId: '',
+        })
+      }
     
     renderAdvancedForm() {
         const { getFieldDecorator } = this.props.form;
@@ -242,7 +279,7 @@ export default class Review extends Component {
                 );
               });
         }
-        const { reasonVisibility, videoUrl } = this.state;
+        const { reasonVisibility, videoUrl, likeId } = this.state;
         const progressColumns = [
             {
                 title: '视频封面',
@@ -335,7 +372,7 @@ export default class Review extends Component {
                 title: '操作',
                 dataIndex: 'do',
                 fixed: 'right',
-                width: 190,
+                width: 180,
                 key: 'do',
                 render: (val, record) => (
                   <Fragment>
@@ -350,6 +387,8 @@ export default class Review extends Component {
                     <a onClick={this.openReason.bind(this, record.id)}>驳回</a>
                     <Divider type="vertical" />
                     <a onClick={this.openVideo.bind(this, record.video_url)}>播放</a>
+                    <Divider type="vertical" />
+                    <a onClick={this.addLike.bind(this, record.id)}>增加点赞</a>
                   </Fragment>
                 ),
             },
@@ -371,6 +410,16 @@ export default class Review extends Component {
                 pagination={videoListPage}
               />
             </Card>
+            <Modal visible={!!likeId} onOk={this.checkLike} onCancel={this.CloseLike} destroyOnClose="true">
+              <Row>
+                <Col span={4}>
+                  点赞数：
+                </Col>
+                <Col span={16}>
+                  <InputNumber onChange={this.chgLikenum} style={{ width: 300 }} />
+                </Col>
+              </Row>
+            </Modal>
             <Modal visible={reasonVisibility} onOk={this.refund} onCancel={this.openOrCloseReason} destroyOnClose="true">
               <Row>
                 <Col span={4}>
