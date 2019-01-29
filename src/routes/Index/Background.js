@@ -54,7 +54,8 @@ export default class Phone extends PureComponent {
       if (!err) {
         const { dispatch } = this.props;
         value.mobile = value.mobile.toString();
-        value.video_audio = Number(value.video_audio) ;
+        value.video_audio = Number(value.video_audio);
+        value.personal_verify = Number(value.personal_verify);
         dispatch({
           type: 'config/addConfig',
           payload: value,
@@ -71,6 +72,16 @@ export default class Phone extends PureComponent {
       type: 'config/setting',
       payload: {
         key: 'video_audio',
+        value: Number(e),
+      },
+    });
+  }
+  identitySwitch = (e) => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'config/setting',
+      payload: {
+        key: 'personal_verify',
         value: Number(e),
       },
     });
@@ -101,6 +112,12 @@ export default class Phone extends PureComponent {
               valuePropName: 'checked',
               initialValue: config.video_audio,
             })(<Switch onChange={this.videoSwitch} />)}
+          </FormItem>
+          <FormItem {...formItemLayout} label="身份是否自动认证">
+            {getFieldDecorator('personal_verify', {
+              valuePropName: 'checked',
+              initialValue: config.personal_verify,
+            })(<Switch onChange={this.identitySwitch} />)}
           </FormItem>
           <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
             <Button type="primary" loading={loading}  onClick={this.handleSubmit}>

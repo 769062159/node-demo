@@ -100,15 +100,34 @@ export default class Analysis extends Component {
             <div className={`${styles.txtYesterday} ${styles.txtBottom}`}>昨日：{statistics.yesterday_merchant_order_num || '0'}</div>
           </div>
           <div  className={styles.txtCenter}>
+            <div className={styles.txtTitle}>财道版</div>
+            <div className={`${styles.txtNumber}`}>{statistics.today_wealth_order_num || '0'}</div>
+            <div className={`${styles.txtYesterday} ${styles.txtBottom}`}>昨日：{statistics.yesterday_wealth_order_num || '0'}</div>
+          </div>
+          <div  className={styles.txtCenter}>
             <div className={styles.txtTitle}>视群版</div>
             <div className={styles.txtNumber}>{statistics.today_group_order_num || '0'}</div>
             <div className={`${styles.txtYesterday} ${styles.txtBottom}`}>昨日：{statistics.yesterday_group_order_num || '0'}</div>
           </div>
+          <div className={styles.txtCenter}>
+            <div className={styles.txtTitle}>补差价商户(视群版)</div>
+            <div className={`${styles.txtNumber}`}>{statistics.today_group_supplement_merchant_order_num || '0'}</div>
+            <div className={`${styles.txtYesterday} ${styles.txtBottom}`}>昨日：{statistics.yesterday_group_supplement_merchant_order_num || '0'}</div>
+          </div>
+          <div className={styles.txtCenter}>
+            <div className={styles.txtTitle}>补差价商户(财道版)</div>
+            <div className={`${styles.txtNumber}`}>{statistics.today_wealth_supplement_merchant_order_num || '0'}</div>
+            <div className={`${styles.txtYesterday} ${styles.txtBottom}`}>昨日：{statistics.yesterday_wealth_supplement_merchant_order_num || '0'}</div>
+          </div>
+          {/* <div  className={styles.txtCenter}>
+            <div className={styles.txtTitle}>补差价商户</div>
+            <div className={`${styles.txtNumber}`}>{statistics.today_supplement_merchant_order_num || '0'}</div>
+            <div className={`${styles.txtYesterday} ${styles.txtBottom}`}>昨日：{statistics.yesterday_supplement_merchant_order_num || '0'}</div>
+          </div> */}
           <div  className={styles.txtCenter}>
-            <div className={styles.txtTitle}>补差价升级</div>
-            {/* todo */}
-            <div className={`${styles.txtNumber}`}>{statistics.today_supplement_order_num || '0'}</div>
-            <div className={`${styles.txtYesterday} ${styles.txtBottom}`}>昨日：{statistics.yesterday_supplement_order_num || '0'}</div>
+            <div className={styles.txtTitle}>补差价财道</div>
+            <div className={`${styles.txtNumber}`}>{statistics.today_supplement_wealth_order_num || '0'}</div>
+            <div className={`${styles.txtYesterday} ${styles.txtBottom}`}>昨日：{statistics.yesterday_supplement_wealth_order_num || '0'}</div>
           </div>
           <div  className={styles.txtCenter}>
             <div className={styles.txtTitle}>佣金（元）</div>
@@ -154,6 +173,14 @@ export default class Analysis extends Component {
           <div  className={styles.txtCenter}>
             <div className={styles.txtTitle}>免费视群版会员数</div>
             <div className={`${styles.txtNumber} ${styles.txtBottom}`}>{statistics.free_group_account_count || 0}</div>
+          </div>
+          <div  className={styles.txtCenter}>
+            <div className={styles.txtTitle}>财道数量</div>
+            <div className={`${styles.txtNumber} ${styles.txtBottom}`}>{statistics.wealth_account_count || 0}</div>
+          </div>
+          <div  className={styles.txtCenter}>
+            <div className={styles.txtTitle}>免费财道用户</div>
+            <div className={`${styles.txtNumber} ${styles.txtBottom}`}>{statistics.charge_wealth_account_count || 0}</div>
           </div>
         </div>
         <div className={styles.cardTitle}>

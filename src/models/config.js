@@ -57,6 +57,7 @@ export default {
     getConfig(state, { payload }) {
       const { data } = payload;
       data.video_audio =  Boolean(data.video_audio);
+      data.personal_verify =  Boolean(data.personal_verify);
       return {
         ...state,
         config: data,
