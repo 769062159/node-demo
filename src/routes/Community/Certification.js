@@ -597,7 +597,7 @@ export default class Certification extends PureComponent {
               <a onClick={this.editDataMsg.bind(this, record, 1)}>同意</a>
             </Fragment>
             ) : record.status === 1 ? (
-              <a onClick={this.editDataMsg.bind(this, record, 2)}>驳回</a>
+              <a onClick={this.editDataMsg.bind(this, record, 2)}>重新驳回</a>
             ) : null,
       },
     ];
