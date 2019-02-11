@@ -22,6 +22,7 @@ import MoneyForm from './MoneyForm';
 
 import styles from './TableList.less';
 
+const LevelName = ['普通版', '商户版', '视群版', '财道版'];
 const { confirm } = Modal;
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -635,6 +636,7 @@ export default class FrontUserList extends PureComponent {
               <div>{text.nickname}</div>
               <div>Id:{text.id}</div>
               <div>等级:{text.account_level}</div>
+              <div>版本:{LevelName[Number(text.has_account ? text.has_account.permission : 0)]}</div>
               <div className={styles.superior} onClick={this.searchMsg.bind(this, text.referee)} >上级:{text.referee && text.referee.nickname}</div>
               <div>手机号码:{text.mobile}</div>
             </div>
