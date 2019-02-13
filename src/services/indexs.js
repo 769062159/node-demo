@@ -111,3 +111,19 @@ export async function editActiveDetail(params) {
     body: params,
   });
 }
+
+// 轮播图需要显示的小程序
+export async function bindBanner(params) {
+  return request('/merchant/index/bind', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+// 获取小程序列表
+export async function getBanner(params) {
+  return request('/merchant/index/wechat-accounts', {
+    method: 'POST',
+    body: params,
+  });
+}

@@ -13,6 +13,8 @@ import {
   setActivePage,
   activeDetail,
   editActiveDetail,
+  bindBanner,
+  getBanner,
 } from '../services/indexs';
 import { getAllGoods } from '../services/goods';
 import { getLive } from '../services/live';
@@ -42,9 +44,26 @@ export default {
     LiveKey: '',
     GoodKey: '',
     remark: '', // 用于记录livekey和goodkey对应的名字
+    programList: [], // 小程序列表
+    checkProgramList: [], // 选中的小程序列表
   },
 
   effects: {
+    *bindBanner({ payload, callback }, { call }) {
+      const response = yield call(bindBanner, payload);
+      if (response && response.code === 200) {
+        callback();
+      }
+    },
+    *getBanner({ payload }, { call, put }) {
+      const response = yield call(getBanner, payload);
+      if (response && response.code === 200) {
+        yield put({
+          type: 'getBanners',
+          payload: response,
+        });
+      }
+    },
     *getActiveList(_, { call, put }) {
       const response = yield call(getActiveList);
       yield put({
@@ -181,6 +200,26 @@ export default {
   },
 
   reducers: {
+    bindProgramId(state, { payload }) {
+      return {
+        ...state,
+        checkProgramList: payload,
+      }
+    },
+    getBanners(state, { payload }) {
+      const { data } = payload;
+      const checkProgramList = [];
+      data.forEach(ele => {
+        if (ele.bind) {
+          checkProgramList.push(ele.id);
+        }
+      });
+      return {
+        ...state,
+        programList: data,
+        checkProgramList,
+      }
+    },
     clearDeail(state) {
       return {
         ...state,

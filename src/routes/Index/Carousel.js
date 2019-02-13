@@ -2,7 +2,7 @@ import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
 import moment from 'moment';
 import { routerRedux } from 'dva/router';
-import { Table, message, Modal, Card, Button, Divider } from 'antd';
+import { Table, message, Modal, Card, Button, Divider, Row, Col, Checkbox } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
 import styles from './TableList.less';
@@ -137,7 +137,8 @@ const jumpType = ['', '跳转商品', '跳转外部链接', '无跳转', '跳转
 }))
 export default class Home extends PureComponent {
   state = {
-    expandForm: false,
+    // expandForm: false,
+    bindFormId: '',
     // homeVisible: false,
     pagination: 1, // 页脚
     // page: 1, // 商品页脚
@@ -161,11 +162,19 @@ export default class Home extends PureComponent {
     // });
   }
 
-  toggleForm = () => {
-    this.setState({
-      expandForm: !this.state.expandForm,
+  // toggleForm = () => {
+  //   this.setState({
+  //     expandForm: !this.state.expandForm,
+  //   });
+  // };
+
+  getBindId = (e) => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'indexs/bindProgramId',
+      payload: e,
     });
-  };
+  }
 
   // 删除商品
   deleteDataMsg = id => {
@@ -285,6 +294,40 @@ export default class Home extends PureComponent {
       },
     });
   };
+  bindProgram = (id) => {
+    this.setState({
+      bindFormId: id,
+    })
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'indexs/getBanner',
+      payload: {
+        index_id: id,
+      },
+    });
+  }
+  bindProgramId = () => {
+    const { bindFormId } = this.state;
+    const { indexs: { checkProgramList }, dispatch } = this.props;
+    dispatch({
+      type: 'indexs/bindBanner',
+      payload: {
+        index_id: bindFormId,
+        wechat_account_ids: checkProgramList,
+      },
+      callback: () => {
+        this.setState({
+          bindFormId: '',
+        })
+        message.success('设置成功');
+      },
+    });
+  }
+  cancelProgram = () => {
+    this.setState({
+      bindFormId: '',
+    })
+  }
   goodListChange = pagination => {
     const { current } = pagination;
     // this.setState({
@@ -307,11 +350,11 @@ export default class Home extends PureComponent {
 
   render() {
     const {
-      indexs: { homeList: datas, homeListPage },
+      indexs: { homeList: datas, homeListPage, programList, checkProgramList },
       loading,
     } = this.props;
     // const { getFieldDecorator } = this.props.form;
-    // const { homeVisible } = this.state;
+    const { bindFormId } = this.state;
     const progressColumns = [
       {
         title: '封面',
@@ -349,11 +392,22 @@ export default class Home extends PureComponent {
           <Fragment>
             <a href={`#/market/EditForm/${record.id}`}>修改</a>
             <Divider type="vertical" />
+            <a onClick={this.bindProgram.bind(this, record.id)}>绑定到小程序</a>
+            <Divider type="vertical" />
             <a onClick={this.deleteDataMsg.bind(this, record.id)}>删除</a>
           </Fragment>
         ),
       },
     ];
+
+    const programListArr = [];
+    if (programList.length) {
+      programList.forEach(res => {
+        programListArr.push(
+          <Col span={8} key={res.id}><Checkbox value={res.id} >{res.name}</Checkbox></Col>
+        );
+      });
+    }
 
     return (
       <PageHeaderLayout>
@@ -374,21 +428,23 @@ export default class Home extends PureComponent {
             />
           </div>
         </Card>
-        {/* <Modal
+        <Modal
           title="热卖商品"
-          visible={homeVisible}
-          onCancel={this.handAddleCancel.bind(this)}
-          footer=""
+          visible={!!bindFormId}
+          onOk={this.bindProgramId}
+          onCancel={this.cancelProgram.bind(this)}
         >
-          <CustomizedForm
-            handleSubmit={this.handleSubmit}
-            GoodList={GoodList}
-            GoodListPage={GoodListPage}
-            goodListChange={this.goodListChange}
-            loading={loading}
-            homeForm={homeForm}
-          />
-        </Modal> */}
+          <Row>
+            <Col span={6}>请选择绑定小程序:</Col>
+            <Col span={18}>
+              <Checkbox.Group style={{ width: '100%' }} value={checkProgramList} onChange={this.getBindId}>
+                <Row>
+                  {programListArr}
+                </Row>
+              </Checkbox.Group>
+            </Col>
+          </Row>
+        </Modal>
       </PageHeaderLayout>
     );
   }
