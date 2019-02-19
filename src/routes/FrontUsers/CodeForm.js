@@ -1,5 +1,5 @@
-import React, { Component, Fragment } from 'react';
-import { Form, Input, Button, Radio, message } from 'antd';
+import React, { Component } from 'react';
+import { Form, Input, Button, Radio, message, InputNumber } from 'antd';
 
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
@@ -99,7 +99,7 @@ const CustomizedForm = Form.create({
                   message: '请输入交易金额',
                 },
               ],
-            })(<Input />)}
+            })(<InputNumber min={0} precision={2} />)}
           </FormItem>
         ) : null
       }
@@ -111,7 +111,7 @@ const CustomizedForm = Form.create({
               message: '请输入商户版数量',
             },
           ],
-        })(<Input />)}
+        })(<InputNumber min={0} step={1} precision={0} />)}
       </FormItem>
       <FormItem {...formItemLayout} label="财道版数量">
         {getFieldDecorator('wealth_num', {
@@ -121,7 +121,7 @@ const CustomizedForm = Form.create({
               message: '请输入财道版数量',
             },
           ],
-        })(<Input />)}
+        })(<InputNumber min={0} step={1} precision={0} />)}
       </FormItem>
       <FormItem {...formItemLayout} label="视群版数量">
         {getFieldDecorator('group_num', {
@@ -131,37 +131,39 @@ const CustomizedForm = Form.create({
               message: '请输入视群版数量',
             },
           ],
-        })(<Input />)}
+        })(<InputNumber min={0} step={1} />)}
       </FormItem>
       {
         codeForm.trade_type !== 3 ? (
-          <Fragment>
-            <FormItem {...formItemLayout} label="上级是否有佣金">
-              {getFieldDecorator('is_commission', {
-                rules: [
-                  {
-                    required: true,
-                    message: '请输入上级是否有佣金',
-                  },
-                ],
-              })(
-                <RadioGroup >
-                  <Radio value={1}>是</Radio>
-                  <Radio value={0}>否</Radio>
-                </RadioGroup>
-              )}
-            </FormItem>
-            <FormItem {...formItemLayout} label="佣金金额">
-              {getFieldDecorator('commission', {
-                rules: [
-                  {
-                    required: true,
-                    message: '请输入佣金金额',
-                  },
-                ],
-              })(<Input />)}
-            </FormItem>
-          </Fragment>
+          <FormItem {...formItemLayout} label="上级是否有佣金">
+            {getFieldDecorator('is_commission', {
+              rules: [
+                {
+                  required: true,
+                  message: '请输入上级是否有佣金',
+                },
+              ],
+            })(
+              <RadioGroup >
+                <Radio value={1}>是</Radio>
+                <Radio value={0}>否</Radio>
+              </RadioGroup>
+            )}
+          </FormItem>
+        ) : null
+      }
+      {
+        codeForm.is_commission === 1 && codeForm.trade_type !== 3 ? (
+          <FormItem {...formItemLayout} label="佣金金额">
+            {getFieldDecorator('commission', {
+              rules: [
+                {
+                  required: true,
+                  message: '请输入佣金金额',
+                },
+              ],
+            })(<InputNumber min={0} precision={2} />)}
+          </FormItem>
         ) : null
       }
       <FormItem {...formItemLayout} label="备注">
@@ -173,7 +175,7 @@ const CustomizedForm = Form.create({
           rules: [
             {
               required: true,
-              message: '请输入佣金金额',
+              message: '请输入操作密码',
             },
           ],
         })(<Input />)}

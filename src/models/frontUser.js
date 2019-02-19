@@ -23,7 +23,10 @@ export default {
     frontUserListPage: {}, // table 页脚
     userRankList: [], // 用户等级列表
     getDefaultList: [], // 默认用户列表
-    codeForm: {}, // code表单
+    codeForm: {
+      is_commission: 1,
+      trade_type: 1,
+    }, // code表单
   },
 
   effects: {
