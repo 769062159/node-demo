@@ -11,6 +11,7 @@ import {
   merchantSetting,
   updatePower,
   updateCommssion,
+  setAuthorCode,
 } from '../services/frontUser.js';
 import { updateMember, addMember } from '../services/video';
 
@@ -22,9 +23,16 @@ export default {
     frontUserListPage: {}, // table 页脚
     userRankList: [], // 用户等级列表
     getDefaultList: [], // 默认用户列表
+    codeForm: {}, // code表单
   },
 
   effects: {
+    *setAuthorCode({ payload, callback }, { call }) {
+      const res = yield call(setAuthorCode, payload);
+      if (res && res.code === 200) {
+        callback();
+      }
+    },
     *createMember({ payload, callback }, { call, put }) {
       const res = yield call(addMember, payload);
       if (res && res.code === 200) {
@@ -161,6 +169,17 @@ export default {
   },
 
   reducers: {
+    changeFormVals(state, { payload }) {
+      let { codeForm } = state;
+      codeForm = {
+        ...codeForm,
+        ...payload.obj,
+      };
+      return {
+        ...state,
+        codeForm,
+      };
+    },
     updateMember(state, { payload }) {
       const { user_id: id, status } = payload;
       let { frontUserList } = state;

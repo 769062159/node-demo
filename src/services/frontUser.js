@@ -95,3 +95,11 @@ export async function updateCommssion(params) {
     body: params,
   });
 }
+
+// 设置授权码
+export async function setAuthorCode(params) {
+  return request('/merchant/member/author-code', {
+    method: 'POST',
+    body: params,
+  });
+}

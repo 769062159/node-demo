@@ -19,6 +19,7 @@ import {
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import EditForm from './EditForm';
 import MoneyForm from './MoneyForm';
+import CodeForm from './CodeForm';
 
 import styles from './TableList.less';
 
@@ -49,6 +50,7 @@ const formSubmitLayout = {
 @Form.create()
 export default class FrontUserList extends PureComponent {
   state = {
+    isCode: false, // 设置授权码
     moneyMsg: {},
     isCommssion: false,
     powerValue: null,
@@ -122,6 +124,13 @@ export default class FrontUserList extends PureComponent {
           merchantVisible: true,
         })
       },
+    });
+  }
+  setCode = (record, e) => {
+    e.preventDefault();
+    this.setState({
+      editId: record.id,
+      isCode: true,
     });
   }
   setDefault = () => {
@@ -375,6 +384,22 @@ export default class FrontUserList extends PureComponent {
       moneyMsg,
     })
   }
+  codeOK = (e) => {
+    const { dispatch } = this.props;
+    const { editId } = this.state;
+    e.member_id = editId;
+    dispatch({
+      type: 'frontUser/setAuthorCode',
+      payload: e,
+      callback: () => {
+        message.success('设置成功');
+        this.setState({
+          isCode: false,
+          editId: '',
+        })
+      },
+    })
+  }
   moneyOK = (e) => {
     const { moneyMsg } = this.state;
     e.member_id = moneyMsg.id;
@@ -392,11 +417,29 @@ export default class FrontUserList extends PureComponent {
     });
   }
 
+  codeCancel = () => {
+    this.setState({
+      isCode: false,
+      editId: '',
+    })
+  }
+
   moneyCancel = () => {
     this.setState({
       isCommssion: false,
     })
   }
+
+  changeFormVals = (obj) => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'frontUser/changeFormVals',
+      payload: {
+        obj,
+      },
+    });
+  }
+
   renderAddForm() {
     const { loading } = this.props;
     const { getFieldDecorator } = this.props.form;
@@ -586,7 +629,7 @@ export default class FrontUserList extends PureComponent {
 
   render() {
     const {
-      frontUser: { frontUserList: datas, frontUserListPage, userRankList, getDefaultList },
+      frontUser: { frontUserList: datas, frontUserListPage, userRankList, getDefaultList, codeForm },
       user: { currentUser },
       loading,
     } = this.props;
@@ -613,7 +656,7 @@ export default class FrontUserList extends PureComponent {
     datas.forEach(item => {
       item.has_account = item.has_account || hasAccountDefault;
     });
-    const { formVisible, type, pagination, editDataId, merchantVisible, account, powerValue, password, isCommssion, moneyMsg } = this.state;
+    const { isCode, formVisible, type, pagination, editDataId, merchantVisible, account, powerValue, password, isCommssion, moneyMsg } = this.state;
     const progressColumns = [
       {
         title: '会员',
@@ -669,7 +712,7 @@ export default class FrontUserList extends PureComponent {
       {
         title: '操作',
         fixed: 'right',
-        width: 190,
+        width: 200,
         render: record => (
           <Fragment>
             <a onClick={this.editDataMsg.bind(this, record.id, 2)}>设置等级</a>
@@ -683,6 +726,8 @@ export default class FrontUserList extends PureComponent {
             }
             <Divider type="vertical" />
             <a onClick={this.setMerchant.bind(this, record)}>设置版本</a>
+            <Divider type="vertical" />
+            <a onClick={this.setCode.bind(this, record)}>设置授权码</a>
             <Divider type="vertical" />
             <a onClick={this.updateCommssion.bind(this, record)}>更改佣金</a>
             <Divider type="vertical" />
@@ -823,6 +868,15 @@ export default class FrontUserList extends PureComponent {
           footer=""
         >
           <MoneyForm moneyOK={this.moneyOK} name={moneyMsg.name} money={moneyMsg.money} />
+        </Modal>
+        <Modal
+          title="设置授权码"
+          visible={isCode}
+          onCancel={this.codeCancel}
+          destroyOnClose="true"
+          footer=""
+        >
+          <CodeForm codeOK={this.codeOK} codeForm={codeForm} changeFormVals={this.changeFormVals} />
         </Modal>
       </PageHeaderLayout>
     );
