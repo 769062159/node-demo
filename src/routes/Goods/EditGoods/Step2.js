@@ -74,7 +74,6 @@ const CheckboxGroup = Checkbox.Group;
 const now = new Date();
 const weekNow = new Date(now.getTime() + 7 * 60 * 1000 * 60 * 24);
 
-
 const CustomizedForm = Form.create({
   onFieldsChange(props, changedFields) {
     props.onChange(changedFields);
@@ -207,9 +206,10 @@ const CustomizedForm = Form.create({
         value: goodsDetail.goods_shelves_type,
       }),
       goods_shelves_time: Form.createFormField({
-        value: typeof goodsDetail.goods_shelves_time === 'number'
-          ? moment(timeFormat(goodsDetail.goods_shelves_time), 'YYYY-MM-DD HH:mm:ss')
-          : (goodsDetail.goods_shelves_time || ''),
+        value:
+          typeof goodsDetail.goods_shelves_time === 'number'
+            ? moment(timeFormat(goodsDetail.goods_shelves_time), 'YYYY-MM-DD HH:mm:ss')
+            : goodsDetail.goods_shelves_time || '',
       }),
       // goods_shelves_time: Form.createFormField({
       //   value: goodsDetail.goods_shelves_time
@@ -226,10 +226,14 @@ const CustomizedForm = Form.create({
       //     : moment(goodsDetail.group_start_time, 'YYYY-MM-DD HH:mm:ss'),
       // }),
       group_start_time: Form.createFormField({
-        value: goodsDetail.group_start_time ? moment(goodsDetail.group_start_time, 'YYYY-MM-DD HH:mm:ss') : null,
+        value: goodsDetail.group_start_time
+          ? moment(goodsDetail.group_start_time, 'YYYY-MM-DD HH:mm:ss')
+          : null,
       }),
       group_end_time: Form.createFormField({
-        value: goodsDetail.group_end_time ? moment(goodsDetail.group_end_time, 'YYYY-MM-DD HH:mm:ss') : null,
+        value: goodsDetail.group_end_time
+          ? moment(goodsDetail.group_end_time, 'YYYY-MM-DD HH:mm:ss')
+          : null,
       }),
       // group_end_time: Form.createFormField({
       //   value: typeof goodsDetail.group_end_time === 'number'
@@ -445,9 +449,7 @@ const CustomizedForm = Form.create({
                 <InputNumber
                   min={0}
                   max={100}
-                  formatter={value =>
-                    `${goodsDetail.sell_goods_price ? value : 0}%`
-                  }
+                  formatter={value => `${goodsDetail.sell_goods_price ? value : 0}%`}
                   parser={value => value.replace('%', '')}
                   onChange={e => chgLevelHas(res, e)}
                 />
@@ -599,29 +601,37 @@ const CustomizedForm = Form.create({
                 rules: [{ required: true, message: '请填写商商品类型' }],
               })(
                 <Select style={{ width: 200 }}>
-                  <Option value={0} key={0}>普通商品</Option>
-                  <Option value={1} key={1}>升级店主商品</Option>
+                  <Option value={0} key={0}>
+                    普通商品
+                  </Option>
+                  <Option value={1} key={1}>
+                    升级店主商品
+                  </Option>
                 </Select>
               )}
             </Form.Item>
           </Col>
-          {
-            goodsDetail.type === 1 ? (
-              <Col span={24}>
-                <Form.Item {...formItemLayouts} label="升级店主套餐">
-                  {getFieldDecorator('upgrade_type', {
-                    rules: [{ required: true, message: '请填写升级店主套餐' }],
-                  })(
-                    <Select style={{ width: 200 }}>
-                      <Option value={1} key={1}>商户版</Option>
-                      <Option value={2} key={2}>视群版</Option>
-                      <Option value={3} key={3}>财道版</Option>
-                    </Select>
-                  )}
-                </Form.Item>
-              </Col>
-            ) : null
-          }
+          {goodsDetail.type === 1 ? (
+            <Col span={24}>
+              <Form.Item {...formItemLayouts} label="升级店主套餐">
+                {getFieldDecorator('upgrade_type', {
+                  rules: [{ required: true, message: '请填写升级店主套餐' }],
+                })(
+                  <Select style={{ width: 200 }}>
+                    <Option value={1} key={1}>
+                      商户版
+                    </Option>
+                    <Option value={2} key={2}>
+                      视群版
+                    </Option>
+                    <Option value={3} key={3}>
+                      财道版
+                    </Option>
+                  </Select>
+                )}
+              </Form.Item>
+            </Col>
+          ) : null}
         </Row>
         <Form.Item {...formItemLayout} label="商品名称">
           {getFieldDecorator('goods_name', {
@@ -791,45 +801,42 @@ const CustomizedForm = Form.create({
               })(<Select>{shippingTemplatesItem}</Select>)}
             </Form.Item>
           </Col>
-          {
-            goodsDetail.type === 0 ? (
-              <Col span={24}>
-                <Form.Item {...formItemLayouts} label="是否拼团">
-                  {getFieldDecorator('is_group', {
-                    rules: [{ required: true, message: '请选择是否拼团' }],
-                  })(
-                    <Select>
-                      <Option value={1} key={1}>
-                        参加
-                      </Option>
-                      <Option value={0} key={0}>
-                        不参加
-                      </Option>
-                    </Select>
+          {goodsDetail.type === 0 ? (
+            <Col span={24}>
+              <Form.Item {...formItemLayouts} label="是否拼团">
+                {getFieldDecorator('is_group', {
+                  rules: [{ required: true, message: '请选择是否拼团' }],
+                })(
+                  <Select>
+                    <Option value={1} key={1}>
+                      参加
+                    </Option>
+                    <Option value={0} key={0}>
+                      不参加
+                    </Option>
+                  </Select>
                 )}
-                </Form.Item>
-              </Col>
-            ) : null
-          }
+              </Form.Item>
+            </Col>
+          ) : null}
         </Row>
-        {
-          goodsDetail.is_group === 1 ? (
-            <Row gutter={24}>
-              <Col span={12}>
-                <Form.Item {...spcialLayouts} label="提货方式">
-                  {getFieldDecorator('sale_channel', {
-                    rules: [{ required: true, message: '请选择提货方式' }],
-                  })(<Select>{saleChannelsItem}</Select>)}
-                </Form.Item>
-              </Col>
-              <Col span={12}>
-                <Form.Item {...spcialLayouts} label="分享标题">
-                  {getFieldDecorator('group_share_title', {
-                    rules: [{ required: goodsDetail.is_group === 1, message: '请输入分享标题' }],
-                  })(<Input />)}
-                </Form.Item>
-              </Col>
-              {/* <Col span={12}>
+        {goodsDetail.is_group === 1 ? (
+          <Row gutter={24}>
+            <Col span={12}>
+              <Form.Item {...spcialLayouts} label="提货方式">
+                {getFieldDecorator('sale_channel', {
+                  rules: [{ required: true, message: '请选择提货方式' }],
+                })(<Select>{saleChannelsItem}</Select>)}
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item {...spcialLayouts} label="分享标题">
+                {getFieldDecorator('group_share_title', {
+                  rules: [{ required: goodsDetail.is_group === 1, message: '请输入分享标题' }],
+                })(<Input />)}
+              </Form.Item>
+            </Col>
+            {/* <Col span={12}>
                 <Form.Item {...spcialLayouts} label="是否返佣">
                   {getFieldDecorator('is_return_profit', {
                     rules: [{ required: goodsDetail.is_group === 1, message: '请选择是否返佣' }],
@@ -845,111 +852,110 @@ const CustomizedForm = Form.create({
                   )}
                 </Form.Item>
               </Col> */}
-              <Col span={12}>
-                <Form.Item {...spcialLayouts} label="团长是否免费">
-                  {getFieldDecorator('is_grouper_free', {
-                    rules: [{ required: goodsDetail.is_group === 1, message: '请选择团长是否免费' }],
-                  })(
-                    <Select>
-                      <Option value={1} key={1}>
-                        是
-                      </Option>
-                      <Option value={0} key={0}>
-                        否
-                      </Option>
-                    </Select>
-                  )}
-                </Form.Item>
-              </Col>
-              <Col span={12}>
-                <Form.Item {...spcialLayouts} label="团购人数">
-                  {getFieldDecorator('group_num', {
-                    rules: [{ required: goodsDetail.is_group === 1, message: '请选择团购人数' }],
-                  })(<InputNumber min={1} max={10} />)}
-                </Form.Item>
-              </Col>
-              <Col span={12}  className={styles.inlineExtra}>
-                <Form.Item {...spcialLayouts} label="拼团时长" extra="小时">
-                  {getFieldDecorator('group_duration', {
-                    rules: [{ required: goodsDetail.is_group === 1, message: '请选择拼团时长' }],
-                  })(<InputNumber min={0} />)}
-                </Form.Item>
-              </Col>
-              <Col span={12} className={styles.inlineExtra}>
-                <Form.Item {...spcialLayouts} label="取货时间" extra="天">
-                  {getFieldDecorator('group_pick_up_duration', {
-                    rules: [{ required: goodsDetail.sale_channel === 1, message: '请选择取货时间' }],
-                  })(<InputNumber min={0} />)}
-                </Form.Item>
-              </Col>
-              <Col span={12} >
-                <Form.Item {...spcialLayouts} label="单人限购数量" extra="0为不限购">
-                  {getFieldDecorator('limit_buy', {
-                    rules: [{ required: goodsDetail.is_group === 1, message: '请选择限购数量' }],
-                  })(<InputNumber min={0} />)}
-                </Form.Item>
-              </Col>
-              <Col span={12} >
-                <Form.Item {...spcialLayouts} label="团购价格">
-                  {getFieldDecorator('group_price', {
-                    rules: [{ required: goodsDetail.is_group === 1, message: '请选择团购价格' }],
-                  })(<InputNumber min={0} step={0.01} precision={2} />)}
-                </Form.Item>
-              </Col>
-              <Col span={12}>
-                <Form.Item {...spcialLayouts} label="团购开始时间" >
-                  {getFieldDecorator('group_start_time', {
-                    rules: [
-                      {
-                        required: goodsDetail.is_group === 1,
-                        message: '请填写团购开始时间',
-                      },
-                    ],
-                    getValueFromEvent: (date, dateString) => {
-                      return dateString;
+            <Col span={12}>
+              <Form.Item {...spcialLayouts} label="团长是否免费">
+                {getFieldDecorator('is_grouper_free', {
+                  rules: [{ required: goodsDetail.is_group === 1, message: '请选择团长是否免费' }],
+                })(
+                  <Select>
+                    <Option value={1} key={1}>
+                      是
+                    </Option>
+                    <Option value={0} key={0}>
+                      否
+                    </Option>
+                  </Select>
+                )}
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item {...spcialLayouts} label="团购人数">
+                {getFieldDecorator('group_num', {
+                  rules: [{ required: goodsDetail.is_group === 1, message: '请选择团购人数' }],
+                })(<InputNumber min={1} max={10} />)}
+              </Form.Item>
+            </Col>
+            <Col span={12} className={styles.inlineExtra}>
+              <Form.Item {...spcialLayouts} label="拼团时长" extra="小时">
+                {getFieldDecorator('group_duration', {
+                  rules: [{ required: goodsDetail.is_group === 1, message: '请选择拼团时长' }],
+                })(<InputNumber min={0} />)}
+              </Form.Item>
+            </Col>
+            <Col span={12} className={styles.inlineExtra}>
+              <Form.Item {...spcialLayouts} label="取货时间" extra="天">
+                {getFieldDecorator('group_pick_up_duration', {
+                  rules: [{ required: goodsDetail.sale_channel === 1, message: '请选择取货时间' }],
+                })(<InputNumber min={0} />)}
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item {...spcialLayouts} label="单人限购数量" extra="0为不限购">
+                {getFieldDecorator('limit_buy', {
+                  rules: [{ required: goodsDetail.is_group === 1, message: '请选择限购数量' }],
+                })(<InputNumber min={0} />)}
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item {...spcialLayouts} label="团购价格">
+                {getFieldDecorator('group_price', {
+                  rules: [{ required: goodsDetail.is_group === 1, message: '请选择团购价格' }],
+                })(<InputNumber min={0} step={0.01} precision={2} />)}
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item {...spcialLayouts} label="团购开始时间">
+                {getFieldDecorator('group_start_time', {
+                  rules: [
+                    {
+                      required: goodsDetail.is_group === 1,
+                      message: '请填写团购开始时间',
                     },
-                  })(
-                    <DatePicker
-                      style={{width: 200}}
-                      showTime
-                      format="YYYY-MM-DD HH:mm:ss"
-                      placeholder="选择团购开始时间"
-                    />
-                  )}
-                </Form.Item>
-              </Col>
-              <Col span={12}>
-                <Form.Item {...spcialLayouts} label="团购结束时间">
-                  {getFieldDecorator('group_end_time', {
-                    rules: [
-                      {
-                        required: goodsDetail.is_group === 1,
-                        message: '请填写团购结束时间',
-                      },
-                    ],
-                    getValueFromEvent: (date, dateString) => {
-                      return dateString;
+                  ],
+                  getValueFromEvent: (date, dateString) => {
+                    return dateString;
+                  },
+                })(
+                  <DatePicker
+                    style={{ width: 200 }}
+                    showTime
+                    format="YYYY-MM-DD HH:mm:ss"
+                    placeholder="选择团购开始时间"
+                  />
+                )}
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item {...spcialLayouts} label="团购结束时间">
+                {getFieldDecorator('group_end_time', {
+                  rules: [
+                    {
+                      required: goodsDetail.is_group === 1,
+                      message: '请填写团购结束时间',
                     },
-                  })(
-                    <DatePicker
-                      style={{width: 200}}
-                      showTime
-                      format="YYYY-MM-DD HH:mm:ss"
-                      placeholder="选择团购结束时间"
-                    />
-                  )}
-                  {/* <DatePicker
+                  ],
+                  getValueFromEvent: (date, dateString) => {
+                    return dateString;
+                  },
+                })(
+                  <DatePicker
+                    style={{ width: 200 }}
+                    showTime
+                    format="YYYY-MM-DD HH:mm:ss"
+                    placeholder="选择团购结束时间"
+                  />
+                )}
+                {/* <DatePicker
                     style={{width: 200}}
                     onChange={changeTime}
                     showTime
                     format="YYYY-MM-DD HH:mm:ss"
                     placeholder="选择团购结束时间"
                   /> */}
-                </Form.Item>
-              </Col>
-            </Row>
-          ) : null
-        }
+              </Form.Item>
+            </Col>
+          </Row>
+        ) : null}
         <Form.Item label="描述">
           {getFieldDecorator('goods_description', {
             rules: [{ required: true, message: '请填写描述' }],
@@ -963,524 +969,427 @@ const CustomizedForm = Form.create({
           )}
         </Form.Item>
       </Card>
-      {
-        goodsDetail.type && goodsDetail.upgrade_type === 3 ? (
-          <Card title="版本返佣">
-            <Row>
-              <Col span={8}>
-                <h2>类型：正常升级</h2>
-              </Col>
-            </Row>
-            <Row>
-              <Col span={8}>
-                <Form.Item {...profitLayout} label="分拥类型">
-                  固定值
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row>
-              <Col span={6}>
-                <Form.Item {...profitLayout} label="普通版">
-                  {getFieldDecorator(`normal_money`, {
-                    rules: [{ required: true, message: `请输入普通版` }],
-                  })(
-                    <InputNumber
-                      step={0.01}
-                      precision={2}
-                      min={0}
-                    />
-                  )}
-                </Form.Item>
-              </Col>
-              <Col span={6}>
-                <Form.Item {...profitLayout} label="视群版">
-                  {getFieldDecorator(`group_money`, {
-                    rules: [{ required: true, message: `请输入视群版` }],
-                  })(
-                    <InputNumber
-                      step={0.01}
-                      precision={2}
-                      min={goodsDetail.normal_money || 0}
-                    />
-                  )}
-                </Form.Item>
-              </Col>
-              <Col span={6}>
-                <Form.Item {...profitLayout} label="财道版">
-                  {getFieldDecorator(`wealth_money`, {
-                    rules: [{ required: true, message: `请输入财道版` }],
-                  })(
-                    <InputNumber
-                      step={0.01}
-                      precision={2}
-                      min={goodsDetail.group_money || 0}
-                    />
-                  )}
-                </Form.Item>
-              </Col>
-              <Col span={6}>
-                <Form.Item {...profitLayout} label="商户版">
-                  {getFieldDecorator(`merchant_money`, {
-                    rules: [{ required: true, message: `请输入商户版` }],
-                  })(
-                    <InputNumber
-                      step={0.01}
-                      precision={2}
-                      min={goodsDetail.wealth_money || 0}
-                    />
-                  )}
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row>
-              <Col span={8}>
-                <h2>类型：补差价升级</h2>
-              </Col>
-            </Row>
-            <Row>
-              <Col span={8}>
-                <Form.Item {...profitLayout} label="分拥类型">
-                  固定值
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row>
-              <Col span={8}>
-                <Form.Item {...profitLayout} label="视群版补差价">
-                  {getFieldDecorator('group_user_price', {
-                    rules: [{ required: true, message: '请填写视群版升级补差价' }],
-                  })(
-                    <InputNumber
-                      step={0.01}
+      {goodsDetail.type && goodsDetail.upgrade_type === 3 ? (
+        <Card title="版本返佣">
+          <Row>
+            <Col span={8}>
+              <h2>类型：正常升级</h2>
+            </Col>
+          </Row>
+          <Row>
+            <Col span={8}>
+              <Form.Item {...profitLayout} label="分拥类型">
+                固定值
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row>
+            <Col span={6}>
+              <Form.Item {...profitLayout} label="普通版">
+                {getFieldDecorator(`normal_money`, {
+                  rules: [{ required: true, message: `请输入普通版` }],
+                })(<InputNumber step={0.01} precision={2} min={0} />)}
+              </Form.Item>
+            </Col>
+            <Col span={6}>
+              <Form.Item {...profitLayout} label="视群版">
+                {getFieldDecorator(`group_money`, {
+                  rules: [{ required: true, message: `请输入视群版` }],
+                })(<InputNumber step={0.01} precision={2} min={goodsDetail.normal_money || 0} />)}
+              </Form.Item>
+            </Col>
+            <Col span={6}>
+              <Form.Item {...profitLayout} label="财道版">
+                {getFieldDecorator(`wealth_money`, {
+                  rules: [{ required: true, message: `请输入财道版` }],
+                })(<InputNumber step={0.01} precision={2} min={goodsDetail.group_money || 0} />)}
+              </Form.Item>
+            </Col>
+            <Col span={6}>
+              <Form.Item {...profitLayout} label="商户版">
+                {getFieldDecorator(`merchant_money`, {
+                  rules: [{ required: true, message: `请输入商户版` }],
+                })(<InputNumber step={0.01} precision={2} min={goodsDetail.wealth_money || 0} />)}
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row>
+            <Col span={8}>
+              <h2>类型：补差价升级</h2>
+            </Col>
+          </Row>
+          <Row>
+            <Col span={8}>
+              <Form.Item {...profitLayout} label="分拥类型">
+                固定值
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row>
+            <Col span={8}>
+              <Form.Item {...profitLayout} label="视群版补差价">
+                {getFieldDecorator('group_user_price', {
+                  rules: [{ required: true, message: '请填写视群版升级补差价' }],
+                })(<InputNumber step={0.01} style={{ width: 200 }} min={0} />)}
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row>
+            <Col span={6}>
+              <Form.Item {...profitLayout} label="普通版">
+                {getFieldDecorator(`supplement_normal_money`, {
+                  rules: [{ required: true, message: `请输入普通版` }],
+                })(<InputNumber step={0.01} precision={2} min={0} />)}
+              </Form.Item>
+            </Col>
+            <Col span={6}>
+              <Form.Item {...profitLayout} label="视群版">
+                {getFieldDecorator(`supplement_group_money`, {
+                  rules: [{ required: true, message: `请输入视群版` }],
+                })(
+                  <InputNumber
+                    step={0.01}
+                    precision={2}
+                    min={goodsDetail.supplement_normal_money || 0}
+                  />
+                )}
+              </Form.Item>
+            </Col>
+            <Col span={6}>
+              <Form.Item {...profitLayout} label="财道版">
+                {getFieldDecorator(`supplement_wealth_money`, {
+                  rules: [{ required: true, message: `请输入财道版` }],
+                })(
+                  <InputNumber
+                    step={0.01}
+                    precision={2}
+                    min={goodsDetail.supplement_group_money || 0}
+                  />
+                )}
+              </Form.Item>
+            </Col>
+            <Col span={6}>
+              <Form.Item {...profitLayout} label="商户版">
+                {getFieldDecorator(`supplement_merchant_money`, {
+                  rules: [{ required: true, message: `请输入商户版` }],
+                })(
+                  <InputNumber
+                    step={0.01}
+                    precision={2}
+                    min={goodsDetail.supplement_wealth_money || 0}
+                  />
+                )}
+              </Form.Item>
+            </Col>
+          </Row>
+        </Card>
+      ) : goodsDetail.type && goodsDetail.upgrade_type == 2 ? (
+        <Card title="版本返佣">
+          <Row>
+            <Col span={8}>
+              <Form.Item {...profitLayout} label="分拥类型">
+                固定值
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row>
+            <Col span={6}>
+              <Form.Item {...profitLayout} label="普通版">
+                {getFieldDecorator(`normal_money`, {
+                  rules: [{ required: true, message: `请输入普通版` }],
+                })(<InputNumber step={0.01} precision={2} min={0} />)}
+              </Form.Item>
+            </Col>
+            <Col span={6}>
+              <Form.Item {...profitLayout} label="视群版">
+                {getFieldDecorator(`group_money`, {
+                  rules: [{ required: true, message: `请输入视群版` }],
+                })(<InputNumber step={0.01} precision={2} min={goodsDetail.normal_money || 0} />)}
+              </Form.Item>
+            </Col>
+            <Col span={6}>
+              <Form.Item {...profitLayout} label="财道版">
+                {getFieldDecorator(`wealth_money`, {
+                  rules: [{ required: true, message: `请输入财道版` }],
+                })(<InputNumber step={0.01} precision={2} min={goodsDetail.group_money || 0} />)}
+              </Form.Item>
+            </Col>
+            <Col span={6}>
+              <Form.Item {...profitLayout} label="商户版">
+                {getFieldDecorator(`merchant_money`, {
+                  rules: [{ required: true, message: `请输入商户版` }],
+                })(<InputNumber step={0.01} precision={2} min={goodsDetail.wealth_money || 0} />)}
+              </Form.Item>
+            </Col>
+          </Row>
+        </Card>
+      ) : goodsDetail.type && goodsDetail.upgrade_type == 1 ? (
+        <Card title="版本返佣">
+          <Row>
+            <Col span={8}>
+              <h2>正常升级</h2>
+            </Col>
+          </Row>
+          <Row>
+            <Col span={8}>
+              <Form.Item {...profitLayout} label="分拥类型">
+                固定值
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row>
+            <Col span={6}>
+              <Form.Item {...profitLayout} label="普通版">
+                {getFieldDecorator(`normal_money`, {
+                  rules: [{ required: true, message: `请输入普通版` }],
+                })(<InputNumber step={0.01} precision={2} min={0} />)}
+              </Form.Item>
+            </Col>
+            <Col span={6}>
+              <Form.Item {...profitLayout} label="视群版">
+                {getFieldDecorator(`group_money`, {
+                  rules: [{ required: true, message: `请输入视群版` }],
+                })(<InputNumber step={0.01} precision={2} min={goodsDetail.normal_money || 0} />)}
+              </Form.Item>
+            </Col>
+            <Col span={6}>
+              <Form.Item {...profitLayout} label="财道版">
+                {getFieldDecorator(`wealth_money`, {
+                  rules: [{ required: true, message: `请输入财道版` }],
+                })(<InputNumber step={0.01} precision={2} min={goodsDetail.group_money || 0} />)}
+              </Form.Item>
+            </Col>
+            <Col span={6}>
+              <Form.Item {...profitLayout} label="商户版">
+                {getFieldDecorator(`merchant_money`, {
+                  rules: [{ required: true, message: `请输入商户版` }],
+                })(<InputNumber step={0.01} precision={2} min={goodsDetail.wealth_money || 0} />)}
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row>
+            <Col span={8}>
+              <h2>视群版补差价升级</h2>
+            </Col>
+          </Row>
+          <Row>
+            <Col span={8}>
+              <Form.Item {...profitLayout} label="分拥类型">
+                固定值
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row>
+            <Col span={8}>
+              <Form.Item {...profitLayout} label="视群版补差价">
+                {getFieldDecorator('group_user_price', {
+                  rules: [{ required: true, message: '请填写视群版升级补差价' }],
+                })(<InputNumber step={0.01} style={{ width: 200 }} min={0} />)}
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row>
+            <Col span={6}>
+              <Form.Item {...profitLayout} label="普通版">
+                {getFieldDecorator(`supplement_normal_money`, {
+                  rules: [{ required: true, message: `请输入普通版` }],
+                })(<InputNumber step={0.01} precision={2} min={0} />)}
+              </Form.Item>
+            </Col>
+            <Col span={6}>
+              <Form.Item {...profitLayout} label="视群版">
+                {getFieldDecorator(`supplement_group_money`, {
+                  rules: [{ required: true, message: `请输入视群版` }],
+                })(
+                  <InputNumber
+                    step={0.01}
+                    precision={2}
+                    min={goodsDetail.supplement_normal_money || 0}
+                  />
+                )}
+              </Form.Item>
+            </Col>
+            <Col span={6}>
+              <Form.Item {...profitLayout} label="财道版">
+                {getFieldDecorator(`supplement_wealth_money`, {
+                  rules: [{ required: true, message: `请输入财道版` }],
+                })(
+                  <InputNumber
+                    step={0.01}
+                    precision={2}
+                    min={goodsDetail.supplement_group_money || 0}
+                  />
+                )}
+              </Form.Item>
+            </Col>
+            <Col span={6}>
+              <Form.Item {...profitLayout} label="商户版">
+                {getFieldDecorator(`supplement_merchant_money`, {
+                  rules: [{ required: true, message: `请输入商户版` }],
+                })(
+                  <InputNumber
+                    step={0.01}
+                    precision={2}
+                    min={goodsDetail.supplement_wealth_money || 0}
+                  />
+                )}
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row>
+            <Col span={8}>
+              <h2>财道版补差价升级</h2>
+            </Col>
+          </Row>
+          <Row>
+            <Col span={8}>
+              <Form.Item {...profitLayout} label="分拥类型">
+                固定值
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row>
+            <Col span={8}>
+              <Form.Item {...profitLayout} label="财道版补差价">
+                {getFieldDecorator('wealth_user_price', {
+                  rules: [{ required: true, message: '请填写财道版升级补差价' }],
+                })(<InputNumber step={0.01} style={{ width: 200 }} min={0} />)}
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row>
+            <Col span={6}>
+              <Form.Item {...profitLayout} label="普通版">
+                {getFieldDecorator(`supplement_normal_money_2`, {
+                  rules: [{ required: true, message: `请输入普通版` }],
+                })(<InputNumber step={0.01} precision={2} min={0} />)}
+              </Form.Item>
+            </Col>
+            <Col span={6}>
+              <Form.Item {...profitLayout} label="视群版">
+                {getFieldDecorator(`supplement_group_money_2`, {
+                  rules: [{ required: true, message: `请输入视群版` }],
+                })(
+                  <InputNumber
+                    step={0.01}
+                    precision={2}
+                    min={goodsDetail.supplement_normal_money_2 || 0}
+                  />
+                )}
+              </Form.Item>
+            </Col>
+            <Col span={6}>
+              <Form.Item {...profitLayout} label="财道版">
+                {getFieldDecorator(`supplement_wealth_money_2`, {
+                  rules: [{ required: true, message: `请输入财道版` }],
+                })(
+                  <InputNumber
+                    step={0.01}
+                    precision={2}
+                    min={goodsDetail.supplement_group_money_2 || 0}
+                  />
+                )}
+              </Form.Item>
+            </Col>
+            <Col span={6}>
+              <Form.Item {...profitLayout} label="商户版">
+                {getFieldDecorator(`supplement_merchant_money_2`, {
+                  rules: [{ required: true, message: `请输入商户版` }],
+                })(
+                  <InputNumber
+                    step={0.01}
+                    precision={2}
+                    min={goodsDetail.supplement_wealth_money_2 || 0}
+                  />
+                )}
+              </Form.Item>
+            </Col>
+          </Row>
+        </Card>
+      ) : (
+        <Card title="sku分佣">
+          <Row>
+            <Col span={8}>
+              <Form.Item
+                {...profitLayout}
+                label="分佣类型"
+                extra={
+                  <Tag color="blue">请先输入销售价格和成本价,切换分佣类型请重新设置分佣值</Tag>
+                }
+              >
+                {getFieldDecorator('profit_type', {
+                  rules: [{ required: true, message: '请填写分拥类型' }],
+                })(<Select>{profitTypeItem}</Select>)}
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row>{levelNumberItem}</Row>
+          {/* 批量 */}
+          {skuInputArr.length < 3 ? (
+            <Button onClick={addSpec} style={{ marginBottom: 10 }}>
+              添加规格项目
+            </Button>
+          ) : null}
+          {skuInputArr.map((res, inx) => {
+            return (
+              <div className={styles.borderList} key={inx}>
+                <div className={styles.specification}>
+                  <span className={styles.title}>属性名：</span>
+                  <div className={styles.specInput}>
+                    <Input
+                      value={res.key}
                       style={{ width: 200 }}
-                      min={0}
+                      onChange={setSkuArrVal.bind(this, inx, {})}
                     />
-                  )}
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row>
-              <Col span={6}>
-                <Form.Item {...profitLayout} label="普通版">
-                  {getFieldDecorator(`supplement_normal_money`, {
-                    rules: [{ required: true, message: `请输入普通版` }],
-                  })(
-                    <InputNumber
-                      step={0.01}
-                      precision={2}
-                      min={0}
+                    <img
+                      className={styles.close}
+                      src="/img/close.png"
+                      onClick={deleteSku.bind(this, inx, {})}
+                      alt="关闭"
                     />
-                  )}
-                </Form.Item>
-              </Col>
-              <Col span={6}>
-                <Form.Item {...profitLayout} label="视群版">
-                  {getFieldDecorator(`supplement_group_money`, {
-                    rules: [{ required: true, message: `请输入视群版` }],
-                  })(
-                    <InputNumber
-                      step={0.01}
-                      precision={2}
-                      min={goodsDetail.supplement_normal_money || 0}
-                    />
-                  )}
-                </Form.Item>
-              </Col>
-              <Col span={6}>
-                <Form.Item {...profitLayout} label="财道版">
-                  {getFieldDecorator(`supplement_wealth_money`, {
-                    rules: [{ required: true, message: `请输入财道版` }],
-                  })(
-                    <InputNumber
-                      step={0.01}
-                      precision={2}
-                      min={goodsDetail.supplement_group_money || 0}
-                    />
-                  )}
-                </Form.Item>
-              </Col>
-              <Col span={6}>
-                <Form.Item {...profitLayout} label="商户版">
-                  {getFieldDecorator(`supplement_merchant_money`, {
-                    rules: [{ required: true, message: `请输入商户版` }],
-                  })(
-                    <InputNumber
-                      step={0.01}
-                      precision={2}
-                      min={goodsDetail.supplement_wealth_money || 0}
-                    />
-                  )}
-                </Form.Item>
-              </Col>
-            </Row>
-          </Card>
-        ) : goodsDetail.type && goodsDetail.upgrade_type == 2 ? (
-          <Card title="版本返佣">
-            <Row>
-              <Col span={8}>
-                <Form.Item {...profitLayout} label="分拥类型">
-                  固定值
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row>
-              <Col span={6}>
-                <Form.Item {...profitLayout} label="普通版">
-                  {getFieldDecorator(`normal_money`, {
-                    rules: [{ required: true, message: `请输入普通版` }],
-                  })(
-                    <InputNumber
-                      step={0.01}
-                      precision={2}
-                      min={0}
-                    />
-                  )}
-                </Form.Item>
-              </Col>
-              <Col span={6}>
-                <Form.Item {...profitLayout} label="视群版">
-                  {getFieldDecorator(`group_money`, {
-                    rules: [{ required: true, message: `请输入视群版` }],
-                  })(
-                    <InputNumber
-                      step={0.01}
-                      precision={2}
-                      min={goodsDetail.normal_money || 0}
-                    />
-                  )}
-                </Form.Item>
-              </Col>
-              <Col span={6}>
-                <Form.Item {...profitLayout} label="财道版">
-                  {getFieldDecorator(`wealth_money`, {
-                    rules: [{ required: true, message: `请输入财道版` }],
-                  })(
-                    <InputNumber
-                      step={0.01}
-                      precision={2}
-                      min={goodsDetail.group_money || 0}
-                    />
-                  )}
-                </Form.Item>
-              </Col>
-              <Col span={6}>
-                <Form.Item {...profitLayout} label="商户版">
-                  {getFieldDecorator(`merchant_money`, {
-                    rules: [{ required: true, message: `请输入商户版` }],
-                  })(
-                    <InputNumber
-                      step={0.01}
-                      precision={2}
-                      min={goodsDetail.wealth_money || 0}
-                    />
-                  )}
-                </Form.Item>
-              </Col>
-            </Row>
-          </Card>
-        ) : (goodsDetail.type && goodsDetail.upgrade_type == 1) ? (
-          <Card title="版本返佣">
-            <Row>
-              <Col span={8}>
-                <h2>正常升级</h2>
-              </Col>
-            </Row>
-            <Row>
-              <Col span={8}>
-                <Form.Item {...profitLayout} label="分拥类型">
-                  固定值
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row>
-              <Col span={6}>
-                <Form.Item {...profitLayout} label="普通版">
-                  {getFieldDecorator(`normal_money`, {
-                    rules: [{ required: true, message: `请输入普通版` }],
-                  })(
-                    <InputNumber
-                      step={0.01}
-                      precision={2}
-                      min={0}
-                    />
-                  )}
-                </Form.Item>
-              </Col>
-              <Col span={6}>
-                <Form.Item {...profitLayout} label="视群版">
-                  {getFieldDecorator(`group_money`, {
-                    rules: [{ required: true, message: `请输入视群版` }],
-                  })(
-                    <InputNumber
-                      step={0.01}
-                      precision={2}
-                      min={goodsDetail.normal_money || 0}
-                    />
-                  )}
-                </Form.Item>
-              </Col>
-              <Col span={6}>
-                <Form.Item {...profitLayout} label="财道版">
-                  {getFieldDecorator(`wealth_money`, {
-                    rules: [{ required: true, message: `请输入财道版` }],
-                  })(
-                    <InputNumber
-                      step={0.01}
-                      precision={2}
-                      min={goodsDetail.group_money || 0}
-                    />
-                  )}
-                </Form.Item>
-              </Col>
-              <Col span={6}>
-                <Form.Item {...profitLayout} label="商户版">
-                  {getFieldDecorator(`merchant_money`, {
-                    rules: [{ required: true, message: `请输入商户版` }],
-                  })(
-                    <InputNumber
-                      step={0.01}
-                      precision={2}
-                      min={goodsDetail.wealth_money || 0}
-                    />
-                  )}
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row>
-              <Col span={8}>
-                <h2>视群版补差价升级</h2>
-              </Col>
-            </Row>
-            <Row>
-              <Col span={8}>
-                <Form.Item {...profitLayout} label="分拥类型">
-                  固定值
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row>
-              <Col span={8}>
-                <Form.Item {...profitLayout} label="视群版补差价">
-                  {getFieldDecorator('group_user_price', {
-                    rules: [{ required: true, message: '请填写视群版升级补差价' }],
-                  })(
-                    <InputNumber
-                      step={0.01}
-                      style={{ width: 200 }}
-                      min={0}
-                    />
-                  )}
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row>
-              <Col span={6}>
-                <Form.Item {...profitLayout} label="普通版">
-                  {getFieldDecorator(`supplement_normal_money`, {
-                    rules: [{ required: true, message: `请输入普通版` }],
-                  })(
-                    <InputNumber
-                      step={0.01}
-                      precision={2}
-                      min={0}
-                    />
-                  )}
-                </Form.Item>
-              </Col>
-              <Col span={6}>
-                <Form.Item {...profitLayout} label="视群版">
-                  {getFieldDecorator(`supplement_group_money`, {
-                    rules: [{ required: true, message: `请输入视群版` }],
-                  })(
-                    <InputNumber
-                      step={0.01}
-                      precision={2}
-                      min={goodsDetail.supplement_normal_money || 0}
-                    />
-                  )}
-                </Form.Item>
-              </Col>
-              <Col span={6}>
-                <Form.Item {...profitLayout} label="财道版">
-                  {getFieldDecorator(`supplement_wealth_money`, {
-                    rules: [{ required: true, message: `请输入财道版` }],
-                  })(
-                    <InputNumber
-                      step={0.01}
-                      precision={2}
-                      min={goodsDetail.supplement_group_money || 0}
-                    />
-                  )}
-                </Form.Item>
-              </Col>
-              <Col span={6}>
-                <Form.Item {...profitLayout} label="商户版">
-                  {getFieldDecorator(`supplement_merchant_money`, {
-                    rules: [{ required: true, message: `请输入商户版` }],
-                  })(
-                    <InputNumber
-                      step={0.01}
-                      precision={2}
-                      min={goodsDetail.supplement_wealth_money || 0}
-                    />
-                  )}
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row>
-              <Col span={8}>
-                <h2>财道版补差价升级</h2>
-              </Col>
-            </Row>
-            <Row>
-              <Col span={8}>
-                <Form.Item {...profitLayout} label="分拥类型">
-                  固定值
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row>
-              <Col span={8}>
-                <Form.Item {...profitLayout} label="财道版补差价">
-                  {getFieldDecorator('wealth_user_price', {
-                    rules: [{ required: true, message: '请填写财道版升级补差价' }],
-                  })(
-                    <InputNumber
-                      step={0.01}
-                      style={{ width: 200 }}
-                      min={0}
-                    />
-                  )}
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row>
-              <Col span={6}>
-                <Form.Item {...profitLayout} label="普通版">
-                  {getFieldDecorator(`supplement_normal_money_2`, {
-                    rules: [{ required: true, message: `请输入普通版` }],
-                  })(
-                    <InputNumber
-                      step={0.01}
-                      precision={2}
-                      min={0}
-                    />
-                  )}
-                </Form.Item>
-              </Col>
-              <Col span={6}>
-                <Form.Item {...profitLayout} label="视群版">
-                  {getFieldDecorator(`supplement_group_money_2`, {
-                    rules: [{ required: true, message: `请输入视群版` }],
-                  })(
-                    <InputNumber
-                      step={0.01}
-                      precision={2}
-                      min={goodsDetail.supplement_normal_money_2 || 0}
-                    />
-                  )}
-                </Form.Item>
-              </Col>
-              <Col span={6}>
-                <Form.Item {...profitLayout} label="财道版">
-                  {getFieldDecorator(`supplement_wealth_money_2`, {
-                    rules: [{ required: true, message: `请输入财道版` }],
-                  })(
-                    <InputNumber
-                      step={0.01}
-                      precision={2}
-                      min={goodsDetail.supplement_group_money_2 || 0}
-                    />
-                  )}
-                </Form.Item>
-              </Col>
-              <Col span={6}>
-                <Form.Item {...profitLayout} label="商户版">
-                  {getFieldDecorator(`supplement_merchant_money_2`, {
-                    rules: [{ required: true, message: `请输入商户版` }],
-                  })(
-                    <InputNumber
-                      step={0.01}
-                      precision={2}
-                      min={goodsDetail.supplement_wealth_money_2 || 0}
-                    />
-                  )}
-                </Form.Item>
-              </Col>
-            </Row>
-          </Card>
-        ) : (
-          <Card title="sku分佣">
-            <Row>
-              <Col span={8}>
-                <Form.Item
-                  {...profitLayout}
-                  label="分佣类型"
-                  extra={<Tag color="blue">请先输入销售价格和成本价,切换分佣类型请重新设置分佣值</Tag>}
-                >
-                  {getFieldDecorator('profit_type', {
-                    rules: [{ required: true, message: '请填写分拥类型' }],
-                  })(<Select>{profitTypeItem}</Select>)}
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row>{levelNumberItem}</Row>
-            {/* 批量 */}
-            {
-              skuInputArr.length < 3 ? (
-                <Button onClick={addSpec} style={{ marginBottom: 10 }} >添加规格项目</Button>
-              ) : null
-            }
-            {
-              skuInputArr.map((res, inx) => {
-                return (
-                  <div className={styles.borderList} key={inx}>
-                    <div className={styles.specification}>
-                      <span className={styles.title}>属性名：</span>
-                      <div className={styles.specInput}>
-                        <Input value={res.key} style={{ width: 200 }} onChange={setSkuArrVal.bind(this, inx, {})}  />
-                        <img className={styles.close} src='/img/close.png' onClick={deleteSku.bind(this, inx, {})} alt="关闭" />
-                      </div>
-                    </div>
-                    <div className={styles.specificationSon}>
-                      {
-                        res.val && res.val.map((ele, index) => {
-                          return (
-                            <div key={index} className={styles.specSonInput}>
-                              <Input style={{ width: 200 }}  onChange={setSkuArrVal.bind(this, inx, index)} value={ele} />
-                              <img className={styles.close} src='/img/close.png' alt="关闭" onClick={deleteSku.bind(this, inx, index)} />
-                            </div>
-                          )
-                        })
-                      }
-                      {
-                        res.key ? (
-                          <div onClick={addSpecSon.bind(this, inx)}>添加规格值</div>
-                        ) : null
-                      }
-                    </div>
                   </div>
-                )
-              })
-            }
-            {/* <div className={styles.borderList}>
+                </div>
+                <div className={styles.specificationSon}>
+                  {res.val &&
+                    res.val.map((ele, index) => {
+                      return (
+                        <div key={index} className={styles.specSonInput}>
+                          <Input
+                            style={{ width: 200 }}
+                            onChange={setSkuArrVal.bind(this, inx, index)}
+                            value={ele}
+                          />
+                          <img
+                            className={styles.close}
+                            src="/img/close.png"
+                            alt="关闭"
+                            onClick={deleteSku.bind(this, inx, index)}
+                          />
+                        </div>
+                      );
+                    })}
+                  {res.key ? <div onClick={addSpecSon.bind(this, inx)}>添加规格值</div> : null}
+                </div>
+              </div>
+            );
+          })}
+          {/* <div className={styles.borderList}>
               <span>属性名：</span>
               {attrItem}
             </div>
             {attrItemSon} */}
-            <EditTable
-              isGroup={goodsDetail.is_group}
-              attrTable={attrTable}
-              uploadUrl={uploadUrl}
-              totalPrice={goodsDetail.sell_goods_price}
-              totalStock={goodsDetail.goods_total_inventory}
-              levelPartialSon={levelPartialSon}
-              rowKey={index => JSON.stringify(index)}
-              modifiedValue={modifiedValue.bind(this)}
-            />
-          </Card>
-        )
-      }
+          <EditTable
+            isGroup={goodsDetail.is_group}
+            attrTable={attrTable}
+            uploadUrl={uploadUrl}
+            totalPrice={goodsDetail.sell_goods_price}
+            totalStock={goodsDetail.goods_total_inventory}
+            levelPartialSon={levelPartialSon}
+            rowKey={index => JSON.stringify(index)}
+            modifiedValue={modifiedValue.bind(this)}
+          />
+        </Card>
+      )}
       <Form.Item
         style={{ marginBottom: 8 }}
         wrapperCol={{
@@ -1580,7 +1489,7 @@ class EditGoodStep2 extends React.PureComponent {
         val: e.target.value,
       },
     });
-  }
+  };
   modifiedValue = event => {
     const { dispatch } = this.props;
     dispatch({
@@ -1654,15 +1563,15 @@ class EditGoodStep2 extends React.PureComponent {
     dispatch({
       type: 'goods/addSpec',
     });
-  }
+  };
   // 添加子规格
-  addSpecSon = (index) => {
+  addSpecSon = index => {
     const { dispatch } = this.props;
     dispatch({
       type: 'goods/addSpecSon',
       payload: index,
     });
-  }
+  };
   // 删除sku
   deleteSku = (inx, index) => {
     const { dispatch } = this.props;
@@ -1673,7 +1582,7 @@ class EditGoodStep2 extends React.PureComponent {
         index,
       },
     });
-  }
+  };
   // 修改表单值
   changeFormVal = val => {
     const { dispatch } = this.props;
@@ -1689,16 +1598,19 @@ class EditGoodStep2 extends React.PureComponent {
     });
   };
   //  限制大小
-  beforeUpload = (file) => {
+  beforeUpload = file => {
     const isLt1M = file.size / 1024 / 1024 < 1;
     if (!isLt1M) {
       message.error('图片不能超过1M!');
     }
     return isLt1M;
-  }
+  };
   // 提交表单
   submitForm = values => {
-    const { goods: { uploadGoodsImg, goodsDetail,skuInputArr, levelPartial }, dispatch } = this.props;
+    const {
+      goods: { uploadGoodsImg, goodsDetail, skuInputArr, levelPartial },
+      dispatch,
+    } = this.props;
     let { goods: { attrTable } } = this.props;
     if (!uploadGoodsImg.length) {
       message.error('请上传图片主体！');
@@ -1709,7 +1621,7 @@ class EditGoodStep2 extends React.PureComponent {
     values.profit_type = goodsDetail.profit_type;
     const skuIdArr = goodsDetail.has_shop_goods_sku.map(res => {
       return res.sku_id;
-    })
+    });
     // 带_2的就是财道升级补差价里的数据
     // 视群版 财道版 商户版 版本越高值越多
     // 1 是商户版 2 是视群版 3是财道版
@@ -1860,7 +1772,7 @@ class EditGoodStep2 extends React.PureComponent {
       const skuCacheObj = {};
       const skuCacheArr = [];
       const isExistInObj = {};
-      for(const ele of skuInputArr){
+      for (const ele of skuInputArr) {
         if (!ele.key) {
           message.error('请输入属性名！');
           return false;
@@ -1872,7 +1784,7 @@ class EditGoodStep2 extends React.PureComponent {
           isExistInObj[ele.key] = 1;
         }
         const arr = [];
-        for(const val of ele.val) {
+        for (const val of ele.val) {
           if (!val) {
             message.error('请输入规格！');
             return false;
@@ -1884,10 +1796,10 @@ class EditGoodStep2 extends React.PureComponent {
           const obj = {
             attr_class_name: ele.key,
             attr_name: val,
-          }
+          };
           arr.push({
             attr_name: val,
-          })
+          });
           skuCacheObj[val] = obj;
         }
         skuCacheArr.push({
@@ -1898,7 +1810,7 @@ class EditGoodStep2 extends React.PureComponent {
       values.attr = skuCacheArr;
       attrTable = attrTable.map((res, index) => {
         const skuArr = res.skuName.split('|,|');
-        const arr = [] ;
+        const arr = [];
         if (res.fileList.length) {
           res.img = res.fileList[0].url;
         } else {
@@ -1906,26 +1818,28 @@ class EditGoodStep2 extends React.PureComponent {
         }
         skuArr.forEach(ele => {
           arr.push(skuCacheObj[ele]);
-        })
+        });
         res.goods_sku_attr = arr;
         res.sku_id = skuIdArr[index] || '';
         return res;
-      })
+      });
       values.goods_sku = deepCopy(attrTable);
     } else {
       values.attr = [];
-      values.goods_sku = [{
-        goods_sku_attr: [],
-        group_price: values.group_price,
-        img: '',
-        price: values.sell_goods_price,
-        store_nums: values.goods_total_inventory,
-        cost_price: values.cost_price,
-        sku_goods_name: '',
-        goods_sku_sn: '',
-        weight: values.weight,
-        sku_id: skuIdArr[0],
-      }];
+      values.goods_sku = [
+        {
+          goods_sku_attr: [],
+          group_price: values.group_price,
+          img: '',
+          price: values.sell_goods_price,
+          store_nums: values.goods_total_inventory,
+          cost_price: values.cost_price,
+          sku_goods_name: '',
+          goods_sku_sn: '',
+          weight: values.weight,
+          sku_id: skuIdArr[0],
+        },
+      ];
     }
     values.class_id = goodsDetail.class_id;
     values.goods_id = goodsDetail.goods_id;
@@ -1974,7 +1888,7 @@ class EditGoodStep2 extends React.PureComponent {
     if (groupStartTime && typeof groupStartTime === 'object') {
       values.group_start_time = parseInt(new Date(values.group_start_time._i).getTime() / 1000, 10);
       // values.group_start_time = Number.parseInt(date.getTime() / 1000, 10);
-    }else {
+    } else {
       values.group_start_time = groupStartTime || 0;
     }
     if (groupEndTime && typeof groupEndTime === 'object') {

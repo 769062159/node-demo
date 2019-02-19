@@ -2,7 +2,23 @@ import React from 'react';
 import { connect } from 'dva';
 import copy from 'copy-to-clipboard';
 // import debounce from 'lodash/debounce';
-import { Form, Button, Input, Select, Upload, Icon, Modal, Tag, message, InputNumber, Table, Row, Col, Pagination, Checkbox } from 'antd';
+import {
+  Form,
+  Button,
+  Input,
+  Select,
+  Upload,
+  Icon,
+  Modal,
+  Tag,
+  message,
+  InputNumber,
+  Table,
+  Row,
+  Col,
+  Pagination,
+  Checkbox,
+} from 'antd';
 import ReactEditor from 'components/ReactEditor';
 // import { Form, Button, Input, Upload, Icon, Modal, Tag, message, Select } from 'antd';
 // import request from '../../../utils/request';
@@ -137,13 +153,13 @@ const CustomizedForm = Form.create({
     type: 2,
   };
   //  限制大小
-  const beforeUpload = (file) => {
+  const beforeUpload = file => {
     const isLt1M = file.size / 1024 / 1024 < 1;
     if (!isLt1M) {
       message.error('图片不能超过1M!');
     }
     return isLt1M;
-  }
+  };
   const rankItem = [];
   userRankList.forEach(res => {
     rankItem.push(
@@ -167,9 +183,7 @@ const CustomizedForm = Form.create({
               message: '请输入用户id',
             },
           ],
-        })(
-          <InputNumber style={{ width: 200 }} />
-        )}
+        })(<InputNumber style={{ width: 200 }} />)}
       </FormItem>
       <FormItem {...formItemLayout} label="社群标题">
         {getFieldDecorator('title', {
@@ -192,18 +206,14 @@ const CustomizedForm = Form.create({
         })(<TextArea placeholder="请输入简介" autosize />)}
       </FormItem>
       <FormItem {...formItemLayout} label="社群公告">
-        {getFieldDecorator('announcement', {
-        })(<TextArea placeholder="请输入社群公告" autosize />)}
+        {getFieldDecorator('announcement', {})(<TextArea placeholder="请输入社群公告" autosize />)}
       </FormItem>
       <Row>
-        <Col span={7} style={{ textAlign: "right", paddingRight: 8 }}>
+        <Col span={7} style={{ textAlign: 'right', paddingRight: 8 }}>
           详情 :
         </Col>
         <Col span={15}>
-          <ReactEditor
-            uploadUrl={uploadUrl}
-            setDescription={setDescription}
-          />
+          <ReactEditor uploadUrl={uploadUrl} setDescription={setDescription} />
         </Col>
       </Row>
       {/* <Form.Item
@@ -299,42 +309,36 @@ const CustomizedForm = Form.create({
           </Select>
         )}
       </FormItem>
-      {
-        (() => {
-          switch (liveForm.access_type) {
-            case 1:
-              return (
-                <Form.Item {...formItemLayout} label="价格">
-                  {getFieldDecorator('money', {
-                    rules: [{ required: true, message: '请填写价格' }],
-                  })(<InputNumber step={0.01} precision={2} min={0.01} style={{ width: '200px' }} />)}
-                </Form.Item>
-              )
-            case 2:
-              return (
-                <Form.Item {...formItemLayout} label="用户等级">
-                  {getFieldDecorator('user_level', {
-                    rules: [{ required: true, message: '请填写用户等级' }],
-                  })(
-                    <Select style={{ width: '200px' }}>
-                      {rankItem}
-                    </Select>
-                  )}
-                </Form.Item>
-              )
-            case 3:
-              return (
-                <Form.Item {...formItemLayout} label="密码">
-                  {getFieldDecorator('password', {
-                    rules: [{ required: true, message: '请填写密码' }],
-                  })(<Input style={{ width: '200px' }} />)}
-                </Form.Item>
-              )
-            default:
-              break;
-          }
-        })()
-      }
+      {(() => {
+        switch (liveForm.access_type) {
+          case 1:
+            return (
+              <Form.Item {...formItemLayout} label="价格">
+                {getFieldDecorator('money', {
+                  rules: [{ required: true, message: '请填写价格' }],
+                })(<InputNumber step={0.01} precision={2} min={0.01} style={{ width: '200px' }} />)}
+              </Form.Item>
+            );
+          case 2:
+            return (
+              <Form.Item {...formItemLayout} label="用户等级">
+                {getFieldDecorator('user_level', {
+                  rules: [{ required: true, message: '请填写用户等级' }],
+                })(<Select style={{ width: '200px' }}>{rankItem}</Select>)}
+              </Form.Item>
+            );
+          case 3:
+            return (
+              <Form.Item {...formItemLayout} label="密码">
+                {getFieldDecorator('password', {
+                  rules: [{ required: true, message: '请填写密码' }],
+                })(<Input style={{ width: '200px' }} />)}
+              </Form.Item>
+            );
+          default:
+            break;
+        }
+      })()}
       <FormItem {...formItemLayout} label="播放类型">
         {getFieldDecorator('play_type', {})(
           <Select style={{ width: 200 }}>
@@ -344,38 +348,40 @@ const CustomizedForm = Form.create({
           </Select>
         )}
       </FormItem>
-      {liveForm.play_type === 1 ? (
-        null
-        // <FormItem {...formItemLayout} label="录播">
-        //   <Select
-        //     showSearch
-        //     labelInValue
-        //     value={homeVod}
-        //     placeholder="输入录播名字搜索"
-        //     notFoundContent={fetching ? <Spin size="small" /> : null}
-        //     filterOption={false}
-        //     onSearch={fetchVod}
-        //     onChange={handleChangesVod}
-        //     style={{ width: '100%' }}
-        //   >
-        //     {vod.map(d => (
-        //       <Option key={d.value} value={d.text}>
-        //         {d.value}
-        //       </Option>
-        //     ))}
-        //   </Select>
-        // </FormItem>
-      ) : liveForm.play_type === 3 ? (
+      {liveForm.play_type === 1 ? null : // <FormItem {...formItemLayout} label="录播">
+      //   <Select
+      //     showSearch
+      //     labelInValue
+      //     value={homeVod}
+      //     placeholder="输入录播名字搜索"
+      //     notFoundContent={fetching ? <Spin size="small" /> : null}
+      //     filterOption={false}
+      //     onSearch={fetchVod}
+      //     onChange={handleChangesVod}
+      //     style={{ width: '100%' }}
+      //   >
+      //     {vod.map(d => (
+      //       <Option key={d.value} value={d.text}>
+      //         {d.value}
+      //       </Option>
+      //     ))}
+      //   </Select>
+      // </FormItem>
+      liveForm.play_type === 3 ? (
         <Form.Item
           {...formItemLayout}
           label="播放地址"
-          extra={<Tag color="blue">目前只支持腾讯视频，一定要填写带有vid的视频地址，示例：https://v.qq.com/txp/iframe/player.html?vid=c0526za9zcn</Tag>}
+          extra={
+            <Tag color="blue">
+              目前只支持腾讯视频，一定要填写带有vid的视频地址，示例：https://v.qq.com/txp/iframe/player.html?vid=c0526za9zcn
+            </Tag>
+          }
         >
-          {getFieldDecorator('play_url', {})(<Input  />)}
+          {getFieldDecorator('play_url', {})(<Input />)}
         </Form.Item>
       ) : liveForm.play_type === 2 ? (
         <Form.Item {...formItemLayout} label="播放地址">
-          {getFieldDecorator('vod_play_url', {})(<Input  />)}
+          {getFieldDecorator('vod_play_url', {})(<Input />)}
           <div className={styles.fileBoxs} onClick={openVod}>
             录播视频
           </div>
@@ -392,9 +398,7 @@ const CustomizedForm = Form.create({
               message: '请输入客服电话',
             },
           ],
-        })(
-          <Input style={{width: 200}} />
-        )}
+        })(<Input style={{ width: 200 }} />)}
       </FormItem>
       <FormItem {...formItemLayout} label="全场禁言">
         {getFieldDecorator('all_prohibit', {
@@ -473,7 +477,7 @@ class AddLiveStep2 extends React.PureComponent {
     searchVal: '',
     uploadPage: 1,
     isVideoModal: false,
-    isVodModal:false,
+    isVodModal: false,
     isSmallVideoModal: false,
     selectedSmallVideoKeys: [],
     smallVideoKey: [],
@@ -508,13 +512,13 @@ class AddLiveStep2 extends React.PureComponent {
     });
   }
   // 添加描述
-  setDescription = (e) => {
+  setDescription = e => {
     const obj = {};
     obj.live_details = {
       value: e,
     };
     this.changeFormVal(obj);
-  }
+  };
   // 模糊查询
   // fetchVod = value => {
   //   console.log('fetching user', value);
@@ -589,13 +593,13 @@ class AddLiveStep2 extends React.PureComponent {
       let richText = liveForm.live_detail;
       richText = richText.split('src="data');
       if (richText.length > 1) {
-        for(let i = 1; i < richText.length; i++) {
+        for (let i = 1; i < richText.length; i++) {
           let richTextData = richText[i];
           richTextData = richTextData.split('"');
           const file = base64ToFile(richTextData[0]);
           const body = new FormData();
-          body.append("type", 4);
-          body.append("file", file);
+          body.append('type', 4);
+          body.append('file', file);
           request('/merchant/upload', {
             method: 'POST',
             headers: {
@@ -617,7 +621,7 @@ class AddLiveStep2 extends React.PureComponent {
               str = richText.join('');
               if (str.indexOf(';base64') === -1) {
                 liveForm.live_detail = str;
-                delete liveForm.live_details
+                delete liveForm.live_details;
                 dispatch({
                   type: 'live/addLive',
                   payload: liveForm,
@@ -674,7 +678,7 @@ class AddLiveStep2 extends React.PureComponent {
     });
     this.setState({
       isGoodModal: true,
-    })
+    });
   };
   openClassList = () => {
     const { dispatch } = this.props;
@@ -683,8 +687,8 @@ class AddLiveStep2 extends React.PureComponent {
     });
     this.setState({
       isClassModal: true,
-    })
-  }
+    });
+  };
   openSmallVideoList = () => {
     const { dispatch } = this.props;
     dispatch({
@@ -695,15 +699,15 @@ class AddLiveStep2 extends React.PureComponent {
     });
     this.setState({
       isSmallVideoModal: true,
-    })
-  }
+    });
+  };
   // 关商品modal
   CloseGoodModal = () => {
     const { goodsKey } = this.state;
     this.setState({
       isGoodModal: false,
       selectedRowKeys: goodsKey,
-    })
+    });
   };
   CloseClassModal = () => {
     const { classKey } = this.state;
@@ -711,16 +715,16 @@ class AddLiveStep2 extends React.PureComponent {
       isClassModal: false,
       selectedClassKeys: classKey,
       searchVal: '',
-    })
-  }
+    });
+  };
   CloseSmallVideoModal = () => {
     const { smallVideoKey } = this.state;
     this.setState({
       isSmallVideoModal: false,
       selectedSmallVideoKeys: smallVideoKey,
       searchVal: '',
-    })
-  }
+    });
+  };
   copyBtn = val => {
     copy(val);
     message.success('成功复制到剪贴板');
@@ -761,7 +765,7 @@ class AddLiveStep2 extends React.PureComponent {
   //     },
   //   });
   // };
-  handleTableChange = (pagination) => {
+  handleTableChange = pagination => {
     const { current } = pagination;
     const { searchVal } = this.state;
     const { dispatch } = this.props;
@@ -775,7 +779,7 @@ class AddLiveStep2 extends React.PureComponent {
       },
     });
   };
-  handleClassChange = (pagination) => {
+  handleClassChange = pagination => {
     const { current } = pagination;
     const { dispatch } = this.props;
     const { searchVal } = this.state;
@@ -787,7 +791,7 @@ class AddLiveStep2 extends React.PureComponent {
       },
     });
   };
-  handleSmallVideoChange = (pagination) => {
+  handleSmallVideoChange = pagination => {
     const { current } = pagination;
     const { dispatch } = this.props;
     const { searchVal } = this.state;
@@ -801,7 +805,7 @@ class AddLiveStep2 extends React.PureComponent {
     });
   };
   // 跳页 vod
-  changeVodPage = (pagination) => {
+  changeVodPage = pagination => {
     const { dispatch } = this.props;
     dispatch({
       type: 'live/fetchVod',
@@ -810,7 +814,7 @@ class AddLiveStep2 extends React.PureComponent {
         'per-page': 18,
       },
     });
-  }
+  };
   openUpload = () => {
     const { dispatch, user: { currentUser } } = this.props;
     const { uploadPage } = this.state;
@@ -823,29 +827,29 @@ class AddLiveStep2 extends React.PureComponent {
       },
     });
     this.openOrCloseVideo();
-  }
+  };
   // 录播modal
   openOrCloseVod = () => {
     const { isVodModal } = this.state;
     this.setState({
       isVodModal: !isVodModal,
-    })
-  }
-  changeSwitch = (url) => {
+    });
+  };
+  changeSwitch = url => {
     const obj = {};
     obj.vod_play_url = {
       value: url,
     };
     this.changeFormVal(obj);
     this.openOrCloseVod();
-  }
+  };
   // video
   openOrCloseVideo = () => {
     const { isVideoModal } = this.state;
     this.setState({
       isVideoModal: !isVideoModal,
-    })
-  }
+    });
+  };
   openVod = () => {
     const { dispatch } = this.props;
     dispatch({
@@ -856,14 +860,14 @@ class AddLiveStep2 extends React.PureComponent {
       },
     });
     this.openOrCloseVod();
-  }
-  searchVal = (val) => {
+  };
+  searchVal = val => {
     console.log(val.target.value);
     this.setState({
       searchVal: val.target.value,
-    })
-  }
-  searchList = (type) => {
+    });
+  };
+  searchList = type => {
     const { searchVal } = this.state;
     const { dispatch } = this.props;
     switch (type) {
@@ -900,16 +904,16 @@ class AddLiveStep2 extends React.PureComponent {
       default:
         break;
     }
-  }
-  selectUpload = (selectList) => {
+  };
+  selectUpload = selectList => {
     const obj = {};
     obj.vod_play_url = {
       value: selectList[0],
     };
     this.changeFormVal(obj);
     this.openOrCloseVideo();
-  }
-  uploadVideo = (e) => {
+  };
+  uploadVideo = e => {
     const files = e.target.files;
     if (files[0].type !== 'video/mp4') {
       message.error('请上传mp4格式文件');
@@ -919,39 +923,39 @@ class AddLiveStep2 extends React.PureComponent {
     const randomNum = `${new Date().getTime()}_${parseInt(Math.random() * 100, 10)}`;
     const name = `${randomNum}.mp4`;
     // 上传
-    for(let i=0;i<files.length;i++){
+    for (let i = 0; i < files.length; i++) {
       uploadJSSDK({
-          file: files[i],   // 文件，必填,html5 file类型，不需要读数据流，
-          name, // 文件名称，选填，默认为文件名称
-          token,  // token，必填
-          dir: `${env.videoUrl}/${currentUser.id}/${currentUser.shop_store_id}`,
-          maxSize: 1024 * 1024 * 1024,  // 上传大小限制，选填，默认0没有限制
-          callback: (percent, result) => {
-            if (percent === 100 && result) {
-              message.success(`上传成功！`);
-              // const { url } = result;
-              const { dispatch } = this.props;
-              dispatch({
-                type: 'classModel/setUploadImg',
-                payload: {
-                  dir: `${env.videoUrl}/${currentUser.id}/${currentUser.shop_store_id}`,
-                  filename: randomNum,
-                  ext: 'mp4',
-                  pic_dir: `${env.pic}/${currentUser.id}/${currentUser.shop_store_id}`,
-                },
-              });
-              this.setState({
-                uploadPage: 1,
-              })
-            } else if (percent > 0) {
-              message.success(`已上传${percent}%`);
-            } else {
-              message.error(`${result.responseText}`);
-            }
-          },
-        });
+        file: files[i], // 文件，必填,html5 file类型，不需要读数据流，
+        name, // 文件名称，选填，默认为文件名称
+        token, // token，必填
+        dir: `${env.videoUrl}/${currentUser.id}/${currentUser.shop_store_id}`,
+        maxSize: 1024 * 1024 * 1024, // 上传大小限制，选填，默认0没有限制
+        callback: (percent, result) => {
+          if (percent === 100 && result) {
+            message.success(`上传成功！`);
+            // const { url } = result;
+            const { dispatch } = this.props;
+            dispatch({
+              type: 'classModel/setUploadImg',
+              payload: {
+                dir: `${env.videoUrl}/${currentUser.id}/${currentUser.shop_store_id}`,
+                filename: randomNum,
+                ext: 'mp4',
+                pic_dir: `${env.pic}/${currentUser.id}/${currentUser.shop_store_id}`,
+              },
+            });
+            this.setState({
+              uploadPage: 1,
+            });
+          } else if (percent > 0) {
+            message.success(`已上传${percent}%`);
+          } else {
+            message.error(`${result.responseText}`);
+          }
+        },
+      });
     }
-  }
+  };
   // handleShareImg = data => {
   //   if (!data.file.status) {
   //     return;
@@ -983,22 +987,22 @@ class AddLiveStep2 extends React.PureComponent {
     this.setState({
       isGoodModal: false,
       goodsKey: selectedRowKeys,
-    })
-  }
+    });
+  };
   selcetClass = () => {
     const { selectedClassKeys } = this.state;
     this.setState({
       isClassModal: false,
       classKey: selectedClassKeys,
-    })
-  }
+    });
+  };
   selcetSmallVideo = () => {
     const { selectedSmallVideoKeys } = this.state;
     this.setState({
       isSmallVideoModal: false,
       smallVideoKey: selectedSmallVideoKeys,
-    })
-  }
+    });
+  };
   handleUploadSelectChange = pagination => {
     const { current } = pagination;
     const { dispatch, user: { currentUser } } = this.props;
@@ -1010,40 +1014,56 @@ class AddLiveStep2 extends React.PureComponent {
         pageSize: 10,
       },
     });
-  }
-  handleRowSelectChange = (selectedRowKeys) => {
+  };
+  handleRowSelectChange = selectedRowKeys => {
     this.setState({ selectedRowKeys });
   };
-  handleClassSelectChange = (selectedRowKeys) => {
+  handleClassSelectChange = selectedRowKeys => {
     this.setState({ selectedClassKeys: selectedRowKeys });
-  }
-  handleSmallVideoSelectChange = (selectedRowKeys) => {
+  };
+  handleSmallVideoSelectChange = selectedRowKeys => {
     this.setState({ selectedSmallVideoKeys: selectedRowKeys });
-  }
+  };
   render() {
     const {
-      live: { liveForm, uploadLiveImg, liveGoods, smallVideoList, smallVideoListPage, vodListPage, vodList },
+      live: {
+        liveForm,
+        uploadLiveImg,
+        liveGoods,
+        smallVideoList,
+        smallVideoListPage,
+        vodListPage,
+        vodList,
+      },
       classModel: { classList, classListPage, uploadList, uploadListPage },
       frontUser: { userRankList },
       goods: { goodsList, goodsListPage },
       imgUrl,
       uploadUrl,
     } = this.props;
-    const { header, isGoodModal, selectedRowKeys, isClassModal, selectedClassKeys, isSmallVideoModal, selectedSmallVideoKeys, isVideoModal, isVodModal } = this.state;
+    const {
+      header,
+      isGoodModal,
+      selectedRowKeys,
+      isClassModal,
+      selectedClassKeys,
+      isSmallVideoModal,
+      selectedSmallVideoKeys,
+      isVideoModal,
+      isVodModal,
+    } = this.state;
     const vodListItem = [];
     vodList.forEach(res => {
       vodListItem.push(
         <div className={styles.listItem} key={res.id}>
           <img src={res.cover} alt="图片" />
-          <div className={styles.word}>
-            {res.title}
-          </div>
+          <div className={styles.word}>{res.title}</div>
           <div className={styles.switch}>
             {/* <Switch checkedChildren={<Icon type="check" />} unCheckedChildren={<Icon type="close" />} onChange={this.changeSwitch.bind(this, res.id, 0)} defaultChecked={res.is_bind} /> */}
             <Checkbox onChange={this.changeSwitch.bind(this, res.play_url)} />
           </div>
         </div>
-      )
+      );
     });
     const uploadListColumns = [
       {
@@ -1051,14 +1071,17 @@ class AddLiveStep2 extends React.PureComponent {
         dataIndex: 'pic',
         key: 'pic',
         width: 100,
-        render: val => (val ? <img src={`${imgUrl}${val}`} style={{ width: '60px', height: 60 }} alt="图片" /> : null),
+        render: val =>
+          val ? (
+            <img src={`${imgUrl}${val}`} style={{ width: '60px', height: 60 }} alt="图片" />
+          ) : null,
       },
       {
         title: '视频路径',
         dataIndex: 'url',
         width: 150,
       },
-    ]
+    ];
     const rowSelections = {
       type: 'radio',
       // selectedRowKeys: selectedMember,
@@ -1070,7 +1093,8 @@ class AddLiveStep2 extends React.PureComponent {
         dataIndex: 'img',
         key: 'goods_id',
         width: 100,
-        render: val => (val ? <img src={val} style={{ width: '60px', height: 60 }} alt="图片" /> : null),
+        render: val =>
+          val ? <img src={val} style={{ width: '60px', height: 60 }} alt="图片" /> : null,
       },
       {
         title: '商品名',
@@ -1087,14 +1111,15 @@ class AddLiveStep2 extends React.PureComponent {
         width: 80,
         dataIndex: 'goods_total_inventory',
       },
-    ]
+    ];
     const classColumns = [
       {
         title: '课程封面',
         dataIndex: 'cover',
         key: 'cover',
         width: 100,
-        render: val => (val ? <img src={val} style={{ width: '60px', height: 60 }} alt="图片" /> : null),
+        render: val =>
+          val ? <img src={val} style={{ width: '60px', height: 60 }} alt="图片" /> : null,
       },
       {
         title: '课程名称',
@@ -1114,7 +1139,8 @@ class AddLiveStep2 extends React.PureComponent {
         dataIndex: 'cover',
         key: 'cover',
         width: 100,
-        render: val => (val ? <img src={val} style={{ width: '60px', height: 60 }} alt="图片" /> : null),
+        render: val =>
+          val ? <img src={val} style={{ width: '60px', height: 60 }} alt="图片" /> : null,
       },
       {
         title: '短视频名称',
@@ -1160,10 +1186,13 @@ class AddLiveStep2 extends React.PureComponent {
           onCancel={this.openOrCloseVod}
           destroyOnClose="true"
         >
-          <div className={styles.modalBox}>
-            {vodListItem}
-          </div>
-          <Pagination pageSize={18} current={vodListPage.current || 1} total={vodListPage.total} onChange={this.changeVodPage} />
+          <div className={styles.modalBox}>{vodListItem}</div>
+          <Pagination
+            pageSize={18}
+            current={vodListPage.current || 1}
+            total={vodListPage.total}
+            onChange={this.changeVodPage}
+          />
         </Modal>
         <Modal
           title="上传视频"
@@ -1198,7 +1227,9 @@ class AddLiveStep2 extends React.PureComponent {
             <Col span={3}>商品名称</Col>
             <Col span={21}>
               <Input style={{ width: 200, marginRight: 10 }} onChange={this.searchVal} />
-              <Button type="primary" onClick={this.searchList.bind(this, 0)}>搜索</Button>
+              <Button type="primary" onClick={this.searchList.bind(this, 0)}>
+                搜索
+              </Button>
             </Col>
           </Row>
           <Table
@@ -1222,7 +1253,9 @@ class AddLiveStep2 extends React.PureComponent {
             <Col span={3}>课程名称</Col>
             <Col span={21}>
               <Input style={{ width: 200, marginRight: 10 }} onChange={this.searchVal} />
-              <Button type="primary" onClick={this.searchList.bind(this, 1)}>搜索</Button>
+              <Button type="primary" onClick={this.searchList.bind(this, 1)}>
+                搜索
+              </Button>
             </Col>
           </Row>
           <Table
@@ -1246,7 +1279,9 @@ class AddLiveStep2 extends React.PureComponent {
             <Col span={3}>视频名称</Col>
             <Col span={21}>
               <Input style={{ width: 200, marginRight: 10 }} onChange={this.searchVal} />
-              <Button type="primary" onClick={this.searchList.bind(this, 2)}>搜索</Button>
+              <Button type="primary" onClick={this.searchList.bind(this, 2)}>
+                搜索
+              </Button>
             </Col>
           </Row>
           <Table

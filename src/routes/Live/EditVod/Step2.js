@@ -115,13 +115,13 @@ const CustomizedForm = Form.create({
     type: 2,
   };
   //  限制大小
-  const beforeUpload = (file) => {
+  const beforeUpload = file => {
     const isLt1M = file.size / 1024 / 1024 < 1;
     if (!isLt1M) {
       message.error('图片不能超过1M!');
     }
     return isLt1M;
-  }
+  };
   return (
     <Form autoComplete="OFF">
       <FormItem {...formItemLayout} label="录播标题">
@@ -187,42 +187,44 @@ const CustomizedForm = Form.create({
           </Select>
         )}
       </FormItem>
-      {
-        (() => {
-          switch (liveForm.type) {
-            case 2:
-              return (
-                <Form.Item {...formItemLayout} label="播放地址">
-                  {getFieldDecorator('play_url', {rules: [{ required: true, message: '请填写播放地址' }]})(<Input style={{ width: '400px' }} />)}
-                </Form.Item>
-              );
-            case 1:
-              return (
-                <Form.Item {...formItemLayout} label="播放地址">
-                  {getFieldDecorator('zz', {rules: [{ required: false, message: '请上传视频' }]})(
-                    <div className={styles.fileBox}>
-                      <input type="file" className={styles.fileBtn} onChange={uploadVideo} />
-                      <div className={styles.add}>+</div>
-                      {
-                        liveForm.zz ? (
-                          <video className={styles.videoItem} src={liveForm.zz} controls><track kind="captions" /></video>
-                        ) : null
-                      }
-                    </div>
-                  )}
-                </Form.Item>
-              );
-            case 3:
-              return (
-                <Form.Item {...formItemLayout} label="播放地址">
-                  {getFieldDecorator('tencent_url', {rules: [{ required: true, message: '请填写腾讯地址' }]})(<Input style={{ width: '400px' }} />)}
-                </Form.Item>
-              );
-            default:
-              break;
-          }
-        })()
-      }
+      {(() => {
+        switch (liveForm.type) {
+          case 2:
+            return (
+              <Form.Item {...formItemLayout} label="播放地址">
+                {getFieldDecorator('play_url', {
+                  rules: [{ required: true, message: '请填写播放地址' }],
+                })(<Input style={{ width: '400px' }} />)}
+              </Form.Item>
+            );
+          case 1:
+            return (
+              <Form.Item {...formItemLayout} label="播放地址">
+                {getFieldDecorator('zz', { rules: [{ required: false, message: '请上传视频' }] })(
+                  <div className={styles.fileBox}>
+                    <input type="file" className={styles.fileBtn} onChange={uploadVideo} />
+                    <div className={styles.add}>+</div>
+                    {liveForm.zz ? (
+                      <video className={styles.videoItem} src={liveForm.zz} controls>
+                        <track kind="captions" />
+                      </video>
+                    ) : null}
+                  </div>
+                )}
+              </Form.Item>
+            );
+          case 3:
+            return (
+              <Form.Item {...formItemLayout} label="播放地址">
+                {getFieldDecorator('tencent_url', {
+                  rules: [{ required: true, message: '请填写腾讯地址' }],
+                })(<Input style={{ width: '400px' }} />)}
+              </Form.Item>
+            );
+          default:
+            break;
+        }
+      })()}
       {/* {
         liveForm.type === 2 ? (
           <Form.Item {...formItemLayout} label="播放地址">
@@ -381,7 +383,7 @@ class EditVodStep2 extends React.PureComponent {
       },
     });
   };
-  uploadVideo = (e) => {
+  uploadVideo = e => {
     const files = e.target.files;
     if (files[0].type !== 'video/mp4') {
       message.error('请上传mp4格式文件');
@@ -390,33 +392,33 @@ class EditVodStep2 extends React.PureComponent {
     const { live: { token }, user: { currentUser } } = this.props;
     const name = `${new Date().getTime()}.mp4`;
     // 上传
-    for(let i=0;i<files.length;i++){
+    for (let i = 0; i < files.length; i++) {
       uploadJSSDK({
-          file: files[i],   // 文件，必填,html5 file类型，不需要读数据流，
-          name, // 文件名称，选填，默认为文件名称
-          token,  // token，必填
-          dir: `vods/${currentUser.id}`,  // 目录，选填，默认根目录''
-          maxSize: 1024 * 1024 * 1024,  // 上传大小限制，选填，默认0没有限制
-          callback: (percent, result) => {
-            if (percent === 100 && result) {
-              message.success(`上传成功！`);
-              const { url } = result;
-              const { dispatch } = this.props;
-              dispatch({
-                type: 'live/setVodurl',
-                payload: {
-                  url,
-                },
-              });
-            } else if (percent > 0) {
-              message.success(`已上传${percent}%`);
-            } else {
-              message.error(`${result.responseText}`);
-            }
-          },
-        });
+        file: files[i], // 文件，必填,html5 file类型，不需要读数据流，
+        name, // 文件名称，选填，默认为文件名称
+        token, // token，必填
+        dir: `vods/${currentUser.id}`, // 目录，选填，默认根目录''
+        maxSize: 1024 * 1024 * 1024, // 上传大小限制，选填，默认0没有限制
+        callback: (percent, result) => {
+          if (percent === 100 && result) {
+            message.success(`上传成功！`);
+            const { url } = result;
+            const { dispatch } = this.props;
+            dispatch({
+              type: 'live/setVodurl',
+              payload: {
+                url,
+              },
+            });
+          } else if (percent > 0) {
+            message.success(`已上传${percent}%`);
+          } else {
+            message.error(`${result.responseText}`);
+          }
+        },
+      });
     }
-  }
+  };
   // 放大图片
   handlePreviewImg = file => {
     this.setState({
