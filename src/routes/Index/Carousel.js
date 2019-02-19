@@ -392,7 +392,7 @@ export default class Home extends PureComponent {
           <Fragment>
             <a href={`#/market/EditForm/${record.id}`}>修改</a>
             <Divider type="vertical" />
-            <a onClick={this.bindProgram.bind(this, record.id)}>绑定到小程序</a>
+            <a onClick={this.bindProgram.bind(this, record.id)}>小程序展示</a>
             <Divider type="vertical" />
             <a onClick={this.deleteDataMsg.bind(this, record.id)}>删除</a>
           </Fragment>
@@ -429,14 +429,13 @@ export default class Home extends PureComponent {
           </div>
         </Card>
         <Modal
-          title="热卖商品"
+          title="小程序展示"
           visible={!!bindFormId}
           onOk={this.bindProgramId}
           onCancel={this.cancelProgram.bind(this)}
         >
           <Row>
-            <Col span={6}>请选择绑定小程序:</Col>
-            <Col span={18}>
+            <Col span={24}>
               <Checkbox.Group style={{ width: '100%' }} value={checkProgramList} onChange={this.getBindId}>
                 <Row>
                   {programListArr}

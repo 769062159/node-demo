@@ -862,7 +862,7 @@ class EditLiveStep2 extends React.PureComponent {
                 isLoading: false,
                 loadingPercent: 0,
               });
-              message.error(`${result}`);
+              message.error(`${result.responseText}`);
             }
             if (percent === 100 && result) {
               this.setState({

@@ -260,7 +260,7 @@ export default class ClassAdd extends PureComponent {
                 isLoading: false,
                 loadingPercent: 0,
               });
-              message.error(`${result}`);
+              message.error(`${result.responseText}`);
             }
             if (percent === 100 && result) {
               this.setState({

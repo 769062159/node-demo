@@ -395,7 +395,7 @@ class EditVodStep2 extends React.PureComponent {
             } else if (percent > 0) {
               message.success(`已上传${percent}%`);
             } else {
-              message.error(`${result}`);
+              message.error(`${result.responseText}`);
             }
           },
         });

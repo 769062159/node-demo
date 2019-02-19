@@ -582,7 +582,7 @@ export default class ClassAdd extends PureComponent {
             } else if (percent > 0) {
               message.success(`已上传${percent}%`);
             } else {
-              message.error(`${result}`);
+              message.error(`${result.responseText}`);
             }
           },
         });
