@@ -66,13 +66,25 @@ const CustomizedForm = Form.create({
       }
     });
   };
-  const { codeForm } = props;
+  const { codeForm, codeMsg } = props;
   return (
     <Form
       onSubmit={this.handleSubmit}
       style={{ marginTop: 8 }}
       autoComplete="OFF"
     >
+      <FormItem {...formItemLayout} label="会员名">
+        {codeMsg.name}
+      </FormItem>
+      <FormItem {...formItemLayout} label="当前商户版数量">
+        {codeMsg.merchant}
+      </FormItem>
+      <FormItem {...formItemLayout} label="当前财道版数量">
+        {codeMsg.wealth}
+      </FormItem>
+      <FormItem {...formItemLayout} label="当前视群版数量">
+        {codeMsg.group}
+      </FormItem>
       <FormItem {...formItemLayout} label="交易类型">
         {getFieldDecorator('trade_type', {
           rules: [
@@ -86,11 +98,12 @@ const CustomizedForm = Form.create({
             <Radio value={1}>线下转账</Radio>
             <Radio value={2}>地网交易</Radio>
             <Radio value={3}>奖励</Radio>
+            <Radio value={4}>扣除</Radio>
           </RadioGroup>
         )}
       </FormItem>
       {
-        codeForm.trade_type !== 3 ? (
+        codeForm.trade_type !== 3 && codeForm.trade_type !== 4 ? (
           <FormItem {...formItemLayout} label="交易金额">
             {getFieldDecorator('trade_amount', {
               rules: [
@@ -134,7 +147,7 @@ const CustomizedForm = Form.create({
         })(<InputNumber min={0} step={1} />)}
       </FormItem>
       {
-        codeForm.trade_type !== 3 ? (
+        codeForm.trade_type !== 3 && codeForm.trade_type !== 4 ? (
           <FormItem {...formItemLayout} label="上级是否有佣金">
             {getFieldDecorator('is_commission', {
               rules: [
@@ -153,7 +166,7 @@ const CustomizedForm = Form.create({
         ) : null
       }
       {
-        codeForm.is_commission === 1 && codeForm.trade_type !== 3 ? (
+        codeForm.is_commission === 1 && codeForm.trade_type !== 3 && codeForm.trade_type !== 4 ? (
           <FormItem {...formItemLayout} label="佣金金额">
             {getFieldDecorator('commission', {
               rules: [
@@ -211,8 +224,8 @@ class TypeForm extends Component {
     // });
   };
   render() {
-    const { codeForm } = this.props;
-    return <CustomizedForm codeForm={codeForm} submitCode={this.handleSubmit} onChange={this.changeFormVal} />;
+    const { codeForm, codeMsg } = this.props;
+    return <CustomizedForm codeForm={codeForm} codeMsg={codeMsg} submitCode={this.handleSubmit} onChange={this.changeFormVal} />;
   }
 }
 

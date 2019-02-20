@@ -12,6 +12,7 @@ import {
   updatePower,
   updateCommssion,
   setAuthorCode,
+  getCodeNum,
 } from '../services/frontUser.js';
 import { updateMember, addMember } from '../services/video';
 
@@ -30,6 +31,12 @@ export default {
   },
 
   effects: {
+    *getCodeNum({ payload, callback }, { call }) {
+      const res = yield call(getCodeNum, payload);
+      if (res && res.code === 200) {
+        callback(res.data);
+      }
+    },
     *setAuthorCode({ payload, callback }, { call }) {
       const res = yield call(setAuthorCode, payload);
       if (res && res.code === 200) {

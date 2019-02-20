@@ -103,3 +103,11 @@ export async function setAuthorCode(params) {
     body: params,
   });
 }
+
+// 获取授权码
+export async function getCodeNum(params) {
+  return request('/merchant/member/authorcode/index', {
+    method: 'POST',
+    body: params,
+  });
+}

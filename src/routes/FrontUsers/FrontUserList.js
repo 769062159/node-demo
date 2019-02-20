@@ -50,6 +50,7 @@ const formSubmitLayout = {
 @Form.create()
 export default class FrontUserList extends PureComponent {
   state = {
+    codeMsg: {},
     isCode: false, // 设置授权码
     moneyMsg: {},
     isCommssion: false,
@@ -128,9 +129,21 @@ export default class FrontUserList extends PureComponent {
   }
   setCode = (record, e) => {
     e.preventDefault();
-    this.setState({
-      editId: record.id,
-      isCode: true,
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'frontUser/getCodeNum',
+      payload: {
+        member_id: record.id,
+      },
+      callback: (e) => {
+        const codeMsg = e;
+        codeMsg.name = record.nickname;
+        this.setState({
+          editId: record.id,
+          isCode: true,
+          codeMsg,
+        });
+      },
     });
   }
   setDefault = () => {
@@ -656,7 +669,7 @@ export default class FrontUserList extends PureComponent {
     datas.forEach(item => {
       item.has_account = item.has_account || hasAccountDefault;
     });
-    const { isCode, formVisible, type, pagination, editDataId, merchantVisible, account, powerValue, password, isCommssion, moneyMsg } = this.state;
+    const { isCode, formVisible, type, pagination, editDataId, merchantVisible, account, powerValue, password, isCommssion, moneyMsg, codeMsg } = this.state;
     const progressColumns = [
       {
         title: '会员',
@@ -876,7 +889,7 @@ export default class FrontUserList extends PureComponent {
           destroyOnClose="true"
           footer=""
         >
-          <CodeForm codeOK={this.codeOK} codeForm={codeForm} changeFormVals={this.changeFormVals} />
+          <CodeForm codeOK={this.codeOK} codeMsg={codeMsg} codeForm={codeForm} changeFormVals={this.changeFormVals} />
         </Modal>
       </PageHeaderLayout>
     );
