@@ -60,6 +60,15 @@ export const getRouterConfig = app => {
         import('../routes/Exception/triggerException')
       ),
     },
+    // 收款码
+    '/code/code': {
+      identity: 'common',
+      component: dynamicWrapper(app, ['code'], () => import('../routes/Code/Code')),
+    },
+    '/code/order': {
+      identity: 'common',
+      component: dynamicWrapper(app, ['code'], () => import('../routes/Code/Order')),
+    },
     // 小视频
     '/video/auditor': {
       identity: 'common',

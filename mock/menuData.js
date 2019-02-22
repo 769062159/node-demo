@@ -293,6 +293,21 @@ export const menuData = [
     icon: 'icon-shezhi',
     path: 'setting/config',
   },
+  {
+    name: '收款码',
+    icon: 'icon-ico',
+    path: 'code',
+    children: [
+      {
+        name: '收款码',
+        path: 'code',
+      },
+      {
+        name: '订单',
+        path: 'order',
+      },
+    ],
+  },
   // {
   //   name: 'dashboard',
   //   icon: 'dashboard',

@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 import moment from 'moment';
-import { Table, Tabs } from 'antd';
+import { Tabs } from 'antd';
 import StandardTable from 'components/StandardTable';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
@@ -28,7 +28,7 @@ export default class Rank extends PureComponent {
       payload: {
         type: tabIndex,
         page,
-        page_number: 1,
+        page_number: 10,
       },
     });
   }
@@ -43,13 +43,12 @@ export default class Rank extends PureComponent {
         payload: {
           type: e,
           page: 1,
-          page_number: 1,
+          page_number: 10,
         },
       });
   }
 
   handleStandardTableChange = (e) => {
-    console.log(e);
     const { current } = e;
     const { dispatch } = this.props;
     this.setState({
@@ -61,7 +60,7 @@ export default class Rank extends PureComponent {
       payload: {
         type: tabIndex,
         page: current,
-        page_number: 1,
+        page_number: 10,
       },
     });
   }
