@@ -111,3 +111,11 @@ export async function getCodeNum(params) {
     body: params,
   });
 }
+
+// 获取记录
+export async function getRecord(params) {
+  return request('/merchant/member/operation/log/list', {
+    method: 'POST',
+    body: params,
+  });
+}

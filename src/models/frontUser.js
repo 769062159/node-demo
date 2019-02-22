@@ -13,6 +13,7 @@ import {
   updateCommssion,
   setAuthorCode,
   getCodeNum,
+  getRecord,
 } from '../services/frontUser.js';
 import { updateMember, addMember } from '../services/video';
 
@@ -20,6 +21,21 @@ export default {
   namespace: 'frontUser',
 
   state: {
+    levelRecord: {
+      list: [],
+    }, // 设置等级记录
+    superiorRecord: {
+      list: [],
+    }, // 修改上级记录
+    versionRecord: {
+      list: [],
+    }, // 设置版本记录
+    codeRecord: {
+      list: [],
+    }, // 设置授权码记录
+    commissionRecord: {
+      list: [],
+    }, // 佣金记录
     frontUserList: [], // table列表
     frontUserListPage: {}, // table 页脚
     userRankList: [], // 用户等级列表
@@ -31,6 +47,18 @@ export default {
   },
 
   effects: {
+    *getRecord({ payload }, { call, put }) {
+      const res = yield call(getRecord, payload);
+      if (res && res.code === 200) {
+        yield put({
+          type: 'getRecords',
+          payload: res,
+          types: payload.type,
+          page: payload.page,
+          pageSize: payload.page_number,
+        });
+      }
+    },
     *getCodeNum({ payload, callback }, { call }) {
       const res = yield call(getCodeNum, payload);
       if (res && res.code === 200) {
@@ -179,6 +207,46 @@ export default {
   },
 
   reducers: {
+    getRecords(state, { payload, types, pageSize, page }) {
+      let { levelRecord, superiorRecord, versionRecord, codeRecord, commissionRecord } = state;
+      let { data } = payload;
+      types = Number(types);
+      data = {
+        list: data.list,
+        pagination: {
+          current: page,
+          total: data.total,
+          pageSize,
+        },
+      };
+      switch (types) {
+        case 1:
+          levelRecord = data;
+          break;
+        case 2:
+        superiorRecord = data;
+          break;
+        case 3:
+        versionRecord = data;
+          break;
+        case 4:
+        codeRecord = data;
+          break;
+        case 5:
+        commissionRecord = data;
+          break;
+        default:
+          break;
+      }
+      return {
+        ...state,
+        levelRecord,
+        superiorRecord,
+        versionRecord,
+        commissionRecord,
+        codeRecord,
+      };
+    },
     changeFormVals(state, { payload }) {
       let { codeForm } = state;
       codeForm = {

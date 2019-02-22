@@ -38,6 +38,10 @@ export const getRouterConfig = app => {
       identity: 'common',
       component: dynamicWrapper(app, ['frontUser'], () => import('../routes/FrontUsers/Rank')),
     },
+    '/front-users/record': {
+      identity: 'common',
+      component: dynamicWrapper(app, ['frontUser'], () => import('../routes/FrontUsers/Record')),
+    },
     '/exception/403': {
       identity: 'common',
       component: dynamicWrapper(app, [], () => import('../routes/Exception/403')),

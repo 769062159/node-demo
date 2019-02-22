@@ -348,12 +348,7 @@ const CustomizedForm = Form.create({
           </Select>
         )}
       </FormItem>
-      {liveForm.play_type === 1 ? null : // <FormItem {...formItemLayout} label="录播">
-      //   <Select
-      //     showSearch
-      //     labelInValue
-      //     value={homeVod}
-      //     placeholder="输入录播名字搜索"
+      {liveForm.play_type === 1 ? null : //     placeholder="输入录播名字搜索" //     value={homeVod} //     labelInValue //     showSearch //   <Select // <FormItem {...formItemLayout} label="录播">
       //     notFoundContent={fetching ? <Spin size="small" /> : null}
       //     filterOption={false}
       //     onSearch={fetchVod}
