@@ -69,6 +69,14 @@ export const getRouterConfig = app => {
       identity: 'common',
       component: dynamicWrapper(app, ['code'], () => import('../routes/Code/Order')),
     },
+    '/code/user-code': {
+      identity: 'common',
+      component: dynamicWrapper(app, ['code'], () => import('../routes/Code/userCode')),
+    },
+    '/code/detail/:id': {
+      identity: 'common',
+      component: dynamicWrapper(app, ['code'], () => import('../routes/Code/Detail')),
+    },
     // 小视频
     '/video/auditor': {
       identity: 'common',

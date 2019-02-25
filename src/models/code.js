@@ -1,4 +1,4 @@
-import { getConfigCode, saveCodeConfig, getCodeLog } from '../services/code';
+import { getConfigCode, saveCodeConfig, getCodeLog, getUserCode, getUserDetail, getCodeList } from '../services/code';
 
 export default {
   namespace: 'code',
@@ -11,9 +11,52 @@ export default {
       list: [],
       pagination: {},
     },
+    userCode: {
+      list: [],
+      pagination: {},
+    },
+    codeDetail: {},
+    merchant: {
+      list: [],
+      pagination: {},
+    },
+    group: {
+      list: [],
+      pagination: {},
+    },
+    wealth: {
+      list: [],
+      pagination: {},
+    },
   },
 
   effects: {
+    *getCodeList({ payload }, { call, put }) {
+      const response = yield call(getCodeList, payload);
+      yield put({
+        type: 'getCodeLists',
+        payload: response,
+        types: payload.type,
+        page: payload.page,
+        pageSize: payload.page_number,
+      });
+    },
+    *getUserDetail({ payload }, { call, put }) {
+      const response = yield call(getUserDetail, payload);
+      yield put({
+        type: 'getUserDetails',
+        payload: response,
+      });
+    },
+    *getUserCode({ payload }, { call, put }) {
+      const response = yield call(getUserCode, payload);
+      yield put({
+        type: 'getUserCodes',
+        payload: response,
+        page: payload.page,
+        pageSize: payload.page_number,
+      });
+    },
     *getCodeLog({ payload }, { call, put }) {
       const response = yield call(getCodeLog, payload);
       yield put({
@@ -39,6 +82,81 @@ export default {
   },
 
   reducers: {
+    clearDetail(state) {
+      return {
+        ...state,
+        codeDetail: {},
+        merchant: {
+          list: [],
+          pagination: {},
+        },
+        group: {
+          list: [],
+          pagination: {},
+        },
+        wealth: {
+          list: [],
+          pagination: {},
+        },
+      };
+    },
+    getCodeLists(state, { payload, page, pageSize, types }) {
+      let { data } = payload;
+      let { merchant, group, wealth } = state;
+      const list = data.list.map(res => {
+        res.user = res.has_the_user || res.has_origin_user || res.has_transfer_user;
+        return res;
+      })
+      data = {
+        list,
+        pagination: {
+          current: page,
+          total: data.total,
+          pageSize,
+        },
+      };
+      switch (types) {
+        case 1:
+          merchant = data;
+          break;
+        case 2:
+          group = data;
+          break;
+        case 3:
+          wealth = data;
+          break;
+        default:
+          break;
+      }
+      return {
+        ...state,
+        merchant,
+        group,
+        wealth,
+      };
+    },
+    getUserDetails(state, { payload }) {
+      const { data } = payload;
+      return {
+        ...state,
+        codeDetail: data,
+      };
+    },
+    getUserCodes(state, { payload, page, pageSize }) {
+      let { data } = payload;
+      data = {
+        list: data.list,
+        pagination: {
+          current: page,
+          total: data.total,
+          pageSize,
+        },
+      };
+      return {
+        ...state,
+        userCode: data,
+      };
+    },
     getCodeLogs(state, { payload, page, pageSize }) {
       let { data } = payload;
       data = {

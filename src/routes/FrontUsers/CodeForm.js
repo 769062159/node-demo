@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Input, Button, Radio, message, InputNumber } from 'antd';
+import { Form, Input, Button, Radio, message, InputNumber, Row, Col } from 'antd';
 
 const FormItem = Form.Item;
 const RadioGroup = Radio.Group;
@@ -76,7 +76,12 @@ const CustomizedForm = Form.create({
       <FormItem {...formItemLayout} label="会员名">
         {codeMsg.name}
       </FormItem>
-      <FormItem {...formItemLayout} label="当前商户版数量">
+      <Row>
+        <Col span={8}>当前商户版数量:{codeMsg.merchant}</Col>
+        <Col span={8}>当前财道版数量:{codeMsg.wealth}</Col>
+        <Col span={8}>当前视群版数量:{codeMsg.group}</Col>
+      </Row>
+      {/* <FormItem {...formItemLayout} label="当前商户版数量">
         {codeMsg.merchant}
       </FormItem>
       <FormItem {...formItemLayout} label="当前财道版数量">
@@ -84,7 +89,7 @@ const CustomizedForm = Form.create({
       </FormItem>
       <FormItem {...formItemLayout} label="当前视群版数量">
         {codeMsg.group}
-      </FormItem>
+      </FormItem> */}
       <FormItem {...formItemLayout} label="交易类型">
         {getFieldDecorator('trade_type', {
           rules: [

@@ -23,3 +23,27 @@ export async function getCodeLog(params) {
     body: params,
   });
 }
+
+// 用户授权码列表
+export async function getUserCode(params) {
+  return request('/merchant/authorcode/user/list', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+// 用户授权详情
+export async function getUserDetail(params) {
+  return request('/merchant/authorcode/user/detail', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+// 用户授权码详情列表商户版 1 视群版 2 财道版 3
+export async function getCodeList(params) {
+  return request('/merchant/authorcode/type/list', {
+    method: 'POST',
+    body: params,
+  });
+}
