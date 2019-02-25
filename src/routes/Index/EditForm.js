@@ -1,7 +1,7 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
 // import moment from 'moment';
-import { Table, message, Modal, Form, Button, InputNumber, Upload, Select, Icon, Tag } from 'antd';
+import { Table, message, Modal, Form, Button, InputNumber, Upload, Select, Icon, Tag, Row, Col, Input } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './Style.less';
 
@@ -104,6 +104,8 @@ const CustomizedForm = Form.create({
     LiveKey,
     uploadUrl,
     beforeUpload,
+    getLiveId,
+    searchLive,
   } = props;
   const goodListColumns = [
     {
@@ -163,22 +165,6 @@ const CustomizedForm = Form.create({
           ],
         })(<InputNumber step={1} min={0} />)}
       </FormItem>
-      {/* <FormItem {...formItemLayout} label="类型">
-        {getFieldDecorator('type', {
-          rules: [
-            {
-              required: true,
-              message: '请输入类型',
-            },
-          ],
-        })(
-          <Select style={{ width: 120 }}>
-            <Option value={1}>热销商品</Option>
-            <Option value={2}>直播商品</Option>
-            <Option value={3}>轮播图</Option>
-          </Select>
-        )}
-      </FormItem> */}
       {homeForm.type === 3 ? (
         <div>
           <FormItem {...formItemLayout} label="跳转类型">
@@ -235,19 +221,27 @@ const CustomizedForm = Form.create({
           />
         </FormItem>
       ) : homeForm.jump_type === 4 ? (
-        <FormItem {...formItemLayout} label="直播列表" className={styles.tableHeaders}>
-          <Table
-            style={{ width: 600 }}
-            onChange={goodLiveChange}
-            // onSelect={liveSelect}
-            dataSource={LiveList}
-            rowSelection={{ type: 'radio', onSelect: liveSelect, selectedRowKeys: LiveKey }}
-            rowKey={record => record.stv_live_id}
-            loading={loading}
-            columns={goodLiveColumns}
-            pagination={LiveListPage}
-          />
-        </FormItem>
+        <Fragment>
+          <Row style={{ marginBottom: 20 }}>
+            <Col span={17} offset={7}>
+              <Input placeholder="请输入用户id" style={{ width: 200 }} onChange={getLiveId} />
+              <Button style={{ marginLeft: 20 }} onClick={searchLive}>搜索</Button>
+            </Col>
+          </Row>
+          <FormItem {...formItemLayout} label="直播列表" className={styles.tableHeaders}>
+            <Table
+              style={{ width: 600 }}
+              onChange={goodLiveChange}
+              // onSelect={liveSelect}
+              dataSource={LiveList}
+              rowSelection={{ type: 'radio', onSelect: liveSelect, selectedRowKeys: LiveKey }}
+              rowKey={record => record.stv_live_id}
+              loading={loading}
+              columns={goodLiveColumns}
+              pagination={LiveListPage}
+            />
+          </FormItem>
+        </Fragment>
       ) : null}
       <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
         <Button type="primary" htmlType="submit" onClick={onValidateForm}>
@@ -264,6 +258,7 @@ const CustomizedForm = Form.create({
 }))
 export default class Home extends PureComponent {
   state = {
+    liveId: '',
     expandForm: false,
     pagination: 1, // 页脚
     previewVisible: false,
@@ -306,6 +301,25 @@ export default class Home extends PureComponent {
     const { dispatch } = this.props;
     dispatch({
       type: 'indexs/clearHomeMsgs',
+    });
+  }
+
+  getLiveId = (e) => {
+    this.setState({
+      liveId: e.target.value,
+    });
+  }
+
+  searchLive = () => {
+    const { liveId } = this.state;
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'indexs/fetchLiveList',
+      payload: {
+        user_id: liveId,
+        page: 1,
+        page_number: 10,
+      },
     });
   }
 
@@ -545,7 +559,9 @@ export default class Home extends PureComponent {
           liveSelect={this.liveSelect}
           GoodKey={GoodKey}
           LiveKey={LiveKey}
+          getLiveId={this.getLiveId}
           uploadUrl={uploadUrl}
+          searchLive={this.searchLive}
         />
       </PageHeaderLayout>
     );
