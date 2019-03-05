@@ -9,17 +9,17 @@ export default {
   define: {
     'process.env':{
       'test': {
-        uploadUrl: 'http://dev-api.store.314live.cn/merchant/upload',
+        uploadUrl: 'http://dev.shiqun.api.iyov.io/merchant/upload',
         videoUrl: 'dev_audio',
         pic: 'dev_pic',
-        apiurl: 'http://dev-api.store.314live.cn',
+        apiurl: 'http://dev.shiqun.api.iyov.io',
         wxTxt: 'http://wechat.store.314live.cn/wx/wechataccount/upload/txt',
       },
       'env': {
-        uploadUrl: 'http://api.store.314live.cn/merchant/upload',
+        uploadUrl: 'http://dev.shiqun.api.iyov.io/merchant/upload',
         videoUrl: 'audio',
         pic: 'pic',
-        apiurl: 'http://api.store.314live.cn',
+        apiurl: 'http://dev.shiqun.api.iyov.io',
         wxTxt: 'http://wechat.store.314live.cn/wx/wechataccount/upload/txt',
       }
     },
