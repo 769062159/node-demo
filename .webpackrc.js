@@ -16,6 +16,7 @@ export default {
         wxapiurl: 'http://dev.wechat.shiqun.iyov.io',
         wxTxt: 'http://dev.wechat.shiqun.iyov.io/wx/wechataccount/upload/txt',
         adminUrl: 'http://dev.admin.shop.iyov.io',
+        h5Url: 'http://dev.h5.shiqun.iyov.io'
       },
       'master': {
         uploadUrl: 'http://shiqun.api.iyov.io/merchant/upload',
@@ -25,6 +26,7 @@ export default {
         wxapiurl: 'http://wechat.shiqun.iyov.io',
         wxTxt: 'http://wechat.shiqun.iyov.io/wx/wechataccount/upload/txt',
         adminUrl: 'http://admin.shop.iyov.io',
+        h5Url: 'http://h5.shiqun.iyov.io'
       }
     },
     /*cannot set NODE_ENV for userDefined*/
