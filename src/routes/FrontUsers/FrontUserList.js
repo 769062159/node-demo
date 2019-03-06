@@ -810,8 +810,8 @@ export default class FrontUserList extends PureComponent {
         <Card bordered={false} style={{ marginBottom: 10 }}>
           <div className={styles.tableList}>
             商户版和社群版后台地址：
-            <a href='http://shop.store.314live.cn' target="view_window">
-              http://shop.store.314live.cn
+            <a href='http://dev.admin.shop.iyov.io' target="view_window">
+              http://dev.admin.shop.iyov.io
             </a>
           </div>
         </Card>

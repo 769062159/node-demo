@@ -414,11 +414,11 @@ function dynamicWrapper(app, models, component) {
         ...props,
         routerConfig: routerConfigCache,
         uploadUrl,
-        // uploadUrl: 'http://api.store.314live.cn/merchant/upload', // 正式全局上传图片路径
-        // uploadUrl: 'http://dev-api.store.314live.cn/merchant/upload', // 测试全局上传图片路径
+        // uploadUrl: 'http://shiqun.api.iyov.io/merchant/upload', // 正式全局上传图片路径
+        // uploadUrl: 'http://dev.shiqun.api.iyov.io/merchant/upload', // 测试全局上传图片路径
         imgUrl: 'http://314live.image.alimmdn.com', // 测试图片前缀
         // imgUrl: 'http://314live.image.alimmdn.com/', // 测试
-        uploadFile: 'http://wechat.store.314live.cn/wx/wechataccount/upload', // 证书上传
+        uploadFile: 'http://wechat.shiqun.iyov.io/wx/wechataccount/upload', // 证书上传
       });
     };
   }
