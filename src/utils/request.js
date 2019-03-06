@@ -41,11 +41,7 @@ function checkStatus(response) {
   throw error;
 }
 
-const { apiurl } = process.env[process.env.API_ENV];
-// const apiurl = 'http://dev.shiqun.api.iyov.io'; // 测试接口
-// const apiurl = 'http://shiqun.api.iyov.io'; // 正式接口
-const wxapiurl = 'http://wechat.shiqun.iyov.io';
-// const apiurl = "";
+const { apiurl, wxapiurl } = process.env[process.env.API_ENV];
 
 /**
  * Requests a URL, returning a promise.

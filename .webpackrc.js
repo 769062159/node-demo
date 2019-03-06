@@ -8,19 +8,23 @@ export default {
   ],
   define: {
     'process.env':{
-      'test': {
+      'dev': {
         uploadUrl: 'http://dev.shiqun.api.iyov.io/merchant/upload',
         videoUrl: 'dev_audio',
         pic: 'dev_pic',
         apiurl: 'http://dev.shiqun.api.iyov.io',
-        wxTxt: 'http://wechat.store.314live.cn/wx/wechataccount/upload/txt',
+        wxapiurl: 'http://dev.wechat.shiqun.iyov.io',
+        wxTxt: 'http://dev.wechat.shiqun.iyov.io/wx/wechataccount/upload/txt',
+        adminUrl: 'http://dev.admin.shop.iyov.io',
       },
-      'env': {
-        uploadUrl: 'http://dev.shiqun.api.iyov.io/merchant/upload',
+      'master': {
+        uploadUrl: 'http://shiqun.api.iyov.io/merchant/upload',
         videoUrl: 'audio',
         pic: 'pic',
-        apiurl: 'http://dev.shiqun.api.iyov.io',
-        wxTxt: 'http://wechat.store.314live.cn/wx/wechataccount/upload/txt',
+        apiurl: 'http://shiqun.api.iyov.io',
+        wxapiurl: 'http://wechat.shiqun.iyov.io',
+        wxTxt: 'http://wechat.shiqun.iyov.io/wx/wechataccount/upload/txt',
+        adminUrl: 'http://admin.shop.iyov.io',
       }
     },
     /*cannot set NODE_ENV for userDefined*/

@@ -6,9 +6,9 @@
   "scripts": {
     "start:test": "set port=8080 && cross-env API_ENV=test ESLINT=none roadhog dev",
     "start:env": "set port=8080 && cross-env API_ENV=env ESLINT=none roadhog dev",
-    "start:no-proxy": "cross-env NO_PROXY=true ESLINT=none roadhog dev",
     "build:test": "cross-env API_ENV=test ESLINT=none roadhog build && ./doc/cs_merchant.sh",
     "build:env": "cross-env API_ENV=env ESLINT=none roadhog build && ./doc/pro_merchant",
+    "start:no-proxy": "cross-env NO_PROXY=true ESLINT=none roadhog dev",
     "site": "roadhog-api-doc static && gh-pages -d dist",
     "analyze": "cross-env ANALYZE=true roadhog build",
     "lint:style": "stylelint \"src/**/*.less\" --syntax less",

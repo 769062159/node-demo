@@ -23,6 +23,8 @@ import CodeForm from './CodeForm';
 
 import styles from './TableList.less';
 
+const { adminUrl } = process.env[process.env.API_ENV];
+
 const LevelName = ['普通版', '商户版', '视群版', '财道版'];
 const { confirm } = Modal;
 const FormItem = Form.Item;
@@ -810,8 +812,8 @@ export default class FrontUserList extends PureComponent {
         <Card bordered={false} style={{ marginBottom: 10 }}>
           <div className={styles.tableList}>
             商户版和社群版后台地址：
-            <a href='http://dev.admin.shop.iyov.io' target="view_window">
-              http://dev.admin.shop.iyov.io
+            <a href={adminUrl} target="view_window">
+              {adminUrl}
             </a>
           </div>
         </Card>
