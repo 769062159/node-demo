@@ -175,3 +175,11 @@ export async function addPeople(params) {
     body: params,
   });
 }
+
+// 获取直播推流地址
+export async function getLivePushUrl(params) {
+  return request('/merchant/live/push/url', {
+    method: 'POST',
+    body: params,
+  });
+}
