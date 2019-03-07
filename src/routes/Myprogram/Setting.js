@@ -44,16 +44,6 @@ export default class Setting extends PureComponent {
         account_id: id,
       },
     });
-    console.log(this.program);
-    dispatch({
-      type: 'program/getAuthorizationUrl',
-      payload: {
-        account_id: id,
-      },
-      callback: (url, bin_component_url) => {
-        console.log(url, bin_component_url)
-      },
-    });
 
     // dispatch({
     //   type: 'program/getWxOpen',

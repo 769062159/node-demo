@@ -21,6 +21,7 @@ export default {
       config_jump_account: 0,
     },
     wxOpen: '',
+    binComponentUrl: '',
   },
 
   effects: {
@@ -97,10 +98,10 @@ export default {
         payload: response,
       });
       if (response && response.code === 200) {
-        const {authorizationUrl} = yield call(getAuthorizationUrl, { ...payload });
+        const authorizationUrl = yield call(getAuthorizationUrl, { ...payload });
         yield put({
           type: 'setAuthorizationUrl',
-          authorizationUrl
+          payload: authorizationUrl,
         });
       }
     },
@@ -170,22 +171,13 @@ export default {
         hasPublic,
       };
     },
-    setAuthorizationUrl(state, { authorizationUrl, binComponentUrl }) {
-      if (process.env.API_ENV === 'dev') {
-        const { data: { authorization_url: url, bin_component_url: binUrl } } = { authorizationUrl, binComponentUrl } ;
-        return {
-          ...state,
-          authorizationUrl: url,
-          binComponentUrl: binUrl,
-        };
-      } else {
-        const { data: { authorization_url: url, bin_component_url: binUrl } } = { authorizationUrl, binComponentUrl } ;
-        return {
-          ...state,
-          authorizationUrl: url,
-          binComponentUrl: binUrl,
-        };
-      }
+    setAuthorizationUrl(state, { payload }) {
+      const { data } = payload;
+      return {
+        ...state,
+        authorizationUrl: data.authorization_url,
+        binComponentUrl: data.bin_component_url
+      };
     },
     setProgramDetail(state, { payload }) {
       const { data } = payload;
