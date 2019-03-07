@@ -97,10 +97,10 @@ export default {
         payload: response,
       });
       if (response && response.code === 200) {
-        const authorizationUrl = yield call(getAuthorizationUrl, { ...payload });
+        const {authorizationUrl} = yield call(getAuthorizationUrl, { ...payload });
         yield put({
           type: 'setAuthorizationUrl',
-          authorizationUrl,
+          authorizationUrl
         });
       }
     },
