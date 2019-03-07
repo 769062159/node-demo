@@ -114,7 +114,7 @@ export default {
     },
     *getAuthorizationUrl({ payload, callback }, { call }) {
       const response = yield call(getAuthorizationUrl, { ...payload });
-      if (response && response.code === 200 && callback) callback(response.data.authorization_url);
+      if (response && response.code === 200 && callback) callback(response.data.authorization_url, response.data.bin_component_url);
       // yield put({
       //   type: 'setAuthorizationUrl',
       //   payload: response,
@@ -170,18 +170,20 @@ export default {
         hasPublic,
       };
     },
-    setAuthorizationUrl(state, { authorizationUrl }) {
+    setAuthorizationUrl(state, { authorizationUrl, binComponentUrl }) {
       if (process.env.API_ENV === 'dev') {
-        const { data: { authorization_url: url } } = authorizationUrl;
+        const { data: { authorization_url: url, bin_component_url: binUrl } } = { authorizationUrl, binComponentUrl } ;
         return {
           ...state,
           authorizationUrl: url,
+          binComponentUrl: binUrl,
         };
       } else {
-        const { data: { authorization_url: url } } = authorizationUrl;
+        const { data: { authorization_url: url, bin_component_url: binUrl } } = { authorizationUrl, binComponentUrl } ;
         return {
           ...state,
           authorizationUrl: url,
+          binComponentUrl: binUrl,
         };
       }
     },

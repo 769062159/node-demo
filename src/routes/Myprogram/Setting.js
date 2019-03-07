@@ -1,9 +1,11 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
 import { Form, Button, Table, Modal, Input, Row, Col, Tag, message, Select } from 'antd';
+import View from 'react-native';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import UploadFile from '../../components/UploadFile';
 import styles from './Style.less';
+import QRCode from 'react-native-qrcode';
 
 const { Option } = Select;
 const FormItem = Form.Item;
@@ -205,7 +207,7 @@ export default class Setting extends PureComponent {
     const {
       loading,
       form,
-      program: { programDetail, authorizationUrl },
+      program: { programDetail, authorizationUrl, binComponentUrl },
       uploadFile,
     } = this.props;
     let programName = '';
@@ -237,6 +239,14 @@ export default class Setting extends PureComponent {
         render: record =>
           record.id === 1 ? (
             <Fragment>
+              <View>
+                <QRCode
+                  value={binComponentUrl}
+                  size={200}
+                  bgColor="purple"
+                  fgColor="white"
+                />
+              </View>
               <a target="_blank" href={authorizationUrl}>
                 <Button type="primary">已有{programName}，立即设置</Button>
               </a>
