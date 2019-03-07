@@ -1,11 +1,11 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
 import { Form, Button, Table, Modal, Input, Row, Col, Tag, message, Select } from 'antd';
-import { View } from 'react-native';
+import View from 'react-native';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import UploadFile from '../../components/UploadFile';
 import styles from './Style.less';
-import QRCode from 'react-native-qrcode'; // 二维码组件
+import QRCode from 'react-native-qrcode';
 
 const { Option } = Select;
 const FormItem = Form.Item;
