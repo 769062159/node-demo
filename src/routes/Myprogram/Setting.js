@@ -243,8 +243,9 @@ export default class Setting extends PureComponent {
                 <QRCode
                   value={binComponentUrl}
                   size={200}
-                  bgColor="purple"
-                  fgColor="white"
+                  // bgColor="purple"
+                  // fgColor="white"
+                  // includeMargin
                 />
               </div>
               {/* <a target="_blank" href={authorizationUrl}>
