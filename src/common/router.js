@@ -3,7 +3,7 @@ import dynamic from 'dva/dynamic';
 // import pathToRegexp from 'path-to-regexp';
 
 let routerConfigCache;
-const { uploadUrl, apiurl, wxapiurl } = process.env[process.env.API_ENV];
+const { uploadUrl, wxapiurl } = process.env[process.env.API_ENV];
 /**
  * *
  * @description 通过自定义的module是否存在于命名空间，不存在就require让它存在于命名空间中

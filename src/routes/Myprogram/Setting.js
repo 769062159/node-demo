@@ -289,14 +289,14 @@ export default class Setting extends PureComponent {
             </Tag>
           ) : (
             <Tag color="blue">
-              公众号地址：{process.env[process.env.API_ENV]}/index?wechat_account_id={programDetail.id}
+              公众号地址：{process.env[process.env.API_ENV].h5Url}/index?wechat_account_id={programDetail.id}
             </Tag>
           )
         }
         <br />
         {
           programDetail.type !== 0 ? (
-            <Tag >公众号支付还需要登录https://pay.weixin.qq.com微信商户平台;选择产品中心-》开发配置-》公众号支付支付授权目录;添加{process.env[process.env.API_ENV]}/</Tag>
+            <Tag >公众号支付还需要登录https://pay.weixin.qq.com微信商户平台;选择产品中心-》开发配置-》公众号支付支付授权目录;添加{process.env[process.env.API_ENV].h5Url}/</Tag>
           ) : null
         }
         <Table
