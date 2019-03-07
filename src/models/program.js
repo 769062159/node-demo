@@ -171,7 +171,7 @@ export default {
       };
     },
     setAuthorizationUrl(state, { authorizationUrl, binComponentUrl }) {
-      if (process.env.API_ENV === 'test') {
+      if (process.env.API_ENV === 'dev') {
         const { data: { authorization_url: url, bin_component_url: binUrl } } = { authorizationUrl, binComponentUrl } ;
         return {
           ...state,

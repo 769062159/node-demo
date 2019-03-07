@@ -8,19 +8,25 @@ export default {
   ],
   define: {
     'process.env':{
-      'test': {
-        uploadUrl: 'http://dev-api.store.314live.cn/merchant/upload',
+      'dev': {
+        uploadUrl: 'http://dev.shiqun.api.iyov.io/merchant/upload',
         videoUrl: 'dev_audio',
         pic: 'dev_pic',
-        apiurl: 'http://dev-api.store.314live.cn',
-        wxTxt: 'http://wechat.store.314live.cn/wx/wechataccount/upload/txt',
+        apiurl: 'http://dev.shiqun.api.iyov.io',
+        wxapiurl: 'http://dev.wechat.shiqun.iyov.io',
+        wxTxt: 'http://dev.wechat.shiqun.iyov.io/wx/wechataccount/upload/txt',
+        adminUrl: 'http://dev.admin.shop.iyov.io',
+        h5Url: 'http://dev.h5.shiqun.iyov.io'
       },
-      'env': {
-        uploadUrl: 'http://api.store.314live.cn/merchant/upload',
+      'master': {
+        uploadUrl: 'http://shiqun.api.iyov.io/merchant/upload',
         videoUrl: 'audio',
         pic: 'pic',
-        apiurl: 'http://api.store.314live.cn',
-        wxTxt: 'http://wechat.store.314live.cn/wx/wechataccount/upload/txt',
+        apiurl: 'http://shiqun.api.iyov.io',
+        wxapiurl: 'http://wechat.shiqun.iyov.io',
+        wxTxt: 'http://wechat.shiqun.iyov.io/wx/wechataccount/upload/txt',
+        adminUrl: 'http://admin.shop.iyov.io',
+        h5Url: 'http://h5.shiqun.iyov.io'
       }
     },
     /*cannot set NODE_ENV for userDefined*/

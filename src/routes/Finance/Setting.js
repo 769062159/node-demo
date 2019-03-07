@@ -95,7 +95,7 @@ export default class Withdraw extends PureComponent {
             微信提现是直接到账的。
           </Tag>
           {
-            process.env.API_ENV === 'test' ? (
+            process.env.API_ENV === 'dev' ? (
               <Tag className={styles.tip}>测试环境提现配置与正式环境共用</Tag>
             ) : null
           }

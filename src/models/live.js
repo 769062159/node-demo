@@ -21,6 +21,7 @@ import {
   bindLiveVideo,
   updateLiveStatus,
   addPeople,
+  getLivePushUrl
 } from '../services/live';
 import { getAllGoods } from '../services/goods';
 import { dedupe } from '../utils/utils';
@@ -376,6 +377,13 @@ export default {
         page: payload.page,
       });
     },
+
+    *getLivePushURL({ payload, callback }, { call, put}) {
+      const response = yield call(getLivePushUrl, payload);
+      if (callback && response && response.code === 200) {
+        callback(response.data.rtmp);
+      }
+    }
   },
 
   reducers: {

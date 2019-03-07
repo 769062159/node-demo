@@ -380,11 +380,21 @@ export default class Live extends PureComponent {
       },
     });
   };
-  copyBtn = val => {
-    if (val) {
-      if (copy(val)) {
-        message.success('成功复制到剪贴板');
-      }
+  copyBtn = id => {
+    if (id) {
+      // 开始请求
+      const { dispatch } = this.props;
+      dispatch({
+        type: 'live/getLivePushURL',
+        payload: {
+          live_id: id
+        },
+        callback: (rtmp) => {
+          if (copy(rtmp)) {
+            message.success('成功复制到剪贴板');
+          }
+        }
+      });
     } else {
       message.error('推流地址正在生成中');
     }
@@ -484,7 +494,7 @@ export default class Live extends PureComponent {
         // width: 150,
         render: (text, record) => (
           <Fragment>
-            <a onClick={this.copyBtn.bind(this, record.rtmp_push)}>推流地址</a>
+            <a onClick={this.copyBtn.bind(this, record.id)}>推流地址</a>
             <Divider type="vertical" />
             <a href={`#/live/edit-live/confirm/${record.id}`}>修改</a>
             <Divider type="vertical" />
