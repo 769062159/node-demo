@@ -3,7 +3,7 @@ import dynamic from 'dva/dynamic';
 // import pathToRegexp from 'path-to-regexp';
 
 let routerConfigCache;
-const { uploadUrl } = process.env[process.env.API_ENV];
+const { uploadUrl, wxapiurl } = process.env[process.env.API_ENV];
 /**
  * *
  * @description 通过自定义的module是否存在于命名空间，不存在就require让它存在于命名空间中
@@ -414,11 +414,9 @@ function dynamicWrapper(app, models, component) {
         ...props,
         routerConfig: routerConfigCache,
         uploadUrl,
-        // uploadUrl: 'http://api.store.314live.cn/merchant/upload', // 正式全局上传图片路径
-        // uploadUrl: 'http://dev-api.store.314live.cn/merchant/upload', // 测试全局上传图片路径
         imgUrl: 'http://314live.image.alimmdn.com', // 测试图片前缀
         // imgUrl: 'http://314live.image.alimmdn.com/', // 测试
-        uploadFile: 'http://wechat.store.314live.cn/wx/wechataccount/upload', // 证书上传
+        uploadFile: `${wxapiurl}/wx/wechataccount/upload`, // 证书上传
       });
     };
   }

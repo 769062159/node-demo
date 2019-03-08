@@ -41,11 +41,7 @@ function checkStatus(response) {
   throw error;
 }
 
-const { apiurl } = process.env[process.env.API_ENV];
-// const apiurl = 'http://dev-api.store.314live.cn'; // 测试接口
-// const apiurl = 'http://api.store.314live.cn'; // 正式接口
-const wxapiurl = 'http://wechat.store.314live.cn';
-// const apiurl = "";
+const { apiurl, wxapiurl } = process.env[process.env.API_ENV];
 
 /**
  * Requests a URL, returning a promise.

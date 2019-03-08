@@ -4,6 +4,7 @@ import { Form, Button, Table, Modal, Input, Row, Col, Tag, message, Select } fro
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import UploadFile from '../../components/UploadFile';
 import styles from './Style.less';
+const QRCode = require('qrcode.react');
 
 const { Option } = Select;
 const FormItem = Form.Item;
@@ -43,6 +44,7 @@ export default class Setting extends PureComponent {
         account_id: id,
       },
     });
+
     // dispatch({
     //   type: 'program/getWxOpen',
     //   payload: {
@@ -205,7 +207,7 @@ export default class Setting extends PureComponent {
     const {
       loading,
       form,
-      program: { programDetail, authorizationUrl },
+      program: { programDetail, authorizationUrl, binComponentUrl },
       uploadFile,
     } = this.props;
     let programName = '';
@@ -237,17 +239,26 @@ export default class Setting extends PureComponent {
         render: record =>
           record.id === 1 ? (
             <Fragment>
-              <a target="_blank" href={authorizationUrl}>
+              <div>
+                <QRCode
+                  value={binComponentUrl}
+                  size={200}
+                  // bgColor="purple"
+                  // fgColor="white"
+                  // includeMargin
+                />
+              </div>
+              {/* <a target="_blank" href={authorizationUrl}>
                 <Button type="primary">已有{programName}，立即设置</Button>
-              </a>
+              </a> */}
               <br />
               <Tag style={{ marginTop: 10 }}>若已过期,请刷新页面</Tag>
-              <br />
+              {/* <br />
               {
-                process.env.API_ENV === 'test' ? (
+                process.env.API_ENV === 'dev' ? (
                   <Tag className={styles.tip}>测试环境需要复制授权地址，发送给公众号/小程序管理员授权！！！！！，必须在手机端微信打开！！！！</Tag>
                 ) : null
-              }
+              } */}
             </Fragment>
           ) : (
             <a onClick={this.showModal.bind(this, record.id)}>修改</a>
@@ -287,25 +298,16 @@ export default class Setting extends PureComponent {
             <Tag color="blue">
               如需开通直播，请您在小程序管理后台，“设置”-“接口设置”中自助开通该直播权限
             </Tag>
-          ) : process.env.API_ENV === 'test' ? (
-            <Tag color="blue">
-              公众号地址：http://dev-www.store.314live.cn/index?wechat_account_id={programDetail.id}
-            </Tag>
           ) : (
             <Tag color="blue">
-              公众号地址：http://www.store.314live.cn/index?wechat_account_id={programDetail.id}
+              公众号地址：{process.env[process.env.API_ENV].h5Url}/index?wechat_account_id={programDetail.id}
             </Tag>
           )
         }
         <br />
         {
-          process.env.API_ENV === 'test' && programDetail.type !== 0 ? (
-            <Tag >公众号支付还需要登录https://pay.weixin.qq.com微信商户平台;选择产品中心-》开发配置-》公众号支付支付授权目录;添加http://dev-www.store.314live.cn/</Tag>
-          ) : null
-        }
-        {
-          process.env.API_ENV === 'env' && programDetail.type !== 0 ? (
-            <Tag >公众号支付还需要登录https://pay.weixin.qq.com微信商户平台;选择产品中心-》开发配置-》公众号支付支付授权目录;添加http://www.store.314live.cn/</Tag>
+          programDetail.type !== 0 ? (
+            <Tag >公众号支付还需要登录https://pay.weixin.qq.com微信商户平台;选择产品中心-》开发配置-》公众号支付支付授权目录;添加{process.env[process.env.API_ENV].h5Url}/</Tag>
           ) : null
         }
         <Table
