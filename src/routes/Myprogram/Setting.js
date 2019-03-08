@@ -4,6 +4,7 @@ import { Form, Button, Table, Modal, Input, Row, Col, Tag, message, Select } fro
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import UploadFile from '../../components/UploadFile';
 import styles from './Style.less';
+const QRCode = require('qrcode.react');
 
 const { Option } = Select;
 const FormItem = Form.Item;
@@ -43,6 +44,7 @@ export default class Setting extends PureComponent {
         account_id: id,
       },
     });
+
     // dispatch({
     //   type: 'program/getWxOpen',
     //   payload: {
@@ -205,7 +207,7 @@ export default class Setting extends PureComponent {
     const {
       loading,
       form,
-      program: { programDetail, authorizationUrl },
+      program: { programDetail, authorizationUrl, binComponentUrl },
       uploadFile,
     } = this.props;
     let programName = '';
@@ -237,17 +239,26 @@ export default class Setting extends PureComponent {
         render: record =>
           record.id === 1 ? (
             <Fragment>
-              <a target="_blank" href={authorizationUrl}>
+              <div>
+                <QRCode
+                  value={binComponentUrl}
+                  size={200}
+                  // bgColor="purple"
+                  // fgColor="white"
+                  // includeMargin
+                />
+              </div>
+              {/* <a target="_blank" href={authorizationUrl}>
                 <Button type="primary">已有{programName}，立即设置</Button>
-              </a>
+              </a> */}
               <br />
               <Tag style={{ marginTop: 10 }}>若已过期,请刷新页面</Tag>
-              <br />
+              {/* <br />
               {
                 process.env.API_ENV === 'dev' ? (
                   <Tag className={styles.tip}>测试环境需要复制授权地址，发送给公众号/小程序管理员授权！！！！！，必须在手机端微信打开！！！！</Tag>
                 ) : null
-              }
+              } */}
             </Fragment>
           ) : (
             <a onClick={this.showModal.bind(this, record.id)}>修改</a>
