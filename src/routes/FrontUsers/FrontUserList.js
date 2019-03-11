@@ -827,7 +827,7 @@ export default class FrontUserList extends PureComponent {
               loading={loading}
               columns={progressColumns}
               pagination={frontUserListPage}
-              scroll={{ x: '120%' }}
+              scroll={{ x: '100%' }}
             />
           </div>
         </Card>

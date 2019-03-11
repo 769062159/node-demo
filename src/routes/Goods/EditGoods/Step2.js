@@ -366,6 +366,7 @@ const CustomizedForm = Form.create({
     handlePreviewImg,
     handleCancelImg,
     setDescription,
+    blurSetDescription,
     onCheckAllAttr,
     onChangeSon,
     chgLevelHas,
@@ -965,6 +966,7 @@ const CustomizedForm = Form.create({
               uploadUrl={uploadUrl}
               valueSon={goodsDetail.goods_description}
               setDescription={setDescription.bind(this, 2)}
+              blurSetDescription={blurSetDescription.bind(this, 2)}
             />
           )}
         </Form.Item>
@@ -1476,6 +1478,20 @@ class EditGoodStep2 extends React.PureComponent {
         value: e,
       };
     }
+    // this.changeFormVal(obj);
+  };
+
+  blurSetDescription = (type, e) => {
+    const obj = {};
+    if (type === 1) {
+      obj.goods_des = {
+        value: e,
+      };
+    } else {
+      obj.goods_description = {
+        value: e,
+      };
+    }
     this.changeFormVal(obj);
   };
   // 修改sku的值
@@ -1936,6 +1952,7 @@ class EditGoodStep2 extends React.PureComponent {
         onChange={this.changeFormVal}
         {...this.props}
         setDescription={this.setDescription}
+        blurSetDescription={this.blurSetDescription}
         onCheckAllAttr={this.onCheckAllAttr}
         onChangeSon={this.onChangeSon}
         chgLevelHas={this.chgLevelHas}
