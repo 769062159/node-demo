@@ -1959,7 +1959,7 @@ class EditGoodStep2 extends React.PureComponent {
 
     attrTable = [];
     freezeData.push({
-      normal_money: goodsDetail.normal_money, // 普通返佣金额
+      normal_money: goodsDetail.normal_money ? goodsDetail.normal_money : 0, // 普通返佣金额
       normal_proportion: 0,
       supplement_normal_money: hasGroupData ? goodsDetail.supplement_normal_money : 0,
       supplement_normal_proportion: 0,
@@ -1970,7 +1970,7 @@ class EditGoodStep2 extends React.PureComponent {
       supplement_normal_money_qrcode_2: (isQrcodeGoods && hasWealthData) ? goodsDetail.supplement_normal_money_qrcode_2 : 0,
     });
     freezeData.push({
-      group_money: goodsDetail.group_money, // 视群返佣金额
+      group_money: goodsDetail.group_money ? goodsDetail.group_money : 0, // 视群返佣金额
       group_proportion: 0,
       supplement_group_money: hasGroupData ? goodsDetail.supplement_group_money : 0,
       supplement_group_proportion: 0,
@@ -1981,7 +1981,7 @@ class EditGoodStep2 extends React.PureComponent {
       supplement_group_money_qrcode_2: (isQrcodeGoods && hasWealthData) ? goodsDetail.supplement_group_money_qrcode_2 : 0,
     });
     freezeData.push({
-      merchant_money: goodsDetail.merchant_money, // 商户返佣金额
+      merchant_money: goodsDetail.merchant_money ? goodsDetail.merchant_money : 0, // 商户返佣金额
       merchant_proportion: 0,
       supplement_merchant_money: hasGroupData ? goodsDetail.supplement_merchant_money : 0,
       supplement_merchant_proportion: 0,
@@ -1992,7 +1992,7 @@ class EditGoodStep2 extends React.PureComponent {
       supplement_merchant_money_qrcode_2: (isQrcodeGoods && hasWealthData) ? goodsDetail.supplement_merchant_money_qrcode_2 : 0,
     });
     freezeData.push({
-      wealth_money: goodsDetail.wealth_money, // 财道返佣金额
+      wealth_money: goodsDetail.wealth_money ? goodsDetail.wealth_money : 0, // 财道返佣金额
       wealth_proportion: 0,
       supplement_wealth_money: hasGroupData ? goodsDetail.supplement_wealth_money : 0,
       supplement_wealth_proportion: 0,
@@ -2004,12 +2004,12 @@ class EditGoodStep2 extends React.PureComponent {
     });
     // 追加推荐人和购买人的话费和积分的赠送，强行为0的代表这个升级类型不允许设置金额
     freezeData.push({
-      recommend_reward_phone_charge: goodsDetail.recommend_reward_phone_charge,
-      recommend_reward_integral: goodsDetail.recommend_reward_integral,
-      recommend_reward_shipping_fee: goodsDetail.recommend_reward_shipping_fee,
-      reward_phone_charge: goodsDetail.reward_phone_charge,
-      reward_integral: goodsDetail.reward_integral,
-      reward_shipping_fee: goodsDetail.reward_shipping_fee,
+      recommend_reward_phone_charge: goodsDetail.recommend_reward_phone_charge ? goodsDetail.recommend_reward_phone_charge: 0,
+      recommend_reward_integral: goodsDetail.recommend_reward_integral ? goodsDetail.recommend_reward_integral : 0,
+      recommend_reward_shipping_fee: goodsDetail.recommend_reward_shipping_fee ? goodsDetail.recommend_reward_shipping_fee : 0,
+      reward_phone_charge: goodsDetail.reward_phone_charge ? goodsDetail.reward_phone_charge : 0,
+      reward_integral: goodsDetail.reward_integral ? goodsDetail.reward_integral : 0,
+      reward_shipping_fee: goodsDetail.reward_shipping_fee ? goodsDetail.reward_shipping_fee : 0,
       supplement_recommend_reward_phone_charge: hasGroupData ? goodsDetail.supplement_recommend_reward_phone_charge : 0,
       supplement_recommend_reward_integral: hasGroupData ? goodsDetail.supplement_recommend_reward_integral : 0,
       supplement_recommend_reward_shipping_fee: hasGroupData ? goodsDetail.supplement_recommend_reward_shipping_fee : 0,
