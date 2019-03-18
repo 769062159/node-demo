@@ -17,6 +17,7 @@ import {
   Card,
   message,
   Tag,
+  Tooltip
 } from 'antd';
 import moment from 'moment';
 import ReactEditor from 'components/ReactEditor';
@@ -267,47 +268,204 @@ const CustomizedForm = Form.create({
       upgrade_type: Form.createFormField({
         value: goodsDetail.upgrade_type,
       }),
+
+      // 正常升级不需要金额，因为它等于商品价格
+      // 视群版补差价的金额
       group_user_price: Form.createFormField({
         value: goodsDetail.group_user_price,
       }),
-      merchant_money: Form.createFormField({
-        value: goodsDetail.merchant_money,
-      }),
-      normal_money: Form.createFormField({
-        value: goodsDetail.normal_money,
-      }),
-      group_money: Form.createFormField({
-        value: goodsDetail.group_money,
-      }),
-      supplement_group_money: Form.createFormField({
-        value: goodsDetail.supplement_group_money,
-      }),
-      supplement_normal_money: Form.createFormField({
-        value: goodsDetail.supplement_normal_money,
-      }),
-      supplement_merchant_money: Form.createFormField({
-        value: goodsDetail.supplement_merchant_money,
-      }),
-      wealth_money: Form.createFormField({
-        value: goodsDetail.wealth_money,
-      }),
-      supplement_wealth_money: Form.createFormField({
-        value: goodsDetail.supplement_wealth_money,
-      }),
+      // 财道版补差价的金额
       wealth_user_price: Form.createFormField({
         value: goodsDetail.wealth_user_price,
       }),
+
+      // 正常升级的返佣
+
+      // 商户返佣金额
+      merchant_money: Form.createFormField({
+        value: goodsDetail.merchant_money,
+      }),
+      // 普通返佣金额
+      normal_money: Form.createFormField({
+        value: goodsDetail.normal_money,
+      }),
+      // 视群返佣金额
+      group_money: Form.createFormField({
+        value: goodsDetail.group_money,
+      }),
+      // 财道返佣金额
+      wealth_money: Form.createFormField({
+        value: goodsDetail.wealth_money,
+      }),
+
+      // 只有升级码才有的属性
+      // 商户返佣金额
+      merchant_money_qrcode: Form.createFormField({
+        value: goodsDetail.merchant_money_qrcode,
+      }),
+      // 普通返佣金额
+      normal_money_qrcode: Form.createFormField({
+        value: goodsDetail.normal_money_qrcode,
+      }),
+      // 视群返佣金额
+      group_money_qrcode: Form.createFormField({
+        value: goodsDetail.group_money_qrcode,
+      }),
+      // 财道返佣金额
+      wealth_money_qrcode: Form.createFormField({
+        value: goodsDetail.wealth_money_qrcode,
+      }),
+
+      // 推荐人奖励话费
+      recommend_reward_phone_charge: Form.createFormField({
+        value: goodsDetail.recommend_reward_phone_charge,
+      }),
+      // 推荐人奖励积分
+      recommend_reward_integral: Form.createFormField({
+        value: goodsDetail.recommend_reward_integral,
+      }),
+      // 推荐人奖励购物余额
+      recommend_reward_shipping_fee: Form.createFormField({
+        value: goodsDetail.recommend_reward_shipping_fee,
+      }),
+      // 购买人奖励话费
+      reward_phone_charge: Form.createFormField({
+        value: goodsDetail.reward_phone_charge,
+      }),
+      // 购买人奖励积分
+      reward_integral: Form.createFormField({
+        value: goodsDetail.reward_integral,
+      }),
+      // 购买人奖励购物余额
+      reward_shipping_fee: Form.createFormField({
+        value: goodsDetail.reward_shipping_fee,
+      }),
+
+
+      
+      // 视群补差价升级的返佣金额
+
+      // 视群返佣金额
+      supplement_group_money: Form.createFormField({
+        value: goodsDetail.supplement_group_money,
+      }),
+      // 普通返佣金额
+      supplement_normal_money: Form.createFormField({
+        value: goodsDetail.supplement_normal_money,
+      }),
+      // 商户返佣金额
+      supplement_merchant_money: Form.createFormField({
+        value: goodsDetail.supplement_merchant_money,
+      }),
+      // 财道返佣金额
+      supplement_wealth_money: Form.createFormField({
+        value: goodsDetail.supplement_wealth_money,
+      }),
+      // 只有升级码才有的属性
+
+      // 视群返佣金额
+      supplement_group_money_qrcode: Form.createFormField({
+        value: goodsDetail.supplement_group_money_qrcode,
+      }),
+      // 普通返佣金额
+      supplement_normal_money_qrcode: Form.createFormField({
+        value: goodsDetail.supplement_normal_money_qrcode,
+      }),
+      // 商户返佣金额
+      supplement_merchant_money_qrcode: Form.createFormField({
+        value: goodsDetail.supplement_merchant_money_qrcode,
+      }),
+      // 财道返佣金额
+      supplement_wealth_money_qrcode: Form.createFormField({
+        value: goodsDetail.supplement_wealth_money_qrcode,
+      }),
+
+
+      // 推荐人奖励话费
+      supplement_recommend_reward_phone_charge: Form.createFormField({
+        value: goodsDetail.supplement_recommend_reward_phone_charge,
+      }),
+      // 推荐人奖励积分
+      supplement_recommend_reward_integral: Form.createFormField({
+        value: goodsDetail.supplement_recommend_reward_integral,
+      }),
+      // 推荐人奖励积分
+      supplement_recommend_reward_shipping_fee: Form.createFormField({
+        value: goodsDetail.supplement_recommend_reward_shipping_fee,
+      }),
+      // 购买人奖励话费
+      supplement_reward_phone_charge: Form.createFormField({
+        value: goodsDetail.supplement_reward_phone_charge,
+      }),
+      // 购买人奖励积分
+      supplement_reward_integral: Form.createFormField({
+        value: goodsDetail.supplement_reward_integral,
+      }),
+      // 购买人奖励积分
+      supplement_reward_shipping_fee: Form.createFormField({
+        value: goodsDetail.supplement_reward_shipping_fee,
+      }),
+
+      // 财道补差价升级的返佣金额
+
+      // 视群返佣金额
       supplement_group_money_2: Form.createFormField({
         value: goodsDetail.supplement_group_money_2,
       }),
+      // 财道返佣金额
       supplement_wealth_money_2: Form.createFormField({
         value: goodsDetail.supplement_wealth_money_2,
       }),
+      // 普通返佣金额
       supplement_normal_money_2: Form.createFormField({
         value: goodsDetail.supplement_normal_money_2,
       }),
+      // 商户返佣金额
       supplement_merchant_money_2: Form.createFormField({
         value: goodsDetail.supplement_merchant_money_2,
+      }),
+      // 只有升级码才有的属性
+
+      // 视群返佣金额
+      supplement_group_money_qrcode_2: Form.createFormField({
+        value: goodsDetail.supplement_group_money_qrcode_2,
+      }),
+      // 财道返佣金额
+      supplement_wealth_money_qrcode_2: Form.createFormField({
+        value: goodsDetail.supplement_wealth_money_qrcode_2,
+      }),
+      // 普通返佣金额
+      supplement_normal_money_qrcode_2: Form.createFormField({
+        value: goodsDetail.supplement_normal_money_qrcode_2,
+      }),
+      // 商户返佣金额
+      supplement_merchant_money_qrcode_2: Form.createFormField({
+        value: goodsDetail.supplement_merchant_money_qrcode_2,
+      }),
+
+      // 推荐人奖励话费
+      supplement_recommend_reward_phone_charge_2: Form.createFormField({
+        value: goodsDetail.supplement_recommend_reward_phone_charge_2,
+      }),
+      // 推荐人奖励积分
+      supplement_recommend_reward_integral_2: Form.createFormField({
+        value: goodsDetail.supplement_recommend_reward_integral_2,
+      }),
+      // 推荐人奖励积分
+      supplement_recommend_reward_shipping_fee_2: Form.createFormField({
+        value: goodsDetail.supplement_recommend_reward_shipping_fee_2,
+      }),
+      // 购买人奖励话费
+      supplement_reward_phone_charge_2: Form.createFormField({
+        value: goodsDetail.supplement_reward_phone_charge_2,
+      }),
+      // 购买人奖励积分
+      supplement_reward_integral_2: Form.createFormField({
+        value: goodsDetail.supplement_reward_integral_2,
+      }),
+      // 购买人奖励积分
+      supplement_reward_shipping_fee_2: Form.createFormField({
+        value: goodsDetail.supplement_reward_shipping_fee_2,
       }),
     };
     if (systemType.user_levels && systemType.user_levels.length) {
@@ -564,11 +722,14 @@ const CustomizedForm = Form.create({
                   <Option value={1} key={1}>
                     升级店主商品
                   </Option>
+                  <Option value={2} key={2}>
+                    升级码商品
+                  </Option>
                 </Select>
               )}
             </Form.Item>
           </Col>
-          {goodsDetail.type === 1 ? (
+          {goodsDetail.type === 1  ? (
             <Col span={24}>
               <Form.Item {...formItemLayouts} label="升级店主套餐">
                 {getFieldDecorator('upgrade_type', {
@@ -576,16 +737,42 @@ const CustomizedForm = Form.create({
                 })(
                   <Select style={{ width: 200 }}>
                     <Option value={1} key={1}>
-                      商户版
-                    </Option>
-                    <Option value={2} key={2}>
-                      视群版
+                      商户版[Lv.3]
                     </Option>
                     <Option value={3} key={3}>
-                      财道版
+                      财道版[Lv.2]
+                    </Option>
+                    <Option value={2} key={2}>
+                      视群版[Lv.1]
                     </Option>
                   </Select>
                 )}
+              </Form.Item>
+            </Col>
+          ) : null}
+
+        {goodsDetail.type === 2 ? (
+            <Col span={24}>
+              <Form.Item {...formItemLayouts} label="升级码套餐">
+                {getFieldDecorator('upgrade_type', {
+                  rules: [{ required: true, message: '请填写升级码套餐' }],
+                })(
+                  <Select style={{ width: 200 }}>
+                    <Option value={1} key={1}>
+                      商户版[Lv.3]
+                    </Option>
+                    <Option value={3} key={3}>
+                      财道版[Lv.2]
+                    </Option>
+                    <Option value={2} key={2}>
+                      视群版[Lv.1]
+                    </Option>
+                  </Select>
+                )}
+                &nbsp;
+                <Tooltip title="升级码套餐不展示在商品列表中，展示在用户扫描升级码后">
+                  <Icon type="exclamation-circle" />
+                </Tooltip>
               </Form.Item>
             </Col>
           ) : null}
@@ -1040,72 +1227,160 @@ const CustomizedForm = Form.create({
           )}
         </Form.Item>
       </Card>
-      {goodsDetail.type && goodsDetail.upgrade_type === 3 ? (
+      {goodsDetail.type ? (
         <Card title="版本返佣">
+        {/* 正常升级是三个版本都有的，所以这里不需要做判断 */}
+
+        <Row>
+          <Col span={24}>
+            <h2>正常升级</h2><h5>[固定值分佣]</h5>
+          </Col>
+          <Col span={24}>
+            <h5>>. 原始推荐人返佣金额</h5>
+          </Col>
+          <Col span={6}>
+            <Form.Item {...profitLayout} label="普通版">
+              {getFieldDecorator(`normal_money`, {
+                rules: [{ required: true, message: `请输入普通版` }],
+              })(<InputNumber step={0.01} precision={2} min={0} />)}
+            </Form.Item>
+          </Col>
+          <Col span={6}>
+            <Form.Item {...profitLayout} label="视群版">
+              {getFieldDecorator(`group_money`, {
+                rules: [{ required: true, message: `请输入视群版` }],
+              })(<InputNumber step={0.01} precision={2} min={goodsDetail.normal_money || 0} />)}
+            </Form.Item>
+          </Col>
+          <Col span={6}>
+            <Form.Item {...profitLayout} label="财道版">
+              {getFieldDecorator(`wealth_money`, {
+                rules: [{ required: true, message: `请输入财道版` }],
+              })(<InputNumber step={0.01} precision={2} min={goodsDetail.group_money || 0} />)}
+            </Form.Item>
+          </Col>
+          <Col span={6}>
+            <Form.Item {...profitLayout} label="商户版">
+              {getFieldDecorator(`merchant_money`, {
+                rules: [{ required: true, message: `请输入商户版` }],
+              })(<InputNumber step={0.01} precision={2} min={goodsDetail.wealth_money || 0} />)}
+            </Form.Item>
+          </Col>
+        </Row>
+        {/* 升级码主的返佣 */}
+        {goodsDetail.type === 2 ? (
           <Row>
-            <Col span={8}>
-              <h2>类型：正常升级</h2>
-            </Col>
+          <Col span={24}>
+            <h5>>. 升级码拥有者返佣金额</h5>
+          </Col>
+          <Col span={6}>
+            <Form.Item {...profitLayout} label="普通版">
+              {getFieldDecorator(`normal_money_qrcode`, {
+                rules: [{ required: true, message: `请输入普通版` }],
+              })(<InputNumber step={0.01} precision={2} min={0} />)}
+            </Form.Item>
+          </Col>
+          <Col span={6}>
+            <Form.Item {...profitLayout} label="视群版">
+              {getFieldDecorator(`group_money_qrcode`, {
+                rules: [{ required: true, message: `请输入视群版` }],
+              })(<InputNumber step={0.01} precision={2} min={goodsDetail.normal_money_qrcode || 0} />)}
+            </Form.Item>
+          </Col>
+          <Col span={6}>
+            <Form.Item {...profitLayout} label="财道版">
+              {getFieldDecorator(`wealth_money_qrcode`, {
+                rules: [{ required: true, message: `请输入财道版` }],
+              })(<InputNumber step={0.01} precision={2} min={goodsDetail.group_money_qrcode || 0} />)}
+            </Form.Item>
+          </Col>
+          <Col span={6}>
+            <Form.Item {...profitLayout} label="商户版">
+              {getFieldDecorator(`merchant_money_qrcode`, {
+                rules: [{ required: true, message: `请输入商户版` }],
+              })(<InputNumber step={0.01} precision={2} min={goodsDetail.wealth_money_qrcode || 0} />)}
+            </Form.Item>
+          </Col>
           </Row>
-          <Row>
-            <Col span={8}>
-              <Form.Item {...profitLayout} label="分拥类型">
-                固定值
-              </Form.Item>
+        ) : null}
+        {/* 升级码主的返佣结束 */}
+
+        {/* 推荐奖金 */}
+        <Row>
+          <Col span={24}>
+            <h5>>. 推荐人奖励</h5>
+          </Col>
+          <Col span={8}>
+            <Form.Item {...profitLayout} label="乐美话费">
+              {getFieldDecorator(`recommend_reward_phone_charge`, {
+                rules: [{ required: true, message: `请输入乐美话费金额` }],
+              })(<InputNumber step={1} precision={0} min={0} />)} 元
+            </Form.Item>
+          </Col>
+          <Col span={8}>
+            <Form.Item {...profitLayout} label="积分">
+              {getFieldDecorator(`recommend_reward_integral`, {
+                rules: [{ required: true, message: `请输入积分金额` }],
+              })(<InputNumber step={1} precision={0} min={0} />)} (100积分 = 1元)
+            </Form.Item>
+          </Col>
+          <Col span={8}>
+            <Form.Item {...profitLayout} label="购物余额">
+              {getFieldDecorator(`recommend_reward_shipping_fee`, {
+                rules: [{ required: true, message: `请输入购物余额` }],
+              })(<InputNumber step={1} precision={0} min={0} />)} 元
+            </Form.Item>
+          </Col>
+          <Col span={24}>
+            <h5>>. 购买人奖励</h5>
+          </Col>
+          <Col span={8}>
+            <Form.Item {...profitLayout} label="乐美话费">
+              {getFieldDecorator(`reward_phone_charge`, {
+                rules: [{ required: true, message: `请输入乐美话费金额` }],
+              })(<InputNumber step={1} precision={0} min={0} />)} 元
+            </Form.Item>
+          </Col>
+          <Col span={8}>
+            <Form.Item {...profitLayout} label="积分">
+              {getFieldDecorator(`reward_integral`, {
+                rules: [{ required: true, message: `请输入积分金额` }],
+              })(<InputNumber step={1} precision={0} min={0} />)} (100积分 = 1元)
+            </Form.Item>
+          </Col>
+          <Col span={8}>
+            <Form.Item {...profitLayout} label="购物余额">
+              {getFieldDecorator(`reward_shipping_fee`, {
+                rules: [{ required: true, message: `请输入购物余额` }],
+              })(<InputNumber step={1} precision={0} min={0} />)} 元
+            </Form.Item>
+          </Col>
+        </Row>
+        {/* 推荐奖金结束 */}
+
+        {/* 正常升级的结束 */}
+
+
+        {/* 视群版补差价，只有财道版和商户版才有 */}
+        {(goodsDetail.upgrade_type === 3 || goodsDetail.upgrade_type === 1) ? [(
+            <Row>
+            <Col span={24}>
+              <h2>视群版补差价升级</h2><h5>[固定值分佣]</h5>
             </Col>
-          </Row>
-          <Row>
             <Col span={6}>
-              <Form.Item {...profitLayout} label="普通版">
-                {getFieldDecorator(`normal_money`, {
-                  rules: [{ required: true, message: `请输入普通版` }],
-                })(<InputNumber step={0.01} precision={2} min={0} />)}
-              </Form.Item>
-            </Col>
-            <Col span={6}>
-              <Form.Item {...profitLayout} label="视群版">
-                {getFieldDecorator(`group_money`, {
-                  rules: [{ required: true, message: `请输入视群版` }],
-                })(<InputNumber step={0.01} precision={2} min={goodsDetail.normal_money || 0} />)}
-              </Form.Item>
-            </Col>
-            <Col span={6}>
-              <Form.Item {...profitLayout} label="财道版">
-                {getFieldDecorator(`wealth_money`, {
-                  rules: [{ required: true, message: `请输入财道版` }],
-                })(<InputNumber step={0.01} precision={2} min={goodsDetail.group_money || 0} />)}
-              </Form.Item>
-            </Col>
-            <Col span={6}>
-              <Form.Item {...profitLayout} label="商户版">
-                {getFieldDecorator(`merchant_money`, {
-                  rules: [{ required: true, message: `请输入商户版` }],
-                })(<InputNumber step={0.01} precision={2} min={goodsDetail.wealth_money || 0} />)}
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row>
-            <Col span={8}>
-              <h2>类型：补差价升级</h2>
-            </Col>
-          </Row>
-          <Row>
-            <Col span={8}>
-              <Form.Item {...profitLayout} label="分拥类型">
-                固定值
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row>
-            <Col span={8}>
-              <Form.Item {...profitLayout} label="视群版补差价">
+              <Form.Item {...profitLayout} label="价格">
                 {getFieldDecorator('group_user_price', {
-                  rules: [{ required: true, message: '请填写视群版升级补差价' }],
-                })(<InputNumber step={0.01} style={{ width: 200 }} min={0} />)}
+                  rules: [{ required: true, message: '请填写视群版升级补差价的金额' }],
+                })(<InputNumber step={0.01} min={0} />)}
+                &nbsp;
+                <Tooltip title="视群版用户购买该商品的价格，即补差价的金额">
+                  <Icon type="question-circle-o" />
+                </Tooltip>
               </Form.Item>
             </Col>
-          </Row>
-          <Row>
+            <Col span={24}>
+              <h5>>. 原始推荐人返佣金额</h5>
+            </Col>
             <Col span={6}>
               <Form.Item {...profitLayout} label="普通版">
                 {getFieldDecorator(`supplement_normal_money`, {
@@ -1153,231 +1428,253 @@ const CustomizedForm = Form.create({
               </Form.Item>
             </Col>
           </Row>
+        ),(
+          goodsDetail.type === 2 ? (
+              <Row>
+                <Col span={24}>
+                  <h5>>. 升级码拥有者返佣金额</h5>
+                </Col>
+                <Col span={6}>
+                  <Form.Item {...profitLayout} label="普通版">
+                    {getFieldDecorator(`supplement_normal_money_qrcode`, {
+                      rules: [{ required: true, message: `请输入普通版` }],
+                    })(<InputNumber step={0.01} precision={2} min={0} />)}
+                  </Form.Item>
+                </Col>
+                <Col span={6}>
+                  <Form.Item {...profitLayout} label="视群版">
+                    {getFieldDecorator(`supplement_group_money_qrcode`, {
+                      rules: [{ required: true, message: `请输入视群版` }],
+                    })(<InputNumber step={0.01} precision={2} min={goodsDetail.supplement_normal_money_qrcode || 0} />)}
+                  </Form.Item>
+                </Col>
+                <Col span={6}>
+                  <Form.Item {...profitLayout} label="财道版">
+                    {getFieldDecorator(`supplement_wealth_money_qrcode`, {
+                      rules: [{ required: true, message: `请输入财道版` }],
+                    })(<InputNumber step={0.01} precision={2} min={goodsDetail.supplement_group_money_qrcode || 0} />)}
+                  </Form.Item>
+                </Col>
+                <Col span={6}>
+                  <Form.Item {...profitLayout} label="商户版">
+                    {getFieldDecorator(`supplement_merchant_money_qrcode`, {
+                      rules: [{ required: true, message: `请输入商户版` }],
+                    })(<InputNumber step={0.01} precision={2} min={goodsDetail.supplement_wealth_money_qrcode || 0} />)}
+                  </Form.Item>
+                </Col>
+              </Row>
+          ) : null
+        ), (
+          <Row>
+            <Col span={24}>
+              <h5>>. 推荐人奖励</h5>
+            </Col>
+            <Col span={8}>
+              <Form.Item {...profitLayout} label="乐美话费">
+                {getFieldDecorator(`supplement_recommend_reward_phone_charge`, {
+                  rules: [{ required: true, message: `请输入乐美话费金额` }],
+                })(<InputNumber step={1} precision={0} min={0} />)} 元
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item {...profitLayout} label="积分">
+                {getFieldDecorator(`supplement_recommend_reward_integral`, {
+                  rules: [{ required: true, message: `请输入积分金额` }],
+                })(<InputNumber step={1} precision={0} min={0} />)} (100积分 = 1元)
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item {...profitLayout} label="购物余额">
+                {getFieldDecorator(`supplement_recommend_reward_shipping_fee`, {
+                  rules: [{ required: true, message: `请输入购物余额` }],
+                })(<InputNumber step={1} precision={0} min={0} />)} 元
+              </Form.Item>
+            </Col>
+            <Col span={24}>
+              <h5>>. 购买人奖励</h5>
+            </Col>
+            <Col span={8}>
+              <Form.Item {...profitLayout} label="乐美话费">
+                {getFieldDecorator(`supplement_reward_phone_charge`, {
+                  rules: [{ required: true, message: `请输入乐美话费金额` }],
+                })(<InputNumber step={1} precision={0} min={0} />)} 元
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item {...profitLayout} label="积分">
+                {getFieldDecorator(`supplement_reward_integral`, {
+                  rules: [{ required: true, message: `请输入积分金额` }],
+                })(<InputNumber step={1} precision={0} min={0} />)} (100积分 = 1元)
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item {...profitLayout} label="购物余额">
+                {getFieldDecorator(`supplement_reward_shipping_fee`, {
+                  rules: [{ required: true, message: `请输入乐美购物余额` }],
+                })(<InputNumber step={1} precision={0} min={0} />)} 元
+              </Form.Item>
+            </Col>
+          </Row>
+        )]: null}
+
+        {/* 财道版补差价，只有商户版有 */}
+        {goodsDetail.upgrade_type == 1 ? [(
+        <Row>
+          <Col span={24}>
+            <h2>财道版补差价升级</h2>
+            <h5>[固定值分佣]</h5>
+          </Col>
+          <Col span={6}>
+            <Form.Item {...profitLayout} label="价格">
+              {getFieldDecorator('wealth_user_price', {
+                rules: [{ required: true, message: '请填写财道版升级补差价的金额' }],
+              })(<InputNumber step={0.01} min={0} />)}
+              &nbsp;
+              <Tooltip title="财道版用户购买该商品的价格，即补差价的金额">
+                <Icon type="question-circle-o" />
+              </Tooltip>
+            </Form.Item>
+          </Col>
+          <Col span={24}>
+              <h5>>. 原始推荐人返佣金额</h5>
+          </Col>
+          <Col span={6}>
+            <Form.Item {...profitLayout} label="普通版">
+              {getFieldDecorator(`supplement_normal_money_2`, {
+                rules: [{ required: true, message: `请输入普通版` }],
+              })(<InputNumber step={0.01} precision={2} min={0} />)}
+            </Form.Item>
+          </Col>
+          <Col span={6}>
+            <Form.Item {...profitLayout} label="视群版">
+              {getFieldDecorator(`supplement_group_money_2`, {
+                rules: [{ required: true, message: `请输入视群版` }],
+              })(
+                <InputNumber
+                  step={0.01}
+                  precision={2}
+                  min={goodsDetail.supplement_normal_money_2 || 0}
+                />
+              )}
+            </Form.Item>
+          </Col>
+          <Col span={6}>
+            <Form.Item {...profitLayout} label="财道版">
+              {getFieldDecorator(`supplement_wealth_money_2`, {
+                rules: [{ required: true, message: `请输入财道版` }],
+              })(
+                <InputNumber
+                  step={0.01}
+                  precision={2}
+                  min={goodsDetail.supplement_group_money_2 || 0}
+                />
+              )}
+            </Form.Item>
+          </Col>
+          <Col span={6}>
+            <Form.Item {...profitLayout} label="商户版">
+              {getFieldDecorator(`supplement_merchant_money_2`, {
+                rules: [{ required: true, message: `请输入商户版` }],
+              })(
+                <InputNumber
+                  step={0.01}
+                  precision={2}
+                  min={goodsDetail.supplement_wealth_money_2 || 0}
+                />
+              )}
+            </Form.Item>
+          </Col>
+        </Row>
+        ), (
+          goodsDetail.type === 2 ? (
+            <Row>
+              <Col span={24}>
+                <h5>>. 升级码拥有者返佣金额</h5>
+              </Col>
+              <Col span={6}>
+                <Form.Item {...profitLayout} label="普通版">
+                  {getFieldDecorator(`supplement_normal_money_qrcode_2`, {
+                    rules: [{ required: true, message: `请输入普通版` }],
+                  })(<InputNumber step={0.01} precision={2} min={0} />)}
+                </Form.Item>
+              </Col>
+              <Col span={6}>
+                <Form.Item {...profitLayout} label="视群版">
+                  {getFieldDecorator(`supplement_group_money_qrcode_2`, {
+                    rules: [{ required: true, message: `请输入视群版` }],
+                  })(<InputNumber step={0.01} precision={2} min={goodsDetail.supplement_normal_money_qrcode_2 || 0} />)}
+                </Form.Item>
+              </Col>
+              <Col span={6}>
+                <Form.Item {...profitLayout} label="财道版">
+                  {getFieldDecorator(`supplement_wealth_money_qrcode_2`, {
+                    rules: [{ required: true, message: `请输入财道版` }],
+                  })(<InputNumber step={0.01} precision={2} min={goodsDetail.supplement_group_money_qrcode_2 || 0} />)}
+                </Form.Item>
+              </Col>
+              <Col span={6}>
+                <Form.Item {...profitLayout} label="商户版">
+                  {getFieldDecorator(`supplement_merchant_money_qrcode_2`, {
+                    rules: [{ required: true, message: `请输入商户版` }],
+                  })(<InputNumber step={0.01} precision={2} min={goodsDetail.supplement_wealth_money_qrcode_2 || 0} />)}
+                </Form.Item>
+              </Col>
+            </Row>
+          ) : null
+        ), (
+          <Row>
+            <Col span={24}>
+              <h5>>. 推荐人奖励</h5>
+            </Col>
+            <Col span={8}>
+              <Form.Item {...profitLayout} label="乐美话费">
+                {getFieldDecorator(`supplement_recommend_reward_phone_charge_2`, {
+                  rules: [{ required: true, message: `请输入乐美话费金额` }],
+                })(<InputNumber step={1} precision={0} min={0} />)} 元
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item {...profitLayout} label="积分">
+                {getFieldDecorator(`supplement_recommend_reward_integral_2`, {
+                  rules: [{ required: true, message: `请输入积分金额` }],
+                })(<InputNumber step={1} precision={0} min={0} />)} (100积分 = 1元)
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item {...profitLayout} label="购物余额">
+                {getFieldDecorator(`supplement_recommend_reward_shipping_fee_2`, {
+                  rules: [{ required: true, message: `请输入乐美话费金额` }],
+                })(<InputNumber step={1} precision={0} min={0} />)} 元
+              </Form.Item>
+            </Col>
+            <Col span={24}>
+              <h5>>. 购买人奖励</h5>
+            </Col>
+            <Col span={8}>
+              <Form.Item {...profitLayout} label="乐美话费">
+                {getFieldDecorator(`supplement_reward_phone_charge_2`, {
+                  rules: [{ required: true, message: `请输入乐美话费金额` }],
+                })(<InputNumber step={1} precision={0} min={0} />)} 元
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item {...profitLayout} label="积分">
+                {getFieldDecorator(`supplement_reward_integral_2`, {
+                  rules: [{ required: true, message: `请输入积分金额` }],
+                })(<InputNumber step={1} precision={0} min={0} />)} (100积分 = 1元)
+              </Form.Item>
+            </Col>
+            <Col span={8}>
+              <Form.Item {...profitLayout} label="购物余额">
+                {getFieldDecorator(`supplement_reward_shipping_fee_2`, {
+                  rules: [{ required: true, message: `请输入购物余额` }],
+                })(<InputNumber step={1} precision={0} min={0} />)} 元
+              </Form.Item>
+            </Col>
+          </Row>
+        )] : null}
         </Card>
-      ) : goodsDetail.type && goodsDetail.upgrade_type == 2 ? (
-        <Card title="版本返佣">
-          <Row>
-            <Col span={8}>
-              <Form.Item {...profitLayout} label="分拥类型">
-                固定值
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row>
-            <Col span={6}>
-              <Form.Item {...profitLayout} label="普通版">
-                {getFieldDecorator(`normal_money`, {
-                  rules: [{ required: true, message: `请输入普通版` }],
-                })(<InputNumber step={0.01} precision={2} min={0} />)}
-              </Form.Item>
-            </Col>
-            <Col span={6}>
-              <Form.Item {...profitLayout} label="视群版">
-                {getFieldDecorator(`group_money`, {
-                  rules: [{ required: true, message: `请输入视群版` }],
-                })(<InputNumber step={0.01} precision={2} min={goodsDetail.normal_money || 0} />)}
-              </Form.Item>
-            </Col>
-            <Col span={6}>
-              <Form.Item {...profitLayout} label="财道版">
-                {getFieldDecorator(`wealth_money`, {
-                  rules: [{ required: true, message: `请输入财道版` }],
-                })(<InputNumber step={0.01} precision={2} min={goodsDetail.group_money || 0} />)}
-              </Form.Item>
-            </Col>
-            <Col span={6}>
-              <Form.Item {...profitLayout} label="商户版">
-                {getFieldDecorator(`merchant_money`, {
-                  rules: [{ required: true, message: `请输入商户版` }],
-                })(<InputNumber step={0.01} precision={2} min={goodsDetail.wealth_money || 0} />)}
-              </Form.Item>
-            </Col>
-          </Row>
-        </Card>
-      ) : goodsDetail.type && goodsDetail.upgrade_type == 1 ? (
-        <Card title="版本返佣">
-          <Row>
-            <Col span={8}>
-              <h2>正常升级</h2>
-            </Col>
-          </Row>
-          <Row>
-            <Col span={8}>
-              <Form.Item {...profitLayout} label="分拥类型">
-                固定值
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row>
-            <Col span={6}>
-              <Form.Item {...profitLayout} label="普通版">
-                {getFieldDecorator(`normal_money`, {
-                  rules: [{ required: true, message: `请输入普通版` }],
-                })(<InputNumber step={0.01} precision={2} min={0} />)}
-              </Form.Item>
-            </Col>
-            <Col span={6}>
-              <Form.Item {...profitLayout} label="视群版">
-                {getFieldDecorator(`group_money`, {
-                  rules: [{ required: true, message: `请输入视群版` }],
-                })(<InputNumber step={0.01} precision={2} min={goodsDetail.normal_money || 0} />)}
-              </Form.Item>
-            </Col>
-            <Col span={6}>
-              <Form.Item {...profitLayout} label="财道版">
-                {getFieldDecorator(`wealth_money`, {
-                  rules: [{ required: true, message: `请输入财道版` }],
-                })(<InputNumber step={0.01} precision={2} min={goodsDetail.group_money || 0} />)}
-              </Form.Item>
-            </Col>
-            <Col span={6}>
-              <Form.Item {...profitLayout} label="商户版">
-                {getFieldDecorator(`merchant_money`, {
-                  rules: [{ required: true, message: `请输入商户版` }],
-                })(<InputNumber step={0.01} precision={2} min={goodsDetail.wealth_money || 0} />)}
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row>
-            <Col span={8}>
-              <h2>视群版补差价升级</h2>
-            </Col>
-          </Row>
-          <Row>
-            <Col span={8}>
-              <Form.Item {...profitLayout} label="分拥类型">
-                固定值
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row>
-            <Col span={8}>
-              <Form.Item {...profitLayout} label="视群版补差价">
-                {getFieldDecorator('group_user_price', {
-                  rules: [{ required: true, message: '请填写视群版升级补差价' }],
-                })(<InputNumber step={0.01} style={{ width: 200 }} min={0} />)}
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row>
-            <Col span={6}>
-              <Form.Item {...profitLayout} label="普通版">
-                {getFieldDecorator(`supplement_normal_money`, {
-                  rules: [{ required: true, message: `请输入普通版` }],
-                })(<InputNumber step={0.01} precision={2} min={0} />)}
-              </Form.Item>
-            </Col>
-            <Col span={6}>
-              <Form.Item {...profitLayout} label="视群版">
-                {getFieldDecorator(`supplement_group_money`, {
-                  rules: [{ required: true, message: `请输入视群版` }],
-                })(
-                  <InputNumber
-                    step={0.01}
-                    precision={2}
-                    min={goodsDetail.supplement_normal_money || 0}
-                  />
-                )}
-              </Form.Item>
-            </Col>
-            <Col span={6}>
-              <Form.Item {...profitLayout} label="财道版">
-                {getFieldDecorator(`supplement_wealth_money`, {
-                  rules: [{ required: true, message: `请输入财道版` }],
-                })(
-                  <InputNumber
-                    step={0.01}
-                    precision={2}
-                    min={goodsDetail.supplement_group_money || 0}
-                  />
-                )}
-              </Form.Item>
-            </Col>
-            <Col span={6}>
-              <Form.Item {...profitLayout} label="商户版">
-                {getFieldDecorator(`supplement_merchant_money`, {
-                  rules: [{ required: true, message: `请输入商户版` }],
-                })(
-                  <InputNumber
-                    step={0.01}
-                    precision={2}
-                    min={goodsDetail.supplement_wealth_money || 0}
-                  />
-                )}
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row>
-            <Col span={8}>
-              <h2>财道版补差价升级</h2>
-            </Col>
-          </Row>
-          <Row>
-            <Col span={8}>
-              <Form.Item {...profitLayout} label="分拥类型">
-                固定值
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row>
-            <Col span={8}>
-              <Form.Item {...profitLayout} label="财道版补差价">
-                {getFieldDecorator('wealth_user_price', {
-                  rules: [{ required: true, message: '请填写财道版升级补差价' }],
-                })(<InputNumber step={0.01} style={{ width: 200 }} min={0} />)}
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row>
-            <Col span={6}>
-              <Form.Item {...profitLayout} label="普通版">
-                {getFieldDecorator(`supplement_normal_money_2`, {
-                  rules: [{ required: true, message: `请输入普通版` }],
-                })(<InputNumber step={0.01} precision={2} min={0} />)}
-              </Form.Item>
-            </Col>
-            <Col span={6}>
-              <Form.Item {...profitLayout} label="视群版">
-                {getFieldDecorator(`supplement_group_money_2`, {
-                  rules: [{ required: true, message: `请输入视群版` }],
-                })(
-                  <InputNumber
-                    step={0.01}
-                    precision={2}
-                    min={goodsDetail.supplement_normal_money_2 || 0}
-                  />
-                )}
-              </Form.Item>
-            </Col>
-            <Col span={6}>
-              <Form.Item {...profitLayout} label="财道版">
-                {getFieldDecorator(`supplement_wealth_money_2`, {
-                  rules: [{ required: true, message: `请输入财道版` }],
-                })(
-                  <InputNumber
-                    step={0.01}
-                    precision={2}
-                    min={goodsDetail.supplement_group_money_2 || 0}
-                  />
-                )}
-              </Form.Item>
-            </Col>
-            <Col span={6}>
-              <Form.Item {...profitLayout} label="商户版">
-                {getFieldDecorator(`supplement_merchant_money_2`, {
-                  rules: [{ required: true, message: `请输入商户版` }],
-                })(
-                  <InputNumber
-                    step={0.01}
-                    precision={2}
-                    min={goodsDetail.supplement_wealth_money_2 || 0}
-                  />
-                )}
-              </Form.Item>
-            </Col>
-          </Row>
-        </Card>
-      ) : (
+      ) :(
         <Card title="sku分佣">
           <Row>
             <Col span={8}>
@@ -1457,6 +1754,7 @@ const CustomizedForm = Form.create({
           />
         </Card>
       )}
+
       <Form.Item
         style={{ marginBottom: 8 }}
         wrapperCol={{
@@ -1699,144 +1997,293 @@ class AddGoodStep2 extends React.PureComponent {
     // 视群版 财道版 商户版 版本越高值越多
     // 1 是商户版 2 是视群版 3是财道版
     // supplement_normal_money 是从视群升级的补差价 supplement_normal_money_2是从财道升级的补差价
-    if (values.upgrade_type === 2) {
-      attrTable = [];
-      freezeData.push({
-        normal_money: goodsDetail.normal_money,
-        normal_proportion: 0,
-        supplement_normal_money: 0,
-        supplement_normal_proportion: 0,
-        supplement_normal_money_2: 0,
-        supplement_normal_proportion_2: 0,
-      });
-      freezeData.push({
-        group_money: goodsDetail.group_money,
-        group_proportion: 0,
-        supplement_group_money: 0,
-        supplement_group_proportion: 0,
-        supplement_group_money_2: 0,
-        supplement_group_proportion_2: 0,
-      });
-      freezeData.push({
-        merchant_money: goodsDetail.merchant_money,
-        merchant_proportion: 0,
-        supplement_merchant_money: 0,
-        supplement_merchant_proportion: 0,
-        supplement_merchant_money_2: 0,
-        supplement_merchant_proportion_2: 0,
-      });
-      freezeData.push({
-        wealth_money: goodsDetail.wealth_money,
-        wealth_proportion: 0,
-        supplement_wealth_money: 0,
-        supplement_wealth_proportion: 0,
-        supplement_wealth_money_2: 0,
-        supplement_wealth_proportion_2: 0,
-      });
-    } else if (values.upgrade_type === 1) {
-      attrTable = [];
-      freezeData.push({
-        normal_money: goodsDetail.normal_money,
-        normal_proportion: 0,
-        supplement_normal_money: goodsDetail.supplement_normal_money,
-        supplement_normal_proportion: 0,
-        supplement_normal_money_2: goodsDetail.supplement_normal_money_2,
-        supplement_normal_proportion_2: 0,
-      });
-      freezeData.push({
-        group_money: goodsDetail.group_money,
-        group_proportion: 0,
-        supplement_group_money: goodsDetail.supplement_group_money,
-        supplement_group_proportion: 0,
-        supplement_group_money_2: goodsDetail.supplement_group_money_2,
-        supplement_group_proportion_2: 0,
-      });
-      freezeData.push({
-        merchant_money: goodsDetail.merchant_money,
-        merchant_proportion: 0,
-        supplement_merchant_money: goodsDetail.supplement_merchant_money,
-        supplement_merchant_proportion: 0,
-        supplement_merchant_money_2: goodsDetail.supplement_merchant_money_2,
-        supplement_merchant_proportion_2: 0,
-      });
-      freezeData.push({
-        wealth_money: goodsDetail.wealth_money,
-        wealth_proportion: 0,
-        supplement_wealth_money: goodsDetail.supplement_wealth_money,
-        supplement_wealth_proportion: 0,
-        supplement_wealth_money_2: goodsDetail.supplement_wealth_money_2,
-        supplement_wealth_proportion_2: 0,
-      });
-    } else if (values.upgrade_type === 3) {
-      attrTable = [];
-      freezeData.push({
-        normal_money: goodsDetail.normal_money,
-        normal_proportion: 0,
-        supplement_normal_money: goodsDetail.supplement_normal_money,
-        supplement_normal_proportion: 0,
-        supplement_normal_money_2: 0,
-        supplement_normal_proportion_2: 0,
-      });
-      freezeData.push({
-        group_money: goodsDetail.group_money,
-        group_proportion: 0,
-        supplement_group_money: goodsDetail.supplement_group_money,
-        supplement_group_proportion: 0,
-        supplement_group_money_2: 0,
-        supplement_group_proportion_2: 0,
-      });
-      freezeData.push({
-        merchant_money: goodsDetail.merchant_money,
-        merchant_proportion: 0,
-        supplement_merchant_money: goodsDetail.supplement_merchant_money,
-        supplement_merchant_proportion: 0,
-        supplement_merchant_money_2: 0,
-        supplement_merchant_proportion_2: 0,
-      });
-      freezeData.push({
-        wealth_money: goodsDetail.wealth_money,
-        wealth_proportion: 0,
-        supplement_wealth_money: goodsDetail.supplement_wealth_money,
-        supplement_wealth_proportion: 0,
-        supplement_wealth_money_2: 0,
-        supplement_wealth_proportion_2: 0,
-      });
-    } else {
+
+    // 是否有视群版的补差价数据，只有当财道版3和商户版1才有
+    var hasGroupData = values.upgrade_type === 3 || values.upgrade_type === 1;
+    // 是否有财道版的补差价数据，只有商户版1才有
+    var hasWealthData =  values.upgrade_type === 1;
+    // 是否是升级码商品
+    var isQrcodeGoods = values.type == 2;
+    if (values.upgrade_type !== 1 && values.upgrade_type !== 2 && values.upgrade_type !== 3) {
       values.group_user_price = 0;
       values.wealth_user_price = 0;
-      freezeData.push({
-        normal_money: 0,
-        normal_proportion: 0,
-        supplement_normal_money: 0,
-        supplement_normal_proportion: 0,
-        supplement_normal_money_2: 0,
-        supplement_normal_proportion_2: 0,
-      });
-      freezeData.push({
-        group_money: 0,
-        group_proportion: 0,
-        supplement_group_money: 0,
-        supplement_group_proportion: 0,
-        supplement_group_money_2: 0,
-        supplement_group_proportion_2: 0,
-      });
-      freezeData.push({
-        merchant_money: 0,
-        merchant_proportion: 0,
-        supplement_merchant_money: 0,
-        supplement_merchant_proportion: 0,
-        supplement_merchant_money_2: 0,
-        supplement_merchant_proportion_2: 0,
-      });
-      freezeData.push({
-        wealth_money: 0,
-        wealth_proportion: 0,
-        supplement_wealth_money: 0,
-        supplement_wealth_proportion: 0,
-        supplement_wealth_money_2: 0,
-        supplement_wealth_proportion_2: 0,
-      });
     }
+
+    attrTable = [];
+    freezeData.push({
+      normal_money: goodsDetail.normal_money ? goodsDetail.normal_money : 0, // 普通返佣金额
+      normal_proportion: 0,
+      supplement_normal_money: hasGroupData ? goodsDetail.supplement_normal_money : 0,
+      supplement_normal_proportion: 0,
+      supplement_normal_money_2: hasWealthData ? goodsDetail.supplement_normal_money_2 : 0,
+      supplement_normal_proportion_2: 0,
+      normal_money_qrcode: isQrcodeGoods ? goodsDetail.normal_money_qrcode : 0,
+      supplement_normal_money_qrcode: (isQrcodeGoods && hasGroupData) ? goodsDetail.supplement_normal_money_qrcode : 0,
+      supplement_normal_money_qrcode_2: (isQrcodeGoods && hasWealthData) ? goodsDetail.supplement_normal_money_qrcode_2 : 0,
+    });
+    freezeData.push({
+      group_money: goodsDetail.group_money ? goodsDetail.group_money : 0, // 视群返佣金额
+      group_proportion: 0,
+      supplement_group_money: hasGroupData ? goodsDetail.supplement_group_money : 0,
+      supplement_group_proportion: 0,
+      supplement_group_money_2: hasWealthData ? goodsDetail.supplement_group_money_2 : 0,
+      supplement_group_proportion_2: 0,
+      group_money_qrcode: isQrcodeGoods ? goodsDetail.group_money_qrcode : 0,
+      supplement_group_money_qrcode: (isQrcodeGoods && hasGroupData) ? goodsDetail.supplement_group_money_qrcode : 0,
+      supplement_group_money_qrcode_2: (isQrcodeGoods && hasWealthData) ? goodsDetail.supplement_group_money_qrcode_2 : 0,
+    });
+    freezeData.push({
+      merchant_money: goodsDetail.merchant_money ? goodsDetail.merchant_money : 0, // 商户返佣金额
+      merchant_proportion: 0,
+      supplement_merchant_money: hasGroupData ? goodsDetail.supplement_merchant_money : 0,
+      supplement_merchant_proportion: 0,
+      supplement_merchant_money_2: hasWealthData ? goodsDetail.supplement_merchant_money_2 : 0,
+      supplement_merchant_proportion_2: 0,
+      merchant_money_qrcode: isQrcodeGoods ? goodsDetail.merchant_money_qrcode : 0,
+      supplement_merchant_money_qrcode: (isQrcodeGoods && hasGroupData) ? goodsDetail.supplement_merchant_money_qrcode : 0,
+      supplement_merchant_money_qrcode_2: (isQrcodeGoods && hasWealthData) ? goodsDetail.supplement_merchant_money_qrcode_2 : 0,
+    });
+    freezeData.push({
+      wealth_money: goodsDetail.wealth_money ? goodsDetail.wealth_money : 0, // 财道返佣金额
+      wealth_proportion: 0,
+      supplement_wealth_money: hasGroupData ? goodsDetail.supplement_wealth_money : 0,
+      supplement_wealth_proportion: 0,
+      supplement_wealth_money_2: hasWealthData ? goodsDetail.supplement_wealth_money_2 : 0,
+      supplement_wealth_proportion_2: 0,
+      wealth_money_qrcode: isQrcodeGoods ? goodsDetail.wealth_money_qrcode : 0,
+      supplement_wealth_money_qrcode: (isQrcodeGoods && hasGroupData) ? goodsDetail.supplement_wealth_money_qrcode : 0,
+      supplement_wealth_money_qrcode_2: (isQrcodeGoods && hasWealthData) ? goodsDetail.supplement_wealth_money_qrcode_2 : 0,
+    });
+    // 追加推荐人和购买人的话费和积分的赠送，强行为0的代表这个升级类型不允许设置金额
+    freezeData.push({
+      recommend_reward_phone_charge: goodsDetail.recommend_reward_phone_charge ? goodsDetail.recommend_reward_phone_charge : 0,
+      recommend_reward_integral: goodsDetail.recommend_reward_integral ? goodsDetail.recommend_reward_integral : 0,
+      recommend_reward_shipping_fee: goodsDetail.recommend_reward_shipping_fee ? goodsDetail.recommend_reward_shipping_fee : 0,
+      reward_phone_charge: goodsDetail.reward_phone_charge ? goodsDetail.reward_phone_charge : 0,
+      reward_integral: goodsDetail.reward_integral ? goodsDetail.reward_integral : 0,
+      reward_shipping_fee: goodsDetail.reward_shipping_fee ? goodsDetail.reward_shipping_fee : 0,
+      supplement_recommend_reward_phone_charge: hasGroupData ? goodsDetail.supplement_recommend_reward_phone_charge : 0,
+      supplement_recommend_reward_integral: hasGroupData ? goodsDetail.supplement_recommend_reward_integral : 0,
+      supplement_recommend_reward_shipping_fee: hasGroupData ? goodsDetail.supplement_recommend_reward_shipping_fee : 0,
+      supplement_reward_phone_charge: hasGroupData ? goodsDetail.supplement_reward_phone_charge : 0,
+      supplement_reward_integral: hasGroupData ? goodsDetail.supplement_reward_integral : 0,
+      supplement_reward_shipping_fee: hasGroupData ? goodsDetail.supplement_reward_shipping_fee : 0,
+      supplement_recommend_reward_phone_charge_2: hasWealthData ? goodsDetail.supplement_recommend_reward_phone_charge_2 : 0,
+      supplement_recommend_reward_integral_2: hasWealthData ? goodsDetail.supplement_recommend_reward_integral_2 : 0,
+      supplement_recommend_reward_shipping_fee_2: hasWealthData ? goodsDetail.supplement_recommend_reward_shipping_fee_2 : 0,
+      supplement_reward_phone_charge_2: hasWealthData ? goodsDetail.supplement_reward_phone_charge_2 : 0,
+      supplement_reward_integral_2: hasWealthData ? goodsDetail.supplement_reward_integral_2 : 0,
+      supplement_reward_shipping_fee_2: hasWealthData ? goodsDetail.supplement_reward_shipping_fee_2 : 0
+    });
+
+
+
+    // if (values.upgrade_type === 2) {
+    //   // 全是正常升级
+    //   attrTable = [];
+    //   freezeData.push({
+    //     normal_money: goodsDetail.normal_money, // 普通返佣金额
+    //     normal_proportion: 0,
+    //     supplement_normal_money: 0,
+    //     supplement_normal_proportion: 0,
+    //     supplement_normal_money_2: 0,
+    //     supplement_normal_proportion_2: 0,
+    //     normal_money_qrcode: goodsDetail.normal_money_qrcode,
+
+    //   });
+    //   freezeData.push({
+    //     group_money: goodsDetail.group_money, // 视群返佣金额
+    //     group_proportion: 0,
+    //     supplement_group_money: 0,
+    //     supplement_group_proportion: 0,
+    //     supplement_group_money_2: 0,
+    //     supplement_group_proportion_2: 0,
+    //   });
+    //   freezeData.push({
+    //     merchant_money: goodsDetail.merchant_money, // 商户返佣金额
+    //     merchant_proportion: 0,
+    //     supplement_merchant_money: 0,
+    //     supplement_merchant_proportion: 0,
+    //     supplement_merchant_money_2: 0,
+    //     supplement_merchant_proportion_2: 0,
+    //   });
+    //   freezeData.push({
+    //     wealth_money: goodsDetail.wealth_money, // 财道返佣金额
+    //     wealth_proportion: 0,
+    //     supplement_wealth_money: 0,
+    //     supplement_wealth_proportion: 0,
+    //     supplement_wealth_money_2: 0,
+    //     supplement_wealth_proportion_2: 0,
+    //   });
+
+    //   // 追加推荐人和购买人的话费和积分的赠送，强行为0的代表这个升级类型不允许设置金额
+    //   freezeData.push({
+    //     recommend_reward_phone_charge: goodsDetail.recommend_reward_phone_charge,
+    //     recommend_reward_integral: goodsDetail.recommend_reward_integral,
+    //     reward_phone_charge: goodsDetail.reward_phone_charge,
+    //     reward_integral: goodsDetail.reward_integral,
+    //     supplement_recommend_reward_phone_charge: 0,
+    //     supplement_recommend_reward_integral: 0,
+    //     supplement_reward_phone_charge: 0,
+    //     supplement_reward_integral: 0,
+    //     supplement_recommend_reward_phone_charge_2: 0,
+    //     supplement_recommend_reward_integral_2: 0,
+    //     supplement_reward_phone_charge_2: 0,
+    //     supplement_reward_integral_2: 0
+    //   });
+      
+    // } else if (values.upgrade_type === 1) {
+    //   attrTable = [];
+    //   freezeData.push({
+    //     normal_money: goodsDetail.normal_money,
+    //     normal_proportion: 0,
+    //     supplement_normal_money: goodsDetail.supplement_normal_money,
+    //     supplement_normal_proportion: 0,
+    //     supplement_normal_money_2: goodsDetail.supplement_normal_money_2,
+    //     supplement_normal_proportion_2: 0,
+    //   });
+    //   freezeData.push({
+    //     group_money: goodsDetail.group_money,
+    //     group_proportion: 0,
+    //     supplement_group_money: goodsDetail.supplement_group_money,
+    //     supplement_group_proportion: 0,
+    //     supplement_group_money_2: goodsDetail.supplement_group_money_2,
+    //     supplement_group_proportion_2: 0,
+    //   });
+    //   freezeData.push({
+    //     merchant_money: goodsDetail.merchant_money,
+    //     merchant_proportion: 0,
+    //     supplement_merchant_money: goodsDetail.supplement_merchant_money,
+    //     supplement_merchant_proportion: 0,
+    //     supplement_merchant_money_2: goodsDetail.supplement_merchant_money_2,
+    //     supplement_merchant_proportion_2: 0,
+    //   });
+    //   freezeData.push({
+    //     wealth_money: goodsDetail.wealth_money,
+    //     wealth_proportion: 0,
+    //     supplement_wealth_money: goodsDetail.supplement_wealth_money,
+    //     supplement_wealth_proportion: 0,
+    //     supplement_wealth_money_2: goodsDetail.supplement_wealth_money_2,
+    //     supplement_wealth_proportion_2: 0,
+    //   });
+
+    //   // 追加推荐人和购买人的话费和积分的赠送，强行为0的代表这个升级类型不允许设置金额
+    //   freezeData.push({
+    //     recommend_reward_phone_charge: goodsDetail.recommend_reward_phone_charge,
+    //     recommend_reward_integral: goodsDetail.recommend_reward_integral,
+    //     reward_phone_charge: goodsDetail.reward_phone_charge,
+    //     reward_integral: goodsDetail.reward_integral,
+    //     supplement_recommend_reward_phone_charge: goodsDetail.supplement_recommend_reward_phone_charge,
+    //     supplement_recommend_reward_integral: goodsDetail.supplement_recommend_reward_integral,
+    //     supplement_reward_phone_charge: goodsDetail.supplement_reward_phone_charge,
+    //     supplement_reward_integral: goodsDetail.supplement_reward_integral,
+    //     supplement_recommend_reward_phone_charge_2: goodsDetail.supplement_recommend_reward_phone_charge_2,
+    //     supplement_recommend_reward_integral_2: goodsDetail.supplement_recommend_reward_integral_2,
+    //     supplement_reward_phone_charge_2: goodsDetail.supplement_reward_phone_charge_2,
+    //     supplement_reward_integral_2: goodsDetail.supplement_reward_integral_2
+    //   });
+    // } else if (values.upgrade_type === 3) {
+    //   attrTable = [];
+    //   freezeData.push({
+    //     normal_money: goodsDetail.normal_money,
+    //     normal_proportion: 0,
+    //     supplement_normal_money: goodsDetail.supplement_normal_money,
+    //     supplement_normal_proportion: 0,
+    //     supplement_normal_money_2: 0,
+    //     supplement_normal_proportion_2: 0,
+    //   });
+    //   freezeData.push({
+    //     group_money: goodsDetail.group_money,
+    //     group_proportion: 0,
+    //     supplement_group_money: goodsDetail.supplement_group_money,
+    //     supplement_group_proportion: 0,
+    //     supplement_group_money_2: 0,
+    //     supplement_group_proportion_2: 0,
+    //   });
+    //   freezeData.push({
+    //     merchant_money: goodsDetail.merchant_money,
+    //     merchant_proportion: 0,
+    //     supplement_merchant_money: goodsDetail.supplement_merchant_money,
+    //     supplement_merchant_proportion: 0,
+    //     supplement_merchant_money_2: 0,
+    //     supplement_merchant_proportion_2: 0,
+    //   });
+    //   freezeData.push({
+    //     wealth_money: goodsDetail.wealth_money,
+    //     wealth_proportion: 0,
+    //     supplement_wealth_money: goodsDetail.supplement_wealth_money,
+    //     supplement_wealth_proportion: 0,
+    //     supplement_wealth_money_2: 0,
+    //     supplement_wealth_proportion_2: 0,
+    //   });
+
+    //   // 追加推荐人和购买人的话费和积分的赠送，强行为0的代表这个升级类型不允许设置金额
+    //   freezeData.push({
+    //     recommend_reward_phone_charge: goodsDetail.recommend_reward_phone_charge,
+    //     recommend_reward_integral: goodsDetail.recommend_reward_integral,
+    //     reward_phone_charge: goodsDetail.reward_phone_charge,
+    //     reward_integral: goodsDetail.reward_integral,
+    //     supplement_recommend_reward_phone_charge: goodsDetail.supplement_recommend_reward_phone_charge,
+    //     supplement_recommend_reward_integral: goodsDetail.supplement_recommend_reward_integral,
+    //     supplement_reward_phone_charge: goodsDetail.supplement_reward_phone_charge,
+    //     supplement_reward_integral: goodsDetail.supplement_reward_integral,
+    //     supplement_recommend_reward_phone_charge_2: 0,
+    //     supplement_recommend_reward_integral_2: 0,
+    //     supplement_reward_phone_charge_2: 0,
+    //     supplement_reward_integral_2: 0
+    //   });
+    // } else {
+    //   values.group_user_price = 0;
+    //   values.wealth_user_price = 0;
+    //   freezeData.push({
+    //     normal_money: 0,
+    //     normal_proportion: 0,
+    //     supplement_normal_money: 0,
+    //     supplement_normal_proportion: 0,
+    //     supplement_normal_money_2: 0,
+    //     supplement_normal_proportion_2: 0,
+    //   });
+    //   freezeData.push({
+    //     group_money: 0,
+    //     group_proportion: 0,
+    //     supplement_group_money: 0,
+    //     supplement_group_proportion: 0,
+    //     supplement_group_money_2: 0,
+    //     supplement_group_proportion_2: 0,
+    //   });
+    //   freezeData.push({
+    //     merchant_money: 0,
+    //     merchant_proportion: 0,
+    //     supplement_merchant_money: 0,
+    //     supplement_merchant_proportion: 0,
+    //     supplement_merchant_money_2: 0,
+    //     supplement_merchant_proportion_2: 0,
+    //   });
+    //   freezeData.push({
+    //     wealth_money: 0,
+    //     wealth_proportion: 0,
+    //     supplement_wealth_money: 0,
+    //     supplement_wealth_proportion: 0,
+    //     supplement_wealth_money_2: 0,
+    //     supplement_wealth_proportion_2: 0,
+    //   });
+      
+    //   // 追加推荐人和购买人的话费和积分的赠送，强行为0的代表这个升级类型不允许设置金额
+    //   freezeData.push({
+    //     recommend_reward_phone_charge: 0,
+    //     recommend_reward_integral: 0,
+    //     reward_phone_charge: 0,
+    //     reward_integral: 0,
+    //     supplement_recommend_reward_phone_charge: 0,
+    //     supplement_recommend_reward_integral: 0,
+    //     supplement_reward_phone_charge: 0,
+    //     supplement_reward_integral: 0,
+    //     supplement_recommend_reward_phone_charge_2: 0,
+    //     supplement_recommend_reward_integral_2: 0,
+    //     supplement_reward_phone_charge_2: 0,
+    //     supplement_reward_integral_2: 0
+    //   });
+    // }
     console.log(freezeData);
     values.freeze_commission_type = 0;
     values.freeze_commission_value = freezeData;
@@ -1967,7 +2414,7 @@ class AddGoodStep2 extends React.PureComponent {
     } else {
       values.group_end_time = groupEndTime || 0;
     }
-    if (values.type === 1) {
+    if (values.type === 1 || values.type === 2) {
       values.is_group = 0;
     }
     values.group_pick_up_duration = values.group_pick_up_duration || '';

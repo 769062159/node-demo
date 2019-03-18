@@ -17,8 +17,14 @@ export default class Demo extends React.Component {
   }
   handleChange = content => {
     const { setDescription } = this.props;
-    setDescription(content);
+      setDescription(content);
   };
+  handleBlur = content => {
+    const { blurSetDescription } = this.props;
+    if (blurSetDescription) {
+      blurSetDescription(this.editorInstance.getContent());
+    }
+  }
   uploadFn = param => {
     const serverURL = this.props.uploadUrl;
     const xhr = new XMLHttpRequest();
@@ -81,6 +87,7 @@ export default class Demo extends React.Component {
         uploadFn: this.uploadFn,
       },
       onChange: this.handleChange,
+      onBlur: this.handleBlur,
       // onRawChange: this.handleRawChange,
     };
 
