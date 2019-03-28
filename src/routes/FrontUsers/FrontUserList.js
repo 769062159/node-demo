@@ -25,7 +25,7 @@ import styles from './TableList.less';
 
 const { adminUrl } = process.env[process.env.API_ENV];
 
-const LevelName = ['普通版', '商户版', '视群版', '财道版'];
+const LevelName = ['粉丝', '导师', '群主', '盟主'];
 const { confirm } = Modal;
 const FormItem = Form.Item;
 const { Option } = Select;
@@ -548,10 +548,10 @@ export default class FrontUserList extends PureComponent {
             <FormItem label="店铺">
               {getFieldDecorator('user_oauth_type')(
                 <Select>
-                  <Option value={0}>普通版</Option>
-                  <Option value={2}>视群版</Option>
-                  <Option value={3}>财道版</Option>
-                  <Option value={1}>商户版</Option>
+                  <Option value={0}>粉丝</Option>
+                  <Option value={2}>群主</Option>
+                  <Option value={3}>盟主</Option>
+                  <Option value={1}>导师</Option>
                 </Select>
               )}
             </FormItem>
@@ -811,7 +811,7 @@ export default class FrontUserList extends PureComponent {
         </Card>
         <Card bordered={false} style={{ marginBottom: 10 }}>
           <div className={styles.tableList}>
-            商户版和社群版后台地址：
+            导师和社群版后台地址：
             <a href={adminUrl} target="view_window">
               {adminUrl}
             </a>
@@ -827,7 +827,7 @@ export default class FrontUserList extends PureComponent {
               loading={loading}
               columns={progressColumns}
               pagination={frontUserListPage}
-              scroll={{ x: '120%' }}
+              scroll={{ x: '100%' }}
             />
           </div>
         </Card>
@@ -867,10 +867,10 @@ export default class FrontUserList extends PureComponent {
             <Col span={6}>版本</Col>
             <Col span={18}>
               <Select onChange={this.handleLevel} style={{ width: 200 }} value={powerValue} >
-                <Option key={1} value={1}>商户版</Option>
-                <Option key={3} value={3}>财道版</Option>
-                <Option key={2} value={2}>视群版</Option>
-                <Option key={0} value={0}>普通版</Option>
+                <Option key={1} value={1}>导师</Option>
+                <Option key={3} value={3}>盟主</Option>
+                <Option key={2} value={2}>群主</Option>
+                <Option key={0} value={0}>粉丝</Option>
               </Select>
             </Col>
           </Row>

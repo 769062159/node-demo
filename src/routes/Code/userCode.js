@@ -73,11 +73,11 @@ export default class UserCode extends PureComponent {
         key: 'wealth_author_code_num',
       },
       {
-        title: '视群版授权码',
+        title: '群主授权码',
         dataIndex: 'group_author_code_num',
       },
       {
-        title: '视群版待授权码',
+        title: '群主待授权码',
         dataIndex: 'payment_code_num',
       },
       {

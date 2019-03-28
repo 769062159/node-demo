@@ -89,15 +89,15 @@ export const menuData = [
         path: 'good-list-review',
       },
       {
-        name: '视群版商品协议',
+        name: '群主商品协议',
         path: 'protocol',
       },
       {
-        name: '财道版商品协议',
+        name: '盟主商品协议',
         path: 'protocolss',
       },
       {
-        name: '商户版商品协议',
+        name: '导师商品协议',
         path: 'protocols',
       },
     ],
