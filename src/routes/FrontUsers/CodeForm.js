@@ -77,17 +77,17 @@ const CustomizedForm = Form.create({
         {codeMsg.name}
       </FormItem>
       <Row>
-        <Col span={8}>当前商户版数量:{codeMsg.merchant}</Col>
-        <Col span={8}>当前财道版数量:{codeMsg.wealth}</Col>
-        <Col span={8}>当前视群版数量:{codeMsg.group}</Col>
+        <Col span={8}>当前导师数量:{codeMsg.merchant}</Col>
+        <Col span={8}>当前盟主数量:{codeMsg.wealth}</Col>
+        <Col span={8}>当前群主数量:{codeMsg.group}</Col>
       </Row>
-      {/* <FormItem {...formItemLayout} label="当前商户版数量">
+      {/* <FormItem {...formItemLayout} label="当前导师数量">
         {codeMsg.merchant}
       </FormItem>
-      <FormItem {...formItemLayout} label="当前财道版数量">
+      <FormItem {...formItemLayout} label="当前盟主数量">
         {codeMsg.wealth}
       </FormItem>
-      <FormItem {...formItemLayout} label="当前视群版数量">
+      <FormItem {...formItemLayout} label="当前群主数量">
         {codeMsg.group}
       </FormItem> */}
       <FormItem {...formItemLayout} label="交易类型">
@@ -121,32 +121,32 @@ const CustomizedForm = Form.create({
           </FormItem>
         ) : null
       }
-      <FormItem {...formItemLayout} label="商户版数量">
+      <FormItem {...formItemLayout} label="导师数量">
         {getFieldDecorator('merchant_num', {
           rules: [
             {
               required: true,
-              message: '请输入商户版数量',
+              message: '请输入导师数量',
             },
           ],
         })(<InputNumber min={0} step={1} precision={0} />)}
       </FormItem>
-      <FormItem {...formItemLayout} label="财道版数量">
+      <FormItem {...formItemLayout} label="盟主数量">
         {getFieldDecorator('wealth_num', {
           rules: [
             {
               required: true,
-              message: '请输入财道版数量',
+              message: '请输入盟主数量',
             },
           ],
         })(<InputNumber min={0} step={1} precision={0} />)}
       </FormItem>
-      <FormItem {...formItemLayout} label="视群版数量">
+      <FormItem {...formItemLayout} label="群主数量">
         {getFieldDecorator('group_num', {
           rules: [
             {
               required: true,
-              message: '请输入视群版数量',
+              message: '请输入群主数量',
             },
           ],
         })(<InputNumber min={0} step={1} />)}
