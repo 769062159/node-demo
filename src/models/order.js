@@ -1,5 +1,5 @@
 import { message } from 'antd';
-import { getOrderList, getExpressList, shipshop, editShip, editAdress, getGroupList, getGroupDetail, collectGoods, getDetail } from '../services/order';
+import { getOrderList, getExpressList, shipshop, editShip, editAdress, getGroupList, getGroupDetail, collectGoods, manualCompleteOrder, getDetail } from '../services/order';
 import { toNums } from '../utils/utils'
 
 export default {
@@ -27,6 +27,21 @@ export default {
     *collectGoods({ payload, values }, { call, put, select }) {
       const response = yield call(collectGoods, { order_pack_id: payload });
       if (response.code === 200) {
+        const res = yield call(getOrderList, { ...payload });
+        let id = '';
+        id = yield select(state => state.user.currentUser.shop_store_id);
+        yield put({
+          type: 'getOrder',
+          payload: res,
+          id,
+          page: values.page || 1,
+        });
+      }
+    },
+    *manualCompleteOrder({ payload, values }, { call, put, select }) {
+      const response = yield call(manualCompleteOrder, { order_id: payload });
+      if (response.code === 200) {
+        message.success(response.data);
         const res = yield call(getOrderList, { ...payload });
         let id = '';
         id = yield select(state => state.user.currentUser.shop_store_id);

@@ -63,6 +63,13 @@ export async function collectGoods(params) {
   });
 }
 
+export async function manualCompleteOrder(params) {
+  return request('/merchant/order/complete/manual', {
+    method: 'POST',
+    body: params,
+  });
+}
+
 // 普通订单详情
 export async function getDetail(params) {
   return request('/merchant/order/detail', {

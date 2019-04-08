@@ -220,6 +220,30 @@ export default class Order extends PureComponent {
       isEditType: 1,
     });
   };
+  completeOrder = (pack) => {
+    const that = this;
+    confirm({
+      content: '该操作会检查在【微信支付】中该订单是否已付款成功，如付款成功，将会自动执行订单的所有触发操作，如升级身份等。',
+      okText: '我已知晓',
+      okType: 'primary',
+      cancelText: '取消',
+      onOk() {
+        const { values } = that.state;
+        const { dispatch } = that.props;
+        dispatch({
+          type: 'order/manualCompleteOrder',
+          payload: pack.order_id,
+          values,
+          callback: () => {
+            message.success('已完成修正');
+          },
+        });
+      },
+      onCancel() {
+      },
+    });
+  }
+
   collectGoods = (pack) => {
     const that = this;
     confirm({
@@ -605,11 +629,11 @@ export default class Order extends PureComponent {
             return (
               <Row>
                 <Col span={8} style={{overflow: 'hidden'}}>
-                  <img src={val.avatar} alt="图片" style={{ width: 60, maxHeight: 60 }} />
+                  <img src={val ? val.avatar : ''} alt="图片" style={{ width: 60, maxHeight: 60 }} />
                 </Col>
                 <Col span={16}>
-                  <div>{val.nickname}</div>
-                  <div>id:{val.fake_id}</div>
+                  <div>{val ? val.nickname : ''}</div>
+                  <div>id:{val ? val.fake_id : ''}</div>
                 </Col>
               </Row>
             );
@@ -683,7 +707,13 @@ export default class Order extends PureComponent {
                   确认收货
                 </Button>
               </Fragment>
-            ) : record.order_status === 1 ? null : null}
+            ) : record.order_status === 1 ? (
+              <Fragment>
+                <Button style={grayBtn} onClick={this.completeOrder.bind(this, record)}>
+                  检测异常
+                </Button>
+              </Fragment>
+            ) : null}
             {/* <a href={`#/order/order-detail/${record.order_id}`} style={grayBtn} >
               查看详情
             </a> */}
