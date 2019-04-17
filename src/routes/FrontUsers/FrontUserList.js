@@ -121,7 +121,7 @@ export default class FrontUserList extends PureComponent {
       callback: (e) => {
         this.setState({
           account: account ? account : `${record.id}@${e}`,
-          password: record.mobile || '123456',
+          password: record.mobile || '请先在小程序授权手机号',
           editId: record.id,
           powerValue: Number(record.has_account ? record.has_account.permission : 0),
           merchantVisible: true,
@@ -860,8 +860,8 @@ export default class FrontUserList extends PureComponent {
             <Col span={18}><Input value={account} disabled /></Col>
           </Row>
           <Row style={{ marginBottom: 20 }}>
-            <Col span={6}>密码</Col>
-            <Col span={18}><Input value={password} onChange={this.changePassword}  /></Col>
+            <Col span={6}>手机号</Col>
+            <Col span={18}><Input value={password} onChange={this.changePassword} disabled /></Col>
           </Row>
           <Row>
             <Col span={6}>版本</Col>
