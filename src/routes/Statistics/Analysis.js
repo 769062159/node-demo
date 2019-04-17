@@ -131,7 +131,7 @@ export default class Analysis extends Component {
           </div>
           <div  className={styles.txtCenter}>
             <div className={styles.txtTitle}>佣金（元）</div>
-            <div className={styles.txtNumber}>{statistics.today_commission || 0}</div>
+            <div className={styles.txtNumber}><Popover placement="topLeft" title="概要" content={(statistics.today_upgrade_commission || 0)+'(升级商品) + ' + (statistics.today_other_commission || 0)+'(订单+门店+手动)'} arrowPointAtCenter><a href="javascript:;">{statistics.today_commission || 0}</a></Popover></div>
             <div className={`${styles.txtYesterday} ${styles.txtBottom}`}>昨日：{statistics.yesterday_commission || '0'}</div>
           </div>
           <div  className={styles.txtCenter}>
