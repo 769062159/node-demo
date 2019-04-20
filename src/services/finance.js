@@ -8,6 +8,14 @@ export async function getAccountList(params) {
   });
 }
 
+// 佣金列表
+export async function getAccountLogList(params) {
+  return request('/merchant/account/paginate', {
+    method: 'POST',
+    body: params,
+  });
+}
+
 // 账户详情
 export async function getAccountDetail(params) {
   return request('/merchant/account/detail', {

@@ -1,5 +1,6 @@
 import {
   getAccountList,
+  getAccountLogList,
   getAccountDetail,
   getWithdrawList,
   updateWithdraw,
@@ -16,6 +17,8 @@ export default {
   state: {
     accountList: [], // table列表
     accountListPage: {}, // table 页脚
+    accountLogList: [],
+    accountLogListPage: {},
     refundList: [], // table列表
     refundListPage: {}, // table 页脚
     detailMsg: {}, // 详情的个人信息
@@ -70,6 +73,14 @@ export default {
       const response = yield call(getAccountList, payload);
       yield put({
         type: 'getAccountList',
+        payload: response,
+        page: payload.page,
+      });
+    },
+    *fetchAccountLogList({ payload }, { call, put }) {
+      const response = yield call(getAccountLogList, payload);
+      yield put({
+        type: 'getAccountLogList',
         payload: response,
         page: payload.page,
       });
@@ -160,6 +171,18 @@ export default {
         accountListPage: {
           pageSize: data.page,
           total: data.total,
+          current: page || 1,
+        },
+      };
+    },
+    getAccountLogList(state, { payload, page }) {
+      const { data } = payload;
+      return {
+        ...state,
+        accountLogList: data.list,
+        accountLogListPage: {
+          pageSize: data.pagesize,
+          total: data.count,
           current: page || 1,
         },
       };

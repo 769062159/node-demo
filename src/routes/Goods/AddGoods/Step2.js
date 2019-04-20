@@ -2007,9 +2007,10 @@ class AddGoodStep2 extends React.PureComponent {
     if (values.upgrade_type !== 1 && values.upgrade_type !== 2 && values.upgrade_type !== 3) {
       values.group_user_price = 0;
       values.wealth_user_price = 0;
+    } else {
+      attrTable = [];
     }
 
-    attrTable = [];
     freezeData.push({
       normal_money: goodsDetail.normal_money ? goodsDetail.normal_money : 0, // 普通返佣金额
       normal_proportion: 0,
