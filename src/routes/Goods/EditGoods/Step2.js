@@ -479,9 +479,9 @@ const CustomizedForm = Form.create({
     };
     if (systemType.user_levels && systemType.user_levels.length) {
       systemType.user_levels.forEach(res => {
-        arr[`level_${res.id}`] = Form.createFormField({
-          value: goodsDetail[`level_${res.id}`],
-        });
+          arr[`level_${res.id}`] = Form.createFormField({
+            value: goodsDetail[`level_${res.id}`],
+          });
       });
     }
     return arr;
@@ -1955,9 +1955,10 @@ class EditGoodStep2 extends React.PureComponent {
     if (values.upgrade_type !== 1 && values.upgrade_type !== 2 && values.upgrade_type !== 3) {
       values.group_user_price = 0;
       values.wealth_user_price = 0;
+    } else {
+      attrTable = [];
     }
 
-    attrTable = [];
     freezeData.push({
       normal_money: goodsDetail.normal_money ? goodsDetail.normal_money : 0, // 普通返佣金额
       normal_proportion: 0,

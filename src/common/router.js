@@ -248,6 +248,9 @@ export const getRouterConfig = app => {
     '/finance/account': {
       component: dynamicWrapper(app, ['finance'], () => import('../routes/Finance/Account')),
     },
+    '/finance/account-log': {
+      component: dynamicWrapper(app, ['finance'], () => import('../routes/Finance/AccountLog')),
+    },
     '/finance/protocols': {
       component: dynamicWrapper(app, ['protocol'], () => import('../routes/Goods/Protocols')),
     },

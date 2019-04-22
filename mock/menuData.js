@@ -146,8 +146,12 @@ export const menuData = [
     path: 'finance',
     children: [
       {
-        name: '佣金',
+        name: '佣金账户',
         path: 'account',
+      },
+      {
+        name: '佣金明细',
+        path: 'account-log',
       },
       {
         name: '提现',
