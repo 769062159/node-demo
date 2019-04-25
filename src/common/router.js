@@ -112,8 +112,12 @@ export const getRouterConfig = app => {
       component: dynamicWrapper(app, ['shop'], () => import('../routes/Shop/Store')),
     },
     // 企业版的设置
-    '/setting/config': {
+    '/config/base': {
       component: dynamicWrapper(app, ['config'], () => import('../routes/Index/Background')),
+    },
+    // 企业版的名片官方模板设置
+    '/config/card': {
+      component: dynamicWrapper(app, ['config'], () => import('../routes/Index/ConfigCard')),
     },
     // 首页 广告 营销
     '/market/AddForm/:type': {

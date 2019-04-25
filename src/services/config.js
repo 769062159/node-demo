@@ -15,3 +15,18 @@ export async function addConfig(params) {
     body: params,
   });
 }
+
+// 名片配置
+export async function getCardConfig(params) {
+  return request('/merchant/config/card/get', {
+    method: 'POST',
+    body: params,
+  });
+}
+// 名片配置保存
+export async function saveCardConfig(params) {
+  return request('/merchant/config/card/save', {
+    method: 'POST',
+    body: params,
+  });
+}

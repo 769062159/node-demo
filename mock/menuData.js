@@ -295,7 +295,17 @@ export const menuData = [
   {
     name: '设置',
     icon: 'icon-shezhi',
-    path: 'setting/config',
+    path: 'config',
+    children: [
+      {
+        name: '基础设置',
+        path: 'base',
+      },
+      {
+        name: '名片配置',
+        path: 'card',
+      },
+    ],
   },
   {
     name: '授权码管理',

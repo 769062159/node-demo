@@ -3,6 +3,8 @@ import { connect } from 'dva';
 import {
   Icon,
   Popover,
+  Row,
+  Col
 //   Tabs,
 //   Table,
 //   Radio,
@@ -95,40 +97,41 @@ export default class Analysis extends Component {
             <div className={`${styles.txtYesterday} ${styles.txtBottom}`}>昨日：{statistics.yesterday_goods_order_num || '0'}</div>
           </div>
           <div  className={styles.txtCenter}>
-            <div className={styles.txtTitle}>导师</div>
-            <div className={styles.txtNumber}>{statistics.today_merchant_order_num || '0'}</div>
-            <div className={`${styles.txtYesterday} ${styles.txtBottom}`}>昨日：{statistics.yesterday_merchant_order_num || '0'}</div>
+            <div className={styles.txtTitle}>导师(含群主[补差价]+盟主[补差价]+正常升级)</div>
+            <div className={styles.txtNumber}>
+            {statistics.today_merchant_order_num || '0'}={statistics.today_group_supplement_merchant_order_num || '0'}+{statistics.today_wealth_supplement_merchant_order_num || '0'}+{statistics.today_default_merchant_order_num || '0'}</div>
+            <div className={`${styles.txtYesterday} ${styles.txtBottom}`}>昨日：{statistics.yesterday_merchant_order_num || '0'}={statistics.yesterday_group_supplement_merchant_order_num || '0'}+{statistics.yesterday_wealth_supplement_merchant_order_num || '0'}+{statistics.yesterday_default_merchant_order_num || '0'}</div>
           </div>
           <div  className={styles.txtCenter}>
-            <div className={styles.txtTitle}>盟主</div>
-            <div className={`${styles.txtNumber}`}>{statistics.today_wealth_order_num || '0'}</div>
-            <div className={`${styles.txtYesterday} ${styles.txtBottom}`}>昨日：{statistics.yesterday_wealth_order_num || '0'}</div>
+            <div className={styles.txtTitle}>盟主(含群主[补差价]+正常升级)</div>
+            <div className={`${styles.txtNumber}`}>{statistics.today_wealth_order_num || '0'}={statistics.today_supplement_wealth_order_num || '0'}+{statistics.today_default_wealth_order_num || '0'}</div>
+            <div className={`${styles.txtYesterday} ${styles.txtBottom}`}>昨日：{statistics.yesterday_wealth_order_num || '0'}={statistics.yesterday_supplement_wealth_order_num || '0'}+{statistics.yesterday_default_wealth_order_num || '0'}</div>
           </div>
           <div  className={styles.txtCenter}>
             <div className={styles.txtTitle}>群主</div>
             <div className={styles.txtNumber}>{statistics.today_group_order_num || '0'}</div>
             <div className={`${styles.txtYesterday} ${styles.txtBottom}`}>昨日：{statistics.yesterday_group_order_num || '0'}</div>
           </div>
-          <div className={styles.txtCenter}>
-            <div className={styles.txtTitle}>补差价商户(群主)</div>
+          {/* <div className={styles.txtCenter}>
+            <div className={styles.txtTitle}>群主补差价升级导师</div>
             <div className={`${styles.txtNumber}`}>{statistics.today_group_supplement_merchant_order_num || '0'}</div>
             <div className={`${styles.txtYesterday} ${styles.txtBottom}`}>昨日：{statistics.yesterday_group_supplement_merchant_order_num || '0'}</div>
           </div>
           <div className={styles.txtCenter}>
-            <div className={styles.txtTitle}>补差价商户(盟主)</div>
+            <div className={styles.txtTitle}>盟主补差价升级导师</div>
             <div className={`${styles.txtNumber}`}>{statistics.today_wealth_supplement_merchant_order_num || '0'}</div>
             <div className={`${styles.txtYesterday} ${styles.txtBottom}`}>昨日：{statistics.yesterday_wealth_supplement_merchant_order_num || '0'}</div>
-          </div>
+          </div> */}
           {/* <div  className={styles.txtCenter}>
             <div className={styles.txtTitle}>补差价商户</div>
             <div className={`${styles.txtNumber}`}>{statistics.today_supplement_merchant_order_num || '0'}</div>
             <div className={`${styles.txtYesterday} ${styles.txtBottom}`}>昨日：{statistics.yesterday_supplement_merchant_order_num || '0'}</div>
           </div> */}
-          <div  className={styles.txtCenter}>
-            <div className={styles.txtTitle}>补差价财道</div>
+          {/* <div  className={styles.txtCenter}>
+            <div className={styles.txtTitle}>补差价盟主</div>
             <div className={`${styles.txtNumber}`}>{statistics.today_supplement_wealth_order_num || '0'}</div>
             <div className={`${styles.txtYesterday} ${styles.txtBottom}`}>昨日：{statistics.yesterday_supplement_wealth_order_num || '0'}</div>
-          </div>
+          </div> */}
           <div  className={styles.txtCenter}>
             <div className={styles.txtTitle}>佣金（元）</div>
             <div className={styles.txtNumber}><Popover placement="topLeft" title="概要" content={(statistics.today_upgrade_commission || 0)+'(升级商品) + ' + (statistics.today_other_commission || 0)+'(订单+门店+手动)'} arrowPointAtCenter><a href="javascript:;">{statistics.today_commission || 0}</a></Popover></div>

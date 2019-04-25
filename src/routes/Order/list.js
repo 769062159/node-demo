@@ -707,7 +707,7 @@ export default class Order extends PureComponent {
                   确认收货
                 </Button>
               </Fragment>
-            ) : record.order_status === 1 ? (
+            ) : record.order_status === 0 || record.order_status === 1 ? (
               <Fragment>
                 <Button style={grayBtn} onClick={this.completeOrder.bind(this, record)}>
                   检测异常
