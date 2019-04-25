@@ -12,6 +12,7 @@ import styles from './UserLayout.less';
 // import logo from '../assets/logo.svg';
 import { getRoutes } from '../utils/utils';
 import AppNoMenu from '../components/utils/AppNoMenu';
+import { toYear } from '../utils/date';
 // import { width } from 'window-size';
 // import createCanvasNest from '../../public/canvas-nest';
 
@@ -37,7 +38,7 @@ import AppNoMenu from '../components/utils/AppNoMenu';
 
 const copyright = (
   <Fragment>
-    Copyright <Icon type="copyright" /> 三点一视
+    Copyright <Icon type="copyright" /> ️{toYear(Date.parse(new Date()))} 米茶科技
   </Fragment>
 );
 

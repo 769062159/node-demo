@@ -12,6 +12,7 @@ import GlobalFooter from '../components/GlobalFooter';
 import SiderMenu from '../components/SiderMenu';
 import NotFound from '../routes/Exception/404';
 import { getRoutes } from '../utils/utils';
+import { toYear } from '../utils/date';
 import Authorized from '../utils/Authorized';
 import logo from '../assets/logo.svg';
 
@@ -226,7 +227,7 @@ class BasicLayout extends React.PureComponent {
             // }]}
             copyright={
               <div>
-                Copyright <Icon type="copyright" /> 2018 三点一视
+                Copyright <Icon type="copyright" />️ {toYear(Date.parse(new Date()))} 米茶科技
               </div>
             }
           />
