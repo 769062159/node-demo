@@ -1,16 +1,24 @@
-import { getStatistics } from '../services/statistics';
+import { getStatistics, getDayStatistics  } from '../services/statistics';
 
 export default {
   namespace: 'statistics',
 
   state: {
     statistics: {},
+    statistics_day: {}
   },
   effects: {
     *fetch({ payload }, { call, put }) {
         const response = yield call(getStatistics, payload);
         yield put({
             type: 'getStatistics',
+            payload: response,
+        });
+    },
+    *day({ payload }, { call, put }) {
+        const response = yield call(getDayStatistics, payload);
+        yield put({
+            type: 'getDayStatistics',
             payload: response,
         });
     },
@@ -25,6 +33,16 @@ export default {
         return {
             ...state,
             statistics: data,
+        }
+    },
+    getDayStatistics(state, { payload }) {
+        const { data } = payload;
+        if (data) {
+            data.order = data.normal_order_num + data.group_order_num;
+        }
+        return {
+            ...state,
+            statistics_day: data,
         }
     },
   },

@@ -7,3 +7,10 @@ export async function getStatistics(params) {
     body: params,
   });
 }
+// 商户门店创建
+export async function getDayStatistics(params) {
+  return request('/merchant/analysis/statistics/day', {
+    method: 'POST',
+    body: params,
+  });
+}
