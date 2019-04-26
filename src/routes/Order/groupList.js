@@ -293,6 +293,9 @@ export default class Order extends PureComponent {
               <Button type="primary" htmlType="submit">
                 查询
               </Button>
+              <Button type="primary">
+                导出
+              </Button>
               <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>
                 重置
               </Button>

@@ -134,12 +134,12 @@ export default class Analysis extends Component {
             <div className={styles.txtNumber}>{statistics_day.goods_order_num || '0'}</div>
           </div>
           <div  className={styles.txtCenter}>
-            <div className={styles.txtTitle}>导师(含群主[补差价]+盟主[补差价]+正常升级)</div>
+            <div className={styles.txtTitle}>导师<Popover title="数据组成说明"  overlayClassName={styles.txtTip} content="含群主[补差价]+盟主[补差价]+正常升级"><Icon type='question-circle' /></Popover></div>
             <div className={styles.txtNumber}>
             {statistics_day.merchant_order_num || '0'}={statistics_day.group_supplement_merchant_order_num || '0'}+{statistics_day.wealth_supplement_merchant_order_num || '0'}+{statistics_day.default_merchant_order_num || '0'}</div>
           </div>
           <div  className={styles.txtCenter}>
-            <div className={styles.txtTitle}>盟主(含群主[补差价]+正常升级)</div>
+            <div className={styles.txtTitle}>盟主<Popover title="数据组成说明"  overlayClassName={styles.txtTip} content="含群主[补差价]+正常升级"><Icon type='question-circle' /></Popover></div>
             <div className={`${styles.txtNumber}`}>{statistics_day.wealth_order_num || '0'}={statistics_day.supplement_wealth_order_num || '0'}+{statistics_day.default_wealth_order_num || '0'}</div>
           </div>
           <div  className={styles.txtCenter}>
