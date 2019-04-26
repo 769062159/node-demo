@@ -109,7 +109,7 @@ export default class Analysis extends Component {
             </a>
           </div>
         </div>
-        
+
         <div className={styles.cardTitle}>
           每日概况<Popover title="数据说明"  overlayClassName={styles.txtTip} content={overview}><Icon type='question-circle' /></Popover>
           &nbsp;&nbsp;&nbsp;&nbsp;
@@ -176,11 +176,11 @@ export default class Analysis extends Component {
           </div>
         </div>
         <br />
-        
-        
-        
-        
-        
+
+
+
+
+
         <div className={styles.cardTitle}>
           总概况<Popover title="数据说明" overlayClassName={styles.txtTip} content={totalOverview}><Icon type='question-circle' /></Popover>
         </div>
@@ -216,11 +216,11 @@ export default class Analysis extends Component {
             <div className={`${styles.txtNumber} ${styles.txtBottom}`}>{statistics.free_group_account_count || 0}</div>
           </div>
           <div  className={styles.txtCenter}>
-            <div className={styles.txtTitle}>付费版财道会员数</div>
+            <div className={styles.txtTitle}>付费版盟主会员数</div>
             <div className={`${styles.txtNumber} ${styles.txtBottom}`}>{statistics.wealth_account_count || 0}</div>
           </div>
           <div  className={styles.txtCenter}>
-            <div className={styles.txtTitle}>免费财道会员数</div>
+            <div className={styles.txtTitle}>免费盟主会员数</div>
             <div className={`${styles.txtNumber} ${styles.txtBottom}`}>{statistics.charge_wealth_account_count || 0}</div>
           </div>
         </div>
