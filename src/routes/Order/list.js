@@ -445,12 +445,12 @@ export default class Order extends PureComponent {
       <Form layout="inline" onSubmit={this.handleSearch} autoComplete="OFF">
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
-            <FormItem label="包裹订单sn">
+            <FormItem label="订单SN">
               {getFieldDecorator('pack_order_sn')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
-            <FormItem label="包裹订单状态">
+            <FormItem label="订单状态">
               {getFieldDecorator('order_status')(
                 <Select placeholder="请选择" style={{ width: '100%' }}>
                   <Option value="0">未支付</Option>
@@ -467,6 +467,9 @@ export default class Order extends PureComponent {
             <span className={styles.submitButtons}>
               <Button type="primary"  htmlType="submit" >
                 查询
+              </Button>
+              <Button style={{ marginLeft: 8 }} type="primary" >
+                导出
               </Button>
               <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>
                 重置
@@ -487,12 +490,12 @@ export default class Order extends PureComponent {
       <Form layout="inline" autoComplete="OFF" onSubmit={this.handleSearch} >
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
-            <FormItem label="订单sn">
+            <FormItem label="订单SN">
               {getFieldDecorator('pack_order_sn')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
-            <FormItem label="包裹订单状态">
+            <FormItem label="订单状态">
               {getFieldDecorator('order_status')(
                 <Select placeholder="请选择" style={{ width: '100%' }}>
                   <Option value="0">未支付</Option>
@@ -506,8 +509,14 @@ export default class Order extends PureComponent {
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
-            <FormItem label="联系人">
-              {getFieldDecorator('consignee')(<Input placeholder="请输入" />)}
+            <FormItem label="商品类型">
+              {getFieldDecorator('order_type')(
+                <Select placeholder="请选择" style={{ width: '100%' }}>
+                  <Option value="0">普通商品</Option>
+                  <Option value="1">身份商品</Option>
+                  <Option value="2">升级码商品</Option>
+                </Select>
+              )}
             </FormItem>
           </Col>
         </Row>
@@ -556,18 +565,23 @@ export default class Order extends PureComponent {
         </Row>
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
-            <FormItem label="用户id">
+            <FormItem label="用户ID">
               {getFieldDecorator('user_id')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
-            <FormItem label="订单开始时间">
+            <FormItem label="开始时间">
               {getFieldDecorator('start_order_time')(<DatePicker />)}
             </FormItem>
           </Col>
           <Col md={8} sm={24}>
-            <FormItem label="订单结束时间">
+            <FormItem label="结束时间">
               {getFieldDecorator('end_order_time')(<DatePicker  />)}
+            </FormItem>
+          </Col>
+          <Col md={8} sm={24}>
+            <FormItem label="联系人">
+              {getFieldDecorator('consignee')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
         </Row>
@@ -575,6 +589,9 @@ export default class Order extends PureComponent {
           <span style={{ float: 'right', marginBottom: 24 }}>
             <Button type="primary" htmlType="submit">
               查询
+            </Button>
+            <Button style={{ marginLeft: 8 }} type="primary" >
+              导出
             </Button>
             <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>
               重置
