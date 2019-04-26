@@ -216,7 +216,7 @@ export default class Analysis extends Component {
             <div className={`${styles.txtNumber} ${styles.txtBottom}`}>{statistics.free_group_account_count || 0}</div>
           </div>
           <div  className={styles.txtCenter}>
-            <div className={styles.txtTitle}>付费版盟主会员数</div>
+            <div className={styles.txtTitle}>付费盟主会员数</div>
             <div className={`${styles.txtNumber} ${styles.txtBottom}`}>{statistics.wealth_account_count || 0}</div>
           </div>
           <div  className={styles.txtCenter}>
