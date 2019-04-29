@@ -305,6 +305,10 @@ export const menuData = [
         name: '名片配置',
         path: 'card',
       },
+      {
+        name: '关联商品配置',
+        path: 'video-goods',
+      },
     ],
   },
   {

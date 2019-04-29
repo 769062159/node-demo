@@ -119,6 +119,10 @@ export const getRouterConfig = app => {
     '/config/card': {
       component: dynamicWrapper(app, ['config'], () => import('../routes/Index/ConfigCard')),
     },
+    // 企业版的小视频商品设置
+    '/config/video-goods': {
+      component: dynamicWrapper(app, ['config'], () => import('../routes/Index/ConfigVideoGoods')),
+    },
     // 首页 广告 营销
     '/market/AddForm/:type': {
       component: dynamicWrapper(app, ['indexs'], () => import('../routes/Index/AddForm')),

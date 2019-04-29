@@ -30,3 +30,43 @@ export async function saveCardConfig(params) {
     body: params,
   });
 }
+
+// 获取关联商品开关
+export async function getVideoGoodsConfigPower(params) {
+  return request('/merchant/config/video-goods/power/get', {
+    method: 'POST',
+    body: params,
+  });
+}
+// 设置关联商品开关
+export async function setVideoGoodsConfigPower(params) {
+  return request('/merchant/config/video-goods/power/set', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+// 获取关联商品列表
+export async function getVideoGoodsConfigList(params) {
+  return request('/merchant/config/video-goods/list', {
+    method: 'POST',
+    body: params,
+  });
+}
+// 添加关联商品列表
+export async function createVideoGoodsConfig(params) {
+  return request('/merchant/config/video-goods/add', {
+    method: 'POST',
+    body: params,
+  });
+}
+// 删除关联商品列表
+export async function deleteVideoGoodsConfig(params) {
+  return request('/merchant/config/video-goods/remove', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+
+

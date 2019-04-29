@@ -1,10 +1,12 @@
-import { getConfig, addConfig, getCardConfig, saveCardConfig } from '../services/config';
+import { getConfig, addConfig, getCardConfig, saveCardConfig, getVideoGoodsConfigList, createVideoGoodsConfig, deleteVideoGoodsConfig, getVideoGoodsConfigPower, setVideoGoodsConfigPower } from '../services/config';
 
 export default {
   namespace: 'config',
 
   state: {
     list: [],
+    videoGoodsList: [],
+    videoGoodsPower: 0,
     config: {
       mobile: '',
       video_audio: false,
@@ -48,6 +50,57 @@ export default {
         });
       }
     },
+
+    *videoGoodsConfig({ payload }, { call, put }) {
+      const response = yield call(getVideoGoodsConfigList, payload);
+      yield put({
+        type: 'getVideoGoodsConfig',
+        payload: response,
+      });
+    },
+
+    *videoGoodsConfigPower({ payload }, { call, put }) {
+      const response = yield call(getVideoGoodsConfigPower, payload);
+      yield put({
+        type: 'getVideoGoodsPower',
+        payload: response,
+      });
+    },
+    *setVideoGoodsConfigPower({ payload, callback }, { call, put }) {
+      const res = yield call(setVideoGoodsConfigPower, payload);
+      if (res && res.code === 200) {
+        callback();
+        const response = yield call(getVideoGoodsConfigPower, payload);
+        yield put({
+          type: 'getVideoGoodsPower',
+          payload: response,
+        });
+      }
+    },
+
+    *createVideoGoodsConfig({ payload, callback }, { call, put }) {
+      const res = yield call(createVideoGoodsConfig, payload);
+      if (res && res.code === 200) {
+        callback();
+        const response = yield call(getVideoGoodsConfigList, payload);
+        yield put({
+          type: 'getVideoGoodsConfig',
+          payload: response,
+        });
+      }
+    },
+
+    *deleteVideoGoodsConfig({ payload, callback }, { call, put }) {
+      const res = yield call(deleteVideoGoodsConfig, payload);
+      if (res && res.code === 200) {
+        callback();
+        const response = yield call(getVideoGoodsConfigList, payload);
+        yield put({
+          type: 'getVideoGoodsConfig',
+          payload: response,
+        });
+      }
+    },
   },
 
   reducers: {
@@ -87,6 +140,21 @@ export default {
       return {
         ...state,
         config: data,
+      };
+    },
+
+    getVideoGoodsConfig(state, { payload }) {
+      const { data } = payload;
+      return {
+        ...state,
+        videoGoodsList: data.list,
+      };
+    },
+    getVideoGoodsPower(state, { payload }) {
+      const { data } = payload;
+      return {
+        ...state,
+        videoGoodsPower: data.power,
       };
     },
   },
