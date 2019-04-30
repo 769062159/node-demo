@@ -25,7 +25,8 @@ const formSubmitLayout = {
   },
 };
 
-@connect(({ program, loading, user }) => ({
+@connect(({ global, program, loading, user }) => ({
+  global,
   program,
   user,
   loading: loading.models.program,
@@ -35,13 +36,49 @@ export default class My extends PureComponent {
   state = {
     programType: 0, // 0 是小程序 1是公众号
     formVisible: false,
+    passwordVisible: true,
+    password: ''
   };
   componentDidMount() {
+    if (this.props.global.actionPassword != '') {
+      this.setState({
+        password: this.props.global.actionPassword,
+        passwordVisible: false
+      }, function() {
+        this.handlePasswordConfirm();
+      })
+    }
+  }
+
+  handlePasswordChange = e => {
+    this.setState({
+      password: e.target.value
+    })
+  }
+  handlePasswordConfirm = () => {
     const { dispatch } = this.props;
     dispatch({
       type: 'program/fetchProgramList',
+      payload: {
+        password: this.state.password
+      },
+      callback: () => {
+        this.setState({
+          passwordVisible: false
+        })
+        dispatch({
+          type: 'global/saveActionPassword',
+          payload: this.state.password
+        })
+      }
     });
-  }
+  };
+  handlePasswordCancel = () => {
+    this.setState({
+      passwordVisible: false,
+      password: ''
+    });
+  };
   // 新增取消
   handAddleCancel = () => {
     this.setState({
@@ -169,6 +206,22 @@ export default class My extends PureComponent {
           </Row>
         ) : null}
         <div className={styles.CardProgramList}>{CardItem}</div>
+        <Modal
+          title='校验操作密码'
+          visible={this.state.passwordVisible}
+          onCancel={this.handlePasswordCancel.bind(this)}
+          destroyOnClose="true"
+          footer=""
+        >
+            <FormItem label={`操作密码`} {...formItemLayout}>
+              <Input.Password value={this.state.password} onChange={this.handlePasswordChange} onPressEnter={this.handlePasswordConfirm}/>
+            </FormItem>
+            <FormItem style={{ marginTop: 32 }} {...formSubmitLayout}>
+              <Button type="primary" onClick={this.handlePasswordConfirm}>
+                确认
+              </Button>
+            </FormItem>
+        </Modal>
         <Modal
           title={program}
           visible={formVisible}

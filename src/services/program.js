@@ -9,9 +9,10 @@ export async function addProgram(params) {
 }
 
 // 小程序列表
-export async function getProgramList() {
+export async function getProgramList(params) {
   return request('/wx/wechataccount/list', {
     method: 'POST',
+    body: params
   });
 }
 

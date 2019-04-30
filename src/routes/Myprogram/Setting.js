@@ -24,7 +24,8 @@ const formSubmitLayout = {
     sm: { span: 18, offset: 6 },
   },
 };
-@connect(({ program, loading }) => ({
+@connect(({ global, program, loading }) => ({
+  global,
   program,
   loading: loading.models.program,
 }))
@@ -34,17 +35,18 @@ export default class Setting extends PureComponent {
     formVisible: false,
     type: 0,
     uploadTxt: process.env[process.env.API_ENV].wxTxt,
+    passwordVisible: true,
+    password: ''
   };
   componentDidMount() {
-    const { id } = this.props.match.params;
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'program/getProgramDetail',
-      payload: {
-        account_id: id,
-      },
-    });
-
+    if (this.props.global.actionPassword != '') {
+      this.setState({
+        password: this.props.global.actionPassword,
+        passwordVisible: false
+      }, function() {
+        this.handlePasswordConfirm();
+      })
+    }
     // dispatch({
     //   type: 'program/getWxOpen',
     //   payload: {
@@ -52,6 +54,38 @@ export default class Setting extends PureComponent {
     //   },
     // });
   }
+
+  handlePasswordChange = e => {
+    this.setState({
+      password: e.target.value
+    })
+  }
+  handlePasswordConfirm = () => {
+    const { id } = this.props.match.params;
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'program/getProgramDetail',
+      payload: {
+        account_id: id,
+        password: this.state.password
+      },
+      callback: () => {
+        this.setState({
+          passwordVisible: false
+        })
+        dispatch({
+          type: 'global/saveActionPassword',
+          payload: this.state.password
+        })
+      }
+    });
+  };
+  handlePasswordCancel = () => {
+    this.setState({
+      passwordVisible: false,
+      password: ''
+    });
+  };
   settingProgram = () => {
     const { id } = this.props.match.params;
     const { dispatch } = this.props;
@@ -422,6 +456,23 @@ export default class Setting extends PureComponent {
               </Button>
             </FormItem>
           </Form>
+        </Modal>
+
+        <Modal
+          title='校验操作密码'
+          visible={this.state.passwordVisible}
+          onCancel={this.handlePasswordCancel.bind(this)}
+          destroyOnClose="true"
+          footer=""
+        >
+            <FormItem label={`操作密码`} {...formItemLayout}>
+              <Input.Password value={this.state.password} onChange={this.handlePasswordChange} onPressEnter={this.handlePasswordConfirm}/>
+            </FormItem>
+            <FormItem style={{ marginTop: 32 }} {...formSubmitLayout}>
+              <Button type="primary" onClick={this.handlePasswordConfirm}>
+                确认
+              </Button>
+            </FormItem>
         </Modal>
       </PageHeaderLayout>
     );

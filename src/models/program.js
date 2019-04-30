@@ -68,8 +68,11 @@ export default {
         payload: response,
       });
     },
-    *fetchProgramList(_, { call, put }) {
-      const response = yield call(getProgramList);
+    *fetchProgramList({ payload, callback }, { call, put }) {
+      const response = yield call(getProgramList, { ...payload });
+      if (response && response.code === 200) {
+        callback();
+      }
       yield put({
         type: 'getProgramList',
         payload: response,
@@ -91,13 +94,14 @@ export default {
         payload: response,
       });
     },
-    *getProgramDetail({ payload }, { call, put }) {
+    *getProgramDetail({ payload, callback }, { call, put }) {
       const response = yield call(getProgramDetail, { ...payload });
       yield put({
         type: 'setProgramDetail',
         payload: response,
       });
       if (response && response.code === 200) {
+        if (callback) callback();
         const authorizationUrl = yield call(getAuthorizationUrl, { ...payload });
         yield put({
           type: 'setAuthorizationUrl',

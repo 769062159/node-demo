@@ -153,16 +153,16 @@ export default async function request(url, options) {
         dispatch(routerRedux.push('/user/login'));
         return;
       }
-      if (status === 403) {
-        dispatch(routerRedux.push('/exception/403'));
-        return;
-      }
-      if (status <= 504 && status >= 500) {
-        dispatch(routerRedux.push('/exception/500'));
-        return;
-      }
-      if (status >= 404 && status < 417) {
-        dispatch(routerRedux.push('/exception/404'));
-      }
+      // if (status === 403) {
+      //   dispatch(routerRedux.push('/exception/403'));
+      //   return;
+      // }
+      // if (status <= 504 && status >= 500) {
+      //   dispatch(routerRedux.push('/exception/500'));
+      //   return;
+      // }
+      // if (status >= 404 && status < 417) {
+      //   dispatch(routerRedux.push('/exception/404'));
+      // }
     });
 }

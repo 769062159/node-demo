@@ -91,6 +91,12 @@ export default class VideoGoodsConfig extends PureComponent {
       goods_id: undefined
     });
   };
+  handleGoodsCancel = () => {
+    this.setState({
+      addGoodsVisible: false,
+      goods_id: undefined
+    });
+  };
 
   removeGoodsHandle = value => {
     this.props.dispatch({
@@ -155,6 +161,7 @@ export default class VideoGoodsConfig extends PureComponent {
             <Modal
               title="添加商品"
               visible={this.state.addGoodsVisible}
+              onCancel={this.handleGoodsCancel.bind(this)}
               footer={[
                 <Button key="submit" type="primary" loading={this.state.addGoodsLoading} onClick={this.addGoodsHandle}>
                   添加

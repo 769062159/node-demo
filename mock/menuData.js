@@ -311,25 +311,25 @@ export const menuData = [
       },
     ],
   },
-  {
-    name: '授权码管理',
-    icon: 'icon-ico',
-    path: 'code',
-    children: [
-      {
-        name: '用户收款码',
-        path: 'user-code',
-      },
-      {
-        name: '收款码',
-        path: 'code',
-      },
-      {
-        name: '收款码订单',
-        path: 'order',
-      },
-    ],
-  },
+  // {
+  //   name: '授权码管理',
+  //   icon: 'icon-ico',
+  //   path: 'code',
+  //   children: [
+  //     {
+  //       name: '用户收款码',
+  //       path: 'user-code',
+  //     },
+  //     {
+  //       name: '收款码',
+  //       path: 'code',
+  //     },
+  //     {
+  //       name: '收款码订单',
+  //       path: 'order',
+  //     },
+  //   ],
+  // },
   // {
   //   name: 'dashboard',
   //   icon: 'dashboard',

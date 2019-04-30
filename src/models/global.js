@@ -11,6 +11,8 @@ export default {
     menus: [],
     // 存储路由数据(全局缓存)
     routerData: [],
+    // 存储操作密码
+    actionPassword: '',
   },
 
   effects: {
@@ -88,6 +90,13 @@ export default {
       return {
         ...state,
         routerData: payload,
+      };
+    },
+    saveActionPassword(state, { payload }) {
+      console.log('hello', payload);
+      return {
+        ...state,
+        actionPassword: payload,
       };
     },
   },
