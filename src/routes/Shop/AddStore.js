@@ -52,14 +52,14 @@ export default class AddShop extends Component {
     password: ''
   };
   componentDidMount() {
-    if (this.props.global.actionPassword != '') {
-      this.setState({
-        password: this.props.global.actionPassword,
-        passwordVisible: false
-      }, function() {
-        this.handlePasswordConfirm();
-      })
-    }
+    // if (this.props.global.actionPassword != '') {
+    //   this.setState({
+    //     password: this.props.global.actionPassword,
+    //     passwordVisible: false
+    //   }, function() {
+    //     this.handlePasswordConfirm();
+    //   })
+    // }
     const { dispatch, address: { addressList } } = this.props;
     if (!addressList.length) {
       dispatch({
@@ -76,7 +76,7 @@ export default class AddShop extends Component {
   }
   handlePasswordConfirm = () => {
     // 开一个专门校验密码的
-    
+
     // const { id } = this.props.match.params;
     // const { dispatch } = this.props;
     // dispatch({
@@ -476,22 +476,6 @@ export default class AddShop extends Component {
             </Button>
           </FormItem>
         </Form>
-        <Modal
-          title='校验操作密码'
-          visible={this.state.passwordVisible}
-          onCancel={this.handlePasswordCancel.bind(this)}
-          destroyOnClose="true"
-          footer=""
-        >
-            <FormItem label={`操作密码`} {...formItemLayout}>
-              <Input.Password value={this.state.password} onChange={this.handlePasswordChange} onPressEnter={this.handlePasswordConfirm}/>
-            </FormItem>
-            <FormItem style={{ marginTop: 32 }} {...formSubmitLayout}>
-              <Button type="primary" onClick={this.handlePasswordConfirm}>
-                确认
-              </Button>
-            </FormItem>
-        </Modal>
       </PageHeaderLayout>
     );
   }

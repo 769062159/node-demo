@@ -74,6 +74,12 @@ export default class VideoGoodsConfig extends PureComponent {
     this.setState({
       addGoodsVisible: true
     })
+    this.props.dispatch({
+      type: 'goods/fetchGoods',
+      payload: {
+        goods_name: ''
+      },
+    });
   };
 
   addGoodsHandle = value =>  {
