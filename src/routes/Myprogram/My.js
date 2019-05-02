@@ -96,6 +96,14 @@ export default class My extends PureComponent {
         dispatch({
           type: 'program/addProgram',
           payload: values,
+          callback: () => {
+            dispatch({
+              type: 'program/fetchProgramList',
+              payload: {
+                password: this.state.password
+              }
+            });
+          }
         });
         this.handAddleCancel();
       }
@@ -132,6 +140,14 @@ export default class My extends PureComponent {
           payload: {
             account_id: id,
           },
+          callback: () => {
+            dispatch({
+              type: 'program/fetchProgramList',
+              payload: {
+                password: this.state.password
+              }
+            });
+          }
         });
       },
       onCancel() {

@@ -225,6 +225,18 @@ export default class Setting extends PureComponent {
         dispatch({
           type: 'program/editProgramDetail',
           payload: values,
+          callback: () => {
+
+            const { id } = this.props.match.params;
+            const { dispatch } = this.props;
+            dispatch({
+              type: 'program/getProgramDetail',
+              payload: {
+                account_id: id,
+                password: this.state.password
+              }
+            });
+          }
         });
         this.handAddleCancel();
       }

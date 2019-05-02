@@ -70,7 +70,7 @@ export default {
     },
     *fetchProgramList({ payload, callback }, { call, put }) {
       const response = yield call(getProgramList, { ...payload });
-      if (response && response.code === 200) {
+      if (response && response.code === 200 && callback) {
         callback();
       }
       yield put({
@@ -78,21 +78,23 @@ export default {
         payload: response,
       });
     },
-    *addProgram({ payload }, { call, put }) {
+    *addProgram({ payload, callback }, { call, put }) {
       yield call(addProgram, { ...payload });
-      const response = yield call(getProgramList);
-      yield put({
-        type: 'getProgramList',
-        payload: response,
-      });
+      if (callback) callback();
+      // const response = yield call(getProgramList);
+      // yield put({
+      //   type: 'getProgramList',
+      //   payload: response,
+      // });
     },
     *delProgram({ payload }, { call, put }) {
       yield call(deleteProgram, { ...payload });
-      const response = yield call(getProgramList);
-      yield put({
-        type: 'getProgramList',
-        payload: response,
-      });
+      if (callback) callback();
+      // const response = yield call(getProgramList);
+      // yield put({
+      //   type: 'getProgramList',
+      //   payload: response,
+      // });
     },
     *getProgramDetail({ payload, callback }, { call, put }) {
       const response = yield call(getProgramDetail, { ...payload });
@@ -109,13 +111,14 @@ export default {
         });
       }
     },
-    *editProgramDetail({ payload }, { call, put }) {
+    *editProgramDetail({ payload, callback }, { call, put }) {
       yield call(editProgramDetail, { ...payload });
-      const response = yield call(getProgramDetail, { ...payload });
-      yield put({
-        type: 'setProgramDetail',
-        payload: response,
-      });
+      if (callback) callback();
+      // const response = yield call(getProgramDetail, { ...payload });
+      // yield put({
+      //   type: 'setProgramDetail',
+      //   payload: response,
+      // });
     },
     *getAuthorizationUrl({ payload, callback }, { call }) {
       const response = yield call(getAuthorizationUrl, { ...payload });
