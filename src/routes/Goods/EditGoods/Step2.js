@@ -291,6 +291,40 @@ const CustomizedForm = Form.create({
       // 正常升级的返佣
 
       // 商户返佣金额
+      merchant_integral: Form.createFormField({
+        value: goodsDetail.merchant_integral,
+      }),
+      // 普通返佣金额
+      normal_integral: Form.createFormField({
+        value: goodsDetail.normal_integral,
+      }),
+      // 视群返佣金额
+      group_integral: Form.createFormField({
+        value: goodsDetail.group_integral,
+      }),
+      // 财道返佣金额
+      wealth_integral: Form.createFormField({
+        value: goodsDetail.wealth_integral,
+      }),
+
+      // 只有升级码才有的属性
+      // 商户返佣金额
+      merchant_integral_qrcode: Form.createFormField({
+        value: goodsDetail.merchant_integral_qrcode,
+      }),
+      // 普通返佣金额
+      normal_integral_qrcode: Form.createFormField({
+        value: goodsDetail.normal_integral_qrcode,
+      }),
+      // 视群返佣金额
+      group_integral_qrcode: Form.createFormField({
+        value: goodsDetail.group_integral_qrcode,
+      }),
+      // 财道返佣金额
+      wealth_integral_qrcode: Form.createFormField({
+        value: goodsDetail.wealth_integral_qrcode,
+      }),
+      // 商户返佣金额
       merchant_money: Form.createFormField({
         value: goodsDetail.merchant_money,
       }),
@@ -354,6 +388,40 @@ const CustomizedForm = Form.create({
       
       // 视群补差价升级的返佣金额
 
+       // 视群返佣金额
+       supplement_group_integral: Form.createFormField({
+        value: goodsDetail.supplement_group_integral,
+      }),
+      // 普通返佣金额
+      supplement_normal_integral: Form.createFormField({
+        value: goodsDetail.supplement_normal_integral,
+      }),
+      // 商户返佣金额
+      supplement_merchant_integral: Form.createFormField({
+        value: goodsDetail.supplement_merchant_integral,
+      }),
+      // 财道返佣金额
+      supplement_wealth_integral: Form.createFormField({
+        value: goodsDetail.supplement_wealth_integral,
+      }),
+      // 只有升级码才有的属性
+
+      // 视群返佣金额
+      supplement_group_integral_qrcode: Form.createFormField({
+        value: goodsDetail.supplement_group_integral_qrcode,
+      }),
+      // 普通返佣金额
+      supplement_normal_integral_qrcode: Form.createFormField({
+        value: goodsDetail.supplement_normal_integral_qrcode,
+      }),
+      // 商户返佣金额
+      supplement_merchant_integral_qrcode: Form.createFormField({
+        value: goodsDetail.supplement_merchant_integral_qrcode,
+      }),
+      // 财道返佣金额
+      supplement_wealth_integral_qrcode: Form.createFormField({
+        value: goodsDetail.supplement_wealth_integral_qrcode,
+      }),
       // 视群返佣金额
       supplement_group_money: Form.createFormField({
         value: goodsDetail.supplement_group_money,
@@ -417,6 +485,40 @@ const CustomizedForm = Form.create({
 
       // 财道补差价升级的返佣金额
 
+      // 视群返佣金额
+      supplement_group_integral_2: Form.createFormField({
+        value: goodsDetail.supplement_group_integral_2,
+      }),
+      // 财道返佣金额
+      supplement_wealth_integral_2: Form.createFormField({
+        value: goodsDetail.supplement_wealth_integral_2,
+      }),
+      // 普通返佣金额
+      supplement_normal_integral_2: Form.createFormField({
+        value: goodsDetail.supplement_normal_integral_2,
+      }),
+      // 商户返佣金额
+      supplement_merchant_integral_2: Form.createFormField({
+        value: goodsDetail.supplement_merchant_integral_2,
+      }),
+      // 只有升级码才有的属性
+
+      // 视群返佣金额
+      supplement_group_integral_qrcode_2: Form.createFormField({
+        value: goodsDetail.supplement_group_integral_qrcode_2,
+      }),
+      // 财道返佣金额
+      supplement_wealth_integral_qrcode_2: Form.createFormField({
+        value: goodsDetail.supplement_wealth_integral_qrcode_2,
+      }),
+      // 普通返佣金额
+      supplement_normal_integral_qrcode_2: Form.createFormField({
+        value: goodsDetail.supplement_normal_integral_qrcode_2,
+      }),
+      // 商户返佣金额
+      supplement_merchant_integral_qrcode_2: Form.createFormField({
+        value: goodsDetail.supplement_merchant_integral_qrcode_2,
+      }),
       // 视群返佣金额
       supplement_group_money_2: Form.createFormField({
         value: goodsDetail.supplement_group_money_2,
@@ -1169,34 +1271,66 @@ const CustomizedForm = Form.create({
             <h2>正常升级</h2><h5>[固定值分佣]</h5>
           </Col>
           <Col span={24}>
-            <h5>>. 原始推荐人返佣金额</h5>
+            <h5>>. 原始推荐人返佣（金额）</h5>
           </Col>
           <Col span={6}>
             <Form.Item {...profitLayout} label="粉丝">
               {getFieldDecorator(`normal_money`, {
                 rules: [{ required: true, message: `请输入粉丝` }],
-              })(<InputNumber step={0.01} precision={2} min={0} />)}
+              })(<InputNumber step={0.01} precision={2} min={0} />)} 元
             </Form.Item>
           </Col>
           <Col span={6}>
             <Form.Item {...profitLayout} label="群主">
               {getFieldDecorator(`group_money`, {
                 rules: [{ required: true, message: `请输入群主` }],
-              })(<InputNumber step={0.01} precision={2} min={goodsDetail.normal_money || 0} />)}
+              })(<InputNumber step={0.01} precision={2} min={goodsDetail.normal_money || 0} />)} 元
             </Form.Item>
           </Col>
           <Col span={6}>
             <Form.Item {...profitLayout} label="盟主">
               {getFieldDecorator(`wealth_money`, {
                 rules: [{ required: true, message: `请输入盟主` }],
-              })(<InputNumber step={0.01} precision={2} min={goodsDetail.group_money || 0} />)}
+              })(<InputNumber step={0.01} precision={2} min={goodsDetail.group_money || 0} />)} 元
             </Form.Item>
           </Col>
           <Col span={6}>
             <Form.Item {...profitLayout} label="导师">
               {getFieldDecorator(`merchant_money`, {
                 rules: [{ required: true, message: `请输入导师` }],
-              })(<InputNumber step={0.01} precision={2} min={goodsDetail.wealth_money || 0} />)}
+              })(<InputNumber step={0.01} precision={2} min={goodsDetail.wealth_money || 0} />)} 元
+            </Form.Item>
+          </Col>
+
+          <Col span={24}>
+            <h5>>. 原始推荐人返佣（福包）</h5>
+          </Col>
+          <Col span={6}>
+            <Form.Item {...profitLayout} label="粉丝">
+              {getFieldDecorator(`normal_integral`, {
+                rules: [{ required: true, message: `请输入粉丝` }],
+              })(<InputNumber step={1} precision={0} min={0} />)} 个
+            </Form.Item>
+          </Col>
+          <Col span={6}>
+            <Form.Item {...profitLayout} label="群主">
+              {getFieldDecorator(`group_integral`, {
+                rules: [{ required: true, message: `请输入群主` }],
+              })(<InputNumber step={1} precision={0} min={goodsDetail.normal_integral || 0} />)} 个
+            </Form.Item>
+          </Col>
+          <Col span={6}>
+            <Form.Item {...profitLayout} label="盟主">
+              {getFieldDecorator(`wealth_integral`, {
+                rules: [{ required: true, message: `请输入盟主` }],
+              })(<InputNumber step={1} precision={0} min={goodsDetail.group_integral || 0} />)} 个
+            </Form.Item>
+          </Col>
+          <Col span={6}>
+            <Form.Item {...profitLayout} label="导师">
+              {getFieldDecorator(`merchant_integral`, {
+                rules: [{ required: true, message: `请输入导师` }],
+              })(<InputNumber step={1} precision={0} min={goodsDetail.wealth_integral || 0} />)} 个
             </Form.Item>
           </Col>
         </Row>
@@ -1204,34 +1338,65 @@ const CustomizedForm = Form.create({
         {goodsDetail.type === 2 ? (
           <Row>
           <Col span={24}>
-            <h5>>. 升级码拥有者返佣金额</h5>
+            <h5>>. 升级码拥有者返佣（金额）</h5>
           </Col>
           <Col span={6}>
             <Form.Item {...profitLayout} label="粉丝">
               {getFieldDecorator(`normal_money_qrcode`, {
                 rules: [{ required: true, message: `请输入粉丝` }],
-              })(<InputNumber step={0.01} precision={2} min={0} />)}
+              })(<InputNumber step={0.01} precision={2} min={0} />)} 元
             </Form.Item>
           </Col>
           <Col span={6}>
             <Form.Item {...profitLayout} label="群主">
               {getFieldDecorator(`group_money_qrcode`, {
                 rules: [{ required: true, message: `请输入群主` }],
-              })(<InputNumber step={0.01} precision={2} min={goodsDetail.normal_money_qrcode || 0} />)}
+              })(<InputNumber step={0.01} precision={2} min={goodsDetail.normal_money_qrcode || 0} />)} 元
             </Form.Item>
           </Col>
           <Col span={6}>
             <Form.Item {...profitLayout} label="盟主">
               {getFieldDecorator(`wealth_money_qrcode`, {
                 rules: [{ required: true, message: `请输入盟主` }],
-              })(<InputNumber step={0.01} precision={2} min={goodsDetail.group_money_qrcode || 0} />)}
+              })(<InputNumber step={0.01} precision={2} min={goodsDetail.group_money_qrcode || 0} />)} 元
             </Form.Item>
           </Col>
           <Col span={6}>
             <Form.Item {...profitLayout} label="导师">
               {getFieldDecorator(`merchant_money_qrcode`, {
                 rules: [{ required: true, message: `请输入导师` }],
-              })(<InputNumber step={0.01} precision={2} min={goodsDetail.wealth_money_qrcode || 0} />)}
+              })(<InputNumber step={0.01} precision={2} min={goodsDetail.wealth_money_qrcode || 0} />)} 元
+            </Form.Item>
+          </Col>
+          <Col span={24}>
+            <h5>>. 升级码拥有者返佣（福包）</h5>
+          </Col>
+          <Col span={6}>
+            <Form.Item {...profitLayout} label="粉丝">
+              {getFieldDecorator(`normal_integral_qrcode`, {
+                rules: [{ required: true, message: `请输入粉丝` }],
+              })(<InputNumber step={1} precision={0} min={0} />)} 个
+            </Form.Item>
+          </Col>
+          <Col span={6}>
+            <Form.Item {...profitLayout} label="群主">
+              {getFieldDecorator(`group_integral_qrcode`, {
+                rules: [{ required: true, message: `请输入群主` }],
+              })(<InputNumber step={1} precision={0} min={goodsDetail.normal_integral_qrcode || 0} />)} 个
+            </Form.Item>
+          </Col>
+          <Col span={6}>
+            <Form.Item {...profitLayout} label="盟主">
+              {getFieldDecorator(`wealth_integral_qrcode`, {
+                rules: [{ required: true, message: `请输入盟主` }],
+              })(<InputNumber step={1} precision={0} min={goodsDetail.group_integral_qrcode || 0} />)} 个
+            </Form.Item>
+          </Col>
+          <Col span={6}>
+            <Form.Item {...profitLayout} label="导师">
+              {getFieldDecorator(`merchant_integral_qrcode`, {
+                rules: [{ required: true, message: `请输入导师` }],
+              })(<InputNumber step={1} precision={0} min={goodsDetail.wealth_integral_qrcode || 0} />)} 个
             </Form.Item>
           </Col>
           </Row>
@@ -1312,13 +1477,13 @@ const CustomizedForm = Form.create({
               </Form.Item>
             </Col>
             <Col span={24}>
-              <h5>>. 原始推荐人返佣金额</h5>
+              <h5>>. 原始推荐人返佣（金额）</h5>
             </Col>
             <Col span={6}>
               <Form.Item {...profitLayout} label="粉丝">
                 {getFieldDecorator(`supplement_normal_money`, {
                   rules: [{ required: true, message: `请输入粉丝` }],
-                })(<InputNumber step={0.01} precision={2} min={0} />)}
+                })(<InputNumber step={0.01} precision={2} min={0} />)} 元
               </Form.Item>
             </Col>
             <Col span={6}>
@@ -1331,7 +1496,7 @@ const CustomizedForm = Form.create({
                     precision={2}
                     min={goodsDetail.supplement_normal_money || 0}
                   />
-                )}
+                )} 元
               </Form.Item>
             </Col>
             <Col span={6}>
@@ -1344,7 +1509,7 @@ const CustomizedForm = Form.create({
                     precision={2}
                     min={goodsDetail.supplement_group_money || 0}
                   />
-                )}
+                )} 元
               </Form.Item>
             </Col>
             <Col span={6}>
@@ -1357,7 +1522,56 @@ const CustomizedForm = Form.create({
                     precision={2}
                     min={goodsDetail.supplement_wealth_money || 0}
                   />
-                )}
+                )} 元
+              </Form.Item>
+            </Col>
+            <Col span={24}>
+              <h5>>. 原始推荐人返佣（福包）</h5>
+            </Col>
+            <Col span={6}>
+              <Form.Item {...profitLayout} label="粉丝">
+                {getFieldDecorator(`supplement_normal_integral`, {
+                  rules: [{ required: true, message: `请输入粉丝` }],
+                })(<InputNumber step={1} precision={0} min={0} />)} 个
+              </Form.Item>
+            </Col>
+            <Col span={6}>
+              <Form.Item {...profitLayout} label="群主">
+                {getFieldDecorator(`supplement_group_integral`, {
+                  rules: [{ required: true, message: `请输入群主` }],
+                })(
+                  <InputNumber
+                    step={1}
+                    precision={0}
+                    min={goodsDetail.supplement_normal_integral || 0}
+                  />
+                )} 个
+              </Form.Item>
+            </Col>
+            <Col span={6}>
+              <Form.Item {...profitLayout} label="盟主">
+                {getFieldDecorator(`supplement_wealth_integral`, {
+                  rules: [{ required: true, message: `请输入盟主` }],
+                })(
+                  <InputNumber
+                    step={1}
+                    precision={0}
+                    min={goodsDetail.supplement_group_integral || 0}
+                  />
+                )} 个
+              </Form.Item>
+            </Col>
+            <Col span={6}>
+              <Form.Item {...profitLayout} label="导师">
+                {getFieldDecorator(`supplement_merchant_integral`, {
+                  rules: [{ required: true, message: `请输入导师` }],
+                })(
+                  <InputNumber
+                    step={1}
+                    precision={0}
+                    min={goodsDetail.supplement_wealth_integral || 0}
+                  />
+                )} 个
               </Form.Item>
             </Col>
           </Row>
@@ -1365,34 +1579,65 @@ const CustomizedForm = Form.create({
           goodsDetail.type === 2 ? (
               <Row>
                 <Col span={24}>
-                  <h5>>. 升级码拥有者返佣金额</h5>
+                  <h5>>. 升级码拥有者返佣（金额）</h5>
                 </Col>
                 <Col span={6}>
                   <Form.Item {...profitLayout} label="粉丝">
                     {getFieldDecorator(`supplement_normal_money_qrcode`, {
                       rules: [{ required: true, message: `请输入粉丝` }],
-                    })(<InputNumber step={0.01} precision={2} min={0} />)}
+                    })(<InputNumber step={0.01} precision={2} min={0} />)} 元
                   </Form.Item>
                 </Col>
                 <Col span={6}>
                   <Form.Item {...profitLayout} label="群主">
                     {getFieldDecorator(`supplement_group_money_qrcode`, {
                       rules: [{ required: true, message: `请输入群主` }],
-                    })(<InputNumber step={0.01} precision={2} min={goodsDetail.supplement_normal_money_qrcode || 0} />)}
+                    })(<InputNumber step={0.01} precision={2} min={goodsDetail.supplement_normal_money_qrcode || 0} />)} 元
                   </Form.Item>
                 </Col>
                 <Col span={6}>
                   <Form.Item {...profitLayout} label="盟主">
                     {getFieldDecorator(`supplement_wealth_money_qrcode`, {
                       rules: [{ required: true, message: `请输入盟主` }],
-                    })(<InputNumber step={0.01} precision={2} min={goodsDetail.supplement_group_money_qrcode || 0} />)}
+                    })(<InputNumber step={0.01} precision={2} min={goodsDetail.supplement_group_money_qrcode || 0} />)} 元
                   </Form.Item>
                 </Col>
                 <Col span={6}>
                   <Form.Item {...profitLayout} label="导师">
                     {getFieldDecorator(`supplement_merchant_money_qrcode`, {
                       rules: [{ required: true, message: `请输入导师` }],
-                    })(<InputNumber step={0.01} precision={2} min={goodsDetail.supplement_wealth_money_qrcode || 0} />)}
+                    })(<InputNumber step={0.01} precision={2} min={goodsDetail.supplement_wealth_money_qrcode || 0} />)} 元
+                  </Form.Item>
+                </Col>
+                <Col span={24}>
+                  <h5>>. 升级码拥有者返佣（福包）</h5>
+                </Col>
+                <Col span={6}>
+                  <Form.Item {...profitLayout} label="粉丝">
+                    {getFieldDecorator(`supplement_normal_integral_qrcode`, {
+                      rules: [{ required: true, message: `请输入粉丝` }],
+                    })(<InputNumber step={1} precision={0} min={0} />)} 个
+                  </Form.Item>
+                </Col>
+                <Col span={6}>
+                  <Form.Item {...profitLayout} label="群主">
+                    {getFieldDecorator(`supplement_group_integral_qrcode`, {
+                      rules: [{ required: true, message: `请输入群主` }],
+                    })(<InputNumber step={1} precision={0} min={goodsDetail.supplement_normal_integral_qrcode || 0} />)} 个
+                  </Form.Item>
+                </Col>
+                <Col span={6}>
+                  <Form.Item {...profitLayout} label="盟主">
+                    {getFieldDecorator(`supplement_wealth_integral_qrcode`, {
+                      rules: [{ required: true, message: `请输入盟主` }],
+                    })(<InputNumber step={1} precision={0} min={goodsDetail.supplement_group_integral_qrcode || 0} />)} 个
+                  </Form.Item>
+                </Col>
+                <Col span={6}>
+                  <Form.Item {...profitLayout} label="导师">
+                    {getFieldDecorator(`supplement_merchant_integral_qrcode`, {
+                      rules: [{ required: true, message: `请输入导师` }],
+                    })(<InputNumber step={1} precision={0} min={goodsDetail.supplement_wealth_integral_qrcode || 0} />)} 个
                   </Form.Item>
                 </Col>
               </Row>
@@ -1475,7 +1720,7 @@ const CustomizedForm = Form.create({
             <Form.Item {...profitLayout} label="粉丝">
               {getFieldDecorator(`supplement_normal_money_2`, {
                 rules: [{ required: true, message: `请输入粉丝` }],
-              })(<InputNumber step={0.01} precision={2} min={0} />)}
+              })(<InputNumber step={0.01} precision={2} min={0} />)} 元
             </Form.Item>
           </Col>
           <Col span={6}>
@@ -1488,7 +1733,7 @@ const CustomizedForm = Form.create({
                   precision={2}
                   min={goodsDetail.supplement_normal_money_2 || 0}
                 />
-              )}
+              )} 元
             </Form.Item>
           </Col>
           <Col span={6}>
@@ -1501,7 +1746,7 @@ const CustomizedForm = Form.create({
                   precision={2}
                   min={goodsDetail.supplement_group_money_2 || 0}
                 />
-              )}
+              )} 元
             </Form.Item>
           </Col>
           <Col span={6}>
@@ -1514,7 +1759,56 @@ const CustomizedForm = Form.create({
                   precision={2}
                   min={goodsDetail.supplement_wealth_money_2 || 0}
                 />
-              )}
+              )} 元
+            </Form.Item>
+          </Col>
+          <Col span={24}>
+              <h5>>. 原始推荐人返佣（福包）</h5>
+          </Col>
+          <Col span={6}>
+            <Form.Item {...profitLayout} label="粉丝">
+              {getFieldDecorator(`supplement_normal_integral_2`, {
+                rules: [{ required: true, message: `请输入粉丝` }],
+              })(<InputNumber step={1} precision={0} min={0} />)} 个
+            </Form.Item>
+          </Col>
+          <Col span={6}>
+            <Form.Item {...profitLayout} label="群主">
+              {getFieldDecorator(`supplement_group_integral_2`, {
+                rules: [{ required: true, message: `请输入群主` }],
+              })(
+                <InputNumber
+                  step={1}
+                  precision={0}
+                  min={goodsDetail.supplement_normal_integral_2 || 0}
+                />
+              )} 个
+            </Form.Item>
+          </Col>
+          <Col span={6}>
+            <Form.Item {...profitLayout} label="盟主">
+              {getFieldDecorator(`supplement_wealth_integral_2`, {
+                rules: [{ required: true, message: `请输入盟主` }],
+              })(
+                <InputNumber
+                  step={1}
+                  precision={0}
+                  min={goodsDetail.supplement_group_integral_2 || 0}
+                />
+              )} 个
+            </Form.Item>
+          </Col>
+          <Col span={6}>
+            <Form.Item {...profitLayout} label="导师">
+              {getFieldDecorator(`supplement_merchant_integral_2`, {
+                rules: [{ required: true, message: `请输入导师` }],
+              })(
+                <InputNumber
+                  step={1}
+                  precision={0}
+                  min={goodsDetail.supplement_wealth_integral_2 || 0}
+                />
+              )} 个
             </Form.Item>
           </Col>
         </Row>
@@ -1522,34 +1816,65 @@ const CustomizedForm = Form.create({
           goodsDetail.type === 2 ? (
             <Row>
               <Col span={24}>
-                <h5>>. 升级码拥有者返佣金额</h5>
+                <h5>>. 升级码拥有者返佣（金额）</h5>
               </Col>
               <Col span={6}>
                 <Form.Item {...profitLayout} label="粉丝">
                   {getFieldDecorator(`supplement_normal_money_qrcode_2`, {
                     rules: [{ required: true, message: `请输入粉丝` }],
-                  })(<InputNumber step={0.01} precision={2} min={0} />)}
+                  })(<InputNumber step={0.01} precision={2} min={0} />)} 元
                 </Form.Item>
               </Col>
               <Col span={6}>
                 <Form.Item {...profitLayout} label="群主">
                   {getFieldDecorator(`supplement_group_money_qrcode_2`, {
                     rules: [{ required: true, message: `请输入群主` }],
-                  })(<InputNumber step={0.01} precision={2} min={goodsDetail.supplement_normal_money_qrcode_2 || 0} />)}
+                  })(<InputNumber step={0.01} precision={2} min={goodsDetail.supplement_normal_money_qrcode_2 || 0} />)} 元
                 </Form.Item>
               </Col>
               <Col span={6}>
                 <Form.Item {...profitLayout} label="盟主">
                   {getFieldDecorator(`supplement_wealth_money_qrcode_2`, {
                     rules: [{ required: true, message: `请输入盟主` }],
-                  })(<InputNumber step={0.01} precision={2} min={goodsDetail.supplement_group_money_qrcode_2 || 0} />)}
+                  })(<InputNumber step={0.01} precision={2} min={goodsDetail.supplement_group_money_qrcode_2 || 0} />)} 元
                 </Form.Item>
               </Col>
               <Col span={6}>
                 <Form.Item {...profitLayout} label="导师">
                   {getFieldDecorator(`supplement_merchant_money_qrcode_2`, {
                     rules: [{ required: true, message: `请输入导师` }],
-                  })(<InputNumber step={0.01} precision={2} min={goodsDetail.supplement_wealth_money_qrcode_2 || 0} />)}
+                  })(<InputNumber step={0.01} precision={2} min={goodsDetail.supplement_wealth_money_qrcode_2 || 0} />)} 元
+                </Form.Item>
+              </Col>
+              <Col span={24}>
+                <h5>>. 升级码拥有者返佣（福包）</h5>
+              </Col>
+              <Col span={6}>
+                <Form.Item {...profitLayout} label="粉丝">
+                  {getFieldDecorator(`supplement_normal_integral_qrcode_2`, {
+                    rules: [{ required: true, message: `请输入粉丝` }],
+                  })(<InputNumber step={1} precision={0} min={0} />)} 个
+                </Form.Item>
+              </Col>
+              <Col span={6}>
+                <Form.Item {...profitLayout} label="群主">
+                  {getFieldDecorator(`supplement_group_integral_qrcode_2`, {
+                    rules: [{ required: true, message: `请输入群主` }],
+                  })(<InputNumber step={1} precision={0} min={goodsDetail.supplement_normal_integral_qrcode_2 || 0} />)} 个
+                </Form.Item>
+              </Col>
+              <Col span={6}>
+                <Form.Item {...profitLayout} label="盟主">
+                  {getFieldDecorator(`supplement_wealth_integral_qrcode_2`, {
+                    rules: [{ required: true, message: `请输入盟主` }],
+                  })(<InputNumber step={1} precision={0} min={goodsDetail.supplement_group_integral_qrcode_2 || 0} />)} 个
+                </Form.Item>
+              </Col>
+              <Col span={6}>
+                <Form.Item {...profitLayout} label="导师">
+                  {getFieldDecorator(`supplement_merchant_integral_qrcode_2`, {
+                    rules: [{ required: true, message: `请输入导师` }],
+                  })(<InputNumber step={1} precision={0} min={goodsDetail.supplement_wealth_integral_qrcode_2 || 0} />)} 个
                 </Form.Item>
               </Col>
             </Row>
@@ -1961,47 +2286,71 @@ class EditGoodStep2 extends React.PureComponent {
 
     freezeData.push({
       normal_money: goodsDetail.normal_money ? goodsDetail.normal_money : 0, // 普通返佣金额
+      normal_integral: goodsDetail.normal_integral ? goodsDetail.normal_integral : 0,
       normal_proportion: 0,
       supplement_normal_money: hasGroupData ? goodsDetail.supplement_normal_money : 0,
+      supplement_normal_integral: hasGroupData ? goodsDetail.supplement_normal_integral : 0,
       supplement_normal_proportion: 0,
       supplement_normal_money_2: hasWealthData ? goodsDetail.supplement_normal_money_2 : 0,
+      supplement_normal_integral_2: hasWealthData ? goodsDetail.supplement_normal_integral_2 : 0,
       supplement_normal_proportion_2: 0,
       normal_money_qrcode: isQrcodeGoods ? goodsDetail.normal_money_qrcode : 0,
       supplement_normal_money_qrcode: (isQrcodeGoods && hasGroupData) ? goodsDetail.supplement_normal_money_qrcode : 0,
       supplement_normal_money_qrcode_2: (isQrcodeGoods && hasWealthData) ? goodsDetail.supplement_normal_money_qrcode_2 : 0,
+      normal_integral_qrcode: isQrcodeGoods ? goodsDetail.normal_integral_qrcode : 0,
+      supplement_normal_integral_qrcode: (isQrcodeGoods && hasGroupData) ? goodsDetail.supplement_normal_integral_qrcode : 0,
+      supplement_normal_integral_qrcode_2: (isQrcodeGoods && hasWealthData) ? goodsDetail.supplement_normal_integral_qrcode_2 : 0,
     });
     freezeData.push({
       group_money: goodsDetail.group_money ? goodsDetail.group_money : 0, // 视群返佣金额
+      group_integral: goodsDetail.group_integral ? goodsDetail.group_integral : 0, // 视群返佣金额
       group_proportion: 0,
       supplement_group_money: hasGroupData ? goodsDetail.supplement_group_money : 0,
+      supplement_group_integral: hasGroupData ? goodsDetail.supplement_group_integral : 0,
       supplement_group_proportion: 0,
       supplement_group_money_2: hasWealthData ? goodsDetail.supplement_group_money_2 : 0,
+      supplement_group_integral_2: hasWealthData ? goodsDetail.supplement_group_integral_2 : 0,
       supplement_group_proportion_2: 0,
       group_money_qrcode: isQrcodeGoods ? goodsDetail.group_money_qrcode : 0,
       supplement_group_money_qrcode: (isQrcodeGoods && hasGroupData) ? goodsDetail.supplement_group_money_qrcode : 0,
       supplement_group_money_qrcode_2: (isQrcodeGoods && hasWealthData) ? goodsDetail.supplement_group_money_qrcode_2 : 0,
+      group_integral_qrcode: isQrcodeGoods ? goodsDetail.group_integral_qrcode : 0,
+      supplement_group_integral_qrcode: (isQrcodeGoods && hasGroupData) ? goodsDetail.supplement_group_integral_qrcode : 0,
+      supplement_group_integral_qrcode_2: (isQrcodeGoods && hasWealthData) ? goodsDetail.supplement_group_integral_qrcode_2 : 0,
     });
     freezeData.push({
       merchant_money: goodsDetail.merchant_money ? goodsDetail.merchant_money : 0, // 商户返佣金额
+      merchant_integral: goodsDetail.merchant_integral ? goodsDetail.merchant_integral : 0, // 商户返佣金额
       merchant_proportion: 0,
       supplement_merchant_money: hasGroupData ? goodsDetail.supplement_merchant_money : 0,
+      supplement_merchant_integral: hasGroupData ? goodsDetail.supplement_merchant_integral : 0,
       supplement_merchant_proportion: 0,
       supplement_merchant_money_2: hasWealthData ? goodsDetail.supplement_merchant_money_2 : 0,
+      supplement_merchant_integral_2: hasWealthData ? goodsDetail.supplement_merchant_integral_2 : 0,
       supplement_merchant_proportion_2: 0,
       merchant_money_qrcode: isQrcodeGoods ? goodsDetail.merchant_money_qrcode : 0,
       supplement_merchant_money_qrcode: (isQrcodeGoods && hasGroupData) ? goodsDetail.supplement_merchant_money_qrcode : 0,
       supplement_merchant_money_qrcode_2: (isQrcodeGoods && hasWealthData) ? goodsDetail.supplement_merchant_money_qrcode_2 : 0,
+      merchant_integral_qrcode: isQrcodeGoods ? goodsDetail.merchant_integral_qrcode : 0,
+      supplement_merchant_integral_qrcode: (isQrcodeGoods && hasGroupData) ? goodsDetail.supplement_merchant_integral_qrcode : 0,
+      supplement_merchant_integral_qrcode_2: (isQrcodeGoods && hasWealthData) ? goodsDetail.supplement_merchant_integral_qrcode_2 : 0,
     });
     freezeData.push({
       wealth_money: goodsDetail.wealth_money ? goodsDetail.wealth_money : 0, // 财道返佣金额
+      wealth_integral: goodsDetail.wealth_integral ? goodsDetail.wealth_integral : 0, // 财道返佣金额
       wealth_proportion: 0,
       supplement_wealth_money: hasGroupData ? goodsDetail.supplement_wealth_money : 0,
+      supplement_wealth_integral: hasGroupData ? goodsDetail.supplement_wealth_integral : 0,
       supplement_wealth_proportion: 0,
       supplement_wealth_money_2: hasWealthData ? goodsDetail.supplement_wealth_money_2 : 0,
+      supplement_wealth_integral_2: hasWealthData ? goodsDetail.supplement_wealth_integral_2 : 0,
       supplement_wealth_proportion_2: 0,
       wealth_money_qrcode: isQrcodeGoods ? goodsDetail.wealth_money_qrcode : 0,
       supplement_wealth_money_qrcode: (isQrcodeGoods && hasGroupData) ? goodsDetail.supplement_wealth_money_qrcode : 0,
       supplement_wealth_money_qrcode_2: (isQrcodeGoods && hasWealthData) ? goodsDetail.supplement_wealth_money_qrcode_2 : 0,
+      wealth_integral_qrcode: isQrcodeGoods ? goodsDetail.wealth_integral_qrcode : 0,
+      supplement_wealth_integral_qrcode: (isQrcodeGoods && hasGroupData) ? goodsDetail.supplement_wealth_integral_qrcode : 0,
+      supplement_wealth_integral_qrcode_2: (isQrcodeGoods && hasWealthData) ? goodsDetail.supplement_wealth_integral_qrcode_2 : 0,
     });
     // 追加推荐人和购买人的话费和积分的赠送，强行为0的代表这个升级类型不允许设置金额
     freezeData.push({
