@@ -89,7 +89,7 @@ export default class ShopList extends PureComponent {
         this.setState({
           passwordVisible: false
         })
-        dispatch({
+        this.props.dispatch({
           type: 'global/saveActionPassword',
           payload: this.state.password
         })

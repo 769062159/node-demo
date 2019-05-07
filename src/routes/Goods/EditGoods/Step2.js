@@ -28,6 +28,7 @@ import styles from './style.less';
 import { deepCopy, timeFormat } from '../../../utils/utils';
 import { UPLOAD_TYPE } from '../../../utils/config';
 
+const FormItem = Form.Item;
 // const { TextArea } = Input;
 // const RadioGroup = Radio.Group;
 const Option = Select.Option;
@@ -69,6 +70,12 @@ const formItemLayoutUploadImg = {
   },
   wrapperCol: {
     span: 19,
+  },
+};
+const formSubmitLayout = {
+  wrapperCol: {
+    span: 19,
+    offset: 5,
   },
 };
 const CheckboxGroup = Checkbox.Group;
@@ -618,6 +625,7 @@ const CustomizedForm = Form.create({
       goodsClass,
       skuInputArr,
     },
+    global,
     payload,
     header,
     previewImage,
@@ -637,6 +645,11 @@ const CustomizedForm = Form.create({
     setSkuArrVal,
     deleteSku,
     beforeUpload,
+    password,
+    passwordVisible,
+    handlePasswordCancel,
+    handlePasswordChange,
+    handlePasswordConfirm
   } = props;
   const attrItem = [];
   const attrItemSon = [];
@@ -846,6 +859,7 @@ const CustomizedForm = Form.create({
   //   }
   // }
   return (
+    global.actionPassword != '' ? (
     <Form layout="horizontal" className={styles.stepForm} autoComplete="OFF">
       <Card title="商品信息" style={{ marginBottom: '20px' }}>
         <Row gutter={24}>
@@ -2034,11 +2048,34 @@ const CustomizedForm = Form.create({
         {/* <Button style={{ marginLeft: 8 }}>上一步</Button> */}
       </Form.Item>
     </Form>
+    ) : (
+        <Modal
+          title='校验操作密码'
+          visible={passwordVisible}
+          onCancel={handlePasswordCancel.bind(this)}
+          destroyOnClose="true"
+          footer=""
+          maskClosable={false}
+          closable={true}
+          keyboard={false}
+        >
+            <FormItem label={`操作密码`} {...formItemLayout}>
+              <Input.Password value={password} onChange={handlePasswordChange} onPressEnter={handlePasswordConfirm}/>
+            </FormItem>
+            <FormItem style={{ marginTop: 32 }} {...formSubmitLayout}>
+              <Button type="primary" onClick={handlePasswordConfirm}>
+                确认
+              </Button>
+            </FormItem>
+        </Modal>
+    )
   );
 });
 
-@connect(({ goods, loading }) => ({
+@connect(({ global, login, goods, loading }) => ({
   goods,
+  global,
+  login, 
   loading: loading.models.goods,
 }))
 // @Form.create()
@@ -2052,20 +2089,61 @@ class EditGoodStep2 extends React.PureComponent {
     header: {
       Authorization: `Bearer ${localStorage.getItem('token')}`,
     },
+    passwordVisible: true,
+    password: ''
   };
   componentDidMount() {
-    const { id } = this.props.match.params;
+    if (this.props.global.actionPassword != '') {
+      this.setState({
+        password: this.props.global.actionPassword,
+        passwordVisible: false
+      }, function() {
+        this.handlePasswordConfirm();
+      })
+    }
+  };
+
+  handlePasswordChange = e => {
+    this.setState({
+      password: e.target.value
+    })
+  }
+  handlePasswordConfirm = () => {
     const { dispatch } = this.props;
     dispatch({
-      type: 'goods/initGoodAttr',
+      type: 'login/checkPassword',
       payload: {
-        goods_id: id,
+        password: this.state.password
       },
+      callback: () => {
+        this.setState({
+          passwordVisible: false
+        })
+        this.props.dispatch({
+          type: 'global/saveActionPassword',
+          payload: this.state.password
+        })
+
+        const { id } = this.props.match.params;
+        const { dispatch } = this.props;
+        dispatch({
+          type: 'goods/initGoodAttr',
+          payload: {
+            goods_id: id,
+          },
+        });
+        dispatch({
+          type: 'goods/clearAttrTabe',
+        });
+      }
     });
-    dispatch({
-      type: 'goods/clearAttrTabe',
+  };
+  handlePasswordCancel = () => {
+    this.setState({
+      passwordVisible: false,
+      password: ''
     });
-  }
+  };
   componentWillUnmount() {
     const { dispatch } = this.props;
     dispatch({
@@ -2744,6 +2822,9 @@ class EditGoodStep2 extends React.PureComponent {
         handlePreviewImg={this.handlePreviewImg}
         handleCancelImg={this.handleCancelImg}
         onChange={this.changeFormVal}
+        handlePasswordChange={this.handlePasswordChange}
+        handlePasswordConfirm={this.handlePasswordConfirm}
+        handlePasswordCancel={this.handlePasswordCancel}
         {...this.props}
         setDescription={this.setDescription}
         blurSetDescription={this.blurSetDescription}

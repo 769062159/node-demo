@@ -44,8 +44,10 @@ const formSubmitLayout = {
   },
 };
 
-@connect(({ frontUser, loading, user }) => ({
+@connect(({ frontUser, global, login, loading, user }) => ({
   frontUser,
+  login,
+  global,
   user,
   loading: loading.models.frontUser,
 }))
@@ -71,26 +73,67 @@ export default class FrontUserList extends PureComponent {
     // header: {
     //   Authorization: `Bearer ${localStorage.getItem('token')}`,
     // },
+    passwordVisible: true,
+    password: ''
   };
   componentDidMount() {
-    const { dispatch } = this.props;
-    const { pagination } = this.state;
-    dispatch({
-      type: 'frontUser/fetchFrontUserList',
-      payload: {
-        page: pagination,
-      },
-    });
-    dispatch({
-      type: 'frontUser/fetchUserRankList',
-      payload: {
-        pagination,
-      },
-    });
-    dispatch({
-      type: 'frontUser/getDefaultList',
-    });
+    if (this.props.global.actionPassword != '') {
+      this.setState({
+        password: this.props.global.actionPassword,
+        passwordVisible: false
+      }, function() {
+        this.handlePasswordConfirm();
+      })
+    }
+  };
+
+  handlePasswordChange = e => {
+    this.setState({
+      password: e.target.value
+    })
   }
+  handlePasswordConfirm = () => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'login/checkPassword',
+      payload: {
+        password: this.state.password
+      },
+      callback: () => {
+        this.setState({
+          passwordVisible: false
+        })
+        this.props.dispatch({
+          type: 'global/saveActionPassword',
+          payload: this.state.password
+        })
+
+        const { dispatch } = this.props;
+        const { pagination } = this.state;
+        dispatch({
+          type: 'frontUser/fetchFrontUserList',
+          payload: {
+            page: pagination,
+          },
+        });
+        dispatch({
+          type: 'frontUser/fetchUserRankList',
+          payload: {
+            pagination,
+          },
+        });
+        dispatch({
+          type: 'frontUser/getDefaultList',
+        });
+      }
+    });
+  };
+  handlePasswordCancel = () => {
+    this.setState({
+      passwordVisible: false,
+      password: ''
+    });
+  };
   setDefaultValue = e => {
     this.setState({
       defaultId: e.target.value,
@@ -784,6 +827,7 @@ export default class FrontUserList extends PureComponent {
     ];
 
     return (
+      this.props.global.actionPassword != '' ? (
       <PageHeaderLayout>
         <Card style={{ marginBottom: 10 }}>
           <Row type="flex" align="middle" style={{ marginBottom: 10 }}>
@@ -894,6 +938,29 @@ export default class FrontUserList extends PureComponent {
           <CodeForm codeOK={this.codeOK} codeMsg={codeMsg} codeForm={codeForm} changeFormVals={this.changeFormVals} />
         </Modal>
       </PageHeaderLayout>
+      ) : (
+        <PageHeaderLayout>
+          <Modal
+            title='校验操作密码'
+            visible={this.state.passwordVisible}
+            onCancel={this.handlePasswordCancel.bind(this)}
+            destroyOnClose="true"
+            footer=""
+            maskClosable={false}
+            closable={true}
+            keyboard={false}
+          >
+              <FormItem label={`操作密码`} {...formItemLayout}>
+                <Input.Password value={this.state.password} onChange={this.handlePasswordChange} onPressEnter={this.handlePasswordConfirm}/>
+              </FormItem>
+              <FormItem style={{ marginTop: 32 }} {...formSubmitLayout}>
+                <Button type="primary" onClick={this.handlePasswordConfirm}>
+                  确认
+                </Button>
+              </FormItem>
+          </Modal>
+        </PageHeaderLayout>
+      )
     );
   }
 }
