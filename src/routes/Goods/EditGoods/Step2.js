@@ -363,7 +363,7 @@ const CustomizedForm = Form.create({
       recommend_reward_phone_charge: Form.createFormField({
         value: goodsDetail.recommend_reward_phone_charge,
       }),
-      // 推荐人奖励积分
+      // 推荐人奖励福包
       recommend_reward_integral: Form.createFormField({
         value: goodsDetail.recommend_reward_integral,
       }),
@@ -375,7 +375,7 @@ const CustomizedForm = Form.create({
       reward_phone_charge: Form.createFormField({
         value: goodsDetail.reward_phone_charge,
       }),
-      // 购买人奖励积分
+      // 购买人奖励福包
       reward_integral: Form.createFormField({
         value: goodsDetail.reward_integral,
       }),
@@ -462,11 +462,11 @@ const CustomizedForm = Form.create({
       supplement_recommend_reward_phone_charge: Form.createFormField({
         value: goodsDetail.supplement_recommend_reward_phone_charge,
       }),
-      // 推荐人奖励积分
+      // 推荐人奖励福包
       supplement_recommend_reward_integral: Form.createFormField({
         value: goodsDetail.supplement_recommend_reward_integral,
       }),
-      // 推荐人奖励积分
+      // 推荐人奖励福包
       supplement_recommend_reward_shipping_fee: Form.createFormField({
         value: goodsDetail.supplement_recommend_reward_shipping_fee,
       }),
@@ -474,11 +474,11 @@ const CustomizedForm = Form.create({
       supplement_reward_phone_charge: Form.createFormField({
         value: goodsDetail.supplement_reward_phone_charge,
       }),
-      // 购买人奖励积分
+      // 购买人奖励福包
       supplement_reward_integral: Form.createFormField({
         value: goodsDetail.supplement_reward_integral,
       }),
-      // 购买人奖励积分
+      // 购买人奖励福包
       supplement_reward_shipping_fee: Form.createFormField({
         value: goodsDetail.supplement_reward_shipping_fee,
       }),
@@ -558,11 +558,11 @@ const CustomizedForm = Form.create({
       supplement_recommend_reward_phone_charge_2: Form.createFormField({
         value: goodsDetail.supplement_recommend_reward_phone_charge_2,
       }),
-      // 推荐人奖励积分
+      // 推荐人奖励福包
       supplement_recommend_reward_integral_2: Form.createFormField({
         value: goodsDetail.supplement_recommend_reward_integral_2,
       }),
-      // 推荐人奖励积分
+      // 推荐人奖励福包
       supplement_recommend_reward_shipping_fee_2: Form.createFormField({
         value: goodsDetail.supplement_recommend_reward_shipping_fee_2,
       }),
@@ -570,11 +570,11 @@ const CustomizedForm = Form.create({
       supplement_reward_phone_charge_2: Form.createFormField({
         value: goodsDetail.supplement_reward_phone_charge_2,
       }),
-      // 购买人奖励积分
+      // 购买人奖励福包
       supplement_reward_integral_2: Form.createFormField({
         value: goodsDetail.supplement_reward_integral_2,
       }),
-      // 购买人奖励积分
+      // 购买人奖励福包
       supplement_reward_shipping_fee_2: Form.createFormField({
         value: goodsDetail.supplement_reward_shipping_fee_2,
       }),
@@ -1416,10 +1416,10 @@ const CustomizedForm = Form.create({
             </Form.Item>
           </Col>
           <Col span={8}>
-            <Form.Item {...profitLayout} label="积分">
+            <Form.Item {...profitLayout} label="福包">
               {getFieldDecorator(`recommend_reward_integral`, {
-                rules: [{ required: true, message: `请输入积分金额` }],
-              })(<InputNumber step={1} precision={0} min={0} />)} (100积分 = 1元)
+                rules: [{ required: true, message: `请输入福包金额` }],
+              })(<InputNumber step={1} precision={0} min={0} />)} (100福包 = 1元)
             </Form.Item>
           </Col>
           <Col span={8}>
@@ -1440,10 +1440,10 @@ const CustomizedForm = Form.create({
             </Form.Item>
           </Col>
           <Col span={8}>
-            <Form.Item {...profitLayout} label="积分">
+            <Form.Item {...profitLayout} label="福包">
               {getFieldDecorator(`reward_integral`, {
-                rules: [{ required: true, message: `请输入积分金额` }],
-              })(<InputNumber step={1} precision={0} min={0} />)} (100积分 = 1元)
+                rules: [{ required: true, message: `请输入福包金额` }],
+              })(<InputNumber step={1} precision={0} min={0} />)} (100福包 = 1元)
             </Form.Item>
           </Col>
           <Col span={8}>
@@ -1655,10 +1655,10 @@ const CustomizedForm = Form.create({
               </Form.Item>
             </Col>
             <Col span={8}>
-              <Form.Item {...profitLayout} label="积分">
+              <Form.Item {...profitLayout} label="福包">
                 {getFieldDecorator(`supplement_recommend_reward_integral`, {
-                  rules: [{ required: true, message: `请输入积分金额` }],
-                })(<InputNumber step={1} precision={0} min={0} />)} (100积分 = 1元)
+                  rules: [{ required: true, message: `请输入福包金额` }],
+                })(<InputNumber step={1} precision={0} min={0} />)} (100福包 = 1元)
               </Form.Item>
             </Col>
             <Col span={8}>
@@ -1679,10 +1679,10 @@ const CustomizedForm = Form.create({
               </Form.Item>
             </Col>
             <Col span={8}>
-              <Form.Item {...profitLayout} label="积分">
+              <Form.Item {...profitLayout} label="福包">
                 {getFieldDecorator(`supplement_reward_integral`, {
-                  rules: [{ required: true, message: `请输入积分金额` }],
-                })(<InputNumber step={1} precision={0} min={0} />)} (100积分 = 1元)
+                  rules: [{ required: true, message: `请输入福包金额` }],
+                })(<InputNumber step={1} precision={0} min={0} />)} (100福包 = 1元)
               </Form.Item>
             </Col>
             <Col span={8}>
@@ -1714,7 +1714,7 @@ const CustomizedForm = Form.create({
             </Form.Item>
           </Col>
           <Col span={24}>
-              <h5>>. 原始推荐人返佣金额</h5>
+              <h5>>. 原始推荐人返佣（金额）</h5>
           </Col>
           <Col span={6}>
             <Form.Item {...profitLayout} label="粉丝">
@@ -1892,10 +1892,10 @@ const CustomizedForm = Form.create({
               </Form.Item>
             </Col>
             <Col span={8}>
-              <Form.Item {...profitLayout} label="积分">
+              <Form.Item {...profitLayout} label="福包">
                 {getFieldDecorator(`supplement_recommend_reward_integral_2`, {
-                  rules: [{ required: true, message: `请输入积分金额` }],
-                })(<InputNumber step={1} precision={0} min={0} />)} (100积分 = 1元)
+                  rules: [{ required: true, message: `请输入福包金额` }],
+                })(<InputNumber step={1} precision={0} min={0} />)} (100福包 = 1元)
               </Form.Item>
             </Col>
             <Col span={8}>
@@ -1916,10 +1916,10 @@ const CustomizedForm = Form.create({
               </Form.Item>
             </Col>
             <Col span={8}>
-              <Form.Item {...profitLayout} label="积分">
+              <Form.Item {...profitLayout} label="福包">
                 {getFieldDecorator(`supplement_reward_integral_2`, {
-                  rules: [{ required: true, message: `请输入积分金额` }],
-                })(<InputNumber step={1} precision={0} min={0} />)} (100积分 = 1元)
+                  rules: [{ required: true, message: `请输入福包金额` }],
+                })(<InputNumber step={1} precision={0} min={0} />)} (100福包 = 1元)
               </Form.Item>
             </Col>
             <Col span={8}>
@@ -2352,7 +2352,7 @@ class EditGoodStep2 extends React.PureComponent {
       supplement_wealth_integral_qrcode: (isQrcodeGoods && hasGroupData) ? goodsDetail.supplement_wealth_integral_qrcode : 0,
       supplement_wealth_integral_qrcode_2: (isQrcodeGoods && hasWealthData) ? goodsDetail.supplement_wealth_integral_qrcode_2 : 0,
     });
-    // 追加推荐人和购买人的话费和积分的赠送，强行为0的代表这个升级类型不允许设置金额
+    // 追加推荐人和购买人的话费和福包的赠送，强行为0的代表这个升级类型不允许设置金额
     freezeData.push({
       recommend_reward_phone_charge: goodsDetail.recommend_reward_phone_charge ? goodsDetail.recommend_reward_phone_charge: 0,
       recommend_reward_integral: goodsDetail.recommend_reward_integral ? goodsDetail.recommend_reward_integral : 0,
@@ -2409,7 +2409,7 @@ class EditGoodStep2 extends React.PureComponent {
     //     supplement_wealth_proportion_2: 0,
     //   });
 
-    //   // 追加推荐人和购买人的话费和积分的赠送，强行为0的代表这个升级类型不允许设置金额
+    //   // 追加推荐人和购买人的话费和福包的赠送，强行为0的代表这个升级类型不允许设置金额
     //   freezeData.push({
     //     recommend_reward_phone_charge: goodsDetail.recommend_reward_phone_charge,
     //     recommend_reward_integral: goodsDetail.recommend_reward_integral,
@@ -2459,7 +2459,7 @@ class EditGoodStep2 extends React.PureComponent {
     //     supplement_wealth_proportion_2: 0,
     //   });
 
-    //   // 追加推荐人和购买人的话费和积分的赠送，强行为0的代表这个升级类型不允许设置金额
+    //   // 追加推荐人和购买人的话费和福包的赠送，强行为0的代表这个升级类型不允许设置金额
     //   freezeData.push({
     //     recommend_reward_phone_charge: goodsDetail.recommend_reward_phone_charge,
     //     recommend_reward_integral: goodsDetail.recommend_reward_integral,
@@ -2509,7 +2509,7 @@ class EditGoodStep2 extends React.PureComponent {
     //     supplement_wealth_proportion_2: 0,
     //   });
 
-    //   // 追加推荐人和购买人的话费和积分的赠送，强行为0的代表这个升级类型不允许设置金额
+    //   // 追加推荐人和购买人的话费和福包的赠送，强行为0的代表这个升级类型不允许设置金额
     //   freezeData.push({
     //     recommend_reward_phone_charge: goodsDetail.recommend_reward_phone_charge,
     //     recommend_reward_integral: goodsDetail.recommend_reward_integral,
@@ -2560,7 +2560,7 @@ class EditGoodStep2 extends React.PureComponent {
     //     supplement_wealth_proportion_2: 0,
     //   });
 
-    //   // 追加推荐人和购买人的话费和积分的赠送，强行为0的代表这个升级类型不允许设置金额
+    //   // 追加推荐人和购买人的话费和福包的赠送，强行为0的代表这个升级类型不允许设置金额
     //   freezeData.push({
     //     recommend_reward_phone_charge: 0,
     //     recommend_reward_integral: 0,

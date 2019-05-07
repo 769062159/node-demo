@@ -37,7 +37,8 @@ export default class My extends PureComponent {
     programType: 0, // 0 是小程序 1是公众号
     formVisible: false,
     passwordVisible: true,
-    password: ''
+    password: '',
+    containerShow: false
   };
   componentDidMount() {
     if (this.props.global.actionPassword != '') {
@@ -204,7 +205,8 @@ export default class My extends PureComponent {
       );
     });
     return (
-      <PageHeaderLayout>
+      this.props.global.actionPassword != '' ? (
+        <PageHeaderLayout>
         {!hasApplets ? (
           <Row className={styles.rightBox}>
             <span className={styles.word}>一键创建小程序</span>
@@ -222,22 +224,6 @@ export default class My extends PureComponent {
           </Row>
         ) : null}
         <div className={styles.CardProgramList}>{CardItem}</div>
-        <Modal
-          title='校验操作密码'
-          visible={this.state.passwordVisible}
-          onCancel={this.handlePasswordCancel.bind(this)}
-          destroyOnClose="true"
-          footer=""
-        >
-            <FormItem label={`操作密码`} {...formItemLayout}>
-              <Input.Password value={this.state.password} onChange={this.handlePasswordChange} onPressEnter={this.handlePasswordConfirm}/>
-            </FormItem>
-            <FormItem style={{ marginTop: 32 }} {...formSubmitLayout}>
-              <Button type="primary" onClick={this.handlePasswordConfirm}>
-                确认
-              </Button>
-            </FormItem>
-        </Modal>
         <Modal
           title={program}
           visible={formVisible}
@@ -270,6 +256,30 @@ export default class My extends PureComponent {
           </Form>
         </Modal>
       </PageHeaderLayout>
+      ) : (
+        <PageHeaderLayout>
+          <Modal
+            title='校验操作密码'
+            visible={this.state.passwordVisible}
+            onCancel={this.handlePasswordCancel.bind(this)}
+            destroyOnClose="true"
+            footer=""
+            maskClosable={false}
+            closable={true}
+            keyboard={false}
+          >
+              <FormItem label={`操作密码`} {...formItemLayout}>
+                <Input.Password value={this.state.password} onChange={this.handlePasswordChange} onPressEnter={this.handlePasswordConfirm}/>
+              </FormItem>
+              <FormItem style={{ marginTop: 32 }} {...formSubmitLayout}>
+                <Button type="primary" onClick={this.handlePasswordConfirm}>
+                  确认
+                </Button>
+              </FormItem>
+          </Modal>
+        </PageHeaderLayout>
+      )
+      
     );
   }
 }

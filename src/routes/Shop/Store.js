@@ -6,6 +6,8 @@ import {
   Card,
   Form,
   Button,
+  Input,
+  InputNumber
   // Divider,
 } from 'antd';
 import { routerRedux } from 'dva/router';
@@ -15,8 +17,32 @@ import styles from './TableList.less';
 
 const { confirm } = Modal;
 
-@connect(({ shop, loading }) => ({
+const FormItem = Form.Item;
+// const Option = Select.Option;
+// const { TextArea } = Input;
+const formItemLayout = {
+  labelCol: {
+    xs: { span: 24 },
+    sm: { span: 7 },
+  },
+  wrapperCol: {
+    xs: { span: 24 },
+    sm: { span: 12 },
+    md: { span: 10 },
+  },
+};
+const formSubmitLayout = {
+  wrapperCol: {
+    xs: { span: 24, offset: 0 },
+    sm: { span: 10, offset: 7 },
+  },
+};
+
+
+@connect(({ global, shop, login, loading }) => ({
   shop,
+  global,
+  login,
   loading: loading.models.shop,
 }))
 @Form.create()
@@ -29,19 +55,62 @@ export default class ShopList extends PureComponent {
     // // selectedRows: [],
     // formValues: {},
     page: 1, // 页脚
+    passwordVisible: true,
+    password: ''
   };
 
   componentDidMount() {
-    const { dispatch } = this.props;
-    const {  page } = this.state;
-    dispatch({
-      type: 'shop/fetchShop',
-      payload: {
-        page,
-        // page_number: 1,
-      },
-    });
+    if (this.props.global.actionPassword != '') {
+      this.setState({
+        password: this.props.global.actionPassword,
+        passwordVisible: false
+      }, function() {
+        this.handlePasswordConfirm();
+      })
+    }
+
   }
+
+  handlePasswordChange = e => {
+    this.setState({
+      password: e.target.value
+    })
+  }
+  handlePasswordConfirm = () => {
+    // 开一个专门校验密码的
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'login/checkPassword',
+      payload: {
+        password: this.state.password
+      },
+      callback: () => {
+        const { dispatch } = this.props;
+        this.setState({
+          passwordVisible: false
+        })
+        dispatch({
+          type: 'global/saveActionPassword',
+          payload: this.state.password
+        })
+
+        const {  page } = this.state;
+        dispatch({
+          type: 'shop/fetchShop',
+          payload: {
+            page,
+            // page_number: 1,
+          },
+        });
+      }
+    });
+  };
+  handlePasswordCancel = () => {
+    this.setState({
+      passwordVisible: false,
+      password: ''
+    });
+  };
 
 
   // 删除商品
@@ -191,6 +260,7 @@ export default class ShopList extends PureComponent {
 
 
     return (
+      this.props.global.actionPassword != '' ? (
       <PageHeaderLayout>
         <Card bordered={false}>
           <div className={styles.tableList}>
@@ -212,6 +282,28 @@ export default class ShopList extends PureComponent {
           </div>
         </Card>
       </PageHeaderLayout>
+    ) : (
+      <PageHeaderLayout>
+        <Modal
+        title='校验操作密码'
+        visible={this.state.passwordVisible}
+        onCancel={this.handlePasswordCancel.bind(this)}
+        destroyOnClose="true"
+        footer=""
+        maskClosable={false}
+        closable={true}
+        keyboard={false}
+      >
+          <FormItem label={`操作密码`} {...formItemLayout}>
+            <Input.Password value={this.state.password} onChange={this.handlePasswordChange} onPressEnter={this.handlePasswordConfirm}/>
+          </FormItem>
+          <FormItem style={{ marginTop: 32 }} {...formSubmitLayout}>
+            <Button type="primary" onClick={this.handlePasswordConfirm}>
+              确认
+            </Button>
+          </FormItem>
+      </Modal>
+    </PageHeaderLayout> )
     );
   }
 }

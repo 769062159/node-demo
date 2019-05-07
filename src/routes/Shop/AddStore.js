@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { message, Form, Input, Button, Cascader, InputNumber, TimePicker, Tag, Upload, Icon } from 'antd';
+import { Modal, message, Form, Input, Button, Cascader, InputNumber, TimePicker, Tag, Upload, Icon } from 'antd';
 import { connect } from 'dva';
 // import moment from 'moment';
 import { routerRedux } from 'dva/router';
@@ -10,6 +10,7 @@ import Maps from '../../components/Map/index';
 import styles from './Style.less';
 
 const { TextArea } = Input;
+const { confirm } = Modal;
 const FormItem = Form.Item;
 // const Option = Select.Option;
 // const { TextArea } = Input;
@@ -24,15 +25,16 @@ const formItemLayout = {
     md: { span: 10 },
   },
 };
-const submitFormLayout = {
+const formSubmitLayout = {
   wrapperCol: {
     xs: { span: 24, offset: 0 },
     sm: { span: 10, offset: 7 },
   },
 };
 
-@connect(({ global, shop, address, loading }) => ({
+@connect(({ global, login, shop, address, loading }) => ({
     global,
+    login,
     shop,
     address,
     loading: loading.models.shop,
@@ -52,21 +54,21 @@ export default class AddShop extends Component {
     password: ''
   };
   componentDidMount() {
-    // if (this.props.global.actionPassword != '') {
-    //   this.setState({
-    //     password: this.props.global.actionPassword,
-    //     passwordVisible: false
-    //   }, function() {
-    //     this.handlePasswordConfirm();
-    //   })
-    // }
-    const { dispatch, address: { addressList } } = this.props;
-    if (!addressList.length) {
-      dispatch({
-        type: 'address/fetch',
-        payload: {},
-      });
+    if (this.props.global.actionPassword != '') {
+      this.setState({
+        password: this.props.global.actionPassword,
+        passwordVisible: false
+      }, function() {
+        this.handlePasswordConfirm();
+      })
     }
+    // const { dispatch, address: { addressList } } = this.props;
+    // if (!addressList.length) {
+    //   dispatch({
+    //     type: 'address/fetch',
+    //     payload: {},
+    //   });
+    // }
   }
 
   handlePasswordChange = e => {
@@ -76,25 +78,30 @@ export default class AddShop extends Component {
   }
   handlePasswordConfirm = () => {
     // 开一个专门校验密码的
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'login/checkPassword',
+      payload: {
+        password: this.state.password
+      },
+      callback: () => {
+        const { dispatch, address: { addressList } } = this.props;
+        this.setState({
+          passwordVisible: false
+        })
+        dispatch({
+          type: 'global/saveActionPassword',
+          payload: this.state.password
+        })
 
-    // const { id } = this.props.match.params;
-    // const { dispatch } = this.props;
-    // dispatch({
-    //   type: 'program/getProgramDetail',
-    //   payload: {
-    //     account_id: id,
-    //     password: this.state.password
-    //   },
-    //   callback: () => {
-    //     this.setState({
-    //       passwordVisible: false
-    //     })
-    //     dispatch({
-    //       type: 'global/saveActionPassword',
-    //       payload: this.state.password
-    //     })
-    //   }
-    // });
+        if (!addressList.length) {
+          dispatch({
+            type: 'address/fetch',
+            payload: {},
+          });
+        }
+      }
+    });
   };
   handlePasswordCancel = () => {
     this.setState({
@@ -306,6 +313,7 @@ export default class AddShop extends Component {
     const { getFieldDecorator } = this.props.form;
     const { propsAddress, phone } = this.state;
     return (
+      this.props.global.actionPassword != '' ? (
       <PageHeaderLayout>
         <Form autoComplete="OFF" >
           <Form.Item
@@ -470,13 +478,35 @@ export default class AddShop extends Component {
               <TimePicker />
             )}
           </FormItem>
-          <FormItem {...submitFormLayout} style={{ marginTop: 32 }}>
+          <FormItem {...formSubmitLayout} style={{ marginTop: 32 }}>
             <Button type="primary" htmlType="submit" loading={loading} onClick={this.handleSubmit}>
               提交
             </Button>
           </FormItem>
         </Form>
       </PageHeaderLayout>
+    ) : (
+      <PageHeaderLayout>
+        <Modal
+        title='校验操作密码'
+        visible={this.state.passwordVisible}
+        onCancel={this.handlePasswordCancel.bind(this)}
+        destroyOnClose="true"
+        footer=""
+        maskClosable={false}
+        closable={true}
+        keyboard={false}
+      >
+          <FormItem label={`操作密码`} {...formItemLayout}>
+            <Input.Password value={this.state.password} onChange={this.handlePasswordChange} onPressEnter={this.handlePasswordConfirm}/>
+          </FormItem>
+          <FormItem style={{ marginTop: 32 }} {...formSubmitLayout}>
+            <Button type="primary" onClick={this.handlePasswordConfirm}>
+              确认
+            </Button>
+          </FormItem>
+      </Modal>
+    </PageHeaderLayout> )
     );
   }
 }

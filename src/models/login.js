@@ -1,5 +1,5 @@
 import { routerRedux } from 'dva/router';
-import { fakeAccountLogin, fakeAccountLogout } from '../services/api';
+import { fakeAccountLogin, fakeAccountLogout, authPassword } from '../services/api';
 import { setToken, setTokenExpired } from '../utils/authority';
 import { reloadAuthorized } from '../utils/Authorized';
 
@@ -11,6 +11,14 @@ export default {
   },
 
   effects: {
+    *checkPassword({ payload, callback }, { call, put }) {
+      const response = yield call(authPassword, { ...payload });
+      if (response && response.code === 200 && callback) {
+        callback();
+      }
+    },
+
+
     *login({ payload }, { call, put }) {
       payload.mobile = payload.user_name;
       const response = yield call(fakeAccountLogin, payload);

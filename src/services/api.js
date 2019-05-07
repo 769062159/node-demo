@@ -200,6 +200,15 @@ export async function getAuthMenus() {
     resolve(menuConfig.getMenuData(menuData));
   });
 }
+// 验证密码
+export async function authPassword(params) {
+  return request('/merchant/action_password', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+
 // 我的菜单列表
 // export async function getAuthMenus() {
 // 	return request('/merchant/menu/list', { method: 'POST'}).then((datas) => {

@@ -30,7 +30,9 @@ const formSubmitLayout = {
   },
 };
 
-@connect(({ shop, loading }) => ({
+@connect(({ global, login, shop, loading }) => ({
+  global,
+  login,
   shop,
   loading: loading.models.shop,
 }))
@@ -40,15 +42,19 @@ export default class WriteOff extends PureComponent {
     expandForm: false,
     dataIndex: {},
     formVisible: false,
+    passwordVisible: true,
+    password: ''
   };
   componentDidMount() {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'shop/fetchMenber',
-    });
-    dispatch({
-      type: 'shop/fetchShop',
-    });
+
+    if (this.props.global.actionPassword != '') {
+      this.setState({
+        password: this.props.global.actionPassword,
+        passwordVisible: false
+      }, function() {
+        this.handlePasswordConfirm();
+      })
+    }
   }
   componentWillUnmount() {
     const { dispatch } = this.props;
@@ -56,6 +62,46 @@ export default class WriteOff extends PureComponent {
       type: 'shop/clearTable',
     });
   }
+
+
+  handlePasswordChange = e => {
+    this.setState({
+      password: e.target.value
+    })
+  }
+  handlePasswordConfirm = () => {
+    // 开一个专门校验密码的
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'login/checkPassword',
+      payload: {
+        password: this.state.password
+      },
+      callback: () => {
+        const { dispatch } = this.props;
+        this.setState({
+          passwordVisible: false
+        })
+        dispatch({
+          type: 'global/saveActionPassword',
+          payload: this.state.password
+        })
+
+        dispatch({
+          type: 'shop/fetchMenber',
+        });
+        dispatch({
+          type: 'shop/fetchShop',
+        });
+      }
+    });
+  };
+  handlePasswordCancel = () => {
+    this.setState({
+      passwordVisible: false,
+      password: ''
+    });
+  };
 
   toggleForm = () => {
     this.setState({
@@ -280,6 +326,7 @@ export default class WriteOff extends PureComponent {
     ];
 
     return (
+      this.props.global.actionPassword != '' ? (
       <PageHeaderLayout>
         <Card bordered={false}>
           <div className={styles.tableList}>
@@ -307,6 +354,28 @@ export default class WriteOff extends PureComponent {
           {this.renderForm()}
         </Modal>
       </PageHeaderLayout>
+    ) : (
+      <PageHeaderLayout>
+        <Modal
+        title='校验操作密码'
+        visible={this.state.passwordVisible}
+        onCancel={this.handlePasswordCancel.bind(this)}
+        destroyOnClose="true"
+        footer=""
+        maskClosable={false}
+        closable={true}
+        keyboard={false}
+      >
+          <FormItem label={`操作密码`} {...formItemLayout}>
+            <Input.Password value={this.state.password} onChange={this.handlePasswordChange} onPressEnter={this.handlePasswordConfirm}/>
+          </FormItem>
+          <FormItem style={{ marginTop: 32 }} {...formSubmitLayout}>
+            <Button type="primary" onClick={this.handlePasswordConfirm}>
+              确认
+            </Button>
+          </FormItem>
+      </Modal>
+    </PageHeaderLayout> )
     );
   }
 }
