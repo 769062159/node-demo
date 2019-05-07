@@ -26,8 +26,10 @@ const withdrawStatus = ['提现申请', '提现成功', '提现失败'];
 // auto_withdraw_status 自动提现失败 状态码和上面一样
 // const { confirm } = Modal;
 
-@connect(({ finance, loading }) => ({
+@connect(({ finance, login, global, loading }) => ({
   finance,
+  global, 
+  login,
   loading: loading.models.finance,
 }))
 @Form.create()
@@ -39,17 +41,58 @@ export default class Withdraw extends PureComponent {
     formValues: {},
     page: 1, // 页脚
     type: 0, // 是否同意
+    passwordVisible: true,
+    password: ''
   };
   componentDidMount() {
-    const { dispatch } = this.props;
-    const { page } = this.state;
-    dispatch({
-      type: 'finance/fetchWithdraw',
-      payload: {
-        page,
-      },
-    });
+    if (this.props.global.actionPassword != '') {
+      this.setState({
+        password: this.props.global.actionPassword,
+        passwordVisible: false
+      }, function() {
+        this.handlePasswordConfirm();
+      })
+    }
+  };
+
+  handlePasswordChange = e => {
+    this.setState({
+      password: e.target.value
+    })
   }
+  handlePasswordConfirm = () => {
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'login/checkPassword',
+      payload: {
+        password: this.state.password
+      },
+      callback: () => {
+        this.setState({
+          passwordVisible: false
+        })
+        this.props.dispatch({
+          type: 'global/saveActionPassword',
+          payload: this.state.password
+        })
+
+        const { dispatch } = this.props;
+        const { page } = this.state;
+        dispatch({
+          type: 'finance/fetchWithdraw',
+          payload: {
+            page,
+          },
+        });
+      }
+    });
+  };
+  handlePasswordCancel = () => {
+    this.setState({
+      passwordVisible: false,
+      password: ''
+    });
+  };
 
   toggleForm = () => {
     this.setState({
@@ -323,37 +366,61 @@ export default class Withdraw extends PureComponent {
     ];
 
     return (
-      <PageHeaderLayout>
-        <Card bordered={false}>
-          <Tag
-            color="blue"
-            style={{ marginBottom: 20, width: '100%', whiteSpace: 'pre-wrap', height: 'auto' }}
+      this.props.global.actionPassword != '' ? (
+        <PageHeaderLayout>
+          <Card bordered={false}>
+            <Tag
+              color="blue"
+              style={{ marginBottom: 20, width: '100%', whiteSpace: 'pre-wrap', height: 'auto' }}
+            >
+              由于发放佣金需要在微信商户平台开通企业付款到零钱这个功能才可以正常发放，所以请商户们需要提前开通此功能。此功能需要满足已入驻90日 ，有30天连续正常交易才可以去产品中心开通。详细请查看。<a style={{ color: 'red' }} href="https://pay.weixin.qq.com/wiki/doc/api/tools/mch_pay.php?chapter=14_1" target="view_window">微信支付企业付款</a>
+              <br />
+              微信提现是直接到账的。
+            </Tag>
+            <SearchForm handleFormReset={this.handleFormReset} handleSearch={this.handleSearch} />
+            <Table
+              scroll={{ x: '120%' }}
+              onChange={this.handleTableChange}
+              dataSource={datas}
+              rowKey={record => record.id}
+              loading={loading}
+              columns={progressColumns}
+              pagination={withdrawListPage}
+            />
+          </Card>
+          <Modal
+            title="提现"
+            visible={formVisible}
+            onCancel={this.handAddleCancel.bind(this)}
+            footer=""
+            destroyOnClose="true"
           >
-            由于发放佣金需要在微信商户平台开通企业付款到零钱这个功能才可以正常发放，所以请商户们需要提前开通此功能。此功能需要满足已入驻90日 ，有30天连续正常交易才可以去产品中心开通。详细请查看。<a style={{ color: 'red' }} href="https://pay.weixin.qq.com/wiki/doc/api/tools/mch_pay.php?chapter=14_1" target="view_window">微信支付企业付款</a>
-            <br />
-            微信提现是直接到账的。
-          </Tag>
-          <SearchForm handleFormReset={this.handleFormReset} handleSearch={this.handleSearch} />
-          <Table
-            scroll={{ x: '120%' }}
-            onChange={this.handleTableChange}
-            dataSource={datas}
-            rowKey={record => record.id}
-            loading={loading}
-            columns={progressColumns}
-            pagination={withdrawListPage}
-          />
-        </Card>
-        <Modal
-          title="提现"
-          visible={formVisible}
-          onCancel={this.handAddleCancel.bind(this)}
-          footer=""
-          destroyOnClose="true"
-        >
-          {this.renderForm()}
-        </Modal>
-      </PageHeaderLayout>
+            {this.renderForm()}
+          </Modal>
+        </PageHeaderLayout>
+      ) : (
+        <PageHeaderLayout>
+          <Modal
+            title='校验操作密码'
+            visible={this.state.passwordVisible}
+            onCancel={this.handlePasswordCancel.bind(this)}
+            destroyOnClose="true"
+            footer=""
+            maskClosable={false}
+            closable={true}
+            keyboard={false}
+          >
+              <FormItem label={`操作密码`} {...formItemLayout}>
+                <Input.Password value={this.state.password} onChange={this.handlePasswordChange} onPressEnter={this.handlePasswordConfirm}/>
+              </FormItem>
+              <FormItem style={{ marginTop: 32 }} {...formSubmitLayout}>
+                <Button type="primary" onClick={this.handlePasswordConfirm}>
+                  确认
+                </Button>
+              </FormItem>
+          </Modal>
+        </PageHeaderLayout>
+      )
     );
   }
 }
