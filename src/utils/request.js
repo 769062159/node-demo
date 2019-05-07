@@ -1,5 +1,5 @@
 import fetch from 'dva/fetch';
-import { notification } from 'antd';
+import { notification, message } from 'antd';
 import { routerRedux } from 'dva/router';
 import store from '../index';
 
@@ -27,11 +27,13 @@ function checkStatus(response) {
   }
   if (!((response.status >= 501 && response.status <= 505) || (response.status >= 400 && response.status <= 403) || (response.status >= 405 && response.status <= 406))) {
     response.json().then(res => {
-      notification.error({
-        message: `请求错误 ${response.status}: ${response.url}`,
-        description: res.data,
-        duration: 10,
-      });
+      message.error(res.data, 10);
+      // notification.error({
+      //   // message: `请求错误 ${response.status}: ${response.url}`,
+      //   message: res.data,
+      //   // description: res.data,
+      //   duration: 10,
+      // });
     })
   }
   const errortext = codeMessage[response.status] || response.statusText;

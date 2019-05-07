@@ -1,0 +1,106 @@
+.chooseGoods {
+    width: 100%;
+    background: #fff;
+    border-radius: 8px;
+    height: 120px;
+    display: flex;
+    flex-direction: row;
+    padding: 10px 5px;
+    margin: 10px;
+    .cover { 
+        height: 100px;
+        width: 100px;
+        margin-right: 5px;
+        img {
+            height: 100%;
+            width: 100%;
+        }
+    }
+    .content {
+        width: calc(~"100% - 100px");
+        .name {
+            height: 60px;
+            line-height: 20px;
+            overflow: hidden;
+        }
+        .price {
+            height: 30px;
+            line-height: 30px;
+            margin-top: 10px;
+        }
+    }
+    .action {
+        display: none;
+        position: absolute;
+        top: 10px;
+        right: 0px;
+        height: 30px;
+        line-height: 30px;
+        width: 30px;
+        text-align: center;
+        background: #666;
+        color: #fff;
+        border-radius: 50%;
+        border: 1px solid rgba(240, 240, 240, .8);
+        cursor: pointer;
+    }
+}
+.chooseGoods:hover {
+    .action {
+        display: block;
+    }
+}
+
+.showGoods {
+    width: 100%;
+    background: rgba(240, 240, 240, .8);
+    border-radius: 8px;
+    height: 120px;
+    display: flex;
+    flex-direction: row;
+    padding: 10px 5px;
+    margin: 10px;
+    .cover { 
+        height: 100px;
+        width: 100px;
+        margin-right: 5px;
+        img {
+            height: 100%;
+            width: 100%;
+        }
+    }
+    .content {
+        width: calc(~"100% - 100px");
+        .name {
+            height: 60px;
+            line-height: 20px;
+            overflow: hidden;
+        }
+        .price {
+            height: 30px;
+            line-height: 30px;
+            margin-top: 10px;
+        }
+    }
+    .action {
+        display: none;
+        position: absolute;
+        top: 10px;
+        right: 0px;
+        height: 30px;
+        line-height: 30px;
+        width: 30px;
+        text-align: center;
+        background: #096dd9;
+        color: #fff;
+        border-radius: 50%;
+        border: 1px solid #fff;
+        cursor: pointer;
+    }
+}
+.showGoods:hover {
+    background: rgba(150, 150, 150, .8);
+    .action {
+        display: block;
+    }
+}

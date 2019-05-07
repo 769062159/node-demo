@@ -11,10 +11,13 @@ import {
   Row,
   Col,
   Icon,
-  Popconfirm
+  Popconfirm,
+  Pagination,
+  Input
 } from 'antd';
 
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
+import styles from './ConfigVideoGoods.less';
 
 const Option = Select.Option;
 const FormItem = Form.Item;
@@ -46,8 +49,19 @@ export default class VideoGoodsConfig extends PureComponent {
   state = {
     addGoodsVisible: false,
     goods_id: undefined,
-    addGoodsLoading: false
+    addGoodsLoading: false,
+    page: 1,
+    pagesize: 10,
+    total: 0,
+    key: ''
   };
+  onPaginateChange = (page) => {
+    this.setState({
+      page: page,
+    }, function() {
+      this.goodsSearchHandle();
+    });
+  }
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch({
@@ -74,33 +88,42 @@ export default class VideoGoodsConfig extends PureComponent {
     this.setState({
       addGoodsVisible: true
     })
-    this.props.dispatch({
-      type: 'goods/fetchGoods',
-      payload: {
-        goods_name: ''
-      },
-    });
+    this.goodsSearchHandle();
   };
+
+  handleSearchKey = e => {
+    this.setState({
+      key: e.target.value
+    })
+  }
 
   addGoodsHandle = value =>  {
     this.props.dispatch({
       type: 'config/createVideoGoodsConfig',
       payload: {
-        goods_id: this.state.goods_id
+        goods_id: value
       },
       callback: () => {
         message.success('添加成功！');
       },
     });
-    this.setState({
-      addGoodsVisible: false,
-      goods_id: undefined
-    });
+    // this.setState({
+    //   addGoodsVisible: false,
+    //   goods_id: undefined
+    // });
   };
   handleGoodsCancel = () => {
     this.setState({
       addGoodsVisible: false,
       goods_id: undefined
+    });
+
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'config/videoGoodsConfig',
+    });
+    dispatch({
+      type: 'config/videoGoodsConfigPower',
     });
   };
 
@@ -118,10 +141,12 @@ export default class VideoGoodsConfig extends PureComponent {
 
   goodsSearchHandle = value => {
     let values = {};
-    values.goods_name = value;
+    values.goods_name = this.state.key;
+    values.page = this.state.page;
+    values.page_number = this.state.pagesize;
     this.props.dispatch({
       type: 'goods/fetchGoods',
-      payload: values,
+      payload: values
     });
   };
   goodsChangeHandle = value => {
@@ -148,9 +173,7 @@ export default class VideoGoodsConfig extends PureComponent {
     });
   };
   render() {
-    const { loading, form, config: { videoGoodsList, videoGoodsPower }, goods: {goodsList}  } = this.props;
-    const { getFieldDecorator } = form;
-    const options = goodsList.map(d => <Option key={d.goods_id}>{d.goods_name}</Option>)
+    const { loading, form, config: { videoGoodsList, videoGoodsPower }, goods: {goodsList, goodsListPage}  } = this.props;
 
 
     // const { header, previewImage, previewVisible } = this.state;
@@ -165,46 +188,57 @@ export default class VideoGoodsConfig extends PureComponent {
           <FormItem {...formItemLayout} label="关联商品列表">
             <Button type="primary" onClick={this.addGoods}>添加商品</Button>
             <Modal
-              title="添加商品"
+              width={600}
+              title={`添加商品`}
               visible={this.state.addGoodsVisible}
               onCancel={this.handleGoodsCancel.bind(this)}
               footer={[
-                <Button key="submit" type="primary" loading={this.state.addGoodsLoading} onClick={this.addGoodsHandle}>
-                  添加
-                </Button>
               ]}
             >
-            <Select
-              style={{ width: '100%' }}
-              showSearch
-              value={this.state.goods_id}
-              defaultActiveFirstOption={false}
-              showArrow={false}
-              filterOption={false}
-              onSearch={this.goodsSearchHandle}
-              onChange={this.goodsChangeHandle}
-              notFoundContent={null}
-            >
-              {options}
-            </Select>
+              <Input value={this.state.key} onChange={this.handleSearchKey} onPressEnter={this.goodsSearchHandle} placeholder="输入关键词，回车搜索"/>
+              <Row gutter={16}>
+                {goodsList.map(item =>
+                  <Col sm={12} key={item.goods_id}>
+                    <div className={styles.showGoods}>
+                      <div className={styles.cover}>
+                        <img src={item.img}  />
+                      </div>
+                      <div className={styles.content}>
+                        <div className={styles.name}>
+                          {item.goods_name}
+                        </div>
+                        <div className={styles.price}>
+                          售价：￥{item.sell_goods_price}
+                        </div>
+                      </div>
+                      <div className={styles.action}>
+                      <Popconfirm title="是否添加该商品？" onConfirm={() => this.addGoodsHandle(item.goods_id)} okText="是" cancelText="否">
+                        <Icon type="check" />
+                      </Popconfirm>
+                      </div>
+                    </div>
+                  </Col>
+                )}
+              </Row>
+              <Pagination page={goodsListPage.current} pageSize={goodsListPage.pageSize} onChange={this.onPaginateChange} total={goodsListPage.total} />
             </Modal>
             <br />
             <Row gutter={16}>
               {videoGoodsList.map(item =>
-                <Col sm={10}>
-                  <div style={{width: '100%', background: '#fff', borderRadius: '8px', height: '120px', display: 'flex', flexDirection: 'row', padding: '10px 5px', margin: '10px'}}>
-                    <div style={{height: '100px', width: '100px', marginRight: '5px'}}>
-                      <img src={item.goods.img} style={{height: '100%', width: '100%'}}/>
+                <Col sm={10} key={item.id}>
+                  <div className={styles.chooseGoods}>
+                    <div className={styles.cover}>
+                      <img src={item.goods.img}  />
                     </div>
-                    <div style={{ width: 'calc(100% - 100px)' }}>
-                      <div style={{ height: '60px', lineHeight: '20px', overflow: 'hidden'}}>
+                    <div className={styles.content}>
+                      <div className={styles.name}>
                         {item.goods.name}
                       </div>
-                      <div style={{ height: '30px', lineHeight: '30px', marginTop: '10px'}}>
+                      <div className={styles.price}>
                         售价：￥{item.goods.price}
                       </div>
                     </div>
-                    <div style={{ position: 'absolute', top: '0', right: '-10px', height: '30px', lineHeight: '30px', width: '30px', textAlign: 'center', background: '#666', color: '#fff', borderRadius: '50%', border: '1px solid rgba(240, 240, 240, .8)', cursor: 'pointer'}}>
+                    <div className={styles.action}>
                     <Popconfirm title="确定取消这个默认商品的设置吗？" onConfirm={() => this.removeGoodsHandle(item.id)} okText="是" cancelText="否">
                       <Icon type="close" />
                     </Popconfirm>
