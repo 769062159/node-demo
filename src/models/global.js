@@ -93,7 +93,6 @@ export default {
       };
     },
     saveActionPassword(state, { payload }) {
-      console.log('hello', payload);
       return {
         ...state,
         actionPassword: payload,

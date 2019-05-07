@@ -24,8 +24,9 @@ const formSubmitLayout = {
     sm: { span: 18, offset: 6 },
   },
 };
-@connect(({ global, program, loading }) => ({
+@connect(({ global, login, program, loading }) => ({
   global,
+  login,
   program,
   loading: loading.models.program,
 }))
@@ -61,15 +62,14 @@ export default class Setting extends PureComponent {
     })
   }
   handlePasswordConfirm = () => {
-    const { id } = this.props.match.params;
     const { dispatch } = this.props;
     dispatch({
-      type: 'program/getProgramDetail',
+      type: 'login/checkPassword',
       payload: {
-        account_id: id,
         password: this.state.password
       },
       callback: () => {
+        const { id } = this.props.match.params;
         this.setState({
           passwordVisible: false
         })
@@ -77,6 +77,13 @@ export default class Setting extends PureComponent {
           type: 'global/saveActionPassword',
           payload: this.state.password
         })
+
+        dispatch({
+          type: 'program/getProgramDetail',
+          payload: {
+            account_id: id
+          },
+        });
       }
     });
   };

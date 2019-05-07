@@ -25,8 +25,9 @@ const formSubmitLayout = {
   },
 };
 
-@connect(({ global, program, loading, user }) => ({
+@connect(({ global, login, program, loading, user }) => ({
   global,
+  login,
   program,
   user,
   loading: loading.models.program,
@@ -37,8 +38,7 @@ export default class My extends PureComponent {
     programType: 0, // 0 是小程序 1是公众号
     formVisible: false,
     passwordVisible: true,
-    password: '',
-    containerShow: false
+    password: ''
   };
   componentDidMount() {
     if (this.props.global.actionPassword != '') {
@@ -59,7 +59,7 @@ export default class My extends PureComponent {
   handlePasswordConfirm = () => {
     const { dispatch } = this.props;
     dispatch({
-      type: 'program/fetchProgramList',
+      type: 'login/checkPassword',
       payload: {
         password: this.state.password
       },
@@ -70,6 +70,12 @@ export default class My extends PureComponent {
         dispatch({
           type: 'global/saveActionPassword',
           payload: this.state.password
+        })
+
+        dispatch({
+          type: 'program/fetchProgramList',
+          payload: {
+          }
         })
       }
     });
