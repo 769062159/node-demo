@@ -28,8 +28,8 @@ const formItemLayout = {
   },
   wrapperCol: {
     xs: { span: 24 },
-    sm: { span: 12 },
-    md: { span: 10 },
+    sm: { span: 22 },
+    md: { span: 22 },
   },
 };
 const submitFormLayout = {
@@ -198,7 +198,7 @@ export default class VideoGoodsConfig extends PureComponent {
               <Input value={this.state.key} onChange={this.handleSearchKey} onPressEnter={this.goodsSearchHandle} placeholder="输入关键词，回车搜索"/>
               <Row gutter={16}>
                 {goodsList.map(item =>
-                  <Col sm={12} key={item.goods_id}>
+                  <Col sm={12} xs={24} md={12} lg={12} xl={8} xxl={4} key={item.goods_id}>
                     <div className={styles.showGoods}>
                       <div className={styles.cover}>
                         <img src={item.img}  />
@@ -225,7 +225,7 @@ export default class VideoGoodsConfig extends PureComponent {
             <br />
             <Row gutter={16}>
               {videoGoodsList.map(item =>
-                <Col sm={10} key={item.id}>
+                <Col sm={12} xs={24} md={12} lg={12} xl={8} xxl={4} key={item.id}>
                   <div className={styles.chooseGoods}>
                     <div className={styles.cover}>
                       <img src={item.goods.img}  />
