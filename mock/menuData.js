@@ -309,6 +309,10 @@ export const menuData = [
         name: '关联商品配置',
         path: 'video-goods',
       },
+      {
+        name: '直播间配置',
+        path: 'video-live-config',
+      },
     ],
   },
   // {
