@@ -5,6 +5,7 @@ import {
   updatePopularity,
   removeVideoLive,
   addVideoLive,
+  createDefaultConfig,
 } from '../services/config';
 
 export default {
@@ -21,14 +22,28 @@ export default {
   },
 
   effects : {
-    *initVideoLiveConfig(_, { call, put}) {
+    *createDefault( { payload, callback }, { call, put }) {
+      const ret = yield call(createDefaultConfig, payload);
+      console.log(ret);
+      if (ret && ret.code === 200) {
+        callback();
+        yield put({
+          type: 'videoLiveConfigReducer',
+          payload: ret.data,
+        });
+      }
+    },
+    *initVideoLiveConfig({ callback }, { call, put}) {
       const ret = yield call(getVideoLiveConfig);
       if (ret && ret.code === 200) {
         yield put({
           type:'videoLiveConfigReducer',
           payload: ret.data,
         });
+      } else {
+        callback();
       }
+
     },
     *changeStatusConfig({ payload, callback }, { call, put }) {
       const ret = yield call(updateStatusConfig, payload);

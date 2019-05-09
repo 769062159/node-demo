@@ -112,5 +112,12 @@ export async function removeVideoLive(params) {
   });
 }
 
+export async function createDefaultConfig(params) {
+  return request('/merchant/config/video-live-config/createdefaultconfig', {
+    method: 'POST',
+    body: params,
+  });
+}
+
 
 

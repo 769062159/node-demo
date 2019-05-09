@@ -34,13 +34,13 @@ const popularityStatus = 0;
 const appointStatus = 1;
 
 // 提示消息
-const messageTime = 2;
 const noticeMessage = {
   success: '更新成功',
   invalidUserId: '请输入合法用户ID',
   invalidPopularity: '人气人数不在合法范围内',
   unexpectedError: '未找到该直播间',
   deleteSuccess: '删除成功',
+  defaultSuccess: '成功生成默认配置',
   maxAppointError: '直播间数量已达到上限',
 };
 
@@ -57,6 +57,9 @@ export default class ConfigVideoLive extends PureComponent {
   componentDidMount() {
     this.props.dispatch({
       type: 'videoLiveConfig/initVideoLiveConfig',
+      callback: () => {
+        this.createDefaultConfig();
+      },
     });
   }
 
@@ -67,23 +70,49 @@ export default class ConfigVideoLive extends PureComponent {
         type: e.target.value,
       },
       callback: () => {
-        message.success(noticeMessage.success, messageTime);
+        message.success(noticeMessage.success);
       },
     });
   };
+
+  createDefaultConfig() {
+    let secondsToGo = 5;
+    const modal = Modal.success({
+      title: '该商户下暂无配置',
+      content: `当前商户将在 ${secondsToGo} 秒后默认生成随机直播配置`,
+    });
+    const timer = setInterval(() => {
+      secondsToGo -= 1;
+      modal.update({
+        content: `当前商户将在 ${secondsToGo} 秒后默认生成随机直播配置`,
+      });
+    }, 1000);
+    setTimeout(() => {
+      clearInterval(timer);
+      const { status, popularity } = this.props.videoLiveConfig;
+      this.props.dispatch({
+        type: 'videoLiveConfig/createDefault',
+        payload: { type: status, popularity },
+        callback: () => {
+          message.success(noticeMessage.defaultSuccess);
+        },
+      });
+      modal.destroy();
+    }, secondsToGo * 1000);
+  }
 
   handlePopularityChange(popularity) {
     if (popularity === "" || popularity === undefined) {
       return;
     } else if (popularity < minPopularity || popularity >= maxPopularity) {
-      message.warn(noticeMessage.invalidPopularity, messageTime);
+      message.warn(noticeMessage.invalidPopularity);
       return;
     }
     this.props.dispatch({
       type: 'videoLiveConfig/updatePopularityNum',
       payload: {popularity},
       callback: () => {
-        message.success(noticeMessage.success, messageTime);
+        message.success(noticeMessage.success);
       },
     });
   };
@@ -91,13 +120,13 @@ export default class ConfigVideoLive extends PureComponent {
   searchUser = (userId) => {
     const { liveMap } = this.props.videoLiveConfig;
     if (liveMap.length === maxAppointLength) {
-      message.warn(noticeMessage.maxAppointError, messageTime);
+      message.warn(noticeMessage.maxAppointError);
       return;
     }
     userId = Number(userId)
     const reg = /^-?(0|[1-9][0-9]*)(\.[0-9]*)?$/;
     if (Number.isNaN(userId) || !reg.test(userId) || userId <= 0) {
-      message.warn(noticeMessage.invalidUserId, messageTime);
+      message.warn(noticeMessage.invalidUserId);
       return;
     }
 
@@ -120,7 +149,7 @@ export default class ConfigVideoLive extends PureComponent {
             addLiveRoomVisible: true,
           });
         } else {
-          message.warn(msg, messageTime);
+          message.warn(msg);
         }
       },
     });
@@ -156,7 +185,7 @@ export default class ConfigVideoLive extends PureComponent {
       return liveItem.user_id === userId;
     }).shift();
     if (!live) {
-      message.warn(noticeMessage.unexpectedError, messageTime);
+      message.warn(noticeMessage.unexpectedError);
       return;
     }
 
@@ -177,7 +206,7 @@ export default class ConfigVideoLive extends PureComponent {
       type: 'videoLiveConfig/removeVideoLive',
       payload: {userId: id},
       callback: () => {
-        message.success(noticeMessage.deleteSuccess, messageTime);
+        message.success(noticeMessage.deleteSuccess);
       },
     });
   }
@@ -212,6 +241,7 @@ export default class ConfigVideoLive extends PureComponent {
       </div>
     );
   };
+
 
   renderAddLiveRoom() {
     const { tmpLive } = this.props.videoLiveConfig;
