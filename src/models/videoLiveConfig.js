@@ -2,6 +2,9 @@ import {
   getVideoLiveConfig,
   updateStatusConfig,
   checkLiveRoom,
+  updatePopularity,
+  removeVideoLive,
+  addVideoLive,
 } from '../services/config';
 
 export default {
@@ -12,7 +15,9 @@ export default {
     status: 0,
     popularity: 1,
     liveMap: [],
-    tmpLive: {},
+    tmpLive: {
+      has_user: {},
+    },
   },
 
   effects : {
@@ -27,7 +32,7 @@ export default {
     },
     *changeStatusConfig({ payload, callback }, { call, put }) {
       const ret = yield call(updateStatusConfig, payload);
-      if (ret && ret.code ==200) {
+      if (ret && ret.code === 200 ) {
         callback();
         yield put({
           type: 'changeStatusReduce',
@@ -36,14 +41,45 @@ export default {
       }
     },
     *checkUserLiveRoom({ payload, callback }, { call, put }) {
-      const ret = yield call(checkLiveRoom, payload)
+      const ret = yield call(checkLiveRoom, payload);
       if (ret && ret.code === 200) {
         yield put({
           type: 'checkLiveRoomReducer',
           payload: ret.data,
         });
+        callback(ret.code, 'success');
       } else if (ret && ret.code === 417) {
-        callback(ret.message);
+        callback(ret.code, ret.message);
+      }
+    },
+    *updatePopularityNum({ payload, callback }, { call, put }) {
+      const ret = yield call(updatePopularity, payload);
+      if (ret && ret.code === 200) {
+        callback();
+        yield put({
+          type: 'updatePopularityReducer',
+          payload: ret.data,
+        });
+      }
+    },
+    *removeVideoLive({ payload, callback }, { call, put }) {
+      const ret = yield call(removeVideoLive, payload);
+      if (ret && ret.code === 200) {
+        callback();
+        yield put({
+          type: 'removeVideoRoomReducer',
+          payload: ret.data,
+        });
+      }
+    },
+    *addVideoLive({ payload, callback }, { call, put }) {
+      const ret = yield call(addVideoLive, payload);
+      if (ret && ret.code === 200 ) {
+        callback();
+        yield put({
+          type: 'addVideoRoomReducer',
+          payload: ret.data,
+        });
       }
     },
   },
@@ -62,10 +98,33 @@ export default {
       }
     },
     checkLiveRoomReducer(state, { payload }) {
+      const tmpLive = payload;
       return {
         ...state,
-        ...payload,
+        tmpLive,
       }
+    },
+    updatePopularityReducer(state, { payload }) {
+      return {
+        ...state,
+        popularity: payload.num,
+      }
+    },
+    removeVideoRoomReducer(state, { payload }) {
+      const liveMap = state.liveMap.filter((liveItem) => {
+        return liveItem.user_id !== payload.userId;
+      });
+      return {
+        ...state,
+        liveMap,
+      }
+    },
+    addVideoRoomReducer(state, { payload }) {
+      const liveMap = [...state.liveMap, payload];
+      return {
+        ...state,
+        liveMap,
+      };
     },
   },
 };

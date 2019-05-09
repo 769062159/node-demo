@@ -83,8 +83,30 @@ export async function updateStatusConfig(params) {
   });
 }
 
+// 更新随机人气人数
+export async function updatePopularity(params) {
+  return request('/merchant/config/video-live-config/updatepopularity', {
+    method: 'POST',
+    body: params,
+  });
+}
+
 export async function checkLiveRoom(params) {
   return request('/merchant/config/video-live-config/checkliveroom', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+export async function addVideoLive(params) {
+  return request('/merchant/config/video-live-config/addvideolive', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+export async function removeVideoLive(params) {
+  return request('/merchant/config/video-live-config/removevideolive', {
     method: 'POST',
     body: params,
   });
