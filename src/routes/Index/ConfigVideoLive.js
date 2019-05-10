@@ -104,7 +104,7 @@ export default class ConfigVideoLive extends PureComponent {
   handlePopularityChange(popularity) {
     if (popularity === "" || popularity === undefined) {
       return;
-    } else if (popularity < minPopularity || popularity >= maxPopularity) {
+    } else if (popularity < minPopularity || popularity > maxPopularity) {
       message.warn(noticeMessage.invalidPopularity);
       return;
     }
