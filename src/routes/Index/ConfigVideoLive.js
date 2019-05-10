@@ -302,7 +302,7 @@ export default class ConfigVideoLive extends PureComponent {
               onSearch={this.searchUser}
               style={{ width: 300 }}
               disabled={!status}
-            /><br />
+            />&nbsp;&nbsp;(最大直播间数量：{maxAppointLength})<br />
           </Radio>
         </RadioGroup>
       </PageHeaderLayout>
