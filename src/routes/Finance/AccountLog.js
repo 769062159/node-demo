@@ -187,6 +187,12 @@ export default class Rank extends PureComponent {
         render: val => upgrade[val],
       },
       {
+        title: '生成时间',
+        dataIndex: 'create_time',
+        render: val => <span>{moment(val * 1000).format('YYYY-MM-DD HH:mm:ss')}</span>,
+        key: 'create_time',
+      },
+      {
         title: '到账时间',
         dataIndex: 'profit_time',
         render: (val, record) => record.status === 1 ? <span>{moment(val * 1000).format('YYYY-MM-DD HH:mm:ss')}</span> : record.status === 2 ? '已失效' : '未到账',
@@ -240,7 +246,7 @@ export default class Rank extends PureComponent {
               </Col>
 
               <Col md={8} sm={24}>
-                <FormItem label="时间">
+                <FormItem label="生成时间">
                   {getFieldDecorator('times')(<RangePicker
                     // showTime={{ format: 'HH:mm' }}
                     format="YYYY-MM-DD"
