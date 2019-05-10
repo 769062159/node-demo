@@ -123,6 +123,10 @@ export const getRouterConfig = app => {
     '/config/video-goods': {
       component: dynamicWrapper(app, ['config'], () => import('../routes/Index/ConfigVideoGoods')),
     },
+    // 企业版随机直播间配置
+    '/config/video-live-config': {
+      component: dynamicWrapper(app, ['videoLiveConfig'], () => import('../routes/Index/ConfigVideoLive')),
+    },
     // 首页 广告 营销
     '/market/AddForm/:type': {
       component: dynamicWrapper(app, ['indexs'], () => import('../routes/Index/AddForm')),

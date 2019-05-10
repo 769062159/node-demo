@@ -68,5 +68,56 @@ export async function deleteVideoGoodsConfig(params) {
   });
 }
 
+// 获取随机直播间配置
+export async function getVideoLiveConfig() {
+  return request('/merchant/config/video-live-config/get', {
+    method: 'GET',
+  });
+}
+
+// 更新随机方式
+export async function updateStatusConfig(params) {
+  return request('/merchant/config/video-live-config/updatetype', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+// 更新随机人气人数
+export async function updatePopularity(params) {
+  return request('/merchant/config/video-live-config/updatepopularity', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+export async function checkLiveRoom(params) {
+  return request('/merchant/config/video-live-config/checkliveroom', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+export async function addVideoLive(params) {
+  return request('/merchant/config/video-live-config/addvideolive', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+export async function removeVideoLive(params) {
+  return request('/merchant/config/video-live-config/removevideolive', {
+    method: 'POST',
+    body: params,
+  });
+}
+
+export async function createDefaultConfig(params) {
+  return request('/merchant/config/video-live-config/createdefaultconfig', {
+    method: 'POST',
+    body: params,
+  });
+}
+
 
 
