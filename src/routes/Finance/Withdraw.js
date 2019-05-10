@@ -22,9 +22,9 @@ const formSubmitLayout = {
   },
 };
 const { TextArea } = Input;
-const withdrawStatus = [(<span style={{color: '#096dd9'}}>处理中</span>), (<span style={{color: '#389e0d'}}>成功</span>), (<span style={{color: '#cf1322'}}>失败</span>)];
+const withdrawStatus = [(<span style={{color: '#096dd9'}}>待处理</span>), (<span style={{color: '#389e0d'}}>同意</span>), (<span style={{color: '#cf1322'}}>拒绝</span>)];
 const processChannel = ['系统', (<span style={{color: '#096dd9'}}>星程付</span>)];
-const processStatus = [(<span style={{color: '#096dd9'}}>处理中</span>), (<span style={{color: '#389e0d'}}>成功</span>), (<span style={{color: '#cf1322'}}>失败</span>)];
+const processStatus = [(<span style={{color: '#096dd9'}}>处理中</span>), (<span style={{color: '#389e0d'}}>支付成功</span>), (<span style={{color: '#cf1322'}}>支付失败</span>)];
 // auto_withdraw_status 自动提现失败 状态码和上面一样
 // const { confirm } = Modal;
 
@@ -153,7 +153,11 @@ export default class Withdraw extends PureComponent {
           type: 'finance/updateWithdraw',
           payload: values,
           callback: () => {
-            message.success('提现申请已提交给第三方，请等待支付机构回复');
+            if (values.status == 1) {
+              message.success('提现申请已提交给支付机构，请等待回复');
+            } else {
+              message.success('操作成功');
+            }
           },
         });
         this.handAddleCancel();
