@@ -77,14 +77,14 @@ const CustomizedForm = Form.create({
         {codeMsg.name}
       </FormItem>
       <Row>
-        <Col span={8}>当前导师数量:{codeMsg.merchant}</Col>
-        <Col span={8}>当前盟主数量:{codeMsg.wealth}</Col>
+        <Col span={8}>当前盟主数量:{codeMsg.merchant}</Col>
+        <Col span={8}>当前店主数量:{codeMsg.wealth}</Col>
         <Col span={8}>当前群主数量:{codeMsg.group}</Col>
       </Row>
-      {/* <FormItem {...formItemLayout} label="当前导师数量">
+      {/* <FormItem {...formItemLayout} label="当前盟主数量">
         {codeMsg.merchant}
       </FormItem>
-      <FormItem {...formItemLayout} label="当前盟主数量">
+      <FormItem {...formItemLayout} label="当前店主数量">
         {codeMsg.wealth}
       </FormItem>
       <FormItem {...formItemLayout} label="当前群主数量">
@@ -121,22 +121,22 @@ const CustomizedForm = Form.create({
           </FormItem>
         ) : null
       }
-      <FormItem {...formItemLayout} label="导师数量">
+      <FormItem {...formItemLayout} label="盟主数量">
         {getFieldDecorator('merchant_num', {
           rules: [
             {
               required: true,
-              message: '请输入导师数量',
+              message: '请输入盟主数量',
             },
           ],
         })(<InputNumber min={0} step={1} precision={0} />)}
       </FormItem>
-      <FormItem {...formItemLayout} label="盟主数量">
+      <FormItem {...formItemLayout} label="店主数量">
         {getFieldDecorator('wealth_num', {
           rules: [
             {
               required: true,
-              message: '请输入盟主数量',
+              message: '请输入店主数量',
             },
           ],
         })(<InputNumber min={0} step={1} precision={0} />)}

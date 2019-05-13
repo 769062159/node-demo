@@ -115,15 +115,15 @@ handleStandardTableChange = (e) => {
       <PageHeaderLayout>
         <Row>
           <Col span={8}>昵称/姓名：{codeDetail.nickname}</Col>
-          <Col span={8}>导师授权码：{codeDetail.merchant_author_code_num}</Col>
-          <Col span={8}>盟主授权码：{codeDetail.wealth_author_code_num}</Col>
+          <Col span={8}>盟主授权码：{codeDetail.merchant_author_code_num}</Col>
+          <Col span={8}>店主授权码：{codeDetail.wealth_author_code_num}</Col>
           <Col span={8}>群主收款码：{codeDetail.group_author_code_num}</Col>
           <Col span={8}>群主待收款码：{codeDetail.payment_code_num}</Col>
           <Col span={8}>创建时间：{moment(codeDetail.create_time * 1000).format('YYYY-MM-DD HH:mm:ss')}</Col>
         </Row>
         <h2>明细</h2>
         <Tabs onChange={this.changeTabs} type="card">
-          <TabPane tab="导师授权码" key="1">
+          <TabPane tab="盟主授权码" key="1">
             <StandardTable
               rowKey={record => record.id}
               loading={loading}
@@ -133,7 +133,7 @@ handleStandardTableChange = (e) => {
               onChange={this.handleStandardTableChange}
             />
           </TabPane>
-          <TabPane tab="盟主授权码" key="2">
+          <TabPane tab="店主授权码" key="2">
             {/* <Table
               dataSource={superiorRecord.list}
               rowKey={record => record.id}

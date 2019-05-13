@@ -289,7 +289,7 @@ export default class AddShop extends Component {
               ],
             })(
               <Select>
-                <Option value={1}>导师</Option>
+                <Option value={1}>盟主</Option>
                 <Option value={2}>社群版本</Option>
               </Select>
             )}

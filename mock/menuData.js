@@ -93,11 +93,11 @@ export const menuData = [
         path: 'protocol',
       },
       {
-        name: '盟主商品协议',
+        name: '店主商品协议',
         path: 'protocolss',
       },
       {
-        name: '导师商品协议',
+        name: '盟主商品协议',
         path: 'protocols',
       },
     ],

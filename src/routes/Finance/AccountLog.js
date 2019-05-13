@@ -9,7 +9,7 @@ import moment from 'moment';
 import styles from './TableList.less';
 
 const FormItem = Form.Item;
-const upgrade = ['普通商品', '导师专属', '群主专属'];
+const upgrade = ['普通商品', '盟主专属', '群主专属'];
 const actionType = ['-', '充值', '下单返利', '退款减利', '提现', '后台操作', '线下操作'];
 const status = ['未到账', '已到账', '已失效'];
 // const formItemLayout = {

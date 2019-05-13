@@ -8,7 +8,7 @@ import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './BasicProfile.less';
 
 const { Description } = DescriptionList;
-const upgrade = ['普通商品', '导师专属', '群主专属'];
+const upgrade = ['普通商品', '盟主专属', '群主专属'];
 
 @connect(({ finance, loading, order }) => ({
   finance,

@@ -40,7 +40,7 @@ export async function getUserDetail(params) {
   });
 }
 
-// 用户授权码详情列表导师 1 群主 2 盟主 3
+// 用户授权码详情列表盟主 1 群主 2 店主 3
 export async function getCodeList(params) {
   return request('/merchant/authorcode/type/list', {
     method: 'POST',
