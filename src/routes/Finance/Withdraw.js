@@ -22,7 +22,9 @@ const formSubmitLayout = {
   },
 };
 const { TextArea } = Input;
-const withdrawStatus = ['提现申请', '提现成功', '提现失败'];
+const withdrawStatus = [(<span style={{color: '#096dd9'}}>待处理</span>), (<span style={{color: '#389e0d'}}>同意</span>), (<span style={{color: '#cf1322'}}>拒绝</span>)];
+const processChannel = ['系统', (<span style={{color: '#096dd9'}}>星程付</span>)];
+const processStatus = [(<span style={{color: '#096dd9'}}>处理中</span>), (<span style={{color: '#389e0d'}}>支付成功</span>), (<span style={{color: '#cf1322'}}>支付失败</span>)];
 // auto_withdraw_status 自动提现失败 状态码和上面一样
 // const { confirm } = Modal;
 
@@ -151,7 +153,11 @@ export default class Withdraw extends PureComponent {
           type: 'finance/updateWithdraw',
           payload: values,
           callback: () => {
-            message.success('更新成功');
+            if (values.status == 1) {
+              message.success('提现申请已提交给支付机构，请等待回复');
+            } else {
+              message.success('操作成功');
+            }
           },
         });
         this.handAddleCancel();
@@ -293,40 +299,51 @@ export default class Withdraw extends PureComponent {
           <div className={styles.userMsg}>
             <img src={val.avatar} alt="图片" />
             <div>
-              <span>{val.nickname}</span>
-              <span>Id:<a href={`#/finance/detail/${record.account_id}`}>{val.fake_id}</a></span>
+              <span>{val.nickname}[<a href={`#/finance/detail/${record.account_id}`}>{val.fake_id}</a>]</span>
+              <span>昵称:{record.real_name}</span>
+              <span>手机号:{record.mobile}</span>
             </div>
           </div>
         ),
-      },
-      {
-        title: '昵称/手机号',
-        dataIndex: 'real_name',
-        width: 150,
-        render: (val, record) => (
-          <div>
-            <div>{val}</div>
-            <div>{record.mobile}</div>
-          </div>
-        ),
-      },
-      {
-        title: '申请类别',
-        dataIndex: 'type',
-        render: val => (val ? '微信提现' : '银行卡提现'),
-      },
-      {
-        title: '申请时间',
-        dataIndex: 'create_time',
-        render: val => <span>{moment(val * 1000).format('YYYY-MM-DD HH:mm:ss')}</span>,
       },
       {
         title: '申请金额（元）',
         dataIndex: 'apply_money',
       },
       {
-        title: '到账金额（元）',
+        title: '状态',
+        width: 120,
+        dataIndex: 'status',
+        render: val => withdrawStatus[val],
+      },
+      {
+        title: '支付机构',
+        width: 200,
+        dataIndex: 'process',
+        render: (val, record) => (
+          <div className={styles.userMsg}>
+            <div>
+              <span>名称: {processChannel[record.process_channel]}</span>
+              <span>状态: {processStatus[record.process_status]}</span>
+              <span>提现订单号: {record.withdraw_trade_no}</span>
+              <span>备注: <span style={{color: '#096dd9'}}>{record.process_mark}</span></span>
+            </div>
+          </div>
+        ),
+      },
+      {
+        title: '预计到账金额（元）',
         dataIndex: 'money',
+      },
+      {
+        title: '申请类别',
+        dataIndex: 'type',
+        render: val => (val ? '微信' : '银行卡'),
+      },
+      {
+        title: '申请时间',
+        dataIndex: 'create_time',
+        render: val => <span>{moment(val * 1000).format('YYYY-MM-DD HH:mm:ss')}</span>,
       },
       {
         title: '收款帐号/OpenID',
@@ -336,12 +353,6 @@ export default class Withdraw extends PureComponent {
         title: '开户行',
         dataIndex: 'bank_name',
         render: (val, record) => <span>{record.bank_addr + val}</span>,
-      },
-      {
-        title: '状态',
-        width: 120,
-        dataIndex: 'status',
-        render: val => withdrawStatus[val],
       },
       {
         title: '自动提现失败说明',
