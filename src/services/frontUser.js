@@ -119,3 +119,10 @@ export async function getRecord(params) {
     body: params,
   });
 }
+// 修改备注
+export async function setRemark(params) {
+  return request('/merchant/member/remark/update', {
+    method: 'POST',
+    body: params,
+  });
+}

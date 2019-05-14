@@ -20,6 +20,7 @@ import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import EditForm from './EditForm';
 import MoneyForm from './MoneyForm';
 import CodeForm from './CodeForm';
+import RemarkForm from './RemarkForm';
 
 import styles from './TableList.less';
 
@@ -58,6 +59,8 @@ export default class FrontUserList extends PureComponent {
     isCode: false, // 设置授权码
     moneyMsg: {},
     isCommssion: false,
+    isRemark: false,
+    remarkId: '',
     powerValue: null,
     pagination: 1, // 页脚
     formVisible: false,
@@ -171,6 +174,15 @@ export default class FrontUserList extends PureComponent {
         })
       },
     });
+  }
+  setRemark = (record, e) => {
+    e.preventDefault();
+    console.log(e);
+    console.log(record);
+    this.setState({
+      isRemark: true,
+      remarkId: record.id
+    })
   }
   setCode = (record, e) => {
     e.preventDefault();
@@ -442,6 +454,33 @@ export default class FrontUserList extends PureComponent {
       moneyMsg,
     })
   }
+  remarkOK = e => {
+    const { dispatch } = this.props;
+    const { remarkId } = this.state;
+    const { pagination } = this.state;
+    let data = {
+      remark: e.remark,
+      user_id: remarkId
+    }
+    console.log(data);
+    dispatch({
+      type: 'frontUser/setRemark',
+      payload: data,
+      callback: () => {
+        message.success('设置成功');
+        this.setState({
+          isRemark: false,
+          remarkId: ''
+        })
+        dispatch({
+          type: 'frontUser/fetchFrontUserList',
+          payload: {
+            page: pagination,
+          },
+        });
+      }
+    })
+  }
   codeOK = (e) => {
     const { dispatch } = this.props;
     const { editId } = this.state;
@@ -485,6 +524,11 @@ export default class FrontUserList extends PureComponent {
   moneyCancel = () => {
     this.setState({
       isCommssion: false,
+    })
+  }
+  remarkCancel = () => {
+    this.setState({
+      isRemark: false,
     })
   }
 
@@ -615,6 +659,13 @@ export default class FrontUserList extends PureComponent {
               )}
             </FormItem>
           </Col>
+          <Col md={8} sm={24}>
+            <FormItem label="备注">
+              {getFieldDecorator('user_remark')(
+                <Input placeholder="请输入" />
+              )}
+            </FormItem>
+          </Col>
         </Row>
         <div style={{ overflow: 'hidden' }}>
           <span style={{ float: 'right', marginBottom: 24 }}>
@@ -714,7 +765,7 @@ export default class FrontUserList extends PureComponent {
     datas.forEach(item => {
       item.has_account = item.has_account || hasAccountDefault;
     });
-    const { isCode, formVisible, type, pagination, editDataId, merchantVisible, account, powerValue, password, isCommssion, moneyMsg, codeMsg } = this.state;
+    const { isCode, formVisible, type, pagination, editDataId, merchantVisible, account, powerValue, password, isCommssion, isRemark, moneyMsg, codeMsg } = this.state;
     const progressColumns = [
       {
         title: '会员',
@@ -768,6 +819,12 @@ export default class FrontUserList extends PureComponent {
         key: 'create_time',
       },
       {
+        title: '备注',
+        dataIndex: 'has_user_oauth',
+        render: val => val ? (<span>{val.user_remark}</span>) : (<span></span>),
+        key: 'has_user_oauth',
+      },
+      {
         title: '操作',
         fixed: 'right',
         width: 200,
@@ -786,6 +843,8 @@ export default class FrontUserList extends PureComponent {
             <a onClick={this.setMerchant.bind(this, record)}>设置版本</a>
             <Divider type="vertical" />
             <a onClick={this.setCode.bind(this, record)}>设置授权码</a>
+            <Divider type="vertical" />
+            <a onClick={this.setRemark.bind(this, record)} disabled={!record.has_user_oauth}>设置备注</a>
             <Divider type="vertical" />
             <a onClick={this.updateCommssion.bind(this, record)}>更改佣金</a>
             <Divider type="vertical" />
@@ -927,6 +986,15 @@ export default class FrontUserList extends PureComponent {
           footer=""
         >
           <MoneyForm moneyOK={this.moneyOK} name={moneyMsg.name} money={moneyMsg.money} />
+        </Modal>
+        <Modal
+          title="设置备注"
+          visible={isRemark}
+          onCancel={this.remarkCancel}
+          destroyOnClose="true"
+          footer=""
+        >
+          <RemarkForm remarkOK={this.remarkOK}/>
         </Modal>
         <Modal
           title="设置授权码"

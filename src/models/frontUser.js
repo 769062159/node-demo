@@ -12,6 +12,7 @@ import {
   updatePower,
   updateCommssion,
   setAuthorCode,
+  setRemark,
   getCodeNum,
   getRecord,
 } from '../services/frontUser.js';
@@ -67,6 +68,12 @@ export default {
     },
     *setAuthorCode({ payload, callback }, { call }) {
       const res = yield call(setAuthorCode, payload);
+      if (res && res.code === 200) {
+        callback();
+      }
+    },
+    *setRemark({ payload, callback }, { call }) {
+      const res = yield call(setRemark, payload);
       if (res && res.code === 200) {
         callback();
       }
