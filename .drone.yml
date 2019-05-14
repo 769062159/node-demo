@@ -1,0 +1,70 @@
+---
+kind: pipeline
+name: admin-merchant-dev
+
+steps:
+- name: build-dev
+  image: node:10.15.3
+  commands:
+  - npm install
+  - npm run build:dev
+
+- name: deploy-dev
+  image: drillster/drone-rsync
+  settings:
+    user: root
+    hosts: [dev.shiqun.api.iyov.io]
+    source: ./dist/*
+    target: /home/wwwroot/admin_merchant
+    include: []
+    exclude: []
+    key:
+      from_secret: ssh_key
+
+trigger:
+  branch:
+  - dev
+
+---
+kind: pipeline
+name: admin-merchant-prod
+
+steps:
+- name: build-prod
+  image: node:10.15.3
+  commands:
+  - npm install
+  - npm run build
+
+- name: deploy-prod
+  image: drillster/drone-rsync
+  settings:
+    user: root
+    hosts: [shiqun.api.iyov.io]
+    source: ./dist/*
+    target: /home/wwwroot/admin_merchant
+    include: []
+    exclude: []
+    key:
+      from_secret: ssh_key
+
+trigger:
+  branch:
+  - master
+
+---
+kind: pipeline
+name: notify
+
+- name: notify
+  image: drillster/drone-email
+  settings:
+    host:
+      from_secret: email_host
+    username:
+      from_secret: email_username
+    password:
+      from_secret: email_password
+    from: coding@imicha.com
+    recipients: [siyuanh@imicha.com, xingchaof@imicha.com, hailinh@imicha.com]
+    recipients_only: true

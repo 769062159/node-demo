@@ -1,4 +1,5 @@
-# dynamic-menu-router
-ant design pro动态router
+[![Build Status](https://ci.xingchengfu.com/api/badges/TDR/adminmerchant/status.svg)](https://ci.xingchengfu.com/TDR/adminmerchant)
 
-如果启动报错，请删除.webpackrc.js中的'transform-decorators-legacy'
+# admin-merchant
+
+小程序管理后台
