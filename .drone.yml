@@ -54,18 +54,15 @@ trigger:
 
 ---
 kind: pipeline
-name: notify
+name: after-notify
 
-steps:
-- name: notify
-  image: drillster/drone-email
-  settings:
+notify:
+  email:
+    from: coding@imicha.com
     host:
       from_secret: email_host
     username:
       from_secret: email_username
     password:
       from_secret: email_password
-    from: coding@imicha.com
     recipients: [siyuanh@imicha.com, xingchaof@imicha.com, hailinh@imicha.com]
-    recipients_only: true
