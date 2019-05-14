@@ -3,3 +3,5 @@
 # admin-merchant
 
 小程序管理后台
+
+> 如果 `npm install` 不行请尝试使用 `yarn.`
