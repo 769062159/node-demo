@@ -821,7 +821,12 @@ export default class FrontUserList extends PureComponent {
       {
         title: '备注',
         dataIndex: 'has_user_oauth',
-        render: val => val ? (<span>{val.user_remark}</span>) : (<span></span>),
+        render: val => val ? (
+          <div style={{
+            maxWidth: 260,
+            wordBreak: 'break-all'
+          }}>{val.user_remark}</div>
+        ) : (<span></span>),
         key: 'has_user_oauth',
       },
       {
