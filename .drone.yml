@@ -13,13 +13,15 @@ steps:
   image: drillster/drone-rsync
   settings:
     user: root
-    hosts: [39.96.218.194]
+    hosts: [dev.shiqun.api.iyov.io]
     source: ./dist/*
     target: /home/wwwroot/admin_merchant
     include: []
     exclude: []
     key:
       from_secret: ssh_key
+    script:
+      - sudo chmod 755 -R /home/wwwroot/admin_merchant
 
 trigger:
   branch:
@@ -47,22 +49,9 @@ steps:
     exclude: []
     key:
       from_secret: ssh_key
+    script:
+      - sudo chmod 755 -R /home/wwwroot/admin_merchant
 
 trigger:
   branch:
   - master
-
----
-kind: pipeline
-name: after-notify
-
-notify:
-  email:
-    from: coding@imicha.com
-    host:
-      from_secret: email_host
-    username:
-      from_secret: email_username
-    password:
-      from_secret: email_password
-    recipients: [siyuanh@imicha.com, xingchaof@imicha.com, hailinh@imicha.com]
