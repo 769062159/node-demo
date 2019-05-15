@@ -17,8 +17,7 @@ steps:
 - name: build-dev
   image: node:10.15.3
   commands:
-  - git diff --name-only HEAD^ HEAD | grep package-lock.json && npm ci || echo 'Skip download deps'
-  - npm run build:dev
+  - yarn install && npm run build:dev
 
 - name: rebuild-cache
   image: drillster/drone-volume-cache
@@ -73,8 +72,7 @@ steps:
 - name: build-prod
   image: node:10.15.3
   commands:
-  - git diff --name-only HEAD^ HEAD | grep package-lock.json && npm ci || echo 'Skip download deps'
-  - npm run build
+  - yarn install && npm run build
 
 - name: rebuild-cache
   image: drillster/drone-volume-cache
