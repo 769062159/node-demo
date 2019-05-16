@@ -95,9 +95,8 @@ export default class BasicProfile extends Component {
       },
       {
         title: '类型',
-        dataIndex: 'upgrade_type',
-        key: 'upgrade_type',
-        render: val => upgrade[val],
+        dataIndex: 'upgrade_type_text',
+        key: 'upgrade_type_text'
       },
       {
         title: '备注',
