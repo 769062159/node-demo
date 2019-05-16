@@ -202,18 +202,18 @@ export default class Rank extends PureComponent {
       //   title: '账户佣金',
       //   dataIndex: 'account_commission',
       // },
-      // {
-      //   title: '操作',
-      //   // fixed: 'right',
-      //   // width: 150,
-      //   render: (text, record) => (
-      //     <Fragment>
-      //       <a href={`#/finance/detail/${record.account_id}`}>详情</a>
-      //       {/* <Divider type="vertical" /> */}
-      //       {/* <a onClick={this.deleteGoods.bind(this, record.id)}>删除</a> */}
-      //     </Fragment>
-      //   ),
-      // },
+      {
+        title: '操作',
+        // fixed: 'right',
+        // width: 150,
+        render: (text, record) => (
+          <Fragment>
+            <a href={`#/finance/detail/${record.account_id}`}>详情</a>
+            {/* <Divider type="vertical" /> */}
+            {/* <a onClick={this.deleteGoods.bind(this, record.id)}>删除</a> */}
+          </Fragment>
+        ),
+      },
     ];
 
     return (

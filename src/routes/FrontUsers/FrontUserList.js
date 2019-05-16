@@ -919,7 +919,7 @@ export default class FrontUserList extends PureComponent {
         </Card>
         <Card bordered={false} style={{ marginBottom: 10 }}>
           <div className={styles.tableList}>
-            盟主和社群版后台地址：
+            盟主和店主后台地址：
             <a href={adminUrl} target="view_window">
               {adminUrl}
             </a>
