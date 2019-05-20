@@ -31,6 +31,7 @@ class TypeForm extends Component {
   };
   renderForm() {
     const { getFieldDecorator } = this.props.form;
+    const { remarkText } = this.props;
     return (
       <Form
         onSubmit={this.handleSubmit}
@@ -45,7 +46,8 @@ class TypeForm extends Component {
                 message: '请输入备注',
               },
             ],
-          })(<Input />)}
+            initialValue: remarkText
+          })(<Input/>)}
         </FormItem>
         <FormItem style={{ marginTop: 32 }} {...formSubmitLayout}>
           <Button type="primary" htmlType="submit" >

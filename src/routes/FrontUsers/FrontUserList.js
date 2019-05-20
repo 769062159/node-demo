@@ -60,7 +60,7 @@ export default class FrontUserList extends PureComponent {
     moneyMsg: {},
     isCommssion: false,
     isRemark: false,
-    remarkId: '',
+    remarkMsg: {},
     powerValue: null,
     pagination: 1, // 页脚
     formVisible: false,
@@ -179,9 +179,13 @@ export default class FrontUserList extends PureComponent {
     e.preventDefault();
     console.log(e);
     console.log(record);
+    let remarkMsg = {
+      id: record.id,
+      remark: record.has_user_oauth ? record.has_user_oauth.user_remark : ''
+    };
     this.setState({
       isRemark: true,
-      remarkId: record.id
+      remarkMsg
     })
   }
   setCode = (record, e) => {
@@ -456,11 +460,11 @@ export default class FrontUserList extends PureComponent {
   }
   remarkOK = e => {
     const { dispatch } = this.props;
-    const { remarkId } = this.state;
+    const { remarkMsg } = this.state;
     const { pagination } = this.state;
     let data = {
       remark: e.remark,
-      user_id: remarkId
+      user_id: remarkMsg.id
     }
     console.log(data);
     dispatch({
@@ -470,14 +474,9 @@ export default class FrontUserList extends PureComponent {
         message.success('设置成功');
         this.setState({
           isRemark: false,
-          remarkId: ''
+          remarkMsg: {}
         })
-        dispatch({
-          type: 'frontUser/fetchFrontUserList',
-          payload: {
-            page: pagination,
-          },
-        });
+        this.handleSearch();
       }
     })
   }
@@ -765,7 +764,7 @@ export default class FrontUserList extends PureComponent {
     datas.forEach(item => {
       item.has_account = item.has_account || hasAccountDefault;
     });
-    const { isCode, formVisible, type, pagination, editDataId, merchantVisible, account, powerValue, password, isCommssion, isRemark, moneyMsg, codeMsg } = this.state;
+    const { isCode, formVisible, type, pagination, editDataId, merchantVisible, account, powerValue, password, isCommssion, isRemark, remarkMsg, moneyMsg, codeMsg } = this.state;
     const progressColumns = [
       {
         title: '会员',
@@ -849,7 +848,9 @@ export default class FrontUserList extends PureComponent {
             <Divider type="vertical" />
             <a onClick={this.setCode.bind(this, record)}>设置授权码</a>
             <Divider type="vertical" />
-            <a onClick={this.setRemark.bind(this, record)} disabled={!record.has_user_oauth}>设置备注</a>
+            <a onClick={this.setRemark.bind(this, record)} disabled={!record.has_user_oauth}>{
+              record.has_user_oauth && record.has_user_oauth.user_remark ? '修改备注' : '设置备注'
+            }</a>
             <Divider type="vertical" />
             <a onClick={this.updateCommssion.bind(this, record)}>更改佣金</a>
             <Divider type="vertical" />
@@ -993,13 +994,13 @@ export default class FrontUserList extends PureComponent {
           <MoneyForm moneyOK={this.moneyOK} name={moneyMsg.name} money={moneyMsg.money} />
         </Modal>
         <Modal
-          title="设置备注"
+          title="修改备注"
           visible={isRemark}
           onCancel={this.remarkCancel}
           destroyOnClose="true"
           footer=""
         >
-          <RemarkForm remarkOK={this.remarkOK}/>
+          <RemarkForm remarkOK={this.remarkOK} remarkText={remarkMsg.remark}/>
         </Modal>
         <Modal
           title="设置授权码"
