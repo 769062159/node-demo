@@ -705,6 +705,18 @@ export default class Order extends PureComponent {
               {getFieldDecorator('consignee')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
+          <Col md={8} sm={24}>
+            <FormItem label="支付类型">
+              {getFieldDecorator('pay_type')(
+                <Select placeholder="请选择" style={{ width: '100%' }}>
+                  <Option value="1">微信支付</Option>
+                  <Option value="2">支付宝支付</Option>
+                  <Option value="3">扫呗支付</Option>
+                  <Option value="4">线下支付</Option>
+                </Select>
+              )}
+            </FormItem>
+          </Col>
         </Row>
         <div style={{ overflow: 'hidden' }}>
           <span style={{ float: 'right', marginBottom: 24 }}>
@@ -948,6 +960,13 @@ export default class Order extends PureComponent {
                     <Col span={4} style={{ paddingLeft: 20 }}>
                       {moment(item.create_time * 1000).format('YYYY-MM-DD HH:mm:ss')}
                     </Col>
+                    {
+                      item.pay_type === 4 ? (
+                        <Col span={6} style={{ paddingLeft: 10, color: '#f44' }}>
+                          订单类型：线下订单
+                        </Col>
+                      ) : ''
+                    }
                     <Col span={6} style={{ paddingLeft: 10 }}>
                       订单号：{item.order_sn}
                     </Col>
