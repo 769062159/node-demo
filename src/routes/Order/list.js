@@ -204,6 +204,8 @@ export default class Order extends PureComponent {
         searchOrderSn && form.setFieldsValue({
           pack_order_sn: searchOrderSn,
         });
+      } else {
+        message.error(res.msg)
       }
     })
   }
