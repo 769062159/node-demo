@@ -205,7 +205,7 @@ export default class Order extends PureComponent {
           pack_order_sn: searchOrderSn,
         });
       } else {
-        message.error(res.msg)
+        message.error(res.message)
       }
     })
   }
