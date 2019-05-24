@@ -19,6 +19,9 @@ import {
 } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
+
+import debounce from 'lodash/debounce';
+import request from '../../utils/request';
 import styles from './List.less';
 
 const FormItem = Form.Item;
@@ -92,6 +95,10 @@ export default class Order extends PureComponent {
     minPrice: '',
     sn: '', // 需要修改的包裹的sn
     isSnModal: false,
+    isManualOrder: false, // 添加手工单显示
+    manualOrder: {},
+    manualOrderGoods: [],
+    applets: [], // 小程序列表
     shipNumber: '',
     expressId: '',
     isEditType: 0, // 修改发
@@ -104,6 +111,10 @@ export default class Order extends PureComponent {
     values: {}, // form表单的查询条件
   };
 
+  constructor (props) {
+    super(props);
+    this.filterGoods = debounce(this.filterGoods, 300);
+  }
   componentDidMount() {
     const { dispatch, address: { addressList }, order: { expressList, searchOrderSn }, form } = this.props;
     if (searchOrderSn) {
@@ -138,6 +149,8 @@ export default class Order extends PureComponent {
         type: 'order/fetchExpressList',
       });
     }
+    this.filterGoods('')
+    this.getApplets()
   }
   componentWillUnmount() {
     const { dispatch } = this.props;
@@ -145,6 +158,7 @@ export default class Order extends PureComponent {
       type: 'order/clearOrder',
     });
   }
+  
   // 设置最小值
   setMin = e => {
     const { value } = e.target;
@@ -155,6 +169,44 @@ export default class Order extends PureComponent {
     const { value } = e.target;
     this.setState({ maxPrice: value });
   };
+  saveManualOrder = () => {
+    let { manualOrder } = this.state
+    if (!manualOrder.user_id) {
+      message.error('请输入用户id')
+      return false
+    }
+    if (!manualOrder.sku_id) {
+      message.error('请选择商品')
+      return false
+    }
+    if (!manualOrder.wechat_account_id) {
+      message.error('请选择小程序')
+      return false
+    }
+    request('/merchant/order/create/manual', {
+      method: 'POST',
+      body: manualOrder
+    }).then(res => {
+      console.log(res)
+      if (res && res.code === 200) {
+        const { dispatch, order: { searchOrderSn } } = this.props;
+        const { page } = this.state;
+        let payload = {
+          page: page,
+          pack_order_sn: searchOrderSn,
+        }
+        !searchOrderSn && delete payload.pack_order_sn
+        this.hideManualOrder()
+        dispatch({
+          type: 'order/fetchOrder',
+          payload: payload,
+        });
+        searchOrderSn && form.setFieldsValue({
+          pack_order_sn: searchOrderSn,
+        });
+      }
+    })
+  }
   setShip = () => {
     const { shipNumber, sn, expressId, isEditType } = this.state;
     if (!sn) {
@@ -203,6 +255,11 @@ export default class Order extends PureComponent {
       },
     });
     this.handAddressCancel();
+  };
+  showManulOrder = () => {
+    this.setState({
+      isManualOrder: true
+    })
   };
   ship = sn => {
     this.setState({
@@ -289,6 +346,46 @@ export default class Order extends PureComponent {
       },
     });
   };
+  getApplets = () => {
+    request('/merchant/wechat-accounts', {
+      method: 'POST'
+    }).then(res => {
+      console.log(res)
+      if (res && res.code === 200) {
+        this.setState({
+          applets: res.data
+        })
+      }
+    })
+  }
+  filterGoods = v => {
+    request('/merchant/goods/list', {
+      method: 'POST',
+      body: {
+        goods_name: v,
+        page_number: 99
+      },
+    }).then(res => {
+      console.log(res)
+      if (res.code === 200) {
+        this.setState({
+          manualOrderGoods: res.data.list
+        })
+      }
+    })
+  }
+  hideManualOrder = () => {
+    let {manualOrder} = this.state
+    manualOrder = {
+      user_id: '',
+      sku_id: '',
+      wechat_account_id: ''
+    }
+    this.setState({
+      isManualOrder: false,
+      manualOrder
+    })
+  }
   //  取消发货
   handShipCancel = () => {
     this.setState({
@@ -347,6 +444,27 @@ export default class Order extends PureComponent {
       }
     }
   };
+  changeManualOrderId = e => {
+    var {manualOrder} = this.state;
+    manualOrder.user_id = e.target.value
+    this.setState({
+      manualOrder
+    })
+  }
+  handleChangeManualOrderGoods = v => {
+    var {manualOrder} = this.state;
+    manualOrder.sku_id = v
+    this.setState({
+      manualOrder
+    })
+  }
+  handleChangeManualOrderApplets = v => {
+    var {manualOrder} = this.state;
+    manualOrder.wechat_account_id = v
+    this.setState({
+      manualOrder
+    })
+  }
   changeAddressInfo = e => {
     this.setState({
       addressInfo: e.target.value,
@@ -444,12 +562,12 @@ export default class Order extends PureComponent {
     return (
       <Form layout="inline" onSubmit={this.handleSearch} autoComplete="OFF">
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-          <Col md={8} sm={24}>
+          <Col md={7} sm={24}>
             <FormItem label="订单SN">
               {getFieldDecorator('pack_order_sn')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
-          <Col md={8} sm={24}>
+          <Col md={7} sm={24}>
             <FormItem label="订单状态">
               {getFieldDecorator('order_status')(
                 <Select placeholder="请选择" style={{ width: '100%' }}>
@@ -463,7 +581,7 @@ export default class Order extends PureComponent {
               )}
             </FormItem>
           </Col>
-          <Col md={8} sm={24}>
+          <Col md={6} sm={24}>
             <span className={styles.submitButtons}>
               <Button type="primary"  htmlType="submit" >
                 查询
@@ -473,6 +591,9 @@ export default class Order extends PureComponent {
               </Button>
               <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>
                 重置
+              </Button>
+              <Button style={{ marginLeft: 8 }} onClick={this.showManulOrder}>
+                添加订单
               </Button>
               <a style={{ marginLeft: 8 }} onClick={this.toggleForm}>
                 展开 <Icon type="down" />
@@ -596,6 +717,9 @@ export default class Order extends PureComponent {
             <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>
               重置
             </Button>
+            <Button style={{ marginLeft: 8 }} onClick={this.showManulOrder}>
+              添加订单
+            </Button>
             <a style={{ marginLeft: 8 }} onClick={this.toggleForm}>
               收起 <Icon type="up" />
             </a>
@@ -617,6 +741,10 @@ export default class Order extends PureComponent {
     } = this.props;
     const {
       isSnModal,
+      isManualOrder,
+      manualOrder,
+      manualOrderGoods,
+      applets,
       isEditType,
       shipNumber,
       expressId,
@@ -636,6 +764,24 @@ export default class Order extends PureComponent {
         );
       });
     }
+    const manualOrderGoodsItem = [];
+    if (manualOrderGoods.length) {
+      manualOrderGoods.map(v => {
+        manualOrderGoodsItem.push(
+          <Option value={v.has_shop_goods_sku[0].sku_id} key={v.goods_id}>{v.goods_name}</Option>
+        )
+      })
+    }
+    
+    const appletsItem = [];
+    if (applets.length) {
+      applets.map(v => {
+        appletsItem.push(
+          <Option value={v.id} key={v.id}>{v.name}</Option>
+        )
+      })
+    }
+
     const detailColumns = [
       {
         title: '直播标题',
@@ -877,6 +1023,64 @@ export default class Order extends PureComponent {
             )}
           />
         </Card>
+        <Modal
+          title="添加订单"
+          visible={isManualOrder}
+          onCancel={this.hideManualOrder.bind(this)}
+          footer=""
+          destroyOnClose="true"
+        >
+          <Row style={{ margin: '20px 0' }}>
+            <Col span={8}>订单购买人ID</Col>
+            <Col span={16}>
+              <Input
+                defaultValue={manualOrder.id}
+                placeholder="请输入购买人ID"
+                onChange={this.changeManualOrderId}
+              />
+            </Col>
+          </Row>
+          <Row style={{ margin: '20px 0'}}>
+            <Col span={8}>订单商品</Col>
+            <Col span={16}>
+              <Select
+                defaultValue={expressId}
+                showSearch
+                style={{ width: 200 }}
+                placeholder="选择商品"
+                optionFilterProp="children"
+                onSearch={this.filterGoods}
+                onChange={this.handleChangeManualOrderGoods.bind(this)}
+                filterOption={(input, option) =>
+                  option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                }
+              >
+                {manualOrderGoodsItem}
+              </Select>
+            </Col>
+          </Row>
+          <Row style={{marginBottom: '20px'}}>
+            <Col span={8}>订单对应小程序</Col>
+            <Col span={16}>
+              <Select
+                defaultValue={expressId}
+                showSearch
+                style={{ width: 200 }}
+                placeholder="选择对应小程序"
+                optionFilterProp="children"
+                onChange={this.handleChangeManualOrderApplets.bind(this)}
+                filterOption={(input, option) =>
+                  option.props.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                }
+              >
+                {appletsItem}
+              </Select>
+            </Col>
+          </Row>
+          <Button loading={loading} onClick={this.saveManualOrder} type="primary" style={{textAlign: 'right'}}>
+            确认添加
+          </Button>
+        </Modal>
         <Modal
           title="发货"
           visible={isSnModal}
