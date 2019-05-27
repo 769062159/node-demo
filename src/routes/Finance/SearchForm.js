@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Select, Form, Input, Button, Row, Col } from 'antd';
 
+const { apiurl } = process.env[process.env.API_ENV];
 const FormItem = Form.Item;
 const { Option } = Select;
 
@@ -21,6 +22,34 @@ class SearchForm extends Component {
     form.resetFields();
     handleFormReset();
   };
+  exportWithdraw = e => {
+    e.preventDefault();
+    const { form } = this.props;
+    form.validateFields(async (err, fieldsValue) => {
+      if (err) return;
+      let token = localStorage.getItem('token');
+      let res = await fetch(`${apiurl}/merchant/withdraw/export`, {
+        method: 'post',
+        headers: {
+          mode: 'no-cors',
+          Accept: 'application/json',
+          'Content-Type': 'application/json; charset=utf-8',
+          Authorization: `Bearer ${token}`,
+        },
+        body: fieldsValue,
+      });
+      res.blob().then(blob => {
+        let blobUrl = window.URL.createObjectURL(blob);
+        let a = window.document.createElement('a');
+        let date = new Date();
+        let timer = `${date.getFullYear()}-${(date.getMonth() + 1)}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
+        a.href = blobUrl
+        a.download = `提现记录${timer}.csv`
+        a.click()
+        a.remove()
+      })
+    })
+  }
   render() {
     const { getFieldDecorator } = this.props.form;
     return (
@@ -47,15 +76,16 @@ class SearchForm extends Component {
               )}
             </FormItem>
           </Col>
-          <Col md={8} sm={24}>
-            <span>
-              <Button type="primary" htmlType="submit">
-                查询
-              </Button>
-              <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>
-                重置
-              </Button>
-            </span>
+          <Col md={8} sm={24} style={{margin: 8}}>
+            <Button type="primary" htmlType="submit">
+              查询
+            </Button>
+            <Button type="primary" style={{marginLeft: 8}} onClick={this.exportWithdraw}>
+              导出
+            </Button>
+            <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>
+              重置
+            </Button>
           </Col>
         </Row>
       </Form>

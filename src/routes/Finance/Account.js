@@ -3,6 +3,7 @@ import { connect } from 'dva';
 import { Table, Card, Form, Row, Col, Button, Input } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
+const { apiurl, wxapiurl } = process.env[process.env.API_ENV];
 import styles from './TableList.less';
 
 const FormItem = Form.Item;
@@ -74,7 +75,38 @@ export default class Rank extends PureComponent {
       });
     });
   };
+  exportAccount = e => {
+    e.preventDefault();
+    const { form } = this.props;
+    form.validateFields(async (err, fieldsValue) => {
+      if (err) return;
 
+      const values = {
+        ...fieldsValue,
+      };
+      let token = localStorage.getItem('token');
+      let res = await fetch(`${apiurl}/merchant/account/export/account`, {
+        method: 'post',
+        headers: {
+          mode: 'no-cors',
+          Accept: 'application/json',
+          'Content-Type': 'application/json; charset=utf-8',
+          Authorization: `Bearer ${token}`,
+        },
+        body: values,
+      });
+      res.blob().then(blob => {
+        let blobUrl = window.URL.createObjectURL(blob);
+        let a = window.document.createElement('a');
+        let date = new Date();
+        let timer = `${date.getFullYear()}-${(date.getMonth() + 1)}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
+        a.href = blobUrl
+        a.download = `佣金账户${timer}.csv`
+        a.click()
+        a.remove()
+      })
+    });
+  }
   handleFormReset = () => {
     const { form, dispatch } = this.props;
     form.resetFields();
@@ -195,6 +227,9 @@ export default class Rank extends PureComponent {
                 <span className={styles.submitButtons}>
                   <Button type="primary" htmlType="submit">
                     查询
+                  </Button>
+                  <Button type="primary" style={{marginLeft: 8}} onClick={this.exportAccount}>
+                    导出
                   </Button>
                   <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>
                     重置

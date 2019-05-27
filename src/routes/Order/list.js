@@ -20,9 +20,11 @@ import {
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
 
+const { apiurl, wxapiurl } = process.env[process.env.API_ENV];
 import debounce from 'lodash/debounce';
 import request from '../../utils/request';
 import styles from './List.less';
+import { getDay } from 'date-fns';
 
 const FormItem = Form.Item;
 const { confirm } = Modal;
@@ -496,6 +498,59 @@ export default class Order extends PureComponent {
       expandForm: !this.state.expandForm,
     });
   };
+  exportOrderList = e => {
+    e.preventDefault();
+    const { form } = this.props;
+
+    form.validateFields(async (err, fieldsValue) => {
+      if (err) return;
+
+      const values = {
+        ...fieldsValue,
+      };
+
+      const { minPrice, maxPrice } = this.state;
+      if (minPrice && maxPrice) {
+        values.start_order_amount = minPrice;
+        values.end_order_amount = maxPrice;
+      }
+      if (values.end_order_time) {
+        values.end_order_time = parseInt(new Date(moment(values.end_order_time).format('YYYY-MM-DD 23:59:59')).getTime()/ 1000, 10);
+        // console.log(new Date(values.end_order_time).getTime());
+      } else {
+        delete values.end_order_time;
+      }
+      if (values.start_order_time) {
+        values.start_order_time = parseInt(new Date(moment(values.start_order_time).format('YYYY-MM-DD 00:00:00')).getTime()/ 1000, 10);
+        // console.log(new Date(values.start_order_time).getTime());
+      } else {
+        delete values.start_order_time;
+      }
+      
+      let token = localStorage.getItem('token');
+      let res = await fetch(`${apiurl}/merchant/order/export`, {
+        method: 'post',
+        headers: {
+          mode: 'no-cors',
+          Accept: 'application/json',
+          'Content-Type': 'application/json; charset=utf-8',
+          Authorization: `Bearer ${token}`,
+        },
+        body: values,
+      });
+      console.log(res)
+      res.blob().then(blob => {
+        let blobUrl = window.URL.createObjectURL(blob);
+        let a = window.document.createElement('a');
+        let date = new Date();
+        let timer = `${date.getFullYear()}-${(date.getMonth() + 1)}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
+        a.href = blobUrl
+        a.download = `订单数据${timer}.csv`
+        a.click()
+        a.remove()
+      })
+    })
+  }
   handleFormReset = () => {
     const { form, dispatch } = this.props;
     const { page } = this.state;
@@ -587,7 +642,7 @@ export default class Order extends PureComponent {
               <Button type="primary"  htmlType="submit" >
                 查询
               </Button>
-              <Button style={{ marginLeft: 8 }} type="primary" >
+              <Button style={{ marginLeft: 8 }} type="primary" onClick={this.exportOrderList}>
                 导出
               </Button>
               <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>
