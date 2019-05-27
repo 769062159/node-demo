@@ -179,10 +179,10 @@ export default class Order extends PureComponent {
       message.error('请选择商品')
       return false
     }
-    if (!manualOrder.wechat_account_id) {
-      message.error('请选择小程序')
-      return false
-    }
+    // if (!manualOrder.wechat_account_id) {
+    //   message.error('请选择小程序')
+    //   return false
+    // }
     request('/merchant/order/create/manual', {
       method: 'POST',
       body: manualOrder
@@ -204,9 +204,9 @@ export default class Order extends PureComponent {
         searchOrderSn && form.setFieldsValue({
           pack_order_sn: searchOrderSn,
         });
-      } else {
-        message.error(res.message)
       }
+    }).catch(e => {
+      console.log(e)
     })
   }
   setShip = () => {
@@ -380,8 +380,7 @@ export default class Order extends PureComponent {
     let {manualOrder} = this.state
     manualOrder = {
       user_id: '',
-      sku_id: '',
-      wechat_account_id: ''
+      sku_id: ''
     }
     this.setState({
       isManualOrder: false,
@@ -460,13 +459,13 @@ export default class Order extends PureComponent {
       manualOrder
     })
   }
-  handleChangeManualOrderApplets = v => {
-    var {manualOrder} = this.state;
-    manualOrder.wechat_account_id = v
-    this.setState({
-      manualOrder
-    })
-  }
+  // handleChangeManualOrderApplets = v => {
+  //   var {manualOrder} = this.state;
+  //   manualOrder.wechat_account_id = v
+  //   this.setState({
+  //     manualOrder
+  //   })
+  // }
   changeAddressInfo = e => {
     this.setState({
       addressInfo: e.target.value,
@@ -1080,6 +1079,7 @@ export default class Order extends PureComponent {
               </Select>
             </Col>
           </Row>
+          {/**
           <Row style={{marginBottom: '20px'}}>
             <Col span={8}>订单对应小程序</Col>
             <Col span={16}>
@@ -1097,7 +1097,7 @@ export default class Order extends PureComponent {
                 {appletsItem}
               </Select>
             </Col>
-          </Row>
+          </Row>*/}
           <Button loading={loading} onClick={this.saveManualOrder} type="primary" style={{textAlign: 'right'}}>
             确认添加
           </Button>
