@@ -36,7 +36,7 @@ class SearchForm extends Component {
           'Content-Type': 'application/json; charset=utf-8',
           Authorization: `Bearer ${token}`,
         },
-        body: fieldsValue,
+        body: JSON.stringify(fieldsValue),
       });
       res.blob().then(blob => {
         let blobUrl = window.URL.createObjectURL(blob);

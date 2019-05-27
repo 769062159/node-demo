@@ -109,7 +109,7 @@ export default class Rank extends PureComponent {
           'Content-Type': 'application/json; charset=utf-8',
           Authorization: `Bearer ${token}`,
         },
-        body: values,
+        body: JSON.stringify(values),
       });
       res.blob().then(blob => {
         let blobUrl = window.URL.createObjectURL(blob);

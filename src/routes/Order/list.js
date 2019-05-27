@@ -536,7 +536,7 @@ export default class Order extends PureComponent {
           'Content-Type': 'application/json; charset=utf-8',
           Authorization: `Bearer ${token}`,
         },
-        body: values,
+        body: JSON.stringify(values),
       });
       console.log(res)
       res.blob().then(blob => {
