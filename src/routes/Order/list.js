@@ -779,7 +779,7 @@ export default class Order extends PureComponent {
             <Button type="primary" htmlType="submit">
               查询
             </Button>
-            <Button style={{ marginLeft: 8 }} type="primary" >
+            <Button style={{ marginLeft: 8 }} type="primary" onClick={this.exportOrderList}>
               导出
             </Button>
             <Button style={{ marginLeft: 8 }} onClick={this.handleFormReset}>
