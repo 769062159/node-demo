@@ -34,7 +34,7 @@ steps:
   image: drillster/drone-rsync
   settings:
     user: root
-    hosts: [dev.shiqun.api.iyov.io]
+    hosts: [dev.shiqun.api.iyov.io,dev.admin.merchant.jianbolive.com]
     source: ./dist/*
     target: /home/wwwroot/admin_merchant
     include: []
@@ -89,7 +89,7 @@ steps:
   image: drillster/drone-rsync
   settings:
     user: root
-    hosts: [shiqun.api.iyov.io]
+    hosts: [shiqun.api.iyov.io,admin.merchant.jianbolive.com]
     source: ./dist/*
     target: /home/www/admin_merchant
     include: []
