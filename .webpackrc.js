@@ -9,14 +9,14 @@ export default {
   define: {
     'process.env':{
       'dev': {
-        uploadUrl: 'http://dev.shiqun.api.iyov.io/merchant/upload',
+        uploadUrl: 'http://dev.shiqun.api.jianbolive.com/merchant/upload',
         videoUrl: 'dev_audio',
         pic: 'dev_pic',
-        apiurl: 'http://dev.shiqun.api.iyov.io',
-        wxapiurl: 'http://dev.wechat.shiqun.iyov.io',
-        wxTxt: 'http://dev.wechat.shiqun.iyov.io/wx/wechataccount/upload/txt',
-        adminUrl: 'http://dev.admin.shop.iyov.io',
-        h5Url: 'http://dev.h5.shiqun.iyov.io'
+        apiurl: 'http://dev.shiqun.api.jianbolive.com',
+        wxapiurl: 'http://dev.wechat.shiqun.jianbolive.com',
+        wxTxt: 'http://dev.wechat.shiqun.jianbolive.com/wx/wechataccount/upload/txt',
+        adminUrl: 'http://dev.admin.shop.jianbolive.com',
+        h5Url: 'http://dev.h5.shiqun.jianbolive.com'
       },
       'master': {
         uploadUrl: 'http://shiqun.api.iyov.io/merchant/upload',
