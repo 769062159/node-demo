@@ -19,14 +19,14 @@ export default {
         h5Url: 'http://dev.h5.shiqun.jianbolive.com'
       },
       'master': {
-        uploadUrl: 'http://shiqun.api.iyov.io/merchant/upload',
+        uploadUrl: 'http://shiqun.api.jianbolive.com/merchant/upload',
         videoUrl: 'audio',
         pic: 'pic',
-        apiurl: 'http://shiqun.api.iyov.io',
-        wxapiurl: 'http://wechat.shiqun.iyov.io',
-        wxTxt: 'http://wechat.shiqun.iyov.io/wx/wechataccount/upload/txt',
-        adminUrl: 'http://admin.shop.iyov.io',
-        h5Url: 'http://h5.shiqun.iyov.io'
+        apiurl: 'http://shiqun.api.jianbolive.com',
+        wxapiurl: 'http://wechat.shiqun.jianbolive.com',
+        wxTxt: 'http://wechat.shiqun.jianbolive.com/wx/wechataccount/upload/txt',
+        adminUrl: 'http://admin.shop.jianbolive.com',
+        h5Url: 'http://h5.shiqun.jianbolive.com'
       }
     },
     /*cannot set NODE_ENV for userDefined*/
