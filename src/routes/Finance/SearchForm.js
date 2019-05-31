@@ -28,7 +28,7 @@ class SearchForm extends Component {
     form.validateFields(async (err, fieldsValue) => {
       if (err) return;
       let token = localStorage.getItem('token');
-      let res = await fetch(`${apiurl}/merchant/withdraw/export`, {
+      let res = await fetch(`${apiurl}/merchant/withdraw/export/ticket`, {
         method: 'post',
         headers: {
           mode: 'no-cors',
@@ -38,16 +38,20 @@ class SearchForm extends Component {
         },
         body: JSON.stringify(fieldsValue),
       });
-      res.blob().then(blob => {
-        let blobUrl = window.URL.createObjectURL(blob);
-        let a = window.document.createElement('a');
-        let date = new Date();
-        let timer = `${date.getFullYear()}-${(date.getMonth() + 1)}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
-        a.href = blobUrl
-        a.download = `提现记录${timer}.csv`
-        a.click()
-        a.remove()
+      res.json().then(res => {
+        console.log(res)
+        res.data.url && window.open(res.data.url)
       })
+      // res.blob().then(blob => {
+      //   let blobUrl = window.URL.createObjectURL(blob);
+      //   let a = window.document.createElement('a');
+      //   let date = new Date();
+      //   let timer = `${date.getFullYear()}-${(date.getMonth() + 1)}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
+      //   a.href = blobUrl
+      //   a.download = `提现记录${timer}.csv`
+      //   a.click()
+      //   a.remove()
+      // })
     })
   }
   render() {

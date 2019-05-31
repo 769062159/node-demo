@@ -528,7 +528,7 @@ export default class Order extends PureComponent {
       }
       
       let token = localStorage.getItem('token');
-      let res = await fetch(`${apiurl}/merchant/order/export`, {
+      let res = await fetch(`${apiurl}/merchant/order/export/ticket`, {
         method: 'post',
         headers: {
           mode: 'no-cors',
@@ -538,17 +538,20 @@ export default class Order extends PureComponent {
         },
         body: JSON.stringify(values),
       });
-      console.log(res)
-      res.blob().then(blob => {
-        let blobUrl = window.URL.createObjectURL(blob);
-        let a = window.document.createElement('a');
-        let date = new Date();
-        let timer = `${date.getFullYear()}-${(date.getMonth() + 1)}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
-        a.href = blobUrl
-        a.download = `订单数据${timer}.csv`
-        a.click()
-        a.remove()
+      res.json().then(res => {
+        console.log(res)
+        res.data.url && window.open(res.data.url)
       })
+      // res.blob().then(blob => {
+      //   let blobUrl = window.URL.createObjectURL(blob);
+      //   let a = window.document.createElement('a');
+      //   let date = new Date();
+      //   let timer = `${date.getFullYear()}-${(date.getMonth() + 1)}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
+      //   a.href = blobUrl
+      //   a.download = `订单数据${timer}.csv`
+      //   a.click()
+      //   a.remove()
+      // })
     })
   }
   handleFormReset = () => {

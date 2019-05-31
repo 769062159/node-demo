@@ -85,7 +85,7 @@ export default class Rank extends PureComponent {
         ...fieldsValue,
       };
       let token = localStorage.getItem('token');
-      let res = await fetch(`${apiurl}/merchant/account/export/account`, {
+      let res = await fetch(`${apiurl}/merchant/account/export/account/ticket`, {
         method: 'post',
         headers: {
           mode: 'no-cors',
@@ -95,16 +95,20 @@ export default class Rank extends PureComponent {
         },
         body: JSON.stringify(values),
       });
-      res.blob().then(blob => {
-        let blobUrl = window.URL.createObjectURL(blob);
-        let a = window.document.createElement('a');
-        let date = new Date();
-        let timer = `${date.getFullYear()}-${(date.getMonth() + 1)}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
-        a.href = blobUrl
-        a.download = `佣金账户${timer}.csv`
-        a.click()
-        a.remove()
+      res.json().then(res => {
+        console.log(res)
+        res.data.url && window.open(res.data.url)
       })
+      // res.blob().then(blob => {
+      //   let blobUrl = window.URL.createObjectURL(blob);
+      //   let a = window.document.createElement('a');
+      //   let date = new Date();
+      //   let timer = `${date.getFullYear()}-${(date.getMonth() + 1)}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
+      //   a.href = blobUrl
+      //   a.download = `佣金账户${timer}.csv`
+      //   a.click()
+      //   a.remove()
+      // })
     });
   }
   handleFormReset = () => {
