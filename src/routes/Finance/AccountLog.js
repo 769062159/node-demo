@@ -100,6 +100,10 @@ export default class Rank extends PureComponent {
       const values = {
         ...fieldsValue,
       };
+      if (values.times) {
+        values.times[0] = moment(values.times[0]).format('YYYY-MM-DD');
+        values.times[1] = moment(values.times[1]).format('YYYY-MM-DD');
+      }
       let token = localStorage.getItem('token');
       let res = await fetch(`${apiurl}/merchant/account/export/accountLog/ticket`, {
         method: 'post',
