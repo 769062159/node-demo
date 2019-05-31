@@ -70,6 +70,7 @@ export default {
       }
     },
     *fetchAccountList({ payload }, { call, put }) {
+      if (payload.times) payload.times = payload.times.map(time => time.format('YYYY-MM-DD'))
       const response = yield call(getAccountList, payload);
       yield put({
         type: 'getAccountList',
@@ -102,6 +103,7 @@ export default {
       });
     },
     *fetchWithdraw({ payload }, { call, put }) {
+      if (payload.times) payload.times = payload.times.map(time => time.format('YYYY-MM-DD'))
       const response = yield call(getWithdrawList, payload);
       yield put({
         type: 'getWithdraw',
