@@ -78,6 +78,7 @@ export default {
       });
     },
     *fetchAccountLogList({ payload }, { call, put }) {
+      if (payload.times) payload.times = payload.times.map(time => time.format('YYYY-MM-DD'))
       const response = yield call(getAccountLogList, payload);
       yield put({
         type: 'getAccountLogList',
