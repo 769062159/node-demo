@@ -17,7 +17,7 @@ steps:
 - name: build-dev
   image: node:10.15.3
   commands:
-  - yarn install && npm run build:dev
+  - yarn --ignore-optional && npm run build:dev
 
 - name: rebuild-cache
   image: drillster/drone-volume-cache
@@ -34,7 +34,7 @@ steps:
   image: drillster/drone-rsync
   settings:
     user: root
-    hosts: [dev.shiqun.api.iyov.io]
+    hosts: [dev.shiqun.api.iyov.io,dev.admin.merchant.jianbolive.com]
     source: ./dist/*
     target: /home/wwwroot/admin_merchant
     include: []
@@ -72,7 +72,7 @@ steps:
 - name: build-prod
   image: node:10.15.3
   commands:
-  - yarn install && npm run build
+  - yarn --ignore-optional && npm run build
 
 - name: rebuild-cache
   image: drillster/drone-volume-cache
@@ -89,7 +89,7 @@ steps:
   image: drillster/drone-rsync
   settings:
     user: root
-    hosts: [shiqun.api.iyov.io]
+    hosts: [shiqun.api.iyov.io,admin.merchant.jianbolive.com]
     source: ./dist/*
     target: /home/www/admin_merchant
     include: []
