@@ -140,6 +140,7 @@ export default {
       });
     },
     *fetchOrder({ payload }, { call, put, select }) {
+      if (payload.times) payload.times = payload.times.map(time => time.format('YYYY-MM-DD'))
       const response = yield call(getOrderList, { ...payload });
       let id = '';
       id = yield select(state => state.user.currentUser.shop_store_id);
