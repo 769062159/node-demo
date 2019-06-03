@@ -116,7 +116,10 @@ class StandardTable extends PureComponent {
           rowSelection={rowSelection}
           dataSource={list}
           columns={columns}
-          pagination={paginationProps}
+          pagination={{
+            ...paginationProps,
+            showQuickJumper: true
+          }}
           onChange={this.handleTableChange}
         />
       </div>
