@@ -2718,6 +2718,7 @@ class EditGoodStep2 extends React.PureComponent {
       normal_integral_qrcode: isQrcodeGoods ? goodsDetail.normal_integral_qrcode : 0,
       supplement_normal_integral_qrcode: (isQrcodeGoods && hasGroupData) ? goodsDetail.supplement_normal_integral_qrcode : 0,
       supplement_normal_integral_qrcode_2: (isQrcodeGoods && hasWealthData) ? goodsDetail.supplement_normal_integral_qrcode_2 : 0,
+      normal_union_integral_qrcode: isQrcodeGoods ? goodsDetail.normal_union_integral_qrcode : 0,
       supplement_normal_union_integral_qrcode: (isQrcodeGoods && hasGroupData) ? goodsDetail.supplement_normal_union_integral_qrcode : 0,
       supplement_normal_union_integral_qrcode_2: (isQrcodeGoods && hasWealthData) ? goodsDetail.supplement_normal_union_integral_qrcode_2 : 0,
     });
@@ -2740,6 +2741,7 @@ class EditGoodStep2 extends React.PureComponent {
       group_integral_qrcode: isQrcodeGoods ? goodsDetail.group_integral_qrcode : 0,
       supplement_group_integral_qrcode: (isQrcodeGoods && hasGroupData) ? goodsDetail.supplement_group_integral_qrcode : 0,
       supplement_group_integral_qrcode_2: (isQrcodeGoods && hasWealthData) ? goodsDetail.supplement_group_integral_qrcode_2 : 0,
+      group_union_integral_qrcode: isQrcodeGoods ? goodsDetail.group_union_integral_qrcode : 0,
       supplement_group_union_integral_qrcode: (isQrcodeGoods && hasGroupData) ? goodsDetail.supplement_group_union_integral_qrcode : 0,
       supplement_group_union_integral_qrcode_2: (isQrcodeGoods && hasWealthData) ? goodsDetail.supplement_group_union_integral_qrcode_2 : 0,
     });
@@ -2762,6 +2764,7 @@ class EditGoodStep2 extends React.PureComponent {
       merchant_integral_qrcode: isQrcodeGoods ? goodsDetail.merchant_integral_qrcode : 0,
       supplement_merchant_integral_qrcode: (isQrcodeGoods && hasGroupData) ? goodsDetail.supplement_merchant_integral_qrcode : 0,
       supplement_merchant_integral_qrcode_2: (isQrcodeGoods && hasWealthData) ? goodsDetail.supplement_merchant_integral_qrcode_2 : 0,
+      merchant_union_integral_qrcode: isQrcodeGoods ? goodsDetail.merchant_union_integral_qrcode : 0,
       supplement_merchant_union_integral_qrcode: (isQrcodeGoods && hasGroupData) ? goodsDetail.supplement_merchant_union_integral_qrcode : 0,
       supplement_merchant_union_integral_qrcode_2: (isQrcodeGoods && hasWealthData) ? goodsDetail.supplement_merchant_union_integral_qrcode_2 : 0,
     });
@@ -2784,6 +2787,7 @@ class EditGoodStep2 extends React.PureComponent {
       wealth_integral_qrcode: isQrcodeGoods ? goodsDetail.wealth_integral_qrcode : 0,
       supplement_wealth_integral_qrcode: (isQrcodeGoods && hasGroupData) ? goodsDetail.supplement_wealth_integral_qrcode : 0,
       supplement_wealth_integral_qrcode_2: (isQrcodeGoods && hasWealthData) ? goodsDetail.supplement_wealth_integral_qrcode_2 : 0,
+      wealth_union_integral_qrcode: isQrcodeGoods ? goodsDetail.wealth_union_integral_qrcode : 0,
       supplement_wealth_union_integral_qrcode: (isQrcodeGoods && hasGroupData) ? goodsDetail.supplement_wealth_union_integral_qrcode : 0,
       supplement_wealth_union_integral_qrcode_2: (isQrcodeGoods && hasWealthData) ? goodsDetail.supplement_wealth_union_integral_qrcode_2 : 0,
     });
