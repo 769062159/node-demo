@@ -928,6 +928,7 @@ class AddLiveStep2 extends React.PureComponent {
             dispatch({
               type: 'classModel/setUploadImg',
               payload: {
+                url: result.url,
                 dir: `${env.videoUrl}/${currentUser.id}/${currentUser.shop_store_id}`,
                 filename: randomNum,
                 ext: 'mp4',
