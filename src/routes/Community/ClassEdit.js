@@ -379,9 +379,6 @@ export default class ClassAdd extends PureComponent {
         course_id: id,
       },
     });
-    dispatch({
-      type: 'live/fetchToken',
-    });
   }
   componentWillUnmount() {
     const { dispatch } = this.props;
@@ -559,7 +556,6 @@ export default class ClassAdd extends PureComponent {
           file: files[i],   // 文件，必填,html5 file类型，不需要读数据流，
           name, // 文件名称，选填，默认为文件名称
           token,  // token，必填
-          dir: `${env.videoUrl}/${currentUser.id}/${currentUser.shop_store_id}`,
           maxSize: 1024 * 1024 * 1024,  // 上传大小限制，选填，默认0没有限制
           callback: (percent, result) => {
             if (percent === 100 && result) {
@@ -577,7 +573,6 @@ export default class ClassAdd extends PureComponent {
               dispatch({
                 type: 'classModel/getUpload',
                 payload: {
-                  dir: `${env.videoUrl}/${currentUser.id}/${currentUser.shop_store_id}`,
                   page: 1,
                   pageSize: 10,
                 },
@@ -731,7 +726,7 @@ export default class ClassAdd extends PureComponent {
         dataIndex: 'pic',
         key: 'pic',
         width: 100,
-        render: val => (val ? <img src={`${imgUrl}${val}`} style={{ width: '60px', height: 60 }} alt="图片" /> : null),
+        render: val => (val ? <img src={`${val}`} style={{ width: '60px', height: 60 }} alt="图片" /> : null),
       },
       {
         title: '视频路径',
@@ -778,6 +773,11 @@ export default class ClassAdd extends PureComponent {
             rowSelection={rowSelection}
             columns={uploadListColumns}
             pagination={uploadListPage}
+            rowClassName={
+              (record) => {
+                return record.transcoding ? styles.rowDisabled : ''
+              }
+            }
             onChange={this.handleUploadSelectChange}
           />
         </Modal>

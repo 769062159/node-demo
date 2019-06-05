@@ -315,14 +315,15 @@ async function uploadInit () {
 
 export async function uploadJSSDK2 (config) {
   let uploadClient = await uploadInit()
-  uploadClient.client.multipartUpload(uploadClient.config.Path + config.file.name, config.file, {
+  uploadClient.client.multipartUpload(uploadClient.config.Path + (+new Date()) + config.file.name, config.file, {
     progress: function (p, cpt) {
-      console.log(p, cpt)
-      config.callback(p * 100)
+      config.callback(parseFloat((p * 100).toFixed(2)))
     }
   }).then(res => {
-    console.log(res)
-    console.log(uploadClient.config.Bucket + uploadClient.config.EndPoint + uploadClient.config.Path + config.file.name)
+
+    console.log(res.name)
+    console.log(uploadClient.config.Host)
+    
     config.callback(100, {
       url: uploadClient.config.Host + res.name
     })

@@ -18,7 +18,7 @@ import {
   Checkbox,
 } from 'antd';
 import ReactEditor from 'components/ReactEditor';
-import { uploadJSSDK, base64ToFile } from '../../../utils/utils';
+import { uploadJSSDK2 as uploadJSSDK, base64ToFile } from '../../../utils/utils';
 import request from '../../../utils/request';
 // import { env } from '../../../utils/config';
 // import LiveGoodTable from '../../../components/LiveGoodTable';
@@ -481,9 +481,7 @@ class EditLiveStep2 extends React.PureComponent {
         page_number: 10,
       },
     });
-    dispatch({
-      type: 'live/fetchToken',
-    });
+
     dispatch({
       type: 'frontUser/fetchUserRankList',
     });

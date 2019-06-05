@@ -20,7 +20,7 @@ import { routerRedux } from 'dva/router';
 import ReactEditor from 'components/ReactEditor';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './style.less'
-import { uploadJSSDK } from '../../utils/utils';
+import { uploadJSSDK2 as uploadJSSDK } from '../../utils/utils';
 // import styles from './TableList.less';
 // import request from '../../utils/request';
 
@@ -381,12 +381,6 @@ export default class ClassAdd extends PureComponent {
     isVideoModal: false,
     index: 0,
   };
-  componentDidMount() {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'live/fetchToken',
-    });
-  }
   // 添加描述
   setDescription = (e) => {
     const obj = {};

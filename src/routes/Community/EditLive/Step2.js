@@ -21,7 +21,7 @@ import {
 // import { Form, Button, Input, Upload, Icon, Modal, Tag, message } from 'antd';
 // import LiveGoodTable from '../../../components/LiveGoodTable';
 import ReactEditor from 'components/ReactEditor';
-import { uploadJSSDK, base64ToFile } from '../../../utils/utils';
+import { uploadJSSDK2 as uploadJSSDK, base64ToFile } from '../../../utils/utils';
 import { UPLOAD_TYPE } from '../../../utils/config';
 // import { env } from '../../../utils/config';
 import request from '../../../utils/request';
@@ -488,9 +488,7 @@ class EditLiveStep2 extends React.PureComponent {
         page_number: 10,
       },
     });
-    dispatch({
-      type: 'live/fetchToken',
-    });
+   
     dispatch({
       type: 'frontUser/fetchUserRankList',
     });

@@ -142,12 +142,6 @@ export default class ClassAdd extends PureComponent {
     isLiveModal: false,
     index: 0,
   };
-  componentDidMount() {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'live/fetchToken',
-    });
-  }
   handleSubmit = () => {
     const { live: { smallVideoForm } } = this.props;
     const { dispatch } = this.props;
@@ -252,7 +246,7 @@ export default class ClassAdd extends PureComponent {
               videoDom.addEventListener("loadedmetadata", () => {
                 const data = {
                   size,
-                  zz: url,
+                  url: url,
                   width: videoDom.videoWidth,
                   height: videoDom.videoHeight,
                   dir: `videos/${currentUser.id}`,

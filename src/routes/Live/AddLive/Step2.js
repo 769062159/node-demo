@@ -22,7 +22,7 @@ import {
 import ReactEditor from 'components/ReactEditor';
 // import { Form, Button, Input, Upload, Icon, Modal, Tag, message, Select } from 'antd';
 // import request from '../../../utils/request';
-import { uploadJSSDK, base64ToFile } from '../../../utils/utils';
+import { uploadJSSDK2 as uploadJSSDK, base64ToFile } from '../../../utils/utils';
 import request from '../../../utils/request';
 // import { env } from '../../../utils/config';
 // import LiveGoodTable from '../../../components/LiveGoodTable';
@@ -498,9 +498,6 @@ class AddLiveStep2 extends React.PureComponent {
       },
     });
     dispatch({
-      type: 'live/fetchToken',
-    });
-    dispatch({
       type: 'frontUser/fetchUserRankList',
     });
   }
@@ -907,7 +904,7 @@ class AddLiveStep2 extends React.PureComponent {
     this.openOrCloseVideo();
   };
   uploadVideo = e => {
-    const files = e.target.files;
+    const files = e.target.files || [];
     if (files[0].type !== 'video/mp4') {
       message.error('请上传mp4格式文件');
       return false;
@@ -1066,7 +1063,7 @@ class AddLiveStep2 extends React.PureComponent {
         width: 100,
         render: val =>
           val ? (
-            <img src={`${imgUrl}${val}`} style={{ width: '60px', height: 60 }} alt="图片" />
+            <img src={`${val}`} style={{ width: '60px', height: 60 }} alt="图片" />
           ) : null,
       },
       {
@@ -1079,6 +1076,11 @@ class AddLiveStep2 extends React.PureComponent {
       type: 'radio',
       // selectedRowKeys: selectedMember,
       onChange: this.selectUpload,
+      getCheckboxProps: function (record) {
+        return {
+          disbaled: record.transcoding
+        }
+      }
     };
     const goodsColumns = [
       {
