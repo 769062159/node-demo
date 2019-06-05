@@ -12,7 +12,7 @@ import {
 import { routerRedux } from 'dva/router';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './style.less'
-import { uploadJSSDK } from '../../utils/utils';
+import { uploadJSSDK2 as uploadJSSDK } from '../../utils/utils';
 // import styles from './TableList.less';
 // import request from '../../utils/request';
 
@@ -260,6 +260,7 @@ export default class ClassAdd extends PureComponent {
                 isLoading: false,
                 loadingPercent: 0,
               });
+              
               message.error(`${result.responseText}`);
             }
             if (percent === 100 && result) {

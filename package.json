@@ -24,6 +24,7 @@
   "dependencies": {
     "@antv/data-set": "^0.8.0",
     "@babel/polyfill": "^7.0.0-beta.36",
+    "ali-oss": "^6.1.1",
     "ant-design-pro": "^2.3.1",
     "antd": "^3.9.0",
     "babel-runtime": "^6.9.2",

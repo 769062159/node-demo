@@ -1,4 +1,6 @@
 import moment from 'moment';
+import request from './request';
+import { message } from 'antd';
 
 /* eslint-disable */ 
 export function fixedZero(val) {
@@ -286,7 +288,49 @@ const reg = /(((^https?:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-
 export function isUrl(path) {
   return reg.test(path);
 }
+async function uploadInit () {
+  let OSS = require('ali-oss');
+  let res = await request(`/merchant/oss-upload/key`, {
+    method: 'POST'
+  })
+  res = res.data
+  let client = null
+  try {
+    client = new OSS({
+      region: res.Region,
+      accessKeyId: res.AccessKeyId,
+      accessKeySecret: res.AccessKeySecret,
+      stsToken: res.SecurityToken,
+      bucket: res.Bucket,
+      endpoint: res.EndPoint
+    })
+  } catch (e) {
+    console.log(e)
+  }
+  return {
+    config: res,
+    client: client
+  }
+}
 
+export async function uploadJSSDK2 (config) {
+  let uploadClient = await uploadInit()
+  uploadClient.client.multipartUpload(uploadClient.config.Path + config.file.name, config.file, {
+    progress: function (p, cpt) {
+      console.log(p, cpt)
+      config.callback(p * 100)
+    }
+  }).then(res => {
+    console.log(res)
+    console.log(uploadClient.config.Bucket + uploadClient.config.EndPoint + uploadClient.config.Path + config.file.name)
+    config.callback(100, {
+      url: uploadClient.config.Host + res.name
+    })
+  }).catch(e => {
+    console.log(e)
+  })
+}
+// uploadJSSDK2()
 // 上传玩图
 export function uploadJSSDK(config) {
 

@@ -11,7 +11,7 @@ import {
 import { routerRedux } from 'dva/router';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './style.less'
-import { uploadJSSDK } from '../../utils/utils';
+import { uploadJSSDK2 as uploadJSSDK } from '../../utils/utils';
 // import styles from './TableList.less';
 // import request from '../../utils/request';
 
