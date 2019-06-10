@@ -37,7 +37,7 @@ export default class Demo extends React.Component {
       // 上传成功后调用param.success并传入上传后的文件地址
       const data = JSON.parse(xhr.responseText);
       param.success({
-        url: `${data.data}@500w_1l`,
+        url: `${data.data}`,
         meta: {
           // id: 'xxx',
           title: 'xxx',
