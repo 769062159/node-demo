@@ -1076,12 +1076,7 @@ class AddLiveStep2 extends React.PureComponent {
     const rowSelections = {
       type: 'radio',
       // selectedRowKeys: selectedMember,
-      onChange: this.selectUpload,
-      getCheckboxProps: function (record) {
-        return {
-          disbaled: record.transcoding
-        }
-      }
+      onChange: this.selectUpload
     };
     const goodsColumns = [
       {

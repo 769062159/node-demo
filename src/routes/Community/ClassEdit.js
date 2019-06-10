@@ -773,11 +773,6 @@ export default class ClassAdd extends PureComponent {
             rowSelection={rowSelection}
             columns={uploadListColumns}
             pagination={uploadListPage}
-            rowClassName={
-              (record) => {
-                return record.transcoding ? styles.rowDisabled : ''
-              }
-            }
             onChange={this.handleUploadSelectChange}
           />
         </Modal>

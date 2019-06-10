@@ -776,11 +776,6 @@ export default class ClassAdd extends PureComponent {
       type: 'radio',
       // selectedRowKeys: selectedMember,
       onChange: this.selectUpload,
-      getCheckboxProps: (record) => {
-        return {
-          disabled: record.transcoding
-        }
-      }
     };
 
     return (
@@ -814,11 +809,6 @@ export default class ClassAdd extends PureComponent {
             dataSource={uploadList}
             rowKey={record => record.url}
             rowSelection={rowSelection}
-            rowClassName={
-              (record) => {
-                return record.transcoding ? styles.rowDisabled : ''
-              }
-            }
             columns={uploadListColumns}
             pagination={uploadListPage}
             onChange={this.handleUploadSelectChange}

@@ -763,7 +763,7 @@ export default class ClassAdd extends PureComponent {
         dataIndex: 'pic',
         key: 'pic',
         width: 100,
-        render: val => (val ? <img src={`${imgUrl}${val}`} style={{ width: '60px', height: 60 }} alt="图片" /> : null),
+        render: val => (val ? <img src={`${val}`} style={{ width: '60px', height: 60 }} alt="图片" /> : null),
       },
       {
         title: '视频路径',

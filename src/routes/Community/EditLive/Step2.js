@@ -1288,7 +1288,7 @@ class EditLiveStep2 extends React.PureComponent {
         width: 100,
         render: val =>
           val ? (
-            <img src={`${imgUrl}${val}`} style={{ width: '60px', height: 60 }} alt="图片" />
+            <img src={`${val}`} style={{ width: '60px', height: 60 }} alt="图片" />
           ) : null,
       },
       {
