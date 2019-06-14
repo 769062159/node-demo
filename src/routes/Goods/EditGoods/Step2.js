@@ -427,7 +427,7 @@ const CustomizedForm = Form.create({
       }),
 
 
-      
+
       // 视群补差价升级的返佣金额
 
        // 视群返佣福包
@@ -579,7 +579,7 @@ const CustomizedForm = Form.create({
       supplement_merchant_integral_2: Form.createFormField({
         value: goodsDetail.supplement_merchant_integral_2,
       }),
-      
+
 
       // 视群返佣金额
       supplement_group_union_integral_2: Form.createFormField({
@@ -598,7 +598,7 @@ const CustomizedForm = Form.create({
         value: goodsDetail.supplement_merchant_union_integral_2,
       }),
 
-      
+
       // 只有升级码才有的属性
 
       // 视群返佣金额
@@ -694,6 +694,18 @@ const CustomizedForm = Form.create({
       // 购买人奖励福包
       supplement_reward_shipping_fee_2: Form.createFormField({
         value: goodsDetail.supplement_reward_shipping_fee_2,
+      }),
+      // 讲师成交佣金（正常升级）
+      lecturer_reward_normal_price: Form.createFormField({
+        value: goodsDetail.lecturer_reward_normal_price,
+      }),
+      // 讲师成交佣金（群主补差价升级）
+      lecturer_reward_supplement_group_price: Form.createFormField({
+        value: goodsDetail.lecturer_reward_supplement_group_price,
+      }),
+      // 讲师成交佣金（店主补差价升级）
+      lecturer_reward_supplement_wealth_price: Form.createFormField({
+        value: goodsDetail.lecturer_reward_supplement_wealth_price,
       }),
     };
     if (systemType.user_levels && systemType.user_levels.length) {
@@ -1640,6 +1652,16 @@ const CustomizedForm = Form.create({
               })(<InputNumber step={1} precision={0} min={0} />)} 元
             </Form.Item>
           </Col>
+          <Col span={24}>
+            <h5>&gt;. 讲师成交佣金</h5>
+          </Col>
+          <Col span={8}>
+            <Form.Item {...profitLayout} label="讲师成交佣金">
+              {getFieldDecorator(`lecturer_reward_normal_price`, {
+                rules: [{ required: false, message: `讲师成交佣金` }],
+              })(<InputNumber step={1} precision={0} min={0} />)} 元
+            </Form.Item>
+          </Col>
         </Row>
         {/* 推荐奖金结束 */}
 
@@ -1958,6 +1980,16 @@ const CustomizedForm = Form.create({
               <Form.Item {...profitLayout} label="购物余额">
                 {getFieldDecorator(`supplement_reward_shipping_fee`, {
                   rules: [{ required: true, message: `请输入乐美购物余额` }],
+                })(<InputNumber step={1} precision={0} min={0} />)} 元
+              </Form.Item>
+            </Col>
+            <Col span={24}>
+              <h5>&gt;. 讲师成交佣金</h5>
+            </Col>
+            <Col span={8}>
+              <Form.Item {...profitLayout} label="讲师成交佣金">
+                {getFieldDecorator(`lecturer_reward_supplement_group_price`, {
+                  rules: [{ required: false, message: `讲师成交佣金` }],
                 })(<InputNumber step={1} precision={0} min={0} />)} 元
               </Form.Item>
             </Col>
@@ -2280,6 +2312,16 @@ const CustomizedForm = Form.create({
                 })(<InputNumber step={1} precision={0} min={0} />)} 元
               </Form.Item>
             </Col>
+            <Col span={24}>
+              <h5>&gt;. 讲师成交佣金</h5>
+            </Col>
+            <Col span={8}>
+              <Form.Item {...profitLayout} label="讲师成交佣金">
+                {getFieldDecorator(`lecturer_reward_supplement_wealth_price`, {
+                  rules: [{ required: false, message: `讲师成交佣金` }],
+                })(<InputNumber step={1} precision={0} min={0} />)} 元
+              </Form.Item>
+            </Col>
           </Row>
         )] : null}
         </Card>
@@ -2412,7 +2454,7 @@ const CustomizedForm = Form.create({
 @connect(({ global, login, goods, loading }) => ({
   goods,
   global,
-  login, 
+  login,
   loading: loading.models.goods,
 }))
 // @Form.create()
@@ -2880,7 +2922,11 @@ class EditGoodStep2 extends React.PureComponent {
       supplement_reward_integral_2: hasWealthData ? goodsDetail.supplement_reward_integral_2 : 0,
       supplement_reward_shipping_fee_2: hasWealthData ? goodsDetail.supplement_reward_shipping_fee_2 : 0
     });
-
+    freezeData.push({
+      lecturer_reward_normal_price:goodsDetail.lecturer_reward_normal_price?goodsDetail.lecturer_reward_normal_price:0,
+      lecturer_reward_supplement_group_price:hasGroupData?goodsDetail.lecturer_reward_supplement_group_price:0,
+      lecturer_reward_supplement_wealth_price:hasWealthData?goodsDetail.lecturer_reward_supplement_wealth_price:0
+    })
     values.freeze_commission_type = 0;
     values.freeze_commission_value = freezeData;
     if (attrTable.length) {
