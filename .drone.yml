@@ -17,6 +17,7 @@ steps:
 - name: build-dev
   image: node:10.15.3
   commands:
+  - rm -rf .yarnrc
   - yarn --ignore-optional && npm run build:dev
 
 - name: rebuild-cache
@@ -46,7 +47,7 @@ steps:
 
 volumes:
   - name: cache
-    host: 
+    host:
       path: /tmp
 
 trigger:
@@ -101,7 +102,7 @@ steps:
 
 volumes:
   - name: cache
-    host: 
+    host:
       path: /tmp
 
 trigger:
