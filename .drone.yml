@@ -17,7 +17,7 @@ steps:
 - name: build-dev
   image: node:10.15.3
   commands:
-  - rm -rf .yarnrc
+  - rm -rf .npmrc
   - yarn --ignore-optional && npm run build:dev
 
 - name: rebuild-cache
