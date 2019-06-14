@@ -688,16 +688,16 @@ const CustomizedForm = Form.create({
       }),
 
       // 讲师成交佣金（正常升级）
-      lecturer_transaction_commission_v1: Form.createFormField({
-        value: goodsDetail.lecturer_transaction_commission_v1,
+      lecturer_reward_normal_price: Form.createFormField({
+        value: goodsDetail.lecturer_reward_normal_price,
       }),
       // 讲师成交佣金（群主补差价升级）
-      lecturer_transaction_commission_v2: Form.createFormField({
-        value: goodsDetail.lecturer_transaction_commission_v2,
+      lecturer_reward_supplement_group_price: Form.createFormField({
+        value: goodsDetail.lecturer_reward_supplement_group_price,
       }),
       // 讲师成交佣金（店主补差价升级）
-      lecturer_transaction_commission_v3: Form.createFormField({
-        value: goodsDetail.lecturer_transaction_commission_v3,
+      lecturer_reward_supplement_wealth_price: Form.createFormField({
+        value: goodsDetail.lecturer_reward_supplement_wealth_price,
       }),
 
     };
@@ -1726,7 +1726,7 @@ const CustomizedForm = Form.create({
               </Col>
               <Col span={8}>
                 <Form.Item {...profitLayout} label="讲师成交佣金">
-                  {getFieldDecorator(`lecturer_transaction_commission_v1`, {
+                  {getFieldDecorator(`lecturer_reward_normal_price`, {
                     rules: [{ required: false, message: `讲师成交佣金` }],
                   })(<InputNumber step={1} precision={0} min={0} />)} 元
                 </Form.Item>
@@ -2057,7 +2057,7 @@ const CustomizedForm = Form.create({
             </Col>
             <Col span={8}>
               <Form.Item {...profitLayout} label="讲师成交佣金">
-                {getFieldDecorator(`lecturer_transaction_commission_v2`, {
+                {getFieldDecorator(`lecturer_reward_supplement_group_price`, {
                   rules: [{ required: false, message: `讲师成交佣金` }],
                 })(<InputNumber step={1} precision={0} min={0} />)} 元
               </Form.Item>
@@ -2385,7 +2385,7 @@ const CustomizedForm = Form.create({
             </Col>
             <Col span={8}>
               <Form.Item {...profitLayout} label="讲师成交佣金">
-                {getFieldDecorator(`lecturer_transaction_commission_v3`, {
+                {getFieldDecorator(`lecturer_reward_supplement_wealth_price`, {
                   rules: [{ required: false, message: `讲师成交佣金` }],
                 })(<InputNumber step={1} precision={0} min={0} />)} 元
               </Form.Item>
@@ -2912,9 +2912,9 @@ class AddGoodStep2 extends React.PureComponent {
     });
 
     freezeData.push({
-      lecturer_transaction_commission_v1:goodsDetail.lecturer_transaction_commission_v1?goodsDetail.lecturer_transaction_commission_v1:0,
-      lecturer_transaction_commission_v2:hasGroupData?goodsDetail.lecturer_transaction_commission_v2:0,
-      lecturer_transaction_commission_v3:hasWealthData?goodsDetail.lecturer_transaction_commission_v3:0
+      lecturer_reward_normal_price:goodsDetail.lecturer_reward_normal_price?goodsDetail.lecturer_reward_normal_price:0,
+      lecturer_reward_supplement_group_price:hasGroupData?goodsDetail.lecturer_reward_supplement_group_price:0,
+      lecturer_reward_supplement_wealth_price:hasWealthData?goodsDetail.lecturer_reward_supplement_wealth_price:0
     })
 
     values.freeze_commission_type = 0;
@@ -3058,8 +3058,8 @@ class AddGoodStep2 extends React.PureComponent {
     values.is_grouper_free = values.is_grouper_free || 0;
     values.is_return_profit = values.is_return_profit || 0;
     values.group_share_title = values.group_share_title || 0;
-    console.log(11);
-    console.log(values.group_user_price);
+    /*console.log(11);
+    console.log(values.group_user_price);*/
     dispatch({
       type: 'goods/addShop',
       payload: {
