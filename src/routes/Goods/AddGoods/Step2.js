@@ -569,7 +569,7 @@ const CustomizedForm = Form.create({
       supplement_merchant_integral_2: Form.createFormField({
         value: goodsDetail.supplement_merchant_integral_2,
       }),
-      
+
 
       // 视群返佣金额
       supplement_group_union_integral_2: Form.createFormField({
@@ -588,7 +588,7 @@ const CustomizedForm = Form.create({
         value: goodsDetail.supplement_merchant_union_integral_2,
       }),
 
-      
+
       // 只有升级码才有的属性
 
       // 视群返佣金额
@@ -686,6 +686,20 @@ const CustomizedForm = Form.create({
       supplement_reward_shipping_fee_2: Form.createFormField({
         value: goodsDetail.supplement_reward_shipping_fee_2,
       }),
+
+      // 讲师成交佣金（正常升级）
+      lecturer_transaction_commission_v1: Form.createFormField({
+        value: goodsDetail.lecturer_transaction_commission_v1,
+      }),
+      // 讲师成交佣金（群主补差价升级）
+      lecturer_transaction_commission_v2: Form.createFormField({
+        value: goodsDetail.lecturer_transaction_commission_v2,
+      }),
+      // 讲师成交佣金（店主补差价升级）
+      lecturer_transaction_commission_v3: Form.createFormField({
+        value: goodsDetail.lecturer_transaction_commission_v3,
+      }),
+
     };
     if (systemType.user_levels && systemType.user_levels.length) {
       systemType.user_levels.forEach(res => {
@@ -939,7 +953,7 @@ const CustomizedForm = Form.create({
             <Col span={24}>
               <Form.Item {...formItemLayouts} label="商品类型">
                 {getFieldDecorator('type', {
-                rules: [{ required: true, message: '请填写商商品类型' }],
+                rules: [{ required: true, message: '请填写商品类型' }],
               })(
                 <Select style={{ width: 200 }}>
                   <Option value={0} key={0}>
@@ -1707,6 +1721,16 @@ const CustomizedForm = Form.create({
               })(<InputNumber step={1} precision={0} min={0} />)} 元
                 </Form.Item>
               </Col>
+              <Col span={24}>
+                <h5>&gt;. 讲师成交佣金</h5>
+              </Col>
+              <Col span={8}>
+                <Form.Item {...profitLayout} label="讲师成交佣金">
+                  {getFieldDecorator(`lecturer_transaction_commission_v1`, {
+                    rules: [{ required: false, message: `讲师成交佣金` }],
+                  })(<InputNumber step={1} precision={0} min={0} />)} 元
+                </Form.Item>
+              </Col>
             </Row>
             {/* 推荐奖金结束 */}
 
@@ -2028,6 +2052,16 @@ const CustomizedForm = Form.create({
                 })(<InputNumber step={1} precision={0} min={0} />)} 元
               </Form.Item>
             </Col>
+            <Col span={24}>
+              <h5>&gt;. 讲师成交佣金</h5>
+            </Col>
+            <Col span={8}>
+              <Form.Item {...profitLayout} label="讲师成交佣金">
+                {getFieldDecorator(`lecturer_transaction_commission_v2`, {
+                  rules: [{ required: false, message: `讲师成交佣金` }],
+                })(<InputNumber step={1} precision={0} min={0} />)} 元
+              </Form.Item>
+            </Col>
           </Row>
         )]: null}
 
@@ -2344,6 +2378,17 @@ const CustomizedForm = Form.create({
                   rules: [{ required: true, message: `请输入购物余额` }],
                 })(<InputNumber step={1} precision={0} min={0} />)} 元
               </Form.Item>
+
+            </Col>
+            <Col span={24}>
+              <h5>&gt;. 讲师成交佣金</h5>
+            </Col>
+            <Col span={8}>
+              <Form.Item {...profitLayout} label="讲师成交佣金">
+                {getFieldDecorator(`lecturer_transaction_commission_v3`, {
+                  rules: [{ required: false, message: `讲师成交佣金` }],
+                })(<InputNumber step={1} precision={0} min={0} />)} 元
+              </Form.Item>
             </Col>
           </Row>
         )] : null}
@@ -2477,6 +2522,8 @@ const CustomizedForm = Form.create({
   login,
   loading: loading.models.goods,
 }))
+
+
 class AddGoodStep2 extends React.PureComponent {
   state = {
     previewVisible: false,
@@ -2863,6 +2910,12 @@ class AddGoodStep2 extends React.PureComponent {
       supplement_reward_integral_2: hasWealthData ? goodsDetail.supplement_reward_integral_2 : 0,
       supplement_reward_shipping_fee_2: hasWealthData ? goodsDetail.supplement_reward_shipping_fee_2 : 0,
     });
+
+    freezeData.push({
+      lecturer_transaction_commission_v1:goodsDetail.lecturer_transaction_commission_v1?goodsDetail.lecturer_transaction_commission_v1:0,
+      lecturer_transaction_commission_v2:hasGroupData?goodsDetail.lecturer_transaction_commission_v2:0,
+      lecturer_transaction_commission_v3:hasWealthData?goodsDetail.lecturer_transaction_commission_v3:0
+    })
 
     values.freeze_commission_type = 0;
     values.freeze_commission_value = freezeData;
