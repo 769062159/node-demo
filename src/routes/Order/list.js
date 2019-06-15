@@ -1,24 +1,8 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
 import moment from 'moment';
-import {
-  Card,
-  Form,
-  Row,
-  Col,
-  List,
-  Button,
-  Icon,
-  Input,
-  Select,
-  Modal,
-  DatePicker,
-  Cascader,
-  Table,
-  message,
-} from 'antd';
+import { Popconfirm,Card, Form, Row, Col, List, Button, Icon, Input, Select, Modal, DatePicker, Cascader, Table, message, } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
-
 
 const { apiurl, wxapiurl } = process.env[process.env.API_ENV];
 import debounce from 'lodash/debounce';
@@ -66,21 +50,7 @@ const grayBtn = {
   margin: '5px 0',
   lineHeight: '28px',
 };
-// const bigStyles = {
-//     width: '90%',
-//     textAlign: 'center',
-//     height: '100%',
-//   };
-//   const smallStyles = {
-//     width: '10%',
-//     textAlign: 'center',
-//     height: '100%',
-//   };
-// const allStyle = {
-//   width: '100%',
-//   textAlign: 'center',
-//   height: '100%',
-// };
+
 
 @connect(({ order, address, loading }) => ({
   order,
@@ -111,6 +81,7 @@ export default class Order extends PureComponent {
     addressArr: [],
     orderId: '',
     values: {}, // form表单的查询条件
+    close_order_sku_id:'',//需要订单退单的id
   };
 
   constructor (props) {
@@ -160,7 +131,7 @@ export default class Order extends PureComponent {
       type: 'order/clearOrder',
     });
   }
-  
+
   // 设置最小值
   setMin = e => {
     const { value } = e.target;
@@ -281,6 +252,7 @@ export default class Order extends PureComponent {
       isEditType: 1,
     });
   };
+
   completeOrder = (pack) => {
     const that = this;
     confirm({
@@ -354,7 +326,7 @@ export default class Order extends PureComponent {
     request('/merchant/wechat-accounts', {
       method: 'POST'
     }).then(res => {
-      console.log(res)
+      // console.log(res)
       if (res && res.code === 200) {
         this.setState({
           applets: res.data
@@ -370,7 +342,7 @@ export default class Order extends PureComponent {
         page_number: 99
       },
     }).then(res => {
-      console.log(res)
+      // console.log(res)
       if (res.code === 200) {
         this.setState({
           manualOrderGoods: res.data.list
@@ -526,7 +498,7 @@ export default class Order extends PureComponent {
       } else {
         delete values.start_order_time;
       }
-      
+
       let token = localStorage.getItem('token');
       let res = await fetch(`${apiurl}/merchant/order/export/ticket`, {
         method: 'post',
@@ -803,6 +775,45 @@ export default class Order extends PureComponent {
   renderForm() {
     return this.state.expandForm ? this.renderAdvancedForm() : this.renderSimpleForm();
   }
+  cancelOrderConfirm =(record) =>{
+    /*const _this=this
+    const body={
+      sku_id:record.has_order_goods[0].has_order_goods_sku.order_goods_sku_id
+    }
+    confirm({
+      content: '仅手工单支持后台退单，该操作将“申请退款->同意退款”两个操作合并处理,是否确认？',
+      okText: '确定',
+      okType: 'danger',
+      cancelText: '取消',
+      onOk() {
+        request('/merchant/order/refund/manual', {
+          method: 'POST',
+          body
+        }).then(res => {
+          console.log(res)
+          if (res && res.code === 200) {
+            _this.props.dispatch({
+              type:"order/..."
+            })
+            message.success('撤销订单操作成功！');
+          }else{
+            message.error('撤销订单操作失败，请重试！');
+          }
+        })
+      },
+      onCancel() {},
+    });*/
+    // console.log(record.pack_id)
+    const { values } = this.state;
+    this.props.dispatch({
+      type:"order/cancelOrder",
+      payload:{
+        sku_id:record.has_order_goods[0].has_order_goods_sku.order_goods_sku_id,
+        pack_id:record.pack_id,
+      },
+      values
+    })
+  }
 
   render() {
     const {
@@ -843,7 +854,7 @@ export default class Order extends PureComponent {
         )
       })
     }
-    
+
     const appletsItem = [];
     if (applets.length) {
       applets.map(v => {
@@ -881,7 +892,7 @@ export default class Order extends PureComponent {
         render: val =>
           val.map(res => {
             return (
-              <Row>
+              <Row key={res.order_goods_id}>
                 <Col span={6}>
                   <img src={res.has_order_goods_sku.http_url} alt="图片" style={{ width: 60 }} />
                 </Col>
@@ -926,7 +937,9 @@ export default class Order extends PureComponent {
       {
         title: '直简介',
         width: '12%',
-        render: (text, record) => (
+        render: (text, record) => {
+          // console.log(record)
+          return (
           <Fragment>
             {record.order_status === 2 && record.isBtn ? (
               <Button style={grayBtn} onClick={this.ship.bind(this, record.pack_id)}>
@@ -940,6 +953,9 @@ export default class Order extends PureComponent {
                 <Button style={grayBtn} onClick={this.collectGoods.bind(this, record)}>
                   确认收货
                 </Button>
+                <Button style={grayBtn} onClick={this.cancelOrderConfirm.bind(this, record)}>
+                  撤销订单
+                </Button>
               </Fragment>
             ) : record.order_status === 0 || record.order_status === 1 ? (
               <Fragment>
@@ -952,7 +968,7 @@ export default class Order extends PureComponent {
               查看详情
             </a> */}
           </Fragment>
-        ),
+        )},
       },
     ];
 
@@ -965,7 +981,7 @@ export default class Order extends PureComponent {
               backgroundColor: '#F5F5F5',
               height: 34,
               marginBottom: 10,
-              fontSize: 12,
+              fontSize: 12
             }}
             align="middle"
             type="flex"
