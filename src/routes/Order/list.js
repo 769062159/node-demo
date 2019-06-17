@@ -910,7 +910,6 @@ export default class Order extends PureComponent {
         title: '直简介',
         width: '12%',
         render: (text, record) => {
-          console.log(record)
           return (
           <Fragment>
             {record.order_status === 2 && record.isBtn ? (
