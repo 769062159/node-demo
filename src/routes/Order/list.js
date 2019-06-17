@@ -776,34 +776,6 @@ export default class Order extends PureComponent {
     return this.state.expandForm ? this.renderAdvancedForm() : this.renderSimpleForm();
   }
   cancelOrderConfirm =(record) =>{
-    /*const _this=this
-    const body={
-      sku_id:record.has_order_goods[0].has_order_goods_sku.order_goods_sku_id
-    }
-    confirm({
-      content: '仅手工单支持后台退单，该操作将“申请退款->同意退款”两个操作合并处理,是否确认？',
-      okText: '确定',
-      okType: 'danger',
-      cancelText: '取消',
-      onOk() {
-        request('/merchant/order/refund/manual', {
-          method: 'POST',
-          body
-        }).then(res => {
-          console.log(res)
-          if (res && res.code === 200) {
-            _this.props.dispatch({
-              type:"order/..."
-            })
-            message.success('撤销订单操作成功！');
-          }else{
-            message.error('撤销订单操作失败，请重试！');
-          }
-        })
-      },
-      onCancel() {},
-    });*/
-    // console.log(record.pack_id)
     const { values } = this.state;
     this.props.dispatch({
       type:"order/cancelOrder",
@@ -938,7 +910,7 @@ export default class Order extends PureComponent {
         title: '直简介',
         width: '12%',
         render: (text, record) => {
-          // console.log(record)
+          console.log(record)
           return (
           <Fragment>
             {record.order_status === 2 && record.isBtn ? (
@@ -953,9 +925,9 @@ export default class Order extends PureComponent {
                 <Button style={grayBtn} onClick={this.collectGoods.bind(this, record)}>
                   确认收货
                 </Button>
-                <Button style={grayBtn} onClick={this.cancelOrderConfirm.bind(this, record)}>
+                {record.pay_type===4&&<Button style={grayBtn} onClick={this.cancelOrderConfirm.bind(this, record)}>
                   撤销订单
-                </Button>
+                </Button>}
               </Fragment>
             ) : record.order_status === 0 || record.order_status === 1 ? (
               <Fragment>
