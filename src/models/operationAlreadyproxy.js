@@ -21,7 +21,7 @@ export default {
       result.data.list = result.data.list.map((item) => {
         const data = {
           ...item,
-          key: item.id,
+          key: `${item.id}-${item.level}`,
           title: item.name,
         };
         if (data.level === 4) {
@@ -55,11 +55,7 @@ export default {
 
       yield put({
         type: 'setUserChosen',
-        payload: result.data.list.map((item) => ({
-          ...item,
-          key: item.id,
-          title: item.name,
-        })),
+        payload: result.data.list,
       });
     },
     // 设置已代理区域
@@ -86,7 +82,11 @@ export default {
     setUserChosen(state, { payload }) {
       return {
         ...state,
-        userChosen: [...payload],
+        userChosen: payload.map((item) => ({
+          ...item,
+          key: `${item.id}-${item.level}`,
+          title: item.name,
+        })),
       };
     },
   },

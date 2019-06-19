@@ -38,6 +38,8 @@ export default class OperationCenter extends React.PureComponent {
   state = {
     searchKey: '',
     reviewFilter: '',
+    positionTypeFilter: 0,
+    contactStatusFilter: '',
     reviewDialog: {
       id: 0,
       title: '',
@@ -74,10 +76,13 @@ export default class OperationCenter extends React.PureComponent {
     });
   };
   handleSearch = () => {
+    const { searchKey, reviewFilter, positionTypeFilter, contactStatusFilter } = this.state;
     this.doGetCenterList({
       page: 1,
-      key: this.state.searchKey,
-      status: this.state.reviewFilter,
+      key: searchKey,
+      status: reviewFilter,
+      position_type: positionTypeFilter,
+      contact_status: contactStatusFilter,
     });
   };
   // 审核
@@ -181,6 +186,37 @@ export default class OperationCenter extends React.PureComponent {
                 </Select>
               </Col>
               <Col>
+                <span>职位类型：</span>
+                <Select
+                  value={state.positionTypeFilter}
+                  onChange={value => {
+                    this.setState({
+                      positionTypeFilter: value,
+                    });
+                  }}
+                >
+                  <Select.Option value={0}>全部</Select.Option>
+                  <Select.Option value={1}>总裁</Select.Option>
+                  <Select.Option value={2}>事业合伙人</Select.Option>
+                  <Select.Option value={3}>运营中心</Select.Option>
+                </Select>
+              </Col>
+              <Col>
+                <span>联系状态：</span>
+                <Select
+                  value={state.contactStatusFilter}
+                  onChange={value => {
+                    this.setState({
+                      contactStatusFilter: value,
+                    });
+                  }}
+                >
+                  <Select.Option value="">全部</Select.Option>
+                  <Select.Option value={1}>未联系</Select.Option>
+                  <Select.Option value={2}>已联系</Select.Option>
+                </Select>
+              </Col>
+              <Col>
                 <Button type="primary" onClick={this.handleSearch}>
                   查询
                 </Button>
@@ -208,14 +244,21 @@ export default class OperationCenter extends React.PureComponent {
               rowKey="id"
               columns={[
                 {
-                  title: '运营中心编号',
+                  title: '编号',
                   dataIndex: 'id',
                 },
                 {
-                  title: '运营中心身份',
+                  title: '类型',
                   dataIndex: 'type',
                   render(type) {
                     return <span>{type.value}</span>;
+                  },
+                },
+                {
+                  title: '职位类型',
+                  dataIndex: 'position_type',
+                  render(positionType) {
+                    return <span>{positionType.value}</span>;
                   },
                 },
                 {
@@ -225,7 +268,8 @@ export default class OperationCenter extends React.PureComponent {
                     return (
                       <span>{`${record.area}${record.province}${record.city}${
                         record.county
-                      }`}</span>
+                      }`}
+                      </span>
                     );
                   },
                 },
@@ -236,6 +280,13 @@ export default class OperationCenter extends React.PureComponent {
                 {
                   title: '联系电话',
                   dataIndex: 'mobile',
+                },
+                {
+                  title: '联系状态',
+                  dataIndex: 'contact_status',
+                  render(contactStatus) {
+                    return (<span>{contactStatus.value}</span>);
+                  },
                 },
                 {
                   title: '绑定用户',
@@ -307,6 +358,7 @@ export default class OperationCenter extends React.PureComponent {
               }}
               pagination={{
                 defaultCurrent: 1,
+                current: props.centerModel.page,
                 total: props.centerModel.total,
                 pageSize: props.centerModel.pagesize,
                 onChange: current => {

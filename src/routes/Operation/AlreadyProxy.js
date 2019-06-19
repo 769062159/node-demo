@@ -25,7 +25,7 @@ const generateTree = (
           title={item.title}
           dataRef={item}
           isLeaf={isLeaf}
-          disabled={checkedKeys.some(key => Number(key) === item.id)}
+          disabled={checkedKeys.some(key => key === item.key)}
         >
           {
             item.children ? generateTree(item.children, checkedKeys) : null
@@ -77,9 +77,8 @@ const TreeTransfer = ({
               node,
             },
           ) => {
-            let eventKey = node.props.eventKey
+            const eventKey = node.props.eventKey;
             if (eventKey === 'FORBIDDEN') return;
-            eventKey = Number(eventKey);
             onItemSelect(eventKey, !isChecked(checkedKeys, eventKey));
           };
           return (
@@ -119,7 +118,6 @@ const TreeTransfer = ({
               },
             }
           ) => {
-            eventKey = Number(eventKey);
             onRightCheckedKeysChange(eventKey, !isChecked(checkedKeys, eventKey));
             onItemSelect(eventKey, !isChecked(checkedKeys, eventKey));
           };
@@ -136,10 +134,10 @@ const TreeTransfer = ({
                 // 降落位置， 被拖拽的节点， 被降落的节点
                 const { dropPosition, dragNode, node } = info;
                 const copiedKeys = [...allLeftTargetKeys];
-                const dragNodeIndex = copiedKeys.findIndex(key => dragNode.props.dataRef.id === key);
+                const dragNodeIndex = copiedKeys.findIndex(key => dragNode.props.eventKey === key);
                 const dragNodeValue = copiedKeys[dragNodeIndex];
                 copiedKeys.splice(dragNodeIndex, 1);
-                const nodeIndex = copiedKeys.findIndex(key => node.props.dataRef.id === key);
+                const nodeIndex = copiedKeys.findIndex(key => node.props.eventKey === key);
                 // 放置在被降落节点的前方
                 if (dropPosition === nodeIndex - 1) {
                   copiedKeys.splice(nodeIndex, 0, dragNodeValue);
@@ -155,8 +153,7 @@ const TreeTransfer = ({
               {
                 allLeftTargetKeys
                   .map(key => {
-                    key = Number(key);
-                    const item = transferDataSource.find(item => key === item.id);
+                    const item = transferDataSource.find(item => key === item.key);
                     return item;
                   })
                   .map(
@@ -165,7 +162,7 @@ const TreeTransfer = ({
                         title={item.title}
                         key={item.key}
                         dataRef={item}
-                        checked={isChecked(checkedKeys, item.id)}
+                        checked={isChecked(checkedKeys, item.key)}
                       />
                     )
                   )
@@ -204,7 +201,7 @@ export default class AlreadyProxy extends React.Component {
   componentWillReceiveProps = (nextProps) => {
     if (nextProps.userChosen !== this.props.userChosen) {
       this.setState({
-        targetKeys: nextProps.userChosen.map(item => item.id),
+        targetKeys: nextProps.userChosen.map(item => item.key),
       });
     }
   }
@@ -212,7 +209,7 @@ export default class AlreadyProxy extends React.Component {
   onChange = (targetKeys, direction, moveKeys) => {
     let { rightCheckedKeys } = this.state;
     if (direction === 'left') {
-      rightCheckedKeys = rightCheckedKeys.filter(key => !(moveKeys.some(id => id === key)));
+      rightCheckedKeys = rightCheckedKeys.filter(key => !(moveKeys.some(mKey => mKey === key)));
     }
 
     this.setState({
@@ -221,12 +218,12 @@ export default class AlreadyProxy extends React.Component {
     });
   }
 
-  onRightCheckedKeysChange = (id, checked) => {
+  onRightCheckedKeysChange = (cKey, checked) => {
     let { rightCheckedKeys } = this.state;
     if (checked) {
-      rightCheckedKeys = [...rightCheckedKeys, id];
+      rightCheckedKeys = [...rightCheckedKeys, cKey];
     } else {
-      rightCheckedKeys = rightCheckedKeys.filter(key => key !== id);
+      rightCheckedKeys = rightCheckedKeys.filter(key => key !== cKey);
     }
     this.setState({
       rightCheckedKeys,
@@ -257,7 +254,7 @@ export default class AlreadyProxy extends React.Component {
   onSaveRegion = (allDataSource) => {
     const { dispatch } = this.props;
     const { targetKeys } = this.state;
-    const selectedItems = targetKeys.map(key => allDataSource.find(item => item.id === key));
+    const selectedItems = targetKeys.map(key => allDataSource.find(item => item.key === key));
     dispatch({
       type: 'operationAlreadyproxy/doSetAlreadyProxyRegions',
       payload: {

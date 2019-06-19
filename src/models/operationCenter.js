@@ -28,6 +28,12 @@ export default {
       if (payload.status) {
         params.status = payload.status;
       }
+      if (payload.position_type) {
+        params.position_type = payload.position_type;
+      }
+      if (payload.contact_status) {
+        params.contact_status = payload.contact_status;
+      }
       const response = yield call(api.getCenterList, params);
       yield put({
         type: 'setCenterObj',
