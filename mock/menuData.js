@@ -37,10 +37,10 @@ export const menuData = [
       //   name: '职位管理',
       //   path: 'positions',
       // },
-      // {
-      //   name: '已代理区域',
-      //   path: 'alreadyproxy',
-      // },
+      {
+        name: '已代理区域',
+        path: 'alreadyproxy',
+      },
     ],
   },
   {

@@ -1,142 +1,342 @@
 import React from 'react';
-import { Icon, Card, Input, Button, Table, Row, Col, Form, Select, Modal } from 'antd';
+import { Card, Tree, Transfer, Spin, Button } from 'antd';
+import { connect } from 'dva';
 
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
-const columns = [
-  {
-    title: '序号',
-    dataIndex: 'id',
-    key: 'id',
-  },
-  {
-    title: '代理身份',
-    dataIndex: 'identity',
-    key: 'identity',
-  },
-  {
-    title: '代理区域',
-    dataIndex: 'area',
-    key: 'area',
-  },
-  {
-    title: '排序',
-    dataIndex: 'order',
-    key: 'order',
-  },
-  {
-    title: '创建时间',
-    dataIndex: 'create_time',
-    key: 'create_time',
-  },
-  {
-    title: '操作',
-    key: 'action',
-    render(text) {
-      return (
-        <div>
-          <Button type="primary" style={{ marginRight: '10px' }}>
-            编辑
-          </Button>
-          <Button type="danger">删除</Button>
-        </div>
-      );
-    },
-  },
-];
+const { TreeNode } = Tree;
 
-const dataSource = [
-  {
-    id: 'yyx990803',
-    identity: '省级运营中心',
-    area: 'X省X市',
-    order: 9,
-    create_time: '1989-12-25 13:14:00',
-  },
-];
+const noop = function() {};
 
-const formItemLayout = {
-  labelCol: {
-    span: 5,
-  },
-  wrapperCol: {
-    span: 19,
-  },
+// Customize Table Transfer
+const isChecked = (selectedKeys, eventKey) => {
+  return selectedKeys.indexOf(eventKey) !== -1;
 };
 
-export default class Operating extends React.PureComponent {
+const generateTree = (
+  treeNodes = [],
+  checkedKeys = [],
+  isLeaf = false,
+) => {
+  return treeNodes.map((item) => {
+      return (
+        <TreeNode
+          key={item.key}
+          title={item.title}
+          dataRef={item}
+          isLeaf={isLeaf}
+          disabled={checkedKeys.some(key => Number(key) === item.id)}
+        >
+          {
+            item.children ? generateTree(item.children, checkedKeys) : null
+          }
+        </TreeNode>
+      );
+    })
+  };
+
+function flattenDataSource(list = []) {
+  let result = [];
+  list.forEach(item => {
+    result.push(item);
+    if (item.children) {
+      result = result.concat(flattenDataSource(item.children));
+    }
+  });
+  return result;
+}
+
+const TreeTransfer = ({
+  dataSource,
+  transferDataSource,
+  targetKeys,
+  rightCheckedKeys,
+  onRightCheckedKeysChange = noop,
+  // 已经保存选择的数据（从后台获取）
+  alreadyChosenList,
+  onLeftLoadData,
+  onRightTreeDrop,
+  ...restProps
+}) => {
+  const allLeftTargetKeys = targetKeys;
+
+  return (
+    <Transfer
+      {...restProps}
+      targetKeys={allLeftTargetKeys}
+      dataSource={transferDataSource}
+      render={item => item.title}
+      showSelectAll={false}
+    >
+      {({ direction, onItemSelect, selectedKeys }) => {
+        if (direction === 'left') {
+          const checkedKeys = [...selectedKeys, ...allLeftTargetKeys];
+          const onCheck = (
+            _,
+            {
+              node,
+            },
+          ) => {
+            let eventKey = node.props.eventKey
+            if (eventKey === 'FORBIDDEN') return;
+            eventKey = Number(eventKey);
+            onItemSelect(eventKey, !isChecked(checkedKeys, eventKey));
+          };
+          return (
+            <Tree
+              checkable
+              blockNode
+              checkStrictly
+              checkedKeys={checkedKeys}
+              loadData={onLeftLoadData}
+              onCheck={onCheck}
+              onSelect={onCheck}
+            >
+              {
+                <TreeNode
+                  key="FORBIDDEN"
+                  title="已保存的选择"
+                  checkable={false}
+                >
+                  {
+                    generateTree(alreadyChosenList, allLeftTargetKeys, true)
+                  }
+                </TreeNode>
+              }
+              {generateTree(dataSource, allLeftTargetKeys)}
+            </Tree>
+          );
+        } else {
+          const checkedKeys = [...selectedKeys, ...rightCheckedKeys];
+
+          const onCheck = (
+            _,
+            {
+              node: {
+                props: {
+                  eventKey,
+                },
+              },
+            }
+          ) => {
+            eventKey = Number(eventKey);
+            onRightCheckedKeysChange(eventKey, !isChecked(checkedKeys, eventKey));
+            onItemSelect(eventKey, !isChecked(checkedKeys, eventKey));
+          };
+
+          return (
+            <Tree
+              checkable
+              draggable
+              blockNode
+              checkStrictly
+              checkedKeys={checkedKeys}
+              onDrop={(info) => {
+                if (!info.dropToGap) return;
+                // 降落位置， 被拖拽的节点， 被降落的节点
+                const { dropPosition, dragNode, node } = info;
+                const copiedKeys = [...allLeftTargetKeys];
+                const dragNodeIndex = copiedKeys.findIndex(key => dragNode.props.dataRef.id === key);
+                const dragNodeValue = copiedKeys[dragNodeIndex];
+                copiedKeys.splice(dragNodeIndex, 1);
+                const nodeIndex = copiedKeys.findIndex(key => node.props.dataRef.id === key);
+                // 放置在被降落节点的前方
+                if (dropPosition === nodeIndex - 1) {
+                  copiedKeys.splice(nodeIndex, 0, dragNodeValue);
+                } else {
+                // 放置在被降落节点的后方
+                  copiedKeys.splice(nodeIndex + 1, 0, dragNodeValue);
+                }
+                onRightTreeDrop(copiedKeys);
+              }}
+              onCheck={onCheck}
+              onSelect={onCheck}
+            >
+              {
+                allLeftTargetKeys
+                  .map(key => {
+                    key = Number(key);
+                    const item = transferDataSource.find(item => key === item.id);
+                    return item;
+                  })
+                  .map(
+                    (item) => (
+                      <TreeNode
+                        title={item.title}
+                        key={item.key}
+                        dataRef={item}
+                        checked={isChecked(checkedKeys, item.id)}
+                      />
+                    )
+                  )
+              }
+            </Tree>
+          )
+        }
+      }}
+    </Transfer>
+  );
+};
+
+@connect(({ operationAlreadyproxy, loading }) => ({
+  operationAlreadyproxy,
+  regionTree: operationAlreadyproxy.regionTree,
+  userChosen: operationAlreadyproxy.userChosen,
+  loading: loading.models.operationAlreadyproxy,
+}))
+export default class AlreadyProxy extends React.Component {
+  state = {
+    // 左边的Key
+    targetKeys: [],
+    // 右边的Key
+    rightCheckedKeys: [],
+  };
+
+  componentDidMount = () => {
+    this.getRegionList({}, {});
+    const { dispatch } = this.props;
+    dispatch({
+      type: 'operationAlreadyproxy/doGetAlreadyProxyRegions',
+      payload: {},
+    });
+  }
+
+  componentWillReceiveProps = (nextProps) => {
+    if (nextProps.userChosen !== this.props.userChosen) {
+      this.setState({
+        targetKeys: nextProps.userChosen.map(item => item.id),
+      });
+    }
+  }
+
+  onChange = (targetKeys, direction, moveKeys) => {
+    let { rightCheckedKeys } = this.state;
+    if (direction === 'left') {
+      rightCheckedKeys = rightCheckedKeys.filter(key => !(moveKeys.some(id => id === key)));
+    }
+
+    this.setState({
+      targetKeys,
+      rightCheckedKeys,
+    });
+  }
+
+  onRightCheckedKeysChange = (id, checked) => {
+    let { rightCheckedKeys } = this.state;
+    if (checked) {
+      rightCheckedKeys = [...rightCheckedKeys, id];
+    } else {
+      rightCheckedKeys = rightCheckedKeys.filter(key => key !== id);
+    }
+    this.setState({
+      rightCheckedKeys,
+    });
+  }
+
+  onLeftLoadData = (treeNode) => {
+    return new Promise((resolve) => {
+      if (treeNode.props.children) {
+        resolve();
+        return;
+      }
+      const { level, id } = treeNode.props.dataRef;
+      if (level === 4) {
+        resolve();
+        return;
+      }
+      this.getRegionList({
+        id,
+        type: level + 1,
+      }, {
+        regionRef: treeNode.props.dataRef,
+        callback: () => resolve(),
+      });
+    });
+  }
+
+  onSaveRegion = (allDataSource) => {
+    const { dispatch } = this.props;
+    const { targetKeys } = this.state;
+    const selectedItems = targetKeys.map(key => allDataSource.find(item => item.id === key));
+    dispatch({
+      type: 'operationAlreadyproxy/doSetAlreadyProxyRegions',
+      payload: {
+        params: selectedItems.map(item => ({
+          id: item.id,
+          level: item.level,
+        })),
+        userChosen: selectedItems,
+      },
+    });
+  }
+
+  onRightTreeDrop = (draggedKeys) => {
+    this.setState({
+      targetKeys: draggedKeys,
+    });
+  }
+
+  getRegionList = ({
+    id = 0,
+    type = 1,
+  }, {
+    regionRef = [],
+    callback = noop,
+  }) => {
+    const { dispatch, regionTree } = this.props;
+    dispatch({
+      type: 'operationAlreadyproxy/doGetRegionList',
+      payload: {
+        data: {id, type},
+        regionTree,
+        regionRef,
+        callback,
+      },
+    });
+  }
+
   render() {
+    const { props, state } = this;
+    const flattenedSource = flattenDataSource(props.regionTree);
+    const transferDataSource = flattenedSource.concat(
+      props.userChosen.filter(
+        (alItem) =>
+          !flattenedSource.some(fs => fs.id === alItem.id)
+      )
+    );
+
     return (
       <PageHeaderLayout>
-        <Card bordered={false}>
-          {/* 查询 */}
-          <Row type="flex" gutter={10}>
-            <Col span={6}>
-              <Row type="flex" align="middle" gutter={10}>
-                <Col
-                  span={6}
-                  style={{
-                    textAlign: 'right',
-                  }}
-                >
-                  <span>联系人</span>
-                </Col>
-                <Col span={18}>
-                  <Input type="text" prefix={<Icon type="search" />} placeholder="联系人" />
-                </Col>
-              </Row>
-            </Col>
-            <Col>
-              <Button type="primary">查询</Button>
-            </Col>
-          </Row>
+        <Card
+          bordered={false}
+        >
+          <Spin spinning={props.loading}>
+            <TreeTransfer
+              dataSource={props.regionTree}
+              transferDataSource={transferDataSource}
+              targetKeys={state.targetKeys}
+              rightCheckedKeys={state.rightCheckedKeys}
+              alreadyChosenList={props.userChosen}
+              listStyle={{
+                maxHeight: '500px',
+                overflow: 'auto',
+              }}
+              titles={['所有区域', '已选（可拖拽排序）']}
+              onChange={this.onChange}
+              onRightCheckedKeysChange={this.onRightCheckedKeysChange}
+              onLeftLoadData={this.onLeftLoadData}
+              onRightTreeDrop={this.onRightTreeDrop}
+            />
 
-          {/* 添加代理区域 */}
-          <Row
-            style={{
-              marginTop: '30px',
-            }}
-          >
-            <Col>
-              <Button type="primary">添加</Button>
-            </Col>
-          </Row>
+            <div style={{marginTop: '15px', textAlign: 'right'}}>
+              <Button
+                type="primary"
+                onClick={() => this.onSaveRegion(transferDataSource)}
+              >确认并保存
+              </Button>
+            </div>
 
-          {/* 代理区域表格 */}
-          <Table
-            dataSource={dataSource}
-            columns={columns}
-            style={{
-              marginTop: '10px',
-            }}
-          />
-
-          {/* 编辑、创建代理区域 */}
-          <Modal title="编辑已代理区域" visible>
-            <Form layout="horizontal">
-              <Form.Item {...formItemLayout} label="代理身份">
-                <Select>
-                  <Select.Option value="">请选择</Select.Option>
-                  <Select.Option value={0}>大区代理</Select.Option>
-                  <Select.Option value={1}>省级代理</Select.Option>
-                  <Select.Option value={2}>市级代理</Select.Option>
-                  <Select.Option value={3}>区县代理</Select.Option>
-                </Select>
-              </Form.Item>
-              <Form.Item {...formItemLayout} label="代理区域">
-                <Select>
-                  <Select.Option value="">请选择</Select.Option>
-                  <Select.Option value={0}>西南大区</Select.Option>
-                  <Select.Option value={1}>东北大区</Select.Option>
-                  <Select.Option value={2}>东南大区</Select.Option>
-                  <Select.Option value={3}>西北大区</Select.Option>
-                </Select>
-              </Form.Item>
-              <Form.Item {...formItemLayout} label="排序">
-                <Input type="text" placeholder="数字越大，排序越靠前" />
-              </Form.Item>
-            </Form>
-          </Modal>
+          </Spin>
         </Card>
       </PageHeaderLayout>
     );

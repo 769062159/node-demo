@@ -230,19 +230,6 @@ export default class OperationCenter extends React.PureComponent {
                   },
                 },
                 {
-                  title: '地址',
-                  dataIndex: 'user_province',
-                  render(_, record) {
-                    return (
-                      <span>{record.user_province + record.user_city + record.user_county}</span>
-                    );
-                  },
-                },
-                {
-                  title: '详细地址',
-                  dataIndex: 'user_address',
-                },
-                {
                   title: '联系人',
                   dataIndex: 'nickname',
                 },
