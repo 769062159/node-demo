@@ -699,6 +699,10 @@ export default class OperationCenter extends React.PureComponent {
                   },
                 },
                 {
+                  title: '备注',
+                  dataIndex: 'audit_mark',
+                },
+                {
                   title: '操作',
                   key: 'action',
                   render: (_, record) => {

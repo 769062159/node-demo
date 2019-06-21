@@ -126,6 +126,7 @@ export default class AreaManagement extends React.PureComponent {
       id: row.id,
       areaName: row.name,
       provinces: row.provinces.map(item => item.id),
+      constProvinces: row.provinces.map(item => item.id),
     });
   };
   handleClickDel = row => {
@@ -155,7 +156,7 @@ export default class AreaManagement extends React.PureComponent {
   render() {
     const { state, props } = this;
     const allProvinces = props.allProvincesModel.map(item => {
-      const alreadyChosen = state.areaDialog.provinces;
+      const alreadyChosen = state.areaDialog.constProvinces;
       const isExist = alreadyChosen.some(id => id === item.id);
       let disabled = false;
       if (isExist) {
@@ -169,6 +170,7 @@ export default class AreaManagement extends React.PureComponent {
         disabled,
       };
     });
+    console.log(allProvinces);
 
     return (
       <PageHeaderLayout>
