@@ -99,7 +99,7 @@ const CustomizedForm = Form.create({
     // } else if (typeof groupEndTime === 'undefined') {
     //   goodsDetail.group_end_time = weekNow;
     // }
-    console.log(1, goodsDetail.has_freeze_commission);
+    // console.log(1, goodsDetail.has_freeze_commission);
     if (groupEndTime === 0) {
       goodsDetail.group_start_time = now;
     } else if (typeof groupEndTime === 'number') {
@@ -1391,7 +1391,7 @@ const CustomizedForm = Form.create({
               uploadUrl={uploadUrl}
               valueSon={goodsDetail.goods_description}
               setDescription={setDescription.bind(this, 2)}
-              blurSetDescription={blurSetDescription.bind(this, 2)}
+              // blurSetDescription={blurSetDescription.bind(this, 2)}
             />
           )}
         </Form.Item>
@@ -2560,7 +2560,7 @@ class EditGoodStep2 extends React.PureComponent {
         value: e,
       };
     }
-    // this.changeFormVal(obj);
+    this.changeFormVal(obj);
   };
 
   blurSetDescription = (type, e) => {
