@@ -55,7 +55,10 @@ export default {
 
       yield put({
         type: 'setUserChosen',
-        payload: result.data.list,
+        payload: result.data.list.map((item) => ({
+          ...item,
+          id: item.increment,
+        })),
       });
     },
     // 设置已代理区域

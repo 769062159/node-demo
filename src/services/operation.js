@@ -141,3 +141,27 @@ export function getProxyableAreas(qs) {
     qs,
   });
 }
+
+// 添加运营中心
+export function createCenter(body) {
+  return request('/merchant/operate/create', {
+    method: 'POST',
+    body,
+  });
+}
+
+// 编辑运营中心
+export function updateCenter(body) {
+  return request('/merchant/operate/update', {
+    method: 'POST',
+    body,
+  });
+}
+
+// 通过场地名搜索场地
+export function searchLecturerPlace(qs) {
+  return request('/lecturer/area/all', {
+    method: 'GET',
+    qs,
+  });
+}

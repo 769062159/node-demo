@@ -9,6 +9,7 @@ export default {
     videoGoodsPower: 0,
     config: {
       mobile: '',
+      operate_mobile: '',
       video_audio: false,
     },
   },
