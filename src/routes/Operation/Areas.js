@@ -43,6 +43,7 @@ export default class AreaManagement extends React.PureComponent {
       areaName: '',
       provinces: [],
       id: 0,
+      constProvinces: [],
     },
     search: '',
   };
@@ -170,7 +171,6 @@ export default class AreaManagement extends React.PureComponent {
         disabled,
       };
     });
-    console.log(allProvinces);
 
     return (
       <PageHeaderLayout>
@@ -226,6 +226,7 @@ export default class AreaManagement extends React.PureComponent {
                       areaName: '',
                       provinces: [],
                       id: 0,
+                      constProvinces: [],
                     });
                   }}
                 >
