@@ -19,9 +19,9 @@ const RightAreaList = (() => {
         overflow: 'hidden',
         whiteSpace: 'nowrap',
         textOverflow: 'ellipsis',
-        transition: 'all 0.3s',
         listStyle: 'none',
         boxSizing: 'border-box',
+        transition: 'background .3s',
       }}
       title={item.title}
       onClick={() => onSelect(item.key, !checked)}
