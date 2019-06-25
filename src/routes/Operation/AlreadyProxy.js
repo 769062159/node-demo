@@ -1,341 +1,219 @@
 import React from 'react';
-import { Card, Tree, Transfer, Spin, Button } from 'antd';
+import { Card, Transfer, Spin, Button, Checkbox } from 'antd';
 import { connect } from 'dva';
+import { SortableContainer, SortableElement } from 'react-sortable-hoc';
+import AuthDialog from '../../components/AuthDialog';
 
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
-const { TreeNode } = Tree;
-
 const noop = function() {};
 
-// Customize Table Transfer
-const isChecked = (selectedKeys, eventKey) => {
-  return selectedKeys.indexOf(eventKey) !== -1;
-};
-
-const generateTree = (
-  treeNodes = [],
-  checkedKeys = [],
-  isLeaf = false,
-) => {
-  return treeNodes.map((item) => {
-      return (
-        <TreeNode
-          key={item.key}
-          title={item.title}
-          dataRef={item}
-          isLeaf={isLeaf}
-          disabled={checkedKeys.some(key => key === item.key)}
-        >
-          {
-            item.children ? generateTree(item.children, checkedKeys) : null
-          }
-        </TreeNode>
-      );
-    })
-  };
-
-function flattenDataSource(list = []) {
-  let result = [];
-  list.forEach(item => {
-    result.push(item);
-    if (item.children) {
-      result = result.concat(flattenDataSource(item.children));
-    }
-  });
-  return result;
-}
-
-const TreeTransfer = ({
-  dataSource,
-  transferDataSource,
-  targetKeys,
-  rightCheckedKeys,
-  onRightCheckedKeysChange = noop,
-  // 已经保存选择的数据（从后台获取）
-  alreadyChosenList,
-  onLeftLoadData,
-  onRightTreeDrop,
-  ...restProps
-}) => {
-  const allLeftTargetKeys = targetKeys;
-
-  return (
-    <Transfer
-      {...restProps}
-      targetKeys={allLeftTargetKeys}
-      dataSource={transferDataSource}
-      render={item => item.title}
-      showSelectAll={false}
-    >
-      {({ direction, onItemSelect, selectedKeys }) => {
-        if (direction === 'left') {
-          const checkedKeys = [...selectedKeys, ...allLeftTargetKeys];
-          const onCheck = (
-            _,
-            {
-              node,
-            },
-          ) => {
-            const eventKey = node.props.eventKey;
-            if (eventKey === 'FORBIDDEN') return;
-            onItemSelect(eventKey, !isChecked(checkedKeys, eventKey));
-          };
-          return (
-            <Tree
-              checkable
-              blockNode
-              checkStrictly
-              checkedKeys={checkedKeys}
-              loadData={onLeftLoadData}
-              onCheck={onCheck}
-              onSelect={onCheck}
-            >
-              {
-                <TreeNode
-                  key="FORBIDDEN"
-                  title="已保存的选择"
-                  checkable={false}
-                >
-                  {
-                    generateTree(alreadyChosenList, allLeftTargetKeys, true)
-                  }
-                </TreeNode>
-              }
-              {generateTree(dataSource, allLeftTargetKeys)}
-            </Tree>
-          );
-        } else {
-          const checkedKeys = [...selectedKeys, ...rightCheckedKeys];
-
-          const onCheck = (
-            _,
-            {
-              node: {
-                props: {
-                  eventKey,
-                },
-              },
-            }
-          ) => {
-            onRightCheckedKeysChange(eventKey, !isChecked(checkedKeys, eventKey));
-            onItemSelect(eventKey, !isChecked(checkedKeys, eventKey));
-          };
-
-          return (
-            <Tree
-              checkable
-              draggable
-              blockNode
-              checkStrictly
-              checkedKeys={checkedKeys}
-              onDrop={(info) => {
-                if (!info.dropToGap) return;
-                // 降落位置， 被拖拽的节点， 被降落的节点
-                const { dropPosition, dragNode, node } = info;
-                const copiedKeys = [...allLeftTargetKeys];
-                const dragNodeIndex = copiedKeys.findIndex(key => dragNode.props.eventKey === key);
-                const dragNodeValue = copiedKeys[dragNodeIndex];
-                copiedKeys.splice(dragNodeIndex, 1);
-                const nodeIndex = copiedKeys.findIndex(key => node.props.eventKey === key);
-                // 放置在被降落节点的前方
-                if (dropPosition === nodeIndex - 1) {
-                  copiedKeys.splice(nodeIndex, 0, dragNodeValue);
-                } else {
-                // 放置在被降落节点的后方
-                  copiedKeys.splice(nodeIndex + 1, 0, dragNodeValue);
-                }
-                onRightTreeDrop(copiedKeys);
-              }}
-              onCheck={onCheck}
-              onSelect={onCheck}
-            >
-              {
-                allLeftTargetKeys
-                  .map(key => {
-                    const item = transferDataSource.find(item => key === item.key);
-                    return item;
-                  })
-                  .map(
-                    (item) => (
-                      <TreeNode
-                        title={item.title}
-                        key={item.key}
-                        dataRef={item}
-                        checked={isChecked(checkedKeys, item.key)}
-                      />
-                    )
-                  )
-              }
-            </Tree>
-          )
-        }
+const RightAreaList = (() => {
+  const SortableItem = SortableElement(({ item, checked, onSelect }) => (
+    <li
+      key={item.key}
+      className="ant-transfer-list-content-item"
+      style={{
+        minHeight: '32px',
+        padding: '6px 12px',
+        overflow: 'hidden',
+        whiteSpace: 'nowrap',
+        textOverflow: 'ellipsis',
+        transition: 'all 0.3s',
+        listStyle: 'none',
+        boxSizing: 'border-box',
       }}
-    </Transfer>
-  );
-};
+      title={item.title}
+      onClick={() => onSelect(item.key, !checked)}
+    >
+      <Checkbox
+        checked={checked}
+        onChange={(event) => onSelect(item.key, event.target.checked)}
+      >{item.title}
+      </Checkbox>
+    </li>
+  ));
 
-@connect(({ operationAlreadyproxy, loading }) => ({
-  operationAlreadyproxy,
-  regionTree: operationAlreadyproxy.regionTree,
-  userChosen: operationAlreadyproxy.userChosen,
+  return SortableContainer(({
+    list,
+    checkedKeys,
+    onSelect,
+  }) => (
+    <ul
+      style={{
+        listStyle: 'none',
+        padding: 0,
+        margin: 0,
+      }}
+    >
+      {
+        list.map((item, index) => (
+          <SortableItem
+            key={item.key}
+            item={item}
+            checked={checkedKeys.some(key => key === item.key)}
+            onSelect={onSelect}
+            index={index}
+          />
+        ))
+      }
+    </ul>
+    ));
+})();
+
+@connect(({ operationAlreadyproxy: model, loading }) => ({
+  model,
+  centerList: model.centerList,
+  centerObj: model.centerObj,
+  centerLoading: model.centerLoading,
+  targetKeys: model.targetKeys,
   loading: loading.models.operationAlreadyproxy,
 }))
 export default class AlreadyProxy extends React.Component {
   state = {
-    // 左边的Key
-    targetKeys: [],
-    // 右边的Key
-    rightCheckedKeys: [],
-  };
+  }
 
-  componentDidMount = () => {
-    this.getRegionList({}, {});
+  init = () => {
     const { dispatch } = this.props;
     dispatch({
       type: 'operationAlreadyproxy/doGetAlreadyProxyRegions',
       payload: {},
     });
+    this.doGetCenterList();
   }
 
-  componentWillReceiveProps = (nextProps) => {
-    if (nextProps.userChosen !== this.props.userChosen) {
-      this.setState({
-        targetKeys: nextProps.userChosen.map(item => item.key),
-      });
-    }
-  }
+  onSaveRegion = () => {
+    const { targetKeys, dispatch } = this.props;
 
-  onChange = (targetKeys, direction, moveKeys) => {
-    let { rightCheckedKeys } = this.state;
-    if (direction === 'left') {
-      rightCheckedKeys = rightCheckedKeys.filter(key => !(moveKeys.some(mKey => mKey === key)));
-    }
-
-    this.setState({
-      targetKeys,
-      rightCheckedKeys,
-    });
-  }
-
-  onRightCheckedKeysChange = (cKey, checked) => {
-    let { rightCheckedKeys } = this.state;
-    if (checked) {
-      rightCheckedKeys = [...rightCheckedKeys, cKey];
-    } else {
-      rightCheckedKeys = rightCheckedKeys.filter(key => key !== cKey);
-    }
-    this.setState({
-      rightCheckedKeys,
-    });
-  }
-
-  onLeftLoadData = (treeNode) => {
-    return new Promise((resolve) => {
-      if (treeNode.props.children) {
-        resolve();
-        return;
-      }
-      const { level, id } = treeNode.props.dataRef;
-      if (level === 4) {
-        resolve();
-        return;
-      }
-      this.getRegionList({
-        id,
-        type: level + 1,
-      }, {
-        regionRef: treeNode.props.dataRef,
-        callback: () => resolve(),
-      });
-    });
-  }
-
-  onSaveRegion = (allDataSource) => {
-    const { dispatch } = this.props;
-    const { targetKeys } = this.state;
-    const selectedItems = targetKeys.map(key => allDataSource.find(item => item.key === key));
     dispatch({
       type: 'operationAlreadyproxy/doSetAlreadyProxyRegions',
       payload: {
-        params: selectedItems.map(item => ({
-          id: item.id,
-          level: item.level,
-        })),
-        userChosen: selectedItems,
+        params: targetKeys.map((item) => {
+          const arr = item.split('-');
+          return {
+            id: arr[0],
+            level: arr[1],
+          }
+        }),
       },
     });
   }
 
-  onRightTreeDrop = (draggedKeys) => {
-    this.setState({
-      targetKeys: draggedKeys,
-    });
-  }
+  onRightListSortEnd = ({oldIndex, newIndex}) => {
+    const { targetKeys, dispatch } = this.props;
 
-  getRegionList = ({
-    id = 0,
-    type = 1,
-  }, {
-    regionRef = [],
-    callback = noop,
-  }) => {
-    const { dispatch, regionTree } = this.props;
+    newIndex = newIndex < 0 ? newIndex + targetKeys.length : newIndex;
+    targetKeys.splice(newIndex, 0, targetKeys.splice(oldIndex, 1)[0]);
     dispatch({
-      type: 'operationAlreadyproxy/doGetRegionList',
+      type: 'operationAlreadyproxy/setTargetKeys',
+      payload: targetKeys,
+    })
+  }
+
+  doGetCenterList = () => {
+    const { centerObj, dispatch } = this.props;
+    dispatch({
+      type: 'operationAlreadyproxy/doGetCenterList',
       payload: {
-        data: {id, type},
-        regionTree,
-        regionRef,
-        callback,
+        callback: noop,
+        params: {
+          page: centerObj.page + 1,
+          pagesize: centerObj.pageSize,
+        },
       },
     });
   }
+
+  targetKeysOnChange = (targetKeys) => {
+    const { dispatch } = this.props;
+    console.log('targetKeys', targetKeys)
+    dispatch({
+      type: 'operationAlreadyproxy/setTargetKeys',
+      payload: targetKeys,
+    })
+  }
+
+  renderFooter = (props) => {
+    const { centerObj } = this.props;
+    if (props.direction === 'left' && centerObj.hasMore) {
+      return (
+        <Button
+          type="default"
+          onClick={this.doGetCenterList}
+          style={{
+            float: 'right',
+            margin: 5,
+          }}
+          size="small"
+        >加载更多
+        </Button>
+      );
+    }
+  }
+
 
   render() {
     const { props, state } = this;
-    const flattenedSource = flattenDataSource(props.regionTree);
-    const transferDataSource = flattenedSource.concat(
-      props.userChosen.filter(
-        (alItem) =>
-          !flattenedSource.some(fs => fs.id === alItem.id)
-      )
-    );
+
+    const { targetKeys, centerList, loading } = props;
+    const rightList = targetKeys.map(key => centerList.find(item => item.key === key)).filter(item => item);
 
     return (
-      <PageHeaderLayout>
-        <Card
-          bordered={false}
-        >
-          <Spin spinning={props.loading}>
-            <TreeTransfer
-              dataSource={props.regionTree}
-              transferDataSource={transferDataSource}
-              targetKeys={state.targetKeys}
-              rightCheckedKeys={state.rightCheckedKeys}
-              alreadyChosenList={props.userChosen}
-              listStyle={{
-                maxHeight: '500px',
-                overflow: 'auto',
-              }}
-              titles={['所有区域', '已选（可拖拽排序）']}
-              onChange={this.onChange}
-              onRightCheckedKeysChange={this.onRightCheckedKeysChange}
-              onLeftLoadData={this.onLeftLoadData}
-              onRightTreeDrop={this.onRightTreeDrop}
-            />
+      <AuthDialog
+        onAuth={this.init}
+      >
+        <PageHeaderLayout>
 
-            <div style={{marginTop: '15px', textAlign: 'right'}}>
-              <Button
-                type="primary"
-                onClick={() => this.onSaveRegion(transferDataSource)}
-              >确认并保存
-              </Button>
-            </div>
+          <Card
+            bordered={false}
+          >
+            <Spin spinning={loading}>
 
-          </Spin>
-        </Card>
-      </PageHeaderLayout>
+
+              <Transfer
+                dataSource={centerList}
+                targetKeys={targetKeys}
+                footer={this.renderFooter}
+                render={item => item.title}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                }}
+                listStyle={{
+                  flex: '1 1 auto',
+                  height: 500,
+                }}
+                onChange={this.targetKeysOnChange}
+              >
+                {
+                  ({ direction, onItemSelect, selectedKeys }) => {
+                    if (direction === 'right') {
+                      return (
+                        <RightAreaList
+                          list={rightList}
+                          checkedKeys={selectedKeys}
+                          onSelect={onItemSelect}
+                          onSortEnd={this.onRightListSortEnd}
+                          distance={5}
+                        />
+                      )
+                    }
+                  }
+                }
+              </Transfer>
+
+              <div style={{ marginTop: '15px', textAlign: 'right' }}>
+                <Button
+                  type="primary"
+                  onClick={() => this.onSaveRegion()}
+                >确认并保存
+                </Button>
+              </div>
+
+            </Spin>
+          </Card>
+        </PageHeaderLayout>
+      </AuthDialog>
     );
   }
 }

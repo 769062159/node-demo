@@ -9825,6 +9825,15 @@ react-slick@~0.24.0:
     lodash.debounce "^4.0.8"
     resize-observer-polyfill "^1.5.0"
 
+react-sortable-hoc@^1.9.1:
+  version "1.9.1"
+  resolved "https://registry.npm.taobao.org/react-sortable-hoc/download/react-sortable-hoc-1.9.1.tgz#ae3d28c3cff87fb862be3ddcde9c76b5b5bd2152"
+  integrity sha1-rj0ow8/4f7hivj3c3px2tbW9IVI=
+  dependencies:
+    "@babel/runtime" "^7.2.0"
+    invariant "^2.2.4"
+    prop-types "^15.5.7"
+
 react-test-renderer@^16.0.0-0:
   version "16.8.6"
   resolved "https://registry.npm.taobao.org/react-test-renderer/download/react-test-renderer-16.8.6.tgz#188d8029b8c39c786f998aa3efd3ffe7642d5ba1"

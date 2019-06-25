@@ -18,6 +18,7 @@ import {
 import { connect } from 'dva';
 import moment from 'moment';
 import { debounce } from "lodash";
+import AuthDialog from '../../../components/AuthDialog';
 
 // import CenterForm from './CenterForm';
 import PageHeaderLayout from '../../../layouts/PageHeaderLayout';
@@ -105,15 +106,15 @@ export default class OperationCenter extends React.PureComponent {
         lecturer_area_id: '',
       },
     },
-  };
-  componentDidMount = () => {
+  }
+  init = () => {
     this.doGetCenterList();
     const { dispatch } = this.props;
     dispatch({
       type: 'operationCenter/doGetAllPositions',
     });
     this.doGetRegionList();
-  };
+  }
   doGetCenterList = (params = {}) => {
     const { dispatch, centerModel } = this.props;
     dispatch({
@@ -526,380 +527,290 @@ export default class OperationCenter extends React.PureComponent {
     const { state, props } = this;
 
     return (
-      <PageHeaderLayout>
-        <Card bordered={false}>
-          <Spin spinning={props.loading}>
-            {/* 搜索行 */}
-            <Row type="flex" gutter={10}>
-              <Col span={6}>
-                <Input
-                  type="text"
-                  prefix={<Icon type="search" />}
-                  placeholder="搜索联系人"
-                  value={state.searchKey}
-                  onChange={event => {
-                    this.setState({
-                      searchKey: event.target.value,
-                    });
-                  }}
-                  addonBefore="搜索"
-                />
-              </Col>
-              <Col>
-                <span>审核状态：</span>
-                <Select
-                  value={state.reviewFilter}
-                  onChange={value => {
-                    this.setState({
-                      reviewFilter: value,
-                    });
-                  }}
-                >
-                  <Select.Option value="">全部</Select.Option>
-                  <Select.Option value={1}>待审核</Select.Option>
-                  <Select.Option value={2}>已驳回</Select.Option>
-                  <Select.Option value={3}>已同意</Select.Option>
-                </Select>
-              </Col>
-              <Col>
-                <span>职位类型：</span>
-                <Select
-                  value={state.positionTypeFilter}
-                  onChange={value => {
-                    this.setState({
-                      positionTypeFilter: value,
-                    });
-                  }}
-                  style={{
-                    width: '114px',
-                  }}
-                >
-                  <Select.Option value={0}>全部</Select.Option>
-                  <Select.Option value={1}>总裁</Select.Option>
-                  <Select.Option value={2}>事业合伙人</Select.Option>
-                  <Select.Option value={3}>运营中心</Select.Option>
-                </Select>
-              </Col>
-              <Col>
-                <span>联系状态：</span>
-                <Select
-                  value={state.contactStatusFilter}
-                  onChange={value => {
-                    this.setState({
-                      contactStatusFilter: value,
-                    });
-                  }}
-                >
-                  <Select.Option value="">全部</Select.Option>
-                  <Select.Option value={1}>未联系</Select.Option>
-                  <Select.Option value={2}>已联系</Select.Option>
-                </Select>
-              </Col>
-              <Col>
-                <Button type="primary" onClick={this.handleSearch}>
-                  查询
-                </Button>
-              </Col>
-            </Row>
-
-            {/* 添加运营中心 */}
-            <Row
-              type="flex"
-              style={{
-                marginTop: '30px',
-              }}
-            >
-              <Col>
-                <Button
-                  type="default"
-                  onClick={() => this.updateChooseTypeDialog({
-                    show: true,
-                    position_type: 1,
-                  })}
-                >添加
-                </Button>
-              </Col>
-            </Row>
-            {/* 表格 */}
-            <Table
-              dataSource={props.centerModel.list}
-              rowKey="id"
-              columns={[
-                {
-                  title: '编号',
-                  dataIndex: 'id',
-                },
-                {
-                  title: '类型',
-                  dataIndex: 'type',
-                  render(type) {
-                    return <span>{type.value}</span>;
-                  },
-                },
-                {
-                  title: '职位类型',
-                  dataIndex: 'position_type',
-                  render(positionType) {
-                    return <span>{positionType.value}</span>;
-                  },
-                },
-                {
-                  title: '代理区域',
-                  dataIndex: 'area',
-                  render(_, record) {
-                    return (
-                      <span>{`${record.area.name}${record.province.name}${record.city.name}${
-                        record.county.name
-                      }`}
-                      </span>
-                    );
-                  },
-                },
-                {
-                  title: '联系人',
-                  dataIndex: 'nickname',
-                },
-                {
-                  title: '联系电话',
-                  dataIndex: 'mobile',
-                },
-                {
-                  title: '联系状态',
-                  dataIndex: 'contact_status',
-                  render(contactStatus) {
-                    return (<span>{contactStatus.value}</span>);
-                  },
-                },
-                {
-                  title: '绑定用户',
-                  dataIndex: 'user_name',
-                  render(_, record) {
-                    return <span>{record.user.nickname}</span>;
-                  },
-                },
-                {
-                  title: '绑定用户Id',
-                  dataIndex: 'user_id',
-                  render(_, record) {
-                    return <span>{record.user.fake_id}</span>;
-                  },
-                },
-                {
-                  title: '职位',
-                  dataIndex: 'position',
-                  render(position) {
-                    return <span>{position.name}</span>;
-                  },
-                },
-                {
-                  title: '申请时间',
-                  dataIndex: 'time',
-                  render(text) {
-                    return <span>{moment(text * 1000).format('YYYY-MM-DD HH:mm:ss')}</span>;
-                  },
-                },
-                {
-                  title: '备注',
-                  dataIndex: 'audit_mark',
-                },
-                {
-                  title: '操作',
-                  key: 'action',
-                  render: (_, record) => {
-                    if (record.audit_status.key === 1) {
-                      return (
-                        <div>
-                          <Button
-                            type="primary"
-                            size="small"
-                            style={{ marginRight: '10px' }}
-                            onClick={() => {
-                              this.handleClickReview(true, record);
-                            }}
-                          >
-                            通过
-                          </Button>
-                          <Button
-                            type="danger"
-                            size="small"
-                            onClick={() => {
-                              this.handleClickReview(false, record);
-                            }}
-                          >
-                            驳回
-                          </Button>
-                        </div>
-                      );
-                    } else {
-                      return (
-                        <div
-                          style={{
-                            color: record.audit_status.key === 2 ? '#CF1322' : '#1890ff',
-                          }}
-                        >
-                          {record.audit_status.value}
-                          {
-                            record.audit_status.key === 3 ? (
-                              <Button
-                                type="primary"
-                                size="small"
-                                onClick={() => this.handleClickEditOperate(record)}
-                                style={{
-                                  marginLeft: '8px',
-                                }}
-                              >
-                                编辑
-                              </Button>
-                            ) : null
-                          }
-                        </div>
-                      );
-                    }
-                  },
-                },
-              ]}
-              style={{
-                marginTop: '10px',
-              }}
-              pagination={{
-                defaultCurrent: 1,
-                current: props.centerModel.page,
-                total: props.centerModel.total,
-                pageSize: props.centerModel.pagesize,
-                onChange: current => {
-                  this.doGetCenterList({
-                    page: current,
-                  });
-                },
-              }}
-            />
-          </Spin>
-
-          {/* 审核对话框 */}
-          <Modal
-            title={state.reviewDialog.title}
-            visible={props.reviewCenterDialogShow}
-            onCancel={() => {
-              this.updateReviewDialog({
-                show: false,
-              });
-            }}
-            onOk={this.doReview}
-          >
-            <Form layout="horizontal">
-              <Form.Item {...formItemLayout} label="备注">
-                <Input
-                  type="text"
-                  value={state.reviewDialog.mark}
-                  onChange={event => {
-                    this.updateReviewDialog({
-                      mark: event.target.value,
-                    });
-                  }}
-                />
-              </Form.Item>
-              {state.reviewDialog.reviewType ? (
-                <Form.Item {...formItemLayout} label="职位">
+      <AuthDialog
+        onAuth={this.init}
+      >
+        <PageHeaderLayout>
+          <Card bordered={false}>
+            <Spin spinning={props.loading}>
+              {/* 搜索行 */}
+              <Row type="flex" gutter={10}>
+                <Col span={6}>
+                  <Input
+                    type="text"
+                    prefix={<Icon type="search" />}
+                    placeholder="搜索联系人"
+                    value={state.searchKey}
+                    onChange={event => {
+                      this.setState({
+                        searchKey: event.target.value,
+                      });
+                    }}
+                    addonBefore="搜索"
+                  />
+                </Col>
+                <Col>
+                  <span>审核状态：</span>
                   <Select
-                    value={state.reviewDialog.positionId}
+                    value={state.reviewFilter}
                     onChange={value => {
-                      this.updateReviewDialog({
-                        positionId: value,
+                      this.setState({
+                        reviewFilter: value,
                       });
                     }}
                   >
-                    <Select.Option value="">请选择</Select.Option>
-                    {props.allPositionsModel.map(item => (
-                      <Select.Option value={item.id} key={item.id}>
-                        {item.name}
-                      </Select.Option>
-                    ))}
+                    <Select.Option value="">全部</Select.Option>
+                    <Select.Option value={1}>待审核</Select.Option>
+                    <Select.Option value={2}>已驳回</Select.Option>
+                    <Select.Option value={3}>已同意</Select.Option>
                   </Select>
-                </Form.Item>
-              ) : null}
-            </Form>
-          </Modal>
-          {/** 选择要添加（1总裁, 2事业合伙人, 3运营中心）的对话框 */}
-          <Modal
-            title="请选择要添加的类型"
-            visible={state.chooseTypeDialog.show}
-            onCancel={() => this.updateChooseTypeDialog({ show: false })}
-            onOk={this.handleChooseTypeDialogSure}
-          >
-            <Radio.Group
-              defaultValue={1}
-              buttonStyle="solid"
-              value={state.chooseTypeDialog.position_type}
-              onChange={(event) => {
-                this.updateChooseTypeDialog({
-                  position_type: event.target.value,
+                </Col>
+                <Col>
+                  <span>职位类型：</span>
+                  <Select
+                    value={state.positionTypeFilter}
+                    onChange={value => {
+                      this.setState({
+                        positionTypeFilter: value,
+                      });
+                    }}
+                    style={{
+                      width: '114px',
+                    }}
+                  >
+                    <Select.Option value={0}>全部</Select.Option>
+                    <Select.Option value={1}>总裁</Select.Option>
+                    <Select.Option value={2}>事业合伙人</Select.Option>
+                    <Select.Option value={3}>运营中心</Select.Option>
+                  </Select>
+                </Col>
+                <Col>
+                  <span>联系状态：</span>
+                  <Select
+                    value={state.contactStatusFilter}
+                    onChange={value => {
+                      this.setState({
+                        contactStatusFilter: value,
+                      });
+                    }}
+                  >
+                    <Select.Option value="">全部</Select.Option>
+                    <Select.Option value={1}>未联系</Select.Option>
+                    <Select.Option value={2}>已联系</Select.Option>
+                  </Select>
+                </Col>
+                <Col>
+                  <Button type="primary" onClick={this.handleSearch}>
+                    查询
+                </Button>
+                </Col>
+              </Row>
+
+              {/* 添加运营中心 */}
+              <Row
+                type="flex"
+                style={{
+                  marginTop: '30px',
+                }}
+              >
+                <Col>
+                  <Button
+                    type="default"
+                    onClick={() => this.updateChooseTypeDialog({
+                      show: true,
+                      position_type: 1,
+                    })}
+                  >添加
+                </Button>
+                </Col>
+              </Row>
+              {/* 表格 */}
+              <Table
+                dataSource={props.centerModel.list}
+                rowKey="id"
+                columns={[
+                  {
+                    title: '编号',
+                    dataIndex: 'id',
+                  },
+                  {
+                    title: '类型',
+                    dataIndex: 'type',
+                    render(type) {
+                      return <span>{type.value}</span>;
+                    },
+                  },
+                  {
+                    title: '职位类型',
+                    dataIndex: 'position_type',
+                    render(positionType) {
+                      return <span>{positionType.value}</span>;
+                    },
+                  },
+                  {
+                    title: '代理区域',
+                    dataIndex: 'area',
+                    render(_, record) {
+                      return (
+                        <span>{`${record.area.name}${record.province.name}${record.city.name}${
+                          record.county.name
+                          }`}
+                        </span>
+                      );
+                    },
+                  },
+                  {
+                    title: '联系人',
+                    dataIndex: 'nickname',
+                  },
+                  {
+                    title: '联系电话',
+                    dataIndex: 'mobile',
+                  },
+                  {
+                    title: '联系状态',
+                    dataIndex: 'contact_status',
+                    render(contactStatus) {
+                      return (<span>{contactStatus.value}</span>);
+                    },
+                  },
+                  {
+                    title: '绑定用户',
+                    dataIndex: 'user_name',
+                    render(_, record) {
+                      return <span>{record.user.nickname}</span>;
+                    },
+                  },
+                  {
+                    title: '绑定用户Id',
+                    dataIndex: 'user_id',
+                    render(_, record) {
+                      return <span>{record.user.fake_id}</span>;
+                    },
+                  },
+                  {
+                    title: '职位',
+                    dataIndex: 'position',
+                    render(position) {
+                      return <span>{position.name}</span>;
+                    },
+                  },
+                  {
+                    title: '申请时间',
+                    dataIndex: 'time',
+                    render(text) {
+                      return <span>{moment(text * 1000).format('YYYY-MM-DD HH:mm:ss')}</span>;
+                    },
+                  },
+                  {
+                    title: '备注',
+                    dataIndex: 'audit_mark',
+                  },
+                  {
+                    title: '操作',
+                    key: 'action',
+                    render: (_, record) => {
+                      if (record.audit_status.key === 1) {
+                        return (
+                          <div>
+                            <Button
+                              type="primary"
+                              size="small"
+                              style={{ marginRight: '10px' }}
+                              onClick={() => {
+                                this.handleClickReview(true, record);
+                              }}
+                            >
+                              通过
+                          </Button>
+                            <Button
+                              type="danger"
+                              size="small"
+                              onClick={() => {
+                                this.handleClickReview(false, record);
+                              }}
+                            >
+                              驳回
+                          </Button>
+                          </div>
+                        );
+                      } else {
+                        return (
+                          <div
+                            style={{
+                              color: record.audit_status.key === 2 ? '#CF1322' : '#1890ff',
+                            }}
+                          >
+                            {record.audit_status.value}
+                            {
+                              record.audit_status.key === 3 ? (
+                                <Button
+                                  type="primary"
+                                  size="small"
+                                  onClick={() => this.handleClickEditOperate(record)}
+                                  style={{
+                                    marginLeft: '8px',
+                                  }}
+                                >
+                                  编辑
+                              </Button>
+                              ) : null
+                            }
+                          </div>
+                        );
+                      }
+                    },
+                  },
+                ]}
+                style={{
+                  marginTop: '10px',
+                }}
+                pagination={{
+                  defaultCurrent: 1,
+                  current: props.centerModel.page,
+                  total: props.centerModel.total,
+                  pageSize: props.centerModel.pagesize,
+                  onChange: current => {
+                    this.doGetCenterList({
+                      page: current,
+                    });
+                  },
+                }}
+              />
+            </Spin>
+
+            {/* 审核对话框 */}
+            <Modal
+              title={state.reviewDialog.title}
+              visible={props.reviewCenterDialogShow}
+              onCancel={() => {
+                this.updateReviewDialog({
+                  show: false,
                 });
               }}
+              onOk={this.doReview}
             >
-              <Radio.Button value={1}>总裁</Radio.Button>
-              <Radio.Button value={2}>事业合伙人</Radio.Button>
-              <Radio.Button value={3}>运营中心</Radio.Button>
-            </Radio.Group>
-          </Modal>
-          {/** 新增或编辑（1总裁, 2事业合伙人, 3运营中心）对话框 */}
-          <Modal
-            title="添加总裁"
-            visible={state.operationDialog.show}
-            title={state.operationDialog.title}
-            onCancel={this.closeOperationDialog}
-            onOk={this.handleOperationDialogSure}
-            okButtonProps={{
-              loading: props.saveOperateLoading,
-            }}
-          >
-            <Form layout="horizontal">
-              {
-                state.operationDialog.form.position_type !== 3 ? (
-                  <Form.Item
-                    {...formItemLayout}
-                    label="代理身份"
-                  >
+              <Form layout="horizontal">
+                <Form.Item {...formItemLayout} label="备注">
+                  <Input
+                    type="text"
+                    value={state.reviewDialog.mark}
+                    onChange={event => {
+                      this.updateReviewDialog({
+                        mark: event.target.value,
+                      });
+                    }}
+                  />
+                </Form.Item>
+                {state.reviewDialog.reviewType ? (
+                  <Form.Item {...formItemLayout} label="职位">
                     <Select
-                      placeholder="请选择"
-                      value={state.operationDialog.form.type}
-                      defaultValue={1}
-                      onChange={(value) => this.updateOperationDialogForm({
-                        type: value,
-                      })}
-                    >
-                      {
-                        state.operationDialog.form.position_type === 1 ?(
-                          <Select.Option value={1}>大区{getPositionTypeText(state.operationDialog.form.position_type)}</Select.Option>
-                        ) : null
-                      }
-                      <Select.Option value={2}>省级{getPositionTypeText(state.operationDialog.form.position_type)}</Select.Option>
-                      <Select.Option value={3}>市级{getPositionTypeText(state.operationDialog.form.position_type)}</Select.Option>
-                      <Select.Option value={4}>区县{getPositionTypeText(state.operationDialog.form.position_type)}</Select.Option>
-                    </Select>
-                  </Form.Item>
-                ) : null
-              }
-              <Form.Item {...formItemLayout} label="代理区域">
-                <Cascader
-                  changeOnSelect
-                  placeholder="请选择"
-                  value={state.operationDialog.form.raw_area_code}
-                  options={props.regionTree}
-                  loadData={this.handleRegionSelectLoadData}
-                  onChange={(value) => this.updateOperationDialogForm({
-                    raw_area_code: value,
-                  })}
-                />
-              </Form.Item>
-              {
-                state.operationDialog.form.position_type !== 3 && state.operationDialog.form.type === 1 ? (
-                  <Form.Item {...formItemLayout} label="代理职位">
-                    <Select
-                      placeholder="请选择"
-                      value={state.operationDialog.form.position_id}
-                      onChange={(value) => this.updateOperationDialogForm({
-                        position_id: value,
-                      })}
+                      value={state.reviewDialog.positionId}
+                      onChange={value => {
+                        this.updateReviewDialog({
+                          positionId: value,
+                        });
+                      }}
                     >
                       <Select.Option value="">请选择</Select.Option>
                       {props.allPositionsModel.map(item => (
@@ -909,66 +820,160 @@ export default class OperationCenter extends React.PureComponent {
                       ))}
                     </Select>
                   </Form.Item>
-                ) : null
-              }
-              <Form.Item {...formItemLayout} label="联系人姓名">
-                <Input
-                  type="text"
-                  placeholder="请填写"
-                  value={state.operationDialog.form.nickname}
-                  onChange={(event) => this.updateOperationDialogForm({
-                    nickname: event.target.value,
-                  })}
-                />
-              </Form.Item>
-              <Form.Item {...formItemLayout} label="联系电话">
-                <Input
-                  type="number"
-                  placeholder="请填写"
-                  value={state.operationDialog.form.mobile}
-                  onChange={(event) => this.updateOperationDialogForm({
-                    mobile: event.target.value,
-                  })}
-                  maxLength={11}
-                  minLength={11}
-                />
-              </Form.Item>
-              <Form.Item {...formItemLayout} label="用户Id">
-                <Input
-                  type="text"
-                  placeholder="请填写"
-                  value={state.operationDialog.form.user_id}
-                  onChange={(event) => this.updateOperationDialogForm({
-                    user_id: event.target.value,
-                  })}
-                />
-              </Form.Item>
-              {
-                state.operationDialog.form.position_type === 3 ? (
-                  <Form.Item {...formItemLayout} label="关联场地">
-                    <Select
-                      showSearch
-                      allowClear
-                      value={state.operationDialog.form.lecturer_area_id}
-                      onChange={(value) => this.updateOperationDialogForm({
-                        lecturer_area_id: value,
-                      })}
-                      notFoundContent={props.placesLoading ? <Spin size="small" /> : null}
-                      onSearch={this.handleSearchLecturer}
-                      filterOption={false}
-                      placeholder="搜索并选择"
+                ) : null}
+              </Form>
+            </Modal>
+            {/** 选择要添加（1总裁, 2事业合伙人, 3运营中心）的对话框 */}
+            <Modal
+              title="请选择要添加的类型"
+              visible={state.chooseTypeDialog.show}
+              onCancel={() => this.updateChooseTypeDialog({ show: false })}
+              onOk={this.handleChooseTypeDialogSure}
+            >
+              <Radio.Group
+                defaultValue={1}
+                buttonStyle="solid"
+                value={state.chooseTypeDialog.position_type}
+                onChange={(event) => {
+                  this.updateChooseTypeDialog({
+                    position_type: event.target.value,
+                  });
+                }}
+              >
+                <Radio.Button value={1}>总裁</Radio.Button>
+                <Radio.Button value={2}>事业合伙人</Radio.Button>
+                <Radio.Button value={3}>运营中心</Radio.Button>
+              </Radio.Group>
+            </Modal>
+            {/** 新增或编辑（1总裁, 2事业合伙人, 3运营中心）对话框 */}
+            <Modal
+              title="添加总裁"
+              visible={state.operationDialog.show}
+              title={state.operationDialog.title}
+              onCancel={this.closeOperationDialog}
+              onOk={this.handleOperationDialogSure}
+              okButtonProps={{
+                loading: props.saveOperateLoading,
+              }}
+            >
+              <Form layout="horizontal">
+                {
+                  state.operationDialog.form.position_type !== 3 ? (
+                    <Form.Item
+                      {...formItemLayout}
+                      label="代理身份"
                     >
-                      {props.places.map(d => (
-                        <Select.Option key={d.value} value={d.value}>{d.text}</Select.Option>
-                      ))}
-                    </Select>
-                  </Form.Item>
-                ) : null
-              }
-            </Form>
-          </Modal>
-        </Card>
-      </PageHeaderLayout>
+                      <Select
+                        placeholder="请选择"
+                        value={state.operationDialog.form.type}
+                        defaultValue={1}
+                        onChange={(value) => this.updateOperationDialogForm({
+                          type: value,
+                        })}
+                      >
+                        {
+                          state.operationDialog.form.position_type === 1 ? (
+                            <Select.Option value={1}>大区{getPositionTypeText(state.operationDialog.form.position_type)}</Select.Option>
+                          ) : null
+                        }
+                        <Select.Option value={2}>省级{getPositionTypeText(state.operationDialog.form.position_type)}</Select.Option>
+                        <Select.Option value={3}>市级{getPositionTypeText(state.operationDialog.form.position_type)}</Select.Option>
+                        <Select.Option value={4}>区县{getPositionTypeText(state.operationDialog.form.position_type)}</Select.Option>
+                      </Select>
+                    </Form.Item>
+                  ) : null
+                }
+                <Form.Item {...formItemLayout} label="代理区域">
+                  <Cascader
+                    changeOnSelect
+                    placeholder="请选择"
+                    value={state.operationDialog.form.raw_area_code}
+                    options={props.regionTree}
+                    loadData={this.handleRegionSelectLoadData}
+                    onChange={(value) => this.updateOperationDialogForm({
+                      raw_area_code: value,
+                    })}
+                  />
+                </Form.Item>
+                {
+                  state.operationDialog.form.position_type !== 3 && state.operationDialog.form.type === 1 ? (
+                    <Form.Item {...formItemLayout} label="代理职位">
+                      <Select
+                        placeholder="请选择"
+                        value={state.operationDialog.form.position_id}
+                        onChange={(value) => this.updateOperationDialogForm({
+                          position_id: value,
+                        })}
+                      >
+                        <Select.Option value="">请选择</Select.Option>
+                        {props.allPositionsModel.map(item => (
+                          <Select.Option value={item.id} key={item.id}>
+                            {item.name}
+                          </Select.Option>
+                        ))}
+                      </Select>
+                    </Form.Item>
+                  ) : null
+                }
+                <Form.Item {...formItemLayout} label="联系人姓名">
+                  <Input
+                    type="text"
+                    placeholder="请填写"
+                    value={state.operationDialog.form.nickname}
+                    onChange={(event) => this.updateOperationDialogForm({
+                      nickname: event.target.value,
+                    })}
+                  />
+                </Form.Item>
+                <Form.Item {...formItemLayout} label="联系电话">
+                  <Input
+                    type="number"
+                    placeholder="请填写"
+                    value={state.operationDialog.form.mobile}
+                    onChange={(event) => this.updateOperationDialogForm({
+                      mobile: event.target.value,
+                    })}
+                    maxLength={11}
+                    minLength={11}
+                  />
+                </Form.Item>
+                <Form.Item {...formItemLayout} label="用户Id">
+                  <Input
+                    type="text"
+                    placeholder="请填写"
+                    value={state.operationDialog.form.user_id}
+                    onChange={(event) => this.updateOperationDialogForm({
+                      user_id: event.target.value,
+                    })}
+                  />
+                </Form.Item>
+                {
+                  state.operationDialog.form.position_type === 3 ? (
+                    <Form.Item {...formItemLayout} label="关联场地">
+                      <Select
+                        showSearch
+                        allowClear
+                        value={state.operationDialog.form.lecturer_area_id}
+                        onChange={(value) => this.updateOperationDialogForm({
+                          lecturer_area_id: value,
+                        })}
+                        notFoundContent={props.placesLoading ? <Spin size="small" /> : null}
+                        onSearch={this.handleSearchLecturer}
+                        filterOption={false}
+                        placeholder="搜索并选择"
+                      >
+                        {props.places.map(d => (
+                          <Select.Option key={d.value} value={d.value}>{d.text}</Select.Option>
+                        ))}
+                      </Select>
+                    </Form.Item>
+                  ) : null
+                }
+              </Form>
+            </Modal>
+          </Card>
+        </PageHeaderLayout>
+      </AuthDialog>
     );
   }
 }
