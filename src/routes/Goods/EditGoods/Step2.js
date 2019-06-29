@@ -99,7 +99,7 @@ const CustomizedForm = Form.create({
     // } else if (typeof groupEndTime === 'undefined') {
     //   goodsDetail.group_end_time = weekNow;
     // }
-    console.log(1, goodsDetail.has_freeze_commission);
+    // console.log(1, goodsDetail.has_freeze_commission);
     if (groupEndTime === 0) {
       goodsDetail.group_start_time = now;
     } else if (typeof groupEndTime === 'number') {
@@ -314,6 +314,23 @@ const CustomizedForm = Form.create({
         value: goodsDetail.wealth_integral,
       }),
 
+      // 商户返佣福包
+      merchant_union_integral: Form.createFormField({
+        value: goodsDetail.merchant_union_integral,
+      }),
+      // 普通返佣福包
+      normal_union_integral: Form.createFormField({
+        value: goodsDetail.normal_union_integral,
+      }),
+      // 视群返佣福包
+      group_union_integral: Form.createFormField({
+        value: goodsDetail.group_union_integral,
+      }),
+      // 财道返佣福包
+      wealth_union_integral: Form.createFormField({
+        value: goodsDetail.wealth_union_integral,
+      }),
+
       // 只有升级码才有的属性
       // 商户返佣金额
       merchant_integral_qrcode: Form.createFormField({
@@ -331,6 +348,24 @@ const CustomizedForm = Form.create({
       wealth_integral_qrcode: Form.createFormField({
         value: goodsDetail.wealth_integral_qrcode,
       }),
+
+      // 商户返佣福包 [联盟积分]
+      merchant_union_integral_qrcode: Form.createFormField({
+        value: goodsDetail.merchant_union_integral_qrcode,
+      }),
+      // 普通返佣福包 [联盟积分]
+      normal_union_integral_qrcode: Form.createFormField({
+        value: goodsDetail.normal_union_integral_qrcode,
+      }),
+      // 视群返佣福包 [联盟积分]
+      group_union_integral_qrcode: Form.createFormField({
+        value: goodsDetail.group_union_integral_qrcode,
+      }),
+      // 财道返佣福包 [联盟积分]
+      wealth_union_integral_qrcode: Form.createFormField({
+        value: goodsDetail.wealth_union_integral_qrcode,
+      }),
+
       // 商户返佣金额
       merchant_money: Form.createFormField({
         value: goodsDetail.merchant_money,
@@ -392,43 +427,79 @@ const CustomizedForm = Form.create({
       }),
 
 
-      
+
       // 视群补差价升级的返佣金额
 
-       // 视群返佣金额
-       supplement_group_integral: Form.createFormField({
+       // 视群返佣福包
+      supplement_group_integral: Form.createFormField({
         value: goodsDetail.supplement_group_integral,
       }),
-      // 普通返佣金额
+      // 普通返佣福包
       supplement_normal_integral: Form.createFormField({
         value: goodsDetail.supplement_normal_integral,
       }),
-      // 商户返佣金额
+      // 商户返佣福包
       supplement_merchant_integral: Form.createFormField({
         value: goodsDetail.supplement_merchant_integral,
       }),
-      // 财道返佣金额
+      // 财道返佣福包
       supplement_wealth_integral: Form.createFormField({
         value: goodsDetail.supplement_wealth_integral,
       }),
-      // 只有升级码才有的属性
 
-      // 视群返佣金额
+      supplement_group_union_integral: Form.createFormField({
+        value: goodsDetail.supplement_group_union_integral,
+      }),
+      // 普通返佣福包
+      supplement_normal_union_integral: Form.createFormField({
+        value: goodsDetail.supplement_normal_union_integral,
+      }),
+      // 商户返佣福包
+      supplement_merchant_union_integral: Form.createFormField({
+        value: goodsDetail.supplement_merchant_union_integral,
+      }),
+      // 财道返佣福包
+      supplement_wealth_union_integral: Form.createFormField({
+        value: goodsDetail.supplement_wealth_union_integral,
+      }),
+
+
+      // 只有升级码才有的属性
+      // 视群返佣福包
       supplement_group_integral_qrcode: Form.createFormField({
         value: goodsDetail.supplement_group_integral_qrcode,
       }),
-      // 普通返佣金额
+      // 普通返佣福包
       supplement_normal_integral_qrcode: Form.createFormField({
         value: goodsDetail.supplement_normal_integral_qrcode,
       }),
-      // 商户返佣金额
+      // 商户返佣福包
       supplement_merchant_integral_qrcode: Form.createFormField({
         value: goodsDetail.supplement_merchant_integral_qrcode,
       }),
-      // 财道返佣金额
+      // 财道返佣福包
       supplement_wealth_integral_qrcode: Form.createFormField({
         value: goodsDetail.supplement_wealth_integral_qrcode,
       }),
+
+      // 视群返佣福包
+      supplement_group_union_integral_qrcode: Form.createFormField({
+        value: goodsDetail.supplement_group_union_integral_qrcode,
+      }),
+      // 普通返佣福包
+      supplement_normal_union_integral_qrcode: Form.createFormField({
+        value: goodsDetail.supplement_normal_union_integral_qrcode,
+      }),
+      // 商户返佣福包
+      supplement_merchant_union_integral_qrcode: Form.createFormField({
+        value: goodsDetail.supplement_merchant_union_integral_qrcode,
+      }),
+      // 财道返佣福包
+      supplement_wealth_union_integral_qrcode: Form.createFormField({
+        value: goodsDetail.supplement_wealth_union_integral_qrcode,
+      }),
+
+
       // 视群返佣金额
       supplement_group_money: Form.createFormField({
         value: goodsDetail.supplement_group_money,
@@ -508,6 +579,26 @@ const CustomizedForm = Form.create({
       supplement_merchant_integral_2: Form.createFormField({
         value: goodsDetail.supplement_merchant_integral_2,
       }),
+
+
+      // 视群返佣金额
+      supplement_group_union_integral_2: Form.createFormField({
+        value: goodsDetail.supplement_group_union_integral_2,
+      }),
+      // 财道返佣金额
+      supplement_wealth_union_integral_2: Form.createFormField({
+        value: goodsDetail.supplement_wealth_union_integral_2,
+      }),
+      // 普通返佣金额
+      supplement_normal_union_integral_2: Form.createFormField({
+        value: goodsDetail.supplement_normal_union_integral_2,
+      }),
+      // 商户返佣金额
+      supplement_merchant_union_integral_2: Form.createFormField({
+        value: goodsDetail.supplement_merchant_union_integral_2,
+      }),
+
+
       // 只有升级码才有的属性
 
       // 视群返佣金额
@@ -526,6 +617,25 @@ const CustomizedForm = Form.create({
       supplement_merchant_integral_qrcode_2: Form.createFormField({
         value: goodsDetail.supplement_merchant_integral_qrcode_2,
       }),
+
+
+      // 视群返佣金额
+      supplement_group_union_integral_qrcode_2: Form.createFormField({
+        value: goodsDetail.supplement_group_union_integral_qrcode_2,
+      }),
+      // 财道返佣金额
+      supplement_wealth_union_integral_qrcode_2: Form.createFormField({
+        value: goodsDetail.supplement_wealth_union_integral_qrcode_2,
+      }),
+      // 普通返佣金额
+      supplement_normal_union_integral_qrcode_2: Form.createFormField({
+        value: goodsDetail.supplement_normal_union_integral_qrcode_2,
+      }),
+      // 商户返佣金额
+      supplement_merchant_union_integral_qrcode_2: Form.createFormField({
+        value: goodsDetail.supplement_merchant_union_integral_qrcode_2,
+      }),
+
       // 视群返佣金额
       supplement_group_money_2: Form.createFormField({
         value: goodsDetail.supplement_group_money_2,
@@ -584,6 +694,18 @@ const CustomizedForm = Form.create({
       // 购买人奖励福包
       supplement_reward_shipping_fee_2: Form.createFormField({
         value: goodsDetail.supplement_reward_shipping_fee_2,
+      }),
+      // 讲师成交佣金（正常升级）
+      lecturer_reward_normal_price: Form.createFormField({
+        value: goodsDetail.lecturer_reward_normal_price,
+      }),
+      // 讲师成交佣金（群主补差价升级）
+      lecturer_reward_supplement_group_price: Form.createFormField({
+        value: goodsDetail.lecturer_reward_supplement_group_price,
+      }),
+      // 讲师成交佣金（店主补差价升级）
+      lecturer_reward_supplement_wealth_price: Form.createFormField({
+        value: goodsDetail.lecturer_reward_supplement_wealth_price,
       }),
     };
     if (systemType.user_levels && systemType.user_levels.length) {
@@ -1269,7 +1391,7 @@ const CustomizedForm = Form.create({
               uploadUrl={uploadUrl}
               valueSon={goodsDetail.goods_description}
               setDescription={setDescription.bind(this, 2)}
-              blurSetDescription={blurSetDescription.bind(this, 2)}
+              // blurSetDescription={blurSetDescription.bind(this, 2)}
             />
           )}
         </Form.Item>
@@ -1317,7 +1439,7 @@ const CustomizedForm = Form.create({
           </Col>
 
           <Col span={24}>
-            <h5>>. 原始推荐人返佣（福包）</h5>
+            <h5>>. 原始推荐人返佣（定向福包）</h5>
           </Col>
           <Col span={6}>
             <Form.Item {...profitLayout} label="粉丝">
@@ -1345,6 +1467,38 @@ const CustomizedForm = Form.create({
               {getFieldDecorator(`merchant_integral`, {
                 rules: [{ required: true, message: `请输入盟主` }],
               })(<InputNumber step={1} precision={0} min={goodsDetail.wealth_integral || 0} />)} 个
+            </Form.Item>
+          </Col>
+
+          <Col span={24}>
+            <h5>>. 原始推荐人返佣（联盟福包）</h5>
+          </Col>
+          <Col span={6}>
+            <Form.Item {...profitLayout} label="粉丝">
+              {getFieldDecorator(`normal_union_integral`, {
+                rules: [{ required: true, message: `请输入粉丝` }],
+              })(<InputNumber step={1} precision={0} min={0} />)} 个
+            </Form.Item>
+          </Col>
+          <Col span={6}>
+            <Form.Item {...profitLayout} label="群主">
+              {getFieldDecorator(`group_union_integral`, {
+                rules: [{ required: true, message: `请输入群主` }],
+              })(<InputNumber step={1} precision={0} min={goodsDetail.normal_union_integral || 0} />)} 个
+            </Form.Item>
+          </Col>
+          <Col span={6}>
+            <Form.Item {...profitLayout} label="店主">
+              {getFieldDecorator(`wealth_union_integral`, {
+                rules: [{ required: true, message: `请输入店主` }],
+              })(<InputNumber step={1} precision={0} min={goodsDetail.group_union_integral || 0} />)} 个
+            </Form.Item>
+          </Col>
+          <Col span={6}>
+            <Form.Item {...profitLayout} label="盟主">
+              {getFieldDecorator(`merchant_union_integral`, {
+                rules: [{ required: true, message: `请输入盟主` }],
+              })(<InputNumber step={1} precision={0} min={goodsDetail.wealth_union_integral || 0} />)} 个
             </Form.Item>
           </Col>
         </Row>
@@ -1383,7 +1537,7 @@ const CustomizedForm = Form.create({
             </Form.Item>
           </Col>
           <Col span={24}>
-            <h5>>. 升级码拥有者返佣（福包）</h5>
+            <h5>>. 升级码拥有者返佣（定向福包）</h5>
           </Col>
           <Col span={6}>
             <Form.Item {...profitLayout} label="粉丝">
@@ -1411,6 +1565,37 @@ const CustomizedForm = Form.create({
               {getFieldDecorator(`merchant_integral_qrcode`, {
                 rules: [{ required: true, message: `请输入盟主` }],
               })(<InputNumber step={1} precision={0} min={goodsDetail.wealth_integral_qrcode || 0} />)} 个
+            </Form.Item>
+          </Col>
+          <Col span={24}>
+            <h5>>. 升级码拥有者返佣（联盟福包）</h5>
+          </Col>
+          <Col span={6}>
+            <Form.Item {...profitLayout} label="粉丝">
+              {getFieldDecorator(`normal_union_integral_qrcode`, {
+                rules: [{ required: true, message: `请输入粉丝` }],
+              })(<InputNumber step={1} precision={0} min={0} />)} 个
+            </Form.Item>
+          </Col>
+          <Col span={6}>
+            <Form.Item {...profitLayout} label="群主">
+              {getFieldDecorator(`group_union_integral_qrcode`, {
+                rules: [{ required: true, message: `请输入群主` }],
+              })(<InputNumber step={1} precision={0} min={goodsDetail.normal_union_integral_qrcode || 0} />)} 个
+            </Form.Item>
+          </Col>
+          <Col span={6}>
+            <Form.Item {...profitLayout} label="店主">
+              {getFieldDecorator(`wealth_union_integral_qrcode`, {
+                rules: [{ required: true, message: `请输入店主` }],
+              })(<InputNumber step={1} precision={0} min={goodsDetail.group_union_integral_qrcode || 0} />)} 个
+            </Form.Item>
+          </Col>
+          <Col span={6}>
+            <Form.Item {...profitLayout} label="盟主">
+              {getFieldDecorator(`merchant_union_integral_qrcode`, {
+                rules: [{ required: true, message: `请输入盟主` }],
+              })(<InputNumber step={1} precision={0} min={goodsDetail.wealth_union_integral_qrcode || 0} />)} 个
             </Form.Item>
           </Col>
           </Row>
@@ -1465,6 +1650,16 @@ const CustomizedForm = Form.create({
               {getFieldDecorator(`reward_shipping_fee`, {
                 rules: [{ required: true, message: `请输入购物余额` }],
               })(<InputNumber step={1} precision={0} min={0} />)} 元
+            </Form.Item>
+          </Col>
+          <Col span={24}>
+            <h5>&gt;. 讲师成交佣金</h5>
+          </Col>
+          <Col span={8}>
+            <Form.Item {...profitLayout} label="讲师成交佣金">
+              {getFieldDecorator(`lecturer_reward_normal_price`, {
+                rules: [{ required: false, message: `讲师成交佣金` }],
+              })(<InputNumber step={0.01} precision={0} min={0} />)} 元
             </Form.Item>
           </Col>
         </Row>
@@ -1540,7 +1735,7 @@ const CustomizedForm = Form.create({
               </Form.Item>
             </Col>
             <Col span={24}>
-              <h5>>. 原始推荐人返佣（福包）</h5>
+              <h5>>. 原始推荐人返佣（定向福包）</h5>
             </Col>
             <Col span={6}>
               <Form.Item {...profitLayout} label="粉丝">
@@ -1588,6 +1783,56 @@ const CustomizedForm = Form.create({
                 )} 个
               </Form.Item>
             </Col>
+
+            <Col span={24}>
+              <h5>>. 原始推荐人返佣（联盟福包）</h5>
+            </Col>
+            <Col span={6}>
+              <Form.Item {...profitLayout} label="粉丝">
+                {getFieldDecorator(`supplement_normal_union_integral`, {
+                  rules: [{ required: true, message: `请输入粉丝` }],
+                })(<InputNumber step={1} precision={0} min={0} />)} 个
+              </Form.Item>
+            </Col>
+            <Col span={6}>
+              <Form.Item {...profitLayout} label="群主">
+                {getFieldDecorator(`supplement_group_union_integral`, {
+                  rules: [{ required: true, message: `请输入群主` }],
+                })(
+                  <InputNumber
+                    step={1}
+                    precision={0}
+                    min={goodsDetail.supplement_normal_union_integral || 0}
+                  />
+                )} 个
+              </Form.Item>
+            </Col>
+            <Col span={6}>
+              <Form.Item {...profitLayout} label="店主">
+                {getFieldDecorator(`supplement_wealth_union_integral`, {
+                  rules: [{ required: true, message: `请输入店主` }],
+                })(
+                  <InputNumber
+                    step={1}
+                    precision={0}
+                    min={goodsDetail.supplement_group_union_integral || 0}
+                  />
+                )} 个
+              </Form.Item>
+            </Col>
+            <Col span={6}>
+              <Form.Item {...profitLayout} label="盟主">
+                {getFieldDecorator(`supplement_merchant_union_integral`, {
+                  rules: [{ required: true, message: `请输入盟主` }],
+                })(
+                  <InputNumber
+                    step={1}
+                    precision={0}
+                    min={goodsDetail.supplement_wealth_union_integral || 0}
+                  />
+                )} 个
+              </Form.Item>
+            </Col>
           </Row>
         ),(
           goodsDetail.type === 2 ? (
@@ -1624,7 +1869,7 @@ const CustomizedForm = Form.create({
                   </Form.Item>
                 </Col>
                 <Col span={24}>
-                  <h5>>. 升级码拥有者返佣（福包）</h5>
+                  <h5>>. 升级码拥有者返佣（定向福包）</h5>
                 </Col>
                 <Col span={6}>
                   <Form.Item {...profitLayout} label="粉丝">
@@ -1652,6 +1897,38 @@ const CustomizedForm = Form.create({
                     {getFieldDecorator(`supplement_merchant_integral_qrcode`, {
                       rules: [{ required: true, message: `请输入盟主` }],
                     })(<InputNumber step={1} precision={0} min={goodsDetail.supplement_wealth_integral_qrcode || 0} />)} 个
+                  </Form.Item>
+                </Col>
+
+                <Col span={24}>
+                  <h5>>. 升级码拥有者返佣（联盟福包）</h5>
+                </Col>
+                <Col span={6}>
+                  <Form.Item {...profitLayout} label="粉丝">
+                    {getFieldDecorator(`supplement_normal_union_integral_qrcode`, {
+                      rules: [{ required: true, message: `请输入粉丝` }],
+                    })(<InputNumber step={1} precision={0} min={0} />)} 个
+                  </Form.Item>
+                </Col>
+                <Col span={6}>
+                  <Form.Item {...profitLayout} label="群主">
+                    {getFieldDecorator(`supplement_group_union_integral_qrcode`, {
+                      rules: [{ required: true, message: `请输入群主` }],
+                    })(<InputNumber step={1} precision={0} min={goodsDetail.supplement_normal_union_integral_qrcode || 0} />)} 个
+                  </Form.Item>
+                </Col>
+                <Col span={6}>
+                  <Form.Item {...profitLayout} label="店主">
+                    {getFieldDecorator(`supplement_wealth_union_integral_qrcode`, {
+                      rules: [{ required: true, message: `请输入店主` }],
+                    })(<InputNumber step={1} precision={0} min={goodsDetail.supplement_group_union_integral_qrcode || 0} />)} 个
+                  </Form.Item>
+                </Col>
+                <Col span={6}>
+                  <Form.Item {...profitLayout} label="盟主">
+                    {getFieldDecorator(`supplement_merchant_union_integral_qrcode`, {
+                      rules: [{ required: true, message: `请输入盟主` }],
+                    })(<InputNumber step={1} precision={0} min={goodsDetail.supplement_wealth_union_integral_qrcode || 0} />)} 个
                   </Form.Item>
                 </Col>
               </Row>
@@ -1704,6 +1981,16 @@ const CustomizedForm = Form.create({
                 {getFieldDecorator(`supplement_reward_shipping_fee`, {
                   rules: [{ required: true, message: `请输入乐美购物余额` }],
                 })(<InputNumber step={1} precision={0} min={0} />)} 元
+              </Form.Item>
+            </Col>
+            <Col span={24}>
+              <h5>&gt;. 讲师成交佣金</h5>
+            </Col>
+            <Col span={8}>
+              <Form.Item {...profitLayout} label="讲师成交佣金">
+                {getFieldDecorator(`lecturer_reward_supplement_group_price`, {
+                  rules: [{ required: false, message: `讲师成交佣金` }],
+                })(<InputNumber step={0.01} precision={0} min={0} />)} 元
               </Form.Item>
             </Col>
           </Row>
@@ -1777,7 +2064,7 @@ const CustomizedForm = Form.create({
             </Form.Item>
           </Col>
           <Col span={24}>
-              <h5>>. 原始推荐人返佣（福包）</h5>
+              <h5>>. 原始推荐人返佣（定向福包）</h5>
           </Col>
           <Col span={6}>
             <Form.Item {...profitLayout} label="粉丝">
@@ -1825,6 +2112,56 @@ const CustomizedForm = Form.create({
               )} 个
             </Form.Item>
           </Col>
+
+          <Col span={24}>
+              <h5>>. 原始推荐人返佣（联盟福包）</h5>
+          </Col>
+          <Col span={6}>
+            <Form.Item {...profitLayout} label="粉丝">
+              {getFieldDecorator(`supplement_normal_union_integral_2`, {
+                rules: [{ required: true, message: `请输入粉丝` }],
+              })(<InputNumber step={1} precision={0} min={0} />)} 个
+            </Form.Item>
+          </Col>
+          <Col span={6}>
+            <Form.Item {...profitLayout} label="群主">
+              {getFieldDecorator(`supplement_group_union_integral_2`, {
+                rules: [{ required: true, message: `请输入群主` }],
+              })(
+                <InputNumber
+                  step={1}
+                  precision={0}
+                  min={goodsDetail.supplement_normal_union_integral_2 || 0}
+                />
+              )} 个
+            </Form.Item>
+          </Col>
+          <Col span={6}>
+            <Form.Item {...profitLayout} label="店主">
+              {getFieldDecorator(`supplement_wealth_union_integral_2`, {
+                rules: [{ required: true, message: `请输入店主` }],
+              })(
+                <InputNumber
+                  step={1}
+                  precision={0}
+                  min={goodsDetail.supplement_group_union_integral_2 || 0}
+                />
+              )} 个
+            </Form.Item>
+          </Col>
+          <Col span={6}>
+            <Form.Item {...profitLayout} label="盟主">
+              {getFieldDecorator(`supplement_merchant_union_integral_2`, {
+                rules: [{ required: true, message: `请输入盟主` }],
+              })(
+                <InputNumber
+                  step={1}
+                  precision={0}
+                  min={goodsDetail.supplement_wealth_union_integral_2 || 0}
+                />
+              )} 个
+            </Form.Item>
+          </Col>
         </Row>
         ), (
           goodsDetail.type === 2 ? (
@@ -1861,7 +2198,7 @@ const CustomizedForm = Form.create({
                 </Form.Item>
               </Col>
               <Col span={24}>
-                <h5>>. 升级码拥有者返佣（福包）</h5>
+                <h5>>. 升级码拥有者返佣（定向福包）</h5>
               </Col>
               <Col span={6}>
                 <Form.Item {...profitLayout} label="粉丝">
@@ -1889,6 +2226,38 @@ const CustomizedForm = Form.create({
                   {getFieldDecorator(`supplement_merchant_integral_qrcode_2`, {
                     rules: [{ required: true, message: `请输入盟主` }],
                   })(<InputNumber step={1} precision={0} min={goodsDetail.supplement_wealth_integral_qrcode_2 || 0} />)} 个
+                </Form.Item>
+              </Col>
+
+              <Col span={24}>
+                <h5>>. 升级码拥有者返佣（联盟福包）</h5>
+              </Col>
+              <Col span={6}>
+                <Form.Item {...profitLayout} label="粉丝">
+                  {getFieldDecorator(`supplement_normal_union_integral_qrcode_2`, {
+                    rules: [{ required: true, message: `请输入粉丝` }],
+                  })(<InputNumber step={1} precision={0} min={0} />)} 个
+                </Form.Item>
+              </Col>
+              <Col span={6}>
+                <Form.Item {...profitLayout} label="群主">
+                  {getFieldDecorator(`supplement_group_union_integral_qrcode_2`, {
+                    rules: [{ required: true, message: `请输入群主` }],
+                  })(<InputNumber step={1} precision={0} min={goodsDetail.supplement_normal_union_integral_qrcode_2 || 0} />)} 个
+                </Form.Item>
+              </Col>
+              <Col span={6}>
+                <Form.Item {...profitLayout} label="店主">
+                  {getFieldDecorator(`supplement_wealth_union_integral_qrcode_2`, {
+                    rules: [{ required: true, message: `请输入店主` }],
+                  })(<InputNumber step={1} precision={0} min={goodsDetail.supplement_group_union_integral_qrcode_2 || 0} />)} 个
+                </Form.Item>
+              </Col>
+              <Col span={6}>
+                <Form.Item {...profitLayout} label="盟主">
+                  {getFieldDecorator(`supplement_merchant_union_integral_qrcode_2`, {
+                    rules: [{ required: true, message: `请输入盟主` }],
+                  })(<InputNumber step={1} precision={0} min={goodsDetail.supplement_wealth_union_integral_qrcode_2 || 0} />)} 个
                 </Form.Item>
               </Col>
             </Row>
@@ -1941,6 +2310,16 @@ const CustomizedForm = Form.create({
                 {getFieldDecorator(`supplement_reward_shipping_fee_2`, {
                   rules: [{ required: true, message: `请输入购物余额` }],
                 })(<InputNumber step={1} precision={0} min={0} />)} 元
+              </Form.Item>
+            </Col>
+            <Col span={24}>
+              <h5>&gt;. 讲师成交佣金</h5>
+            </Col>
+            <Col span={8}>
+              <Form.Item {...profitLayout} label="讲师成交佣金">
+                {getFieldDecorator(`lecturer_reward_supplement_wealth_price`, {
+                  rules: [{ required: false, message: `讲师成交佣金` }],
+                })(<InputNumber step={0.01} precision={0} min={0} />)} 元
               </Form.Item>
             </Col>
           </Row>
@@ -2075,7 +2454,7 @@ const CustomizedForm = Form.create({
 @connect(({ global, login, goods, loading }) => ({
   goods,
   global,
-  login, 
+  login,
   loading: loading.models.goods,
 }))
 // @Form.create()
@@ -2181,7 +2560,7 @@ class EditGoodStep2 extends React.PureComponent {
         value: e,
       };
     }
-    // this.changeFormVal(obj);
+    this.changeFormVal(obj);
   };
 
   blurSetDescription = (type, e) => {
@@ -2365,12 +2744,15 @@ class EditGoodStep2 extends React.PureComponent {
     freezeData.push({
       normal_money: goodsDetail.normal_money ? goodsDetail.normal_money : 0, // 普通返佣金额
       normal_integral: goodsDetail.normal_integral ? goodsDetail.normal_integral : 0,
+      normal_union_integral: goodsDetail.normal_union_integral ? goodsDetail.normal_union_integral : 0,
       normal_proportion: 0,
       supplement_normal_money: hasGroupData ? goodsDetail.supplement_normal_money : 0,
       supplement_normal_integral: hasGroupData ? goodsDetail.supplement_normal_integral : 0,
+      supplement_normal_union_integral: hasGroupData ? goodsDetail.supplement_normal_union_integral : 0,
       supplement_normal_proportion: 0,
       supplement_normal_money_2: hasWealthData ? goodsDetail.supplement_normal_money_2 : 0,
       supplement_normal_integral_2: hasWealthData ? goodsDetail.supplement_normal_integral_2 : 0,
+      supplement_normal_union_integral_2: hasWealthData ? goodsDetail.supplement_normal_union_integral_2 : 0,
       supplement_normal_proportion_2: 0,
       normal_money_qrcode: isQrcodeGoods ? goodsDetail.normal_money_qrcode : 0,
       supplement_normal_money_qrcode: (isQrcodeGoods && hasGroupData) ? goodsDetail.supplement_normal_money_qrcode : 0,
@@ -2378,16 +2760,22 @@ class EditGoodStep2 extends React.PureComponent {
       normal_integral_qrcode: isQrcodeGoods ? goodsDetail.normal_integral_qrcode : 0,
       supplement_normal_integral_qrcode: (isQrcodeGoods && hasGroupData) ? goodsDetail.supplement_normal_integral_qrcode : 0,
       supplement_normal_integral_qrcode_2: (isQrcodeGoods && hasWealthData) ? goodsDetail.supplement_normal_integral_qrcode_2 : 0,
+      normal_union_integral_qrcode: isQrcodeGoods ? goodsDetail.normal_union_integral_qrcode : 0,
+      supplement_normal_union_integral_qrcode: (isQrcodeGoods && hasGroupData) ? goodsDetail.supplement_normal_union_integral_qrcode : 0,
+      supplement_normal_union_integral_qrcode_2: (isQrcodeGoods && hasWealthData) ? goodsDetail.supplement_normal_union_integral_qrcode_2 : 0,
     });
     freezeData.push({
       group_money: goodsDetail.group_money ? goodsDetail.group_money : 0, // 视群返佣金额
       group_integral: goodsDetail.group_integral ? goodsDetail.group_integral : 0, // 视群返佣金额
+      group_union_integral: goodsDetail.group_union_integral ? goodsDetail.group_union_integral : 0, // 视群返佣金额
       group_proportion: 0,
       supplement_group_money: hasGroupData ? goodsDetail.supplement_group_money : 0,
       supplement_group_integral: hasGroupData ? goodsDetail.supplement_group_integral : 0,
+      supplement_group_union_integral: hasGroupData ? goodsDetail.supplement_group_union_integral : 0,
       supplement_group_proportion: 0,
       supplement_group_money_2: hasWealthData ? goodsDetail.supplement_group_money_2 : 0,
       supplement_group_integral_2: hasWealthData ? goodsDetail.supplement_group_integral_2 : 0,
+      supplement_group_union_integral_2: hasWealthData ? goodsDetail.supplement_group_union_integral_2 : 0,
       supplement_group_proportion_2: 0,
       group_money_qrcode: isQrcodeGoods ? goodsDetail.group_money_qrcode : 0,
       supplement_group_money_qrcode: (isQrcodeGoods && hasGroupData) ? goodsDetail.supplement_group_money_qrcode : 0,
@@ -2395,16 +2783,22 @@ class EditGoodStep2 extends React.PureComponent {
       group_integral_qrcode: isQrcodeGoods ? goodsDetail.group_integral_qrcode : 0,
       supplement_group_integral_qrcode: (isQrcodeGoods && hasGroupData) ? goodsDetail.supplement_group_integral_qrcode : 0,
       supplement_group_integral_qrcode_2: (isQrcodeGoods && hasWealthData) ? goodsDetail.supplement_group_integral_qrcode_2 : 0,
+      group_union_integral_qrcode: isQrcodeGoods ? goodsDetail.group_union_integral_qrcode : 0,
+      supplement_group_union_integral_qrcode: (isQrcodeGoods && hasGroupData) ? goodsDetail.supplement_group_union_integral_qrcode : 0,
+      supplement_group_union_integral_qrcode_2: (isQrcodeGoods && hasWealthData) ? goodsDetail.supplement_group_union_integral_qrcode_2 : 0,
     });
     freezeData.push({
       merchant_money: goodsDetail.merchant_money ? goodsDetail.merchant_money : 0, // 商户返佣金额
       merchant_integral: goodsDetail.merchant_integral ? goodsDetail.merchant_integral : 0, // 商户返佣金额
+      merchant_union_integral: goodsDetail.merchant_union_integral ? goodsDetail.merchant_union_integral : 0, // 商户返佣金额
       merchant_proportion: 0,
       supplement_merchant_money: hasGroupData ? goodsDetail.supplement_merchant_money : 0,
       supplement_merchant_integral: hasGroupData ? goodsDetail.supplement_merchant_integral : 0,
+      supplement_merchant_union_integral: hasGroupData ? goodsDetail.supplement_merchant_union_integral : 0,
       supplement_merchant_proportion: 0,
       supplement_merchant_money_2: hasWealthData ? goodsDetail.supplement_merchant_money_2 : 0,
       supplement_merchant_integral_2: hasWealthData ? goodsDetail.supplement_merchant_integral_2 : 0,
+      supplement_merchant_union_integral_2: hasWealthData ? goodsDetail.supplement_merchant_union_integral_2 : 0,
       supplement_merchant_proportion_2: 0,
       merchant_money_qrcode: isQrcodeGoods ? goodsDetail.merchant_money_qrcode : 0,
       supplement_merchant_money_qrcode: (isQrcodeGoods && hasGroupData) ? goodsDetail.supplement_merchant_money_qrcode : 0,
@@ -2412,16 +2806,22 @@ class EditGoodStep2 extends React.PureComponent {
       merchant_integral_qrcode: isQrcodeGoods ? goodsDetail.merchant_integral_qrcode : 0,
       supplement_merchant_integral_qrcode: (isQrcodeGoods && hasGroupData) ? goodsDetail.supplement_merchant_integral_qrcode : 0,
       supplement_merchant_integral_qrcode_2: (isQrcodeGoods && hasWealthData) ? goodsDetail.supplement_merchant_integral_qrcode_2 : 0,
+      merchant_union_integral_qrcode: isQrcodeGoods ? goodsDetail.merchant_union_integral_qrcode : 0,
+      supplement_merchant_union_integral_qrcode: (isQrcodeGoods && hasGroupData) ? goodsDetail.supplement_merchant_union_integral_qrcode : 0,
+      supplement_merchant_union_integral_qrcode_2: (isQrcodeGoods && hasWealthData) ? goodsDetail.supplement_merchant_union_integral_qrcode_2 : 0,
     });
     freezeData.push({
       wealth_money: goodsDetail.wealth_money ? goodsDetail.wealth_money : 0, // 财道返佣金额
       wealth_integral: goodsDetail.wealth_integral ? goodsDetail.wealth_integral : 0, // 财道返佣金额
+      wealth_union_integral: goodsDetail.wealth_union_integral ? goodsDetail.wealth_union_integral : 0, // 财道返佣金额
       wealth_proportion: 0,
       supplement_wealth_money: hasGroupData ? goodsDetail.supplement_wealth_money : 0,
       supplement_wealth_integral: hasGroupData ? goodsDetail.supplement_wealth_integral : 0,
+      supplement_wealth_union_integral: hasGroupData ? goodsDetail.supplement_wealth_union_integral : 0,
       supplement_wealth_proportion: 0,
       supplement_wealth_money_2: hasWealthData ? goodsDetail.supplement_wealth_money_2 : 0,
       supplement_wealth_integral_2: hasWealthData ? goodsDetail.supplement_wealth_integral_2 : 0,
+      supplement_wealth_union_integral_2: hasWealthData ? goodsDetail.supplement_wealth_union_integral_2 : 0,
       supplement_wealth_proportion_2: 0,
       wealth_money_qrcode: isQrcodeGoods ? goodsDetail.wealth_money_qrcode : 0,
       supplement_wealth_money_qrcode: (isQrcodeGoods && hasGroupData) ? goodsDetail.supplement_wealth_money_qrcode : 0,
@@ -2429,7 +2829,78 @@ class EditGoodStep2 extends React.PureComponent {
       wealth_integral_qrcode: isQrcodeGoods ? goodsDetail.wealth_integral_qrcode : 0,
       supplement_wealth_integral_qrcode: (isQrcodeGoods && hasGroupData) ? goodsDetail.supplement_wealth_integral_qrcode : 0,
       supplement_wealth_integral_qrcode_2: (isQrcodeGoods && hasWealthData) ? goodsDetail.supplement_wealth_integral_qrcode_2 : 0,
+      wealth_union_integral_qrcode: isQrcodeGoods ? goodsDetail.wealth_union_integral_qrcode : 0,
+      supplement_wealth_union_integral_qrcode: (isQrcodeGoods && hasGroupData) ? goodsDetail.supplement_wealth_union_integral_qrcode : 0,
+      supplement_wealth_union_integral_qrcode_2: (isQrcodeGoods && hasWealthData) ? goodsDetail.supplement_wealth_union_integral_qrcode_2 : 0,
     });
+    // freezeData.push({
+    //   normal_money: goodsDetail.normal_money ? goodsDetail.normal_money : 0, // 普通返佣金额
+    //   normal_integral: goodsDetail.normal_integral ? goodsDetail.normal_integral : 0,
+    //   normal_proportion: 0,
+    //   supplement_normal_money: hasGroupData ? goodsDetail.supplement_normal_money : 0,
+    //   supplement_normal_integral: hasGroupData ? goodsDetail.supplement_normal_integral : 0,
+    //   supplement_normal_proportion: 0,
+    //   supplement_normal_money_2: hasWealthData ? goodsDetail.supplement_normal_money_2 : 0,
+    //   supplement_normal_integral_2: hasWealthData ? goodsDetail.supplement_normal_integral_2 : 0,
+    //   supplement_normal_proportion_2: 0,
+    //   normal_money_qrcode: isQrcodeGoods ? goodsDetail.normal_money_qrcode : 0,
+    //   supplement_normal_money_qrcode: (isQrcodeGoods && hasGroupData) ? goodsDetail.supplement_normal_money_qrcode : 0,
+    //   supplement_normal_money_qrcode_2: (isQrcodeGoods && hasWealthData) ? goodsDetail.supplement_normal_money_qrcode_2 : 0,
+    //   normal_integral_qrcode: isQrcodeGoods ? goodsDetail.normal_integral_qrcode : 0,
+    //   supplement_normal_integral_qrcode: (isQrcodeGoods && hasGroupData) ? goodsDetail.supplement_normal_integral_qrcode : 0,
+    //   supplement_normal_integral_qrcode_2: (isQrcodeGoods && hasWealthData) ? goodsDetail.supplement_normal_integral_qrcode_2 : 0,
+    // });
+    // freezeData.push({
+    //   group_money: goodsDetail.group_money ? goodsDetail.group_money : 0, // 视群返佣金额
+    //   group_integral: goodsDetail.group_integral ? goodsDetail.group_integral : 0, // 视群返佣金额
+    //   group_proportion: 0,
+    //   supplement_group_money: hasGroupData ? goodsDetail.supplement_group_money : 0,
+    //   supplement_group_integral: hasGroupData ? goodsDetail.supplement_group_integral : 0,
+    //   supplement_group_proportion: 0,
+    //   supplement_group_money_2: hasWealthData ? goodsDetail.supplement_group_money_2 : 0,
+    //   supplement_group_integral_2: hasWealthData ? goodsDetail.supplement_group_integral_2 : 0,
+    //   supplement_group_proportion_2: 0,
+    //   group_money_qrcode: isQrcodeGoods ? goodsDetail.group_money_qrcode : 0,
+    //   supplement_group_money_qrcode: (isQrcodeGoods && hasGroupData) ? goodsDetail.supplement_group_money_qrcode : 0,
+    //   supplement_group_money_qrcode_2: (isQrcodeGoods && hasWealthData) ? goodsDetail.supplement_group_money_qrcode_2 : 0,
+    //   group_integral_qrcode: isQrcodeGoods ? goodsDetail.group_integral_qrcode : 0,
+    //   supplement_group_integral_qrcode: (isQrcodeGoods && hasGroupData) ? goodsDetail.supplement_group_integral_qrcode : 0,
+    //   supplement_group_integral_qrcode_2: (isQrcodeGoods && hasWealthData) ? goodsDetail.supplement_group_integral_qrcode_2 : 0,
+    // });
+    // freezeData.push({
+    //   merchant_money: goodsDetail.merchant_money ? goodsDetail.merchant_money : 0, // 商户返佣金额
+    //   merchant_integral: goodsDetail.merchant_integral ? goodsDetail.merchant_integral : 0, // 商户返佣金额
+    //   merchant_proportion: 0,
+    //   supplement_merchant_money: hasGroupData ? goodsDetail.supplement_merchant_money : 0,
+    //   supplement_merchant_integral: hasGroupData ? goodsDetail.supplement_merchant_integral : 0,
+    //   supplement_merchant_proportion: 0,
+    //   supplement_merchant_money_2: hasWealthData ? goodsDetail.supplement_merchant_money_2 : 0,
+    //   supplement_merchant_integral_2: hasWealthData ? goodsDetail.supplement_merchant_integral_2 : 0,
+    //   supplement_merchant_proportion_2: 0,
+    //   merchant_money_qrcode: isQrcodeGoods ? goodsDetail.merchant_money_qrcode : 0,
+    //   supplement_merchant_money_qrcode: (isQrcodeGoods && hasGroupData) ? goodsDetail.supplement_merchant_money_qrcode : 0,
+    //   supplement_merchant_money_qrcode_2: (isQrcodeGoods && hasWealthData) ? goodsDetail.supplement_merchant_money_qrcode_2 : 0,
+    //   merchant_integral_qrcode: isQrcodeGoods ? goodsDetail.merchant_integral_qrcode : 0,
+    //   supplement_merchant_integral_qrcode: (isQrcodeGoods && hasGroupData) ? goodsDetail.supplement_merchant_integral_qrcode : 0,
+    //   supplement_merchant_integral_qrcode_2: (isQrcodeGoods && hasWealthData) ? goodsDetail.supplement_merchant_integral_qrcode_2 : 0,
+    // });
+    // freezeData.push({
+    //   wealth_money: goodsDetail.wealth_money ? goodsDetail.wealth_money : 0, // 财道返佣金额
+    //   wealth_integral: goodsDetail.wealth_integral ? goodsDetail.wealth_integral : 0, // 财道返佣金额
+    //   wealth_proportion: 0,
+    //   supplement_wealth_money: hasGroupData ? goodsDetail.supplement_wealth_money : 0,
+    //   supplement_wealth_integral: hasGroupData ? goodsDetail.supplement_wealth_integral : 0,
+    //   supplement_wealth_proportion: 0,
+    //   supplement_wealth_money_2: hasWealthData ? goodsDetail.supplement_wealth_money_2 : 0,
+    //   supplement_wealth_integral_2: hasWealthData ? goodsDetail.supplement_wealth_integral_2 : 0,
+    //   supplement_wealth_proportion_2: 0,
+    //   wealth_money_qrcode: isQrcodeGoods ? goodsDetail.wealth_money_qrcode : 0,
+    //   supplement_wealth_money_qrcode: (isQrcodeGoods && hasGroupData) ? goodsDetail.supplement_wealth_money_qrcode : 0,
+    //   supplement_wealth_money_qrcode_2: (isQrcodeGoods && hasWealthData) ? goodsDetail.supplement_wealth_money_qrcode_2 : 0,
+    //   wealth_integral_qrcode: isQrcodeGoods ? goodsDetail.wealth_integral_qrcode : 0,
+    //   supplement_wealth_integral_qrcode: (isQrcodeGoods && hasGroupData) ? goodsDetail.supplement_wealth_integral_qrcode : 0,
+    //   supplement_wealth_integral_qrcode_2: (isQrcodeGoods && hasWealthData) ? goodsDetail.supplement_wealth_integral_qrcode_2 : 0,
+    // });
     // 追加推荐人和购买人的话费和福包的赠送，强行为0的代表这个升级类型不允许设置金额
     freezeData.push({
       recommend_reward_phone_charge: goodsDetail.recommend_reward_phone_charge ? goodsDetail.recommend_reward_phone_charge: 0,
@@ -2451,209 +2922,11 @@ class EditGoodStep2 extends React.PureComponent {
       supplement_reward_integral_2: hasWealthData ? goodsDetail.supplement_reward_integral_2 : 0,
       supplement_reward_shipping_fee_2: hasWealthData ? goodsDetail.supplement_reward_shipping_fee_2 : 0
     });
-
-    // if (values.upgrade_type === 2) {
-    //   attrTable = [];
-    //   freezeData.push({
-    //     normal_money: goodsDetail.normal_money,
-    //     normal_proportion: 0,
-    //     supplement_normal_money: 0,
-    //     supplement_normal_proportion: 0,
-    //     supplement_normal_money_2: 0,
-    //     supplement_normal_proportion_2: 0,
-    //   });
-    //   freezeData.push({
-    //     group_money: goodsDetail.group_money,
-    //     group_proportion: 0,
-    //     supplement_group_money: 0,
-    //     supplement_group_proportion: 0,
-    //     supplement_group_money_2: 0,
-    //     supplement_group_proportion_2: 0,
-    //   });
-    //   freezeData.push({
-    //     merchant_money: goodsDetail.merchant_money,
-    //     merchant_proportion: 0,
-    //     supplement_merchant_money: 0,
-    //     supplement_merchant_proportion: 0,
-    //     supplement_merchant_money_2: 0,
-    //     supplement_merchant_proportion_2: 0,
-    //   });
-    //   freezeData.push({
-    //     wealth_money: goodsDetail.wealth_money,
-    //     wealth_proportion: 0,
-    //     supplement_wealth_money: 0,
-    //     supplement_wealth_proportion: 0,
-    //     supplement_wealth_money_2: 0,
-    //     supplement_wealth_proportion_2: 0,
-    //   });
-
-    //   // 追加推荐人和购买人的话费和福包的赠送，强行为0的代表这个升级类型不允许设置金额
-    //   freezeData.push({
-    //     recommend_reward_phone_charge: goodsDetail.recommend_reward_phone_charge,
-    //     recommend_reward_integral: goodsDetail.recommend_reward_integral,
-    //     reward_phone_charge: goodsDetail.reward_phone_charge,
-    //     reward_integral: goodsDetail.reward_integral,
-    //     supplement_recommend_reward_phone_charge: 0,
-    //     supplement_recommend_reward_integral: 0,
-    //     supplement_reward_phone_charge: 0,
-    //     supplement_reward_integral: 0,
-    //     supplement_recommend_reward_phone_charge_2: 0,
-    //     supplement_recommend_reward_integral_2: 0,
-    //     supplement_reward_phone_charge_2: 0,
-    //     supplement_reward_integral_2: 0
-    //   });
-    // } else if (values.upgrade_type === 1) {
-    //   attrTable = [];
-    //   freezeData.push({
-    //     normal_money: goodsDetail.normal_money,
-    //     normal_proportion: 0,
-    //     supplement_normal_money: goodsDetail.supplement_normal_money,
-    //     supplement_normal_proportion: 0,
-    //     supplement_normal_money_2: goodsDetail.supplement_normal_money_2,
-    //     supplement_normal_proportion_2: 0,
-    //   });
-    //   freezeData.push({
-    //     group_money: goodsDetail.group_money,
-    //     group_proportion: 0,
-    //     supplement_group_money: goodsDetail.supplement_group_money,
-    //     supplement_group_proportion: 0,
-    //     supplement_group_money_2: goodsDetail.supplement_group_money_2,
-    //     supplement_group_proportion_2: 0,
-    //   });
-    //   freezeData.push({
-    //     merchant_money: goodsDetail.merchant_money,
-    //     merchant_proportion: 0,
-    //     supplement_merchant_money: goodsDetail.supplement_merchant_money,
-    //     supplement_merchant_proportion: 0,
-    //     supplement_merchant_money_2: goodsDetail.supplement_merchant_money_2,
-    //     supplement_merchant_proportion_2: 0,
-    //   });
-    //   freezeData.push({
-    //     wealth_money: goodsDetail.wealth_money,
-    //     wealth_proportion: 0,
-    //     supplement_wealth_money: goodsDetail.supplement_wealth_money,
-    //     supplement_wealth_proportion: 0,
-    //     supplement_wealth_money_2: goodsDetail.supplement_wealth_money_2,
-    //     supplement_wealth_proportion_2: 0,
-    //   });
-
-    //   // 追加推荐人和购买人的话费和福包的赠送，强行为0的代表这个升级类型不允许设置金额
-    //   freezeData.push({
-    //     recommend_reward_phone_charge: goodsDetail.recommend_reward_phone_charge,
-    //     recommend_reward_integral: goodsDetail.recommend_reward_integral,
-    //     reward_phone_charge: goodsDetail.reward_phone_charge,
-    //     reward_integral: goodsDetail.reward_integral,
-    //     supplement_recommend_reward_phone_charge: goodsDetail.supplement_recommend_reward_phone_charge,
-    //     supplement_recommend_reward_integral: goodsDetail.supplement_recommend_reward_integral,
-    //     supplement_reward_phone_charge: goodsDetail.supplement_reward_phone_charge,
-    //     supplement_reward_integral: goodsDetail.supplement_reward_integral,
-    //     supplement_recommend_reward_phone_charge_2: goodsDetail.supplement_recommend_reward_phone_charge_2,
-    //     supplement_recommend_reward_integral_2: goodsDetail.supplement_recommend_reward_integral_2,
-    //     supplement_reward_phone_charge_2: goodsDetail.supplement_reward_phone_charge_2,
-    //     supplement_reward_integral_2: goodsDetail.supplement_reward_integral_2
-    //   });
-    // } else if (values.upgrade_type === 3) {
-    //   attrTable = [];
-    //   freezeData.push({
-    //     normal_money: goodsDetail.normal_money,
-    //     normal_proportion: 0,
-    //     supplement_normal_money: goodsDetail.supplement_normal_money,
-    //     supplement_normal_proportion: 0,
-    //     supplement_normal_money_2: 0,
-    //     supplement_normal_proportion_2: 0,
-    //   });
-    //   freezeData.push({
-    //     group_money: goodsDetail.group_money,
-    //     group_proportion: 0,
-    //     supplement_group_money: goodsDetail.supplement_group_money,
-    //     supplement_group_proportion: 0,
-    //     supplement_group_money_2: 0,
-    //     supplement_group_proportion_2: 0,
-    //   });
-    //   freezeData.push({
-    //     merchant_money: goodsDetail.merchant_money,
-    //     merchant_proportion: 0,
-    //     supplement_merchant_money: goodsDetail.supplement_merchant_money,
-    //     supplement_merchant_proportion: 0,
-    //     supplement_merchant_money_2: 0,
-    //     supplement_merchant_proportion_2: 0,
-    //   });
-    //   freezeData.push({
-    //     wealth_money: goodsDetail.wealth_money,
-    //     wealth_proportion: 0,
-    //     supplement_wealth_money: goodsDetail.supplement_wealth_money,
-    //     supplement_wealth_proportion: 0,
-    //     supplement_wealth_money_2: 0,
-    //     supplement_wealth_proportion_2: 0,
-    //   });
-
-    //   // 追加推荐人和购买人的话费和福包的赠送，强行为0的代表这个升级类型不允许设置金额
-    //   freezeData.push({
-    //     recommend_reward_phone_charge: goodsDetail.recommend_reward_phone_charge,
-    //     recommend_reward_integral: goodsDetail.recommend_reward_integral,
-    //     reward_phone_charge: goodsDetail.reward_phone_charge,
-    //     reward_integral: goodsDetail.reward_integral,
-    //     supplement_recommend_reward_phone_charge: goodsDetail.supplement_recommend_reward_phone_charge,
-    //     supplement_recommend_reward_integral: goodsDetail.supplement_recommend_reward_integral,
-    //     supplement_reward_phone_charge: goodsDetail.supplement_reward_phone_charge,
-    //     supplement_reward_integral: goodsDetail.supplement_reward_integral,
-    //     supplement_recommend_reward_phone_charge_2: 0,
-    //     supplement_recommend_reward_integral_2: 0,
-    //     supplement_reward_phone_charge_2: 0,
-    //     supplement_reward_integral_2: 0
-    //   });
-    // } else {
-    //   values.group_user_price = 0;
-    //   values.wealth_user_price = 0;
-    //   freezeData.push({
-    //     normal_money: 0,
-    //     normal_proportion: 0,
-    //     supplement_normal_money: 0,
-    //     supplement_normal_proportion: 0,
-    //     supplement_normal_money_2: 0,
-    //     supplement_normal_proportion_2: 0,
-    //   });
-    //   freezeData.push({
-    //     group_money: 0,
-    //     group_proportion: 0,
-    //     supplement_group_money: 0,
-    //     supplement_group_proportion: 0,
-    //     supplement_group_money_2: 0,
-    //     supplement_group_proportion_2: 0,
-    //   });
-    //   freezeData.push({
-    //     merchant_money: 0,
-    //     merchant_proportion: 0,
-    //     supplement_merchant_money: 0,
-    //     supplement_merchant_proportion: 0,
-    //     supplement_merchant_money_2: 0,
-    //     supplement_merchant_proportion_2: 0,
-    //   });
-    //   freezeData.push({
-    //     wealth_money: 0,
-    //     wealth_proportion: 0,
-    //     supplement_wealth_money: 0,
-    //     supplement_wealth_proportion: 0,
-    //     supplement_wealth_money_2: 0,
-    //     supplement_wealth_proportion_2: 0,
-    //   });
-
-    //   // 追加推荐人和购买人的话费和福包的赠送，强行为0的代表这个升级类型不允许设置金额
-    //   freezeData.push({
-    //     recommend_reward_phone_charge: 0,
-    //     recommend_reward_integral: 0,
-    //     reward_phone_charge: 0,
-    //     reward_integral: 0,
-    //     supplement_recommend_reward_phone_charge: 0,
-    //     supplement_recommend_reward_integral: 0,
-    //     supplement_reward_phone_charge: 0,
-    //     supplement_reward_integral: 0,
-    //     supplement_recommend_reward_phone_charge_2: 0,
-    //     supplement_recommend_reward_integral_2: 0,
-    //     supplement_reward_phone_charge_2: 0,
-    //     supplement_reward_integral_2: 0
-    //   });
-    // }
+    freezeData.push({
+      lecturer_reward_normal_price:goodsDetail.lecturer_reward_normal_price?goodsDetail.lecturer_reward_normal_price:0,
+      lecturer_reward_supplement_group_price:hasGroupData?goodsDetail.lecturer_reward_supplement_group_price:0,
+      lecturer_reward_supplement_wealth_price:hasWealthData?goodsDetail.lecturer_reward_supplement_wealth_price:0
+    })
     values.freeze_commission_type = 0;
     values.freeze_commission_value = freezeData;
     if (attrTable.length) {
