@@ -4,7 +4,7 @@ import debounce from 'lodash/debounce';
 // import { Form, Button, Input, Select, Upload, Icon, Modal, Tag, message, InputNumber } from 'antd';
 import { Form, Button, Input, Upload, Icon, Modal, Tag, message, Select } from 'antd';
 import request from '../../../utils/request';
-import { uploadJSSDK } from '../../../utils/utils';
+import { uploadJSSDK2 as uploadJSSDK } from '../../../utils/utils';
 import styles from './style.less';
 // import { router } from 'sw-toolbox';
 // import LiveGoodTable from '../../../components/LiveGoodTable';
@@ -289,9 +289,6 @@ class EditVodStep2 extends React.PureComponent {
         goods_status: 0,
         page_number: 10,
       },
-    });
-    dispatch({
-      type: 'live/fetchToken',
     });
   }
   componentWillUnmount() {

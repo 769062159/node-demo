@@ -21,7 +21,7 @@ import { routerRedux } from 'dva/router';
 import ReactEditor from 'components/ReactEditor';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './style.less'
-import { uploadJSSDK } from '../../utils/utils';
+import { uploadJSSDK2 as uploadJSSDK } from '../../utils/utils';
 
 const env = process.env[process.env.API_ENV];
 const FormItem = Form.Item;
@@ -379,9 +379,6 @@ export default class ClassAdd extends PureComponent {
         course_id: id,
       },
     });
-    dispatch({
-      type: 'live/fetchToken',
-    });
   }
   componentWillUnmount() {
     const { dispatch } = this.props;
@@ -550,7 +547,7 @@ export default class ClassAdd extends PureComponent {
       message.error('请上传mp4格式文件');
       return false;
     }
-    const { live: { token }, user: { currentUser } } = this.props;
+    const { live: { token }, user: { currentUser }, dispatch} = this.props;
     const randomNum = `${new Date().getTime()}_${parseInt(Math.random() * 100, 10)}`;
     const name = `${randomNum}.mp4`;
     // 上传
@@ -559,37 +556,32 @@ export default class ClassAdd extends PureComponent {
           file: files[i],   // 文件，必填,html5 file类型，不需要读数据流，
           name, // 文件名称，选填，默认为文件名称
           token,  // token，必填
-          dir: `${env.videoUrl}/${currentUser.id}/${currentUser.shop_store_id}`,
           maxSize: 1024 * 1024 * 1024,  // 上传大小限制，选填，默认0没有限制
           callback: (percent, result) => {
             if (percent === 100 && result) {
               message.success(`上传成功！`);
-              // const { url } = result;
-              const { dispatch } = this.props;
-              // dispatch({
-              //   type: 'classModel/setVodurl',
-              //   payload: {
-              //     index,
-              //     url,
-              //     type: 1,
-              //   },
-              // });
+              const { url } = result;
               dispatch({
                 type: 'classModel/setUploadImg',
                 payload: {
-                  dir: `${env.videoUrl}/${currentUser.id}/${currentUser.shop_store_id}`,
-                  filename: randomNum,
-                  ext: 'mp4',
-                  pic_dir: `${env.pic}/${currentUser.id}/${currentUser.shop_store_id}`,
-                },
+                  url: url
+                }
               });
               this.setState({
                 uploadPage: 1,
               })
+              dispatch({
+                type: 'classModel/getUpload',
+                payload: {
+                  page: 1,
+                  pageSize: 10,
+                },
+              });
             } else if (percent > 0) {
               message.success(`已上传${percent}%`);
             } else {
-              message.error(`${result.responseText}`);
+              console.log(percent, result)
+              // message.error(`${result.responseText}`);
             }
           },
         });
@@ -734,7 +726,7 @@ export default class ClassAdd extends PureComponent {
         dataIndex: 'pic',
         key: 'pic',
         width: 100,
-        render: val => (val ? <img src={`${imgUrl}${val}`} style={{ width: '60px', height: 60 }} alt="图片" /> : null),
+        render: val => (val ? <img src={`${val}`} style={{ width: '60px', height: 60 }} alt="图片" /> : null),
       },
       {
         title: '视频路径',

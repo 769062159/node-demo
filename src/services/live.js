@@ -64,14 +64,6 @@ export async function updateVodDetail(params) {
   });
 }
 
-// 玩图token
-export async function getWanTuToken(params) {
-  return request('/merchant/wantu/token', {
-    method: 'POST',
-    body: params,
-  });
-}
-
 // 视频列表
 export async function getVideoList(params) {
   return request('/merchant/vod/videos', {

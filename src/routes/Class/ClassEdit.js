@@ -22,7 +22,7 @@ import { routerRedux } from 'dva/router';
 import ReactEditor from 'components/ReactEditor';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './style.less'
-import { uploadJSSDK } from '../../utils/utils';
+import { uploadJSSDK2 as uploadJSSDK } from '../../utils/utils';
 import { UPLOAD_TYPE } from '../../utils/config';
 // import styles from './TableList.less';
 // import request from '../../utils/request';
@@ -395,9 +395,6 @@ export default class ClassAdd extends PureComponent {
         course_id: id,
       },
     });
-    dispatch({
-      type: 'live/fetchToken',
-    });
   }
   componentWillUnmount() {
     const { dispatch } = this.props;
@@ -625,6 +622,7 @@ export default class ClassAdd extends PureComponent {
               dispatch({
                 type: 'classModel/setUploadImg',
                 payload: {
+                  url: result.url,
                   dir: `${env.videoUrl}/${currentUser.id}/${currentUser.shop_store_id}`,
                   filename: randomNum,
                   ext: 'mp4',
@@ -766,7 +764,7 @@ export default class ClassAdd extends PureComponent {
         dataIndex: 'pic',
         key: 'pic',
         width: 100,
-        render: val => (val ? <img src={`${imgUrl}${val}`} style={{ width: '60px', height: 60 }} alt="图片" /> : null),
+        render: val => (val ? <img src={`${val}`} style={{ width: '60px', height: 60 }} alt="图片" /> : null),
       },
       {
         title: '视频路径',

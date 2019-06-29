@@ -54,6 +54,7 @@ export default class Phone extends PureComponent {
       if (!err) {
         const { dispatch } = this.props;
         value.mobile = value.mobile.toString();
+        value.operate_mobile = String(value.operate_mobile);
         value.video_audio = Number(value.video_audio);
         value.personal_verify = Number(value.personal_verify);
         dispatch({
@@ -106,6 +107,17 @@ export default class Phone extends PureComponent {
                 },
               ],
             })(<Input style={{width: 200}} />)}
+          </FormItem>
+          <FormItem {...formItemLayout} label="客服电话">
+            {getFieldDecorator('operate_mobile', {
+              initialValue: config.operate_mobile,
+              rules: [
+                {
+                  required: true,
+                  message: '请输入客服电话',
+                },
+              ],
+            })(<Input style={{ width: 200 }} />)}
           </FormItem>
           <FormItem {...formItemLayout} label="小视频是否审核">
             {getFieldDecorator('video_audio', {

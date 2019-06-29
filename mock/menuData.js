@@ -1,3 +1,9 @@
+import React from 'react';
+import { Icon } from 'antd';
+
+//   icon: 'setting', iconfont.cn 上生成
+//   icon: 'http://demo.com/icon.png', svg地址
+//   icon: <Icon type="setting" />, ant design图标
 export const menuData = [
   /**
    * @description 动态menu以及伪动态router
@@ -11,6 +17,29 @@ export const menuData = [
       {
         name: '分析台',
         path: 'analysis',
+      },
+    ],
+  },
+  {
+    name: '运营中心',
+    icon: <Icon type="apartment" />,
+    path: 'operation',
+    children: [
+      {
+        name: '运营中心管理',
+        path: 'centers',
+      },
+      {
+        name: '大区管理',
+        path: 'areas',
+      },
+      // {
+      //   name: '职位管理',
+      //   path: 'positions',
+      // },
+      {
+        name: '已代理区域',
+        path: 'alreadyproxy',
       },
     ],
   },

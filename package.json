@@ -24,6 +24,7 @@
   "dependencies": {
     "@antv/data-set": "^0.8.0",
     "@babel/polyfill": "^7.0.0-beta.36",
+    "ali-oss": "^6.1.1",
     "ant-design-pro": "^2.3.1",
     "antd": "^3.9.0",
     "babel-runtime": "^6.9.2",
@@ -37,7 +38,6 @@
     "dva-loading": "^1.0.4",
     "enquire-js": "^0.2.1",
     "less-loader": "^3.0.0",
-    "lodash": "^4.17.4",
     "lodash-decorators": "^4.4.1",
     "moment": "^2.19.1",
     "numeral": "^2.0.6",

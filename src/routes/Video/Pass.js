@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'dva';
-import { Table, message, Modal, Divider, Row, Col, Select, Form, Button, Input, Card, InputNumber } from 'antd';
+import { Table, message, Modal, Divider, Row, Col, Select, Form, Button, Input, Card, InputNumber, Pagination } from 'antd';
 import moment from 'moment';
 import { Player } from 'video-react';
 import "video-react/dist/video-react.css";
@@ -43,10 +43,11 @@ export default class Review extends Component {
         });
     }
 
-    handleTableChange = (pagination) => {
-        const { current } = pagination;
+    handleTableChange = (page) => {
+        // const { current } = pagination;
+        console.log(page)
         this.setState({
-          page: current,
+          page: page,
         });
         const { formValues } = this.state;
         const { dispatch } = this.props;
@@ -55,7 +56,7 @@ export default class Review extends Component {
           payload: {
             ...formValues,
             status: 1,
-            page: current,
+            page: page,
           },
         });
     }
@@ -394,21 +395,30 @@ export default class Review extends Component {
             },
         ];
         const autoplay = true;
+        console.log(videoListPage)
         return (
           <PageHeaderLayout>
             <Card bordered={false}>
               <div className={styles.tableListForm}>{this.renderAdvancedForm()}</div>
               <Table
-                onChange={this.handleTableChange}  // 换页
+                // onChange={this.handleTableChange}  // 换页
                 scroll={{ x: '170%' }}
-              //   className="components-table-demo-nested"
-                // expandedRowRender={record => <p style={{ margin: 0 }}>{record.description}</p>}
                 dataSource={videoList}
                 rowKey={record => record.id}
                 loading={loading}
                 columns={progressColumns}
-                pagination={videoListPage}
+                pagination={false}
               />
+              <Pagination
+                showQuickJumper
+                defaultCurrent={videoListPage.current}
+                total={videoListPage.total}
+                defaultPageSize={videoListPage.page_size}
+                style={{
+                  margin: '20px 0',
+                  textAlign: 'right'
+                }}
+                onChange={this.handleTableChange} />
             </Card>
             <Modal visible={!!likeId} onOk={this.checkLike} onCancel={this.CloseLike} destroyOnClose="true">
               <Row>

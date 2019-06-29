@@ -275,7 +275,10 @@ export default class Review extends Component {
                 rowKey={record => record.id}
                 loading={loading}
                 columns={progressColumns}
-                pagination={videoListPage}
+                pagination={{
+                  ...videoListPage,
+                  showQuickJumper: true
+                }}
               />
             </Card>
             <Modal visible={reasonVisibility} onOk={this.refund} onCancel={this.openOrCloseReason} destroyOnClose="true">

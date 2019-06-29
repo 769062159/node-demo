@@ -323,6 +323,32 @@ export const getRouterConfig = app => {
     '/good/good-type': {
       component: dynamicWrapper(app, ['goods'], () => import('../routes/Goods/GoodsType')),
     },
+    // 运营中心管理
+    '/operation/centers': {
+      identity: 'common',
+      component: dynamicWrapper(app, ['operationCenter'], () =>
+        import('../routes/Operation/Centers')
+      ),
+    },
+    // 大区管理
+    '/operation/areas': {
+      identity: 'common',
+      component: dynamicWrapper(app, ['operationArea'], () => import('../routes/Operation/Areas')),
+    },
+    // 职位管理
+    '/operation/positions': {
+      identity: 'common',
+      component: dynamicWrapper(app, ['operationPosition'], () =>
+        import('../routes/Operation/Positions')
+      ),
+    },
+    // 已代理区域
+    '/operation/alreadyproxy': {
+      identity: 'common',
+      component: dynamicWrapper(app, ['operationAlreadyproxy'], () =>
+        import('../routes/Operation/AlreadyProxy')
+      ),
+    },
     // '/good/good-attr': {
     //   component: dynamicWrapper(app, ['goods'], () => import('../routes/Goods/GoodsAttr')),
     // },

@@ -12,7 +12,7 @@ import {
 import { routerRedux } from 'dva/router';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './style.less'
-import { uploadJSSDK } from '../../utils/utils';
+import { uploadJSSDK2 as uploadJSSDK } from '../../utils/utils';
 // import styles from './TableList.less';
 // import request from '../../utils/request';
 
@@ -45,8 +45,8 @@ const CustomizedForm = Form.create({
       title: Form.createFormField({
         value: props.smallVideoForm.title,
       }),
-      zz: Form.createFormField({
-        value: props.smallVideoForm.zz,
+      url: Form.createFormField({
+        value: props.smallVideoForm.url,
       }),
       user_id: Form.createFormField({
         value: props.smallVideoForm.user_id,
@@ -87,13 +87,13 @@ const CustomizedForm = Form.create({
         })(<Input />)}
       </FormItem>
       <Form.Item {...formItemLayout} label="上传视频">
-        {getFieldDecorator(`zz`, {rules: [{ required: true, message: '请上传视频' }]})(
+        {getFieldDecorator(`url`, {rules: [{ required: true, message: '请上传视频' }]})(
           <div className={styles.fileBox}>
             <input type="file" className={styles.fileBtn} onChange={uploadVideo} />
             <div className={styles.add}>+</div>
             {
-              smallVideoForm.zz ? (
-                <video className={styles.videoItem} src={smallVideoForm.zz} controls><track kind="captions" /></video>
+              smallVideoForm.url ? (
+                <video className={styles.videoItem} src={smallVideoForm.url} controls><track kind="captions" /></video>
               ) : null
             }
           </div>
@@ -145,12 +145,7 @@ export default class ClassAdd extends PureComponent {
     isLiveModal: false,
     index: 0,
   };
-  componentDidMount() {
-    const { dispatch } = this.props;
-    dispatch({
-      type: 'live/fetchToken',
-    });
-  }
+  
   handleSubmit = () => {
     const { live: { smallVideoForm } } = this.props;
     const { dispatch } = this.props;
@@ -260,6 +255,7 @@ export default class ClassAdd extends PureComponent {
                 isLoading: false,
                 loadingPercent: 0,
               });
+              
               message.error(`${result.responseText}`);
             }
             if (percent === 100 && result) {
@@ -274,7 +270,7 @@ export default class ClassAdd extends PureComponent {
               videoDom.addEventListener("loadedmetadata", () => {
                 const data = {
                   size,
-                  zz: url,
+                  url: url,
                   width: videoDom.videoWidth,
                   height: videoDom.videoHeight,
                   dir: `videos/${currentUser.id}`,

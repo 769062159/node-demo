@@ -1,5 +1,5 @@
 import { message } from 'antd';
-import { getOrderList, getExpressList, shipshop, editShip, editAdress, getGroupList, getGroupDetail, collectGoods, manualCompleteOrder, getDetail } from '../services/order';
+import { cancelOrder, getOrderList, getExpressList, shipshop, editShip, editAdress, getGroupList, getGroupDetail, collectGoods, manualCompleteOrder, getDetail } from '../services/order';
 import { toNums } from '../utils/utils'
 
 export default {
@@ -24,6 +24,22 @@ export default {
   },
 
   effects: {
+    *cancelOrder({ payload, values }, { call, put, select }) {
+      const response = yield call(cancelOrder, {sku_id:payload.sku_id});
+
+      if (response.code === 200) {
+        message.success('撤销订单操作成功！');
+        const res = yield call(getOrderList, {pack_id:payload.pack_id});
+        let id = '';
+        id = yield select(state => state.user.currentUser.shop_store_id);
+        yield put({
+          type: 'getOrder',
+          payload: res,
+          id,
+          page: values.page || 1,
+        });
+      }
+    },
     *collectGoods({ payload, values }, { call, put, select }) {
       const response = yield call(collectGoods, { order_pack_id: payload });
       if (response.code === 200) {

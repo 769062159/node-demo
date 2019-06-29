@@ -59,6 +59,14 @@ export default async function request(url, options) {
   } else {
     newUrl = apiurl + url;
   }
+  if (options.qs) {
+    const qs = Object.keys(options.qs)
+      .map(key => {
+        return encodeURIComponent(key) + '=' + encodeURIComponent(options.qs[key]);
+      })
+      .join('&');
+    newUrl = newUrl.includes('?') ? newUrl + '&' + qs : newUrl + '?' + qs;
+  }
   const failTime = localStorage.getItem('failTime');
   let token = localStorage.getItem('token');
   // console.log(token);

@@ -77,3 +77,12 @@ export async function getDetail(params) {
     body: params,
   });
 }
+
+
+// 撤销订单
+export async function cancelOrder(params) {
+  return request('/merchant/order/refund/manual', {
+    method: 'POST',
+    body: params,
+  });
+}

@@ -8,7 +8,6 @@ import {
   getVod,
   getVodDetail,
   updateVodDetail,
-  getWanTuToken,
   getVideoList,
   addVideo,
   checkSwitch,
@@ -161,13 +160,6 @@ export default {
       }
       yield put({
         type: 'getVideo',
-        payload: response,
-      });
-    },
-    *fetchToken(_, { call, put }) {
-      const response = yield call(getWanTuToken);
-      yield put({
-        type: 'fetchTokens',
         payload: response,
       });
     },
@@ -445,13 +437,6 @@ export default {
       return {
         ...state,
         liveForm,
-      };
-    },
-    fetchTokens(state, { payload }) {
-      const { data: { token } } = payload;
-      return {
-        ...state,
-        token,
       };
     },
     setHomeVod(state, { payload }) {
