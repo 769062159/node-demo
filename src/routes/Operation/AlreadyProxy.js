@@ -171,6 +171,7 @@ export default class AlreadyProxy extends React.Component {
 
 
               <Transfer
+                showSearch
                 dataSource={centerList}
                 targetKeys={targetKeys}
                 footer={this.renderFooter}
@@ -184,13 +185,14 @@ export default class AlreadyProxy extends React.Component {
                   height: 500,
                 }}
                 onChange={this.targetKeysOnChange}
+                titles={['所有区域', '已选的区域（可拖拽排序）']}
               >
                 {
-                  ({ direction, onItemSelect, selectedKeys }) => {
+                  ({ direction, onItemSelect, selectedKeys, filteredItems }) => {
                     if (direction === 'right') {
                       return (
                         <RightAreaList
-                          list={rightList}
+                          list={filteredItems}
                           checkedKeys={selectedKeys}
                           onSelect={onItemSelect}
                           onSortEnd={this.onRightListSortEnd}

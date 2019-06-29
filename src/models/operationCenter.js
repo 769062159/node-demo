@@ -1,3 +1,4 @@
+import { message } from 'antd';
 import * as api from '../services/operation';
 
 export default {
@@ -59,7 +60,10 @@ export default {
     },
     // 审核同意
     *doAcceptCenterApplication({ payload }, { call, put }) {
-      yield call(api.acceptCenterApplication, { ...payload.data });
+      const result = yield call(api.acceptCenterApplication, { ...payload.data });
+      if (result.code !== 200) {
+        message.error(result.message);
+      }
       yield put({
         type: 'setReviewCenterDialogShow',
         payload: false,
@@ -71,7 +75,10 @@ export default {
     },
     // 审核驳回
     *doRefuseCenterApplication({ payload }, { call, put }) {
-      yield call(api.refuseCenterApplication, { ...payload.data });
+      const result = yield call(api.refuseCenterApplication, { ...payload.data });
+      if (result.code !== 200) {
+        message.error(result.message);
+      }
       yield put({
         type: 'setReviewCenterDialogShow',
         payload: false,
@@ -148,6 +155,7 @@ export default {
       });
 
       if (response.code !== 200) {
+        message.error(response.message);
         return;
       }
 
@@ -165,6 +173,7 @@ export default {
         payload: false,
       });
       if (response.code !== 200) {
+        message.error(response.message);
         return;
       }
 
