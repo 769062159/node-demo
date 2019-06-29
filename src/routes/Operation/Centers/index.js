@@ -78,6 +78,7 @@ export default class OperationCenter extends React.PureComponent {
       mark: '',
       positionId: '',
       reviewType: false,
+      positionType: 0,
     },
     // 选择要添加（1总裁, 2事业合伙人, 3运营中心）的对话框
     chooseTypeDialog: {
@@ -140,10 +141,11 @@ export default class OperationCenter extends React.PureComponent {
     this.updateReviewDialog({
       show: true,
       id: row.id,
-      title: `${reviewType ? '审核同意' : '审核驳回'}_${row.user.nickname}_${row.area}_${row.id}`,
+      title: `${reviewType ? '审核同意' : '审核驳回'}_${row.user.nickname}_${row.id}`,
       mark: '',
       positionId: '',
       reviewType,
+      positionType: row.position_type.key,
     });
   };
   // 更新审核dialog
@@ -166,20 +168,23 @@ export default class OperationCenter extends React.PureComponent {
     });
   };
   doReview = () => {
-    const { id, mark, positionId, reviewType } = this.state.reviewDialog;
+    const { id, mark, positionId, reviewType, positionType } = this.state.reviewDialog;
     const { dispatch, centerModel } = this.props;
     if (reviewType) {
-      if (!positionId) {
+      if (positionType === 1 && !positionId) {
         return message.error('请选择职位');
+      }
+      const data = {
+        id,
+        mark,
+      }
+      if (data.positionType === 1) {
+        data.position_id = data.positionId;
       }
       dispatch({
         type: 'operationCenter/doAcceptCenterApplication',
         payload: {
-          data: {
-            id,
-            mark,
-            position_id: positionId,
-          },
+          data,
           searchParams: centerModel,
         },
       });
@@ -316,8 +321,8 @@ export default class OperationCenter extends React.PureComponent {
       return message.error('请输入联系人姓名');
     }
 
-    if (!(/^1\d{10}$/.test(mobile))) {
-      return message.error('手机号必须为1开头的11位数字');
+    if (!mobile) {
+      return message.error('请输入联系电话');
     }
 
     if (!user_id) {
@@ -328,7 +333,7 @@ export default class OperationCenter extends React.PureComponent {
       return message.error('请选择代理身份');
     }
 
-    if (position_type !== 3 && type === 1 && !position_id) {
+    if (position_type === 1 && !position_id) {
       return message.error('请选择代理职位');
     }
 
@@ -350,11 +355,11 @@ export default class OperationCenter extends React.PureComponent {
     const data = {
       nickname, mobile, user_id, position_type,
     }
-    if (position_type !== 3) {
-      data.type = type;
-      if (type === 1) {
+    if (position_type === 1) {
         data.position_id = position_id;
       }
+    if (position_type !== 3) {
+      data.type = type;
     }
     if (position_type === 3) {
       data.lecturer_area_id = lecturer_area_id;
@@ -802,7 +807,7 @@ export default class OperationCenter extends React.PureComponent {
                     }}
                   />
                 </Form.Item>
-                {state.reviewDialog.reviewType ? (
+                {state.reviewDialog.reviewType && state.reviewDialog.positionType === 1 ? (
                   <Form.Item {...formItemLayout} label="职位">
                     <Select
                       value={state.reviewDialog.positionId}
@@ -896,7 +901,7 @@ export default class OperationCenter extends React.PureComponent {
                   />
                 </Form.Item>
                 {
-                  state.operationDialog.form.position_type !== 3 && state.operationDialog.form.type === 1 ? (
+                  state.operationDialog.form.position_type === 1 ? (
                     <Form.Item {...formItemLayout} label="代理职位">
                       <Select
                         placeholder="请选择"
@@ -933,8 +938,6 @@ export default class OperationCenter extends React.PureComponent {
                     onChange={(event) => this.updateOperationDialogForm({
                       mobile: event.target.value,
                     })}
-                    maxLength={11}
-                    minLength={11}
                   />
                 </Form.Item>
                 <Form.Item {...formItemLayout} label="用户Id">
