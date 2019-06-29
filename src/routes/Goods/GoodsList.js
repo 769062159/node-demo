@@ -562,6 +562,7 @@ export default class GoodsList extends PureComponent {
       {
         title: '分享路径',
         dataIndex: 'goods_id',
+        key:'goods_id1',
         render: val => `/pages/goods-detail/main?id=${val}&referee_id=`,
       },
       {
