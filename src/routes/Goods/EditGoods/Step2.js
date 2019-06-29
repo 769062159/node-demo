@@ -1659,7 +1659,7 @@ const CustomizedForm = Form.create({
             <Form.Item {...profitLayout} label="讲师成交佣金">
               {getFieldDecorator(`lecturer_reward_normal_price`, {
                 rules: [{ required: false, message: `讲师成交佣金` }],
-              })(<InputNumber step={0.01} precision={0} min={0} />)} 元
+              })(<InputNumber step={0.01} precision={2} min={0} />)} 元
             </Form.Item>
           </Col>
         </Row>
@@ -1990,7 +1990,7 @@ const CustomizedForm = Form.create({
               <Form.Item {...profitLayout} label="讲师成交佣金">
                 {getFieldDecorator(`lecturer_reward_supplement_group_price`, {
                   rules: [{ required: false, message: `讲师成交佣金` }],
-                })(<InputNumber step={0.01} precision={0} min={0} />)} 元
+                })(<InputNumber step={0.01} precision={2} min={0} />)} 元
               </Form.Item>
             </Col>
           </Row>
@@ -2319,7 +2319,7 @@ const CustomizedForm = Form.create({
               <Form.Item {...profitLayout} label="讲师成交佣金">
                 {getFieldDecorator(`lecturer_reward_supplement_wealth_price`, {
                   rules: [{ required: false, message: `讲师成交佣金` }],
-                })(<InputNumber step={0.01} precision={0} min={0} />)} 元
+                })(<InputNumber step={0.01} precision={2} min={0} />)} 元
               </Form.Item>
             </Col>
           </Row>
