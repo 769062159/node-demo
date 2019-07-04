@@ -322,6 +322,21 @@ export const menuData = [
     ],
   },
   {
+    name: '解锁&升级码',
+    icon: <Icon type="control" />,
+    path: 'UnlockOrUpgrade',
+    children: [
+      {
+        name: '解锁&升级码-升级码',
+        path: 'Upgrade',
+      },
+      {
+        name: '解锁&升级码-设置',
+        path: 'Unlock',
+      },
+    ],
+  },
+  {
     name: '设置',
     icon: 'icon-shezhi',
     path: 'config',

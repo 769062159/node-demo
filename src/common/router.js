@@ -22,6 +22,17 @@ export const getRouterConfig = app => {
       identity: 'root',
       component: dynamicWrapper(app, ['user', 'login'], () => import('../layouts/BasicLayout')),
     },
+    //解锁码升级码
+    '/UnlockOrUpgrade/Unlock':{
+      component: dynamicWrapper(app, ['unlockorupgrade'], () =>
+        import('../routes/UnlockOrUpgrade/Unlock')
+      ),
+    },
+    '/UnlockOrUpgrade/Upgrade':{
+      component: dynamicWrapper(app, ['unlockorupgrade'], () =>
+        import('../routes/UnlockOrUpgrade/Upgrade')
+      ),
+    },
     // 统计
     '/statistics/analysis': {
       component: dynamicWrapper(app, ['statistics'], () =>
