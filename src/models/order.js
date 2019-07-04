@@ -1,9 +1,7 @@
 import { message } from 'antd';
-<<<<<<< HEAD
-import { cancelOrder, getOrderList, getExpressList, shipshop, editShip, editAdress, getGroupList, getGroupDetail, collectGoods, manualCompleteOrder, getDetail } from '../services/order';
-=======
-import { checkAbnormal,getOrderList, getExpressList, shipshop, editShip, editAdress, getGroupList, getGroupDetail, collectGoods, manualCompleteOrder, getDetail } from '../services/order';
->>>>>>> dev1
+
+import { cancelOrder,checkAbnormal,getOrderList, getExpressList, shipshop, editShip, editAdress, getGroupList, getGroupDetail, collectGoods, manualCompleteOrder, getDetail } from '../services/order';
+
 import { toNums } from '../utils/utils'
 
 export default {
@@ -42,7 +40,7 @@ export default {
           page: values.page || 1,
         });
       }
-    }
+    },
     *checkAbnormal({ payload, values },{ call, put, select }){
       const response = yield call(checkAbnormal,{});
       if (response.code === 200) {
