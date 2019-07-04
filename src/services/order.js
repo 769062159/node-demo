@@ -63,6 +63,13 @@ export async function collectGoods(params) {
   });
 }
 
+// 一键检测异常
+export async function checkAbnormal() {
+  return request('/merchant/order/complete/manual/batch', {
+    method: 'POST'
+  });
+}
+
 export async function manualCompleteOrder(params) {
   return request('/merchant/order/complete/manual', {
     method: 'POST',

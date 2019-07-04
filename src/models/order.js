@@ -1,5 +1,9 @@
 import { message } from 'antd';
+<<<<<<< HEAD
 import { cancelOrder, getOrderList, getExpressList, shipshop, editShip, editAdress, getGroupList, getGroupDetail, collectGoods, manualCompleteOrder, getDetail } from '../services/order';
+=======
+import { checkAbnormal,getOrderList, getExpressList, shipshop, editShip, editAdress, getGroupList, getGroupDetail, collectGoods, manualCompleteOrder, getDetail } from '../services/order';
+>>>>>>> dev1
 import { toNums } from '../utils/utils'
 
 export default {
@@ -26,7 +30,6 @@ export default {
   effects: {
     *cancelOrder({ payload, values }, { call, put, select }) {
       const response = yield call(cancelOrder, {sku_id:payload.sku_id});
-
       if (response.code === 200) {
         message.success('撤销订单操作成功！');
         const res = yield call(getOrderList, {pack_id:payload.pack_id});
@@ -38,6 +41,13 @@ export default {
           id,
           page: values.page || 1,
         });
+      }
+    }
+    *checkAbnormal({ payload, values },{ call, put, select }){
+      const response = yield call(checkAbnormal,{});
+      if (response.code === 200) {
+        message.success('检测异常成功!')
+
       }
     },
     *collectGoods({ payload, values }, { call, put, select }) {

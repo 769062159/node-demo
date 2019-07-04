@@ -253,6 +253,25 @@ export default class Order extends PureComponent {
     });
   };
 
+  checkAbnormal=()=>{
+    const that = this;
+    confirm({
+      content: '该操作会检测所有未支付订单异常。',
+      okText: '确定',
+      okType: 'primary',
+      cancelText: '取消',
+      onOk() {
+        const { values } = that.state;
+        const { dispatch } = that.props;
+        dispatch({
+          type: 'order/checkAbnormal',
+          values,
+        });
+      },
+      onCancel() {},
+    });
+  }
+
   completeOrder = (pack) => {
     const that = this;
     confirm({
@@ -326,7 +345,6 @@ export default class Order extends PureComponent {
     request('/merchant/wechat-accounts', {
       method: 'POST'
     }).then(res => {
-      // console.log(res)
       if (res && res.code === 200) {
         this.setState({
           applets: res.data
@@ -342,7 +360,6 @@ export default class Order extends PureComponent {
         page_number: 99
       },
     }).then(res => {
-      // console.log(res)
       if (res.code === 200) {
         this.setState({
           manualOrderGoods: res.data.list
@@ -626,6 +643,9 @@ export default class Order extends PureComponent {
               <Button style={{ marginLeft: 8 }} onClick={this.showManulOrder}>
                 添加订单
               </Button>
+              <Button style={{ marginLeft: 8 }} type="danger" onClick={()=>this.checkAbnormal()}>
+                检测异常
+              </Button>
               <a style={{ marginLeft: 8 }} onClick={this.toggleForm}>
                 展开 <Icon type="down" />
               </a>
@@ -865,6 +885,7 @@ export default class Order extends PureComponent {
           val.map(res => {
             return (
               <Row key={res.order_goods_id}>
+
                 <Col span={6}>
                   <img src={res.has_order_goods_sku.http_url} alt="图片" style={{ width: 60 }} />
                 </Col>
@@ -928,7 +949,7 @@ export default class Order extends PureComponent {
                   撤销订单
                 </Button>}
               </Fragment>
-            ) : record.order_status === 0 || record.order_status === 1 ? (
+            ) : record.order_status === 0 ? (
               <Fragment>
                 <Button style={grayBtn} onClick={this.completeOrder.bind(this, record)}>
                   检测异常
@@ -1051,7 +1072,7 @@ export default class Order extends PureComponent {
                     <Row style={smallStyle} />
                   )} */}
                   {item.has_order_pack &&
-                    item.has_order_pack.map((res, index) => {
+                    item.has_order_pack.map((res) => {
                       return (
                         <div key={res.pack_id}>
                           {/* <Card.Grid style={{ padding: 0, width: '100%' }}> */}
@@ -1067,7 +1088,7 @@ export default class Order extends PureComponent {
                             align="middle"
                             type="flex"
                           >
-                            <Col span={2}>包裹{index + 1}</Col>
+                            <Col span={2}>包裹</Col>
                             <Col span={5}>包裹订单号：{res.order_sn}</Col>
                             <Col span={3}>运费：{res.shipping_fee}</Col>
                           </Row>
@@ -1076,7 +1097,7 @@ export default class Order extends PureComponent {
                             showHeader={false}
                             // dataSource={item.has_order_pack}
                             dataSource={[res]}
-                            rowKey={record => record.order_id + record.pack_id}
+                            rowKey={record => record.pack_id}
                             columns={detailColumns}
                             pagination={false}
                           />
