@@ -45,6 +45,7 @@ export default {
       const response = yield call(checkAbnormal,{});
       if (response.code === 200) {
         message.success('检测异常成功!')
+
       }
     },
     *collectGoods({ payload, values }, { call, put, select }) {
