@@ -1,5 +1,5 @@
 import { message } from 'antd';
-import { getOrderList, getExpressList, shipshop, editShip, editAdress, getGroupList, getGroupDetail, collectGoods, manualCompleteOrder, getDetail } from '../services/order';
+import { checkAbnormal,getOrderList, getExpressList, shipshop, editShip, editAdress, getGroupList, getGroupDetail, collectGoods, manualCompleteOrder, getDetail } from '../services/order';
 import { toNums } from '../utils/utils'
 
 export default {
@@ -24,6 +24,12 @@ export default {
   },
 
   effects: {
+    *checkAbnormal({ payload, values },{ call, put, select }){
+      const response = yield call(checkAbnormal,{});
+      if (response.code === 200) {
+        message.success('检测异常成功!')
+      }
+    },
     *collectGoods({ payload, values }, { call, put, select }) {
       const response = yield call(collectGoods, { order_pack_id: payload });
       if (response.code === 200) {
