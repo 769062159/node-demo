@@ -169,6 +169,7 @@ export default class Rank extends PureComponent {
     });
   };
 
+
   render() {
     const { finance: { accountLogList: datas, accountLogListPage }, loading } = this.props;
     const { getFieldDecorator } = this.props.form;
