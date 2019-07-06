@@ -160,7 +160,7 @@ export default class Order extends PureComponent {
       method: 'POST',
       body: manualOrder
     }).then(res => {
-      console.log(res)
+
       if (res && res.code === 200) {
         const { dispatch, order: { searchOrderSn } } = this.props;
         const { page } = this.state;
@@ -326,7 +326,6 @@ export default class Order extends PureComponent {
     request('/merchant/wechat-accounts', {
       method: 'POST'
     }).then(res => {
-      // console.log(res)
       if (res && res.code === 200) {
         this.setState({
           applets: res.data
@@ -342,8 +341,7 @@ export default class Order extends PureComponent {
         page_number: 99
       },
     }).then(res => {
-      // console.log(res)
-      if (res.code === 200) {
+      if (res&&res.code === 200) {
         this.setState({
           manualOrderGoods: res.data.list
         })
@@ -488,13 +486,13 @@ export default class Order extends PureComponent {
       }
       if (values.end_order_time) {
         values.end_order_time = parseInt(new Date(moment(values.end_order_time).format('YYYY-MM-DD 23:59:59')).getTime()/ 1000, 10);
-        // console.log(new Date(values.end_order_time).getTime());
+
       } else {
         delete values.end_order_time;
       }
       if (values.start_order_time) {
         values.start_order_time = parseInt(new Date(moment(values.start_order_time).format('YYYY-MM-DD 00:00:00')).getTime()/ 1000, 10);
-        // console.log(new Date(values.start_order_time).getTime());
+
       } else {
         delete values.start_order_time;
       }
@@ -511,7 +509,7 @@ export default class Order extends PureComponent {
         body: JSON.stringify(values),
       });
       res.json().then(res => {
-        console.log(res)
+
         res.data.url && window.open(res.data.url)
       })
       // res.blob().then(blob => {
@@ -568,13 +566,13 @@ export default class Order extends PureComponent {
       }
       if (values.end_order_time) {
         values.end_order_time = parseInt(new Date(moment(values.end_order_time).format('YYYY-MM-DD 23:59:59')).getTime()/ 1000, 10);
-        // console.log(new Date(values.end_order_time).getTime());
+
       } else {
         delete values.end_order_time;
       }
       if (values.start_order_time) {
         values.start_order_time = parseInt(new Date(moment(values.start_order_time).format('YYYY-MM-DD 00:00:00')).getTime()/ 1000, 10);
-        // console.log(new Date(values.start_order_time).getTime());
+
       } else {
         delete values.start_order_time;
       }

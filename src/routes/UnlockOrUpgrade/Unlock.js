@@ -1,48 +1,55 @@
 import React, { Component } from 'react';
 import { Card, Button, Row, Col, Modal, Form, Select, Input } from 'antd';
-import AddNewRules from './addNewRules'
+import AddNewRules from './addNewRules';
 import styles from './uou.less';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
-
+const { Search } = Input;
 
 const { Option } = Select;
 
 class Unlock extends Component {
-  state = { visible: false };
+  state = { visible: false,selectGoodsStatus:false }
 
-  showModal = () => {
-    this.setState({
-      visible: true,
-    });
-  };
+  //显示新增规则
+  showModal = () => { this.setState({ visible: true, }) }
+
+  //选择商品
+  showSelectGoodsModal = () => { this.setState({ selectGoodsStatus: true, }) }
 
   handleOk = e => {
     this.setState({
       visible: false,
-    },()=>{this.props.form.resetFields()});
+    }, () => {
+      this.props.form.resetFields();
+    });
   };
 
-  handleCancel = e => {
-    this.setState({
-      visible: false,
-    },()=>{this.props.form.resetFields()});
-  };
+  handleCancel = e => {this.setState({ visible: false, })}
+
+  handleSelectGoodsCancel=e=>{this.setState({ selectGoodsStatus: false, })}
 
   render() {
-    const { getFieldDecorator } = this.props.form;
-    const formItemLayout = {
-      labelCol: { span: 8 },
-      wrapperCol: { span: 16 },
-    };
+    const imgData=[
+      {
+        img:'',
+        name:'1',
+        price:'21'
+      },
+      {
+        img:'',
+        name:'2',
+        price:'234'
+      },
+    ]
     return (
       <PageHeaderLayout>
         <Card title="解锁码赠送设置">
           <Button type='primary' onClick={this.showModal}>新建赠送规则</Button>
-          <AddNewRules />
+          <AddNewRules/>
         </Card>
         <Card title="解锁码购买设置">
           <Row>购买指定商品可获得解锁码：</Row>
-          <Button type='primary' onClick={this.showModal}>选择商品</Button>
+          <Button type='primary' onClick={this.showSelectGoodsModal}>选择商品</Button>
           <Row>购买指定商品可获得解锁码的商品列表</Row>
           <Row className={styles.goodContent}>
             <Col span={4} className={styles.goodImg}><img src="" alt=""/></Col>
@@ -97,44 +104,68 @@ class Unlock extends Component {
           </ul>
 
         </Card>
-        <Form {...formItemLayout} onSubmit={this.handleSubmit}>
-          <Modal
-            title="新建赠送规则"
-            visible={this.state.visible}
-            onOk={this.handleOk}
-            onCancel={this.handleCancel}
-          >
-            <Row>
-              <Col span={24}>
-                <Form.Item label="请选择身份版本：">
-                  {getFieldDecorator('selectIdentityType', {
-                    rules: [{ required: true, message: '请选择身份版本' }],
-                  })(
-                    <Select placeholder="请选择身份版本" style={{width:'100%'}}>
-                      <Option value={0}>群主</Option>
-                      <Option value={1}>店主</Option>
-                      <Option value={2}>补差价升级店主</Option>
-                      <Option value={3}>盟主</Option>
-                      <Option value={4}>补差价升级盟主</Option>
-                      <Option value={5}>区代</Option>
-                      <Option value={6}>市代</Option>
-                      <Option value={7}>省代</Option>
-                    </Select>,
-                  )}
-                </Form.Item>
+
+        <Modal
+          title="新建赠送规则"
+          visible={this.state.visible}
+          onOk={this.handleOk}
+          onCancel={this.handleCancel}
+        >
+          <Row className={styles.addRulesModal}>
+            <Col span={7}>请选择身份版本：</Col>
+            <Col span={17}>
+              <Select
+                placeholder="请选择身份版本"
+                style={{ width: '100%' }}
+                onChange={() => {
+                }}
+              >
+                <Option value={0}>群主</Option>
+                <Option value={1}>店主</Option>
+                <Option value={2}>补差价升级店主</Option>
+                <Option value={3}>盟主</Option>
+                <Option value={4}>补差价升级盟主</Option>
+                <Option value={5}>区代</Option>
+                <Option value={6}>市代</Option>
+                <Option value={7}>省代</Option>
+              </Select>
+            </Col>
+          </Row>
+          <Row className={styles.addRulesModal}>
+            <Col span={7}>赠送解锁码数量(个)：</Col>
+            <Col span={17}>
+              <Input/>
+            </Col>
+          </Row>
+        </Modal>
+        <Modal
+          visible={this.state.selectGoodsStatus}
+          closable={false}
+          footer={null}
+          onCancel={this.handleSelectGoodsCancel}
+        >
+          <Row className={styles.onlineGoods}>
+            <Col span={4} className={styles.goods}>已上架商品</Col>
+            <Col span={20} className={styles.goods}>
+              <Search
+                placeholder="请输入搜索商品名称"
+                enterButton="搜索"
+                onSearch={value => console.log(value)}
+              />
+            </Col>
+          </Row>
+          {imgData.map(item=>(
+            <Row className={styles.goodsList}>
+              <Col span={8}><img src={item.img} alt=""/></Col>
+              <Col span={12}>
+                <Row>{item.name}</Row>
+                <Row>{item.price}</Row>
               </Col>
+              <Col span={4}><Button type='primary'>选取</Button></Col>
             </Row>
-            <Row>
-              <Col span={24}>
-                <Form.Item label="赠送解锁码数量(个)：">
-                  {getFieldDecorator('GiftUnlockNum', {
-                    rules: [{ required: true, message: '赠送解锁码数量！' }],
-                  })(<Input/>)}
-                </Form.Item>
-              </Col>
-            </Row>
-          </Modal>
-        </Form>
+          ))}
+
+        </Modal>
       </PageHeaderLayout>
     );
   }
