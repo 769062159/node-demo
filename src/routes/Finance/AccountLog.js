@@ -51,7 +51,7 @@ export default class Rank extends PureComponent {
   onRankOk(value) {
     console.log('onOk: ', value);
   }
-  
+
   componentDidMount() {
     const { dispatch } = this.props;
     const { page } = this.state;
@@ -190,6 +190,18 @@ export default class Rank extends PureComponent {
       {
         title: '备注',
         dataIndex: 'desc',
+        key: 'desc',
+      },
+      {
+        title: '数据包',
+        dataIndex: 'ext',
+        key: 'ext',
+        width:'150',
+        render: (text, record) => (
+          <div style={{ wordWrap: 'break-word', wordBreak: 'break-all' }}>
+            {text}
+          </div>
+        ),
       },
       {
         title: '购买人',
@@ -208,10 +220,12 @@ export default class Rank extends PureComponent {
       {
         title: '佣金',
         dataIndex: 'money',
+        key: 'money',
       },
       {
         title: '订单',
         dataIndex: 'order_sn',
+        key: 'order_sn',
       },
       {
         title: '操作类型',
@@ -276,7 +290,7 @@ export default class Rank extends PureComponent {
                     <Select placeholder="请选择" style={{ minWidth: '100px', width: '100%' }}>
                       {
                         actionType.map((item, index) => {
-                          return <Option value={index} >{item}</Option>
+                          return <Option value={index} key={index} >{item}</Option>
                         })
                       }
                     </Select>
@@ -301,7 +315,7 @@ export default class Rank extends PureComponent {
                       <Option value="-1" >-</Option>
                       {
                         status.map((item, index) => {
-                          return <Option value={index} >{item}</Option>
+                          return <Option value={index} key={index}>{item}</Option>
                         })
                       }
                     </Select>

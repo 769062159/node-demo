@@ -107,6 +107,17 @@ export default class BasicProfile extends Component {
         },
       },
       {
+        title: '数据包',
+        dataIndex: 'ext',
+        key: 'ext',
+        width:'200',
+        render: (text, record) => (
+          <div style={{ wordWrap: 'break-word', wordBreak: 'break-all' }}>
+            {text}
+          </div>
+        ),
+      },
+      {
         title: '到账时间',
         dataIndex: 'profit_time',
         render: (val, record) => record.status === 1 ? <span>{moment(val * 1000).format('YYYY-MM-DD HH:mm:ss')}</span> : record.status === 2 ? '已失效' : '未到账',
