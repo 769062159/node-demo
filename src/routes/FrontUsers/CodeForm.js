@@ -153,12 +153,12 @@ const CustomizedForm = Form.create({
       </FormItem>
       {
         codeForm.trade_type !== 3 && codeForm.trade_type !== 4 ? (
-          <FormItem {...formItemLayout} label="上级是否有佣金">
+          <FormItem {...formItemLayout} label="VIP是否有佣金">
             {getFieldDecorator('is_commission', {
               rules: [
                 {
                   required: true,
-                  message: '请输入上级是否有佣金',
+                  message: '请输入VIP是否有佣金',
                 },
               ],
             })(

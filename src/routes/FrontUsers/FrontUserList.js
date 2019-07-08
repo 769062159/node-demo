@@ -551,12 +551,12 @@ export default class FrontUserList extends PureComponent {
         style={{ marginTop: 8 }}
         autoComplete="OFF"
       >
-        <FormItem {...formItemLayout} label="上级id">
+        <FormItem {...formItemLayout} label="VIP_id">
           {getFieldDecorator('level_id', {
             rules: [
               {
                 required: true,
-                message: '请输入上级id',
+                message: '请输入VIP_id',
               },
             ],
           })(<Input />)}
@@ -618,7 +618,12 @@ export default class FrontUserList extends PureComponent {
   renderSimpleForm() {
     const { getFieldDecorator } = this.props.form;
     return (
-      <Form onSubmit={this.handleSearch} layout="inline" autoComplete="OFF">
+      <Form onSubmit={this.handleSearch} layout="inline" autoComplete="OFF" labelCol={
+        {
+          xs: { span: 24 },
+          sm: { span: 5 },
+        }
+      }>
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
             <FormItem label="昵称">
@@ -645,7 +650,7 @@ export default class FrontUserList extends PureComponent {
         </Row>
         <Row>
           <Col md={8} sm={24}>
-            <FormItem label="上级id">
+            <FormItem label="VIPid">
               {getFieldDecorator('referee_id')(
                 <Input placeholder="请输入" />
               )}
@@ -709,7 +714,7 @@ export default class FrontUserList extends PureComponent {
         </Row>
         <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
           <Col md={8} sm={24}>
-            <FormItem label="上级用户id">
+            <FormItem label="VIP用户id">
               {getFieldDecorator('goods_name')(<Input placeholder="请输入" />)}
             </FormItem>
           </Col>
@@ -785,11 +790,11 @@ export default class FrontUserList extends PureComponent {
             <img style={{ height: 80, width: 80 }} src={val} alt="头像" />
             <div className={styles.userInfo}>
               <div>{text.nickname}</div>
-              <div>Id:{text.id}</div>
-              <div>等级:{text.account_level}</div>
-              <div>版本:{LevelName[Number(text.has_account ? text.has_account.permission : 0)]}</div>
-              <div className={styles.superior} onClick={this.searchMsg.bind(this, text.referee)} >上级:{text.referee && text.referee.nickname}</div>
-              <div>手机号码:{text.mobile}</div>
+              <div>Id : {text.id}</div>
+              <div>等级 : {text.account_level}</div>
+              <div>版本 : {LevelName[Number(text.has_account ? text.has_account.permission : 0)]}</div>
+              <div className={styles.superior} onClick={this.searchMsg.bind(this, text.referee)} >VIP : {text.referee && text.referee.nickname}</div>
+              <div>手机号码 : {text.mobile}</div>
             </div>
           </div>
         ),
@@ -801,11 +806,11 @@ export default class FrontUserList extends PureComponent {
         render: (val, text) => (
           <Row>
             <Col span={24} style={{ fontSize: 14 }}>
-              <div>消费:{val.account_consume}</div>
-              <div>总收入:{val.account_total_income}</div>
-              <div>佣金余额:{val.account_commission}</div>
-              <div>注册渠道:{text.wechat_account_name}</div>
-              <div onClick={this.getFans.bind(this, text.id)} className={styles.superior}>粉丝数量:{text.fans_num}</div>
+              <div>消费 : {val.account_consume}</div>
+              <div>总收入 : {val.account_total_income}</div>
+              <div>佣金余额 : {val.account_commission}</div>
+              <div>注册渠道 : {text.wechat_account_name}</div>
+              <div onClick={this.getFans.bind(this, text.id)} className={styles.superior}>粉丝数量 : {text.fans_num}</div>
             </Col>
           </Row>
         ),
@@ -839,7 +844,7 @@ export default class FrontUserList extends PureComponent {
               currentUser.show_update_referee_button ? (
                 <Fragment>
                   <Divider type="vertical" />
-                  <a onClick={this.editDataMsg.bind(this, record.id, 1)}>设置上级</a>
+                  <a onClick={this.editDataMsg.bind(this, record.id, 1)}>设置VIP</a>
                 </Fragment>
               ) : null
             }

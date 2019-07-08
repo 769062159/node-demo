@@ -105,7 +105,7 @@ export default class Rank extends PureComponent {
               onChange={this.handleStandardTableChange}
             />
           </TabPane>
-          <TabPane tab="设置上级" key="2">
+          <TabPane tab="设置VIP" key="2">
             {/* <Table
               dataSource={superiorRecord.list}
               rowKey={record => record.id}

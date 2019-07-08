@@ -38,7 +38,7 @@ class TypeForm extends Component {
               ],
             })(<Input placeholder="给分类起个名字" />)}
           </FormItem>
-          <FormItem label="上级分类">
+          <FormItem label="VIP分类">
             {getFieldDecorator('parent_id', {})(
               <Select style={{ width: 120 }} onChange={this.selectOption}>
                 {/* {selectItem} */}
