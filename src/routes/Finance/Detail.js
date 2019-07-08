@@ -130,7 +130,7 @@ export default class BasicProfile extends Component {
           <DescriptionList size="large" style={{ marginBottom: 32 }}>
             <Description term="昵称/姓名">{nickname}</Description>
             <Description term="手机号码">{mobile}</Description>
-            <Description term="直属上级">{referee}</Description>
+            <Description term="直属VIP">{referee}</Description>
             <Description term="佣金总收入">{total}</Description>
             <Description term="佣金余额">{balance}</Description>
             <Description term="创建时间">{createTime}</Description>

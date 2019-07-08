@@ -67,12 +67,12 @@ class TypeForm extends Component {
         style={{ marginTop: 8 }}
         autoComplete="OFF"
       >
-        <FormItem {...formItemLayout} label="上级id">
+        <FormItem {...formItemLayout} label="VIP_id">
           {getFieldDecorator('level_id', {
             rules: [
               {
                 required: true,
-                message: '请输入上级id',
+                message: '请输入VIP_id',
               },
             ],
           })(<Input />)}

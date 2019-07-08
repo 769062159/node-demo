@@ -488,7 +488,7 @@ export default class Certification extends PureComponent {
           //     <div>{text.nickname}</div>
           //     <div>Id:{text.id}</div>
           //     <div>等级:{text.account_level}</div>
-          //     <div>上级:{text.referee && text.referee.nickname}</div>
+          //     <div>VIP:{text.referee && text.referee.nickname}</div>
           //   </Col>
           // </Row>
           <div className={styles.userBox}>

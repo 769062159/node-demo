@@ -93,12 +93,12 @@ const CustomizedForm = Form.create({
         )}
       </FormItem>
       {routerForm.level === '2' ? (
-        <FormItem {...formItemLayout} label={<span>上级路由</span>}>
+        <FormItem {...formItemLayout} label={<span>VIP路由</span>}>
           {getFieldDecorator('parent_id', {
             rules: [
               {
                 required: routerForm.level === '2',
-                message: '请输入上级路由',
+                message: '请输入VIP路由',
               },
             ],
           })(
