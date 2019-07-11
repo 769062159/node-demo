@@ -1,7 +1,7 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
 import moment from 'moment';
-import { Table, message, Modal, Card, Form, Input, Button, Tag, Divider } from 'antd';
+import { Table, message, Modal, Card, Form, Input, Button, Tag, Divider,Switch } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import SearchForm from './SearchForm';
 import styles from './TableList.less';
@@ -23,14 +23,14 @@ const formSubmitLayout = {
 };
 const { TextArea } = Input;
 const withdrawStatus = [(<span style={{color: '#096dd9'}}>待处理</span>), (<span style={{color: '#389e0d'}}>同意</span>), (<span style={{color: '#cf1322'}}>拒绝</span>)];
-const processChannel = ['系统', (<span style={{color: '#096dd9'}}>地网</span>)];
+const processChannel = ['系统', (<span style={{color: '#096dd9'}}>地网</span>),(<span style={{color: '#e60012'}}>手工通道</span>)];
 const processStatus = [(<span style={{color: '#096dd9'}}>处理中</span>), (<span style={{color: '#389e0d'}}>支付成功</span>), (<span style={{color: '#cf1322'}}>支付失败</span>)];
 // auto_withdraw_status 自动提现失败 状态码和上面一样
 // const { confirm } = Modal;
 
 @connect(({ finance, login, global, loading }) => ({
   finance,
-  global, 
+  global,
   login,
   loading: loading.models.finance,
 }))
@@ -149,11 +149,12 @@ export default class Withdraw extends PureComponent {
         values.page = page;
         values.status = type;
         values.id = editData.id;
+        values.pay_power= values.pay_power?1:2
         dispatch({
           type: 'finance/updateWithdraw',
           payload: values,
           callback: () => {
-            if (values.status == 1) {
+            if (editData.process_channel == 1) {
               message.success('提现申请已提交给支付机构，请等待回复');
             } else {
               message.success('操作成功');
@@ -194,7 +195,7 @@ export default class Withdraw extends PureComponent {
       },
     });
   }
-  
+
   renderAgree() {
     const { loading } = this.props;
     const { editData } = this.state;
@@ -206,32 +207,6 @@ export default class Withdraw extends PureComponent {
         style={{ marginTop: 8 }}
         autoComplete="OFF"
       >
-        {/* <Row>
-          <Col span={5}>
-           申请日期:
-          </Col>
-          <Col span={19}>
-            {moment(editData.create_time*1000).format('YYYY-MM-DD HH:mm:ss')}
-          </Col>
-          <Col span={5}>
-            申请金额:
-          </Col>
-          <Col span={19}>
-            {editData.money}
-          </Col>
-          <Col span={5}>
-            收款帐号:
-          </Col>
-          <Col span={19}>
-            {editData.account_no}
-          </Col>
-          <Col span={5}>
-            收款人:
-          </Col>
-          <Col span={19}>
-            {editData.real_name}
-          </Col>
-        </Row> */}
         <FormItem {...formItemLayout} style={{ marginBottom: 5 }} label="申请日期">
           {moment(editData.create_time * 1000).format('YYYY-MM-DD HH:mm:ss')}
         </FormItem>
@@ -244,11 +219,17 @@ export default class Withdraw extends PureComponent {
         <FormItem {...formItemLayout} style={{ marginBottom: 5 }} label="收款人">
           {editData.real_name}
         </FormItem>
+        <FormItem {...formItemLayout} label="是否打款">
+          {getFieldDecorator('pay_power', {
+            rules: [],
+          })(<Switch onChange={(value)=>{}}/>)}
+        </FormItem>
         <FormItem {...formItemLayout} label="备注">
           {getFieldDecorator('remark', {
             rules: [],
           })(<TextArea placeholder="请输入备注" autosize />)}
         </FormItem>
+
         <FormItem style={{ marginTop: 32 }} {...formSubmitLayout}>
           <Button type="primary" htmlType="submit" loading={loading}>
             同意
