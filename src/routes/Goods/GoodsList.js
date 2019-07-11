@@ -57,6 +57,7 @@ export default class GoodsList extends PureComponent {
 
   componentDidMount() {
     const { dispatch } = this.props;
+
     dispatch({
       type: 'goods/fetchGoods',
       payload: {
@@ -476,7 +477,6 @@ export default class GoodsList extends PureComponent {
   }
 
   render() {
-    // console.log(this.props);
     const { goods: { goodsList: datas, goodsListPage }, loading } = this.props;
     const data = {
       list: datas,
