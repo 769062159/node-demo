@@ -1,408 +1,243 @@
-import React, { Component, Fragment } from 'react';
-import { Card, Button, Row, Col, Modal, Form, Select, Input,message,Table } from 'antd';
-import AddNewRules from './addNewRules';
-import styles from './uou.less';
-import { connect } from 'dva';
+import React, { Component } from 'react';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
-const { Search } = Input;
-
+import {Form, Select,Card,Row,Col,Input,DatePicker,Button,Table } from 'antd'
+import {toDateTime} from '../../utils/date'
+import styles from './uou.less'
+const InputGroup = Input.Group;
+const { RangePicker } = DatePicker;
 const { Option } = Select;
-const { confirm } = Modal;
-
+import { connect } from 'dva';
 class Unlock extends Component {
-  state = { visible: false,selectGoodsStatus:false }
-
-  //显示新增升级/解锁码赠送规则
-  showUpgradeModal=()=>{this.setState({ upgradeVisible: true })}
-  showModal = (value) => {
-    //value，0解锁，1升级
-    this.setState({
-      visible: true ,
-      modalStatus:value
-    })
+  state={
+    code_type:'',
+    action_type:"",
+    source:'',
+    openTime:[],
+    search_type:'',
+    search_input:''
   }
 
-  handleOk = e => {
-    const {modalStatus}=this.state
-    if(modalStatus){
-      this.addUpgradeRules()
-    }else{
-      this.addUnlockRules()
-    }
-    this.setState({ visible: false });
-  };
-  addUnlockRules=()=>{
-    //新增解锁码赠送规则
-    const { unlock_type, unlock_number }=this.state
-    if(unlock_type&&unlock_number){
-      const { dispatch }=this.props
-      dispatch({
-        type:'unlockorupgrade/unlockRules',
-        payload:{
-          type:unlock_type,
-          amount:unlock_number,
-        }
-      })
-    }else{
-      message.error('输入有误请重新输入！')
-    }
-  }
-
-  addUpgradeRules=()=>{
-    //新增升级码赠送规则
-    const { upgrade_type, upgrade_number1,upgrade_number2 }=this.state
-    if(upgrade_type&&upgrade_number1&&upgrade_number2){
-      const { dispatch }=this.props
-      dispatch({
-        type:'unlockorupgrade/upgradeRules',
-        payload:{
-          type:upgrade_type,
-          v1_amount:upgrade_number1,
-          v2_amount:upgrade_number2,
-        }
-      })
-    }else{
-      message.error('输入有误请重新输入！')
-      return false
-    }
-  }
-
-  //选择商品
-  showSelectGoodsModal = () => {
+  searchMethod=()=>{
     const {dispatch}=this.props
-    dispatch({
-      type: 'goods/fetchGoods',
-      payload: {
-        page_number: 10,
-      },
-    });
-    this.setState({ selectGoodsStatus: true, })
-  }
+    const {search_type,search_input,code_type,action_type,source,openTime}=this.state
+    let body={}
+    if(search_type&&search_input) { body[search_type] = search_input }
+    if(code_type){ body.code_type=code_type }
+    if(action_type){ body.action_type=action_type }
+    if(source){ body.source=source }
+    if(openTime.length){ body.openTime=openTime }
 
-  handleCancel = e => {
+    dispatch({
+      type:'unlockorupgrade/getUnlockChangeList',
+      payload:body
+    })
+    this.clearData()
+  }
+  clearData=()=>{
     this.setState({
-      visible: false,
-      unlock_type:'',
-      unlock_number:'',
-      upgrade_type:'',
-      upgrade_number1:'',
-      upgrade_number2:'',
+      search_type:'',
+      search_input:'',
+      code_type:'',
+      action_type:'',
+      source:'',
+      openTime:[],
+      keyValue:new Date()
     })
   }
-
-  handleSelectGoodsCancel=e=>{this.setState({ selectGoodsStatus: false, })}
-
   componentDidMount(){
-    const { dispatch } = this.props;
-    dispatch({ type:'unlockorupgrade/getCodeInfo' })
-    dispatch({ type:'unlockorupgrade/unlockTypeList' })
-    dispatch({ type:'unlockorupgrade/upgradeTypeList' })
-
+    const {dispatch}=this.props
+    dispatch({ type:'unlockorupgrade/getUnlockChangeList'})
   }
-
   render() {
-    const imgData=[
-      {
-        img:'',
-        name:'1',
-        price:'21'
-      },
-      {
-        img:'',
-        name:'2',
-        price:'234'
-      },
-    ]
-    const columns1 =[
-      {
-        title: '身份版本',
-        dataIndex: 'type_name',
-        key: 'type_name',
-      },
-      {
-        title: '赠送店主升级码数量',
-        dataIndex: 'v1_amount',
-        key: 'v1_amount',
-        render:(record)=>{
-          return <Input
-            defaultValue={record}
-            onPressEnter={(e)=>{
-              const _this=this
-              confirm({
-                content: '你确定修改这个吗？',
-                okText: '确定',
-                okType: 'danger',
-                cancelText: '取消',
-                onOk() {
-                  const {dispatch}=_this.props
-                  /*if(_this.state.temporary_unlock_type&&_this.state.temporary_unlock_number){
-                    dispatch({
-                      type:'unlockorupgrade/unlockRules',
-                      payload:{
-                        type:_this.state.temporary_unlock_type,
-                        amount:_this.state.temporary_unlock_number,
-                      }
-                    });
-                  }*/
-                }
-              });
-            }}
-          />
-        }
-      },
-      {
-        title: '赠送盟主升级码数量',
-        dataIndex: 'v2_amount',
-        key: 'v2_amount',
-        render:(record)=>{
-          return <Input
-            defaultValue={record}
-            onPressEnter={(e)=>{
-              const _this=this
-              confirm({
-                content: '你确定修改这个吗？',
-                okText: '确定',
-                okType: 'danger',
-                cancelText: '取消',
-                onOk() {
-                  const {dispatch}=_this.props
-                  /*if(_this.state.temporary_unlock_type&&_this.state.temporary_unlock_number){
-                    dispatch({
-                      type:'unlockorupgrade/unlockRules',
-                      payload:{
-                        type:_this.state.temporary_unlock_type,
-                        amount:_this.state.temporary_unlock_number,
-                      }
-                    });
-                  }*/
-                }
-              });
-            }}
-          />
-        }
-      }
-    ]
+    const {unlockorupgrade} =this.props
+
     const columns = [
       {
-        title: '身份版本',
-        dataIndex: 'type_name',
-        key: 'type_name',
+        title: '用户昵称',
+        dataIndex: 'user',
+        key: 'nickname',
+        render:(text)=>{
+          return text.nickname
+        }
       },
       {
-        title: '赠送解锁码数量',
+        title: '用户ID',
+        dataIndex: 'user',
+        key: 'user',
+        render:(text)=>{
+          return text.id
+        }
+      },
+      {
+        title: '业务类型',
+        dataIndex: 'code_type',
+        key: 'code_type'
+      },
+      {
+        title: '用户身份版本',
+        dataIndex: 'action_type',
+        key: 'action_type',
+      },
+      {
+        title: '涉及升级码数量',
         dataIndex: 'amount',
         key: 'amount',
-        render:(record)=>{
-          return <Input
-            defaultValue={record}
-            onChange={(e)=>{this.setState({temporary_unlock_number:e.target.value})}}
-            onPressEnter={(e)=>{
-              const _this=this
-              confirm({
-                content: '你确定修改这个吗？',
-                okText: '确定',
-                okType: 'danger',
-                cancelText: '取消',
-                onOk() {
-                  const {dispatch}=_this.props
-                  if(_this.state.temporary_unlock_type&&_this.state.temporary_unlock_number){
-                    dispatch({
-                      type:'unlockorupgrade/unlockRules',
-                      payload:{
-                        type:_this.state.temporary_unlock_type,
-                        amount:_this.state.temporary_unlock_number,
-                      }
-                    });
-                  }
-                }
-              });
-            }}
-          />
+      },
+      {
+        title: '剩余升级码数量',
+        dataIndex: 'balance',
+        key: 'balance',
+      },
+      {
+        title: '发生时间',
+        dataIndex: 'time',
+        key: 'time',
+        render:(text)=>{
+          return toDateTime(text)
         }
-      }
+      },
+      {
+        title: '对应商城订单号',
+        dataIndex: 'order_sn',
+        key: 'order_sn',
+      },
+      {
+        title: '使用对象',
+        dataIndex: 'action_user',
+        key: 'action_user',
+        render:(text)=>{
+          return text.nickname
+        }
+      },
+      {
+        title: '对象ID',
+        dataIndex: 'action_user',
+        key: 'action_user_id',
+        render:(text)=>{
+          return text.id
+        }
+      },
+      {
+        title: '备注',
+        dataIndex: 'remark',
+        key: 'remark',
+      },
     ];
-    const {modalStatus}=this.state
-    const {unlockorupgrade,goods}=this.props
     return (
       <PageHeaderLayout>
-        <Card title="解锁码赠送设置" className={styles.cardStyle}>
-          <Button type='primary' onClick={()=>this.showModal(0)}>新建解锁码赠送规则</Button>
-          {/*<AddNewRules unlock={unlockorupgrade.unlock}/>*/}
-          <Table
-            dataSource={unlockorupgrade.unlock}
-            columns={columns}
-            className={styles.tableStyleRow}
-            rowKey={(record)=>record.id}
-            onRow={record => {
-              return {
-                onClick: event => {
-                  this.setState({
-                    temporary_unlock_type:record.type,
-                    temporary_unlock_number:record.amount
-                  })
-                  console.log(record)
-                }, // 点击行
-              };
-            }}
-          />
-        </Card>
-        <Card title="解锁码购买设置" className={styles.cardStyle}>
-          <Row>购买指定商品可获得解锁码：</Row>
-          <Button type='primary' onClick={this.showSelectGoodsModal}>选择商品</Button>
-          <Row>购买指定商品可获得解锁码的商品列表</Row>
-          {/*<Row className={styles.goodContent}>
-            <Col span={5} className={styles.goodImg}><img src={unlockorupgrade.unlockorupgrade&&unlockorupgrade.unlock_goods} alt=""/></Col>
-            <Col span={10} className={styles.goodText}>
-              <div className="goodName">{unlockorupgrade&&unlockorupgrade.unlock_goods}</div>
-              <div className="goodPrice">售价：¥{unlockorupgrade&&unlockorupgrade.unlock_goods}</div>
+        <Card>
+          <Row className={styles.rowStyle}>
+            <Col span={2} className={styles.labelTitle}>搜索：</Col>
+            <Col span={10}>
+              <InputGroup compact style={{display:'flex',flexWrap:'nowrap'}}>
+                <Select
+                  style={{width:'150px'}}
+                  placeholder="请选择搜索类型"
+                  value={this.state.search_type}
+                  onChange={(value)=>{
+                    this.setState({search_type:value})
+                  }}
+                >
+                  <Option value='order_sn'>商城订单号</Option>
+                  <Option value='user_id'>用户ID</Option>
+                  <Option value='action_user_id'>使用对象ID</Option>
+                  <Option value='user_nickname'>用户昵称</Option>
+                  <Option value='action_user_nickname'>使用对象昵称</Option>
+                </Select>
+                <Input
+                  style={{ width: '50%' }}
+                  value={this.state.search_input}
+                  onChange={(e)=>{this.setState({search_input:e.target.value})}}/>
+              </InputGroup>
+            </Col>
+          </Row>
+          <Row className={styles.rowStyle}>
+            <Col span={2} className={styles.labelTitle}>发生时间：</Col>
+            <Col span={10}>
+              <RangePicker
+                value={this.state.openTime}
+                onChange={(value,dateStrings)=>{
+                  this.setState({openTime:dateStrings})
+                }}/>
+            </Col>
+          </Row>
+          {/*<Row className={styles.rowStyle}>
+            <Col span={2} className={styles.labelTitle}>升级码类型：</Col>
+            <Col span={3}>
+              <Select
+                style={{width:'200px'}}
+                placeholder="请选择搜索类型"
+                value={this.state.code_type}
+                onChange={(value)=>{
+                  this.setState({code_type:value})
+                }}
+              >
+                <Option value={1}>店主</Option>
+                <Option value={2}>盟主</Option>
+              </Select>
             </Col>
           </Row>*/}
-          <Row style={{height:'36px',lineHeight:'36px',marginTop:'10px'}}>
-            <Col span={5}>购买该设定的商品的1个库存后，可以获得</Col>
-            <Col span={1}><Input defaultValue={unlockorupgrade&&unlockorupgrade.unlock_goods.amount}/></Col>
-            <Col span={18}>个解锁码</Col>
+          <Row className={styles.rowStyle}>
+            <Col span={2} className={styles.labelTitle}>业务类型：</Col>
+            <Col span={3}>
+              <Select
+                style={{width:'200px'}}
+                placeholder="请选择搜索类型"
+                value={this.state.source}
+                onChange={(value)=>{
+                  this.setState({source:value})
+                }}
+              >
+                <Option value={1}>赠送</Option>
+                <Option value={2}>购买</Option>
+                <Option value={3}>正常消费</Option>
+                <Option value={4}>返还</Option>
+                <Option value={5}>系统调整</Option>
+              </Select>
+            </Col>
           </Row>
+          <Row className={styles.rowStyle}>
+            <Col span={2} className={styles.labelTitle}>操作类型：</Col>
+            <Col span={3}>
+              <Select
+                style={{width:'200px'}}
+                placeholder="请选择搜索类型"
+                value={this.state.action_type}
+                onChange={(value)=>{
+                  this.setState({action_type:value})
+                }}
+              >
+                <Option value={1}>收入</Option>
+                <Option value={2}>支出</Option>
+              </Select>
+            </Col>
+          </Row>
+          <Row className={styles.rowStyle}>
+            <Col span={2} style={{height:'30px',lineHeight:'30px'}}></Col>
+            <Col span={2}>
+              <Button type='primary' onClick={()=>{this.searchMethod()}}>搜索</Button>
+            </Col>
+            <Col span={2}>
+              <Button type='primary' onClick={()=>{}}>导出</Button>
+            </Col>
+            <Col span={2}>
+              <Button type='primary' onClick={()=>{}}>系统调整</Button>
+            </Col>
+          </Row>
+
         </Card>
-        <Card title="升级码赠送设置" className={styles.cardStyle}>
-          <Button type='primary' onClick={()=>this.showModal(1)}>新建升级码赠送规则</Button>
+        <Card>
           <Table
-            dataSource={unlockorupgrade.upgrade}
-            columns={columns1}
-            className={styles.tableStyleRow}
+            dataSource={unlockorupgrade.unlockChangeList}
+            columns={columns}
             rowKey={(record)=>record.id}
-            onRow={record => {
-              return {
-                onClick: event => {
-                  this.setState({
-                    temporary_unlock_type:record.type,
-                    temporary_unlock_number:record.amount
-                  })
-                  console.log(record)
-                }, // 点击行
-              };
-            }}
           />
         </Card>
-
-        <Modal
-          title={modalStatus==1?"新建升级码赠送规则":"新建解锁码赠送规则"}
-          visible={this.state.visible}
-          onOk={this.handleOk}
-          onCancel={this.handleCancel}
-        >
-          <Row className={styles.addRulesModal}>
-            <Col span={7}>请选择身份版本：</Col>
-            <Col span={17}>
-              {modalStatus==0?
-                <Select
-                  placeholder="请选择身份版本"
-                  style={{ width: '100%' }}
-                  onChange={(value) => {this.setState({unlock_type:value})}}
-                  value={this.state.unlock_type}
-                  >
-                  {
-                    unlockorupgrade.unlockTypeList.length&&unlockorupgrade.unlockTypeList.map(item=>(
-                      <Option value={item.key} key={item.key}>{item.value}</Option>
-                    ))
-                  }
-                </Select>
-                :
-                <Select
-                  placeholder="请选择身份版本"
-                  style={{ width: '100%' }}
-                  onChange={(value) => {this.setState({upgrade_type:value})}}
-                  value={this.state.upgrade_type}
-                >
-                  {unlockorupgrade.upgradeTypeList.length&&unlockorupgrade.upgradeTypeList.map(item=>(
-                      <Option value={item.key} key={item.key}>{item.value}</Option>
-                  ))}
-                </Select>
-                }
-            </Col>
-          </Row>
-          {modalStatus==0?
-            <Row className={styles.addRulesModal}>
-              <Col span={7}>赠送解锁码数量(个)：</Col>
-              <Col span={17}>
-              <Input
-                value={this.state.unlock_number}
-                onChange={(e)=>{
-                  const reg = new RegExp("^[0-9]*$")
-                  if(reg.test(e.target.value)){
-                    this.setState({unlock_number:e.target.value})
-                  }
-                }}
-              />
-              </Col>
-            </Row>
-            :
-            <Fragment>
-              <Row className={styles.addRulesModal}>
-                <Col span={9}>赠送店主升级码数量(个)：</Col>
-                <Col span={15}>
-                  <Input
-                    value={this.state.upgrade_number1}
-                    onChange={(e)=>{
-                      const reg = new RegExp("^[0-9]*$")
-                      if(reg.test(e.target.value)){
-                        this.setState({upgrade_number1:e.target.value})
-                      }
-                    }}
-                  />
-                </Col>
-              </Row>
-              <Row className={styles.addRulesModal}>
-                <Col span={9}>赠送盟主升级码数量(个)：</Col>
-                <Col span={15}>
-                  <Input
-                    value={this.state.upgrade_number2}
-                    onChange={(e)=>{
-                      const reg = new RegExp("^[0-9]*$")
-                      if(reg.test(e.target.value)){
-                        this.setState({upgrade_number2:e.target.value})
-                      }
-                    }}
-                  />
-                </Col>
-              </Row>
-            </Fragment>
-          }
-        </Modal>
-        <Modal
-          visible={this.state.selectGoodsStatus}
-          closable={false}
-          footer={null}
-          onCancel={this.handleSelectGoodsCancel}
-        >
-          <Row className={styles.onlineGoods}>
-            <Col span={4} className={styles.goods}>已上架商品</Col>
-            <Col span={20} className={styles.goods}>
-              <Search
-                placeholder="请输入搜索商品名称"
-                enterButton="搜索"
-                onSearch={value => console.log(value)}
-              />
-            </Col>
-          </Row>
-          {goods.goodsList.map(item=>(
-            <Row className={styles.goodsList} key={item.goods_id}>
-              <Col span={5}><img src={item.img} alt=""/></Col>
-              <Col span={14}>
-                <Row>{item.goods_name}</Row>
-                <Row>售价:￥{item.goods_price}</Row>
-              </Col>
-              <Col span={4}><Button type='primary' style={{float:'right'}}>选取</Button></Col>
-            </Row>
-          ))}
-        </Modal>
       </PageHeaderLayout>
     );
   }
 }
 
-export default connect(({ unlockorupgrade ,goods})=>({
+export default connect(({ unlockorupgrade })=>({
   unlockorupgrade,
-  goods
 }))(Unlock);
-
-

@@ -1,161 +1,235 @@
 import React, { Component } from 'react';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
-import {Form, Select,Card,Row,Col,Input,DatePicker,Button,Table } from 'antd'
+import {Modal, Select,Card,Row,Col,Input,DatePicker,Button,Table,Radio } from 'antd'
+import {toDateTime} from '../../utils/date'
+import styles from './uou.less'
+const InputGroup = Input.Group;
 const { RangePicker } = DatePicker;
 const { Option } = Select;
+import { connect } from 'dva';
 class Upgrade extends Component {
-  handleSubmit = e => {
-    e.preventDefault();
-    this.props.form.validateFields((err, values) => {
-      if (!err) {
-        console.log('Received values of form: ', values);
-      }
-    });
+  state={
+    visible:false,
+    openTime:[],
+    radio:1
+    /*search_type:'',
+    search_input:'',
+    code_type:'',
+    action_type:"",
+    source:'',*/
+  }
+  showModal = () => {
+    this.setState({
+      visible: true
+    })
+  }
+  handleOk = e => {
+    this.setState({ visible: false });
   };
+  handleCancel = e => {
+    this.setState({
+      visible: false,
+    })
+  }
+  onChangeRadio=(e)=>{
+    this.setState({
+      radio: e.target.value,
+    });
+  }
   searchMethod=()=>{
-    console.log()
+    const {dispatch}=this.props
+    const {search_type,search_input,code_type,action_type,source,openTime}=this.state
+    let body={}
+    if(search_type&&search_input) { body[search_type] = search_input }
+    if(code_type){ body.code_type=code_type }
+    if(action_type){ body.action_type=action_type }
+    if(source){ body.source=source }
+    if(openTime.length){ body.openTime=openTime }
+
+    dispatch({
+      type:'unlockorupgrade/getUpgradeChangeList',
+      payload:body
+    })
+    this.clearData()
+  }
+  clearData=()=>{
+    this.setState({
+      search_type:'',
+      search_input:'',
+      code_type:'',
+      action_type:'',
+      source:'',
+      openTime:[]
+    })
+  }
+  componentDidMount(){
+    const {dispatch}=this.props
+    dispatch({ type:'unlockorupgrade/getUpgradeChangeList'})
   }
   render() {
-    const { getFieldDecorator } = this.props.form;
-    const formItemLayout = {
-      labelCol: { span: 0 },
-      wrapperCol: { span: 24 },
-    };
-    const rangeConfig = {
-      rules: [{ type: 'array', required: true, message: '请选择搜索时间段!' }],
-    };
-    const dataSource = [
-      {
-        key: '1',
-        name: '胡彦斌',
-        age: 32,
-        address: '西湖区湖底公园1号',
-      },
-      {
-        key: '2',
-        name: '胡彦祖',
-        age: 42,
-        address: '西湖区湖底公园1号',
-      },
-    ];
+    const {unlockorupgrade} =this.props
 
     const columns = [
       {
         title: '用户昵称',
-        dataIndex: 'name',
-        key: 'name',
+        dataIndex: 'user',
+        key: 'nickname',
+        render:(text)=>{
+          return text.nickname
+        }
       },
       {
         title: '用户ID',
-        dataIndex: 'age',
-        key: 'age',
-      },
-      {
-        title: '用户身份版本',
-        dataIndex: 'address',
-        key: 'address',
+        dataIndex: 'user',
+        key: 'user',
+        render:(text)=>{
+          return text.id
+        }
       },
       {
         title: '业务类型',
-        dataIndex: 'address',
-        key: 'address1',
+        dataIndex: 'code_type',
+        key: 'code_type',
+        render:(text)=>{
+          return text.value
+        }
+      },
+      {
+        title: '用户身份版本',
+        dataIndex: 'action_type',
+        key: 'action_type',
       },
       {
         title: '涉及升级码数量',
-        dataIndex: 'address',
-        key: 'address2',
+        dataIndex: 'amount',
+        key: 'amount',
       },
       {
         title: '剩余升级码数量',
-        dataIndex: 'address',
-        key: 'address3',
+        dataIndex: 'balance',
+        key: 'balance',
       },
       {
         title: '发生时间',
-        dataIndex: 'address',
-        key: 'address4',
+        dataIndex: 'time',
+        key: 'time',
+        render:(text)=>{
+          return toDateTime(text)
+        }
       },
       {
         title: '对应商城订单号',
-        dataIndex: 'address',
-        key: 'address5',
+        dataIndex: 'order_sn',
+        key: 'order_sn',
       },
       {
         title: '使用对象',
-        dataIndex: 'address',
-        key: 'address6',
+        dataIndex: 'action_user',
+        key: 'action_user',
+        render:(text)=>{
+          return text.nickname
+        }
       },
       {
         title: '对象ID',
-        dataIndex: 'address',
-        key: 'address7',
+        dataIndex: 'action_user',
+        key: 'action_user_id',
+        render:(text)=>{
+          return text.id
+        }
       },
       {
         title: '备注',
-        dataIndex: 'address',
-        key: 'address8',
+        dataIndex: 'remark',
+        key: 'remark',
       },
     ];
     return (
       <PageHeaderLayout>
         <Card>
-          <Form {...formItemLayout} onSubmit={this.handleSubmit}>
-            <Row>
-              <Col span={2} style={{height:'30px',lineHeight:'30px'}}>搜索：</Col>
-              <Col span={3} >
-                <Form.Item>
-                  {getFieldDecorator('selectSearchType', {
-                    rules: [{ required: true, message: '请选择搜索类型' }],
-                    initialValue:0
-                  })(
-                    <Select placeholder="Please select a country">
-                      <Option value={0}>商城订单号</Option>
-                      <Option value={1}>用户昵称</Option>
-                      <Option value={2}>用户ID</Option>
-                      <Option value={3}>使用对象昵称</Option>
-                      <Option value={4}>使用对象ID</Option>
-                    </Select>,
-                  )}
-                </Form.Item>
-              </Col>
+            <Row className={styles.rowStyle}>
+              <Col span={2} className={styles.labelTitle}>搜索：</Col>
               <Col span={10}>
-                <Form.Item>
-                  {getFieldDecorator('selectSearchInput', {
-                    rules: [{ required: true, message: 'Please input your Data!' }],
-                  })(<Input />)}
-                </Form.Item>
+                <InputGroup compact style={{display:'flex',flexWrap:'nowrap'}}>
+                  <Select
+                    style={{width:'150px'}}
+                    placeholder="请选择搜索类型"
+                    value={this.state.search_type}
+                    onChange={(value)=>{
+                      this.setState({search_type:value})
+                    }}
+                  >
+                    <Option value='order_sn'>商城订单号</Option>
+                    <Option value='user_id'>用户ID</Option>
+                    <Option value='action_user_id'>使用对象ID</Option>
+                    <Option value='user_nickname'>用户昵称</Option>
+                    <Option value='action_user_nickname'>使用对象昵称</Option>
+                  </Select>
+                  <Input
+                    style={{ width: '50%' }}
+                    value={this.state.search_input}
+                    onChange={(e)=>{this.setState({search_input:e.target.value})}}/>
+                </InputGroup>
               </Col>
             </Row>
-            <Row>
-              <Col span={2} style={{height:'30px',lineHeight:'30px'}}>发生时间：</Col>
+            <Row className={styles.rowStyle}>
+              <Col span={2} className={styles.labelTitle}>发生时间：</Col>
               <Col span={10}>
-                <Form.Item>
-                  {getFieldDecorator('range-picker', rangeConfig)(<RangePicker />)}
-                </Form.Item>
+                 <RangePicker
+                   onChange={(value,dateStrings)=>{
+                   this.setState({openTime:dateStrings})
+                 }}/>
               </Col>
             </Row>
-            <Row>
-              <Col span={2} style={{height:'30px',lineHeight:'30px'}}>业务类型：</Col>
-              <Col span={3} >
-                <Form.Item>
-                  {getFieldDecorator('selectBusinessType', {
-                    rules: [{ required: true, message: '请选择搜索类型' }],
-                    initialValue:0
-                  })(
-                    <Select placeholder="请选择搜索类型">
-                      <Option value={0}>全部</Option>
-                      <Option value={1}>赠送店主升级码</Option>
-                      <Option value={2}>赠送盟主升级码</Option>
-                      <Option value={3}>使用店主升级码</Option>
-                      <Option value={4}>使用盟主升级码</Option>
-                      <Option value={5}>系统调整店主升级码</Option>
-                      <Option value={6}>系统调整盟主升级码</Option>
-                    </Select>,
-                  )}
-                </Form.Item>
+            <Row className={styles.rowStyle}>
+              <Col span={2} className={styles.labelTitle}>升级码类型：</Col>
+              <Col span={3}>
+                  <Select
+                    style={{width:'200px'}}
+                    placeholder="请选择搜索类型"
+                    value={this.state.code_type}
+                    onChange={(value)=>{
+                      this.setState({code_type:value})
+                    }}
+                  >
+                    <Option value={1}>店主</Option>
+                    <Option value={2}>盟主</Option>
+                  </Select>
               </Col>
             </Row>
-            <Row>
+          <Row className={styles.rowStyle}>
+            <Col span={2} className={styles.labelTitle}>操作来源：</Col>
+            <Col span={3}>
+              <Select
+                style={{width:'200px'}}
+                placeholder="请选择搜索类型"
+                value={this.state.source}
+                onChange={(value)=>{
+                  this.setState({source:value})
+                }}
+              >
+                <Option value={1}>系统</Option>
+                <Option value={2}>手工</Option>
+              </Select>
+            </Col>
+          </Row>
+          <Row className={styles.rowStyle}>
+            <Col span={2} className={styles.labelTitle}>操作类型：</Col>
+            <Col span={3}>
+              <Select
+                style={{width:'200px'}}
+                placeholder="请选择搜索类型"
+                value={this.state.action_type}
+                onChange={(value)=>{
+                  this.setState({action_type:value})
+                }}
+              >
+                <Option value={1}>收入</Option>
+                <Option value={2}>支出</Option>
+              </Select>
+            </Col>
+          </Row>
+            <Row className={styles.rowStyle}>
               <Col span={2} style={{height:'30px',lineHeight:'30px'}}></Col>
               <Col span={2}>
                 <Button type='primary' onClick={()=>{this.searchMethod()}}>搜索</Button>
@@ -164,23 +238,65 @@ class Upgrade extends Component {
                 <Button type='primary' onClick={()=>{}}>导出</Button>
               </Col>
               <Col span={2}>
-                <Button type='primary' onClick={()=>{}}>系统调整</Button>
+                <Button type='primary' onClick={()=>{this.showModal()}}>系统调整</Button>
               </Col>
             </Row>
-
-          </Form>
-
         </Card>
         <Card>
-          <Table dataSource={dataSource} columns={columns} />
+          <Table
+            dataSource={unlockorupgrade.upgradeChangeList}
+            columns={columns}
+            rowKey={(record)=>record.id}
+          />
         </Card>
+        <Modal
+          title='充值升级码'
+          visible={this.state.visible}
+          onOk={this.handleOk}
+          onCancel={this.handleCancel}
+        >
+          <Row>
+            <Col>
+              <Radio.Group onChange={this.onChangeRadio} value={this.state.radio}>
+                <Radio value={1}>店主升级码</Radio>
+                <Radio value={2}>盟主升级码</Radio>
+              </Radio.Group>
+            </Col>
+          </Row>
+          <Row className={styles.rowStyle}>
+            <Col span={6} className={styles.labelTitle}>请输入用户ID：</Col>
+            <Col span={10}>
+                <Input
+                  style={{ width: '100%' }}
+                  value={this.state.search_input}
+                  onChange={(e)=>{this.setState({search_input:e.target.value})}}/>
+            </Col>
+          </Row>
+          <Row className={styles.rowStyle}>
+            <Col span={6} className={styles.labelTitle}>请输入调整数量：</Col>
+            <Col span={10}>
+              <Input
+                style={{ width: '100%' }}
+                value={this.state.search_input}
+                onChange={(e)=>{this.setState({search_input:e.target.value})}}/>
+            </Col>
+          </Row>
+          <Row className={styles.rowStyle}>
+            <Col span={6} className={styles.labelTitle}>备注：</Col>
+            <Col span={10}>
+              <Input
+                style={{ width: '100%' }}
+                value={this.state.search_input}
+                onChange={(e)=>{this.setState({search_input:e.target.value})}}/>
+            </Col>
+          </Row>
+        </Modal>
       </PageHeaderLayout>
 
     );
   }
 }
 
-export default Form.create({
-  mapPropsToFields(){},
-  onFieldsChange(){}
-})(Upgrade);
+export default connect(({ unlockorupgrade })=>({
+  unlockorupgrade,
+}))(Upgrade);

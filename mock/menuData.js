@@ -331,8 +331,12 @@ export const menuData = [
         path: 'Upgrade',
       },
       {
-        name: '解锁&升级码-设置',
+        name: '解锁&升级码-解锁码',
         path: 'Unlock',
+      },
+      {
+        name: '解锁&升级码-设置',
+        path: 'Config',
       },
     ],
   },

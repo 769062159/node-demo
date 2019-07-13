@@ -1,4 +1,9 @@
-import {  getCodeInfo,setUnlockCode ,setUpgradeCode,getUnlockTypeList,getUpgradeTypeList } from '../services/unlockorupgrade';
+import {
+  getCodeInfo,
+  setUnlockCode , setUpgradeCode,
+  getUnlockTypeList, getUpgradeTypeList,
+  getUpgradeChangeList, getUnlockChangeList,
+} from '../services/unlockorupgrade';
 import {message} from 'antd'
 export default {
   namespace: 'unlockorupgrade',
@@ -7,9 +12,33 @@ export default {
     upgrade: [],
     unlock_goods:[],
     unlockTypeList:[],
-    upgradeTypeList:[]
+    upgradeTypeList:[],
+    upgradeChangeList:[],
+    unlockChangeList:[]
   },
   effects: {
+    *getUnlockChangeList({ payload }, { call, put }) {
+      if(Object.keys({payload}).length !== 0){
+        const response = yield call(getUnlockChangeList,{ ...payload });
+        if(response && response.code===200){
+          yield put({
+            type: 'getUnlockChangedList',
+            payload: response,
+          });
+        }
+      }
+    },
+    *getUpgradeChangeList({ payload }, { call, put }) {
+      if(Object.keys({payload}).length !== 0){
+        const response = yield call(getUpgradeChangeList,{ ...payload });
+        if(response && response.code===200){
+          yield put({
+            type: 'getUpgradeChangedList',
+            payload: response,
+          });
+        }
+      }
+    },
     *unlockTypeList({ payload }, { call, put }) {
       const response = yield call(getUnlockTypeList,{ ...payload });
       if(response && response.code===200){
@@ -69,6 +98,20 @@ export default {
     },
   },
   reducers: {
+    getUnlockChangedList(state, { payload }) {
+      const { data } = payload;
+      return {
+        ...state,
+        unlockChangeList: data.list,
+      }
+    },
+    getUpgradeChangedList(state, { payload }) {
+      const { data } = payload;
+      return {
+        ...state,
+        upgradeChangeList: data.list,
+      }
+    },
     getCodeConfigInfo(state, { payload }) {
       const { data } = payload;
       return {

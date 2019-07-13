@@ -33,6 +33,11 @@ export const getRouterConfig = app => {
         import('../routes/UnlockOrUpgrade/Upgrade')
       ),
     },
+    '/UnlockOrUpgrade/Config':{
+      component: dynamicWrapper(app, ['unlockorupgrade'], () =>
+        import('../routes/UnlockOrUpgrade/Config')
+      ),
+    },
     // 统计
     '/statistics/analysis': {
       component: dynamicWrapper(app, ['statistics'], () =>

@@ -43,3 +43,19 @@ export async function getUpgradeTypeList() {
     method: 'GET'
   });
 }
+
+//获取升级码变动记录
+export async function getUpgradeChangeList(params) {
+  return request('/merchant/code-config/upgrade-code/record/paginate', {
+    method: 'POST',
+    body:params
+  });
+}
+
+//获取解锁码变动记录
+export async function getUnlockChangeList(params) {
+  return request('/merchant/code-config/unlock-code/record/paginate', {
+    method: 'POST',
+    body:params
+  });
+}
