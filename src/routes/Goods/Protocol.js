@@ -31,9 +31,10 @@ export default class Protocol extends PureComponent {
   }
   // 添加描述
   setDescription = (e) => {
+    let str=e.replace(/<[\/]?(u)([^<>]*)>/g, (m)=>m.replace('u', 'span'));
     this.setState({
-        newRichText: e,
-    })
+        newRichText: str ,
+    },()=>{console.log(this.state.newRichText)})
   }
   editProtocol = () => {
     const { newRichText } = this.state;
