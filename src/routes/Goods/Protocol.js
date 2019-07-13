@@ -31,7 +31,9 @@ export default class Protocol extends PureComponent {
   }
   // 添加描述
   setDescription = (e) => {
-    let str=e.replace(/<[\/]?(u)([^<>]*)>/g, (m)=>m.replace('u', 'span'));
+    let str1=e.replace(/\<u\>/g,'<span style="text-decoration: underline;display: inline-block">')
+    let str=str1.replace(/<\/u>/ig, "</span>")
+    // let str=e.replace(/<[\/]?(u)([^<>]*)>/g, (m)=>m.replace('u', 'span'));
     this.setState({
         newRichText: str ,
     },()=>{console.log(this.state.newRichText)})
