@@ -1407,7 +1407,7 @@ const CustomizedForm = Form.create({
             <h2>正常升级</h2><h5>[固定值分佣]</h5>
           </Col>
           <Col span={24}>
-            <h5>>. 原始推荐人返佣（金额）</h5>
+            <h5>>. VIP返佣（金额）</h5>
           </Col>
           <Col span={6}>
             <Form.Item {...profitLayout} label="粉丝">
@@ -1439,7 +1439,7 @@ const CustomizedForm = Form.create({
           </Col>
 
           <Col span={24}>
-            <h5>>. 原始推荐人返佣（定向福包）</h5>
+            <h5>>. VIP返佣（定向福包）</h5>
           </Col>
           <Col span={6}>
             <Form.Item {...profitLayout} label="粉丝">
@@ -1471,7 +1471,7 @@ const CustomizedForm = Form.create({
           </Col>
 
           <Col span={24}>
-            <h5>>. 原始推荐人返佣（联盟福包）</h5>
+            <h5>>. VIP返佣（联盟福包）</h5>
           </Col>
           <Col span={6}>
             <Form.Item {...profitLayout} label="粉丝">
@@ -1605,7 +1605,7 @@ const CustomizedForm = Form.create({
         {/* 推荐奖金 */}
         <Row>
           <Col span={24}>
-            <h5>>. 推荐人奖励</h5>
+            <h5>>. VIP奖励</h5>
           </Col>
           <Col span={8}>
             <Form.Item {...profitLayout} label="乐美话费">
@@ -1686,7 +1686,7 @@ const CustomizedForm = Form.create({
               </Form.Item>
             </Col>
             <Col span={24}>
-              <h5>>. 原始推荐人返佣（金额）</h5>
+              <h5>>. VIP返佣（金额）</h5>
             </Col>
             <Col span={6}>
               <Form.Item {...profitLayout} label="粉丝">
@@ -1735,7 +1735,7 @@ const CustomizedForm = Form.create({
               </Form.Item>
             </Col>
             <Col span={24}>
-              <h5>>. 原始推荐人返佣（定向福包）</h5>
+              <h5>>. VIP返佣（定向福包）</h5>
             </Col>
             <Col span={6}>
               <Form.Item {...profitLayout} label="粉丝">
@@ -1785,7 +1785,7 @@ const CustomizedForm = Form.create({
             </Col>
 
             <Col span={24}>
-              <h5>>. 原始推荐人返佣（联盟福包）</h5>
+              <h5>>. VIP返佣（联盟福包）</h5>
             </Col>
             <Col span={6}>
               <Form.Item {...profitLayout} label="粉丝">
@@ -1936,7 +1936,7 @@ const CustomizedForm = Form.create({
         ), (
           <Row>
             <Col span={24}>
-              <h5>>. 推荐人奖励</h5>
+              <h5>>. VIP奖励</h5>
             </Col>
             <Col span={8}>
               <Form.Item {...profitLayout} label="乐美话费">
@@ -2015,7 +2015,7 @@ const CustomizedForm = Form.create({
             </Form.Item>
           </Col>
           <Col span={24}>
-              <h5>>. 原始推荐人返佣（金额）</h5>
+              <h5>>. VIP返佣（金额）</h5>
           </Col>
           <Col span={6}>
             <Form.Item {...profitLayout} label="粉丝">
@@ -2064,7 +2064,7 @@ const CustomizedForm = Form.create({
             </Form.Item>
           </Col>
           <Col span={24}>
-              <h5>>. 原始推荐人返佣（定向福包）</h5>
+              <h5>>. VIP返佣（定向福包）</h5>
           </Col>
           <Col span={6}>
             <Form.Item {...profitLayout} label="粉丝">
@@ -2114,7 +2114,7 @@ const CustomizedForm = Form.create({
           </Col>
 
           <Col span={24}>
-              <h5>>. 原始推荐人返佣（联盟福包）</h5>
+              <h5>>. VIP返佣（联盟福包）</h5>
           </Col>
           <Col span={6}>
             <Form.Item {...profitLayout} label="粉丝">
@@ -2265,7 +2265,7 @@ const CustomizedForm = Form.create({
         ), (
           <Row>
             <Col span={24}>
-              <h5>>. 推荐人奖励</h5>
+              <h5>>. VIP奖励</h5>
             </Col>
             <Col span={8}>
               <Form.Item {...profitLayout} label="乐美话费">
