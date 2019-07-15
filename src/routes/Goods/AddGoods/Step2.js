@@ -1540,7 +1540,7 @@ const CustomizedForm = Form.create({
 
 
               <Col span={24}>
-                <h5>&gt;. 原始推荐人返佣（联盟福包）</h5>
+                <h5>&gt;. VIP返佣（联盟福包）</h5>
               </Col>
               <Col span={6}>
                 <Form.Item {...profitLayout} label="粉丝">
@@ -1855,7 +1855,7 @@ const CustomizedForm = Form.create({
                 </Col>
 
                 <Col span={24}>
-                  <h5>&gt;. 原始推荐人返佣（联盟福包）</h5>
+                  <h5>&gt;. VIP返佣（联盟福包）</h5>
                 </Col>
                 <Col span={6}>
                   <Form.Item {...profitLayout} label="粉丝">
@@ -2182,7 +2182,7 @@ const CustomizedForm = Form.create({
                   </Form.Item>
                 </Col>
                 <Col span={24}>
-                  <h5>&gt;. 原始推荐人返佣（联盟福包）</h5>
+                  <h5>&gt;. VIP返佣（联盟福包）</h5>
                 </Col>
                 <Col span={6}>
                   <Form.Item {...profitLayout} label="粉丝">
