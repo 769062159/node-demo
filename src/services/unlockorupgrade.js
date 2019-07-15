@@ -59,3 +59,19 @@ export async function getUnlockChangeList(params) {
     body:params
   });
 }
+
+//手动为用户创建升级码
+export async function createUpgradeCode(params) {
+  return request('/merchant/code-config/upgrade-code/recharge', {
+    method: 'POST',
+    body:params
+  });
+}
+
+//手动为用户创建解锁码
+export async function createUnlockCode(params) {
+  return request('/merchant/code-config/unlock-code/recharge', {
+    method: 'POST',
+    body:params
+  });
+}

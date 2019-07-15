@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
-import {Form, Select,Card,Row,Col,Input,DatePicker,Button,Table } from 'antd'
+import {Form, Select,Card,Row,Col,Input,DatePicker,Button,Table,message } from 'antd'
+import moment from 'moment';
+import SysModal from './sysModal'
 import {toDateTime} from '../../utils/date'
 import styles from './uou.less'
 const InputGroup = Input.Group;
@@ -9,19 +11,50 @@ const { Option } = Select;
 import { connect } from 'dva';
 class Unlock extends Component {
   state={
-    code_type:'',
-    action_type:"",
-    source:'',
+    code_type:0,
+    action_type:0,
+    source:0,
+    search_type:0,
+    search_input:'',
     openTime:[],
-    search_type:'',
-    search_input:''
+  }
+  showModal = () => {
+    this.setState({
+      visible: true
+    })
   }
 
+  handleCancel = e => {
+    this.setState({
+      visible: false,
+    })
+  }
+  handleOk = params => {
+    const {dispatch}=this.props
+    const { upgrade_code_type,upgrade_user_id,upgrade_amount,upgrade_remark}= params
+    let body={
+      code_type:upgrade_code_type,
+      user_id:upgrade_user_id,
+      amount:upgrade_amount,
+      remark:upgrade_remark,
+    }
+    if(upgrade_code_type&&upgrade_user_id&&upgrade_amount&&upgrade_remark){
+      dispatch({
+        type:'unlockorupgrade/createUnlockCode',
+        payload:body
+      })
+    }else{
+      message.error('字段缺失，请补充完整')
+    }
+    this.setState({ visible: false, });
+  };
   searchMethod=()=>{
     const {dispatch}=this.props
     const {search_type,search_input,code_type,action_type,source,openTime}=this.state
     let body={}
-    if(search_type&&search_input) { body[search_type] = search_input }
+    if(search_type&&search_input) { body[search_type] = search_input }else{
+      if(search_type){ message.error('请补齐搜索条件！') }
+    }
     if(code_type){ body.code_type=code_type }
     if(action_type){ body.action_type=action_type }
     if(source){ body.source=source }
@@ -35,11 +68,11 @@ class Unlock extends Component {
   }
   clearData=()=>{
     this.setState({
-      search_type:'',
+      search_type:0,
       search_input:'',
-      code_type:'',
-      action_type:'',
-      source:'',
+      code_type:0,
+      action_type:0,
+      source:0,
       openTime:[],
       keyValue:new Date()
     })
@@ -133,11 +166,13 @@ class Unlock extends Component {
                 <Select
                   style={{width:'150px'}}
                   placeholder="请选择搜索类型"
+                  defaultValue={0}
                   value={this.state.search_type}
                   onChange={(value)=>{
                     this.setState({search_type:value})
                   }}
                 >
+                  <Option value={0}>全部</Option>
                   <Option value='order_sn'>商城订单号</Option>
                   <Option value='user_id'>用户ID</Option>
                   <Option value='action_user_id'>使用对象ID</Option>
@@ -146,6 +181,7 @@ class Unlock extends Component {
                 </Select>
                 <Input
                   style={{ width: '50%' }}
+                  placeholder="请输入关联条件"
                   value={this.state.search_input}
                   onChange={(e)=>{this.setState({search_input:e.target.value})}}/>
               </InputGroup>
@@ -155,28 +191,14 @@ class Unlock extends Component {
             <Col span={2} className={styles.labelTitle}>发生时间：</Col>
             <Col span={10}>
               <RangePicker
-                value={this.state.openTime}
+                value={moment[this.state.openTime]}
                 onChange={(value,dateStrings)=>{
-                  this.setState({openTime:dateStrings})
+                  this.setState({openTime:dateStrings},()=>{console.log(this.state.openTime)})
+
                 }}/>
             </Col>
           </Row>
-          {/*<Row className={styles.rowStyle}>
-            <Col span={2} className={styles.labelTitle}>升级码类型：</Col>
-            <Col span={3}>
-              <Select
-                style={{width:'200px'}}
-                placeholder="请选择搜索类型"
-                value={this.state.code_type}
-                onChange={(value)=>{
-                  this.setState({code_type:value})
-                }}
-              >
-                <Option value={1}>店主</Option>
-                <Option value={2}>盟主</Option>
-              </Select>
-            </Col>
-          </Row>*/}
+
           <Row className={styles.rowStyle}>
             <Col span={2} className={styles.labelTitle}>业务类型：</Col>
             <Col span={3}>
@@ -184,10 +206,12 @@ class Unlock extends Component {
                 style={{width:'200px'}}
                 placeholder="请选择搜索类型"
                 value={this.state.source}
+                defaultValue={0}
                 onChange={(value)=>{
                   this.setState({source:value})
                 }}
               >
+                <Option value={0}>全部</Option>
                 <Option value={1}>赠送</Option>
                 <Option value={2}>购买</Option>
                 <Option value={3}>正常消费</Option>
@@ -201,12 +225,14 @@ class Unlock extends Component {
             <Col span={3}>
               <Select
                 style={{width:'200px'}}
-                placeholder="请选择搜索类型"
+                // placeholder="请选择搜索类型"
                 value={this.state.action_type}
+                defaultValue={0}
                 onChange={(value)=>{
                   this.setState({action_type:value})
                 }}
               >
+                <Option value={0}>全部</Option>
                 <Option value={1}>收入</Option>
                 <Option value={2}>支出</Option>
               </Select>
@@ -221,7 +247,7 @@ class Unlock extends Component {
               <Button type='primary' onClick={()=>{}}>导出</Button>
             </Col>
             <Col span={2}>
-              <Button type='primary' onClick={()=>{}}>系统调整</Button>
+              <Button type='primary' onClick={()=>{this.showModal()}}>系统调整</Button>
             </Col>
           </Row>
 
@@ -233,6 +259,12 @@ class Unlock extends Component {
             rowKey={(record)=>record.id}
           />
         </Card>
+        <SysModal
+          type='unlock'
+          visible={this.state.visible}
+          handleOk={(params)=>this.handleOk(params)}
+          handleCancel={this.handleCancel}
+        />
       </PageHeaderLayout>
     );
   }

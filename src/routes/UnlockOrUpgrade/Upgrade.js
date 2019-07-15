@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
-import {Modal, Select,Card,Row,Col,Input,DatePicker,Button,Table,Radio } from 'antd'
+import {Modal, Select,Card,Row,Col,Input,DatePicker,Button,Table,Radio,message } from 'antd'
 import {toDateTime} from '../../utils/date'
 import styles from './uou.less'
+import SysModal from './sysModal'
 const InputGroup = Input.Group;
 const { RangePicker } = DatePicker;
 const { Option } = Select;
@@ -11,36 +12,48 @@ class Upgrade extends Component {
   state={
     visible:false,
     openTime:[],
-    radio:1
-    /*search_type:'',
+
+    search_type:0,
     search_input:'',
-    code_type:'',
-    action_type:"",
-    source:'',*/
+    code_type:0,
+    action_type:0,
+    source:0,
   }
   showModal = () => {
     this.setState({
       visible: true
     })
   }
-  handleOk = e => {
-    this.setState({ visible: false });
-  };
+
   handleCancel = e => {
     this.setState({
       visible: false,
     })
   }
-  onChangeRadio=(e)=>{
-    this.setState({
-      radio: e.target.value,
-    });
-  }
+  handleOk = params => {
+    const {dispatch}=this.props
+    const { upgrade_code_type,upgrade_user_id,upgrade_amount,upgrade_remark}= params
+    let body={
+      code_type:upgrade_code_type,
+      user_id:upgrade_user_id,
+      amount:upgrade_amount,
+      remark:upgrade_remark,
+    }
+    if(upgrade_code_type&&upgrade_user_id&&upgrade_amount&&upgrade_remark){
+      dispatch({
+        type:'unlockorupgrade/createUpgradeCode',
+        payload:body
+      })
+    }else{
+      message.error('字段缺失，请补充完整')
+    }
+    this.setState({ visible: false, });
+  };
   searchMethod=()=>{
     const {dispatch}=this.props
     const {search_type,search_input,code_type,action_type,source,openTime}=this.state
     let body={}
-    if(search_type&&search_input) { body[search_type] = search_input }
+    if(search_type&&search_input) { body[search_type] = search_input }else{if(search_type){ message.error('请补齐搜索条件！') }}
     if(code_type){ body.code_type=code_type }
     if(action_type){ body.action_type=action_type }
     if(source){ body.source=source }
@@ -54,12 +67,12 @@ class Upgrade extends Component {
   }
   clearData=()=>{
     this.setState({
-      search_type:'',
+      search_type:0,
       search_input:'',
-      code_type:'',
-      action_type:'',
-      source:'',
-      openTime:[]
+      openTime:[],
+      code_type:0,
+      action_type:0,
+      source:0,
     })
   }
   componentDidMount(){
@@ -154,11 +167,13 @@ class Upgrade extends Component {
                   <Select
                     style={{width:'150px'}}
                     placeholder="请选择搜索类型"
+                    defaultValue={0}
                     value={this.state.search_type}
                     onChange={(value)=>{
                       this.setState({search_type:value})
                     }}
                   >
+                    <Option value={0}>全部</Option>
                     <Option value='order_sn'>商城订单号</Option>
                     <Option value='user_id'>用户ID</Option>
                     <Option value='action_user_id'>使用对象ID</Option>
@@ -166,6 +181,7 @@ class Upgrade extends Component {
                     <Option value='action_user_nickname'>使用对象昵称</Option>
                   </Select>
                   <Input
+                    placeholder="请输入查询条件"
                     style={{ width: '50%' }}
                     value={this.state.search_input}
                     onChange={(e)=>{this.setState({search_input:e.target.value})}}/>
@@ -186,12 +202,13 @@ class Upgrade extends Component {
               <Col span={3}>
                   <Select
                     style={{width:'200px'}}
-                    placeholder="请选择搜索类型"
+                    defaultValue={0}
                     value={this.state.code_type}
                     onChange={(value)=>{
                       this.setState({code_type:value})
                     }}
                   >
+                    <Option value={0}>全部</Option>
                     <Option value={1}>店主</Option>
                     <Option value={2}>盟主</Option>
                   </Select>
@@ -203,11 +220,13 @@ class Upgrade extends Component {
               <Select
                 style={{width:'200px'}}
                 placeholder="请选择搜索类型"
+                defaultValue={0}
                 value={this.state.source}
                 onChange={(value)=>{
                   this.setState({source:value})
                 }}
               >
+                <Option value={0}>全部</Option>
                 <Option value={1}>系统</Option>
                 <Option value={2}>手工</Option>
               </Select>
@@ -220,10 +239,12 @@ class Upgrade extends Component {
                 style={{width:'200px'}}
                 placeholder="请选择搜索类型"
                 value={this.state.action_type}
+                defaultValue={0}
                 onChange={(value)=>{
                   this.setState({action_type:value})
                 }}
               >
+                <Option value={0}>全部</Option>
                 <Option value={1}>收入</Option>
                 <Option value={2}>支出</Option>
               </Select>
@@ -238,7 +259,10 @@ class Upgrade extends Component {
                 <Button type='primary' onClick={()=>{}}>导出</Button>
               </Col>
               <Col span={2}>
-                <Button type='primary' onClick={()=>{this.showModal()}}>系统调整</Button>
+                <Button type='primary' onClick={()=>{
+                  this.showModal()
+                  // console.log(this.sysM)
+                }}>系统调整</Button>
               </Col>
             </Row>
         </Card>
@@ -249,48 +273,12 @@ class Upgrade extends Component {
             rowKey={(record)=>record.id}
           />
         </Card>
-        <Modal
-          title='充值升级码'
+        <SysModal
+          type='upgrade'
           visible={this.state.visible}
-          onOk={this.handleOk}
-          onCancel={this.handleCancel}
-        >
-          <Row>
-            <Col>
-              <Radio.Group onChange={this.onChangeRadio} value={this.state.radio}>
-                <Radio value={1}>店主升级码</Radio>
-                <Radio value={2}>盟主升级码</Radio>
-              </Radio.Group>
-            </Col>
-          </Row>
-          <Row className={styles.rowStyle}>
-            <Col span={6} className={styles.labelTitle}>请输入用户ID：</Col>
-            <Col span={10}>
-                <Input
-                  style={{ width: '100%' }}
-                  value={this.state.search_input}
-                  onChange={(e)=>{this.setState({search_input:e.target.value})}}/>
-            </Col>
-          </Row>
-          <Row className={styles.rowStyle}>
-            <Col span={6} className={styles.labelTitle}>请输入调整数量：</Col>
-            <Col span={10}>
-              <Input
-                style={{ width: '100%' }}
-                value={this.state.search_input}
-                onChange={(e)=>{this.setState({search_input:e.target.value})}}/>
-            </Col>
-          </Row>
-          <Row className={styles.rowStyle}>
-            <Col span={6} className={styles.labelTitle}>备注：</Col>
-            <Col span={10}>
-              <Input
-                style={{ width: '100%' }}
-                value={this.state.search_input}
-                onChange={(e)=>{this.setState({search_input:e.target.value})}}/>
-            </Col>
-          </Row>
-        </Modal>
+          handleOk={(params)=>this.handleOk(params)}
+          handleCancel={this.handleCancel}
+        />
       </PageHeaderLayout>
 
     );

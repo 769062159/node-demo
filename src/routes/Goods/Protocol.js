@@ -31,11 +31,19 @@ export default class Protocol extends PureComponent {
   }
   // 添加描述
   setDescription = (e) => {
-    let str1=e.replace(/\<u\>/g,'<span style="text-decoration: underline;display: inline-block">')
-    let str=str1.replace(/<\/u>/ig, "</span>")
+    let str = '<span style="text-decoration: underline;">'
+    let str1=e.replace(/\<span\>\<u\>/g, str)
+      // .replace(/\<span style=\"background:#fff;\"\>\<u\>/g, str)
+      .replace(/\<u\>/g,str)
+      // .replace(/\<\/span\>\<\/u\>/g, '</span>')
+      .replace(/<\/u>/ig, "</span>")
+      .replace(/span style=\"/g, 'span style="display:inline;')
+      .replace(/\<span\>/g, '<span style="display:inline;">')
+      .replace(/\<strong\>/g, '<strong style="display:inline;">')
+    str1 = `<div style="background: #fff; padding: 20px; box-sizing: border-box;">${str1}</div>`
     // let str=e.replace(/<[\/]?(u)([^<>]*)>/g, (m)=>m.replace('u', 'span'));
     this.setState({
-        newRichText: str ,
+        newRichText: str1 ,
     },()=>{console.log(this.state.newRichText)})
   }
   editProtocol = () => {
