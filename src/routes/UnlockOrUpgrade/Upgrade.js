@@ -19,18 +19,9 @@ class Upgrade extends Component {
     action_type:0,
     source:0,
   }
-  showModal = () => {
-    this.setState({
-      visible: true
-    })
-  }
 
-  handleCancel = e => {
-    this.setState({
-      visible: false,
-    })
-  }
   handleOk = params => {
+
     const {dispatch}=this.props
     const { upgrade_code_type,upgrade_user_id,upgrade_amount,upgrade_remark}= params
     let body={
@@ -47,7 +38,7 @@ class Upgrade extends Component {
     }else{
       message.error('字段缺失，请补充完整')
     }
-    this.setState({ visible: false, });
+    this.sysmodal.handleCancel()
   };
   searchMethod=()=>{
     const {dispatch}=this.props
@@ -260,7 +251,7 @@ class Upgrade extends Component {
               </Col>
               <Col span={2}>
                 <Button type='primary' onClick={()=>{
-                  this.showModal()
+                  this.sysmodal.showModal()
                   // console.log(this.sysM)
                 }}>系统调整</Button>
               </Col>
@@ -274,10 +265,9 @@ class Upgrade extends Component {
           />
         </Card>
         <SysModal
+          ref={node=>this.sysmodal=node}
           type='upgrade'
-          visible={this.state.visible}
           handleOk={(params)=>this.handleOk(params)}
-          handleCancel={this.handleCancel}
         />
       </PageHeaderLayout>
 

@@ -18,6 +18,23 @@ export default {
     unlockChangeList:[]
   },
   effects: {
+    *createUnlockCode({ payload }, { call, put }) {
+      if(Object.keys({payload}).length !== 0){
+        const response = yield call(createUnlockCode,{ ...payload });
+        if(response && response.code===200){
+          message.success('操作成功！')
+          const response = yield call(getUnlockChangeList,{ });
+          if(response && response.code===200){
+            yield put({
+              type: 'getUnlockChangedList',
+              payload: response,
+            });
+          }
+        }else{
+          message.error(response.message)
+        }
+      }
+    },
     *createUpgradeCode({ payload }, { call, put }) {
       if(Object.keys({payload}).length !== 0){
         const response = yield call(createUpgradeCode,{ ...payload });

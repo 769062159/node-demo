@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
-import {Form, Select,Card,Row,Col,Input,DatePicker,Button,Table,message } from 'antd'
+import { Select,Card,Row,Col,Input,DatePicker,Button,Table,message } from 'antd'
 import moment from 'moment';
 import SysModal from './sysModal'
 import {toDateTime} from '../../utils/date'
@@ -31,14 +31,13 @@ class Unlock extends Component {
   }
   handleOk = params => {
     const {dispatch}=this.props
-    const { upgrade_code_type,upgrade_user_id,upgrade_amount,upgrade_remark}= params
+    const { upgrade_user_id,upgrade_amount,upgrade_remark }= params
     let body={
-      code_type:upgrade_code_type,
       user_id:upgrade_user_id,
       amount:upgrade_amount,
       remark:upgrade_remark,
     }
-    if(upgrade_code_type&&upgrade_user_id&&upgrade_amount&&upgrade_remark){
+    if(upgrade_user_id&&upgrade_amount&&upgrade_remark){
       dispatch({
         type:'unlockorupgrade/createUnlockCode',
         payload:body
@@ -46,7 +45,7 @@ class Unlock extends Component {
     }else{
       message.error('字段缺失，请补充完整')
     }
-    this.setState({ visible: false, });
+    this.sysmodal.handleCancel()
   };
   searchMethod=()=>{
     const {dispatch}=this.props
@@ -247,7 +246,7 @@ class Unlock extends Component {
               <Button type='primary' onClick={()=>{}}>导出</Button>
             </Col>
             <Col span={2}>
-              <Button type='primary' onClick={()=>{this.showModal()}}>系统调整</Button>
+              <Button type='primary' onClick={()=>{this.sysmodal.showModal()}}>系统调整</Button>
             </Col>
           </Row>
 
@@ -261,9 +260,8 @@ class Unlock extends Component {
         </Card>
         <SysModal
           type='unlock'
-          visible={this.state.visible}
-          handleOk={(params)=>this.handleOk(params)}
-          handleCancel={this.handleCancel}
+          ref={node=>this.sysmodal=node}
+          unlockHandleOk={(params)=>this.handleOk(params)}
         />
       </PageHeaderLayout>
     );

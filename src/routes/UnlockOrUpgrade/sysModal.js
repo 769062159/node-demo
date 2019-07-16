@@ -1,30 +1,42 @@
 import React, { Component } from 'react';
-import {Modal, Select,Card,Row,Col,Input,DatePicker,Button,Table,Radio,message } from 'antd'
-
+import {Modal, Row,Col,Input,Radio,message } from 'antd'
 import styles from './uou.less'
+import { connect } from 'dva/index';
 
 class SysModal extends Component {
   state={
+    visible:false,
     upgrade_code_type:1,
   }
 
-  onChangeRadio=(e)=>{
+  showModal = () => { this.setState({ visible: true })}
+
+  handleCancel = e => {
     this.setState({
-      upgrade_code_type: e.target.value,
-    });
+      visible: false,
+      upgrade_code_type:1,
+      upgrade_user_id:'',
+      upgrade_amount:'',
+      upgrade_remark:''
+    })
   }
+
+  onChangeRadio=(e)=>{ this.setState({ upgrade_code_type: e.target.value })}
+
   render() {
+    const {type}=this.props
+    const {upgrade_code_type,upgrade_user_id,upgrade_amount,upgrade_remark} = this.state
     return (
       <Modal
-        title='充值升级码'
-        visible={this.props.visible}
-        onOk={()=>this.props.handleOk({
-          upgrade_code_type:this.state.upgrade_code_type,
-          upgrade_user_id:this.state.upgrade_user_id,
-          upgrade_amount:this.state.upgrade_amount,
-          upgrade_remark:this.state.upgrade_remark
+        title={type=='upgrade'?"充值升级码":"充值解锁码"}
+        visible={this.state.visible}
+        onOk={()=>this.props.unlockHandleOk({
+          upgrade_code_type,
+          upgrade_user_id,
+          upgrade_amount,
+          upgrade_remark
         })}
-        onCancel={this.props.handleCancel}
+        onCancel={this.handleCancel}
       >
         {this.props.type=='upgrade'?
           <Row className={styles.rowStyle}>
@@ -66,7 +78,7 @@ class SysModal extends Component {
           <Col span={6} className={styles.labelTitle}>备注：</Col>
           <Col span={18}>
             <Input
-              placeHolder='请输入备注，不超过30个字'
+              placeholder='请输入备注，不超过30个字'
               style={{ width: '100%' }}
               value={this.state.upgrade_remark}
               onChange={(e)=>{this.setState({upgrade_remark:e.target.value})}}/>
