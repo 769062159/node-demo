@@ -1,10 +1,11 @@
 import React, { Component, Fragment } from 'react';
 import { Card, Button, Row, Col, Modal, Form, Select, Input,message,Table } from 'antd';
-import AddNewRules from './addNewRules';
+
 import styles from './uou.less';
 import { connect } from 'dva';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
-const { Search } = Input;
+import GoodsConfig from './goodsConfig';
+
 
 const { Option } = Select;
 const { confirm } = Modal;
@@ -67,16 +68,19 @@ class Config extends Component {
     }
   }
 
-  //选择商品
-  showSelectGoodsModal = () => {
+  /*showSelectGoodsModal = () => {
+
+    this.setState({ selectGoodsStatus: true })
+  }*/
+
+  getGoodsList=(params)=>{
     const {dispatch}=this.props
+    const body={ page_number: 10 }
+    if(params){body.page=params}
     dispatch({
       type: 'goods/fetchGoods',
-      payload: {
-        page_number: 10,
-      },
+      payload: body,
     });
-    this.setState({ selectGoodsStatus: true, })
   }
 
   handleCancel = e => {
@@ -90,14 +94,13 @@ class Config extends Component {
     })
   }
 
-  handleSelectGoodsCancel=e=>{this.setState({ selectGoodsStatus: false, })}
+
 
   componentDidMount(){
     const { dispatch } = this.props;
     dispatch({ type:'unlockorupgrade/getCodeInfo' })
     dispatch({ type:'unlockorupgrade/unlockTypeList' })
     dispatch({ type:'unlockorupgrade/upgradeTypeList' })
-
   }
 
   render() {
@@ -240,7 +243,10 @@ class Config extends Component {
         </Card>
         <Card title="解锁码购买设置" className={styles.cardStyle}>
           <Row>购买指定商品可获得解锁码：</Row>
-          <Button type='primary' onClick={this.showSelectGoodsModal}>选择商品</Button>
+          <Button type='primary' onClick={()=>{
+            this.goodsConfig.showSelectGoodsModal()
+            this.getGoodsList()
+          }}>选择商品</Button>
           <Row>购买指定商品可获得解锁码的商品列表</Row>
           {/*<Row className={styles.goodContent}>
             <Col span={5} className={styles.goodImg}><img src={unlockorupgrade.unlockorupgrade&&unlockorupgrade.unlock_goods} alt=""/></Col>
@@ -249,6 +255,11 @@ class Config extends Component {
               <div className="goodPrice">售价：¥{unlockorupgrade&&unlockorupgrade.unlock_goods}</div>
             </Col>
           </Row>*/}
+          <GoodsConfig
+            ref={node=>this.goodsConfig=node}
+            goods={goods}
+            getGoodsList={(params)=>this.getGoodsList(params)}
+          />
           <Row style={{height:'36px',lineHeight:'36px',marginTop:'10px'}}>
             <Col span={5}>购买该设定的商品的1个库存后，可以获得</Col>
             <Col span={1}><Input defaultValue={unlockorupgrade&&unlockorupgrade.unlock_goods.amount}/></Col>
@@ -361,33 +372,7 @@ class Config extends Component {
             </Fragment>
           }
         </Modal>
-        <Modal
-          visible={this.state.selectGoodsStatus}
-          closable={false}
-          footer={null}
-          onCancel={this.handleSelectGoodsCancel}
-        >
-          <Row className={styles.onlineGoods}>
-            <Col span={4} className={styles.goods}>已上架商品</Col>
-            <Col span={20} className={styles.goods}>
-              <Search
-                placeholder="请输入搜索商品名称"
-                enterButton="搜索"
-                onSearch={value => console.log(value)}
-              />
-            </Col>
-          </Row>
-          {goods.goodsList.map(item=>(
-            <Row className={styles.goodsList} key={item.goods_id}>
-              <Col span={5}><img src={item.img} alt=""/></Col>
-              <Col span={14}>
-                <Row>{item.goods_name}</Row>
-                <Row>售价:￥{item.goods_price}</Row>
-              </Col>
-              <Col span={4}><Button type='primary' style={{float:'right'}}>选取</Button></Col>
-            </Row>
-          ))}
-        </Modal>
+
       </PageHeaderLayout>
     );
   }
