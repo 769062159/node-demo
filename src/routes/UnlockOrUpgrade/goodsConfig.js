@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Card, Button, Row, Col, Modal, Form, Select, Input,message,Table,Pagination } from 'antd';
+import {  Button, Row, Col, Modal,  Input,message,Table,Pagination } from 'antd';
 import styles from './uou.less';
 const { Search } = Input;
 class GoodsConfig extends Component {
@@ -9,10 +9,7 @@ class GoodsConfig extends Component {
   }
   showSelectGoodsModal = () => {this.setState({ selectGoodsStatus: true })}
   handleSelectGoodsCancel=()=>{this.setState({ selectGoodsStatus: false })}
-  //选择商品
-  onShowSizeChange=(current, pageSize)=> {
-    console.log(current, pageSize);
-  }
+
   render() {
     const columns = [
       {
@@ -78,16 +75,6 @@ class GoodsConfig extends Component {
             this.props.getGoodsList(page)
           }}
         />
-        {/*{goods.goodsList.map(item=>(
-          <Row className={styles.goodsList} key={item.goods_id}>
-            <Col span={5}><img src={item.img} alt=""/></Col>
-            <Col span={14}>
-              <Row>{item.goods_name}</Row>
-              <Row>售价:￥{item.goods_price}</Row>
-            </Col>
-            <Col span={4}><Button type='primary' style={{float:'right'}}>选取</Button></Col>
-          </Row>
-        ))}*/}
       </Modal>
     );
   }
