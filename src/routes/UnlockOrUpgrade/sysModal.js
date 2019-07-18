@@ -30,12 +30,22 @@ class SysModal extends Component {
       <Modal
         title={type=='upgrade'?"充值升级码":"充值解锁码"}
         visible={this.state.visible}
-        onOk={()=>this.props.unlockHandleOk({
-          upgrade_code_type,
-          upgrade_user_id,
-          upgrade_amount,
-          upgrade_remark
-        })}
+        onOk={()=>{
+          if(this.props.type=='unlock'){
+            this.props.unlockHandleOk({
+              upgrade_user_id,
+              upgrade_amount,
+              upgrade_remark
+            })
+          }else{
+            this.props.handleOk({
+              upgrade_code_type,
+              upgrade_user_id,
+              upgrade_amount,
+              upgrade_remark
+            })
+          }
+        }}
         onCancel={this.handleCancel}
       >
         {this.props.type=='upgrade'?
