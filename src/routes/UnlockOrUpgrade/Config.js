@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { Card, Button, Row, Col, Modal, Form, Select, Input,message,Table } from 'antd';
-
+import '../../utils/emptyUtils'
 import styles from './uou.less';
 import { connect } from 'dva';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
@@ -248,23 +248,34 @@ class Config extends Component {
             this.getGoodsList()
           }}>选择商品</Button>
           <Row>购买指定商品可获得解锁码的商品列表</Row>
-          {/*<Row className={styles.goodContent}>
-            <Col span={5} className={styles.goodImg}><img src={unlockorupgrade.unlockorupgrade&&unlockorupgrade.unlock_goods} alt=""/></Col>
-            <Col span={10} className={styles.goodText}>
-              <div className="goodName">{unlockorupgrade&&unlockorupgrade.unlock_goods}</div>
-              <div className="goodPrice">售价：¥{unlockorupgrade&&unlockorupgrade.unlock_goods}</div>
-            </Col>
-          </Row>*/}
+          {unlockorupgrade.unlock_goods.goods&&[unlockorupgrade.unlock_goods.goods].map(item=>(
+            <div  key={item.img}>
+              <Row className={styles.goodContent} >
+                <Col span={5} className={styles.goodImg}>
+                  <img src={item.img} alt=""/>
+                </Col>
+                <Col span={10} className={styles.goodText}>
+                  <div className="goodName">{item.name}</div>
+                  <div className="goodPrice">售价：¥{item.price}</div>
+                </Col>
+              </Row>
+
+            </div>
+          ))
+          }
+          <Row style={{height:'36px',lineHeight:'36px',marginTop:'10px'}}>
+            <div style={{display:'flex',flexWrap:'nowrap'}}>
+              <div className="text">购买该设定的商品的1个库存后，可以获得</div>
+              <div><Input style={{width:'200px'}} defaultValue={unlockorupgrade.unlock_goods&&unlockorupgrade.unlock_goods.amount}/></div>
+              <div className="text">个解锁码</div>
+            </div>
+          </Row>
           <GoodsConfig
             ref={node=>this.goodsConfig=node}
             goods={goods}
             getGoodsList={(params)=>this.getGoodsList(params)}
           />
-          <Row style={{height:'36px',lineHeight:'36px',marginTop:'10px'}}>
-            <Col span={5}>购买该设定的商品的1个库存后，可以获得</Col>
-            <Col span={1}><Input defaultValue={unlockorupgrade&&unlockorupgrade.unlock_goods.amount}/></Col>
-            <Col span={18}>个解锁码</Col>
-          </Row>
+
         </Card>
         <Card title="升级码赠送设置" className={styles.cardStyle}>
           <Button type='primary' onClick={()=>this.showModal(1)}>新建升级码赠送规则</Button>

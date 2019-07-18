@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {  Button, Row, Col, Modal,  Input,message,Table,Pagination } from 'antd';
 import styles from './uou.less';
 const { Search } = Input;
+
 class GoodsConfig extends Component {
   state = {
     selectGoodsStatus:false,
