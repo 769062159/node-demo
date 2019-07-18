@@ -22,6 +22,19 @@ class Config extends Component {
       modalStatus:value
     })
   }
+  //选择商品
+  selectGoods=(record)=> {
+
+    const body={
+      goods_id:record.goods_id,
+    }
+    const {dispatch} = this.props
+    dispatch({
+      type:'unlockorupgrade/setUnlockGoods',
+      payload:body
+    })
+    this.goodsConfig.handleSelectGoodsCancel()
+  }
 
   handleOk = e => {
     const {modalStatus}=this.state
@@ -101,6 +114,12 @@ class Config extends Component {
     dispatch({ type:'unlockorupgrade/getCodeInfo' })
     dispatch({ type:'unlockorupgrade/unlockTypeList' })
     dispatch({ type:'unlockorupgrade/upgradeTypeList' })
+  }
+
+  componentWillReceiveProps(nextProps){
+    this.setState({
+      goods_amount:nextProps.unlockorupgrade.unlock_goods.amount
+    })
   }
 
   render() {
@@ -241,6 +260,8 @@ class Config extends Component {
             }}
           />
         </Card>
+
+
         <Card title="解锁码购买设置" className={styles.cardStyle}>
           <Row>购买指定商品可获得解锁码：</Row>
           <Button type='primary' onClick={()=>{
@@ -255,28 +276,61 @@ class Config extends Component {
                   <img src={item.img} alt=""/>
                 </Col>
                 <Col span={10} className={styles.goodText}>
-                  <div className="goodName">{item.name}</div>
-                  <div className="goodPrice">售价：¥{item.price}</div>
+                  <div className={styles.goodName}>{item.name}</div>
+                  <div className={styles.goodPrice}>售价：¥{item.price}</div>
                 </Col>
               </Row>
 
             </div>
           ))
           }
-          <Row style={{height:'36px',lineHeight:'36px',marginTop:'10px'}}>
-            <div style={{display:'flex',flexWrap:'nowrap'}}>
-              <div className="text">购买该设定的商品的1个库存后，可以获得</div>
-              <div><Input style={{width:'200px'}} defaultValue={unlockorupgrade.unlock_goods&&unlockorupgrade.unlock_goods.amount}/></div>
-              <div className="text">个解锁码</div>
-            </div>
-          </Row>
+          {unlockorupgrade.unlock_goods&&[unlockorupgrade.unlock_goods].map((item,index)=>(
+            <Row className={styles.selectGoods} key={index}>
+              <div style={{display:'flex',flexWrap:'nowrap'}}>
+                <div className={styles.text}>购买该设定的商品的1个库存后，可以获得</div>
+                <div>
+                  <Input
+                    style={{width:'200px'}}
+
+                    value={this.state.goods_amount}
+                    onChange={(e)=>this.setState({goods_amount:e.target.value})}
+                    onPressEnter={()=>{
+                      const _this=this
+                      confirm({
+                        content: '你确定修改对应商品解锁码数量？',
+                        okText: '确定',
+                        okType: 'danger',
+                        cancelText: '取消',
+                        onOk() {
+                          const {dispatch}=_this.props
+                          if(_this.state.goods_amount){
+                            dispatch({
+                              type:'unlockorupgrade/setUnlockGoods',
+                              payload:{amount:_this.state.goods_amount}
+                            })
+                          }
+                        }
+                      });
+                    }}
+                  />
+                </div>
+                <div className={styles.text}>个解锁码</div>
+              </div>
+            </Row>
+          ))}
+
+
           <GoodsConfig
             ref={node=>this.goodsConfig=node}
             goods={goods}
             getGoodsList={(params)=>this.getGoodsList(params)}
+            selectGoods={(record)=>{this.selectGoods(record)}}
           />
 
         </Card>
+
+
+
         <Card title="升级码赠送设置" className={styles.cardStyle}>
           <Button type='primary' onClick={()=>this.showModal(1)}>新建升级码赠送规则</Button>
           <Table

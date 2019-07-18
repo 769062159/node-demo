@@ -17,13 +17,7 @@
     }
   }
 }
-.goodContent{
-  border: 1px solid #e5e5e5;
-  .goodImg{
-    width: 100px;
-    height: 100px;
-  }
-}
+
 
 
 .addRulesModal{
@@ -80,6 +74,29 @@
 
 .cardStyle{
   margin-bottom: 20px;
+
+  .goodContent{
+    border: 1px solid #e5e5e5;
+    height: 100px;
+    position: relative;
+    .goodImg{
+      width: 100px;
+      height: 100px;
+      margin-right: 20px;
+      &>img{
+        width: 100px;
+        height: 100px;
+      }
+    }
+    .goodName{
+      font-size: 16px;
+      max-width: 260px;
+    }
+    .goodPrice{
+      font-size: 12px;
+    }
+  }
+
 }
 
 .rowStyle{
@@ -90,4 +107,13 @@
     white-space: nowrap;
   }
 }
+.selectGoods{
+  height:36px;
+  line-height:36px;
+  margin-top:10px;
+  .text{
+    white-space: nowrap;
+  }
+}
+
 

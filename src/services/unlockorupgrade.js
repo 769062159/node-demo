@@ -24,7 +24,7 @@ export async function setUpgradeCode(params) {
 
 // 设置解锁码商品配置
 export async function setUnlockGoods(params) {
-  return request('/merchant/unlock-code/goods/set', {
+  return request('/merchant/code-config/unlock-code/goods/set', {
     method: 'POST',
     body: params,
   });

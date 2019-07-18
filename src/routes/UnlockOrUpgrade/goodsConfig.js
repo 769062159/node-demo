@@ -19,7 +19,7 @@ class GoodsConfig extends Component {
         key: 'img',
         width:150,
         render:(text)=>(
-          <img src={text} style={{width:'60px',height:'60px'}} alt=""/>
+          <img src={text} style={{width:'80px',height:'80px'}} alt=""/>
         )
       },
       {
@@ -38,8 +38,8 @@ class GoodsConfig extends Component {
       {
         title: '操作',
         key: 'action',
-        render:()=>(
-          <Button type='primary'>选取</Button>
+        render:(record)=>(
+          <Button type='primary' onClick={()=>this.props.selectGoods(record)}>选取</Button>
         )
       },
     ];

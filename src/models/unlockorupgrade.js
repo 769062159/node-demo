@@ -24,12 +24,14 @@ export default {
         const response = yield call(setUnlockGoods,{ ...payload });
         if(response && response.code===200){
           message.success('操作成功！')
+          const response = yield call(getCodeInfo,{ ...payload });
           if(response && response.code===200){
-            /*yield put({
-              type: 'getUnlockChangedList',
+            yield put({
+              type: 'getCodeConfigInfo',
               payload: response,
-            });*/
+            });
           }
+
         }else{
           message.error(response.message)
         }
