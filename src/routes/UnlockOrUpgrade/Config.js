@@ -24,7 +24,6 @@ class Config extends Component {
   }
   //选择商品
   selectGoods=(record)=> {
-
     const body={
       goods_id:record.goods_id,
     }
@@ -80,21 +79,20 @@ class Config extends Component {
       return false
     }
   }
-
-  /*showSelectGoodsModal = () => {
-
-    this.setState({ selectGoodsStatus: true })
-  }*/
-
-  getGoodsList=(params)=>{
+  //获取商品列表
+  getGoodsList=(page,value)=>{
     const {dispatch}=this.props
     const body={ page_number: 10 }
-    if(params){body.page=params}
+    if(page){body.page=page}
+    if(value){body.goods_name=value}
     dispatch({
       type: 'goods/fetchGoods',
       payload: body,
     });
   }
+
+
+
 
   handleCancel = e => {
     this.setState({
@@ -117,9 +115,7 @@ class Config extends Component {
   }
 
   componentWillReceiveProps(nextProps){
-    this.setState({
-      goods_amount:nextProps.unlockorupgrade.unlock_goods.amount
-    })
+    this.setState({ goods_amount:nextProps.unlockorupgrade.unlock_goods.amount })
   }
 
   render() {
@@ -323,7 +319,7 @@ class Config extends Component {
           <GoodsConfig
             ref={node=>this.goodsConfig=node}
             goods={goods}
-            getGoodsList={(params)=>this.getGoodsList(params)}
+            getGoodsList={(page,name)=>this.getGoodsList(page,name)}
             selectGoods={(record)=>{this.selectGoods(record)}}
           />
 

@@ -69,6 +69,7 @@ class Upgrade extends Component {
   componentDidMount(){
     const {dispatch}=this.props
     dispatch({ type:'unlockorupgrade/getUpgradeChangeList'})
+    dispatch({ type: 'frontUser/fetchFrontUserList' });
   }
   render() {
     const {unlockorupgrade} =this.props
@@ -107,6 +108,9 @@ class Upgrade extends Component {
         title: '涉及升级码数量',
         dataIndex: 'amount',
         key: 'amount',
+        render:(text)=>(
+          <div>{text}</div>
+        )
       },
       {
         title: '剩余升级码数量',
@@ -118,7 +122,7 @@ class Upgrade extends Component {
         dataIndex: 'time',
         key: 'time',
         render:(text)=>{
-          return toDateTime(text)
+          return toDateTime(text*1000)
         }
       },
       {
@@ -268,13 +272,32 @@ class Upgrade extends Component {
           ref={node=>this.sysmodal=node}
           type='upgrade'
           handleOk={(params)=>this.handleOk(params)}
+          showUserInfo={(id)=>{this.showUserInfo(id)}}
+          frontUserList={this.props.frontUser.frontUserList}
+          // getDefaultList={this.props.frontUser.getDefaultList}
         />
+
       </PageHeaderLayout>
 
     );
   }
+
+  showUserInfo=(id)=>{
+    const {dispatch}=this.props
+    const body={
+      user_id:id,
+      page:1
+    }
+
+    dispatch({
+      type: 'frontUser/fetchFrontUserList',
+      payload: body,
+    });
+
+  }
 }
 
-export default connect(({ unlockorupgrade })=>({
+export default connect(({ frontUser,unlockorupgrade })=>({
   unlockorupgrade,
+  frontUser,
 }))(Upgrade);

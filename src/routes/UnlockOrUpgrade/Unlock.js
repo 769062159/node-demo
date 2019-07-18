@@ -47,7 +47,7 @@ class Unlock extends Component {
     }
     this.sysmodal.handleCancel()
   };
-  searchMethod=()=>{
+  searchMethod=(type)=>{
     const {dispatch}=this.props
     const {search_type,search_input,code_type,action_type,source,openTime}=this.state
     let body={}
@@ -58,7 +58,13 @@ class Unlock extends Component {
     if(action_type){ body.action_type=action_type }
     if(source){ body.source=source }
     if(openTime.length){ body.openTime=openTime }
-
+    if(type=='export'){
+      dispatch({
+        type:'unlockorupgrade/exportUnlockCode',
+        payload:body
+      })
+      return
+    }
     dispatch({
       type:'unlockorupgrade/getUnlockChangeList',
       payload:body
@@ -79,6 +85,7 @@ class Unlock extends Component {
   componentDidMount(){
     const {dispatch}=this.props
     dispatch({ type:'unlockorupgrade/getUnlockChangeList'})
+    dispatch({ type: 'frontUser/fetchFrontUserList' });
   }
   render() {
     const {unlockorupgrade} =this.props
@@ -125,7 +132,7 @@ class Unlock extends Component {
         dataIndex: 'time',
         key: 'time',
         render:(text)=>{
-          return toDateTime(text)
+          return toDateTime(text*1000)
         }
       },
       {
@@ -190,10 +197,8 @@ class Unlock extends Component {
             <Col span={2} className={styles.labelTitle}>发生时间：</Col>
             <Col span={10}>
               <RangePicker
-                value={moment[this.state.openTime]}
                 onChange={(value,dateStrings)=>{
                   this.setState({openTime:dateStrings},()=>{console.log(this.state.openTime)})
-
                 }}/>
             </Col>
           </Row>
@@ -243,7 +248,7 @@ class Unlock extends Component {
               <Button type='primary' onClick={()=>{this.searchMethod()}}>搜索</Button>
             </Col>
             <Col span={2}>
-              <Button type='primary' onClick={()=>{}}>导出</Button>
+              <Button type='primary' onClick={()=>{this.searchMethod('export')}}>导出</Button>
             </Col>
             <Col span={2}>
               <Button type='primary' onClick={()=>{this.sysmodal.showModal()}}>系统调整</Button>
@@ -262,12 +267,28 @@ class Unlock extends Component {
           type='unlock'
           ref={node=>this.sysmodal=node}
           unlockHandleOk={(params)=>this.handleOk(params)}
+          showUserInfo={(id)=>{this.showUserInfo(id)}}
+          frontUserList={this.props.frontUser.frontUserList}
         />
       </PageHeaderLayout>
     );
   }
+  showUserInfo=(id)=>{
+    const {dispatch}=this.props
+    const body={
+      user_id:id,
+      page:1
+    }
+
+    dispatch({
+      type: 'frontUser/fetchFrontUserList',
+      payload: body,
+    });
+
+  }
 }
 
-export default connect(({ unlockorupgrade })=>({
+export default connect(({ unlockorupgrade, frontUser})=>({
   unlockorupgrade,
+  frontUser
 }))(Unlock);

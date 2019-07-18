@@ -4,7 +4,8 @@ import {
   getUnlockTypeList, getUpgradeTypeList,
   getUpgradeChangeList, getUnlockChangeList,
   createUpgradeCode,createUnlockCode,
-  setUnlockGoods
+  setUnlockGoods,
+  exportUpgradeCode,exportUnlockCode,
 } from '../services/unlockorupgrade';
 import {message} from 'antd'
 export default {
@@ -19,6 +20,21 @@ export default {
     unlockChangeList:[]
   },
   effects: {
+    *exportUnlockCode({ payload }, { call, put }) {
+      if(Object.keys({payload}).length !== 0){
+        const response = yield call(exportUnlockCode,{ ...payload });
+        if(response && response.code===200){
+          message.success('操作成功！')
+          /*const response = yield call(getCodeInfo,{ ...payload });
+          if(response && response.code===200){
+            yield put({
+              type: 'getCodeConfigInfo',
+              payload: response,
+            });
+          }*/
+        }
+      }
+    },
     *setUnlockGoods({ payload }, { call, put }) {
       if(Object.keys({payload}).length !== 0){
         const response = yield call(setUnlockGoods,{ ...payload });

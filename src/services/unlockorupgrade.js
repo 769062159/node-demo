@@ -75,3 +75,19 @@ export async function createUnlockCode(params) {
     body:params
   });
 }
+
+//获取解锁码导出记录
+export async function exportUnlockCode(params) {
+  return request('/merchant/code-config/unlock-code/record/export/key', {
+    method: 'POST',
+    body:params
+  });
+}
+
+//获取升级码导出记录
+export async function exportUpgradeCode(params) {
+  return request('/merchant/code-config/upgrade-code/record/export/key', {
+    method: 'POST',
+    body:params
+  });
+}

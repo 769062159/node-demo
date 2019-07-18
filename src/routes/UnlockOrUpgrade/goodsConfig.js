@@ -57,7 +57,9 @@ class GoodsConfig extends Component {
             <Search
               placeholder="请输入搜索商品名称"
               enterButton="搜索"
-              onSearch={value => console.log(value)}
+              onSearch={value => {
+                this.props.getGoodsList(1,value)
+              }}
             />
           </Col>
         </Row>

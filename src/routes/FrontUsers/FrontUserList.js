@@ -1,6 +1,7 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
 import moment from 'moment';
+import {toDate} from '../../utils/date'
 import {
   Table,
   Card,
@@ -770,6 +771,7 @@ export default class FrontUserList extends PureComponent {
         title: '会员',
         dataIndex: 'avatar',
         render: (val, text) => (
+
           // <Row style={{ width: 500 }}>
           //   <Col span={4}>
           //     <img style={{ height: 80, width: 80 }} src={val} alt="头像" />
@@ -790,6 +792,8 @@ export default class FrontUserList extends PureComponent {
               <div>版本:{LevelName[Number(text.has_account ? text.has_account.permission : 0)]}</div>
               <div className={styles.superior} onClick={this.searchMsg.bind(this, text.referee)} >上级:{text.referee && text.referee.nickname}</div>
               <div>手机号码:{text.mobile}</div>
+              <div>关系到期时间:{toDate(text.lost_time)}</div>
+              <div>关系状态:{text.lost?'已过期':'正常'}</div>
             </div>
           </div>
         ),
