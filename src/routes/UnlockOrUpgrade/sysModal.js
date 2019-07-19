@@ -1,7 +1,7 @@
 import React, { Component ,Fragment} from 'react';
 import {Modal, Row,Col,Input,Radio,message } from 'antd'
 import styles from './uou.less'
-
+import '../../utils/emptyUtils'
 class SysModal extends Component {
   state={
     visible:false,
@@ -85,51 +85,25 @@ class SysModal extends Component {
 
           </Col>
         </Row>
-        {this.props.frontUserList.length===1&&this.state.upgrade_user_id?
+
+        {empty.check(this.props.userInfo.user)&&this.state.upgrade_user_id==this.props.userInfo.user.fake_id?
           <Fragment>
             <Row className={styles.rowStyle1}>
               <Col span={6} className={styles.labelTitle}></Col>
-              {this.props.frontUserList.map(item=>(
-                <Col span={18} key={item.id} className={styles.labelText}>
-                  用户ID：{item.nickname}
+                <Col span={18}  className={styles.labelText}>
+                  用户昵称：{empty.check(this.props.userInfo.user)?this.props.userInfo.user.nickname:'无此用户'}
                 </Col>
-              ))}
             </Row>
             <Row className={styles.rowStyle1}>
               <Col span={6} className={styles.labelTitle}></Col>
-              {this.props.frontUserList.map(item=>(
-                <Col span={18} key={item.id} className={styles.labelText}>
-                  用户剩余解锁码数量(个)：{item.nickname}
+                <Col span={18}  className={styles.labelText}>
+                  用户剩余解锁码数量(个)：{empty.check(this.props.userInfo.account)?this.props.userInfo.account.unlock_code_amount:'无此信息'}
                 </Col>
-              ))}
             </Row>
           </Fragment>
           :
           null
         }
-
-        {/*{this.props.getDefaultList&&this.state.upgrade_user_id?
-          <Fragment>
-            <Row className={styles.rowStyle1}>
-              <Col span={6} className={styles.labelTitle}></Col>
-              {this.state.expList.map(item=>(
-                <Col span={18} key={item.id} className={styles.labelText}>
-                  用户ID：{item.nickname}
-                </Col>
-              ))}
-            </Row>
-            <Row className={styles.rowStyle1}>
-              <Col span={6} className={styles.labelTitle}></Col>
-              {this.state.expList.map(item=>(
-                <Col span={18} key={item.id} className={styles.labelText}>
-                  用户剩余解锁码数量(个)：{item.nickname}
-                </Col>
-              ))}
-            </Row>
-          </Fragment>
-          :
-          null
-        }*/}
 
         <Row className={styles.rowStyle}>
           <Col span={6} className={styles.labelTitle}>请输入调整数量：</Col>
@@ -162,33 +136,7 @@ class SysModal extends Component {
       </Modal>
     );
   }
-  /*selectUserId=(e)=> {
-    let {expList, expSelectList} = this.state
-    const value = e.target.value.replace(/\s+/g, '').toUpperCase()
 
-      expSelectList.length = 0//清空列表
-      if (expBox.length === 0) {
-        expBox = expList //将原本的列表保存起来
-      }
-    console.log(value,expBox,'-------------')
-      // 每次输入关键字时先清空列表，并更新列表
-      if (value.length > 0) {
-        const reg = new RegExp(value)
-        expBox.map(v => {
-          if (PinyinMatch.match(v.id.toString().toUpperCase(), value.toString()) || reg.test(v.num)) {
-            expSelectList.push(v)
-          }
-        })
-      }
-      if (expSelectList.length === 0) {//如果没有查询到，将原来的列表填充到页面
-        this.setState({
-          expList: value ? [] : expBox
-        })
-      } else {
-        this.setState({expList: expSelectList})
-      }
-
-  }*/
 }
 
 export default SysModal;

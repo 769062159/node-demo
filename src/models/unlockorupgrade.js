@@ -4,7 +4,7 @@ import {
   getUnlockTypeList, getUpgradeTypeList,
   getUpgradeChangeList, getUnlockChangeList,
   createUpgradeCode,createUnlockCode,
-  setUnlockGoods,
+  setUnlockGoods,getAcount,
   exportUpgradeCode,exportUnlockCode,
 } from '../services/unlockorupgrade';
 import {message} from 'antd'
@@ -17,23 +17,45 @@ export default {
     unlockTypeList:[],
     upgradeTypeList:[],
     upgradeChangeList:[],
-    unlockChangeList:[]
+    unlockChangeList:[],
+    userInfo:{},
+    exportUnlockUrl:''
   },
   effects: {
+    *getAcount({ payload }, { call, put }) {
+      if(Object.keys(payload).length !== 0){
+        const response = yield call(getAcount,{ ...payload });
+        if(response ){
+          yield put({
+            type: 'getedAcount',
+            payload: response,
+          });
+        }
+      }
+    },
+    *exportUpgradeCode({ payload }, { call, put }) {
+      const response = yield call(exportUpgradeCode,{ ...payload });
+      if(response && response.code===200){
+        // message.success('操作成功！')
+        const w=window.open('about:blank');
+        w.location.href=response.data.export_url
+        /*yield put({
+          type: 'exportedUpgradeCode',
+          payload: response,
+        });*/
+      }
+    },
     *exportUnlockCode({ payload }, { call, put }) {
-      if(Object.keys({payload}).length !== 0){
         const response = yield call(exportUnlockCode,{ ...payload });
         if(response && response.code===200){
           message.success('操作成功！')
-          /*const response = yield call(getCodeInfo,{ ...payload });
-          if(response && response.code===200){
-            yield put({
-              type: 'getCodeConfigInfo',
-              payload: response,
-            });
-          }*/
+          const w=window.open('about:blank');
+          w.location.href=response.data.export_url
+          /*yield put({
+            type: 'exportedUnlockCode',
+            payload: response,
+          });*/
         }
-      }
     },
     *setUnlockGoods({ payload }, { call, put }) {
       if(Object.keys({payload}).length !== 0){
@@ -166,6 +188,27 @@ export default {
     },
   },
   reducers: {
+    exportedUpgradeCode(state, { payload }) {
+      const { data } = payload;
+      return {
+        ...state,
+        exportUpgradeUrl: data.export_url,
+      }
+    },
+    exportedUnlockCode(state, { payload }) {
+      const { data } = payload;
+      return {
+        ...state,
+        exportUnlockUrl: data.export_url,
+      }
+    },
+    getedAcount(state, { payload }) {
+      const { data } = payload;
+      return {
+        ...state,
+        userInfo: data,
+      }
+    },
     getUnlockChangedList(state, { payload }) {
       const { data } = payload;
       return {

@@ -250,8 +250,7 @@ class Config extends Component {
                     temporary_unlock_type:record.type,
                     temporary_unlock_number:record.amount
                   })
-                  console.log(record)
-                }, // 点击行
+                },
               };
             }}
           />

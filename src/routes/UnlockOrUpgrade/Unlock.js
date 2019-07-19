@@ -48,7 +48,7 @@ class Unlock extends Component {
     this.sysmodal.handleCancel()
   };
   searchMethod=(type)=>{
-    const {dispatch}=this.props
+    const {dispatch,unlockorupgrade}=this.props
     const {search_type,search_input,code_type,action_type,source,openTime}=this.state
     let body={}
     if(search_type&&search_input) { body[search_type] = search_input }else{
@@ -63,6 +63,7 @@ class Unlock extends Component {
         type:'unlockorupgrade/exportUnlockCode',
         payload:body
       })
+
       return
     }
     dispatch({
@@ -71,6 +72,7 @@ class Unlock extends Component {
     })
     this.clearData()
   }
+
   clearData=()=>{
     this.setState({
       search_type:0,
@@ -85,7 +87,7 @@ class Unlock extends Component {
   componentDidMount(){
     const {dispatch}=this.props
     dispatch({ type:'unlockorupgrade/getUnlockChangeList'})
-    dispatch({ type: 'frontUser/fetchFrontUserList' });
+    // dispatch({ type: 'unlockorupgrade/fetchFrontUserList' });
   }
   render() {
     const {unlockorupgrade} =this.props
@@ -248,7 +250,10 @@ class Unlock extends Component {
               <Button type='primary' onClick={()=>{this.searchMethod()}}>搜索</Button>
             </Col>
             <Col span={2}>
-              <Button type='primary' onClick={()=>{this.searchMethod('export')}}>导出</Button>
+              <Button type='primary' onClick={()=>{
+                this.searchMethod('export')
+                // this.props.history.push('/download')
+              }}>导出</Button>
             </Col>
             <Col span={2}>
               <Button type='primary' onClick={()=>{this.sysmodal.showModal()}}>系统调整</Button>
@@ -268,23 +273,18 @@ class Unlock extends Component {
           ref={node=>this.sysmodal=node}
           unlockHandleOk={(params)=>this.handleOk(params)}
           showUserInfo={(id)=>{this.showUserInfo(id)}}
-          frontUserList={this.props.frontUser.frontUserList}
+          userInfo={this.props.unlockorupgrade.userInfo}
         />
       </PageHeaderLayout>
     );
   }
   showUserInfo=(id)=>{
     const {dispatch}=this.props
-    const body={
-      user_id:id,
-      page:1
-    }
-
+    const body={ user_id:id }
     dispatch({
-      type: 'frontUser/fetchFrontUserList',
+      type: 'unlockorupgrade/getAcount',
       payload: body,
     });
-
   }
 }
 

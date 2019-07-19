@@ -40,7 +40,7 @@ class Upgrade extends Component {
     }
     this.sysmodal.handleCancel()
   };
-  searchMethod=()=>{
+  searchMethod=(type)=>{
     const {dispatch}=this.props
     const {search_type,search_input,code_type,action_type,source,openTime}=this.state
     let body={}
@@ -49,7 +49,13 @@ class Upgrade extends Component {
     if(action_type){ body.action_type=action_type }
     if(source){ body.source=source }
     if(openTime.length){ body.openTime=openTime }
-
+    if(type=='export'){
+      dispatch({
+        type:'unlockorupgrade/exportUpgradeCode',
+        payload:body
+      })
+      return
+    }
     dispatch({
       type:'unlockorupgrade/getUpgradeChangeList',
       payload:body
@@ -251,7 +257,7 @@ class Upgrade extends Component {
                 <Button type='primary' onClick={()=>{this.searchMethod()}}>搜索</Button>
               </Col>
               <Col span={2}>
-                <Button type='primary' onClick={()=>{}}>导出</Button>
+                <Button type='primary' onClick={()=>{this.searchMethod('export')}}>导出</Button>
               </Col>
               <Col span={2}>
                 <Button type='primary' onClick={()=>{
@@ -273,7 +279,7 @@ class Upgrade extends Component {
           type='upgrade'
           handleOk={(params)=>this.handleOk(params)}
           showUserInfo={(id)=>{this.showUserInfo(id)}}
-          frontUserList={this.props.frontUser.frontUserList}
+          userInfo={this.props.unlockorupgrade.userInfo}
           // getDefaultList={this.props.frontUser.getDefaultList}
         />
 
@@ -284,20 +290,14 @@ class Upgrade extends Component {
 
   showUserInfo=(id)=>{
     const {dispatch}=this.props
-    const body={
-      user_id:id,
-      page:1
-    }
-
+    const body={ user_id:id }
     dispatch({
-      type: 'frontUser/fetchFrontUserList',
+      type: 'unlockorupgrade/getAcount',
       payload: body,
     });
-
   }
 }
 
-export default connect(({ frontUser,unlockorupgrade })=>({
+export default connect(({ unlockorupgrade })=>({
   unlockorupgrade,
-  frontUser,
 }))(Upgrade);

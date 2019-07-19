@@ -91,3 +91,10 @@ export async function exportUpgradeCode(params) {
     body:params
   });
 }
+
+//获取用户账户信息
+export async function getAcount(params) {
+  return request('/merchant/code-config/account?user_id='+params.user_id, {
+    method: 'GET'
+  });
+}
