@@ -57,19 +57,22 @@ class Unlock extends Component {
     if(code_type){ body.code_type=code_type }
     if(action_type){ body.action_type=action_type }
     if(source){ body.source=source }
-    if(openTime.length){ body.openTime=openTime }
+    if(openTime.length){
+      // body.openTime=openTime
+      body.start=openTime[0]
+      body.end=openTime[1]
+    }
     if(type=='export'){
       dispatch({
         type:'unlockorupgrade/exportUnlockCode',
         payload:body
       })
-
-      return
+    }else {
+      dispatch({
+        type:'unlockorupgrade/getUnlockChangeList',
+        payload:body
+      })
     }
-    dispatch({
-      type:'unlockorupgrade/getUnlockChangeList',
-      payload:body
-    })
     this.clearData()
   }
 
@@ -111,18 +114,27 @@ class Unlock extends Component {
       },
       {
         title: '业务类型',
-        dataIndex: 'code_type',
-        key: 'code_type'
+        dataIndex: 'source',
+        key: 'source',
+        render:(text)=>{
+          return <div>{text.value}</div>
+        }
       },
       {
-        title: '用户身份版本',
-        dataIndex: 'action_type',
+        title: '操作类型',
+        dataIndex: 'data',
         key: 'action_type',
+        render:(text)=>(
+          <div style={{textAlign:'center'}}>{text.type==1?'收入':'支出'}</div>
+        )
       },
       {
-        title: '涉及升级码数量',
-        dataIndex: 'amount',
-        key: 'amount',
+        title: '涉及解锁码数量',
+        dataIndex: 'data',
+        key: 'data',
+        render:(text)=>(
+          <div style={{textAlign:'center'}}>{text.type==1?'+':'-'}{text.amount}</div>
+        )
       },
       {
         title: '剩余升级码数量',
@@ -199,8 +211,9 @@ class Unlock extends Component {
             <Col span={2} className={styles.labelTitle}>发生时间：</Col>
             <Col span={10}>
               <RangePicker
+                format="YYYY-MM-DD HH:mm:ss"
                 onChange={(value,dateStrings)=>{
-                  this.setState({openTime:dateStrings},()=>{console.log(this.state.openTime)})
+                  this.setState({openTime:dateStrings})
                 }}/>
             </Col>
           </Row>

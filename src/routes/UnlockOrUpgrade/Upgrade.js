@@ -48,18 +48,22 @@ class Upgrade extends Component {
     if(code_type){ body.code_type=code_type }
     if(action_type){ body.action_type=action_type }
     if(source){ body.source=source }
-    if(openTime.length){ body.openTime=openTime }
+    if(openTime.length){
+      // body.openTime=openTime
+      body.start=openTime[0]
+      body.end=openTime[1]
+    }
     if(type=='export'){
       dispatch({
         type:'unlockorupgrade/exportUpgradeCode',
         payload:body
       })
-      return
+    }else{
+      dispatch({
+        type:'unlockorupgrade/getUpgradeChangeList',
+        payload:body
+      })
     }
-    dispatch({
-      type:'unlockorupgrade/getUpgradeChangeList',
-      payload:body
-    })
     this.clearData()
   }
   clearData=()=>{
@@ -106,16 +110,27 @@ class Upgrade extends Component {
         }
       },
       {
-        title: '用户身份版本',
-        dataIndex: 'action_type',
-        key: 'action_type',
+        title: '操作类型',
+        dataIndex: 'data',
+        key: 'type',
+        render:(text)=>(
+          <div style={{textAlign:'center'}}>{text.type==1?'收入':'支出'}</div>
+        )
+      },
+      {
+        title: '操作来源',
+        dataIndex: 'source',
+        key: 'source',
+        render:(text)=>(
+          <div style={{textAlign:'center'}}>{text.value}</div>
+        )
       },
       {
         title: '涉及升级码数量',
-        dataIndex: 'amount',
-        key: 'amount',
+        dataIndex: 'data',
+        key: 'data',
         render:(text)=>(
-          <div>{text}</div>
+          <div style={{textAlign:'center'}}>{text.type==1?'+':'-'}{text.amount}</div>
         )
       },
       {
@@ -193,9 +208,11 @@ class Upgrade extends Component {
               <Col span={2} className={styles.labelTitle}>发生时间：</Col>
               <Col span={10}>
                  <RangePicker
+                   format="YYYY-MM-DD HH:mm:ss"
                    onChange={(value,dateStrings)=>{
-                   this.setState({openTime:dateStrings})
-                 }}/>
+                      this.setState({openTime:dateStrings})
+                   }}
+                 />
               </Col>
             </Row>
             <Row className={styles.rowStyle}>
@@ -280,7 +297,6 @@ class Upgrade extends Component {
           handleOk={(params)=>this.handleOk(params)}
           showUserInfo={(id)=>{this.showUserInfo(id)}}
           userInfo={this.props.unlockorupgrade.userInfo}
-          // getDefaultList={this.props.frontUser.getDefaultList}
         />
 
       </PageHeaderLayout>
