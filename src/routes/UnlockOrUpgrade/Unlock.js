@@ -113,6 +113,18 @@ class Unlock extends Component {
         }
       },
       {
+        title: '用户身份/运营中心',
+        dataIndex: 'permission',
+        key: 'permission',
+        render:(text)=>{
+          if(text.operate.key==0){
+            return <div>{text.permission.value}</div>
+          }else{
+            return <div>{text.operate.value}</div>
+          }
+        }
+      },
+      {
         title: '业务类型',
         dataIndex: 'source',
         key: 'source',
@@ -125,7 +137,7 @@ class Unlock extends Component {
         dataIndex: 'data',
         key: 'action_type',
         render:(text)=>(
-          <div style={{textAlign:'center'}}>{text.type==1?'收入':'支出'}</div>
+          <div>{text.type==1?'收入':'支出'}</div>
         )
       },
       {
@@ -133,11 +145,11 @@ class Unlock extends Component {
         dataIndex: 'data',
         key: 'data',
         render:(text)=>(
-          <div style={{textAlign:'center'}}>{text.type==1?'+':'-'}{text.amount}</div>
+          <div>{text.type==1?'+':'-'}{text.amount}</div>
         )
       },
       {
-        title: '剩余升级码数量',
+        title: '剩余解锁码数量',
         dataIndex: 'balance',
         key: 'balance',
       },
@@ -274,7 +286,7 @@ class Unlock extends Component {
           </Row>
 
         </Card>
-        <Card>
+        <Card className={styles.standardTable}>
           <Table
             dataSource={unlockorupgrade.unlockChangeList}
             columns={columns}

@@ -102,6 +102,18 @@ class Upgrade extends Component {
         }
       },
       {
+        title: '用户身份/运营中心',
+        dataIndex: 'permission',
+        key: 'permission',
+        render:(text)=>{
+          if(text.operate.key==0){
+            return <div>{text.permission.value}</div>
+          }else{
+            return <div>{text.operate.value}</div>
+          }
+        }
+      },
+      {
         title: '业务类型',
         dataIndex: 'code_type',
         key: 'code_type',
@@ -114,7 +126,7 @@ class Upgrade extends Component {
         dataIndex: 'data',
         key: 'type',
         render:(text)=>(
-          <div style={{textAlign:'center'}}>{text.type==1?'收入':'支出'}</div>
+          <div>{text.type==1?'收入':'支出'}</div>
         )
       },
       {
@@ -122,7 +134,7 @@ class Upgrade extends Component {
         dataIndex: 'source',
         key: 'source',
         render:(text)=>(
-          <div style={{textAlign:'center'}}>{text.value}</div>
+          <div>{text.value}</div>
         )
       },
       {
@@ -130,7 +142,7 @@ class Upgrade extends Component {
         dataIndex: 'data',
         key: 'data',
         render:(text)=>(
-          <div style={{textAlign:'center'}}>{text.type==1?'+':'-'}{text.amount}</div>
+          <div>{text.type==1?'+':'-'}{text.amount}</div>
         )
       },
       {
@@ -151,6 +163,7 @@ class Upgrade extends Component {
         dataIndex: 'order_sn',
         key: 'order_sn',
       },
+
       {
         title: '使用对象',
         dataIndex: 'action_user',
@@ -245,8 +258,8 @@ class Upgrade extends Component {
                 }}
               >
                 <Option value={0}>全部</Option>
-                <Option value={1}>系统</Option>
-                <Option value={2}>手工</Option>
+                <Option value={1}>手动</Option>
+                <Option value={2}>系统调整</Option>
               </Select>
             </Col>
           </Row>
@@ -284,7 +297,7 @@ class Upgrade extends Component {
               </Col>
             </Row>
         </Card>
-        <Card>
+        <Card className={styles.standardTable}>
           <Table
             dataSource={unlockorupgrade.upgradeChangeList}
             columns={columns}

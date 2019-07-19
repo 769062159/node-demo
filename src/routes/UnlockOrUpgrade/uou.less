@@ -47,7 +47,16 @@
     margin-bottom: 10px;
   }
 }
-
+.standardTable{
+  :global {
+    .ant-table-thead > tr > th > {
+      text-align: center;
+    }
+    .ant-table-tbody > tr > td {
+      text-align: center;
+    }
+  }
+}
 .tableStyleRow{
   :global{
     .ant-table-thead>tr>th>span{
