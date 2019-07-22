@@ -417,6 +417,13 @@ export default class Order extends PureComponent {
       }
     }
   };
+  changeAttendanceId=e=>{
+    var {manualOrder} = this.state;
+    manualOrder.attendance_id = e.target.value
+    this.setState({
+      manualOrder
+    })
+  }
   changeManualOrderId = e => {
     var {manualOrder} = this.state;
     manualOrder.user_id = e.target.value
@@ -1100,6 +1107,16 @@ export default class Order extends PureComponent {
                 defaultValue={manualOrder.id}
                 placeholder="请输入购买人ID"
                 onChange={this.changeManualOrderId}
+              />
+            </Col>
+          </Row>
+          <Row style={{ margin: '20px 0' }}>
+            <Col span={8}>签到码ID</Col>
+            <Col span={16}>
+              <Input
+                // defaultValue={manualOrder.id}
+                placeholder="请输入签到码ID"
+                onChange={this.changeAttendanceId}
               />
             </Col>
           </Row>
