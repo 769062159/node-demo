@@ -82,7 +82,11 @@ class Config extends Component {
   //获取商品列表
   getGoodsList=(page,value)=>{
     const {dispatch}=this.props
-    const body={ page_number: 10 }
+    //goods_status : 0 代表只筛选上架商品
+    const body={
+      page_number: 10,
+      goods_status : 0
+    }
     if(page){body.page=page}
     if(value){body.goods_name=value}
     dispatch({
@@ -286,30 +290,32 @@ class Config extends Component {
                 <div>
                   <Input
                     style={{width:'200px'}}
-
                     value={this.state.goods_amount}
                     onChange={(e)=>this.setState({goods_amount:e.target.value})}
-                    onPressEnter={()=>{
-                      const _this=this
-                      confirm({
-                        content: '你确定修改对应商品解锁码数量？',
-                        okText: '确定',
-                        okType: 'danger',
-                        cancelText: '取消',
-                        onOk() {
-                          const {dispatch}=_this.props
-                          if(_this.state.goods_amount){
-                            dispatch({
-                              type:'unlockorupgrade/setUnlockGoods',
-                              payload:{amount:_this.state.goods_amount}
-                            })
-                          }
-                        }
-                      });
-                    }}
                   />
                 </div>
                 <div className={styles.text}>个解锁码</div>
+                <Button
+                  type='primary'
+                  style={{marginLeft:'20px'}}
+                  onClick={()=>{
+                  const _this=this
+                  confirm({
+                    content: '你确定修改对应商品解锁码数量？',
+                    okText: '确定',
+                    okType: 'danger',
+                    cancelText: '取消',
+                    onOk() {
+                      const {dispatch}=_this.props
+                      if(_this.state.goods_amount){
+                        dispatch({
+                          type:'unlockorupgrade/setUnlockGoods',
+                          payload:{amount:_this.state.goods_amount}
+                        })
+                      }
+                    }
+                  });
+                }}>确定</Button>
               </div>
             </Row>
           ))}

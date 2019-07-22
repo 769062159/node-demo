@@ -786,14 +786,14 @@ export default class FrontUserList extends PureComponent {
           <div className={styles.userBox}>
             <img style={{ height: 80, width: 80 }} src={val} alt="头像" />
             <div className={styles.userInfo}>
-              <div>{text.nickname}</div>
-              <div>Id:{text.id}</div>
-              <div>等级:{text.account_level}</div>
-              <div>版本:{LevelName[Number(text.has_account ? text.has_account.permission : 0)]}</div>
-              <div className={styles.superior} onClick={this.searchMsg.bind(this, text.referee)} >上级:{text.referee && text.referee.nickname}</div>
-              <div>手机号码:{text.mobile}</div>
-              <div>关系到期时间:{toDate(text.lost_time)}</div>
-              <div>关系状态:{text.lost?'已过期':'正常'}</div>
+              <div>昵称: {text.nickname}</div>
+              <div>Id: {text.id}</div>
+              <div>等级: {text.account_level}</div>
+              <div>版本: {LevelName[Number(text.has_account ? text.has_account.permission : 0)]}</div>
+              <div className={styles.superior} onClick={this.searchMsg.bind(this, text.referee)} >上级: {text.referee && text.referee.nickname}</div>
+              <div>手机号码: {text.mobile}</div>
+              <div>关系到期时间: {toDate(text.has_expire.lost_time*1000)}</div>
+              <div>关系状态: {text.lost?'已过期':'正常'}</div>
             </div>
           </div>
         ),
