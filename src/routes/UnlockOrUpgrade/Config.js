@@ -37,11 +37,13 @@ class Config extends Component {
 
   handleOk = e => {
     const {modalStatus}=this.state
+
     if(modalStatus){
       this.addUpgradeRules()
     }else{
       this.addUnlockRules()
     }
+
     this.setState({ visible: false });
   };
   addUnlockRules=()=>{
@@ -56,6 +58,7 @@ class Config extends Component {
           amount:unlock_number,
         }
       })
+      dispatch({ type:'unlockorupgrade/getCodeInfo' })
     }else{
       message.error('输入有误请重新输入！')
     }
@@ -74,6 +77,7 @@ class Config extends Component {
           v2_amount:upgrade_number2,
         }
       })
+      dispatch({ type:'unlockorupgrade/getCodeInfo' })
     }else{
       message.error('输入有误请重新输入！')
       return false
@@ -119,7 +123,12 @@ class Config extends Component {
   }
 
   componentWillReceiveProps(nextProps){
-    this.setState({ goods_amount:nextProps.unlockorupgrade.unlock_goods.amount })
+    this.setState({
+      goods_amount:nextProps.unlockorupgrade.unlock_goods.amount,
+      unlock_list:nextProps.unlockorupgrade.unlock,
+      upgrade_list:nextProps.unlockorupgrade.upgrade,
+    })
+
   }
 
   render() {
@@ -136,8 +145,9 @@ class Config extends Component {
         render:(record)=>{
           return <Input
             defaultValue={record}
+            value={record}
             onChange={(e)=>{this.setState({temporary_upgrade_number1:e.target.value})}}
-            onPressEnter={(e)=>{
+            /*onPressEnter={(e)=>{
               const _this=this
               confirm({
                 content: '你确定修改这个吗？',
@@ -159,7 +169,7 @@ class Config extends Component {
                   }
                 }
               });
-            }}
+            }}*/
           />
         }
       },
@@ -170,8 +180,9 @@ class Config extends Component {
         render:(record)=>{
           return <Input
             defaultValue={record}
+            value={record}
             onChange={(e)=>{this.setState({temporary_upgrade_number2:e.target.value})}}
-            onPressEnter={(e)=>{
+            /*onPressEnter={(e)=>{
               const _this=this
               confirm({
                 content: '你确定修改这个吗？',
@@ -191,7 +202,7 @@ class Config extends Component {
                   }
                 }
               });
-            }}
+            }}*/
           />
         }
       }
@@ -209,8 +220,9 @@ class Config extends Component {
         render:(record)=>{
           return <Input
             defaultValue={record}
+            value={record}
             onChange={(e)=>{this.setState({temporary_unlock_number:e.target.value})}}
-            onPressEnter={(e)=>{
+            /*onPressEnter={(e)=>{
               const _this=this
               confirm({
                 content: '你确定修改这个吗？',
@@ -230,7 +242,7 @@ class Config extends Component {
                   }
                 }
               });
-            }}
+            }}*/
           />
         }
       }
@@ -241,23 +253,25 @@ class Config extends Component {
       <PageHeaderLayout>
         <Card title="解锁码赠送设置" className={styles.cardStyle}>
           <Button type='primary' onClick={()=>this.showModal(0)}>新建解锁码赠送规则</Button>
+          {this.state.unlock_list?
+            <Table
+              dataSource={this.state.unlock_list}
+              columns={columns}
+              className={styles.tableStyleRow}
+              rowKey={(record)=>record.id}
+              onRow={record => {
+                return {
+                  onClick: event => {
+                    this.setState({
+                      temporary_unlock_type:record.type,
+                      temporary_unlock_number:record.amount
+                    })
+                  },
+                };
+              }}
+            />:null
+          }
 
-          <Table
-            dataSource={unlockorupgrade.unlock}
-            columns={columns}
-            className={styles.tableStyleRow}
-            rowKey={(record)=>record.id}
-            onRow={record => {
-              return {
-                onClick: event => {
-                  this.setState({
-                    temporary_unlock_type:record.type,
-                    temporary_unlock_number:record.amount
-                  })
-                },
-              };
-            }}
-          />
         </Card>
 
 
@@ -335,7 +349,7 @@ class Config extends Component {
         <Card title="升级码赠送设置" className={styles.cardStyle}>
           <Button type='primary' onClick={()=>this.showModal(1)}>新建升级码赠送规则</Button>
           <Table
-            dataSource={unlockorupgrade.upgrade}
+            dataSource={this.state.upgrade_list}
             columns={columns1}
             className={styles.tableStyleRow}
             rowKey={(record)=>record.id}

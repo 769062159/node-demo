@@ -73,7 +73,7 @@ class Unlock extends Component {
         payload:body
       })
     }
-    this.clearData()
+    // this.clearData()
   }
 
   clearData=()=>{
@@ -83,8 +83,6 @@ class Unlock extends Component {
       code_type:0,
       action_type:0,
       source:0,
-      openTime:[],
-      keyValue:new Date()
     })
   }
   componentDidMount(){
@@ -223,7 +221,7 @@ class Unlock extends Component {
             <Col span={2} className={styles.labelTitle}>发生时间：</Col>
             <Col span={10}>
               <RangePicker
-                format="YYYY-MM-DD HH:mm:ss"
+                format="YYYY-MM-DD"
                 onChange={(value,dateStrings)=>{
                   this.setState({openTime:dateStrings})
                 }}/>

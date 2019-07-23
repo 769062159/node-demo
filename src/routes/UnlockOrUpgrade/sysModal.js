@@ -30,7 +30,7 @@ class SysModal extends Component {
   onChangeRadio=(e)=>{ this.setState({ upgrade_code_type: e.target.value })}
 
   render() {
-    const {type}=this.props
+    const {type,userInfo}=this.props
     const {upgrade_code_type,upgrade_user_id,upgrade_amount,upgrade_remark} = this.state
     return (
       <Modal
@@ -57,7 +57,7 @@ class SysModal extends Component {
         {this.props.type=='upgrade'?
           <Row className={styles.rowStyle}>
             <Col>
-              <Radio.Group onChange={this.onChangeRadio} value={this.state.upgrade_code_type}>
+              <Radio.Group onChange={this.onChangeRadio} value={upgrade_code_type}>
                 <Radio value={1}>店主升级码</Radio>
                 <Radio value={2}>盟主升级码</Radio>
               </Radio.Group>
@@ -72,13 +72,13 @@ class SysModal extends Component {
           <Col span={18}>
             <Input
               style={{ width: '100%' }}
-              value={this.state.upgrade_user_id}
+              value={upgrade_user_id}
               onChange={(e)=>{
                 this.setState({upgrade_user_id:e.target.value})
               }}
               onBlur={()=>{
                 if(this.props.showUserInfo){
-                  this.props.showUserInfo(this.state.upgrade_user_id)
+                  this.props.showUserInfo(upgrade_user_id)
                 }
               }}
             />
@@ -86,20 +86,35 @@ class SysModal extends Component {
           </Col>
         </Row>
 
-        {empty.check(this.props.userInfo.user)&&this.state.upgrade_user_id==this.props.userInfo.user.fake_id?
+        {empty.check(userInfo.user)&&upgrade_user_id==userInfo.user.fake_id?
           <Fragment>
             <Row className={styles.rowStyle1}>
               <Col span={6} className={styles.labelTitle}></Col>
                 <Col span={18}  className={styles.labelText}>
-                  用户昵称：{empty.check(this.props.userInfo.user)?this.props.userInfo.user.nickname:'无此用户'}
+                  用户昵称：{empty.check(userInfo.user)?userInfo.user.nickname:'无此用户'}
                 </Col>
             </Row>
-            <Row className={styles.rowStyle1}>
-              <Col span={6} className={styles.labelTitle}></Col>
+            {type=='upgrade'?
+              <Row className={styles.rowStyle1}>
+                <Col span={6} className={styles.labelTitle}></Col>
                 <Col span={18}  className={styles.labelText}>
-                  用户剩余解锁码数量(个)：{empty.check(this.props.userInfo.account)?this.props.userInfo.account.unlock_code_amount:'无此信息'}
+                  {empty.check(userInfo.account)&&upgrade_code_type==1?
+                    `用户剩余店主升级码数量(个)：${userInfo.account.upgrade_code_v1_amount}`
+                  :
+                    `用户剩余盟主升级码数量(个)：${userInfo.account.upgrade_code_v2_amount}`
+                  }
+
                 </Col>
-            </Row>
+              </Row>
+              :
+              <Row className={styles.rowStyle1}>
+                <Col span={6} className={styles.labelTitle}></Col>
+                <Col span={18}  className={styles.labelText}>
+                  用户剩余解锁码数量(个)：{empty.check(userInfo.account)?userInfo.account.unlock_code_amount:'无此信息'}
+                </Col>
+              </Row>
+            }
+
           </Fragment>
           :
           null
@@ -114,7 +129,7 @@ class SysModal extends Component {
               onChange={(e)=>{this.setState({upgrade_amount:e.target.value})}}/>
           </Col>
         </Row>
-        {this.state.upgrade_amount?
+        {upgrade_amount?
           <Row className={styles.rowStyle}>
             <Col span={6} className={styles.labelTitle}></Col>
             <Col span={18} style={{color:'#e60012',lineHeight:'20px'}}>如果要减少，请输入负数，负数的最大值为用户剩余的升级码数量</Col>
@@ -129,7 +144,7 @@ class SysModal extends Component {
             <Input
               placeholder='请输入备注，不超过30个字'
               style={{ width: '100%' }}
-              value={this.state.upgrade_remark}
+              value={upgrade_remark}
               onChange={(e)=>{this.setState({upgrade_remark:e.target.value})}}/>
           </Col>
         </Row>

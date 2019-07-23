@@ -64,13 +64,12 @@ class Upgrade extends Component {
         payload:body
       })
     }
-    this.clearData()
+    // this.clearData()
   }
   clearData=()=>{
     this.setState({
       search_type:0,
       search_input:'',
-      openTime:[],
       code_type:0,
       action_type:0,
       source:0,
@@ -221,7 +220,7 @@ class Upgrade extends Component {
               <Col span={2} className={styles.labelTitle}>发生时间：</Col>
               <Col span={10}>
                  <RangePicker
-                   format="YYYY-MM-DD HH:mm:ss"
+                   format="YYYY-MM-DD"
                    onChange={(value,dateStrings)=>{
                       this.setState({openTime:dateStrings})
                    }}

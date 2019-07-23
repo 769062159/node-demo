@@ -1,7 +1,7 @@
 import request from '../utils/request';
 
 // 获取升级码解锁码配置信息
-export async function getCodeInfo() {
+export async function getCodeInfo1() {
   return request('/merchant/code-config/get', {
     method: 'GET'
   });

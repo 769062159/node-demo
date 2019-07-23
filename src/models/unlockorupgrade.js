@@ -1,5 +1,5 @@
 import {
-  getCodeInfo,
+  getCodeInfo1,
   setUnlockCode , setUpgradeCode,
   getUnlockTypeList, getUpgradeTypeList,
   getUpgradeChangeList, getUnlockChangeList,
@@ -13,6 +13,7 @@ export default {
 
   state: {
     upgrade: [],
+    unlock: [],
     unlock_goods:[],
     unlockTypeList:[],
     upgradeTypeList:[],
@@ -36,13 +37,8 @@ export default {
     *exportUpgradeCode({ payload }, { call, put }) {
       const response = yield call(exportUpgradeCode,{ ...payload });
       if(response && response.code===200){
-        // message.success('操作成功！')
         const w=window.open('about:blank');
         w.location.href=response.data.export_url
-        /*yield put({
-          type: 'exportedUpgradeCode',
-          payload: response,
-        });*/
       }
     },
     *exportUnlockCode({ payload }, { call, put }) {
@@ -51,10 +47,6 @@ export default {
           message.success('操作成功！')
           const w=window.open('about:blank');
           w.location.href=response.data.export_url
-          /*yield put({
-            type: 'exportedUnlockCode',
-            payload: response,
-          });*/
         }
     },
     *setUnlockGoods({ payload }, { call, put }) {
@@ -62,14 +54,13 @@ export default {
         const response = yield call(setUnlockGoods,{ ...payload });
         if(response && response.code===200){
           message.success('操作成功！')
-          const response = yield call(getCodeInfo,{ ...payload });
+          const response = yield call(getCodeInfo1,{ ...payload });
           if(response && response.code===200){
             yield put({
               type: 'getCodeConfigInfo',
               payload: response,
             });
           }
-
         }else{
           message.error(response.message)
         }
@@ -88,12 +79,11 @@ export default {
             });
           }
         }else{
-          message.error(response.message)
+          message.error(response.data)
         }
       }
     },
     *createUpgradeCode({ payload }, { call, put }) {
-      if(Object.keys({payload}).length !== 0){
         const response = yield call(createUpgradeCode,{ ...payload });
         if(response && response.code===200){
           message.success('操作成功！')
@@ -104,8 +94,9 @@ export default {
               payload: response,
             });
           }
+        }else{
+          message.error(response.data)
         }
-      }
     },
     *getUnlockChangeList({ payload }, { call, put }) {
       if(Object.keys({payload}).length !== 0){
@@ -148,7 +139,7 @@ export default {
       }
     },
     *getCodeInfo({ payload }, { call, put }) {
-      const response = yield call(getCodeInfo,{ ...payload });
+      const response = yield call(getCodeInfo1,{ ...payload });
       if(response && response.code===200){
         yield put({
           type: 'getCodeConfigInfo',
@@ -159,8 +150,8 @@ export default {
     *unlockRules({ payload }, { call, put }) {
       const response = yield call(setUnlockCode, payload);
       if(response&&response.code===200){
-        const result = yield call(getCodeInfo,payload);
-        if(result){
+        const result = yield call(getCodeInfo1,{});
+        if(result.code==200){
           yield put({
             type: 'getCodeConfigInfo',
             payload: result,
@@ -174,14 +165,14 @@ export default {
     *upgradeRules({ payload }, { call, put }) {
       const response = yield call(setUpgradeCode, payload);
       if(response&&response.code===200){
-        const result = yield call(getCodeInfo,payload);
-        if(result){
+         const result = yield call(getCodeInfo1,{});
+        if(result.code==200){
           yield put({
             type: 'getCodeConfigInfo',
             payload: result,
           });
-          message.success('操作成功！')
         }
+        message.success('操作成功！')
       }else{
         message.error('请求失败，请重试！')
       }

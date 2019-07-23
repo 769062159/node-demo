@@ -644,6 +644,7 @@ export default class FrontUserList extends PureComponent {
             </FormItem>
           </Col>
         </Row>
+
         <Row>
           <Col md={8} sm={24}>
             <FormItem label="上级id">
@@ -666,6 +667,18 @@ export default class FrontUserList extends PureComponent {
               )}
             </FormItem>
           </Col>
+        </Row>
+        <Row>
+          <Col md={8} sm={24}>
+            <FormItem {...formItemLayout} label="推荐关系">
+              {getFieldDecorator('expire_status')(<Select>
+                <Option value={1}>有效</Option>
+                <Option value={2}>过期</Option>
+              </Select>)}
+            </FormItem>
+          </Col>
+          <Col md={8} sm={24}></Col>
+          <Col md={8} sm={24}></Col>
         </Row>
         <div style={{ overflow: 'hidden' }}>
           <span style={{ float: 'right', marginBottom: 24 }}>
