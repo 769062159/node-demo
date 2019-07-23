@@ -164,12 +164,12 @@ export default {
       let hasPublic = false;
       if (data) {
         const hasPublicArr = data.filter(element => element.type);
-        if (hasPublicArr.length > 5) {
+        /*if (hasPublicArr.length > 5) {
           hasPublic = true;
         }
         if (data.length - hasPublicArr.length > 5) {
           hasApplets = true;
-        }
+        }*/
       }
       return {
         ...state,
