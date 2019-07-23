@@ -806,7 +806,7 @@ export default class FrontUserList extends PureComponent {
               <div className={styles.superior} onClick={this.searchMsg.bind(this, text.referee)} >上级: {text.referee && text.referee.nickname}</div>
               <div>手机号码: {text.mobile}</div>
               <div>关系到期时间: {toDate(text.has_expire.lost_time*1000)}</div>
-              <div>关系状态: {text.lost?'已过期':'正常'}</div>
+              <div>关系状态: {text.has_expire.lost?'已过期':'正常'}</div>
             </div>
           </div>
         ),
