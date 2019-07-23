@@ -3,6 +3,7 @@ import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import { Select,Card,Row,Col,Input,DatePicker,Button,Table,message } from 'antd'
 import moment from 'moment';
 import SysModal from './sysModal'
+import ActionPassword from '../../utils/actionPassword'
 import {toDateTime} from '../../utils/date'
 import styles from './uou.less'
 const InputGroup = Input.Group;
@@ -91,7 +92,7 @@ class Unlock extends Component {
     // dispatch({ type: 'unlockorupgrade/fetchFrontUserList' });
   }
   render() {
-    const {unlockorupgrade} =this.props
+    const {unlockorupgrade,global} =this.props
 
     const columns = [
       {
@@ -187,118 +188,123 @@ class Unlock extends Component {
       },
     ];
     return (
-      <PageHeaderLayout>
-        <Card>
-          <Row className={styles.rowStyle}>
-            <Col span={2} className={styles.labelTitle}>搜索：</Col>
-            <Col span={10}>
-              <InputGroup compact style={{display:'flex',flexWrap:'nowrap'}}>
+      global.actionPassword != '' ?
+        <PageHeaderLayout>
+          <Card>
+            <Row className={styles.rowStyle}>
+              <Col span={2} className={styles.labelTitle}>搜索：</Col>
+              <Col span={10}>
+                <InputGroup compact style={{display:'flex',flexWrap:'nowrap'}}>
+                  <Select
+                    style={{width:'150px'}}
+                    placeholder="请选择搜索类型"
+                    defaultValue={0}
+                    value={this.state.search_type}
+                    onChange={(value)=>{
+                      this.setState({search_type:value})
+                    }}
+                  >
+                    <Option value={0}>全部</Option>
+                    <Option value='order_sn'>商城订单号</Option>
+                    <Option value='user_id'>用户ID</Option>
+                    <Option value='action_user_id'>使用对象ID</Option>
+                    <Option value='user_nickname'>用户昵称</Option>
+                    <Option value='action_user_nickname'>使用对象昵称</Option>
+                  </Select>
+                  <Input
+                    style={{ width: '50%' }}
+                    placeholder="请输入关联条件"
+                    value={this.state.search_input}
+                    onChange={(e)=>{this.setState({search_input:e.target.value})}}/>
+                </InputGroup>
+              </Col>
+            </Row>
+            <Row className={styles.rowStyle}>
+              <Col span={2} className={styles.labelTitle}>发生时间：</Col>
+              <Col span={10}>
+                <RangePicker
+                  format="YYYY-MM-DD"
+                  onChange={(value,dateStrings)=>{
+                    this.setState({openTime:dateStrings})
+                  }}/>
+              </Col>
+            </Row>
+
+            <Row className={styles.rowStyle}>
+              <Col span={2} className={styles.labelTitle}>业务类型：</Col>
+              <Col span={3}>
                 <Select
-                  style={{width:'150px'}}
+                  style={{width:'200px'}}
                   placeholder="请选择搜索类型"
+                  value={this.state.source}
                   defaultValue={0}
-                  value={this.state.search_type}
                   onChange={(value)=>{
-                    this.setState({search_type:value})
+                    this.setState({source:value})
                   }}
                 >
                   <Option value={0}>全部</Option>
-                  <Option value='order_sn'>商城订单号</Option>
-                  <Option value='user_id'>用户ID</Option>
-                  <Option value='action_user_id'>使用对象ID</Option>
-                  <Option value='user_nickname'>用户昵称</Option>
-                  <Option value='action_user_nickname'>使用对象昵称</Option>
+                  <Option value={1}>赠送</Option>
+                  <Option value={2}>购买</Option>
+                  <Option value={3}>正常消费</Option>
+                  <Option value={4}>返还</Option>
+                  <Option value={5}>系统调整</Option>
                 </Select>
-                <Input
-                  style={{ width: '50%' }}
-                  placeholder="请输入关联条件"
-                  value={this.state.search_input}
-                  onChange={(e)=>{this.setState({search_input:e.target.value})}}/>
-              </InputGroup>
-            </Col>
-          </Row>
-          <Row className={styles.rowStyle}>
-            <Col span={2} className={styles.labelTitle}>发生时间：</Col>
-            <Col span={10}>
-              <RangePicker
-                format="YYYY-MM-DD"
-                onChange={(value,dateStrings)=>{
-                  this.setState({openTime:dateStrings})
-                }}/>
-            </Col>
-          </Row>
+              </Col>
+            </Row>
+            <Row className={styles.rowStyle}>
+              <Col span={2} className={styles.labelTitle}>操作类型：</Col>
+              <Col span={3}>
+                <Select
+                  style={{width:'200px'}}
+                  // placeholder="请选择搜索类型"
+                  value={this.state.action_type}
+                  defaultValue={0}
+                  onChange={(value)=>{
+                    this.setState({action_type:value})
+                  }}
+                >
+                  <Option value={0}>全部</Option>
+                  <Option value={1}>收入</Option>
+                  <Option value={2}>支出</Option>
+                </Select>
+              </Col>
+            </Row>
+            <Row className={styles.rowStyle}>
+              <Col span={2} style={{height:'30px',lineHeight:'30px'}}></Col>
+              <Col span={2}>
+                <Button type='primary' onClick={()=>{this.searchMethod()}}>搜索</Button>
+              </Col>
+              <Col span={2}>
+                <Button type='primary' onClick={()=>{
+                  this.searchMethod('export')
+                  // this.props.history.push('/download')
+                }}>导出</Button>
+              </Col>
+              <Col span={2}>
+                <Button type='primary' onClick={()=>{this.sysmodal.showModal()}}>系统调整</Button>
+              </Col>
+            </Row>
 
-          <Row className={styles.rowStyle}>
-            <Col span={2} className={styles.labelTitle}>业务类型：</Col>
-            <Col span={3}>
-              <Select
-                style={{width:'200px'}}
-                placeholder="请选择搜索类型"
-                value={this.state.source}
-                defaultValue={0}
-                onChange={(value)=>{
-                  this.setState({source:value})
-                }}
-              >
-                <Option value={0}>全部</Option>
-                <Option value={1}>赠送</Option>
-                <Option value={2}>购买</Option>
-                <Option value={3}>正常消费</Option>
-                <Option value={4}>返还</Option>
-                <Option value={5}>系统调整</Option>
-              </Select>
-            </Col>
-          </Row>
-          <Row className={styles.rowStyle}>
-            <Col span={2} className={styles.labelTitle}>操作类型：</Col>
-            <Col span={3}>
-              <Select
-                style={{width:'200px'}}
-                // placeholder="请选择搜索类型"
-                value={this.state.action_type}
-                defaultValue={0}
-                onChange={(value)=>{
-                  this.setState({action_type:value})
-                }}
-              >
-                <Option value={0}>全部</Option>
-                <Option value={1}>收入</Option>
-                <Option value={2}>支出</Option>
-              </Select>
-            </Col>
-          </Row>
-          <Row className={styles.rowStyle}>
-            <Col span={2} style={{height:'30px',lineHeight:'30px'}}></Col>
-            <Col span={2}>
-              <Button type='primary' onClick={()=>{this.searchMethod()}}>搜索</Button>
-            </Col>
-            <Col span={2}>
-              <Button type='primary' onClick={()=>{
-                this.searchMethod('export')
-                // this.props.history.push('/download')
-              }}>导出</Button>
-            </Col>
-            <Col span={2}>
-              <Button type='primary' onClick={()=>{this.sysmodal.showModal()}}>系统调整</Button>
-            </Col>
-          </Row>
-
-        </Card>
-        <Card className={styles.standardTable}>
-          <Table
-            dataSource={unlockorupgrade.unlockChangeList}
-            columns={columns}
-            rowKey={(record)=>record.id}
+          </Card>
+          <Card className={styles.standardTable}>
+            <Table
+              dataSource={unlockorupgrade.unlockChangeList}
+              columns={columns}
+              rowKey={(record)=>record.id}
+            />
+          </Card>
+          <SysModal
+            type='unlock'
+            ref={node=>this.sysmodal=node}
+            unlockHandleOk={(params)=>this.handleOk(params)}
+            showUserInfo={(id)=>{this.showUserInfo(id)}}
+            userInfo={this.props.unlockorupgrade.userInfo}
           />
-        </Card>
-        <SysModal
-          type='unlock'
-          ref={node=>this.sysmodal=node}
-          unlockHandleOk={(params)=>this.handleOk(params)}
-          showUserInfo={(id)=>{this.showUserInfo(id)}}
-          userInfo={this.props.unlockorupgrade.userInfo}
-        />
-      </PageHeaderLayout>
+        </PageHeaderLayout>
+      :
+        <PageHeaderLayout>
+          <ActionPassword />
+        </PageHeaderLayout>
     );
   }
   showUserInfo=(id)=>{
@@ -311,7 +317,8 @@ class Unlock extends Component {
   }
 }
 
-export default connect(({ unlockorupgrade, frontUser})=>({
+export default connect(({ unlockorupgrade, frontUser,global})=>({
   unlockorupgrade,
-  frontUser
+  frontUser,
+  global
 }))(Unlock);

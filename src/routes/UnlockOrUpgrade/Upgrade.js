@@ -8,6 +8,7 @@ const InputGroup = Input.Group;
 const { RangePicker } = DatePicker;
 const { Option } = Select;
 import { connect } from 'dva';
+import ActionPassword from '../../utils/actionPassword';
 class Upgrade extends Component {
   state={
     visible:false,
@@ -81,7 +82,7 @@ class Upgrade extends Component {
     dispatch({ type: 'frontUser/fetchFrontUserList' });
   }
   render() {
-    const {unlockorupgrade} =this.props
+    const {unlockorupgrade,global} =this.props
 
     const columns = [
       {
@@ -186,8 +187,9 @@ class Upgrade extends Component {
       },
     ];
     return (
-      <PageHeaderLayout>
-        <Card>
+      global.actionPassword != '' ?
+        <PageHeaderLayout>
+          <Card>
             <Row className={styles.rowStyle}>
               <Col span={2} className={styles.labelTitle}>搜索：</Col>
               <Col span={10}>
@@ -219,67 +221,67 @@ class Upgrade extends Component {
             <Row className={styles.rowStyle}>
               <Col span={2} className={styles.labelTitle}>发生时间：</Col>
               <Col span={10}>
-                 <RangePicker
-                   format="YYYY-MM-DD"
-                   onChange={(value,dateStrings)=>{
-                      this.setState({openTime:dateStrings})
-                   }}
-                 />
+                <RangePicker
+                  format="YYYY-MM-DD"
+                  onChange={(value,dateStrings)=>{
+                    this.setState({openTime:dateStrings})
+                  }}
+                />
               </Col>
             </Row>
             <Row className={styles.rowStyle}>
               <Col span={2} className={styles.labelTitle}>升级码类型：</Col>
               <Col span={3}>
-                  <Select
-                    style={{width:'200px'}}
-                    defaultValue={0}
-                    value={this.state.code_type}
-                    onChange={(value)=>{
-                      this.setState({code_type:value})
-                    }}
-                  >
-                    <Option value={0}>全部</Option>
-                    <Option value={1}>店主</Option>
-                    <Option value={2}>盟主</Option>
-                  </Select>
+                <Select
+                  style={{width:'200px'}}
+                  defaultValue={0}
+                  value={this.state.code_type}
+                  onChange={(value)=>{
+                    this.setState({code_type:value})
+                  }}
+                >
+                  <Option value={0}>全部</Option>
+                  <Option value={1}>店主</Option>
+                  <Option value={2}>盟主</Option>
+                </Select>
               </Col>
             </Row>
-          <Row className={styles.rowStyle}>
-            <Col span={2} className={styles.labelTitle}>操作来源：</Col>
-            <Col span={3}>
-              <Select
-                style={{width:'200px'}}
-                placeholder="请选择搜索类型"
-                defaultValue={0}
-                value={this.state.source}
-                onChange={(value)=>{
-                  this.setState({source:value})
-                }}
-              >
-                <Option value={0}>全部</Option>
-                <Option value={1}>手动</Option>
-                <Option value={2}>系统调整</Option>
-              </Select>
-            </Col>
-          </Row>
-          <Row className={styles.rowStyle}>
-            <Col span={2} className={styles.labelTitle}>操作类型：</Col>
-            <Col span={3}>
-              <Select
-                style={{width:'200px'}}
-                placeholder="请选择搜索类型"
-                value={this.state.action_type}
-                defaultValue={0}
-                onChange={(value)=>{
-                  this.setState({action_type:value})
-                }}
-              >
-                <Option value={0}>全部</Option>
-                <Option value={1}>收入</Option>
-                <Option value={2}>支出</Option>
-              </Select>
-            </Col>
-          </Row>
+            <Row className={styles.rowStyle}>
+              <Col span={2} className={styles.labelTitle}>操作来源：</Col>
+              <Col span={3}>
+                <Select
+                  style={{width:'200px'}}
+                  placeholder="请选择搜索类型"
+                  defaultValue={0}
+                  value={this.state.source}
+                  onChange={(value)=>{
+                    this.setState({source:value})
+                  }}
+                >
+                  <Option value={0}>全部</Option>
+                  <Option value={1}>手动</Option>
+                  <Option value={2}>系统调整</Option>
+                </Select>
+              </Col>
+            </Row>
+            <Row className={styles.rowStyle}>
+              <Col span={2} className={styles.labelTitle}>操作类型：</Col>
+              <Col span={3}>
+                <Select
+                  style={{width:'200px'}}
+                  placeholder="请选择搜索类型"
+                  value={this.state.action_type}
+                  defaultValue={0}
+                  onChange={(value)=>{
+                    this.setState({action_type:value})
+                  }}
+                >
+                  <Option value={0}>全部</Option>
+                  <Option value={1}>收入</Option>
+                  <Option value={2}>支出</Option>
+                </Select>
+              </Col>
+            </Row>
             <Row className={styles.rowStyle}>
               <Col span={2} style={{height:'30px',lineHeight:'30px'}}></Col>
               <Col span={2}>
@@ -295,24 +297,27 @@ class Upgrade extends Component {
                 }}>系统调整</Button>
               </Col>
             </Row>
-        </Card>
-        <Card className={styles.standardTable}>
-          <Table
-            dataSource={unlockorupgrade.upgradeChangeList}
-            columns={columns}
-            rowKey={(record)=>record.id}
+          </Card>
+          <Card className={styles.standardTable}>
+            <Table
+              dataSource={unlockorupgrade.upgradeChangeList}
+              columns={columns}
+              rowKey={(record)=>record.id}
+            />
+          </Card>
+          <SysModal
+            ref={node=>this.sysmodal=node}
+            type='upgrade'
+            handleOk={(params)=>this.handleOk(params)}
+            showUserInfo={(id)=>{this.showUserInfo(id)}}
+            userInfo={this.props.unlockorupgrade.userInfo}
           />
-        </Card>
-        <SysModal
-          ref={node=>this.sysmodal=node}
-          type='upgrade'
-          handleOk={(params)=>this.handleOk(params)}
-          showUserInfo={(id)=>{this.showUserInfo(id)}}
-          userInfo={this.props.unlockorupgrade.userInfo}
-        />
 
-      </PageHeaderLayout>
-
+        </PageHeaderLayout>
+          :
+        <PageHeaderLayout>
+          <ActionPassword/>
+        </PageHeaderLayout>
     );
   }
 
@@ -326,6 +331,7 @@ class Upgrade extends Component {
   }
 }
 
-export default connect(({ unlockorupgrade })=>({
+export default connect(({ unlockorupgrade,global })=>({
   unlockorupgrade,
+  global
 }))(Upgrade);

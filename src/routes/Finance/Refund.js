@@ -151,7 +151,7 @@ export default class Withdraw extends PureComponent {
         refund_status: selectState,
         page,
       },
-    }); 
+    });
   }
   handleFormReset = () => {
     this.setState({
@@ -327,12 +327,14 @@ export default class Withdraw extends PureComponent {
         title: '支付类型',
         dataIndex: 'has_order_pack',
         width: 120,
+        key:'has_order_pack',
         render: val => payType[val.pay_type - 1],
       },
       {
         title: '订单',
         dataIndex: 'has_order_pack',
         width: 120,
+        key:'has_order_pack1',
         render: val => val.order_sn,
       },
       {

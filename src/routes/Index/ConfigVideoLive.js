@@ -218,8 +218,8 @@ export default class ConfigVideoLive extends PureComponent {
       return;
     }
 
-    const liveList = [...liveMap.map((live) => (
-      <Col span={5}>
+    const liveList = [...liveMap.map((live,index) => (
+      <Col span={5} key={index}>
         <Card
           bordered={false}
           cover={<img alt="直播间封面" src={live.cover} />}
