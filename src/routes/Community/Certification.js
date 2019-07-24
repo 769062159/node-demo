@@ -493,7 +493,7 @@ export default class Certification extends PureComponent {
           //   </Col>
           // </Row>
           <div >
-            <img style={{ height: 80, width: 80, marginRight: 10, float: 'left' }} src={empty.check(text.has_user)&&text.has_user.avatar} alt="头像" />
+            <img style={{ height: 80, width: 80, marginRight: 10, float: 'left' }} src={empty.check(text.has_user)?text.has_user.avatar:''} alt="头像" />
             <div >
               <div>{empty.check(text.has_user)&&text.has_user.nickname}</div>
               <div>Id:{empty.check(text.has_user)&&text.has_user.fake_id}</div>

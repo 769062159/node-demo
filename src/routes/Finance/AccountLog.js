@@ -51,7 +51,7 @@ export default class Rank extends PureComponent {
   onRankOk(value) {
     console.log('onOk: ', value);
   }
-  
+
   componentDidMount() {
     const { dispatch } = this.props;
     const { page } = this.state;
@@ -276,7 +276,7 @@ export default class Rank extends PureComponent {
                     <Select placeholder="请选择" style={{ minWidth: '100px', width: '100%' }}>
                       {
                         actionType.map((item, index) => {
-                          return <Option value={index} >{item}</Option>
+                          return <Option value={index} key={index}>{item}</Option>
                         })
                       }
                     </Select>
