@@ -749,6 +749,7 @@ export default class Order extends PureComponent {
                   <Option value="2">支付宝支付</Option>
                   <Option value="3">扫呗支付</Option>
                   <Option value="4">线下支付</Option>
+                  <Option value="5">地网订单推送</Option>
                 </Select>
               )}
             </FormItem>
@@ -1016,7 +1017,11 @@ export default class Order extends PureComponent {
                         <Col span={6} style={{ paddingLeft: 10, color: '#f44' }}>
                           订单类型：线下订单
                         </Col>
-                      ) : ''
+                      ) : item.pay_type === 5 &&(
+                        <Col span={6} style={{ paddingLeft: 10, color: '#f44' }}>
+                          订单类型：地网订单推送
+                        </Col>
+                      )
                     }
                     <Col span={6} style={{ paddingLeft: 10 }}>
                       订单号：{item.order_sn}
