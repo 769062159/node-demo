@@ -22,7 +22,6 @@ class Upgrade extends Component {
   }
 
   handleOk = params => {
-
     const {dispatch}=this.props
     const { upgrade_code_type,upgrade_user_id,upgrade_amount,upgrade_remark}= params
     let body={
@@ -49,8 +48,7 @@ class Upgrade extends Component {
     if(code_type){ body.code_type=code_type }
     if(action_type){ body.action_type=action_type }
     if(source){ body.source=source }
-    if(openTime.length){
-      // body.openTime=openTime
+    if(openTime.length&&openTime[0]&&openTime[1]){
       body.start=openTime[0]
       body.end=openTime[1]
     }
@@ -302,7 +300,7 @@ class Upgrade extends Component {
             <Table
               dataSource={unlockorupgrade.upgradeChangeList}
               columns={columns}
-              rowKey={(record)=>record.id}
+              rowKey={(record)=>record.id+Math.random()}
             />
           </Card>
           <SysModal
