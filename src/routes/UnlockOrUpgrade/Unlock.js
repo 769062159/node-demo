@@ -100,7 +100,7 @@ class Unlock extends Component {
         dataIndex: 'user',
         key: 'nickname',
         render:(text)=>{
-          return text.nickname
+          return <div style={{whiteSpace:'nowrap'}}>{text.nickname}</div>
         }
       },
       {
@@ -109,6 +109,14 @@ class Unlock extends Component {
         key: 'user',
         render:(text)=>{
           return text.id
+        }
+      },
+      {
+        title: '状态',
+        dataIndex: 'status',
+        key: 'status',
+        render:(text)=>{
+          return <div style={{whiteSpace:'nowrap'}}>{text.value}</div>
         }
       },
       {
@@ -128,7 +136,7 @@ class Unlock extends Component {
         dataIndex: 'source',
         key: 'source',
         render:(text)=>{
-          return <div>{text.value}</div>
+          return <div style={{whiteSpace:'nowrap'}}>{text.value}</div>
         }
       },
       {
