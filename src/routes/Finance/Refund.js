@@ -89,6 +89,7 @@ export default class Withdraw extends PureComponent {
   handAddleCancel = () => {
     this.setState({
       formVisible: false,
+      money_type:2,
       editData: {},
     });
   };
