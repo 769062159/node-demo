@@ -4,6 +4,7 @@ import {Modal, Select,Card,Row,Col,Input,DatePicker,Button,Table,Radio,message }
 import {toDateTime} from '../../utils/date'
 import styles from './uou.less'
 import SysModal from './sysModal'
+import moment from 'moment'
 const InputGroup = Input.Group;
 const { RangePicker } = DatePicker;
 const { Option } = Select;
@@ -88,7 +89,7 @@ class Upgrade extends Component {
         dataIndex: 'user',
         key: 'nickname',
         render:(text)=>{
-          return text.nickname
+          return <div style={{whiteSpace:'nowrap'}}>{text.nickname}</div>
         }
       },
       {
@@ -116,7 +117,7 @@ class Upgrade extends Component {
         dataIndex: 'code_type',
         key: 'code_type',
         render:(text)=>{
-          return text.value
+          return <div style={{whiteSpace:'nowrap'}}>{text.value}</div>
         }
       },
       {
@@ -224,6 +225,9 @@ class Upgrade extends Component {
                   onChange={(value,dateStrings)=>{
                     this.setState({openTime:dateStrings})
                   }}
+                  /*disabledDate={(current) => {
+                    return  current > moment().endOf('day').add(1,'day')  ;
+                  }}*/
                 />
               </Col>
             </Row>
