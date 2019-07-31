@@ -25,15 +25,9 @@ function checkStatus(response) {
   if (response.status >= 200 && response.status < 300) {
     return response;
   }
-  if (!((response.status >= 501 && response.status <= 505) || (response.status >= 400 && response.status <= 403) || (response.status >= 405 && response.status <= 406))) {
+  if (!((response.status > 500 && response.status <= 505) || (response.status >= 400 && response.status <= 403) || (response.status >= 405 && response.status <= 406))) {
     response.json().then(res => {
       message.error(res.data, 3);
-      // notification.error({
-      //   // message: `请求错误 ${response.status}: ${response.url}`,
-      //   message: res.data,
-      //   // description: res.data,
-      //   duration: 10,
-      // });
     })
   }
   const errortext = codeMessage[response.status] || response.statusText;

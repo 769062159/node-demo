@@ -32,7 +32,7 @@ export default class Protocol extends PureComponent {
   // 添加描述
   setDescription = (e) => {
     this.setState({
-        newRichText: e,
+        newRichText: e ,
     })
   }
   editProtocol = () => {

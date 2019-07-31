@@ -154,7 +154,7 @@ export default class VideoGoodsConfig extends PureComponent {
       goods_id: value
     });
   }
-  
+
   handleSubmit =  e => {
     e.preventDefault();
     const { validateFields } = this.props.form;
@@ -196,9 +196,9 @@ export default class VideoGoodsConfig extends PureComponent {
               ]}
             >
               <Input value={this.state.key} onChange={this.handleSearchKey} onPressEnter={this.goodsSearchHandle} placeholder="输入关键词，回车搜索"/>
-              <Row gutter={16}>
+              <Row gutter={16} className={styles.RowStyleBox}>
                 {goodsList.map(item =>
-                  <Col sm={12} xs={24} md={12} lg={12} xl={8} xxl={4} key={item.goods_id}>
+                  <Col  md={8} key={item.goods_id}>
                     <div className={styles.showGoods}>
                       <div className={styles.cover}>
                         <img src={item.img}  />

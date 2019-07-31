@@ -285,7 +285,6 @@ export default class My extends PureComponent {
           </Modal>
         </PageHeaderLayout>
       )
-      
     );
   }
 }

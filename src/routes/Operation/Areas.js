@@ -15,6 +15,7 @@ import {
 } from 'antd';
 import { connect } from 'dva';
 import moment from 'moment';
+import AuthDialog from '../../components/AuthDialog';
 
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
@@ -46,9 +47,6 @@ export default class AreaManagement extends React.PureComponent {
       constProvinces: [],
     },
     search: '',
-  };
-  componentDidMount = () => {
-    this.doGetAreaList();
   };
   onSaveArea = () => {
     const { areaDialog } = this.state;
@@ -84,7 +82,10 @@ export default class AreaManagement extends React.PureComponent {
         },
       });
     }
-  };
+  }
+  init = () => {
+    this.doGetAreaList();
+  }
   updateAreaDialog = updater => {
     if ('show' in updater) {
       const { dispatch } = this.props;
@@ -173,172 +174,176 @@ export default class AreaManagement extends React.PureComponent {
     });
 
     return (
-      <PageHeaderLayout>
-        <Card bordered={false}>
-          <Spin spinning={props.loading}>
-            {/* 查询 */}
-            <Row type="flex" gutter={10}>
-              <Col span={6}>
-                <Row type="flex" align="middle" gutter={10}>
-                  <Col
-                    span={6}
-                    style={{
-                      textAlign: 'right',
+      <AuthDialog
+        onAuth={this.init}
+      >
+        <PageHeaderLayout>
+          <Card bordered={false}>
+            <Spin spinning={props.loading}>
+              {/* 查询 */}
+              <Row type="flex" gutter={10}>
+                <Col span={6}>
+                  <Row type="flex" align="middle" gutter={10}>
+                    <Col
+                      span={6}
+                      style={{
+                        textAlign: 'right',
+                      }}
+                    >
+                      <span>大区名称</span>
+                    </Col>
+                    <Col span={18}>
+                      <Input
+                        type="text"
+                        prefix={<Icon type="search" />}
+                        placeholder="大区名称"
+                        value={state.search}
+                        onChange={event => {
+                          this.setState({
+                            search: event.target.value,
+                          });
+                        }}
+                      />
+                    </Col>
+                  </Row>
+                </Col>
+                <Col>
+                  <Button onClick={this.handleSearch} type="primary">
+                    查询
+                </Button>
+                </Col>
+              </Row>
+
+              {/* 添加大区 */}
+              <Row
+                style={{
+                  marginTop: '30px',
+                }}
+              >
+                <Col>
+                  <Button
+                    type="primary"
+                    onClick={() => {
+                      this.updateAreaDialog({
+                        show: true,
+                        mode: 'create',
+                        areaName: '',
+                        provinces: [],
+                        id: 0,
+                        constProvinces: [],
+                      });
                     }}
                   >
-                    <span>大区名称</span>
-                  </Col>
-                  <Col span={18}>
-                    <Input
-                      type="text"
-                      prefix={<Icon type="search" />}
-                      placeholder="大区名称"
-                      value={state.search}
-                      onChange={event => {
-                        this.setState({
-                          search: event.target.value,
-                        });
-                      }}
-                    />
-                  </Col>
-                </Row>
-              </Col>
-              <Col>
-                <Button onClick={this.handleSearch} type="primary">
-                  查询
+                    添加大区
                 </Button>
-              </Col>
-            </Row>
+                </Col>
+              </Row>
 
-            {/* 添加大区 */}
-            <Row
-              style={{
-                marginTop: '30px',
-              }}
-            >
-              <Col>
-                <Button
-                  type="primary"
-                  onClick={() => {
-                    this.updateAreaDialog({
-                      show: true,
-                      mode: 'create',
-                      areaName: '',
-                      provinces: [],
-                      id: 0,
-                      constProvinces: [],
+              {/* 大区表格 */}
+              <Table
+                dataSource={props.areaModel.list}
+                rowKey="id"
+                columns={[
+                  {
+                    title: '大区编号',
+                    dataIndex: 'id',
+                  },
+                  {
+                    title: '大区名称',
+                    dataIndex: 'name',
+                  },
+                  {
+                    title: '包含省数量',
+                    dataIndex: 'provinces',
+                    render(provinces) {
+                      return <span>{provinces.length}</span>;
+                    },
+                  },
+                  {
+                    title: '创建时间',
+                    dataIndex: 'create_time',
+                    render(value) {
+                      return <span>{moment(value * 1000).format('YYYY-MM-DD HH:mm:ss')}</span>;
+                    },
+                  },
+                  {
+                    title: '操作',
+                    render: (_, record, index) => {
+                      return (
+                        <div>
+                          <Button
+                            type="primary"
+                            style={{ marginRight: '10px' }}
+                            onClick={() => this.handleClickEdit(record, index)}
+                          >
+                            编辑
+                        </Button>
+                          <Button type="danger" onClick={() => this.handleClickDel(record, index)}>
+                            删除
+                        </Button>
+                        </div>
+                      );
+                    },
+                  },
+                ]}
+                style={{
+                  marginTop: '10px',
+                }}
+                pagination={{
+                  defaultCurrent: 1,
+                  total: props.areaModel.total,
+                  pageSize: props.areaModel.pagesize,
+                  onChange: current => {
+                    this.doGetAreaList({
+                      page: current,
                     });
-                  }}
-                >
-                  添加大区
-                </Button>
-              </Col>
-            </Row>
+                  },
+                }}
+              />
 
-            {/* 大区表格 */}
-            <Table
-              dataSource={props.areaModel.list}
-              rowKey="id"
-              columns={[
-                {
-                  title: '大区编号',
-                  dataIndex: 'id',
-                },
-                {
-                  title: '大区名称',
-                  dataIndex: 'name',
-                },
-                {
-                  title: '包含省数量',
-                  dataIndex: 'provinces',
-                  render(provinces) {
-                    return <span>{provinces.length}</span>;
-                  },
-                },
-                {
-                  title: '创建时间',
-                  dataIndex: 'create_time',
-                  render(value) {
-                    return <span>{moment(value * 1000).format('YYYY-MM-DD HH:mm:ss')}</span>;
-                  },
-                },
-                {
-                  title: '操作',
-                  render: (_, record, index) => {
-                    return (
-                      <div>
-                        <Button
-                          type="primary"
-                          style={{ marginRight: '10px' }}
-                          onClick={() => this.handleClickEdit(record, index)}
-                        >
-                          编辑
-                        </Button>
-                        <Button type="danger" onClick={() => this.handleClickDel(record, index)}>
-                          删除
-                        </Button>
-                      </div>
-                    );
-                  },
-                },
-              ]}
-              style={{
-                marginTop: '10px',
-              }}
-              pagination={{
-                defaultCurrent: 1,
-                total: props.areaModel.total,
-                pageSize: props.areaModel.pagesize,
-                onChange: current => {
-                  this.doGetAreaList({
-                    page: current,
+              {/* 编辑、创建大区 */}
+              <Modal
+                title={state.areaDialog.mode === 'create' ? '添加大区' : '编辑大区'}
+                visible={props.areaDialogShow}
+                onCancel={() => {
+                  this.updateAreaDialog({
+                    show: false,
                   });
-                },
-              }}
-            />
-
-            {/* 编辑、创建大区 */}
-            <Modal
-              title={state.areaDialog.mode === 'create' ? '添加大区' : '编辑大区'}
-              visible={props.areaDialogShow}
-              onCancel={() => {
-                this.updateAreaDialog({
-                  show: false,
-                });
-              }}
-              onOk={this.onSaveArea}
-            >
-              <Spin spinning={props.loading}>
-                <Form layout="horizontal">
-                  <Form.Item {...formItemLayout} label="大区名称">
-                    <Input
-                      type="text"
-                      placeholder="请输入"
-                      value={state.areaDialog.areaName}
-                      onChange={event => {
-                        this.updateAreaDialog({
-                          areaName: event.target.value,
-                        });
-                      }}
-                    />
-                  </Form.Item>
-                  <Form.Item {...formItemLayout} label="包含省份">
-                    <CheckboxGroup
-                      options={allProvinces}
-                      value={state.areaDialog.provinces}
-                      onChange={value => {
-                        this.updateAreaDialog({
-                          provinces: value,
-                        });
-                      }}
-                    />
-                  </Form.Item>
-                </Form>
-              </Spin>
-            </Modal>
-          </Spin>
-        </Card>
-      </PageHeaderLayout>
+                }}
+                onOk={this.onSaveArea}
+              >
+                <Spin spinning={props.loading}>
+                  <Form layout="horizontal">
+                    <Form.Item {...formItemLayout} label="大区名称">
+                      <Input
+                        type="text"
+                        placeholder="请输入"
+                        value={state.areaDialog.areaName}
+                        onChange={event => {
+                          this.updateAreaDialog({
+                            areaName: event.target.value,
+                          });
+                        }}
+                      />
+                    </Form.Item>
+                    <Form.Item {...formItemLayout} label="包含省份">
+                      <CheckboxGroup
+                        options={allProvinces}
+                        value={state.areaDialog.provinces}
+                        onChange={value => {
+                          this.updateAreaDialog({
+                            provinces: value,
+                          });
+                        }}
+                      />
+                    </Form.Item>
+                  </Form>
+                </Spin>
+              </Modal>
+            </Spin>
+          </Card>
+        </PageHeaderLayout>
+      </AuthDialog>
     );
   }
 }

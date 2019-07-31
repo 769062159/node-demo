@@ -416,6 +416,7 @@ export default class Setting extends PureComponent {
                 <Col span={20} style={{ marginTop: 10 }}>
                   <Select onChange={this.handlePay} style={{ width: 200 }} value={programDetail.pay_type}>
                     <Option value={1} key={1}>微信支付</Option>
+                    <Option value={6} key={6}>淘淘谷</Option>
                     <Option value={3} key={3}>钱尔通支付</Option>
                   </Select>
                 </Col>

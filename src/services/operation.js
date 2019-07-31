@@ -165,3 +165,11 @@ export function searchLecturerPlace(qs) {
     qs,
   });
 }
+
+// (已代理区域)获取运营中心列表 page, pagesize, key, status
+export function getCenterListRegion(qs) {
+  return request('/merchant/operate/paginate/region', {
+    method: 'GET',
+    qs,
+  });
+}

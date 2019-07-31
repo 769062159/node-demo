@@ -290,8 +290,8 @@ export default class Rank extends PureComponent {
                   {getFieldDecorator('action_type')(
                     <Select placeholder="请选择" style={{ minWidth: '100px', width: '100%' }}>
                       {
-                        actionType.map((item, index) => {
-                          return <Option value={index} key={index} >{item}</Option>
+                        actionType.map((item,index) => {
+                          return <Option value={index} key={index}>{item}</Option>
                         })
                       }
                     </Select>

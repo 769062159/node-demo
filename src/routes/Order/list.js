@@ -160,7 +160,7 @@ export default class Order extends PureComponent {
       method: 'POST',
       body: manualOrder
     }).then(res => {
-      console.log(res)
+
       if (res && res.code === 200) {
         const { dispatch, order: { searchOrderSn } } = this.props;
         const { page } = this.state;
@@ -360,7 +360,7 @@ export default class Order extends PureComponent {
         page_number: 99
       },
     }).then(res => {
-      if (res.code === 200) {
+      if (res&&res.code === 200) {
         this.setState({
           manualOrderGoods: res.data.list
         })
@@ -436,6 +436,13 @@ export default class Order extends PureComponent {
       }
     }
   };
+  changeAttendanceId=e=>{
+    var {manualOrder} = this.state;
+    manualOrder.attendance_id = e.target.value
+    this.setState({
+      manualOrder
+    })
+  }
   changeManualOrderId = e => {
     var {manualOrder} = this.state;
     manualOrder.user_id = e.target.value
@@ -505,13 +512,13 @@ export default class Order extends PureComponent {
       }
       if (values.end_order_time) {
         values.end_order_time = parseInt(new Date(moment(values.end_order_time).format('YYYY-MM-DD 23:59:59')).getTime()/ 1000, 10);
-        // console.log(new Date(values.end_order_time).getTime());
+
       } else {
         delete values.end_order_time;
       }
       if (values.start_order_time) {
         values.start_order_time = parseInt(new Date(moment(values.start_order_time).format('YYYY-MM-DD 00:00:00')).getTime()/ 1000, 10);
-        // console.log(new Date(values.start_order_time).getTime());
+
       } else {
         delete values.start_order_time;
       }
@@ -528,7 +535,7 @@ export default class Order extends PureComponent {
         body: JSON.stringify(values),
       });
       res.json().then(res => {
-        console.log(res)
+
         res.data.url && window.open(res.data.url)
       })
       // res.blob().then(blob => {
@@ -585,13 +592,13 @@ export default class Order extends PureComponent {
       }
       if (values.end_order_time) {
         values.end_order_time = parseInt(new Date(moment(values.end_order_time).format('YYYY-MM-DD 23:59:59')).getTime()/ 1000, 10);
-        // console.log(new Date(values.end_order_time).getTime());
+
       } else {
         delete values.end_order_time;
       }
       if (values.start_order_time) {
         values.start_order_time = parseInt(new Date(moment(values.start_order_time).format('YYYY-MM-DD 00:00:00')).getTime()/ 1000, 10);
-        // console.log(new Date(values.start_order_time).getTime());
+
       } else {
         delete values.start_order_time;
       }
@@ -764,6 +771,7 @@ export default class Order extends PureComponent {
                   <Option value="2">支付宝支付</Option>
                   <Option value="3">扫呗支付</Option>
                   <Option value="4">线下支付</Option>
+                  <Option value="5">地网订单推送</Option>
                 </Select>
               )}
             </FormItem>
@@ -1031,7 +1039,11 @@ export default class Order extends PureComponent {
                         <Col span={6} style={{ paddingLeft: 10, color: '#f44' }}>
                           订单类型：线下订单
                         </Col>
-                      ) : ''
+                      ) : item.pay_type === 5 &&(
+                        <Col span={6} style={{ paddingLeft: 10, color: '#f44' }}>
+                          订单类型：地网订单推送
+                        </Col>
+                      )
                     }
                     <Col span={6} style={{ paddingLeft: 10 }}>
                       订单号：{item.order_sn}
@@ -1122,6 +1134,16 @@ export default class Order extends PureComponent {
                 defaultValue={manualOrder.id}
                 placeholder="请输入购买人ID"
                 onChange={this.changeManualOrderId}
+              />
+            </Col>
+          </Row>
+          <Row style={{ margin: '20px 0' }}>
+            <Col span={8}>签到码ID</Col>
+            <Col span={16}>
+              <Input
+                // defaultValue={manualOrder.id}
+                placeholder="请输入签到码ID"
+                onChange={this.changeAttendanceId}
               />
             </Col>
           </Row>

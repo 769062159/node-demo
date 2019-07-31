@@ -57,6 +57,7 @@ export default class GoodsList extends PureComponent {
 
   componentDidMount() {
     const { dispatch } = this.props;
+
     dispatch({
       type: 'goods/fetchGoods',
       payload: {
@@ -476,7 +477,6 @@ export default class GoodsList extends PureComponent {
   }
 
   render() {
-    // console.log(this.props);
     const { goods: { goodsList: datas, goodsListPage }, loading } = this.props;
     const data = {
       list: datas,
@@ -562,6 +562,7 @@ export default class GoodsList extends PureComponent {
       {
         title: '分享路径',
         dataIndex: 'goods_id',
+        key:'goods_id1',
         render: val => `/pages/goods-detail/main?id=${val}&referee_id=`,
       },
       {

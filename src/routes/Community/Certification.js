@@ -1,5 +1,6 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
+import '../../utils/emptyUtils'
 // import moment from 'moment';
 import {
   Row,
@@ -491,12 +492,12 @@ export default class Certification extends PureComponent {
           //     <div>VIP:{text.referee && text.referee.nickname}</div>
           //   </Col>
           // </Row>
-          <div className={styles.userBox}>
-            <img style={{ height: 80, width: 80, marginRight: 10, float: 'left' }} src={text.has_user.avatar} alt="头像" />
-            <div className={styles.userInfo}>
-              <div>{text.has_user.nickname}</div>
-              <div>Id:{text.has_user.fake_id}</div>
-              <div>手机号码:{text.has_user.mobile}</div>
+          <div >
+            <img style={{ height: 80, width: 80, marginRight: 10, float: 'left' }} src={empty.check(text.has_user)?text.has_user.avatar:''} alt="头像" />
+            <div >
+              <div>{empty.check(text.has_user)&&text.has_user.nickname}</div>
+              <div>Id:{empty.check(text.has_user)&&text.has_user.fake_id}</div>
+              <div>手机号码:{empty.check(text.has_user)&&text.has_user.mobile}</div>
             </div>
           </div>
         ),
