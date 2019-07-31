@@ -25,7 +25,7 @@ const formSubmitLayout = {
 const { TextArea } = Input;
 const refundType = ['默认', '退款', '退货'];
 const refundStatus = ['没有申请过退款', ' 退款申请中', '退款拒绝', '退款同意'];
-const payType = ['微信支付', '支付宝支付', '扫呗支付', '线下支付'];
+const payType = ['微信支付', '支付宝支付', '扫呗支付', '线下支付','地网订单推送','淘淘谷'];
 // const { confirm } = Modal;
 
 @connect(({ finance, loading }) => ({
@@ -229,7 +229,7 @@ export default class Withdraw extends PureComponent {
         <FormItem {...formItemLayout} label="是否退款">
           {getFieldDecorator('money_type')(<Switch onChange={(value)=>{this.setState({money_type:value?1:2})}} />)}
         </FormItem>
-        {this.state.editData.refund_type==6&&
+        {this.state.editData.has_order_pack&&this.state.editData.has_order_pack.pay_type==6&&
         <FormItem {...formItemLayout} label="密码">
           {getFieldDecorator('password',{rules: [{required:true, message: '请输入密码' }],})(<Input placeholder="请输入密码" type='password' onChange={(e)=>{this.setState({password:e.target.value})}} />)}
         </FormItem>}
