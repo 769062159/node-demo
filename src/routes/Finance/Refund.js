@@ -1,7 +1,7 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
 import moment from 'moment';
-import { Table, message, Modal, Card, Form, Input, Button, Divider, InputNumber, Row, Col, Select } from 'antd';
+import { Switch,Table, message, Modal, Card, Form, Input, Button, Divider, InputNumber, Row, Col, Select } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
 import styles from './TableList.less';
@@ -121,6 +121,9 @@ export default class Withdraw extends PureComponent {
         } else {
           values.type = type;
           values.order_goods_sku_id = editData.order_goods_sku_id;
+          //是否退款状态：1退款，2不退
+          if(this.state.money_type){values.money_type=this.state.money_type}
+          if(this.state.password){values.password=this.state.password}
           dispatch({
             type: 'finance/updateRefundStatus',
             payload: values,
@@ -151,7 +154,7 @@ export default class Withdraw extends PureComponent {
         refund_status: selectState,
         page,
       },
-    }); 
+    });
   }
   handleFormReset = () => {
     this.setState({
@@ -217,43 +220,25 @@ export default class Withdraw extends PureComponent {
         style={{ marginTop: 8 }}
         autoComplete="OFF"
       >
-        {/* <Row>
-          <Col span={5}>
-           申请日期:
-          </Col>
-          <Col span={19}>
-            {moment(editData.create_time*1000).format('YYYY-MM-DD HH:mm:ss')}
-          </Col>
-          <Col span={5}>
-            申请金额:
-          </Col>
-          <Col span={19}>
-            {editData.money}
-          </Col>
-          <Col span={5}>
-            收款帐号:
-          </Col>
-          <Col span={19}>
-            {editData.account_no}
-          </Col>
-          <Col span={5}>
-            收款人:
-          </Col>
-          <Col span={19}>
-            {editData.real_name}
-          </Col>
-        </Row> */}
         <FormItem {...formItemLayout} style={{ marginBottom: 5 }} label="申请日期">
           {moment(editData.create_time).format('YYYY-MM-DD HH:mm:ss')}
         </FormItem>
         <FormItem {...formItemLayout} style={{ marginBottom: 5 }} label="退款金额">
           {editData.refund_money}
         </FormItem>
+        <FormItem {...formItemLayout} label="是否退款">
+          {getFieldDecorator('money_type')(<Switch onChange={(value)=>{this.setState({money_type:value?1:2})}} />)}
+        </FormItem>
+        {this.state.editData.refund_type==6&&
+        <FormItem {...formItemLayout} label="密码">
+          {getFieldDecorator('password',{rules: [{required:true, message: '请输入密码' }],})(<Input placeholder="请输入密码" type='password' onChange={(e)=>{this.setState({password:e.target.value})}} />)}
+        </FormItem>}
         <FormItem {...formItemLayout} label="备注">
           {getFieldDecorator('remark', {
             rules: [],
           })(<TextArea placeholder="请输入备注" autosize />)}
         </FormItem>
+
         <FormItem style={{ marginTop: 32 }} {...formSubmitLayout}>
           <Button type="primary" htmlType="submit" loading={loading}>
             同意
@@ -327,19 +312,21 @@ export default class Withdraw extends PureComponent {
         title: '支付类型',
         dataIndex: 'has_order_pack',
         width: 120,
+        key:'has_order_pack_type',
         render: val => payType[val.pay_type - 1],
       },
       {
         title: '订单',
         dataIndex: 'has_order_pack',
         width: 120,
+        key:'has_order_pack_order',
         render: val => val.order_sn,
       },
       {
         title: '用户昵称',
         dataIndex: 'has_user',
         width: 120,
-        render: val => val.nickname,
+        render: val => val&&val.nickname,
       },
       {
         title: '申请时间',
