@@ -42,6 +42,7 @@ export default class Withdraw extends PureComponent {
     // formValues: {},
     page: 1, // 页脚
     type: 0, // 是否同意
+    money_type:2,//默认不退款
   };
   componentDidMount() {
     const { dispatch } = this.props;
@@ -226,10 +227,10 @@ export default class Withdraw extends PureComponent {
         <FormItem {...formItemLayout} style={{ marginBottom: 5 }} label="退款金额">
           {editData.refund_money}
         </FormItem>
-        <FormItem {...formItemLayout} label="是否退款">
+        <FormItem {...formItemLayout} label="是否退钱">
           {getFieldDecorator('money_type')(<Switch onChange={(value)=>{this.setState({money_type:value?1:2})}} />)}
         </FormItem>
-        {this.state.editData.has_order_pack&&this.state.editData.has_order_pack.pay_type==6&&
+        {this.state.money_type==1&&this.state.editData.has_order_pack&&this.state.editData.has_order_pack.pay_type==6&&
         <FormItem {...formItemLayout} label="密码">
           {getFieldDecorator('password',{rules: [{required:true, message: '请输入密码' }],})(<Input placeholder="请输入密码" type='password' onChange={(e)=>{this.setState({password:e.target.value})}} />)}
         </FormItem>}
