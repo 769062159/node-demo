@@ -25,7 +25,7 @@ const formSubmitLayout = {
 const { TextArea } = Input;
 const refundType = ['默认', '退款', '退货'];
 const refundStatus = ['没有申请过退款', ' 退款申请中', '退款拒绝', '退款同意'];
-const payType = ['微信支付', '支付宝支付', '扫呗支付', '线下支付','地网订单推送','淘淘谷'];
+// const payType = ['微信支付', '支付宝支付', '扫呗支付', '线下支付','地网订单推送','淘淘谷'];
 // const { confirm } = Modal;
 
 @connect(({ finance, loading }) => ({

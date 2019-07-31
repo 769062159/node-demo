@@ -10,7 +10,7 @@ import styles from './List.less';
 const { Step } = Steps;
 const oredrStatus = ['未支付', '已取消', '待发货', '已发货', '待评价', '已评价', '退款成功'];
 
-const payType=['微信',"支付宝","钱尔通",,,"淘淘谷"]
+// const payType = ['微信支付', '支付宝支付', '扫呗支付', '线下支付','地网订单推送','淘淘谷'];
 
 @connect(({ order, loading }) => ({
   order,
