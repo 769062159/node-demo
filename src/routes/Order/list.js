@@ -828,7 +828,7 @@ export default class Order extends PureComponent {
     if (manualOrderGoods.length) {
       manualOrderGoods.map(v => {
         manualOrderGoodsItem.push(
-          <Option value={v.has_shop_goods_sku[0].sku_id} key={v.goods_id}>{v.goods_name}</Option>
+          <Option value={v.has_shop_goods_sku[0].sku_id} key={v.goods_id+Math.random()}>{v.goods_name}</Option>
         )
       })
     }
@@ -837,7 +837,7 @@ export default class Order extends PureComponent {
     if (applets.length) {
       applets.map(v => {
         appletsItem.push(
-          <Option value={v.id} key={v.id}>{v.name}</Option>
+          <Option value={v.id} key={v.id+Math.random()}>{v.name}</Option>
         )
       })
     }
@@ -870,7 +870,11 @@ export default class Order extends PureComponent {
         render: val =>
           val.map(res => {
             return (
+<<<<<<< HEAD
               <Row key={res.order_goods_id}>
+=======
+              <Row key={res.pack_id+Math.random()}>
+>>>>>>> 0d910d8... 退款申请新增是否退款淘淘谷支付密码字段
                 <Col span={6}>
                   <img src={res.has_order_goods_sku.http_url} alt="图片" style={{ width: 60 }} />
                 </Col>
@@ -1063,7 +1067,7 @@ export default class Order extends PureComponent {
                   {item.has_order_pack &&
                     item.has_order_pack.map((res, index) => {
                       return (
-                        <div key={res.pack_id}>
+                        <div key={res.pack_id+Math.random()}>
                           {/* <Card.Grid style={{ padding: 0, width: '100%' }}> */}
                           <Row
                             style={{
