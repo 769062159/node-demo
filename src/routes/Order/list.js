@@ -870,11 +870,7 @@ export default class Order extends PureComponent {
         render: val =>
           val.map(res => {
             return (
-<<<<<<< HEAD
-              <Row key={res.order_goods_id}>
-=======
               <Row key={res.pack_id+Math.random()}>
->>>>>>> 0d910d8... 退款申请新增是否退款淘淘谷支付密码字段
                 <Col span={6}>
                   <img src={res.has_order_goods_sku.http_url} alt="图片" style={{ width: 60 }} />
                 </Col>

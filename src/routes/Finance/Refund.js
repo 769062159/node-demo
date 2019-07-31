@@ -312,22 +312,14 @@ export default class Withdraw extends PureComponent {
         title: '支付类型',
         dataIndex: 'has_order_pack',
         width: 120,
-<<<<<<< HEAD
-        key:'has_order_pack',
-=======
         key:'has_order_pack_type',
->>>>>>> 0d910d8... 退款申请新增是否退款淘淘谷支付密码字段
         render: val => payType[val.pay_type - 1],
       },
       {
         title: '订单',
         dataIndex: 'has_order_pack',
         width: 120,
-<<<<<<< HEAD
-        key:'has_order_pack1',
-=======
         key:'has_order_pack_order',
->>>>>>> 0d910d8... 退款申请新增是否退款淘淘谷支付密码字段
         render: val => val.order_sn,
       },
       {

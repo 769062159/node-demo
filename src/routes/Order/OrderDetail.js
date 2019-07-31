@@ -1,21 +1,17 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'dva';
-<<<<<<< HEAD
-// import moment from 'moment';
-import { Row, Steps, Table, Card } from 'antd';
-=======
+
 import { Row, Steps, Table, Card,Col } from 'antd';
->>>>>>> 0d910d8... 退款申请新增是否退款淘淘谷支付密码字段
+
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 
 import styles from './List.less';
 
 const { Step } = Steps;
 const oredrStatus = ['未支付', '已取消', '待发货', '已发货', '待评价', '已评价', '退款成功'];
-<<<<<<< HEAD
-=======
+
 const payType=['微信',"支付宝","钱尔通",,,"淘淘谷"]
->>>>>>> 0d910d8... 退款申请新增是否退款淘淘谷支付密码字段
+
 @connect(({ order, loading }) => ({
   order,
   loading: loading.models.order,
@@ -23,7 +19,7 @@ const payType=['微信',"支付宝","钱尔通",,,"淘淘谷"]
 export default class orderDetail extends PureComponent {
   state = {
   }
-  
+
   componentDidMount() {
     const { dispatch, match: { params: { id } } } = this.props;
     dispatch({
@@ -94,15 +90,13 @@ export default class orderDetail extends PureComponent {
             return (
               <Card title={`包裹${res.index}`} key={res.pack_id} style={{ marginTop: 10  }} bordered={false} >
                 <div className={styles.whiteBlock}>
-<<<<<<< HEAD
-                  <Row className={styles.grayBlock}>包裹编号:<span className={styles.sn}>{res.order_sn}</span></Row>
-=======
+
                   <Row className={styles.grayBlock}>
                     <Col>包裹编号: <span className={styles.sn}>{res.order_sn?res.order_sn:'暂无'}</span></Col>
                     <Col>第三方订单号: <span className={styles.sn}>{res.pay_sn?res.pay_sn:'暂无'}</span></Col>
                     <Col>支付类型: <span className={styles.sn}>{payType[res.pay_type-1]?payType[res.pay_type-1]:'暂无'}</span></Col>
                   </Row>
->>>>>>> 0d910d8... 退款申请新增是否退款淘淘谷支付密码字段
+
                   <Row className={styles.stepBlock}>
                     {
                       res.order_status === 1 ? (
