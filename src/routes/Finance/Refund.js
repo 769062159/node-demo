@@ -149,7 +149,7 @@ export default class Withdraw extends PureComponent {
   }
   changeUserState=(e)=>{
     this.setState({
-      uer_id: e.target.value,
+      user_id: e.target.value,
     })
   }
   changeOrderState=(e)=>{
