@@ -29,8 +29,8 @@ class GoodsConfig extends Component {
       },
       {
         title: '售价',
-        dataIndex: 'goods_price',
-        key: 'goods_price',
+        dataIndex: 'sell_goods_price',
+        key: 'sell_goods_price',
         render:(text)=>{
           return `￥${text}`
         }
