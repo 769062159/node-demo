@@ -768,7 +768,7 @@ export default class Order extends PureComponent {
               {getFieldDecorator('pay_type')(
                 <Select placeholder="请选择" style={{ width: '100%' }}>
                   {payType.map((item,index)=>(
-                    <Option value={index} key={index+Math.random()}>{item}</Option>
+                    <Option value={index+1} key={index+Math.random()}>{item}</Option>
                   ))}
                 </Select>
               )}

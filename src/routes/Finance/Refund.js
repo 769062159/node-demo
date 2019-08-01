@@ -147,21 +147,38 @@ export default class Withdraw extends PureComponent {
       selectState: e,
     })
   }
+  changeUserState=(e)=>{
+    this.setState({
+      uer_id: e.target.value,
+    })
+  }
+  changeOrderState=(e)=>{
+    this.setState({
+      order_sn:e.target.value
+    })
+
+  }
   search = () => {
     const { dispatch } = this.props;
-    const { page, selectState } = this.state;
+    const { page, selectState,user_id,order_sn } = this.state;
+    console.log(user_id,order_sn)
+    let body={
+      page,
+    }
+    if(selectState){body.refund_status=selectState}
+    if(user_id){body.user_id=user_id}
+    if(order_sn){body.order_sn=order_sn}
     dispatch({
       type: 'finance/fetchRefundList',
-      payload: {
-        refund_status: selectState,
-        page,
-      },
+      payload: body,
     });
   }
   handleFormReset = () => {
     this.setState({
       page: 1,
       selectState: null,
+      uer_id:null,
+      order_sn:null
     });
     const { dispatch } = this.props;
     dispatch({
@@ -336,6 +353,11 @@ export default class Withdraw extends PureComponent {
         render: val => <span>{moment(val * 1000).format('YYYY-MM-DD HH:mm:ss')}</span>,
       },
       {
+        title: '退款成功时间',
+        dataIndex: 'refund_into_at',
+        render: val => <span>{val?moment(val * 1000).format('YYYY-MM-DD HH:mm:ss'):'暂无'}</span>,
+      },
+      {
         title: '申请退款金额',
         dataIndex: 'refund_apply_money',
       },
@@ -384,7 +406,7 @@ export default class Withdraw extends PureComponent {
       <PageHeaderLayout>
         <Card bordered={false}>
           <Row gutter={{ md: 8, lg: 24, xl: 48 }}>
-            <Col md={8} sm={24}>
+            <Col md={6} sm={24} style={{display:'flex',flexWrap:'nowrap',lineHeight:'36px',whiteSpace:'nowrap'}}>
               状态：
               <Select value={selectState} onChange={this.changeState} placeholder="请选择" style={{ width: 200 }}>
                 <Option value={3}>退款同意</Option>
@@ -392,7 +414,15 @@ export default class Withdraw extends PureComponent {
                 <Option value={2}>退款拒绝</Option>
               </Select>
             </Col>
-            <Col md={8} sm={24}>
+            <Col md={6} sm={24} style={{display:'flex',flexWrap:'nowrap',lineHeight:'36px',whiteSpace:'nowrap'}}>
+              用户ID：
+              <Input value={this.state.user_id} onChange={(e)=>this.changeUserState(e)} placeholder="请输入用户ID" style={{ width: 200 }}/>
+            </Col>
+            <Col md={6} sm={24} style={{display:'flex',flexWrap:'nowrap',lineHeight:'36px',whiteSpace:'nowrap'}}>
+              订单号：
+              <Input value={this.state.order_sn} onChange={(e)=>this.changeOrderState(e)} placeholder="请输入订单号" style={{ width: 200 }}/>
+            </Col>
+            <Col md={6} sm={24}>
               <span className={styles.submitButtons}>
                 <Button type="primary" onClick={this.search}>
                   查询
