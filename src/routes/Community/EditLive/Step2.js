@@ -21,7 +21,7 @@ import {
 // import { Form, Button, Input, Upload, Icon, Modal, Tag, message } from 'antd';
 // import LiveGoodTable from '../../../components/LiveGoodTable';
 import ReactEditor from 'components/ReactEditor';
-import { uploadJSSDK2 as uploadJSSDK, base64ToFile } from '../../../utils/utils';
+import { uploadJSSDK, base64ToFile } from '../../../utils/utils';
 import { UPLOAD_TYPE } from '../../../utils/config';
 // import { env } from '../../../utils/config';
 import request from '../../../utils/request';
@@ -488,7 +488,9 @@ class EditLiveStep2 extends React.PureComponent {
         page_number: 10,
       },
     });
-   
+    dispatch({
+      type: 'live/fetchToken',
+    });
     dispatch({
       type: 'frontUser/fetchUserRankList',
     });
@@ -878,7 +880,6 @@ class EditLiveStep2 extends React.PureComponent {
             dispatch({
               type: 'classModel/setUploadImg',
               payload: {
-                url: result.url,
                 dir: `${env.videoUrl}/${currentUser.id}/${currentUser.shop_store_id}`,
                 filename: randomNum,
                 ext: 'mp4',
@@ -1289,7 +1290,7 @@ class EditLiveStep2 extends React.PureComponent {
         width: 100,
         render: val =>
           val ? (
-            <img src={`${val}`} style={{ width: '60px', height: 60 }} alt="图片" />
+            <img src={`${imgUrl}${val}`} style={{ width: '60px', height: 60 }} alt="图片" />
           ) : null,
       },
       {
