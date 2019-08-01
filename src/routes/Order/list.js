@@ -745,11 +745,9 @@ export default class Order extends PureComponent {
             <FormItem label="支付类型">
               {getFieldDecorator('pay_type')(
                 <Select placeholder="请选择" style={{ width: '100%' }}>
-                  <Option value="1">微信支付</Option>
-                  <Option value="2">支付宝支付</Option>
-                  <Option value="3">扫呗支付</Option>
-                  <Option value="4">线下支付</Option>
-                  <Option value="5">地网订单推送</Option>
+                  {payType.map((item,index)=>(
+                    <Option value={index} key={index+Math.random()}>{item}</Option>
+                  ))}
                 </Select>
               )}
             </FormItem>
