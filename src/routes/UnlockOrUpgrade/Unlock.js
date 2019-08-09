@@ -77,7 +77,9 @@ class Unlock extends Component {
     }
     // this.clearData()
   }
-
+  init=()=>{
+    this.props.dispatch({ type:'unlockorupgrade/getUnlockChangeList'})
+  }
   clearData=()=>{
     this.setState({
       search_type:0,
@@ -89,7 +91,7 @@ class Unlock extends Component {
   }
   componentDidMount(){
     const {dispatch}=this.props
-    dispatch({ type:'unlockorupgrade/getUnlockChangeList'})
+    // this.props.dispatch({ type:'unlockorupgrade/getUnlockChangeList'})
     // dispatch({ type: 'unlockorupgrade/fetchFrontUserList' });
   }
   render() {
@@ -197,7 +199,8 @@ class Unlock extends Component {
       },
     ];
     return (
-      <AuthDialog>
+      <AuthDialog
+      onAuth={this.init}>
         <PageHeaderLayout>
           <Card>
             <Row className={styles.rowStyle}>

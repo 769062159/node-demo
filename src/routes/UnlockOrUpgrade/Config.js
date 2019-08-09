@@ -112,12 +112,14 @@ class Config extends Component {
       upgrade_number2:'',
     })
   }
-
-  componentDidMount(){
+  init=()=>{
     const { dispatch } = this.props;
     dispatch({ type:'unlockorupgrade/getCodeInfo' })
     dispatch({ type:'unlockorupgrade/unlockTypeList' })
     dispatch({ type:'unlockorupgrade/upgradeTypeList' })
+  }
+  componentDidMount(){
+
   }
 
   componentWillReceiveProps(nextProps){
@@ -248,7 +250,8 @@ class Config extends Component {
     const {modalStatus}=this.state
     const {unlockorupgrade,goods,global}=this.props
     return (
-      <AuthDialog>
+      <AuthDialog
+      onAuth={this.init}>
         <PageHeaderLayout>
           <Card title="解锁码赠送设置" className={styles.cardStyle}>
             <Button type='primary' onClick={()=>this.showModal(0)}>新建解锁码赠送规则</Button>

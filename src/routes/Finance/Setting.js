@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import { connect } from 'dva';
 import { Form, Card, InputNumber, Button, Radio, message, Tag, Switch, Modal, Input } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
-
+import AuthDialog from '../../components/AuthDialog';
 import styles from './TableList.less';
 
 const FormItem = Form.Item;
@@ -34,8 +34,7 @@ export default class Withdraw extends PureComponent {
     passwordVisible: true,
     password: ''
   };
-
-  componentDidMount() {
+  init=()=>{
     if (this.props.global.actionPassword != '') {
       this.setState({
         password: this.props.global.actionPassword,
@@ -44,6 +43,16 @@ export default class Withdraw extends PureComponent {
         this.handlePasswordConfirm();
       })
     }
+  }
+  componentDidMount() {
+    /*if (this.props.global.actionPassword != '') {
+      this.setState({
+        password: this.props.global.actionPassword,
+        passwordVisible: false
+      }, function() {
+        this.handlePasswordConfirm();
+      })
+    }*/
   };
 
   handlePasswordChange = e => {
@@ -128,7 +137,8 @@ export default class Withdraw extends PureComponent {
     const { loading, finance: { withdrawConfig } } = this.props;
     const { getFieldDecorator } = this.props.form;
     return (
-      this.props.global.actionPassword != '' ? (
+      <AuthDialog
+      onAuth={this.init}>
         <PageHeaderLayout>
           <Card bordered={false}>
             <Tag
@@ -155,10 +165,10 @@ export default class Withdraw extends PureComponent {
                 {getFieldDecorator('withdraw_type', {
                   initialValue: withdrawConfig.withdraw_type,
                   rules: [
-                      {
-                          required: true,
-                          message: '请输入提现方式',
-                      },
+                    {
+                      required: true,
+                      message: '请输入提现方式',
+                    },
                   ],
                 })(
                   <RadioGroup onChange={this.radioChange}>
@@ -184,10 +194,10 @@ export default class Withdraw extends PureComponent {
                     {getFieldDecorator('auto_withdraw_amount', {
                       initialValue: withdrawConfig.auto_withdraw_amount,
                       rules: [
-                          {
-                              required: true,
-                              message: '请输入自动提现上限',
-                          },
+                        {
+                          required: true,
+                          message: '请输入自动提现上限',
+                        },
                       ],
                     })(
                       <InputNumber  style={{ width: 300 }} max={20000} />
@@ -199,10 +209,10 @@ export default class Withdraw extends PureComponent {
                 {getFieldDecorator('withdraw_limit', {
                   initialValue: withdrawConfig.withdraw_limit,
                   rules: [
-                      {
-                          required: true,
-                          message: '请输入每月提现金额不超过',
-                      },
+                    {
+                      required: true,
+                      message: '请输入每月提现金额不超过',
+                    },
                   ],
                 })(<InputNumber placeholder="请输入每月提现金额不超过" style={{ width: 300 }} />)}
               </FormItem>
@@ -210,10 +220,10 @@ export default class Withdraw extends PureComponent {
                 {getFieldDecorator('withdraw_tax', {
                   initialValue: withdrawConfig.withdraw_tax,
                   rules: [
-                      {
-                          required: true,
-                          message: '请输入起征点',
-                      },
+                    {
+                      required: true,
+                      message: '请输入起征点',
+                    },
                   ],
                 })(<InputNumber placeholder="请输入个税起征点" style={{ width: 300 }} />)}
               </FormItem>
@@ -221,13 +231,13 @@ export default class Withdraw extends PureComponent {
                 {getFieldDecorator('withdraw_tax_proportion', {
                   initialValue: withdrawConfig.withdraw_tax_proportion || 0,
                   getValueFromEvent(val) {
-                      return val ? val : 0;
+                    return val ? val : 0;
                   },
                   rules: [
-                      {
-                          required: true,
-                          message: '请输入手续费率',
-                      },
+                    {
+                      required: true,
+                      message: '请输入手续费率',
+                    },
                   ],
                 })(<InputNumber max={100} min={0} formatter={value => `${parseInt(value || 0, 10)}`} placeholder="请输入税率" style={{ width: 300 }} />)}
               </FormItem>
@@ -239,29 +249,9 @@ export default class Withdraw extends PureComponent {
             </Form>
           </Card>
         </PageHeaderLayout>
-        ) : (
-          <PageHeaderLayout>
-            <Modal
-              title='校验操作密码'
-              visible={this.state.passwordVisible}
-              onCancel={this.handlePasswordCancel.bind(this)}
-              destroyOnClose="true"
-              footer=""
-              maskClosable={false}
-              closable={true}
-              keyboard={false}
-            >
-                <FormItem label={`操作密码`} {...formItemLayout}>
-                  <Input.Password value={this.state.password} onChange={this.handlePasswordChange} onPressEnter={this.handlePasswordConfirm}/>
-                </FormItem>
-                <FormItem style={{ marginTop: 32 }} {...formSubmitLayout}>
-                  <Button type="primary" onClick={this.handlePasswordConfirm}>
-                    确认
-                  </Button>
-                </FormItem>
-            </Modal>
-          </PageHeaderLayout>
-        )
+
+      </AuthDialog>
+
     );
   }
 }

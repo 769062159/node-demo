@@ -40,7 +40,7 @@ export default class My extends PureComponent {
     passwordVisible: true,
     password: ''
   };
-  componentDidMount() {
+  init=()=>{
     if (this.props.global.actionPassword != '') {
       this.setState({
         password: this.props.global.actionPassword,
@@ -49,6 +49,9 @@ export default class My extends PureComponent {
         this.handlePasswordConfirm();
       })
     }
+  }
+  componentDidMount() {
+
   }
 
   handlePasswordChange = e => {
@@ -74,8 +77,7 @@ export default class My extends PureComponent {
 
         dispatch({
           type: 'program/fetchProgramList',
-          payload: {
-          }
+          payload: {}
         })
       }
     });
@@ -211,7 +213,8 @@ export default class My extends PureComponent {
       );
     });
     return (
-      <AuthDialog>
+      <AuthDialog
+      onAuth={this.init}>
         <PageHeaderLayout>
           {!hasApplets ? (
             <Row className={styles.rightBox}>

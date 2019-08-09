@@ -53,7 +53,7 @@ export default class AddShop extends Component {
     passwordVisible: true,
     password: ''
   };
-  componentDidMount() {
+  init=()=>{
     if (this.props.global.actionPassword != '') {
       this.setState({
         password: this.props.global.actionPassword,
@@ -62,6 +62,16 @@ export default class AddShop extends Component {
         this.handlePasswordConfirm();
       })
     }
+  }
+  componentDidMount() {
+    /*if (this.props.global.actionPassword != '') {
+      this.setState({
+        password: this.props.global.actionPassword,
+        passwordVisible: false
+      }, function() {
+        this.handlePasswordConfirm();
+      })
+    }*/
     // const { dispatch, address: { addressList } } = this.props;
     // if (!addressList.length) {
     //   dispatch({
@@ -313,7 +323,8 @@ export default class AddShop extends Component {
     const { getFieldDecorator } = this.props.form;
     const { propsAddress, phone } = this.state;
     return (
-      <AuthDialog>
+      <AuthDialog
+      onAuth={this.init}>
         <PageHeaderLayout>
           <Form autoComplete="OFF" >
             <Form.Item

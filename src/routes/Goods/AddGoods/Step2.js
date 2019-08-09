@@ -741,6 +741,7 @@ const CustomizedForm = Form.create({
       goodsClass,
     },
     global,
+    onAuth,
     payload,
     header,
     previewImage,
@@ -939,7 +940,9 @@ const CustomizedForm = Form.create({
     });
   }
   return (
-    <AuthDialog>
+    <AuthDialog
+      onAuth={onAuth}
+    >
       <Form layout="horizontal" className={styles.stepForm} autoComplete="OFF">
         <Card title="商品信息" style={{ marginBottom: '20px' }}>
           <Row gutter={24}>
@@ -2518,7 +2521,8 @@ class AddGoodStep2 extends React.PureComponent {
     passwordVisible: true,
     password: '',
   };
-  componentDidMount() {
+
+  init=()=>{
     if (this.props.global.actionPassword != '') {
       this.setState({
         password: this.props.global.actionPassword,
@@ -2527,6 +2531,17 @@ class AddGoodStep2 extends React.PureComponent {
         this.handlePasswordConfirm();
       })
     }
+  }
+
+  componentDidMount() {
+    /*if (this.props.global.actionPassword != '') {
+      this.setState({
+        password: this.props.global.actionPassword,
+        passwordVisible: false,
+      }, function() {
+        this.handlePasswordConfirm();
+      })
+    }*/
   }
 
   handlePasswordChange = e => {
@@ -3053,6 +3068,7 @@ class AddGoodStep2 extends React.PureComponent {
     return (
       <CustomizedForm
         {...this.state}
+        onAuth={this.init}
         submitForm={this.submitForm}
         handleChangeImg={this.handleChangeImg}
         handlePreviewImg={this.handlePreviewImg}

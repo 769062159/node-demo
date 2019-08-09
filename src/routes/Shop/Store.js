@@ -58,8 +58,7 @@ export default class ShopList extends PureComponent {
     passwordVisible: true,
     password: ''
   };
-
-  componentDidMount() {
+  init=()=>{
     if (this.props.global.actionPassword != '') {
       this.setState({
         password: this.props.global.actionPassword,
@@ -68,7 +67,16 @@ export default class ShopList extends PureComponent {
         this.handlePasswordConfirm();
       })
     }
-
+  }
+  componentDidMount() {
+    /*if (this.props.global.actionPassword != '') {
+      this.setState({
+        password: this.props.global.actionPassword,
+        passwordVisible: false
+      }, function() {
+        this.handlePasswordConfirm();
+      })
+    }*/
   }
 
   handlePasswordChange = e => {
@@ -260,7 +268,8 @@ export default class ShopList extends PureComponent {
 
 
     return (
-      <AuthDialog>
+      <AuthDialog
+      onAuth={this.init}>
         <PageHeaderLayout>
           <Card bordered={false}>
             <div className={styles.tableList}>

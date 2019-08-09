@@ -76,10 +76,13 @@ class Upgrade extends Component {
       source:0,
     })
   }
-  componentDidMount(){
+  init=()=>{
     const {dispatch}=this.props
     dispatch({ type:'unlockorupgrade/getUpgradeChangeList'})
     dispatch({ type: 'frontUser/fetchFrontUserList' });
+  }
+  componentDidMount(){
+
   }
   render() {
     const {unlockorupgrade,global} =this.props
@@ -187,7 +190,8 @@ class Upgrade extends Component {
       },
     ];
     return (
-      <AuthDialog>
+      <AuthDialog
+      onAuth={this.init}>
         <PageHeaderLayout>
           <Card>
             <Row className={styles.rowStyle}>

@@ -83,6 +83,9 @@ export default class AreaManagement extends React.PureComponent {
       });
     }
   }
+  /*init = () => {
+    this.doGetAreaList();
+  }*/
   init = () => {
     this.doGetAreaList();
   }
@@ -175,7 +178,7 @@ export default class AreaManagement extends React.PureComponent {
 
     return (
       <AuthDialog
-        // onAuth={this.init}
+        onAuth={this.init}
       >
         <PageHeaderLayout>
           <Card bordered={false}>
