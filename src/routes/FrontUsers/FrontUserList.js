@@ -682,7 +682,11 @@ export default class FrontUserList extends PureComponent {
               </Select>)}
             </FormItem>
           </Col>
-          <Col md={8} sm={24}></Col>
+          <Col md={8} sm={24}>
+            <FormItem {...formItemLayout} label="认证姓名">
+              {getFieldDecorator('name')(<Input placeholder='请输入'/>)}
+            </FormItem>
+          </Col>
           <Col md={8} sm={24}></Col>
         </Row>
         <div style={{ overflow: 'hidden' }}>
@@ -789,18 +793,6 @@ export default class FrontUserList extends PureComponent {
         title: '会员',
         dataIndex: 'avatar',
         render: (val, text) => (
-
-          // <Row style={{ width: 500 }}>
-          //   <Col span={4}>
-          //     <img style={{ height: 80, width: 80 }} src={val} alt="头像" />
-          //   </Col>
-          //   <Col span={14} style={{ fontSize: 14 }}>
-          //     <div>{text.nickname}</div>
-          //     <div>Id:{text.id}</div>
-          //     <div>等级:{text.account_level}</div>
-          //     <div>上级:{text.referee && text.referee.nickname}</div>
-          //   </Col>
-          // </Row>
           <div className={styles.userBox}>
             <img style={{ height: 80, width: 80 }} src={val} alt="头像" />
             <div className={styles.userInfo}>
@@ -812,6 +804,7 @@ export default class FrontUserList extends PureComponent {
               <div>手机号码: {text.mobile}</div>
               <div>关系到期时间: {toDate(text.has_expire.lost_time*1000)}</div>
               <div>关系状态: {text.has_expire.lost?'已过期':'正常'}</div>
+              <div>姓名: {text.user_verify.name?text.user_verify.name:'暂未认证'}</div>
             </div>
           </div>
         ),
