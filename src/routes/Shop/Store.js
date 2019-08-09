@@ -12,7 +12,7 @@ import {
 } from 'antd';
 import { routerRedux } from 'dva/router';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
-
+import AuthDialog from '../../components/AuthDialog';
 import styles from './TableList.less';
 
 const { confirm } = Modal;
@@ -153,7 +153,7 @@ export default class ShopList extends PureComponent {
     dispatch(routerRedux.push(url));
   }
 
- 
+
   // 换页
   handleTableChange = pagination => {
     const { current } = pagination;
@@ -260,50 +260,29 @@ export default class ShopList extends PureComponent {
 
 
     return (
-      this.props.global.actionPassword != '' ? (
-      <PageHeaderLayout>
-        <Card bordered={false}>
-          <div className={styles.tableList}>
-            <div className={styles.tableListOperator}>
-              <Button icon="plus" type="primary" onClick={this.goAddPath.bind(this)}>
-                新建
-              </Button>
+      <AuthDialog>
+        <PageHeaderLayout>
+          <Card bordered={false}>
+            <div className={styles.tableList}>
+              <div className={styles.tableListOperator}>
+                <Button icon="plus" type="primary" onClick={this.goAddPath.bind(this)}>
+                  新建
+                </Button>
+              </div>
+              <Table
+                onChange={this.handleTableChange}  // 换页
+                className="components-table-demo-nested"
+                // expandedRowRender={record => <p style={{ margin: 0 }}>{record.description}</p>}
+                dataSource={datas}
+                rowKey={record => record.id + record.create_time}
+                loading={loading}
+                columns={progressColumns}
+                pagination={shopListPage}
+              />
             </div>
-            <Table
-              onChange={this.handleTableChange}  // 换页
-              className="components-table-demo-nested"
-              // expandedRowRender={record => <p style={{ margin: 0 }}>{record.description}</p>}
-              dataSource={datas}
-              rowKey={record => record.id + record.create_time}
-              loading={loading}
-              columns={progressColumns}
-              pagination={shopListPage}
-            />
-          </div>
-        </Card>
-      </PageHeaderLayout>
-    ) : (
-      <PageHeaderLayout>
-        <Modal
-        title='校验操作密码'
-        visible={this.state.passwordVisible}
-        onCancel={this.handlePasswordCancel.bind(this)}
-        destroyOnClose="true"
-        footer=""
-        maskClosable={false}
-        closable={true}
-        keyboard={false}
-      >
-          <FormItem label={`操作密码`} {...formItemLayout}>
-            <Input.Password value={this.state.password} onChange={this.handlePasswordChange} onPressEnter={this.handlePasswordConfirm}/>
-          </FormItem>
-          <FormItem style={{ marginTop: 32 }} {...formSubmitLayout}>
-            <Button type="primary" onClick={this.handlePasswordConfirm}>
-              确认
-            </Button>
-          </FormItem>
-      </Modal>
-    </PageHeaderLayout> )
-    );
+          </Card>
+        </PageHeaderLayout>
+      </AuthDialog>
+    )
   }
 }

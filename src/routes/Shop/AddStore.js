@@ -8,7 +8,7 @@ import { UPLOAD_TYPE } from '../../utils/config';
 import Maps from '../../components/Map/index';
 
 import styles from './Style.less';
-
+import AuthDialog from '../../components/AuthDialog';
 const { TextArea } = Input;
 const { confirm } = Modal;
 const FormItem = Form.Item;
@@ -116,7 +116,7 @@ export default class AddShop extends Component {
       type: 'shop/clearAddress',
     });
   }
-  
+
   // toggleForm = () => {
   //   const { addressArr } = this.state;
   //   console.log(addressArr);
@@ -313,62 +313,62 @@ export default class AddShop extends Component {
     const { getFieldDecorator } = this.props.form;
     const { propsAddress, phone } = this.state;
     return (
-      this.props.global.actionPassword != '' ? (
-      <PageHeaderLayout>
-        <Form autoComplete="OFF" >
-          <Form.Item
-            {...formItemLayout}
-            label="门店logo"
-            extra={<Tag color="blue">建议尺寸100px*100px，大小不得大于1M</Tag>}
-          >
-            {getFieldDecorator('yyy', {
-              rules: [{ required: false, message: '请填写门店logo' }],
-            })(
-              <Upload
-                fileList={shopLogo}
-                action={uploadUrl}
-                beforeUpload={this.beforeUpload}
-                listType="picture-card"
-                onChange={this.changeImg}
-                // onPreview={handlePreviewImg}
-                data={payload}
-                headers={header}
-              >
-                {shopLogo.length ? null : uploadButton}
-              </Upload>
-            )}
-          </Form.Item>
-          <FormItem {...formItemLayout} label="店铺电话">
-            {getFieldDecorator('mobile', {
-              rules: [
-                {
-                  required: true,
-                  message: '请输入店铺电话',
-                },
-              ],
-            })(<InputNumber onChange={this.editPhone} style={{ width: 200}} />)}
-          </FormItem>
-          <FormItem className={styles.extraTag} {...formItemLayout} label="账号id" extra={`@${phone}`}>
-            {getFieldDecorator('user_id', {
-              rules: [
-                {
-                  required: true,
-                  message: '请输入账号id',
-                },
-              ],
-            })(<InputNumber style={{ width: 200}} />)}
-          </FormItem>
-          <FormItem {...formItemLayout} label="密码">
-            {getFieldDecorator('password', {
-              rules: [
-                {
-                  required: true,
-                  message: '请输入密码',
-                },
-              ],
-            })(<Input minLength={6} maxLength={20} />)}
-          </FormItem>
-          {/* <FormItem {...formItemLayout} label="门店类别">
+      <AuthDialog>
+        <PageHeaderLayout>
+          <Form autoComplete="OFF" >
+            <Form.Item
+              {...formItemLayout}
+              label="门店logo"
+              extra={<Tag color="blue">建议尺寸100px*100px，大小不得大于1M</Tag>}
+            >
+              {getFieldDecorator('yyy', {
+                rules: [{ required: false, message: '请填写门店logo' }],
+              })(
+                <Upload
+                  fileList={shopLogo}
+                  action={uploadUrl}
+                  beforeUpload={this.beforeUpload}
+                  listType="picture-card"
+                  onChange={this.changeImg}
+                  // onPreview={handlePreviewImg}
+                  data={payload}
+                  headers={header}
+                >
+                  {shopLogo.length ? null : uploadButton}
+                </Upload>
+              )}
+            </Form.Item>
+            <FormItem {...formItemLayout} label="店铺电话">
+              {getFieldDecorator('mobile', {
+                rules: [
+                  {
+                    required: true,
+                    message: '请输入店铺电话',
+                  },
+                ],
+              })(<InputNumber onChange={this.editPhone} style={{ width: 200}} />)}
+            </FormItem>
+            <FormItem className={styles.extraTag} {...formItemLayout} label="账号id" extra={`@${phone}`}>
+              {getFieldDecorator('user_id', {
+                rules: [
+                  {
+                    required: true,
+                    message: '请输入账号id',
+                  },
+                ],
+              })(<InputNumber style={{ width: 200}} />)}
+            </FormItem>
+            <FormItem {...formItemLayout} label="密码">
+              {getFieldDecorator('password', {
+                rules: [
+                  {
+                    required: true,
+                    message: '请输入密码',
+                  },
+                ],
+              })(<Input minLength={6} maxLength={20} />)}
+            </FormItem>
+            {/* <FormItem {...formItemLayout} label="门店类别">
             {getFieldDecorator('type', {
               rules: [
                 {
@@ -383,130 +383,109 @@ export default class AddShop extends Component {
               </Select>
             )}
           </FormItem> */}
-          <FormItem {...formItemLayout} label="门店名称">
-            {getFieldDecorator('shop_name', {
-              rules: [
-                {
-                  required: true,
-                  message: '请输入门店名称',
+            <FormItem {...formItemLayout} label="门店名称">
+              {getFieldDecorator('shop_name', {
+                rules: [
+                  {
+                    required: true,
+                    message: '请输入门店名称',
+                  },
+                ],
+              })(<Input />)}
+            </FormItem>
+            <FormItem
+              {...formItemLayout}
+              label="门店地址"
+            >
+              {getFieldDecorator('addressBig', {
+                rules: [
+                  {
+                    required: true,
+                    message: '请输入地址',
+                  },
+                ],
+              })(
+                <Cascader
+                  style={{ width: 300 }}
+                  options={addressList}
+                  onChange={this.changeAddress}
+                  loadData={this.loadData}
+                  fieldNames={{ label: 'region_name', value: 'id' }}
+                  changeOnSelect
+                />
+              )}
+            </FormItem>
+            <FormItem
+              {...formItemLayout}
+              label="详细地址"
+              extra={<Button size="small" onClick={this.location}>定位</Button>}
+            >
+              {getFieldDecorator('address', {
+                rules: [
+                  {
+                    required: true,
+                    message: '请输入详细地址',
+                  },
+                ],
+              })(<Input />)}
+            </FormItem>
+            <FormItem
+              {...formItemLayout}
+              label="地图"
+            >
+              {getFieldDecorator('maps', {
+              })(<Maps handleMapAddress={this.handleMapAddress} propsAddress={propsAddress} />)}
+            </FormItem>
+            <FormItem {...formItemLayout} label="店铺简介">
+              {getFieldDecorator('shop_desc', {
+                rules: [
+                  {
+                    required: true,
+                    message: '请输入店铺简介',
+                  },
+                ],
+              })(<TextArea placeholder="请输入店铺简介" autosize />)}
+            </FormItem>
+            <FormItem {...formItemLayout} label="开业时间">
+              {getFieldDecorator('open_time', {
+                rules: [
+                  {
+                    required: true,
+                    message: '请输入开业时间',
+                  },
+                ],
+                getValueFromEvent: (date, dateString) => {
+                  date.needTime = dateString;
+                  return date;
                 },
-              ],
-            })(<Input />)}
-          </FormItem>
-          <FormItem
-            {...formItemLayout}
-            label="门店地址"
-          >
-            {getFieldDecorator('addressBig', {
-              rules: [
-                {
-                  required: true,
-                  message: '请输入地址',
+              })(
+                <TimePicker />
+              )}
+            </FormItem>
+            <FormItem {...formItemLayout} label="关门时间">
+              {getFieldDecorator('close_time', {
+                rules: [
+                  {
+                    required: true,
+                    message: '请输入关门时间',
+                  },
+                ],
+                getValueFromEvent: (date, dateString) => {
+                  date.needTime = dateString;
+                  return date;
                 },
-              ],
-            })(
-              <Cascader
-                style={{ width: 300 }}
-                options={addressList}
-                onChange={this.changeAddress}
-                loadData={this.loadData}
-                fieldNames={{ label: 'region_name', value: 'id' }}
-                changeOnSelect
-              />
-            )}
-          </FormItem>
-          <FormItem
-            {...formItemLayout}
-            label="详细地址"
-            extra={<Button size="small" onClick={this.location}>定位</Button>}
-          >
-            {getFieldDecorator('address', {
-              rules: [
-                {
-                  required: true,
-                  message: '请输入详细地址',
-                },
-              ],
-            })(<Input />)}
-          </FormItem>
-          <FormItem
-            {...formItemLayout}
-            label="地图"
-          >
-            {getFieldDecorator('maps', {
-            })(<Maps handleMapAddress={this.handleMapAddress} propsAddress={propsAddress} />)}
-          </FormItem>
-          <FormItem {...formItemLayout} label="店铺简介">
-            {getFieldDecorator('shop_desc', {
-              rules: [
-                {
-                  required: true,
-                  message: '请输入店铺简介',
-                },
-              ],
-            })(<TextArea placeholder="请输入店铺简介" autosize />)}
-          </FormItem>
-          <FormItem {...formItemLayout} label="开业时间">
-            {getFieldDecorator('open_time', {
-              rules: [
-                {
-                  required: true,
-                  message: '请输入开业时间',
-                },
-              ],
-              getValueFromEvent: (date, dateString) => {
-                date.needTime = dateString;
-                return date;
-              },
-            })(
-              <TimePicker />
-            )}
-          </FormItem>
-          <FormItem {...formItemLayout} label="关门时间">
-            {getFieldDecorator('close_time', {
-              rules: [
-                {
-                  required: true,
-                  message: '请输入关门时间',
-                },
-              ],
-              getValueFromEvent: (date, dateString) => {
-                date.needTime = dateString;
-                return date;
-              },
-            })(
-              <TimePicker />
-            )}
-          </FormItem>
-          <FormItem {...formSubmitLayout} style={{ marginTop: 32 }}>
-            <Button type="primary" htmlType="submit" loading={loading} onClick={this.handleSubmit}>
-              提交
-            </Button>
-          </FormItem>
-        </Form>
-      </PageHeaderLayout>
-    ) : (
-      <PageHeaderLayout>
-        <Modal
-        title='校验操作密码'
-        visible={this.state.passwordVisible}
-        onCancel={this.handlePasswordCancel.bind(this)}
-        destroyOnClose="true"
-        footer=""
-        maskClosable={false}
-        closable={true}
-        keyboard={false}
-      >
-          <FormItem label={`操作密码`} {...formItemLayout}>
-            <Input.Password value={this.state.password} onChange={this.handlePasswordChange} onPressEnter={this.handlePasswordConfirm}/>
-          </FormItem>
-          <FormItem style={{ marginTop: 32 }} {...formSubmitLayout}>
-            <Button type="primary" onClick={this.handlePasswordConfirm}>
-              确认
-            </Button>
-          </FormItem>
-      </Modal>
-    </PageHeaderLayout> )
+              })(
+                <TimePicker />
+              )}
+            </FormItem>
+            <FormItem {...formSubmitLayout} style={{ marginTop: 32 }}>
+              <Button type="primary" htmlType="submit" loading={loading} onClick={this.handleSubmit}>
+                提交
+              </Button>
+            </FormItem>
+          </Form>
+        </PageHeaderLayout>
+      </AuthDialog>
     );
   }
 }

@@ -39,7 +39,7 @@ export default class AuthDialog extends React.Component {
 
         this.setState({ loading: false, authorized: true });
         this.close();
-        this.props.onAuth(true);
+        // this.props.onAuth(true);
       },
     })
   }

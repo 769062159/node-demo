@@ -4,6 +4,7 @@ import { Select,Card,Row,Col,Input,DatePicker,Button,Table,message } from 'antd'
 import moment from 'moment';
 import SysModal from './sysModal'
 import ActionPassword from '../../utils/actionPassword'
+import AuthDialog from '../../components/AuthDialog';
 import {toDateTime} from '../../utils/date'
 import styles from './uou.less'
 const InputGroup = Input.Group;
@@ -196,7 +197,7 @@ class Unlock extends Component {
       },
     ];
     return (
-      global.actionPassword != '' ?
+      <AuthDialog>
         <PageHeaderLayout>
           <Card>
             <Row className={styles.rowStyle}>
@@ -309,10 +310,8 @@ class Unlock extends Component {
             userInfo={this.props.unlockorupgrade.userInfo}
           />
         </PageHeaderLayout>
-      :
-        <PageHeaderLayout>
-          <ActionPassword />
-        </PageHeaderLayout>
+      </AuthDialog>
+
     );
   }
   showUserInfo=(id)=>{

@@ -4,6 +4,7 @@ import {Modal, Select,Card,Row,Col,Input,DatePicker,Button,Table,Radio,message }
 import {toDateTime} from '../../utils/date'
 import styles from './uou.less'
 import SysModal from './sysModal'
+import AuthDialog from '../../components/AuthDialog';
 import moment from 'moment'
 const InputGroup = Input.Group;
 const { RangePicker } = DatePicker;
@@ -186,7 +187,7 @@ class Upgrade extends Component {
       },
     ];
     return (
-      global.actionPassword != '' ?
+      <AuthDialog>
         <PageHeaderLayout>
           <Card>
             <Row className={styles.rowStyle}>
@@ -316,10 +317,9 @@ class Upgrade extends Component {
           />
 
         </PageHeaderLayout>
-          :
-        <PageHeaderLayout>
-          <ActionPassword/>
-        </PageHeaderLayout>
+
+      </AuthDialog>
+
     );
   }
 

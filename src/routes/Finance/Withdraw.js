@@ -5,7 +5,7 @@ import { Table, message, Modal, Card, Form, Input, Button, Tag, Divider,Switch }
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import SearchForm from './SearchForm';
 import styles from './TableList.less';
-
+import AuthDialog from '../../components/AuthDialog';
 const FormItem = Form.Item;
 const formItemLayout = {
   labelCol: {
@@ -358,7 +358,7 @@ export default class Withdraw extends PureComponent {
     ];
 
     return (
-      this.props.global.actionPassword != '' ? (
+      <AuthDialog>
         <PageHeaderLayout>
           <Card bordered={false}>
             <Tag
@@ -390,29 +390,8 @@ export default class Withdraw extends PureComponent {
             {this.renderForm()}
           </Modal>
         </PageHeaderLayout>
-      ) : (
-        <PageHeaderLayout>
-          <Modal
-            title='校验操作密码'
-            visible={this.state.passwordVisible}
-            onCancel={this.handlePasswordCancel.bind(this)}
-            destroyOnClose="true"
-            footer=""
-            maskClosable={false}
-            closable={true}
-            keyboard={false}
-          >
-              <FormItem label={`操作密码`} {...formItemLayout}>
-                <Input.Password value={this.state.password} onChange={this.handlePasswordChange} onPressEnter={this.handlePasswordConfirm}/>
-              </FormItem>
-              <FormItem style={{ marginTop: 32 }} {...formSubmitLayout}>
-                <Button type="primary" onClick={this.handlePasswordConfirm}>
-                  确认
-                </Button>
-              </FormItem>
-          </Modal>
-        </PageHeaderLayout>
-      )
+      </AuthDialog>
+
     );
   }
 }

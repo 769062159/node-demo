@@ -175,7 +175,7 @@ export default class AreaManagement extends React.PureComponent {
 
     return (
       <AuthDialog
-        onAuth={this.init}
+        // onAuth={this.init}
       >
         <PageHeaderLayout>
           <Card bordered={false}>

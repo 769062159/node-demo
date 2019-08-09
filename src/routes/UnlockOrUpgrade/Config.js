@@ -6,7 +6,7 @@ import { connect } from 'dva';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import GoodsConfig from './goodsConfig';
 import ActionPassword from '../../utils/actionPassword'
-
+import AuthDialog from '../../components/AuthDialog';
 const { Option } = Select;
 const { confirm } = Modal;
 
@@ -248,7 +248,7 @@ class Config extends Component {
     const {modalStatus}=this.state
     const {unlockorupgrade,goods,global}=this.props
     return (
-      global.actionPassword != '' ? (
+      <AuthDialog>
         <PageHeaderLayout>
           <Card title="解锁码赠送设置" className={styles.cardStyle}>
             <Button type='primary' onClick={()=>this.showModal(0)}>新建解锁码赠送规则</Button>
@@ -448,12 +448,7 @@ class Config extends Component {
           </Modal>
 
         </PageHeaderLayout>
-      ):(
-        <PageHeaderLayout>
-          <ActionPassword />
-        </PageHeaderLayout>
-      )
-
+      </AuthDialog>
     );
   }
 }

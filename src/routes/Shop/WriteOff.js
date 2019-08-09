@@ -10,7 +10,7 @@ import {
   Button,
 } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
-
+import AuthDialog from '../../components/AuthDialog';
 import styles from './TableList.less';
 
 const FormItem = Form.Item;
@@ -326,56 +326,36 @@ export default class WriteOff extends PureComponent {
     ];
 
     return (
-      this.props.global.actionPassword != '' ? (
-      <PageHeaderLayout>
-        <Card bordered={false}>
-          <div className={styles.tableList}>
-            <div className={styles.tableListOperator}>
-              <Button icon="plus" type="primary" onClick={this.showModal.bind(this)}>
-                新建
-              </Button>
+      <AuthDialog>
+        <PageHeaderLayout>
+          <Card bordered={false}>
+            <div className={styles.tableList}>
+              <div className={styles.tableListOperator}>
+                <Button icon="plus" type="primary" onClick={this.showModal.bind(this)}>
+                  新建
+                </Button>
+              </div>
+              <Table
+                dataSource={datas}
+                rowKey={record => record.id}
+                loading={loading}
+                columns={progressColumns}
+                pagination={false}
+              />
             </div>
-            <Table
-              dataSource={datas}
-              rowKey={record => record.id}
-              loading={loading}
-              columns={progressColumns}
-              pagination={false}
-            />
-          </div>
-        </Card>
-        <Modal
-          title="核销员"
-          visible={formVisible}
-          destroyOnClose="true"
-          onCancel={this.handAddleCancel.bind(this)}
-          footer=""
-        >
-          {this.renderForm()}
-        </Modal>
-      </PageHeaderLayout>
-    ) : (
-      <PageHeaderLayout>
-        <Modal
-        title='校验操作密码'
-        visible={this.state.passwordVisible}
-        onCancel={this.handlePasswordCancel.bind(this)}
-        destroyOnClose="true"
-        footer=""
-        maskClosable={false}
-        closable={true}
-        keyboard={false}
-      >
-          <FormItem label={`操作密码`} {...formItemLayout}>
-            <Input.Password value={this.state.password} onChange={this.handlePasswordChange} onPressEnter={this.handlePasswordConfirm}/>
-          </FormItem>
-          <FormItem style={{ marginTop: 32 }} {...formSubmitLayout}>
-            <Button type="primary" onClick={this.handlePasswordConfirm}>
-              确认
-            </Button>
-          </FormItem>
-      </Modal>
-    </PageHeaderLayout> )
+          </Card>
+          <Modal
+            title="核销员"
+            visible={formVisible}
+            destroyOnClose="true"
+            onCancel={this.handAddleCancel.bind(this)}
+            footer=""
+          >
+            {this.renderForm()}
+          </Modal>
+        </PageHeaderLayout>
+      </AuthDialog>
+
     );
   }
 }

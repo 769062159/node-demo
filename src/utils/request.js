@@ -63,8 +63,7 @@ export default async function request(url, options) {
   }
   const failTime = localStorage.getItem('failTime');
   let token = localStorage.getItem('token');
-  // console.log(token);
-  // console.log(failTime);
+
   const nowDate = new Date().getTime() - 60 * 60 * 1000;
   if (url !== '/merchant/login' && failTime < nowDate) {
     let nowToken = await fetch(`${apiurl}/merchant/updatetoken`, {
@@ -91,9 +90,6 @@ export default async function request(url, options) {
     });
   }
 
-  // const defaultOptions = {
-  //   credentials: 'include',
-  // };
   if (options.body instanceof Object) {
     const { body } = options;
     for(const [key, value] of Object.entries(body)){
@@ -108,11 +104,6 @@ export default async function request(url, options) {
     Accept: 'application/json',
     mode: 'no-cors',
     Authorization: `Bearer ${token}`,
-    // 'Authorization': '',
-    // 'JOKE': 'seastartmall!',
-    // 'Device': 'xcx',
-    // 'AppID': 'wxbfd3fb865c4ae400',
-    // 'content-type': 'application/x-www-form-urlencoded',
   };
   if (newOptions.method === 'POST' || newOptions.method === 'PUT') {
     if (!(newOptions.body instanceof FormData)) {
@@ -120,7 +111,6 @@ export default async function request(url, options) {
         mode: 'no-cors',
         Accept: 'application/json',
         'Content-Type': 'application/json; charset=utf-8',
-        // Authorization: `Bearer ${token}`,
         ...newOptions.headers,
       };
       newOptions.body = JSON.stringify(newOptions.body);
@@ -157,16 +147,5 @@ export default async function request(url, options) {
         dispatch(routerRedux.push('/user/login'));
         return;
       }
-      // if (status === 403) {
-      //   dispatch(routerRedux.push('/exception/403'));
-      //   return;
-      // }
-      // if (status <= 504 && status >= 500) {
-      //   dispatch(routerRedux.push('/exception/500'));
-      //   return;
-      // }
-      // if (status >= 404 && status < 417) {
-      //   dispatch(routerRedux.push('/exception/404'));
-      // }
     });
 }

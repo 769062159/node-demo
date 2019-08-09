@@ -5,7 +5,7 @@ import { connect } from 'dva';
 import { Row, Form, Button, Modal, Input } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import styles from './Style.less';
-
+import AuthDialog from '../../components/AuthDialog';
 const FormItem = Form.Item;
 const { confirm } = Modal;
 const formItemLayout = {
@@ -211,80 +211,60 @@ export default class My extends PureComponent {
       );
     });
     return (
-      this.props.global.actionPassword != '' ? (
+      <AuthDialog>
         <PageHeaderLayout>
-        {!hasApplets ? (
-          <Row className={styles.rightBox}>
-            <span className={styles.word}>一键创建小程序</span>
-            <Button type="primary" loading={loading} onClick={this.showModal.bind(this, 0)}>
-              +创建小程序
-            </Button>
-          </Row>
-        ) : null}
-        {!hasPublic ? (
-          <Row className={styles.rightBox}>
-            <span className={styles.word}>一键创建公众号</span>
-            <Button type="primary" loading={loading} onClick={this.showModal.bind(this, 1)}>
-              +创建公众号
-            </Button>
-          </Row>
-        ) : null}
-        <div className={styles.CardProgramList}>{CardItem}</div>
-        <Modal
-          title={program}
-          visible={formVisible}
-          onCancel={this.handAddleCancel.bind(this)}
-          destroyOnClose="true"
-          footer=""
-        >
-          <Form
-            onSubmit={this.handleSubmit}
-            hideRequiredMark
-            style={{ marginTop: 8 }}
-            autoComplete="OFF"
-          >
-            <FormItem label={`${program}名字`} {...formItemLayout}>
-              {getFieldDecorator('name', {
-                // initialValue: editData.goods_class_id,
-                rules: [
-                  {
-                    required: true,
-                    message: `请输入${program}名字`,
-                  },
-                ],
-              })(<Input />)}
-            </FormItem>
-            <FormItem style={{ marginTop: 32 }} {...formSubmitLayout}>
-              <Button type="primary" htmlType="submit" loading={loading}>
-                立即新增
+          {!hasApplets ? (
+            <Row className={styles.rightBox}>
+              <span className={styles.word}>一键创建小程序</span>
+              <Button type="primary" loading={loading} onClick={this.showModal.bind(this, 0)}>
+                +创建小程序
               </Button>
-            </FormItem>
-          </Form>
-        </Modal>
-      </PageHeaderLayout>
-      ) : (
-        <PageHeaderLayout>
+            </Row>
+          ) : null}
+          {!hasPublic ? (
+            <Row className={styles.rightBox}>
+              <span className={styles.word}>一键创建公众号</span>
+              <Button type="primary" loading={loading} onClick={this.showModal.bind(this, 1)}>
+                +创建公众号
+              </Button>
+            </Row>
+          ) : null}
+          <div className={styles.CardProgramList}>{CardItem}</div>
           <Modal
-            title='校验操作密码'
-            visible={this.state.passwordVisible}
-            onCancel={this.handlePasswordCancel.bind(this)}
+            title={program}
+            visible={formVisible}
+            onCancel={this.handAddleCancel.bind(this)}
             destroyOnClose="true"
             footer=""
-            maskClosable={false}
-            closable={true}
-            keyboard={false}
           >
-              <FormItem label={`操作密码`} {...formItemLayout}>
-                <Input.Password value={this.state.password} onChange={this.handlePasswordChange} onPressEnter={this.handlePasswordConfirm}/>
+            <Form
+              onSubmit={this.handleSubmit}
+              hideRequiredMark
+              style={{ marginTop: 8 }}
+              autoComplete="OFF"
+            >
+              <FormItem label={`${program}名字`} {...formItemLayout}>
+                {getFieldDecorator('name', {
+                  // initialValue: editData.goods_class_id,
+                  rules: [
+                    {
+                      required: true,
+                      message: `请输入${program}名字`,
+                    },
+                  ],
+                })(<Input />)}
               </FormItem>
               <FormItem style={{ marginTop: 32 }} {...formSubmitLayout}>
-                <Button type="primary" onClick={this.handlePasswordConfirm}>
-                  确认
+                <Button type="primary" htmlType="submit" loading={loading}>
+                  立即新增
                 </Button>
               </FormItem>
+            </Form>
           </Modal>
         </PageHeaderLayout>
-      )
+
+      </AuthDialog>
+
     );
   }
 }

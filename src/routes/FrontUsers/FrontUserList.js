@@ -22,7 +22,7 @@ import EditForm from './EditForm';
 import MoneyForm from './MoneyForm';
 import CodeForm from './CodeForm';
 import RemarkForm from './RemarkForm';
-
+import AuthDialog from '../../components/AuthDialog';
 import styles from './TableList.less';
 
 const { adminUrl } = process.env[process.env.API_ENV];
@@ -914,149 +914,127 @@ export default class FrontUserList extends PureComponent {
     ];
 
     return (
-      this.props.global.actionPassword != '' ? (
-      <PageHeaderLayout>
-        <Card style={{ marginBottom: 10 }}>
-          <Row type="flex" align="middle" style={{ marginBottom: 10 }}>
-            <span style={{ textAlign: 'right', paddingRight: 10 }}>请输入站长id</span>
-            <span>
+      <AuthDialog>
+        <PageHeaderLayout>
+          <Card style={{ marginBottom: 10 }}>
+            <Row type="flex" align="middle" style={{ marginBottom: 10 }}>
+              <span style={{ textAlign: 'right', paddingRight: 10 }}>请输入站长id</span>
+              <span>
               <Input placeholder="请输入站长id" onChange={this.setDefaultValue} />
             </span>
-            <span>
+              <span>
               <Button type="primary" style={{ marginLeft: 8 }} onClick={this.setDefault}>
                 确定
               </Button>
             </span>
-          </Row>
-          <Table
-            dataSource={getDefaultList}
-            rowKey={record => record.id}
-            loading={loading}
-            columns={deflutColumns}
-            pagination={false}
-            // showHeader={false}
-            locale={{
-              emptyText: '暂无站长id',
-            }}
-          />
-        </Card>
-        <Card bordered={false} style={{ marginBottom: 10 }}>
-          <div className={styles.tableList}>
-            盟主和店主后台地址：
-            <a href={adminUrl} target="view_window">
-              {adminUrl}
-            </a>
-          </div>
-        </Card>
-        <Card bordered={false}>
-          <div className={styles.tableListForm}>{this.renderInquire()}</div>
-          <div className={styles.tableList}>
+            </Row>
             <Table
-              onChange={this.handleTableChange}
-              dataSource={datas}
+              dataSource={getDefaultList}
               rowKey={record => record.id}
               loading={loading}
-              columns={progressColumns}
-              pagination={frontUserListPage}
-              scroll={{ x: '100%' }}
+              columns={deflutColumns}
+              pagination={false}
+              // showHeader={false}
+              locale={{
+                emptyText: '暂无站长id',
+              }}
             />
-          </div>
-        </Card>
-        <Modal
-          title="修改"
-          visible={formVisible}
-          onCancel={this.handAddleCancel.bind(this)}
-          footer=""
-          destroyOnClose="true"
-        >
-          {/* {this.renderForm()} */}
-          <EditForm
-            loading={loading}
-            userRankList={userRankList}
-            type={type}
-            editDataId={editDataId}
-            pagination={pagination}
-            handAddleCancel={this.handAddleCancel}
-          />
-        </Modal>
-        <Modal
-          title="设置版本"
-          visible={merchantVisible}
-          onCancel={this.merchantModal}
-          onOk={this.merchantOK}
-          destroyOnClose="true"
-        >
-          <Row style={{ marginBottom: 20 }}>
-            <Col span={6}>账户</Col>
-            <Col span={18}><Input value={account} disabled /></Col>
-          </Row>
-          <Row style={{ marginBottom: 20 }}>
-            <Col span={6}>手机号</Col>
-            <Col span={18}><Input value={password} onChange={this.changePassword} disabled /></Col>
-          </Row>
-          <Row>
-            <Col span={6}>版本</Col>
-            <Col span={18}>
-              <Select onChange={this.handleLevel} style={{ width: 200 }} value={powerValue} >
-                <Option key={1} value={1}>盟主</Option>
-                <Option key={3} value={3}>店主</Option>
-                <Option key={2} value={2}>群主</Option>
-                <Option key={0} value={0}>粉丝</Option>
-              </Select>
-            </Col>
-          </Row>
-        </Modal>
-        <Modal
-          title="设置余额"
-          visible={isCommssion}
-          onCancel={this.moneyCancel}
-          destroyOnClose="true"
-          footer=""
-        >
-          <MoneyForm moneyOK={this.moneyOK} name={moneyMsg.name} money={moneyMsg.money} />
-        </Modal>
-        <Modal
-          title="修改备注"
-          visible={isRemark}
-          onCancel={this.remarkCancel}
-          destroyOnClose="true"
-          footer=""
-        >
-          <RemarkForm remarkOK={this.remarkOK} remarkText={remarkMsg.remark}/>
-        </Modal>
-        <Modal
-          title="设置授权码"
-          visible={isCode}
-          onCancel={this.codeCancel}
-          destroyOnClose="true"
-          footer=""
-        >
-          <CodeForm codeOK={this.codeOK} codeMsg={codeMsg} codeForm={codeForm} changeFormVals={this.changeFormVals} />
-        </Modal>
-      </PageHeaderLayout>
-      ) : (
-        <PageHeaderLayout>
+          </Card>
+          <Card bordered={false} style={{ marginBottom: 10 }}>
+            <div className={styles.tableList}>
+              盟主和店主后台地址：
+              <a href={adminUrl} target="view_window">
+                {adminUrl}
+              </a>
+            </div>
+          </Card>
+          <Card bordered={false}>
+            <div className={styles.tableListForm}>{this.renderInquire()}</div>
+            <div className={styles.tableList}>
+              <Table
+                onChange={this.handleTableChange}
+                dataSource={datas}
+                rowKey={record => record.id}
+                loading={loading}
+                columns={progressColumns}
+                pagination={frontUserListPage}
+                scroll={{ x: '100%' }}
+              />
+            </div>
+          </Card>
           <Modal
-            title='校验操作密码'
-            visible={this.state.passwordVisible}
-            onCancel={this.handlePasswordCancel.bind(this)}
+            title="修改"
+            visible={formVisible}
+            onCancel={this.handAddleCancel.bind(this)}
+            footer=""
+            destroyOnClose="true"
+          >
+            {/* {this.renderForm()} */}
+            <EditForm
+              loading={loading}
+              userRankList={userRankList}
+              type={type}
+              editDataId={editDataId}
+              pagination={pagination}
+              handAddleCancel={this.handAddleCancel}
+            />
+          </Modal>
+          <Modal
+            title="设置版本"
+            visible={merchantVisible}
+            onCancel={this.merchantModal}
+            onOk={this.merchantOK}
+            destroyOnClose="true"
+          >
+            <Row style={{ marginBottom: 20 }}>
+              <Col span={6}>账户</Col>
+              <Col span={18}><Input value={account} disabled /></Col>
+            </Row>
+            <Row style={{ marginBottom: 20 }}>
+              <Col span={6}>手机号</Col>
+              <Col span={18}><Input value={password} onChange={this.changePassword} disabled /></Col>
+            </Row>
+            <Row>
+              <Col span={6}>版本</Col>
+              <Col span={18}>
+                <Select onChange={this.handleLevel} style={{ width: 200 }} value={powerValue} >
+                  <Option key={1} value={1}>盟主</Option>
+                  <Option key={3} value={3}>店主</Option>
+                  <Option key={2} value={2}>群主</Option>
+                  <Option key={0} value={0}>粉丝</Option>
+                </Select>
+              </Col>
+            </Row>
+          </Modal>
+          <Modal
+            title="设置余额"
+            visible={isCommssion}
+            onCancel={this.moneyCancel}
             destroyOnClose="true"
             footer=""
-            maskClosable={false}
-            closable={true}
-            keyboard={false}
           >
-              <FormItem label={`操作密码`} {...formItemLayout}>
-                <Input.Password value={this.state.password} onChange={this.handlePasswordChange} onPressEnter={this.handlePasswordConfirm}/>
-              </FormItem>
-              <FormItem style={{ marginTop: 32 }} {...formSubmitLayout}>
-                <Button type="primary" onClick={this.handlePasswordConfirm}>
-                  确认
-                </Button>
-              </FormItem>
+            <MoneyForm moneyOK={this.moneyOK} name={moneyMsg.name} money={moneyMsg.money} />
+          </Modal>
+          <Modal
+            title="修改备注"
+            visible={isRemark}
+            onCancel={this.remarkCancel}
+            destroyOnClose="true"
+            footer=""
+          >
+            <RemarkForm remarkOK={this.remarkOK} remarkText={remarkMsg.remark}/>
+          </Modal>
+          <Modal
+            title="设置授权码"
+            visible={isCode}
+            onCancel={this.codeCancel}
+            destroyOnClose="true"
+            footer=""
+          >
+            <CodeForm codeOK={this.codeOK} codeMsg={codeMsg} codeForm={codeForm} changeFormVals={this.changeFormVals} />
           </Modal>
         </PageHeaderLayout>
-      )
+      </AuthDialog>
     );
   }
 }
