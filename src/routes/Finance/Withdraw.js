@@ -1,7 +1,7 @@
 import React, { PureComponent, Fragment } from 'react';
 import { connect } from 'dva';
 import moment from 'moment';
-import { Table, message, Modal, Card, Form, Input, Button, Tag, Divider,Switch } from 'antd';
+import { Table, message, Modal, Card, Form, Input, Button, Tag, Divider,Switch,Select } from 'antd';
 import PageHeaderLayout from '../../layouts/PageHeaderLayout';
 import SearchForm from './SearchForm';
 import styles from './TableList.less';
@@ -23,7 +23,8 @@ const formSubmitLayout = {
 };
 const { TextArea } = Input;
 const withdrawStatus = [(<span style={{color: '#096dd9'}}>待处理</span>), (<span style={{color: '#389e0d'}}>同意</span>), (<span style={{color: '#cf1322'}}>拒绝</span>)];
-const processChannel = ['系统', (<span style={{color: '#096dd9'}}>地网</span>),(<span style={{color: '#e60012'}}>手工通道</span>)];
+// const processChannel = ['系统', (<span style={{color: '#096dd9'}}>地网</span>),(<span style={{color: '#e60012'}}>手工通道</span>)];
+const processChannel=['地网', '手工', '云账户', '天网']
 const processStatus = [(<span style={{color: '#096dd9'}}>处理中</span>), (<span style={{color: '#389e0d'}}>支付成功</span>), (<span style={{color: '#cf1322'}}>支付失败</span>)];
 // auto_withdraw_status 自动提现失败 状态码和上面一样
 // const { confirm } = Modal;
@@ -44,7 +45,8 @@ export default class Withdraw extends PureComponent {
     page: 1, // 页脚
     type: 0, // 是否同意
     passwordVisible: true,
-    password: ''
+    password: '',
+    status:1,
   };
   init=()=>{
     if (this.props.global.actionPassword != '') {
@@ -155,11 +157,12 @@ export default class Withdraw extends PureComponent {
     this.props.form.validateFieldsAndScroll((err, values) => {
       if (!err) {
         const { dispatch } = this.props;
-        const { editData, page, type } = this.state;
+        const { editData, page, type, channel} = this.state;
         values.page = page;
         values.status = type;
         values.id = editData.id;
-        values.pay_power= values.pay_power?1:2
+        // values.status= pay_power;
+        values.channel=channel;
         dispatch({
           type: 'finance/updateWithdraw',
           payload: values,
@@ -205,7 +208,9 @@ export default class Withdraw extends PureComponent {
       },
     });
   }
-
+  changeSelectChannel=(value)=>{
+    this.setState({channel:value.key})
+  }
   renderAgree() {
     const { loading } = this.props;
     const { editData } = this.state;
@@ -221,7 +226,10 @@ export default class Withdraw extends PureComponent {
           {moment(editData.create_time * 1000).format('YYYY-MM-DD HH:mm:ss')}
         </FormItem>
         <FormItem {...formItemLayout} style={{ marginBottom: 5 }} label="申请金额">
-          {editData.money}
+          ￥{editData.apply_money}
+        </FormItem>
+        <FormItem {...formItemLayout} style={{ marginBottom: 5 }} label="打款金额">
+          ￥{editData.money}
         </FormItem>
         <FormItem {...formItemLayout} style={{ marginBottom: 5 }} label="收款帐号">
           {editData.account_no}
@@ -229,10 +237,27 @@ export default class Withdraw extends PureComponent {
         <FormItem {...formItemLayout} style={{ marginBottom: 5 }} label="收款人">
           {editData.real_name}
         </FormItem>
-        <FormItem {...formItemLayout} label="是否打款">
+        {/*<FormItem {...formItemLayout} label="是否打款">
           {getFieldDecorator('pay_power', {
             rules: [],
           })(<Switch onChange={(value)=>{}}/>)}
+        </FormItem>*/}
+        <FormItem {...formItemLayout} label="打款通道">
+          {getFieldDecorator('channel', {
+            rules: [
+              {required:true,message: '请选择打款通道!'}
+            ],
+          })(<Select
+            labelInValue
+            placeholder="请选择打款通道"
+            // value={this.state.channel}
+            onSelect={this.changeSelectChannel}
+          >
+            {payChannel.map(item=>(
+              <Option key={item.key} value={item.key}>{item.value}</Option>
+            ))}
+
+          </Select>)}
         </FormItem>
         <FormItem {...formItemLayout} label="备注">
           {getFieldDecorator('remark', {
@@ -314,7 +339,7 @@ export default class Withdraw extends PureComponent {
         render: (val, record) => (
           <div className={styles.userMsg}>
             <div>
-              <span>名称: {processChannel[record.process_channel]}</span>
+              <span>打款通道: {processChannel[record.process_channel+1]}</span>
               <span>状态: {processStatus[record.process_status]}</span>
               <span>提现订单号: {record.withdraw_trade_no}</span>
               <span>备注: <span style={{color: '#096dd9'}}>{record.process_mark}</span></span>

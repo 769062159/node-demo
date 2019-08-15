@@ -68,6 +68,7 @@ export default class AuthDialog extends React.Component {
               onChange={event => this.setState({
                 password: event.target.value,
               })}
+              onPressEnter={this.onOk}
             />
           </Spin>
         </Modal>
