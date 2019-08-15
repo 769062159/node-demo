@@ -339,7 +339,7 @@ export default class Withdraw extends PureComponent {
         render: (val, record) => (
           <div className={styles.userMsg}>
             <div>
-              <span>打款通道: {processChannel[record.process_channel+1]}</span>
+              <span>打款通道: {processChannel[record.process_channel-1]}</span>
               <span>状态: {processStatus[record.process_status]}</span>
               <span>提现订单号: {record.withdraw_trade_no}</span>
               <span>备注: <span style={{color: '#096dd9'}}>{record.process_mark}</span></span>
