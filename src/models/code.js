@@ -81,6 +81,7 @@ export default {
     },
   },
 
+
   reducers: {
     clearDetail(state) {
       return {
